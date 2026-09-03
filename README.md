@@ -34,3 +34,45 @@ Each prompt should also state, when applicable:
 - concise final-output fields.
 
 Optimize prompts for total Codex resource usage: minimize repository exploration, tool calls, redundant verification, retries, reasoning, and session duration. Prefer targeted tests and stop immediately after acceptance criteria pass.
+
+## Workflow "primo task pendente"
+
+Codex must:
+
+1. open `roadmap.md`;
+2. execute ONLY the first pending prompt in the list;
+3. treat that prompt file as a self-contained task;
+4. NOT execute or investigate later prompts;
+5. use the model, reasoning level, MegaVault mode, and scope stated in the selected prompt;
+6. not expand the task beyond what the selected prompt requests;
+7. reuse MegaVault, `AGENTS.md`, and the evidence already included in the selected prompt;
+8. avoid redundant exploration, tool calls, retries, and tests;
+9. stop as soon as the selected prompt's acceptance criteria are verified.
+
+## Roadmap Management After Execution
+
+`roadmap.md` contains only pending tasks. `completed/` contains only prompts completed with PASS.
+
+If the selected prompt ends with PASS and all acceptance criteria are truly satisfied:
+
+1. move the related file from `prompts/` to `completed/`, preserving its filename;
+2. remove that entry from `roadmap.md`;
+3. do not change the order of the other entries;
+4. commit and push the target project's changes;
+5. commit and push the `codex-roadmap` update;
+6. do not automatically start the next prompt.
+
+If the task fails, remains blocked, or the acceptance criteria are not satisfied:
+
+- do NOT move the prompt;
+- do NOT remove it from `roadmap.md`;
+- do NOT advance to the next task;
+- stop and report the blocker concisely.
+
+## Canonical Launcher
+
+Use this minimal launcher in a new Codex session:
+
+```text
+Esegui il primo task pendente di gernalix/codex-roadmap seguendo integralmente il workflow definito nel README. Esegui un solo task e fermati.
+```
