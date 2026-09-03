@@ -27,6 +27,7 @@ Optimize **total Codex work**, not prompt character count. Token/quota consumpti
 8. Stop immediately once acceptance criteria are evidenced. **No post-PASS audit/exploration.**
 9. Keep progress narration minimal and final output concise.
 10. For directly related changes to the same feature, one coherent task can reduce duplicated bootstrap/exploration. Keep independent objectives separate; use a fresh session when carrying a long unrelated context would cost more.
+11. Treat **tool-call count as an explicit budget**. For a narrowly scoped task, each additional shell/tool round-trip should be justified by new evidence, implementation, or a distinct acceptance criterion. Prefer one batched inspection over many serial reads and one targeted verification command over multiple overlapping checks.
 
 ## Empirical benchmark: PROMPT_ID 428619
 
@@ -46,8 +47,27 @@ Interpretation:
 - Do **not** downgrade comparable safety/debugging tasks to Low merely to save tokens; instead constrain exploration and command count.
 - Cached-input API token totals are not directly equivalent to the user's quota/usage-monitor token figure. Track both when available, but use the user's usage metric for practical cross-session quota comparisons.
 
+## Empirical benchmark: PROMPT_ID 736205
+
+Completed task: PersonalHub durable SAF auto-export diagnosis/fix.
+
+- Model: **GPT-5.5**
+- Reasoning: **Medium**
+- Duration from rollout: **~9m57s**.
+- Rollout/API accounting: **4,061,251 total tokens** = 4,041,417 input, 3,919,360 cached input (~97.0% of input), 19,834 output, 2,669 reasoning output.
+- Tool calls: **80 `exec_command`** calls.
+- User-facing usage-monitor figure was not supplied with this archive, so do not compare quota consumption directly against 428619 until that metric is available.
+
+Interpretation:
+
+- Medium remained justified: the task required proving a persistence/process-death failure mode and changing mutation/WorkManager durability semantics.
+- Despite an explicitly optimized prompt, API-token volume was about twice the 428619 benchmark while reasoning remained tiny. This strengthens the conclusion that lowering reasoning is not the main optimization lever for this class of task.
+- 80 shell round-trips caused repeated large cached-context processing. Future prompts should be more aggressive about **batched reads/searches and command budgets**, and should avoid serial one-file/one-query exploration when a single grouped command can answer the same question.
+- Acceptance criteria should distinguish **must-prove** from optional robustness checks. Once the must-prove criteria pass, stop; do not spend calls on additional reassurance.
+- When a task already names likely components/failure modes, instruct Codex to inspect those in a small number of grouped commands before branching into additional hypotheses.
+
 ## How to calibrate future prompts
 
-Before saving a new prompt, assign model/reasoning from task characteristics and available empirical evidence. Then explicitly encode scope, known evidence, minimal starting files/components, targeted verification, forbidden redundant work, and a hard stop condition.
+Before saving a new prompt, assign model/reasoning from task characteristics and available empirical evidence. Then explicitly encode scope, known evidence, minimal starting files/components, targeted verification, forbidden redundant work, a practical tool-call discipline, and a hard stop condition.
 
-After a task completes, when usage/session evidence is supplied, compare it with this benchmark and update these rules if it supports a better calibration. Prefer measured evidence over generic assumptions.
+After a task completes, when usage/session evidence is supplied, compare it with these benchmarks and update these rules if it supports a better calibration. Prefer measured evidence over generic assumptions.
