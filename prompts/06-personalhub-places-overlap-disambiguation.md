@@ -16,12 +16,12 @@ Add Places check-in disambiguation when the current GPS position is simultaneous
 - Handle cancellation safely without a false check-in.
 - Keep background/location behavior efficient; no new continuous polling solely for this feature.
 
-## Scope
-Minimal diff; no unrelated Places redesign or geofence tuning.
+## Scope / safety
+Minimal diff; no unrelated Places redesign or geofence tuning. Respect existing guardrails protecting the real installed PH app/data during testing.
 
 ## Acceptance
-Targeted tests cover zero/one/multiple matches and cancellation; device/emulator check confirms the selector appears only for overlapping matches and the selected place is persisted.
+Targeted tests cover zero/one/multiple matches and cancellation. Perform a focused device/emulator check using a safe test state/location simulation where supported: confirm the selector appears for overlapping matches, cancellation creates no check-in, and selecting a place persists the intended canonical place. Do not broaden into unrelated location testing.
 
 Stop after PASS.
 
-Final output only: `PROMPT_ID`, `RESULT`, matching/selection behavior, tests, commit SHA.
+Final output only: `PROMPT_ID`, `RESULT`, matching/selection behavior, tests, device/emulator checks, commit SHA.
