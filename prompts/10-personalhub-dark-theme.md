@@ -19,12 +19,12 @@ Known state to preserve: PH already has durable generation-based SAF auto-export
 - Tapping it shows at least last successful export time and relevant current stale/error/folder state, using PH's existing auto-export status APIs.
 - Preserve existing no-idle-loop and durable export behavior.
 
-## Scope
-No export architecture work, unrelated visual redesign, typography overhaul, component refactor, backup/import redesign, or unrelated settings work.
+## Scope / safety
+No export architecture work, unrelated visual redesign, typography overhaul, component refactor, backup/import redesign, or unrelated settings work. Respect existing guardrails protecting the real installed PH app/data during testing.
 
 ## Acceptance
-Build/tests pass. Focused light/dark visual verification covers PH home and representative screens/dialogs from every current module. Verify the export indicator reflects current vs stale/error state and its tap details. Do not perform a broader auto-export audit.
+Build/targeted tests pass. On the project-approved device/emulator, switch between system light/dark modes and perform focused visual verification of PH home plus representative screens/dialogs from every current module, checking readability and absence of light-only surfaces. Verify the export indicator reflects current vs stale/error state where safely reproducible and that tapping it shows the expected status/last-export details. Do not trigger destructive data operations merely to manufacture an error state and do not perform a broader auto-export audit.
 
 Stop immediately after PASS.
 
-Final output only: `PROMPT_ID`, `RESULT`, theme mechanism, export-indicator behavior, screens/modules checked, targeted tests, commit SHA.
+Final output only: `PROMPT_ID`, `RESULT`, theme mechanism, export-indicator behavior, screens/modules checked, targeted tests, device/emulator checks, commit SHA.
