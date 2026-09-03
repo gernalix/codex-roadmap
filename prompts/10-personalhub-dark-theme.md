@@ -6,21 +6,25 @@ Reasoning: low
 MegaVault: FAST
 
 # Goal
-Add complete dark-theme support to Personal Hub and all current modules using the app's existing UI/theme stack.
+Complete the remaining small PH home/theme UI work in one pass: add dark-theme support and the old-MultiTimer-style auto-export status indicator.
+
+Known state to preserve: PH already has durable generation-based SAF auto-export, recovery/error status, and the idle-loop fix. Do not redesign or reimplement the export engine.
 
 ## Requirements
-- Follow Android system light/dark mode by default; preserve any existing explicit theme preference if PH already has one.
-- Define theme-level colors/tokens centrally; do not scatter hardcoded dark colors through screens.
-- Cover PH shell/navigation plus every current module and common dialogs/cards/forms, including newly migrated modules present at execution time.
-- Ensure readable contrast and no light-only surfaces/text/icons in dark mode.
-- Preserve light-theme appearance unless a change is required for proper theming.
+- Follow Android system light/dark mode by default; preserve any existing explicit theme preference if present.
+- Define theme colors/tokens centrally; no scattered hardcoded dark colors.
+- Cover PH shell plus every current module/common dialog/card/form, including modules present at execution time.
+- Preserve light-theme appearance unless proper theming requires a change.
+- On PH home, add the small tappable `✅`/`❌` auto-export status indicator equivalent to old MultiTimer. Reuse/adapt MultiTimer's UI semantics where practical.
+- Tapping it shows at least last successful export time and relevant current stale/error/folder state, using PH's existing auto-export status APIs.
+- Preserve existing no-idle-loop and durable export behavior.
 
 ## Scope
-No unrelated visual redesign, typography overhaul or component refactor.
+No export architecture work, unrelated visual redesign, typography overhaul, component refactor, backup/import redesign, or unrelated settings work.
 
 ## Acceptance
-Build/tests pass; focused visual verification in both light and dark system modes covers PH home/navigation and representative screens/dialogs from every current module, with no obvious unreadable or light-only surfaces.
+Build/tests pass. Focused light/dark visual verification covers PH home and representative screens/dialogs from every current module. Verify the export indicator reflects current vs stale/error state and its tap details. Do not perform a broader auto-export audit.
 
-Stop after PASS.
+Stop immediately after PASS.
 
-Final output only: `PROMPT_ID`, `RESULT`, theme mechanism, screens/modules checked, tests, commit SHA.
+Final output only: `PROMPT_ID`, `RESULT`, theme mechanism, export-indicator behavior, screens/modules checked, targeted tests, commit SHA.
