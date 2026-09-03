@@ -67,7 +67,7 @@ Implement the safest/minimal architecture consistent with PH guidelines:
 - Do not implement OCR in PH.
 
 ## Safety / scope
-Minimal coherent diff for these requirements. No broad PH refactor, generic Git-sync framework, generic accounting engine, ML/OCR, bank API integration, or unrelated UI work. Preserve existing PH real-app destructive-test guardrails. Do not uninstall/wipe/reset the real package or user data.
+Minimal coherent diff for these requirements. No broad PH refactor, generic Git-sync framework, generic accounting engine, ML/OCR, bank API integration, or unrelated UI work. Preserve existing PH real-app destructive-test guardrails. Do not uninstall/wipe/reset the real package or user data during QA/testing.
 
 ## Acceptance
 Targeted DB/domain tests prove:
@@ -78,8 +78,15 @@ Targeted DB/domain tests prove:
 - migration preserves existing finance rows with valid account references;
 - Git interchange round-trip is deterministic; repeated pull is idempotent; malformed/conflicting input cannot partially corrupt live data; no credentials leak into persisted interchange/logging.
 
-Build must pass. On the isolated/project-approved QA device/emulator, verify: Soldi opens; create accounts/transactions and observe account + bottom aggregate totals; include/exclude accounts and see total update/persist; choose a catalog product and reopen the transaction with the same product identity; reconcile an account and verify the generated transaction/balance; close/reopen and verify persistence; configure a safe test Git repo/fixture and exercise explicit Push then Pull without duplicate transactions. Verify Soldi writes still participate in existing PH auto-export/sync paths. Do not touch the real PH installation/data.
+Build must pass. On the isolated/project-approved QA device/emulator, verify: Soldi opens; create accounts/transactions and observe account + bottom aggregate totals; include/exclude accounts and see total update/persist; choose a catalog product and reopen the transaction with the same product identity; reconcile an account and verify the generated transaction/balance; close/reopen and verify persistence; configure a safe test Git repo/fixture and exercise explicit Push then Pull without duplicate transactions. Verify Soldi writes still participate in existing PH auto-export/sync paths.
 
-Stop immediately after all acceptance criteria PASS; no further audit.
+## Final deployment — mandatory after PASS
+Only AFTER all QA/tests above PASS, build the normal/main PersonalHub app artifact and install/update that MAIN package on BOTH the physical Pixel and the physical TCL resolved from the project's authoritative device context. This is final deployment, not destructive testing:
+- preserve each device's existing PH app data and configuration; perform an in-place update only;
+- do not uninstall, clear data, reset storage, substitute the `.qa` package, or run destructive instrumentation/benchmark lifecycle against the main package;
+- verify the installed main PH version/build is the newly produced one on both Pixel and TCL and that PH launches successfully on both;
+- if safe in-place installation cannot be completed on either device, RESULT must be `BLOCKED`, not PASS.
 
-Final output only: `PROMPT_ID`, `RESULT=PASS|BLOCKED`, account model/balance semantics, canonical product fix, reconciliation behavior, Git interchange/auth/conflict design, targeted tests, QA device checks, commit SHA.
+Stop immediately after all acceptance criteria and both final installations PASS; no further audit.
+
+Final output only: `PROMPT_ID`, `RESULT=PASS|BLOCKED`, account model/balance semantics, canonical product fix, reconciliation behavior, Git interchange/auth/conflict design, targeted tests, QA device checks, Pixel main-app install/version, TCL main-app install/version, commit SHA.
