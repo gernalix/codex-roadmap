@@ -1,3 +1,16 @@
+# Execution record — PASS (2026-09-04)
+
+PROMPT_ID: 741295. Completed exactly this task with the following explicit user overrides during execution, which supersede the conflicting original requirements below:
+
+- Do not import any Soldi data into Personal Hub.
+- Remove all receipt functionality; retain only a transaction boolean indicating receipt origin. PH must not see or save any receipt.
+
+Delivered PH v13 / Room schema 4 with seven empty normalized finance tables, transaction/product CRUD, canonical PH Places references and `fromReceipt` only. No receipt tables, content, images, import pipeline, ML/OCR code or dependencies. Existing PH data is preserved by the schema-only upgrade; no standalone Soldi records were imported.
+
+Validation: targeted finance/migration and existing sync/app unit tests; debug and isolated QA builds; synthetic CRUD, persistence, sync journal and automatic SAF readback on Pixel 8a in the separate `.qa` package. UI navigation/edit/reopen checks passed. Emulator startup was blocked by host SIGSEGV; isolated physical-device QA satisfied the device gate. QA packages and their synthetic export folder were removed. Real PH stayed v12. Source commit: `a20e9171a2a48775980d673f2e418ca847b0121c`, pushed to `gernalix/PersonalHub` main. No later task was started.
+
+## Original prompt (requirements superseded above where they conflict)
+
 PROMPT_ID: 741295
 
 project_id: 49
