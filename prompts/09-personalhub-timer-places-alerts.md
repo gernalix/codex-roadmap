@@ -24,11 +24,11 @@ Known issue: the current Timer alert UI is functionally unusable and alert creat
 - Avoid duplicate notifications for one transition.
 
 ## Safety / scope
-Minimal architecture needed to share alert behavior; no generic automation engine, no unrelated notification refactor.
+Minimal architecture needed to share alert behavior; no generic automation engine, no unrelated notification refactor. Respect existing guardrails protecting the real installed PH app/data; device tests must not uninstall/wipe/reset the real app or user data.
 
 ## Acceptance
-Targeted tests cover Timer alert CRUD/triggering and Places enter/exit trigger mapping/deduplication. Focused device/emulator checks prove a Timer alert can be created and a representative geofence transition produces the configured Places alert (or, if emulator geofencing cannot be deterministically exercised, verify the platform registration plus trigger handling with the narrowest reliable test).
+Targeted tests cover Timer alert CRUD/triggering and Places enter/exit trigger mapping/deduplication. On the project-approved device/emulator, focused checks must prove Timer alert create/edit/enable-disable/delete and at least one real notification firing. Verify Places geofence registration/permissions and a representative transition notification; if emulator/device geofencing cannot be deterministically exercised, use the narrowest reliable platform registration + trigger-handling verification and report that limitation rather than faking PASS. Verify relevant behavior survives app reopen/restart where restoration is part of the implementation.
 
-Stop after PASS.
+Stop after PASS; no broader notification/location audit.
 
-Final output only: `PROMPT_ID`, `RESULT`, Timer UX fixed, Places geofence behavior, permissions/restoration behavior, tests, commit SHA.
+Final output only: `PROMPT_ID`, `RESULT`, Timer UX fixed, Places geofence behavior, permissions/restoration behavior, tests, device/emulator checks, commit SHA.
