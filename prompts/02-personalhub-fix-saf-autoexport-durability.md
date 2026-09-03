@@ -2,7 +2,8 @@
 
 **Modello consigliato:** GPT-5.5  
 **Reasoning:** Medium  
-**MegaVault:** STANDARD — riguarda persistenza/backup dati reali
+**MegaVault:** STANDARD — persistenza/backup dati reali; usa però esplorazione stretta  
+**Calibrazione:** applica `codex-calibration.md`; PROMPT_ID=428619 mostra che il costo va ridotto soprattutto limitando tool-call/esplorazione/verifiche ridondanti, non abbassando il reasoning di task diagnostici/safety comparabili.
 
 ```text
 PROMPT_ID=736205
@@ -10,7 +11,15 @@ project_id=49
 
 GOAL: trovare e correggere la causa per cui l'auto-export SAF di PersonalHub può restare vecchio per molte ore nonostante modifiche al DB, rendendo verificabile la garanzia "DB change -> durable SAF export" anche dopo process death/reboot/background restrictions.
 
-EVIDENZA GIÀ RACCOLTA — riusala, non ripetere esplorazione generale:
+OTTIMIZZAZIONE TOKEN/TOOL-CALL OBBLIGATORIA:
+- riusa MegaVault, AGENTS/protocollo ed evidenza sotto; niente esplorazione generale del repo;
+- parti SOLO da HubAutoExport, DatabaseVault.exportNow, hook generation, Application startup e WorkManager config; amplia soltanto se una prova concreta lo richiede;
+- raggruppa ispezioni/comandi quando possibile; niente verifiche equivalenti/ridondanti e niente retry identici senza nuova evidenza;
+- testa prima il failure mode provato e il fix; amplia i test solo se rischio/fallimento lo richiede;
+- nessun audit/refactor/cleanup collaterale; segnala soltanto problemi non bloccanti;
+- appena acceptance criteria sono provati: STOP, niente audit post-PASS.
+
+EVIDENZA GIÀ RACCOLTA — riusala, non riverificarla senza motivo:
 - durante PROMPT_ID=641827 l'utente ha osservato che l'ultimo auto-export SAF era vecchio di ~12 ore;
 - il protocollo MegaVault richiede `saf_sqlite=autoexport_all_app_data_on_db_change;atomic;validate_after_write;failure_visible;preserve_last_good;test_required`;
 - `HubAutoExport.start()` usa un executor in-process che controlla `dirty()` ogni 2 secondi + un periodic WorkManager da 15 minuti;
@@ -22,25 +31,21 @@ EVIDENZA GIÀ RACCOLTA — riusala, non ripetere esplorazione generale:
 
 Non assumere che lo spostamento post-first-frame sia la causa: stabiliscilo con prove. L'osservazione delle ~12 ore potrebbe precedere o essere indipendente dalla modifica di startup.
 
-1. Parti da HubAutoExport, DatabaseVault.exportNow, hook che incrementano hub_generation, Application startup e WorkManager config. Individua la failure mode concreta che permette generation dirty senza export SAF tempestivo.
-2. Verifica in particolare: process death/reboot, app non riaperta, executor in-process, unique work KEEP, worker già pending/running, retry/backoff, URI permission SAF, error visibility e commit-before-enqueue race.
-3. Determina se OGNI write path reale incrementa la generation. Non fare audit generale: usa schema/capsule/write entrypoint canonici e amplia solo se trovi un gap.
-4. Implementa il minimo fix durevole. La correttezza non deve dipendere da un polling thread in-process o dal fatto che l'utente riapra PH.
-5. Dopo una mutation DB completata, deve esistere un trigger persistente WorkManager equivalente che sopravvive a process death; il periodic recovery resta solo rete di sicurezza, non meccanismo principale se evitabile.
-6. Mantieni export atomico, validazione post-write, ultima copia buona e retry idempotente. Nessuna mutation deve essere persa o duplicata.
-7. Rendi failure/staleness osservabile: almeno last successful export, generation esportata/corrente, ultimo errore e stato stale. Non nascondere Exception dietro retry senza traccia persistente/visibile.
-8. Aggiungi test mirati per:
-   - mutation -> export;
-   - più mutation ravvicinate/coalescing;
-   - process death tra commit ed enqueue;
-   - restart/reboot recovery equivalente;
-   - export failure + retry;
-   - URI/provider failure;
-   - preservation last-good;
-   - exported_generation aggiornato solo dopo export valido;
-   - nessuna finestra di ore con dirty generation e nessun work recuperabile.
-9. Device validation solo in modalità non distruttiva e con backup verificato prima. NON uninstall/pm clear/reinstall del package reale; se serve isolamento usa emulator/clone.
-10. Non refactor/cleanup fuori scope. Ferma appena gli acceptance criteria sono verificati.
+1. Individua la failure mode concreta che permette generation dirty senza export SAF tempestivo usando lo scope iniziale sopra.
+2. Verifica solo le ipotesi necessarie tra: process death/reboot, app non riaperta, executor in-process, unique work KEEP, worker pending/running, retry/backoff, URI permission SAF, error visibility, commit-before-enqueue race.
+3. Verifica che i write path canonici incrementino la generation usando schema/capsule/write entrypoint canonici; niente audit generale salvo evidenza di gap.
+4. Implementa il minimo fix durevole. La correttezza non deve dipendere da polling in-process o riapertura di PH.
+5. Dopo una mutation DB completata deve esistere un trigger persistente WorkManager equivalente che sopravvive a process death; periodic recovery solo rete di sicurezza se evitabile.
+6. Mantieni export atomico, validazione post-write, last-good e retry idempotente.
+7. Rendi failure/staleness osservabile almeno con last successful export, generation esportata/corrente, ultimo errore e stato stale.
+8. Test minimi obbligatori, preferibilmente mirati/parametrizzati invece di suite ridondanti:
+   - mutation -> durable trigger/export + mutation ravvicinate/coalescing;
+   - process death/recovery, includendo finestra commit->enqueue;
+   - failure/retry incluse URI/provider failure;
+   - last-good preservato ed exported_generation aggiornato solo dopo export valido.
+   Aggiungi test separati per reboot o altri casi solo se non sono già coperti dalla stessa invariabile o se l'implementazione li rende distinti.
+9. Device validation solo non distruttiva e con backup verificato. NON uninstall/pm clear/reinstall del package reale; usa emulator/clone se serve isolamento.
+10. Incrementa `version.txt` solo se richiesto dal protocollo governante. Commit + push canonici.
 
 Acceptance criteria:
 - root cause provata, non ipotizzata;
@@ -48,8 +53,9 @@ Acceptance criteria:
 - process death/reboot non può lasciare silenziosamente SAF stale per ore;
 - failure visibile e retry idempotente;
 - last-good preservato;
-- test mirati PASS;
-- commit + push canonici.
+- test mirati sufficienti PASS;
+- commit + push canonici;
+- nessuna esplorazione/verifica successiva al PASS.
 
 Output finale conciso:
 PROMPT_ID=
