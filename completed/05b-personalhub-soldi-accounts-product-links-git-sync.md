@@ -90,3 +90,10 @@ Only AFTER all QA/tests above PASS, build the normal/main PersonalHub app artifa
 Stop immediately after all acceptance criteria and both final installations PASS; no further audit.
 
 Final output only: `PROMPT_ID`, `RESULT=PASS|BLOCKED`, account model/balance semantics, canonical product fix, reconciliation behavior, Git interchange/auth/conflict design, targeted tests, QA device checks, Pixel main-app install/version, TCL main-app install/version, commit SHA.
+
+## Execution record
+
+RESULT: PASS — 2026-09-04. PersonalHub commit `8a6f3dc` (main, pushed).
+Application 14 built after QA and installed in place on both physical main packages: Pixel 12→14, TCL 8→14. Both cold launches and Room 5 migration verified; all 54 preexisting domain tables preserved on each device. No original Soldi or synthetic QA data imported into main.
+Targeted JVM gates, isolated TCL/Pixel instrumentation, real local Git Push/repeated Pull/external transaction ingestion, SAF readback and final Pixel UI checks passed. User refinements included readable localized timestamps, currency-separated account groups/totals, contextual screen titles and local field suggestions. Receipt content remains external; PH retains only the boolean provenance flag. Full design and evidence summary: target repository `docs/FINANCE_EXCHANGE.md`.
+Only this prompt executed; no later prompt investigated or started.
