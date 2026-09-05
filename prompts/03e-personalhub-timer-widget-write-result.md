@@ -8,18 +8,21 @@ MegaVault: FAST
 # Goal
 Make the Timer quick-session home widget report success only after a real canonical session commit succeeds.
 
-## Known evidence
-Inspect only:
-- `feature/multitimetracker/.../widget/QuickTaskRunner.kt`
-- `QuickTaskWidgetClickActivity.kt`
-- `core/session/DefaultSessionCore.kt`
-- `persistence/SessionRepository.kt`
-- directly relevant widget/session tests.
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/widget/QuickTaskRunner.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/widget/QuickTaskWidgetClickActivity.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/core/session/DefaultSessionCore.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/persistence/SessionRepository.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/persistence/AuditLogSqlite.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/widget/QuickTaskWidgetProvider.kt`
 
-Current behavior:
+Open snapshot/broadcast helpers only if these files directly call them and the result contract must change there. No Timer-wide exploration. If an earlier task renamed a listed symbol, resolve it with one targeted search only.
+
+## Known evidence
 - the click Activity vibrates and shows the “started” toast before executing the write;
-- `QuickSessionRunner` wraps `ensureRunningSessionRow()` in `runCatching` and ignores its result;
-- it then writes a SESSION_START audit event and broadcasts snapshot-changed even if the session write failed;
+- `QuickSessionRunner`/`QuickTaskRunner` wraps the canonical session-row write in `runCatching` and ignores its result;
+- it can then write a SESSION_START audit event and broadcast snapshot-changed even if the session write failed;
 - the outer caller can therefore consider the operation successful when no session row exists.
 
 ## Work
