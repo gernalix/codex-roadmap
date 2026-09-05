@@ -1,4 +1,4 @@
-PROMPT_ID: 731462
+PROMPT_ID: 937214
 
 project_id: 49
 Recommended model: GPT-5.5
@@ -27,7 +27,7 @@ Current `PersonalHub/main` already shows:
 
 ## Exact starting files — verified on PersonalHub/main
 
-Read these in one grouped pass:
+Read these in one grouped pass only:
 
 - `feature/multitimetracker/src/main/java/com/example/multitimetracker/capsules/now/ui/NowScreen.kt`
 - `feature/multitimetracker/src/main/java/com/example/multitimetracker/ui/components/SessionEditDialog.kt`
