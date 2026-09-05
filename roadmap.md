@@ -9,10 +9,13 @@ Stato già acquisito e quindi NON da duplicare nei task futuri: database PH unif
 3. `prompts/07-personalhub-places-manual-checkin.md`
 4. `prompts/08-personalhub-places-where-was-i.md`
 5. `prompts/09-personalhub-timer-places-alerts.md`
-6. `prompts/10-personalhub-dark-theme.md`
-7. `prompts/11-personalhub-global-activity-audit-undo.md`
+6. `prompts/09b-personalhub-substances-v2-rebuild.md`
+7. `prompts/10-personalhub-dark-theme.md`
+8. `prompts/11-personalhub-global-activity-audit-undo.md`
 
 Il correttivo Soldi 05b precede l'architettura cross-module: completa account/balance, identità prodotto e interscambio Git prima che il task 04 definisca le relazioni condivise sullo schema finance definitivo.
+
+Il rebuild Substances 09b precede il task UI/theme 10 e il registro globale 11 perché ridefinisce schema, domain/write-path, scheduling, notifiche e gran parte della UI del modulo. In questo modo il dark theme viene verificato sulla UI Substances definitiva e il registro audit intercetta i write-path finali, evitando doppio lavoro.
 
 L'indicatore home `✅/❌` con dettaglio stato/ultimo export è intenzionalmente accorpato al task UI/theme 10: non merita bootstrap, esplorazione, build e test di una sessione Codex autonoma. I task devono preservare le garanzie auto-export già verificate e non riesplorare/reimplementare tali feature salvo dipendenza strettamente necessaria.
 
