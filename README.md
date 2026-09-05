@@ -54,13 +54,13 @@ Requirements:
 
 - every pending prompt listed in `roadmap.md` MUST be a clickable Obsidian wikilink to its file under `prompts/`;
 - every corresponding heading in `spiegazioni.md` MUST link to the same prompt;
-- every pending prompt file under `prompts/` MUST contain backlinks near the top to both `[[roadmap]]` and `[[spiegazioni]]`;
+- Obsidian's automatic Backlinks view is the canonical reverse navigation from a prompt back to `roadmap.md` and `spiegazioni.md`; do **not** add redundant manual backlinks inside every prompt solely for this purpose;
 - `README.md`, `roadmap.md` and `spiegazioni.md` SHOULD link to each other with Obsidian wikilinks;
 - use stable path-based links such as `[[prompts/personalhub-example|personalhub-example]]`; do not use ordering numbers as link targets;
 - when a prompt is renamed, moved to `completed/`, added or removed, update all affected wikilinks in the same repository change;
 - do not leave dangling wikilinks to removed pending prompts.
 
-A roadmap/prompt maintenance change is incomplete until Obsidian navigation and backlinks have been checked together with roadmap/spiegazioni synchronization.
+A roadmap/prompt maintenance change is incomplete until Obsidian navigation and automatic backlink resolution have been checked together with roadmap/spiegazioni synchronization.
 
 ### Canonical execution discipline
 
@@ -109,7 +109,7 @@ If the selected prompt ends with PASS and all acceptance criteria are truly sati
 3. preserve the relative order of all remaining entries and renumber the ordered list consecutively from `1` to `N`;
 4. never rename remaining prompt files because their roadmap position changed;
 5. update `spiegazioni.md` so it again contains exactly the pending prompts in `roadmap.md`, in the same order;
-6. update Obsidian wikilinks/backlinks so no pending navigation link points to the moved prompt;
+6. update Obsidian wikilinks so no pending navigation link points to the moved prompt; reverse navigation remains provided automatically by Obsidian backlinks;
 7. commit and push the target project's changes;
 8. commit and push the `codex-roadmap` update;
 9. do not automatically start the next prompt.
