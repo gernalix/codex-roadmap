@@ -11,6 +11,19 @@ Substances v2 — phase 3. Complete prescriptions/refills and make Substances no
 ## Prerequisite
 Use MegaVault/`AGENTS.md` and verify that the phase-2 scheduling/intake command semantics exist. If materially absent, stop `BLOCKED`; do not recreate prior phases.
 
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/data/SostanzeRepository.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/domain/SostanzeEngine.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/notifications/SostanzeNotificationScheduler.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeViewModel.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeApp.kt`
+- `feature/sostanze/src/main/AndroidManifest.xml`
+- `app/src/main/AndroidManifest.xml`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/PersonalHubDatabase.kt`
+
+If phases 1–2 created a command/schedule file, resolve it once from the exact type referenced by `SostanzeEngine`/scheduler and use only that file. Follow prescription/notification entity/DAO declarations directly from `SostanzeRepository`; no module scan. If a listed symbol was renamed, one targeted search is allowed.
+
 After prerequisite verification and before code changes, increment `version.txt` exactly once by `+1`.
 
 ## Prescriptions / refills
