@@ -11,6 +11,15 @@ Global activity register — phase 3. Expose the completed semantic audit + safe
 ## Prerequisite
 Use MegaVault/`AGENTS.md` and verify narrowly that phases 1–2 provide the canonical paged audit read model, semantic labels/descriptions, grouping and current reversibility/conflict status with safe undo commands. If materially absent, stop `BLOCKED`; do not rebuild backend phases.
 
+## Exact starting files — verified/current boundaries
+Read these existing app-shell files in one grouped pass:
+- `app/src/main/java/com/gernalix/personalhub/MainActivity.kt`
+- `app/src/main/java/com/gernalix/personalhub/capsules/shortcuts/LauncherShortcutsCapsule.kt`
+- `app/src/main/java/com/gernalix/personalhub/capsules/settings/HubSettings.kt`
+- `app/src/main/AndroidManifest.xml`
+
+Then locate the phase-1/2 audit read/undo files **once** by the exact audit entity/service names registered in `PersonalHubDatabase.kt`; use only those resolved files. Do not inspect module repositories/business logic in this UI phase. If an app-shell file was renamed, one targeted symbol search is allowed.
+
 After prerequisite verification and before code changes, increment `version.txt` exactly once by `+1`.
 
 ## Home integration
@@ -54,6 +63,6 @@ Targeted UI/state tests cover paging/lazy history, grouped expansion, filter per
 Perform one focused safe device/emulator check: home card → full register → `🎛️` filter → expandable group → one disposable reversible event. Never use irreplaceable live data to prove destructive undo.
 
 ## Scope / resource discipline
-No audit schema redesign, new inverse engine, module business refactor, theme overhaul or analytics. Start only from home/module registration and phase-1/2 read/undo APIs. Stop immediately after PASS.
+No audit schema redesign, new inverse engine, module business refactor, theme overhaul or analytics. Use only the exact app-shell files and the phase-1/2 audit files resolved once. Stop immediately after PASS.
 
 Final output only: `PROMPT_ID`, `RESULT`, home integration, register/paging/group UI, filter behavior, undo/conflict UX, tests/device check, commit SHA.
