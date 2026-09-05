@@ -21,6 +21,16 @@ A prompt MUST NOT depend on:
 
 When evidence from an earlier session is relevant, copy the minimum decisive facts/evidence into the prompt so Codex does not need to rediscover them. References such as a previous `PROMPT_ID` are provenance only and must not be required to understand or execute the task.
 
+### Semantic filenames; roadmap order only
+
+The execution order MUST exist only as the consecutive numeric position in the ordered list in `roadmap.md`: `1.`, `2.`, `3.`, ...
+
+Prompt filenames/titles MUST be stable semantic names and MUST NOT contain any numeric or alphanumeric ordering prefix or suffix. Forbidden examples include `04-...`, `04b-...`, `09b1-...`, `task-12-...` or equivalent ordering codes. Use names such as `personalhub-complete-module-capsulization.md`.
+
+Dependencies and roadmap prose must identify tasks by semantic filename/title or by their functional meaning, never by an ordering code. When tasks are inserted, removed or reordered, renumber only the ordered list in `roadmap.md`; never rename prompt files merely because their position changed.
+
+`PROMPT_ID` is a random task identifier, not an ordering mechanism, and is unaffected by this rule.
+
 Each prompt should also state, when applicable:
 
 - `PROMPT_ID`;
@@ -55,12 +65,13 @@ Codex must:
 
 If the selected prompt ends with PASS and all acceptance criteria are truly satisfied:
 
-1. move the related file from `prompts/` to `completed/`, preserving its filename;
+1. move the related file from `prompts/` to `completed/`, preserving its semantic filename;
 2. remove that entry from `roadmap.md`;
-3. do not change the order of the other entries;
-4. commit and push the target project's changes;
-5. commit and push the `codex-roadmap` update;
-6. do not automatically start the next prompt.
+3. preserve the relative order of all remaining entries and renumber the ordered list consecutively from `1` to `N`;
+4. never rename remaining prompt files because their roadmap position changed;
+5. commit and push the target project's changes;
+6. commit and push the `codex-roadmap` update;
+7. do not automatically start the next prompt.
 
 If the task fails, remains blocked, or the acceptance criteria are not satisfied:
 
