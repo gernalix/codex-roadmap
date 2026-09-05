@@ -1,10 +1,10 @@
 # Codex Roadmap
 
-Ordine consigliato di esecuzione, ricalcolato sull'audit statico di `PersonalHub/main` del 2026-09-05. Un task Codex alla volta sullo stesso progetto.
+Ordine consigliato di esecuzione, riesaminato end-to-end sullo stato corrente di `PersonalHub/main` e sull'audit statico del 2026-09-05. Eseguire **un solo task Codex alla volta** sullo stesso progetto secondo il workflow del README.
 
 Stato già acquisito e da NON reimplementare nei task futuri: database PH unificato; Settings/Database & Backup integrati; sync Datasette local-first; Places API key/address suggestions; shortcut pinnabili e percorso diretto ai moduli; protezione dell'app reale dai benchmark/test distruttivi; auto-export SAF generation-based con WorkManager/recovery/error state; Soldi integrato con account, saldi, prodotto canonico e Git exchange.
 
-Correzioni emerse dall'audit e NON ancora acquisite: il recovery import ha un marker non atomico; le FK Places↔Soldi non sono integrate nel flusso di cancellazione; Soldi usa `included` anche per filtrare lo storico e perde draft su recreation; il call overlay People ha deep-link/race/log PII; il widget Timer può dichiarare successo dopo write fallita; Timer usa version/gating legacy e first-run backup proprio; gli alert Timer non sono ripristinati autonomamente dopo reboot/update; `HubAutoExport.start()` mantiene ancora un poll permanente ogni 2 secondi. Il dettaglio è in `audits/2026-09-05-personalhub-main-audit.md`.
+Finding tecnici ancora pendenti dall'audit: recovery import marker non atomico; policy delete/FK Places↔Soldi; filtro/lifecycle Soldi; People call-overlay deep-link/race/PII; Timer widget write-result; Timer version/AutoConsistency legacy; first-run backup Timer legacy; ripristino alert Timer dopo reboot/update; polling permanente 2 s in `HubAutoExport.start()`. Dettagli: `audits/2026-09-05-personalhub-main-audit.md`.
 
 ## Ordine pendente
 
@@ -18,27 +18,39 @@ Correzioni emerse dall'audit e NON ancora acquisite: il recovery import ha un ma
 8. `prompts/09a-personalhub-timer-alerts.md`
 9. `prompts/03h-personalhub-remove-idle-polling.md`
 10. `prompts/04-personalhub-cross-module-shared-entities.md`
-11. `prompts/06-personalhub-places-overlap-disambiguation.md`
-12. `prompts/07-personalhub-places-manual-checkin.md`
-13. `prompts/08-personalhub-places-where-was-i.md`
-14. `prompts/09c-personalhub-places-geofence-alerts.md`
-15. `prompts/09b-personalhub-substances-v2-rebuild.md`
-16. `prompts/10a-personalhub-autoexport-status-indicator.md`
-17. `prompts/10b-personalhub-dark-theme.md`
-18. `prompts/11-personalhub-global-activity-audit-undo.md`
+11. `prompts/04b-personalhub-cross-module-linked-entities-ui.md`
+12. `prompts/06-personalhub-places-overlap-disambiguation.md`
+13. `prompts/07-personalhub-places-manual-checkin.md`
+14. `prompts/08-personalhub-places-where-was-i.md`
+15. `prompts/09c-personalhub-places-geofence-alerts.md`
+16. `prompts/09b1-personalhub-substances-core-integrity-command-stock-archive.md`
+17. `prompts/09b2-personalhub-substances-scheduling-intake-interactions-macros.md`
+18. `prompts/09b3-personalhub-substances-prescriptions-notifications.md`
+19. `prompts/09b4-personalhub-substances-history-performance.md`
+20. `prompts/09b5-personalhub-substances-global-import-export-cleanup.md`
+21. `prompts/09b6-personalhub-substances-ui-navigation-final-qa.md`
+22. `prompts/10a-personalhub-autoexport-status-indicator.md`
+23. `prompts/10b-personalhub-dark-theme.md`
+24. `prompts/11a-personalhub-global-audit-foundation.md`
+25. `prompts/11b-personalhub-global-audit-safe-undo.md`
+26. `prompts/11c-personalhub-global-audit-register-ui.md`
 
 ## Dipendenze / motivazione dell'ordine
 
-- `03a` e `03b` vengono prima di qualsiasi nuova migrazione/relazione: rendono robusto il recovery e stabiliscono il comportamento delle entità canoniche già referenziate da FK.
-- `03c`–`03g` chiudono regressioni concrete e debito legacy a costo contenuto prima di ampliare l'architettura.
-- `09a` separa il repair degli alert Timer dalla nuova feature geofence Places; il vecchio prompt 09 accorpava due sottosistemi Android distinti.
-- `03h` rimuove/riduce il poll idle solo dopo aver verificato che export e sync dispongano di trigger durevoli/event-driven equivalenti.
-- `04` resta il principale task architetturale cross-module, ma viene eseguito solo dopo le correzioni di integrità sopra; essendo una migrazione DB usa MegaVault STRICT.
-- `06` sfrutta un flusso `Ambiguous` già esistente: deve correggere la policy, non ricostruire il check-in UI da zero.
-- `07` precede `08` perché le visite manuali diventano automaticamente una fonte utile per “Dov'ero?”.
-- `09c` implementa solo gli alert geofence Places dopo che il pattern alert Timer è stato stabilizzato da `09a`.
-- `09b` resta il rebuild Substances derivato dal suo audit separato; è mantenuto fuori dai finding interni di questo audit, ma deve precedere theme e registro audit globale perché ridefinisce write-path/UI/notifiche del modulo.
-- Il vecchio prompt 10 è diviso: l'indicatore auto-export (`10a`) è localizzato; il dark theme (`10b`) è realmente cross-module e viene eseguito dopo il fix lifecycle Soldi e dopo Substances v2.
-- Il registro globale `11` resta ultimo: deve intercettare i write-path finali di tutti i moduli e non va reintegrato dopo modifiche strutturali immediatamente successive.
+- `03a` e `03b` precedono nuove migrazioni/relazioni: prima si mette in sicurezza recovery e comportamento delle entità canoniche già referenziate da FK.
+- `03c`–`03g` chiudono regressioni concrete e debito legacy localizzato prima di ampliare l'architettura. Sono mantenuti separati perché riguardano failure mode indipendenti e hanno acceptance/test diversi.
+- `09a` stabilizza il sottosistema alert Timer e il restore dopo reboot/update prima di introdurre nuovi alert geofence in Places.
+- `03h` rimuove/riduce il poll idle solo dopo aver verificato trigger durevoli/event-driven equivalenti per export e sync; non è un secondo audit dell'auto-export.
+- `04` è ora esplicitamente **fase 1**: schema, FK/delete semantics e repository/query contracts cross-module. Usa GPT-5.6 Sol / medium / STRICT perché modifica il DB canonico.
+- `04b` è la nuova **fase 2 user-facing**: rende selezionabili/visibili/navigabili le relazioni People ↔ Timer ↔ Places senza ridisegnare lo schema. Viene subito dopo `04`, prima delle nuove feature Places.
+- `06 → 07 → 08` resta una catena coerente: correggere la disambiguazione, aggiungere visite manuali, poi usare tutta la history per “Dov'ero?”.
+- `09c` aggiunge solo geofence alerts Places dopo il pattern alert Timer; è ridimensionato a GPT-5.5 / medium / STANDARD perché non richiede un nuovo framework di automazione.
+- Il vecchio mega-prompt `09b-personalhub-substances-v2-rebuild.md` è eliminato e sostituito da `09b1`–`09b6`. Le fasi seguono le dipendenze reali: integrità/command layer → scheduling/intake/interazioni/macro → prescrizioni/notifiche → History/performance → import/export globale → UI/navigation/QA finale. Solo l'ultima fase esegue il passaggio end-to-end su Pixel e TCL.
+- `10a` resta una feature UI localizzata e `10b` viene dopo la UI Substances definitiva, così il dark theme copre le superfici finali invece di essere rifatto.
+- Il vecchio mega-prompt `11-personalhub-global-activity-audit-undo.md` è eliminato e sostituito da tre fasi: `11a` cattura semantica/schema, `11b` undo compensativo conflict-safe, `11c` home card/register/filter UI. Restano in fondo perché devono osservare i write-path e le impostazioni definitive dei moduli precedenti.
 
-I task devono preservare le garanzie già verificate, evitare esplorazione generale quando i file iniziali sono indicati, usare test mirati e fermarsi immediatamente quando gli acceptance criteria sono provati.
+## Disciplina globale
+
+Ogni prompt deve restare self-contained per una sessione Codex nuova, verificare esplicitamente eventuali prerequisiti invece di assumere una chat precedente, rispettare `AGENTS.md`/MegaVault e incrementare `version.txt` secondo la regola di progetto quando modifica PersonalHub.
+
+Ottimizzare il lavoro totale: niente esplorazione generale preventiva, batch di letture/search quando possibile, nessun retry identico senza nuova evidenza, test mirati prima di suite più ampie, nessun refactor/cleanup fuori scope e stop immediato dopo il PASS. Le fasi successive non devono riaprire l'architettura delle fasi precedenti salvo che un acceptance check dimostri una regressione o un prerequisito mancante.
