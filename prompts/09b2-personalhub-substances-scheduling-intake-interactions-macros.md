@@ -11,6 +11,17 @@ Substances v2 — phase 2. Build correct therapy scheduling and make intake, int
 ## Prerequisite — verify narrowly
 Use MegaVault/`AGENTS.md`, then verify that Substances has the safe command boundary, parent-row integrity, stock ledger and archive lifecycle from phase 1. If absent materially, stop `BLOCKED`; do not recreate phase 1.
 
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/domain/SostanzeEngine.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/data/SostanzeRepository.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/data/UtcDateCodec.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeViewModel.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeApp.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/PersonalHubDatabase.kt`
+
+Phase 1 may have created a new command/domain file. Locate it once from the exact command type referenced by `SostanzeEngine`/`SostanzeViewModel`, then use that file directly. Follow entity/DAO declarations from `SostanzeRepository`; do not scan the module. If a listed symbol was renamed, one targeted search is allowed.
+
 After prerequisite verification and before code changes, increment `version.txt` exactly once by `+1`.
 
 ## Known defects / required behavior
@@ -72,6 +83,6 @@ Cover at minimum:
 - macro produces correct per-item outcomes and cannot silently partially succeed.
 
 ## Scope / resource discipline
-No prescription/notification rebuild, history performance project, import/export cleanup or broad Substances UI redesign. Start from phase-1 commands plus scheduling/interaction/macro paths only. Targeted tests and hard stop after PASS.
+No prescription/notification rebuild, history performance project, import/export cleanup or broad Substances UI redesign. Use only the exact starting files, the phase-1 command file resolved once, directly referenced entity/DAO declarations and targeted tests. Hard stop after PASS.
 
 Final output only: `PROMPT_ID`, `RESULT`, schedule model/semantics, intake command outcomes, interactions/macros behavior, migration if any, tests, commit SHA.
