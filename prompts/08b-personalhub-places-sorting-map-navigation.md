@@ -10,19 +10,25 @@ Improve the existing Places home/map UX with explicit sortable place metrics and
 
 After verifying the current state and before code changes, increment `version.txt` exactly once by `+1`.
 
-## Known evidence — start here, do not rediscover broadly
-Use MegaVault/`AGENTS.md`, then inspect only the current equivalents of:
-- `feature/luoghi/.../capsules/places/PlaceListUiModel.kt` — already exposes `totalTimeMs`, `visitCount`, `lastVisitAt` and currently hardcodes active/last-visit/name ordering;
-- Places `HomeScreen` + `MainActivity.kt` navigation;
-- `MapViewerActivity.kt` — currently centers the map on the average marker coordinates;
-- `capsules/mapviewer/MapViewerModels.kt` — canonical marker model has `uuid`, but `MapOverlayMarker` currently drops place identity;
-- existing `LocationCapsule`/foreground location path.
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/places/PlaceListUiModel.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/ui/home/HomeScreen.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/ui/places/PlaceListItem.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/MainActivity.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/MapViewerActivity.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/mapviewer/MapViewerModels.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/mapviewer/MapViewerCapsule.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/mapviewer/MapViewerRepository.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/location/LocationCapsule.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/stats/StatsCapsule.kt`
 
-By this roadmap stage, canonical Places visits/stats may also include Timer-backed Place intervals. Reuse those canonical metrics exactly once; do not create a second stats/history implementation.
+Current `PlaceListUiModel.kt` already exposes `totalTimeMs`, `visitCount`, `lastVisitAt` and hardcodes active/last-visit/name ordering. `MapViewerActivity.kt` currently centers on average marker coordinates. `MapMarkerModel` carries UUID but `MapOverlayMarker` currently drops place identity. These are the decisive starting facts; do not rediscover them.
+
+If a preceding task introduced a new canonical visit/stats projection for Timer-backed Places, resolve it once via the exact symbol referenced by `PlaceListUiModel`/`StatsCapsule`; do not scan the repo. If a listed file was renamed, one targeted symbol search is allowed.
 
 ## 1. Places ordering
 Add a compact sort control to the Places home/list with these criteria:
-
 - **Distanza da dove sono ora**
 - **Ultima visita**
 - **Tempo totale**
@@ -69,7 +75,7 @@ For every **individual Place marker**, tapping the marker must open/navigate to 
 No map-engine replacement, route/directions feature, continuous GPS tracking, geofence-alert work, broad Places redesign, database schema migration, or unrelated statistics refactor.
 
 ## Resource discipline
-Use only the files/components above plus their direct tests/resources. Batch reads/searches. No repo-wide scan, no redundant location experiments, no unrelated cleanup. Run targeted unit/UI tests first and one focused emulator/device flow only for map/location/navigation behavior. Stop immediately after PASS.
+Use only the exact starting files plus the one resolved canonical stats projection if prior tasks created it. Batch reads/searches. No repo-wide scan, no redundant location experiments, no unrelated cleanup. Run targeted unit/UI tests first and one focused emulator/device flow only for map/location/navigation behavior. Stop immediately after PASS.
 
 ## Acceptance
 - Places can be sorted by distance/current location, last visit, total time and visit count in both ASC and DESC directions;
