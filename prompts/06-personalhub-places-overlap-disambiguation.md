@@ -8,9 +8,17 @@ MegaVault: FAST
 # Goal
 Fix Places check-in disambiguation so being inside more than one saved Place/geofence always requires an explicit user choice.
 
-## Known decisive evidence
-Start from `feature/luoghi/.../capsules/checkin/CheckInPolicy.kt` plus the already-existing Ambiguous check-in UI/state and its tests. Do not rediscover the whole Places pipeline.
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/checkin/CheckInPolicy.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/checkin/CheckInModels.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/checkin/CheckInCapsule.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/LuoghiHomeViewModel.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/ui/home/HomeScreen.kt`
 
+Open `PlaceRepository.kt` only if a failing persistence test shows the selected ID is not saved correctly; do not inspect map/geofence/location code otherwise. If a prior task renamed a listed symbol, use one targeted symbol search only.
+
+## Known decisive evidence
 Current `CheckInPolicy.choosePlace()` already builds all in-radius candidates and already has an `Ambiguous` result, but when multiple candidates exist it only returns `Ambiguous` if the first two center distances differ by at most 10 m; otherwise it silently chooses the nearest. Geofence overlap is determined by each Place radius, not by near-equal center distance, so this can auto-check-in to the wrong Place while the user is simultaneously inside multiple saved Places.
 
 ## Requirements
