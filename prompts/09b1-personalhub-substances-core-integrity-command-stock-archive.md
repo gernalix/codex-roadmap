@@ -8,10 +8,19 @@ MegaVault: STRICT
 # Goal
 Substances v2 — phase 1. Establish a safe canonical data/domain foundation: parent-row integrity, one authoritative command boundary for mutations, mathematically correct stock ledger, and reversible archive/restore. Preserve all real user data.
 
-## Starting scope / decisive defects
-Use MegaVault/`AGENTS.md` first. Inspect only `feature/sostanze`, its `core/database` entities/DAOs/migrations, and directly shared mutation infrastructure.
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/data/SostanzeRepository.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/domain/SostanzeEngine.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeViewModel.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/capsules/CapsuleContracts.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/data/SostanzeDatabase.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/PersonalHubDatabase.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/DatabaseGate.kt`
 
-Known defects to verify before changing:
+The concrete Substances entities/DAO are referenced from the repository/database files above; follow those declarations directly rather than scanning `feature/sostanze`. If a prior task moved a listed symbol, resolve it with one targeted symbol search only.
+
+## Decisive defects to verify before changing
 - parent updates may use replace-like semantics capable of deleting/recreating rows and damaging FK-linked history;
 - mutation rules are distributed across entry points instead of one domain command boundary;
 - stock adjustments can represent a delta that differs from what was actually applied, including silent clamping/invalid unit assumptions;
@@ -34,7 +43,7 @@ After verifying current state, increment `version.txt` exactly once by `+1` befo
    - do not treat dose and stock units as interchangeable. Unsupported conversions fail clearly.
 5. Implement archive + archived query/list contract + restore while preserving all history. Archived substances must be excluded from new active operations where semantically required.
 6. Remove/disable automatic personal/demo seeding in real databases.
-7. Inspect `capsules/contracts` only where required by the command boundary. Keep a genuinely used abstraction; remove dead contracts only if consumer-free and directly in scope.
+7. Inspect `CapsuleContracts.kt` only where required by the command boundary. Keep a genuinely used abstraction; remove dead contracts only if consumer-free and directly in scope.
 
 ## Non-goals
 No scheduling redesign, interaction-rule redesign, macro UI, prescription/notification rebuild, history UI/performance work, import/export rewrite, or broad UI redesign in this phase.
@@ -51,6 +60,6 @@ Targeted DB/domain tests must prove:
 - representative mutation commands are atomic and use shared generation/auto-export semantics without duplicate export logic.
 
 ## Resource discipline
-No repo-wide audit. Batch schema/DAO/domain inspection, use targeted tests, no identical retries, no unrelated cleanup. Stop immediately after PASS.
+No repo-wide audit. Use only the exact starting files, directly referenced entity/DAO declarations and targeted tests; no identical retries, no unrelated cleanup. Stop immediately after PASS.
 
 Final output only: `PROMPT_ID`, `RESULT`, migration/integrity changes, command boundary, stock invariant, archive behavior, tests, commit SHA.
