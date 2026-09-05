@@ -8,15 +8,18 @@ MegaVault: FAST
 # Goal
 Fix the three concrete People/SuperContacts call-overlay defects without redesigning the feature.
 
-## Known evidence
-Start from:
-- `feature/supercontacts/.../CallSystemOverlayController.kt`
-- `CallStateReceiver.kt`
-- `MainActivity.kt`
-- `data/repository/ContactModels.kt` (`ContactDeepLink`)
-- app/module manifests and only directly relevant tests.
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/supercontacts/src/main/java/com/supercontacts/app/CallSystemOverlayController.kt`
+- `feature/supercontacts/src/main/java/com/supercontacts/app/CallStateReceiver.kt`
+- `feature/supercontacts/src/main/java/com/supercontacts/app/MainActivity.kt`
+- `feature/supercontacts/src/main/java/com/supercontacts/app/data/repository/ContactModels.kt`
+- `feature/supercontacts/src/main/java/com/supercontacts/app/data/repository/ContactsRepository.kt`
+- `app/src/main/AndroidManifest.xml`
 
-Current defects:
+Inspect the feature manifest only if the app manifest/Gradle merge does not answer intent resolution. Do not browse the large `SuperContactsApp.kt` unless a targeted navigation test proves the explicit contact route requires it. If a prior task renamed a listed symbol, use one targeted symbol search only.
+
+## Known evidence
 1. `openContact()` builds `supercontacts://contact/<publicId>` and launches an implicit `ACTION_VIEW`, but PH declares no intent-filter that resolves that URI. The overlay button can therefore throw `ActivityNotFoundException`.
 2. `show()` suspends for contact lookup on IO. `dismiss()` only removes an already-created view. If call state becomes IDLE while lookup is pending, the stale lookup can later call `showResolved()` and create an overlay after the call ended.
 3. successful overlay logging includes the full phone number at INFO level.
