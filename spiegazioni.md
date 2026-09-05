@@ -4,7 +4,7 @@
 
 Questo file spiega in parole semplici a cosa serve ciascun prompt ancora presente in `roadmap.md`. È pensato per essere comprensibile anche senza conoscenze di programmazione.
 
-**L'ordine e la numerazione qui sotto devono corrispondere esattamente a `roadmap.md`.**
+**L'ordine e la numerazione qui sotto devono corrispondere esattamente a `roadmap.md`.** I valori `Recommended model`/`Reasoning` originali restano dentro i singoli prompt; in `roadmap.md` trovi accanto a ogni voce anche la nuova alternativa sperimentale GPT-5.6, così puoi scegliere di volta in volta quale configurazione usare.
 
 ## 1. [[prompts/personalhub-timer-inapp-alert-cleanup|personalhub-timer-inapp-alert-cleanup]]
 

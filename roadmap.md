@@ -10,29 +10,31 @@ Finding tecnici ancora pendenti: la migrazione Timer Alerts lascia ancora UI `ti
 
 ## Ordine pendente
 
-1. [[prompts/personalhub-timer-inapp-alert-cleanup|personalhub-timer-inapp-alert-cleanup]]
-2. [[prompts/personalhub-soldi-account-inclusion-filter-semantics|personalhub-soldi-account-inclusion-filter-semantics]]
-3. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]]
-4. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]]
-5. [[prompts/personalhub-substances-therapy-intake-interactions-notifications|personalhub-substances-therapy-intake-interactions-notifications]]
-6. [[prompts/personalhub-substances-prescriptions-stock-crossmodule|personalhub-substances-prescriptions-stock-crossmodule]]
-7. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]]
-8. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]]
-9. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
-10. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
-11. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
-12. [[prompts/personalhub-timer-session-tag-picker-ux|personalhub-timer-session-tag-picker-ux]]
-13. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
-14. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
-15. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
-16. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
-17. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]]
-18. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]]
-19. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]]
-20. [[prompts/personalhub-global-screen-version-footer|personalhub-global-screen-version-footer]]
-21. [[prompts/personalhub-dark-theme|personalhub-dark-theme]]
-22. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]]
-23. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]]
+La raccomandazione `Recommended model` + `Reasoning` già contenuta in ciascun prompt resta **invariata**. Accanto a ogni voce qui sotto è aggiunta una seconda scelta, `nuova policy 5.6`, da usare come alternativa sperimentale quando vuoi verificare se un modello più capace riduce errori, retry, tool-call e consumo quota complessivo.
+
+1. [[prompts/personalhub-timer-inapp-alert-cleanup|personalhub-timer-inapp-alert-cleanup]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+2. [[prompts/personalhub-soldi-account-inclusion-filter-semantics|personalhub-soldi-account-inclusion-filter-semantics]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+3. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+4. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+5. [[prompts/personalhub-substances-therapy-intake-interactions-notifications|personalhub-substances-therapy-intake-interactions-notifications]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+6. [[prompts/personalhub-substances-prescriptions-stock-crossmodule|personalhub-substances-prescriptions-stock-crossmodule]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+7. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+8. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+9. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+10. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+11. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+12. [[prompts/personalhub-timer-session-tag-picker-ux|personalhub-timer-session-tag-picker-ux]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+13. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+14. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+15. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+16. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+17. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+18. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+19. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+20. [[prompts/personalhub-global-screen-version-footer|personalhub-global-screen-version-footer]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+21. [[prompts/personalhub-dark-theme|personalhub-dark-theme]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+22. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+23. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]] — **nuova policy 5.6: GPT-5.6 Terra / low**
 
 ## Dipendenze / motivazione dell'ordine
 
