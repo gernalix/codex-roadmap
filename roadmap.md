@@ -22,18 +22,19 @@ Finding tecnici ancora pendenti dall'audit: recovery import marker non atomico; 
 12. `prompts/06-personalhub-places-overlap-disambiguation.md`
 13. `prompts/07-personalhub-places-manual-checkin.md`
 14. `prompts/08-personalhub-places-where-was-i.md`
-15. `prompts/09c-personalhub-places-geofence-alerts.md`
-16. `prompts/09b1-personalhub-substances-core-integrity-command-stock-archive.md`
-17. `prompts/09b2-personalhub-substances-scheduling-intake-interactions-macros.md`
-18. `prompts/09b3-personalhub-substances-prescriptions-notifications.md`
-19. `prompts/09b4-personalhub-substances-history-performance.md`
-20. `prompts/09b5-personalhub-substances-global-import-export-cleanup.md`
-21. `prompts/09b6-personalhub-substances-ui-navigation-final-qa.md`
-22. `prompts/10a-personalhub-autoexport-status-indicator.md`
-23. `prompts/10b-personalhub-dark-theme.md`
-24. `prompts/11a-personalhub-global-audit-foundation.md`
-25. `prompts/11b-personalhub-global-audit-safe-undo.md`
-26. `prompts/11c-personalhub-global-audit-register-ui.md`
+15. `prompts/08b-personalhub-places-sorting-map-navigation.md`
+16. `prompts/09c-personalhub-places-geofence-alerts.md`
+17. `prompts/09b1-personalhub-substances-core-integrity-command-stock-archive.md`
+18. `prompts/09b2-personalhub-substances-scheduling-intake-interactions-macros.md`
+19. `prompts/09b3-personalhub-substances-prescriptions-notifications.md`
+20. `prompts/09b4-personalhub-substances-history-performance.md`
+21. `prompts/09b5-personalhub-substances-global-import-export-cleanup.md`
+22. `prompts/09b6-personalhub-substances-ui-navigation-final-qa.md`
+23. `prompts/10a-personalhub-autoexport-status-indicator.md`
+24. `prompts/10b-personalhub-dark-theme.md`
+25. `prompts/11a-personalhub-global-audit-foundation.md`
+26. `prompts/11b-personalhub-global-audit-safe-undo.md`
+27. `prompts/11c-personalhub-global-audit-register-ui.md`
 
 ## Dipendenze / motivazione dell'ordine
 
@@ -41,10 +42,11 @@ Finding tecnici ancora pendenti dall'audit: recovery import marker non atomico; 
 - `03c`–`03g` chiudono regressioni concrete e debito legacy localizzato prima di ampliare l'architettura. Sono mantenuti separati perché riguardano failure mode indipendenti e hanno acceptance/test diversi.
 - `09a` stabilizza il sottosistema alert Timer e il restore dopo reboot/update prima di introdurre nuovi alert geofence in Places.
 - `03h` rimuove/riduce il poll idle solo dopo aver verificato trigger durevoli/event-driven equivalenti per export e sync; non è un secondo audit dell'auto-export.
-- `04` è ora esplicitamente **fase 1**: schema, FK/delete semantics e repository/query contracts cross-module. Usa GPT-5.6 Sol / medium / STRICT perché modifica il DB canonico.
-- `04b` è la nuova **fase 2 user-facing**: rende selezionabili/visibili/navigabili le relazioni People ↔ Timer ↔ Places senza ridisegnare lo schema. Viene subito dopo `04`, prima delle nuove feature Places.
+- `04` è la **fase 1** cross-module: schema, FK/delete semantics e repository/query contracts. Oltre ai link People/Places, stabilisce che un Timer interval collegato a un Place possa essere la stessa fonte temporale usata da Places history/stats, senza una seconda visita indipendentemente autorevole e senza doppio conteggio. Usa GPT-5.6 Sol / medium / STRICT perché modifica il DB canonico.
+- `04b` è la **fase 2 user-facing**: rende selezionabili/visibili/navigabili le relazioni People ↔ Timer ↔ Places e aggiunge inline creation dai selector Timer (`+ Nuova persona`, `+ Nuovo luogo`). Un luogo creato da quel flusso nasce con radius canonico predefinito di **75 m**. Salvare un Timer interval con Place deve renderlo anche una visita Places secondo la single-source semantics di `04`, senza duplicare il fatto temporale.
 - `06 → 07 → 08` resta una catena coerente: correggere la disambiguazione, aggiungere visite manuali, poi usare tutta la history per “Dov'ero?”.
-- `09c` aggiunge solo geofence alerts Places dopo il pattern alert Timer; è ridimensionato a GPT-5.5 / medium / STANDARD perché non richiede un nuovo framework di automazione.
+- `08b` viene dopo la stabilizzazione della history perché ordina Places usando distanza attuale, ultima visita, tempo totale e numero visite (ASC/DESC) e usa le metriche canoniche finali, incluse eventuali visite Timer-backed una sola volta. Nello stesso task la mappa globale viene centrata sulla posizione attuale quando disponibile e un marker individuale apre la scheda canonica del Place.
+- `09c` aggiunge solo geofence alerts Places dopo il pattern alert Timer; è GPT-5.5 / medium / STANDARD perché non richiede un nuovo framework di automazione.
 - Il vecchio mega-prompt `09b-personalhub-substances-v2-rebuild.md` è eliminato e sostituito da `09b1`–`09b6`. Le fasi seguono le dipendenze reali: integrità/command layer → scheduling/intake/interazioni/macro → prescrizioni/notifiche → History/performance → import/export globale → UI/navigation/QA finale. Solo l'ultima fase esegue il passaggio end-to-end su Pixel e TCL.
 - `10a` resta una feature UI localizzata e `10b` viene dopo la UI Substances definitiva, così il dark theme copre le superfici finali invece di essere rifatto.
 - Il vecchio mega-prompt `11-personalhub-global-activity-audit-undo.md` è eliminato e sostituito da tre fasi: `11a` cattura semantica/schema, `11b` undo compensativo conflict-safe, `11c` home card/register/filter UI. Restano in fondo perché devono osservare i write-path e le impostazioni definitive dei moduli precedenti.
