@@ -2,26 +2,30 @@ PROMPT_ID: 128463
 
 project_id: 49
 Recommended model: GPT-5.5
-Reasoning: medium
+Reasoning: low
 MegaVault: FAST
 
 # Goal
-Add Places check-in disambiguation when the current GPS position is simultaneously inside more than one saved place/geofence.
+Fix Places check-in disambiguation so being inside more than one saved Place/geofence always requires an explicit user choice.
+
+## Known decisive evidence
+Start from `feature/luoghi/.../capsules/checkin/CheckInPolicy.kt` plus the already-existing Ambiguous check-in UI/state and its tests. Do not rediscover the whole Places pipeline.
+
+Current `CheckInPolicy.choosePlace()` already builds all in-radius candidates and already has an `Ambiguous` result, but when multiple candidates exist it only returns `Ambiguous` if the first two center distances differ by at most 10 m; otherwise it silently chooses the nearest. Geofence overlap is determined by each Place radius, not by near-equal center distance, so this can auto-check-in to the wrong Place while the user is simultaneously inside multiple saved Places.
 
 ## Requirements
-- Reuse the existing Places location/geofence matching pipeline; inspect only those paths and the check-in UI/state.
-- When exactly one place matches, preserve current automatic behavior.
-- When multiple places match, do not choose arbitrarily: show a prompt/list containing all matching places and let the user select the intended one.
-- Record only the selected canonical place ID.
-- Handle cancellation safely without a false check-in.
-- Keep background/location behavior efficient; no new continuous polling solely for this feature.
+- zero candidates: preserve current Unknown behavior;
+- exactly one candidate: preserve automatic Match;
+- **two or more candidates: always return/use the existing Ambiguous selection flow** containing the matching candidates; never auto-pick solely because one center is >10 m nearer;
+- record only the selected canonical Place ID;
+- cancellation creates no check-in;
+- preserve efficient current GPS/location behavior; no new polling/geofence redesign.
 
-## Scope / safety
-Minimal diff; no unrelated Places redesign or geofence tuning. Respect existing guardrails protecting the real installed PH app/data during testing.
+If the current UI artificially caps choices below the actual realistic overlap set, adjust only as necessary so a matching Place cannot silently disappear; do not redesign the dialog.
 
 ## Acceptance
-Targeted tests cover zero/one/multiple matches and cancellation. Perform a focused device/emulator check using a safe test state/location simulation where supported: confirm the selector appears for overlapping matches, cancellation creates no check-in, and selecting a place persists the intended canonical place. Do not broaden into unrelated location testing.
+Targeted tests cover 0/1/2+ candidates, including two overlapping Places whose center-distance difference is >10 m, and cancellation/selected persistence. Focused device/emulator check only if needed to prove the existing selector wiring.
 
 Stop after PASS.
 
-Final output only: `PROMPT_ID`, `RESULT`, matching/selection behavior, tests, device/emulator checks, commit SHA.
+Final output only: `PROMPT_ID`, `RESULT`, policy change, tests, device check if any, commit SHA.
