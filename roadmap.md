@@ -6,39 +6,37 @@ Ordine consigliato di esecuzione, riesaminato end-to-end sullo stato corrente di
 
 Stato già acquisito e da NON reimplementare nei task futuri: database PH unificato; Settings/Database & Backup integrati; sync Datasette local-first; Places API key/address suggestions; shortcut pinnabili e percorso diretto ai moduli; protezione dell'app reale dai benchmark/test distruttivi; auto-export SAF generation-based con WorkManager/recovery/error state; hardening del Database Vault con import marker atomico/fail-safe e rollback SAF verificato; Soldi integrato con account, saldi, prodotto canonico e Git exchange; policy delete/FK Places↔Soldi corretta; Timer Alerts passati su `PersonalHub/main` a prompt in-app centrati e immediati con link/deep link cliccabili.
 
-Finding tecnici ancora pendenti: la migrazione Timer Alerts lascia ancora UI `timerMinutes` e rami AlarmManager/notifica non più coerenti col comportamento in-app, mentre il restore boot/update va conservato per le timed-session; Soldi usa ancora `FinanceAccount.included` per nascondere transazioni invece di limitarlo ai totali; People call-overlay deep-link/race/PII; Timer widget write-result; residui runtime/backup legacy Timer; polling permanente 2 s in `HubAutoExport.start()`; capsulizzazione architetturale incompleta nel data layer. Dettagli storici: `audits/2026-09-05-personalhub-main-audit.md`.
+Finding tecnici ancora pendenti: Soldi usa ancora `FinanceAccount.included` per nascondere transazioni invece di limitarlo ai totali; People call-overlay deep-link/race/PII; Timer widget write-result; residui runtime/backup legacy Timer; polling permanente 2 s in `HubAutoExport.start()`; capsulizzazione architetturale incompleta nel data layer. Dettagli storici: `audits/2026-09-05-personalhub-main-audit.md`.
 
 ## Ordine pendente
 
 La raccomandazione `Recommended model` + `Reasoning` già contenuta in ciascun prompt resta **invariata**. Accanto a ogni voce qui sotto è aggiunta una seconda scelta, `nuova policy 5.6`, da usare come alternativa sperimentale quando vuoi verificare se un modello più capace riduce errori, retry, tool-call e consumo quota complessivo.
 
-1. [[prompts/personalhub-timer-inapp-alert-cleanup|personalhub-timer-inapp-alert-cleanup]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-2. [[prompts/personalhub-soldi-account-inclusion-filter-semantics|personalhub-soldi-account-inclusion-filter-semantics]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-3. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-4. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]] — **nuova policy 5.6: GPT-5.6 Sol / high**
-5. [[prompts/personalhub-substances-therapy-intake-interactions-notifications|personalhub-substances-therapy-intake-interactions-notifications]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-6. [[prompts/personalhub-substances-prescriptions-stock-crossmodule|personalhub-substances-prescriptions-stock-crossmodule]] — **nuova policy 5.6: GPT-5.6 Sol / high**
-7. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-8. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-9. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]] — **nuova policy 5.6: GPT-5.6 Sol / high**
-10. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-11. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-12. [[prompts/personalhub-timer-session-tag-picker-ux|personalhub-timer-session-tag-picker-ux]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-13. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-14. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]] — **nuova policy 5.6: GPT-5.6 Sol / high**
-15. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]] — **nuova policy 5.6: GPT-5.6 Sol / high**
-16. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-17. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-18. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-19. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-20. [[prompts/personalhub-global-screen-version-footer|personalhub-global-screen-version-footer]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-21. [[prompts/personalhub-dark-theme|personalhub-dark-theme]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-22. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]] — **nuova policy 5.6: GPT-5.6 Sol / high**
-23. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+1. [[prompts/personalhub-soldi-account-inclusion-filter-semantics|personalhub-soldi-account-inclusion-filter-semantics]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+2. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+3. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+4. [[prompts/personalhub-substances-therapy-intake-interactions-notifications|personalhub-substances-therapy-intake-interactions-notifications]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+5. [[prompts/personalhub-substances-prescriptions-stock-crossmodule|personalhub-substances-prescriptions-stock-crossmodule]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+6. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+7. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+8. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+9. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+10. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+11. [[prompts/personalhub-timer-session-tag-picker-ux|personalhub-timer-session-tag-picker-ux]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+12. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+13. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+14. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+15. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+16. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+17. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+18. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+19. [[prompts/personalhub-global-screen-version-footer|personalhub-global-screen-version-footer]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+20. [[prompts/personalhub-dark-theme|personalhub-dark-theme]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+21. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+22. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]] — **nuova policy 5.6: GPT-5.6 Terra / low**
 
 ## Dipendenze / motivazione dell'ordine
 
-- `personalhub-timer-inapp-alert-cleanup.md` chiude subito il lavoro Timer appena modificato, prima di cambiare sottosistemi indipendenti. Rimuove il vecchio significato di `timerMinutes` e i rami di scheduling/notifica esclusivi dei Timer Alerts, senza toccare le timed-session; nello stesso confine shared receiver/scheduler completa il ripristino idempotente degli alarm delle timed-session dopo reboot/update. GPT-5.5 / medium / FAST.
 - `personalhub-soldi-account-inclusion-filter-semantics.md` ripristina un correttivo P2 dell'audit che era scomparso dalla roadmap durante il consolidamento: escludere un conto deve toglierlo solo dal totale, non dalla cronologia delle transazioni. È localizzato e indipendente. GPT-5.5 / low / FAST.
 - `personalhub-remove-idle-polling.md` resta separato: rimuove/riduce il poll idle solo dopo aver verificato trigger durevoli/event-driven equivalenti per export e sync.
 - Substances viene poi completato in cinque fasi consecutive, così nessun altro task interrompe il lavoro sul modulo: integrità/command-stock-archive → terapia/intake/interazioni/countdown/notifiche → prescrizioni/scorte/People/Soldi → History/performance + integrazione col DB globale → UI/navigation/QA finale. Solo la fase finale esegue il passaggio end-to-end su Pixel e TCL.
