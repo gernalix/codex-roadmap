@@ -13,6 +13,23 @@ Use MegaVault/`AGENTS.md`, then verify narrowly that the canonical cross-module 
 
 If that foundation is absent or materially incomplete, stop `BLOCKED` and report the missing prerequisite. Do not reimplement the phase-1 schema task here.
 
+## Exact starting files — verified on PersonalHub/main
+After prerequisite verification, start with one grouped read of:
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/ui/components/SessionEditDialog.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/capsules/sessions/controller/SessionOwnerCapsuleViewModel.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/persistence/SessionRepository.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/capsules/timeline/ui/TimelineScreen.kt`
+- `feature/supercontacts/src/main/java/com/supercontacts/app/data/repository/ContactsRepository.kt`
+- `feature/supercontacts/src/main/java/com/supercontacts/app/ui/contacts/ContactDetailCapsule.kt`
+- `feature/supercontacts/src/main/java/com/supercontacts/app/ui/app/SuperContactsApp.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/data/PlaceRepository.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/MainActivity.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/ui/place/PlaceEditorDialog.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/ui/place/PlaceDetailScreen.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/ui/history/HistoryScreen.kt`
+
+Phase 1 will have introduced relation repository/DAO classes whose filenames do not yet exist at roadmap-authoring time. Locate those **once** by searching for the exact new relation table/API names recorded in `PersonalHubDatabase.kt`/phase-1 code, then use only those resolved files. Do not scan modules. If an existing listed file was renamed by an earlier task, one targeted symbol search is allowed.
+
 After prerequisite verification and before code changes, increment `version.txt` exactly once by `+1`.
 
 ## User-visible work
@@ -71,7 +88,7 @@ No schema redesign unless a tiny compatibility correction is strictly required b
 Do not add Places list sorting or redesign the Places map here; those are handled by a later dedicated Places UX task.
 
 ## Resource discipline
-Start only from the phase-1 relation repositories/DAOs plus the concrete Timer editor/history, People create/detail and Place create/detail surfaces. Batch inspection and targeted tests. Do not scan unrelated modules. Stop immediately after acceptance passes.
+Use only the exact starting files, the phase-1 relation files resolved by the one targeted search, and directly failing tests. Batch inspection/test commands. Stop immediately after acceptance passes.
 
 ## Acceptance
 - create/edit one Timer interval with canonical person + place links through UI;
