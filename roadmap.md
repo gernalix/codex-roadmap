@@ -1,5 +1,7 @@
 # Codex Roadmap
 
+[[README|README]] · [[spiegazioni|Spiegazioni]]
+
 Ordine consigliato di esecuzione, riesaminato end-to-end sullo stato corrente di `PersonalHub/main` e sull'audit statico del 2026-09-05. Eseguire **un solo task Codex alla volta** sullo stesso progetto secondo il workflow del README.
 
 Stato già acquisito e da NON reimplementare nei task futuri: database PH unificato; Settings/Database & Backup integrati; sync Datasette local-first; Places API key/address suggestions; shortcut pinnabili e percorso diretto ai moduli; protezione dell'app reale dai benchmark/test distruttivi; auto-export SAF generation-based con WorkManager/recovery/error state; hardening del Database Vault con import marker atomico/fail-safe e rollback SAF verificato; Soldi integrato con account, saldi, prodotto canonico e Git exchange; policy delete/FK Places↔Soldi corretta.
@@ -8,25 +10,25 @@ Finding tecnici ancora pendenti dall'audit: lifecycle Soldi; People call-overlay
 
 ## Ordine pendente
 
-1. `prompts/personalhub-soldi-account-filter-lifecycle.md`
-2. `prompts/personalhub-people-call-overlay-hardening.md`
-3. `prompts/personalhub-timer-widget-write-result.md`
-4. `prompts/personalhub-timer-legacy-runtime-cleanup.md`
-5. `prompts/personalhub-timer-alerts.md`
-6. `prompts/personalhub-remove-idle-polling.md`
-7. `prompts/personalhub-complete-module-capsulization.md`
-8. `prompts/personalhub-cross-module-entity-linking.md`
-9. `prompts/personalhub-places-visit-history-checkin.md`
-10. `prompts/personalhub-places-sorting-map-navigation.md`
-11. `prompts/personalhub-places-geofence-alerts.md`
-12. `prompts/personalhub-substances-core-integrity-command-stock-archive.md`
-13. `prompts/personalhub-substances-therapy-intake-prescriptions-notifications.md`
-14. `prompts/personalhub-substances-history-data-integration.md`
-15. `prompts/personalhub-substances-ui-navigation-final-qa.md`
-16. `prompts/personalhub-autoexport-status-indicator.md`
-17. `prompts/personalhub-dark-theme.md`
-18. `prompts/personalhub-global-audit-foundation-safe-undo.md`
-19. `prompts/personalhub-global-audit-register-ui.md`
+1. [[prompts/personalhub-soldi-account-filter-lifecycle|personalhub-soldi-account-filter-lifecycle]]
+2. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
+3. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
+4. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
+5. [[prompts/personalhub-timer-alerts|personalhub-timer-alerts]]
+6. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]]
+7. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
+8. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
+9. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
+10. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]]
+11. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]]
+12. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]]
+13. [[prompts/personalhub-substances-therapy-intake-prescriptions-notifications|personalhub-substances-therapy-intake-prescriptions-notifications]]
+14. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]]
+15. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]]
+16. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]]
+17. [[prompts/personalhub-dark-theme|personalhub-dark-theme]]
+18. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]]
+19. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]]
 
 ## Dipendenze / motivazione dell'ordine
 
