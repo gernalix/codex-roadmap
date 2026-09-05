@@ -8,8 +8,18 @@ MegaVault: FAST
 # Goal
 Add manual historical check-in/out to every saved Place for visits that cannot be reconstructed from current GPS.
 
-## Starting scope
-Begin from the existing Places history model and validation paths, especially `PlaceRepository` history mutation methods, `HistorySessionCalculator`/validation, and the Place detail/actions UI. Do not scan unrelated location/geofence code.
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/data/PlaceRepository.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/checkin/HistoryModels.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/visits/VisitMapper.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/visits/VisitUiModel.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/MainActivity.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/ui/place/PlaceDetailScreen.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/ui/history/HistoryDialogs.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/ui/history/HistoryScreen.kt`
+
+Open `LuoghiHomeViewModel.kt` only if the existing navigation/mutation callback is needed to wire the action. Do not inspect GPS/geofence/map code. If an earlier task renamed a listed symbol, resolve it with one targeted search only.
 
 ## Requirements
 - Add a clear action on each Place to create a manual historical visit.
