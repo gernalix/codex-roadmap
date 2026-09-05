@@ -8,8 +8,24 @@ MegaVault: STANDARD
 # Goal
 Substances v2 — phase 5. Remove obsolete Substances-owned DB transfer behavior and integrate its import/export UI correctly with PersonalHub's single canonical `personalhub.db` infrastructure.
 
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/capsules/importexport/SostanzeDataPorter.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/capsules/importexport/SostanzeImportExportCapsule.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeViewModel.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeApp.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/data/SostanzeRepository.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/DatabaseNavigation.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/DatabaseVault.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/DatabaseGate.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/HubAutoExport.kt`
+- `app/src/main/java/com/gernalix/personalhub/DatabaseActivity.kt`
+- `app/src/androidTest/java/com/gernalix/personalhub/GlobalDatabaseInstrumentedTest.kt`
+
+Do not inspect Datasette sync or other modules. Open another DB helper only if `DatabaseVault` directly delegates the selected-URI/import behavior to it. If a prior task renamed a listed symbol, use one targeted symbol search only.
+
 ## Prerequisite / authoritative architecture
-Use MegaVault/`AGENTS.md`. PersonalHub must remain single-DB and use the global `DatabaseVault`/Database & Backup flow, central `DatabaseGate` mutation tracking and durable auto-export. Verify this current architecture narrowly before changes; do not redesign it.
+Use MegaVault/`AGENTS.md`. PersonalHub must remain single-DB and use the global `DatabaseVault`/Database & Backup flow, central `DatabaseGate` mutation tracking and durable auto-export. Verify this current architecture from the exact files above; do not redesign it.
 
 After prerequisite verification and before code changes, increment `version.txt` exactly once by `+1`.
 
@@ -34,6 +50,6 @@ Targeted tests must prove:
 - central generation/auto-export still observes representative Substances writes exactly through normal PH infrastructure.
 
 ## Scope / resource discipline
-Inspect only Substances import/export/porter UI/helpers and the global DB navigation/import APIs they call. No general DatabaseVault audit, sync redesign, history/UI redesign or unrelated cleanup. Stop after PASS.
+Use only the exact Substances transfer/UI files and global DB APIs above. No general DatabaseVault audit, sync redesign, history/UI redesign or unrelated cleanup. Stop after PASS.
 
 Final output only: `PROMPT_ID`, `RESULT`, import wiring, legacy paths removed/retained, export semantics, tests, commit SHA.
