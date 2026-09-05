@@ -8,10 +8,19 @@ MegaVault: FAST
 # Goal
 Fix two localized regressions in the current Soldi module: account inclusion must affect only aggregate owned-money totals, and in-progress editor/navigation state must survive Activity recreation.
 
-## Known evidence
-Start from `feature/soldi/.../SoldiActivity.kt` and the Soldi capsule/tests only.
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/soldi/src/main/java/com/gernalix/personalhub/soldi/SoldiActivity.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/soldi/FinanceCapsule.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/soldi/FinanceDao.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/soldi/FinanceEntities.kt`
+- `app/src/androidTest/java/com/gernalix/personalhub/FinanceAccountsInstrumentedTest.kt`
+- `app/src/androidTest/java/com/gernalix/personalhub/FinanceInstrumentedTest.kt`
 
-1. The transaction list currently filters rows with `accounts.any { it.id == row.value.accountId && it.included }`. This makes an account excluded from the bottom total disappear from transaction history too. The intended 05b semantics are: `included` selects which account balances contribute to the aggregate total; it does not hide transactions.
+Do not explore other finance/Git-exchange files unless a targeted test proves the bug reaches them. If an earlier task renamed a listed symbol/file, use one targeted search for it; no repository sweep.
+
+## Known evidence
+1. `SoldiActivity.kt` currently filters transaction rows through account `included`, causing an account excluded from the bottom total to disappear from transaction history too. Intended semantics: `included` selects which account balances contribute to the aggregate total; it does not hide transactions.
 2. `SoldiScreen` keeps transaction/account/reconcile/product draft, tab, search and month in plain `remember` state. Configuration/Activity recreation drops unsaved user input and navigation state.
 
 ## Work
