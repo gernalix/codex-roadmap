@@ -8,13 +8,23 @@ MegaVault: STRICT
 # Goal
 Global activity register — phase 1. Add the canonical semantic audit foundation and complete capture coverage for PersonalHub persistent user-data/settings mutations, without building the final register UI or undo engine yet.
 
-## Starting architecture
-Use MegaVault/`AGENTS.md`, then inspect in grouped reads only:
-- unified Room DB/migrations and central mutation/export infrastructure;
-- current module repository/domain write boundaries for People, Timer, Places, Substances, WordPulse and Soldi;
-- persistent PH Settings stores;
-- import/sync/background paths that apply user-visible data changes;
-- Timer's existing module-local audit only as prior art/integration target.
+## Exact starting files — verified on PersonalHub/main
+Read these authoritative write/infrastructure boundaries in grouped passes; do not scan module trees:
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/PersonalHubDatabase.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/DatabaseGate.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/DatabaseVault.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/sync/SyncJournal.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/sync/DatasetteSync.kt`
+- `app/src/main/java/com/gernalix/personalhub/capsules/settings/HubSettings.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/soldi/FinanceCapsule.kt`
+- `feature/supercontacts/src/main/java/com/supercontacts/app/data/repository/ContactsRepository.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/persistence/SessionRepository.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/persistence/AuditLogSqlite.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/data/PlaceRepository.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/data/SostanzeRepository.kt`
+- `feature/wordpulse/src/main/java/com/wordpulse/app/data/WordRepository.kt`
+
+For each module, follow only direct mutation collaborators actually invoked by these files. If a module has gained a new authoritative command boundary from earlier roadmap tasks, resolve that exact imported command type once and use it instead of exploring the module. For import/sync/background capture, follow only calls directly reached from `DatabaseVault`, `DatasetteSync` and the listed repositories. If a listed symbol was renamed, one targeted symbol search is allowed.
 
 After verifying current state, increment `version.txt` exactly once by `+1` before code changes.
 
@@ -48,7 +58,7 @@ Add system lifecycle events:
 - actual DB schema migration: one semantic schema-version event, not SQL-statement spam.
 
 ## Existing Timer audit
-Integrate/bridge/retire the Timer-local audit presentation/storage only enough to ensure the final PH-wide audit has one canonical event source and does not double-log Timer mutations. Preserve any still-useful Timer-specific behavior through the global model where required.
+Use `AuditLogSqlite.kt` only as prior art/integration target. Integrate/bridge/retire it only enough to ensure the final PH-wide audit has one canonical event source and does not double-log Timer mutations. Preserve any still-useful Timer-specific behavior through the global model where required.
 
 ## Export/sync invariants
 Audit integration must not reintroduce an idle auto-export loop or create redundant export storms. Audit rows accompanying a mutation should participate in the same semantic transaction/generation where current architecture permits. Do not redesign Datasette sync or SAF backup.
@@ -69,7 +79,7 @@ Targeted migration/domain tests must prove:
 - Timer does not double-log.
 
 ## Resource discipline
-This is cross-cutting but not a generic repo audit. Start from known write boundaries and batch symbol/path discovery. No UI/undo implementation, no unrelated refactor, no post-PASS coverage sweep beyond the explicit current mutation boundaries.
+This is cross-cutting but not a generic repo audit. Start exclusively from the exact write boundaries above, follow direct mutation collaborators only, batch reads/tests, and do no post-PASS coverage sweep beyond these explicit current boundaries.
 
 Stop immediately after acceptance passes.
 
