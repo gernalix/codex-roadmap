@@ -6,33 +6,33 @@ Ordine consigliato di esecuzione, riesaminato end-to-end sullo stato corrente di
 
 Stato già acquisito e da NON reimplementare nei task futuri: database PH unificato; Settings/Database & Backup integrati; sync Datasette local-first; Places API key/address suggestions; shortcut pinnabili e percorso diretto ai moduli; protezione dell'app reale dai benchmark/test distruttivi; auto-export SAF generation-based con WorkManager/recovery/error state; hardening del Database Vault con import marker atomico/fail-safe e rollback SAF verificato; Soldi integrato con account, saldi, prodotto canonico e Git exchange; policy delete/FK Places↔Soldi corretta.
 
-Finding tecnici ancora pendenti dall'audit: lifecycle Soldi; People call-overlay deep-link/race/PII; Timer widget write-result; residui runtime/backup legacy Timer; ripristino alert Timer dopo reboot/update; polling permanente 2 s in `HubAutoExport.start()`; capsulizzazione architetturale incompleta nel data layer. Dettagli: `audits/2026-09-05-personalhub-main-audit.md` e verifica architetturale corrente.
+Finding tecnici ancora pendenti dall'audit: People call-overlay deep-link/race/PII; Timer widget write-result; residui runtime/backup legacy Timer; ripristino alert Timer dopo reboot/update; polling permanente 2 s in `HubAutoExport.start()`; capsulizzazione architetturale incompleta nel data layer. Dettagli: `audits/2026-09-05-personalhub-main-audit.md` e verifica architetturale corrente.
 
 ## Ordine pendente
 
-1. [[prompts/personalhub-soldi-account-filter-lifecycle|personalhub-soldi-account-filter-lifecycle]]
-2. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
-3. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
-4. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
-5. [[prompts/personalhub-timer-alerts|personalhub-timer-alerts]]
-6. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]]
-7. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
-8. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
-9. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
-10. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]]
-11. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]]
-12. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]]
-13. [[prompts/personalhub-substances-therapy-intake-prescriptions-notifications|personalhub-substances-therapy-intake-prescriptions-notifications]]
-14. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]]
-15. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]]
-16. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]]
-17. [[prompts/personalhub-dark-theme|personalhub-dark-theme]]
-18. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]]
-19. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]]
+
+1. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
+2. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
+3. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
+4. [[prompts/personalhub-timer-alerts|personalhub-timer-alerts]]
+5. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]]
+6. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
+7. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
+8. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
+9. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]]
+10. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]]
+11. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]]
+12. [[prompts/personalhub-substances-therapy-intake-prescriptions-notifications|personalhub-substances-therapy-intake-prescriptions-notifications]]
+13. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]]
+14. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]]
+15. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]]
+16. [[prompts/personalhub-dark-theme|personalhub-dark-theme]]
+17. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]]
+18. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]]
 
 ## Dipendenze / motivazione dell'ordine
 
-- Soldi, People e il widget Timer restano correttivi localizzati e indipendenti, quindi separati. Il task Soldi riguarda ora esclusivamente la persistenza dello stato UI durante recreation; non modifica la semantica dei filtri/account.
+- People e il widget Timer restano correttivi localizzati e indipendenti, quindi separati.
 - `personalhub-timer-legacy-runtime-cleanup.md` accorpa i due residui dello stesso sottosistema legacy Timer: versione/AutoConsistency e vecchio first-run backup. Condividono bootstrap e contesto runtime e possono essere verificati insieme senza allargarsi agli alert.
 - `personalhub-timer-alerts.md` resta separato perché scheduling, receiver, permessi e reboot/update hanno failure mode propri e costituiscono anche il precedente per i successivi geofence alert Places.
 - `personalhub-remove-idle-polling.md` resta separato e rimuove/riduce il poll idle solo dopo aver verificato trigger durevoli/event-driven equivalenti per export e sync.
