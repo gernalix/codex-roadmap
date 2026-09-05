@@ -8,34 +8,33 @@ Finding tecnici ancora pendenti dall'audit: recovery import marker non atomico; 
 
 ## Ordine pendente
 
-1. `prompts/personalhub-database-vault-transfer-hardening.md`
-2. `prompts/personalhub-canonical-entity-delete-fk-policy.md`
-3. `prompts/personalhub-soldi-account-filter-lifecycle.md`
-4. `prompts/personalhub-people-call-overlay-hardening.md`
-5. `prompts/personalhub-timer-widget-write-result.md`
-6. `prompts/personalhub-timer-version-autoconsistency.md`
-7. `prompts/personalhub-timer-remove-legacy-first-run-backup.md`
-8. `prompts/personalhub-timer-alerts.md`
-9. `prompts/personalhub-remove-idle-polling.md`
-10. `prompts/personalhub-complete-module-capsulization.md`
-11. `prompts/personalhub-cross-module-shared-entities.md`
-12. `prompts/personalhub-cross-module-linked-entities-ui.md`
-13. `prompts/personalhub-places-overlap-disambiguation.md`
-14. `prompts/personalhub-places-manual-checkin.md`
-15. `prompts/personalhub-places-where-was-i.md`
-16. `prompts/personalhub-places-sorting-map-navigation.md`
-17. `prompts/personalhub-places-geofence-alerts.md`
-18. `prompts/personalhub-substances-core-integrity-command-stock-archive.md`
-19. `prompts/personalhub-substances-scheduling-intake-interactions-macros.md`
-20. `prompts/personalhub-substances-prescriptions-notifications.md`
-21. `prompts/personalhub-substances-history-performance.md`
-22. `prompts/personalhub-substances-global-import-export-cleanup.md`
-23. `prompts/personalhub-substances-ui-navigation-final-qa.md`
-24. `prompts/personalhub-autoexport-status-indicator.md`
-25. `prompts/personalhub-dark-theme.md`
-26. `prompts/personalhub-global-audit-foundation.md`
-27. `prompts/personalhub-global-audit-safe-undo.md`
-28. `prompts/personalhub-global-audit-register-ui.md`
+1. `prompts/personalhub-canonical-entity-delete-fk-policy.md`
+2. `prompts/personalhub-soldi-account-filter-lifecycle.md`
+3. `prompts/personalhub-people-call-overlay-hardening.md`
+4. `prompts/personalhub-timer-widget-write-result.md`
+5. `prompts/personalhub-timer-version-autoconsistency.md`
+6. `prompts/personalhub-timer-remove-legacy-first-run-backup.md`
+7. `prompts/personalhub-timer-alerts.md`
+8. `prompts/personalhub-remove-idle-polling.md`
+9. `prompts/personalhub-complete-module-capsulization.md`
+10. `prompts/personalhub-cross-module-shared-entities.md`
+11. `prompts/personalhub-cross-module-linked-entities-ui.md`
+12. `prompts/personalhub-places-overlap-disambiguation.md`
+13. `prompts/personalhub-places-manual-checkin.md`
+14. `prompts/personalhub-places-where-was-i.md`
+15. `prompts/personalhub-places-sorting-map-navigation.md`
+16. `prompts/personalhub-places-geofence-alerts.md`
+17. `prompts/personalhub-substances-core-integrity-command-stock-archive.md`
+18. `prompts/personalhub-substances-scheduling-intake-interactions-macros.md`
+19. `prompts/personalhub-substances-prescriptions-notifications.md`
+20. `prompts/personalhub-substances-history-performance.md`
+21. `prompts/personalhub-substances-global-import-export-cleanup.md`
+22. `prompts/personalhub-substances-ui-navigation-final-qa.md`
+23. `prompts/personalhub-autoexport-status-indicator.md`
+24. `prompts/personalhub-dark-theme.md`
+25. `prompts/personalhub-global-audit-foundation.md`
+26. `prompts/personalhub-global-audit-safe-undo.md`
+27. `prompts/personalhub-global-audit-register-ui.md`
 
 ## Dipendenze / motivazione dell'ordine
 
