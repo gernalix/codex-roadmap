@@ -11,6 +11,20 @@ Substances v2 — final phase. Build the coherent user-facing Substances UI/navi
 ## Prerequisite
 Use MegaVault/`AGENTS.md` and verify narrowly that the preceding Substances phases are present: authoritative mutation commands/stock/archive, correct scheduling/intake/interactions/macros, prescriptions/notifications, bounded History, and global DB import/export integration. If a prerequisite is materially absent, stop `BLOCKED`; do not rebuild backend phases in this task.
 
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/MainActivity.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeApp.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeViewModel.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/theme/Color.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/theme/Theme.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/theme/Type.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/domain/SostanzeEngine.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/capsules/importexport/SostanzeImportExportCapsule.kt`
+- `app/src/main/java/com/gernalix/personalhub/MainActivity.kt`
+
+Prior phases may have introduced new command/schedule/history files. Resolve only the exact types imported by `SostanzeViewModel`/`SostanzeApp`; do not scan `feature/sostanze`. Backend files should be read only to consume their public/domain result contracts, not reopened for redesign. If a listed symbol was renamed, one targeted search is allowed.
+
 After prerequisite verification and before code changes, increment `version.txt` exactly once by `+1`.
 
 ## UX target
@@ -75,6 +89,6 @@ Focused checks on both devices:
 Do not run destructive DB-import tests on live user data. Do not broaden into a whole-app UX audit.
 
 ## Resource discipline
-This task is presentation/integration only. Do not reopen solved backend architecture unless a failing acceptance check proves a regression. Targeted tests, one final build/install pass, then stop.
+This task is presentation/integration only. Use the exact UI/theme entrypoints and only the public backend contracts they import. Do not reopen solved backend architecture unless a failing acceptance check proves a regression. Targeted tests, one final build/install pass, then stop.
 
 Final output only: `PROMPT_ID`, `RESULT`, UI/navigation summary, backend regressions if any, tests, Pixel, TCL, version, commit SHA.
