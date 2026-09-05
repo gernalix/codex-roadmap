@@ -11,6 +11,17 @@ Substances v2 — phase 4. Make History correct, identity-stable and scalable wi
 ## Prerequisite
 Use MegaVault/`AGENTS.md`; verify phase-2 canonical intake/scheduling semantics are present. If not, stop `BLOCKED`. Do not recreate earlier phases.
 
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/data/SostanzeRepository.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/domain/SostanzeEngine.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/data/UtcDateCodec.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeViewModel.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeApp.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/PersonalHubDatabase.kt`
+
+Resolve any phase-2 schedule/command file once from the exact type imported by these files. Follow intake/history DAO declarations from `SostanzeRepository`; do not search the whole module. If a listed symbol was renamed, one targeted search is allowed.
+
 After prerequisite verification and before code changes, increment `version.txt` exactly once by `+1`.
 
 ## Known defects / work
@@ -34,7 +45,7 @@ Add indexes only if justified by actual query patterns/plans; do not perform spe
 Cover identity after substance rename, filters/search, edit/delete through commands, date/time boundaries, bounded query/loading behavior on a representative large fixture, and no pathological synthetic missed-dose expansion.
 
 ## Scope
-No notification rebuild, import/export work, archive redesign or broad UI redesign. Modify only History/query/presentation paths plus directly justified indexes/tests.
+No notification rebuild, import/export work, archive redesign or broad UI redesign. Modify only the exact History/query/presentation paths above plus directly justified indexes/tests.
 
 Stop after targeted PASS.
 
