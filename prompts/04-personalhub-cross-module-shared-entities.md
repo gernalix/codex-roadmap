@@ -6,19 +6,35 @@ Reasoning: medium
 MegaVault: STRICT
 
 # Goal
-Phase 1 of cross-module entities: make PersonalHub modules interoperable through shared canonical People/Places relations, without duplicating descriptive facts or temporal visit facts across module-owned tables. This task establishes the persistence/domain/query foundation only; the user-facing linked-entity UX is a separate phase.
+Phase 1 of cross-module entities: make PersonalHub modules interoperable through shared canonical People/Places relations, without duplicating descriptive facts across module-owned tables. Establish the persistence/domain/query foundation only; the user-facing linked-entity UX is a separate phase.
 
-Concrete target: one fact such as “today 16:00–18:00 I was at Cafe Oscar with Giovanni” must be representable as one canonical Timer/activity interval linked to the canonical People entity for Giovanni and canonical Places entity for Cafe Oscar, without copied names/addresses and without a second independently persisted copy of the same 16:00–18:00 visit fact in Places.
+Concrete target: one fact such as “today 16:00–18:00 I walked with Carlo in Piazza Umberto” must be representable as one Timer/activity interval linked to the canonical People entity for Carlo and canonical Places entity for Piazza Umberto, not copied names/addresses in Timer.
 
-## Known current architecture / starting scope
-Use MegaVault/`AGENTS.md` first, then inspect in grouped reads only:
-- `core/database` Room schema/migrations and current FK/delete conventions;
-- People canonical identity (`contacts`, including stable `public_id` if still current);
-- Places canonical identity (`places.uuid` if still current) plus canonical visit/history query model;
-- Timer authoritative `sessions`/`session_tags` model and its SessionCore boundary;
-- Soldi only where its existing canonical Place relation provides a reusable pattern or constraint.
+A Timer interval linked to a Place must also be capable of representing the same temporal visit fact consumed by normal Places history/statistics without creating a second independently authoritative visit row that can drift or be double-counted.
 
-A prior audit found that existing Finance→Places `RESTRICT` FKs exposed a deletion-policy mismatch in Places. Verify the current state before adding new relationships; new links must not recreate uncaught constraint failures.
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/PersonalHubDatabase.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/TimerEntities.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/sync/SyncJournal.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/soldi/FinanceEntities.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/soldi/FinanceDao.kt`
+- `feature/supercontacts/src/main/java/com/supercontacts/app/data/repository/ContactsRepository.kt`
+- `feature/supercontacts/src/main/java/com/supercontacts/app/data/repository/ContactModels.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/data/PlaceRepository.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/checkin/HistoryModels.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/capsules/visits/VisitMapper.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/core/session/SessionCore.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/persistence/SessionRepository.kt`
+- `app/src/androidTest/java/com/gernalix/personalhub/GlobalDatabaseInstrumentedTest.kt`
+
+Do not scan module directories. Open a DAO/entity declaration directly referenced by these files only when needed to implement the FK/migration. If an earlier roadmap task renamed a listed symbol, resolve that exact symbol with one targeted search. After phase-1 implementation creates new relation files, use those directly for tests; do not discover adjacent architecture.
+
+## Known current architecture
+- People canonical identity is owned by SuperContacts/People.
+- Places canonical identity is owned by Places (`places.uuid` in the current schema).
+- Timer authoritative intervals are the canonical Timer session tables exposed through `SessionCore`/`SessionRepository`.
+- Existing Finance→Places `RESTRICT` FKs provide a concrete deletion-policy precedent; the preceding roadmap task should have made that UI/domain behavior safe. Verify the current policy from the files above rather than rediscovering it.
 
 After verifying the current schema/state and before code changes, increment `version.txt` exactly once by `+1`.
 
@@ -29,45 +45,31 @@ After verifying the current schema/state and before code changes, increment `ver
 - Prefer explicit junction/link tables and indexed FKs appropriate to actual cardinality.
 - Define delete/archive semantics for every new FK: historical activity links must not be silently destroyed by deleting a person/place, and repository/domain flows must fail/archive-preserve coherently.
 - Add repository/domain contracts for create/update/remove links and efficient forward/reverse representative queries so phase 2 can build UI without bypassing persistence rules.
-
-### One Timer interval can also be the Place visit
-When a Timer interval is linked to a canonical Place, the same temporal fact must be reusable as a Places visit/history fact rather than creating a second independently editable copy.
-
-Required semantics:
-- one semantic source of truth for the interval start/end;
-- Places history/stats can include a Timer-linked interval as a visit to that Place;
-- do not copy the same start/end + place into an independent Places visit row that can drift from Timer;
-- prefer a query/projection/reference relation from Places history to the canonical Timer interval;
-- if the existing schema technically requires a Places-side row, it may contain only the minimum stable reference/provenance needed to point to the Timer interval, not a second authoritative copy of its temporal/descriptive fields;
-- editing the Timer interval time or linked Place must automatically change what Places history/stats resolve;
-- unlinking/deleting the Timer interval must not leave a stale duplicate visit;
-- visit count and total-time aggregates must count the Timer-linked visit exactly once;
-- existing automatic/manual Places visits remain valid and must not be silently merged or deleted. Add the minimum deterministic anti-double-count rule needed when a Timer-backed visit corresponds to an already recorded Places visit; do not build a generic dedup engine.
-
+- Define one authoritative representation for a Timer interval linked to a Place so Places history/stats can consume that same interval without a duplicate independently editable visit record. Manual/automatic Places visits that are not Timer-backed remain supported by the existing history model.
+- Editing Timer start/end or changing/unlinking the Place must change the Places projection automatically; delete/unlink must not leave stale visits; total time and visit count must count a Timer-backed visit exactly once.
 - Add a non-destructive Room migration from the actual current schema version and targeted migration tests with pre-existing data.
-- Ensure global sync journal, generation/auto-export, DB validation/import/export and Datasette representation remain correct for the new tables/relations. Do not add duplicate per-module transport.
+- Ensure global sync journal, generation/auto-export, DB validation/import/export and Datasette representation remain correct for the new tables. Do not add duplicate per-module transport.
 
 ## Explicit phase boundary
-Do **not** build the general user-facing person/place selectors, inline create actions, linked chips, reverse activity sections or cross-navigation in this task. Only minimal diagnostic/test UI is allowed if strictly required to prove persistence through an already-existing flow. The next roadmap phase owns the user-visible integration.
+Do **not** build the general user-facing person/place selectors, inline creation, linked chips, reverse activity sections or cross-navigation in this task. Only minimal diagnostic/test wiring is allowed if strictly required to prove persistence. The next roadmap phase owns the user-visible integration.
 
 ## Safety / non-goals
 No broad schema rewrite, event-sourcing migration, generic relationship engine, cleanup or conversion of unrelated tables. Preserve existing user data and real-app destructive-test guardrails.
 
 ## Resource discipline
-This is high-risk because it changes the canonical DB schema, but exploration must remain narrow. Batch schema/repository inspection; do not scan unrelated modules. Test migration/FK/query/sync invariants directly, then stop.
+This is high-risk because it changes the canonical DB schema, but exploration must remain narrow. Use the exact starting set, batch schema/repository inspection, test migration/FK/query/projection/sync invariants directly, then stop.
 
 ## Acceptance
 - example interval can link to canonical person + place with no duplicated descriptive data;
-- the same Timer interval can appear in canonical Places history/stats as one visit without a second independently authoritative copy of the temporal fact;
-- editing interval time/place updates Places history/aggregates automatically and unlink/delete leaves no stale visit;
-- visit count/total time count the Timer-backed visit exactly once;
+- Timer-backed Place interval appears through the canonical Places history/stats query path without a second authoritative duplicate and without double counting;
+- edit/change/unlink/delete semantics keep that projection coherent;
 - migration from current production schema preserves existing rows and passes Room validation/foreign-key checks;
 - delete/archive behavior is defined and tested for linked canonical entities;
 - new rows participate correctly in generation/export/sync semantics;
-- repository/domain APIs support efficient forward/reverse cross-module queries needed by phase 2;
+- repository/domain APIs support efficient forward and reverse queries needed by phase 2;
 - representative create/query survives reopen;
 - targeted tests/build PASS; no speculative UI added.
 
 Stop immediately after acceptance passes.
 
-Final output only: `PROMPT_ID`, `RESULT`, schema/relationships, Timer-backed Place-visit semantics, cardinality/delete semantics, repository/query contracts, migration safety, sync/export impact, tests, commit SHA.
+Final output only: `PROMPT_ID`, `RESULT`, schema/relationships, Timer→Places single-source semantics, cardinality/delete semantics, repository/query contracts, migration safety, sync/export impact, tests, commit SHA.
