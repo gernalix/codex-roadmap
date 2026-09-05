@@ -10,30 +10,28 @@ Finding tecnici ancora pendenti dall'audit: People call-overlay deep-link/race/P
 
 ## Ordine pendente
 
-1. [[prompts/personalhub-timer-alerts|personalhub-timer-alerts]]
-2. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]]
-3. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]]
-4. [[prompts/personalhub-substances-therapy-intake-interactions-notifications|personalhub-substances-therapy-intake-interactions-notifications]]
-5. [[prompts/personalhub-substances-prescriptions-stock-crossmodule|personalhub-substances-prescriptions-stock-crossmodule]]
-6. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]]
-7. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]]
-8. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
-9. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
-10. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
-11. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
-12. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
-13. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
-14. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]]
-15. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]]
-16. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]]
-17. [[prompts/personalhub-dark-theme|personalhub-dark-theme]]
-18. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]]
-19. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]]
+1. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]]
+2. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]]
+3. [[prompts/personalhub-substances-therapy-intake-interactions-notifications|personalhub-substances-therapy-intake-interactions-notifications]]
+4. [[prompts/personalhub-substances-prescriptions-stock-crossmodule|personalhub-substances-prescriptions-stock-crossmodule]]
+5. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]]
+6. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]]
+7. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
+8. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
+9. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
+10. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
+11. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
+12. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
+13. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]]
+14. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]]
+15. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]]
+16. [[prompts/personalhub-dark-theme|personalhub-dark-theme]]
+17. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]]
+18. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]]
 
 ## Dipendenze / motivazione dell'ordine
 
-- `personalhub-timer-alerts.md` è la priorità assoluta corrente: resta un correttivo localizzato del sottosistema Timer, rende gli alert semplici notifiche Android, aggiunge il routing al tap per URL/deep link e completa il ripristino dopo reboot/update senza dipendere dagli altri task.
-- `personalhub-remove-idle-polling.md` è secondo e resta separato: rimuove/riduce il poll idle solo dopo aver verificato trigger durevoli/event-driven equivalenti per export e sync.
+- `personalhub-remove-idle-polling.md` resta separato: rimuove/riduce il poll idle solo dopo aver verificato trigger durevoli/event-driven equivalenti per export e sync.
 - Substances viene poi completato in cinque fasi consecutive, così nessun altro task interrompe il lavoro sul modulo: integrità/command-stock-archive → terapia/intake/interazioni/countdown/notifiche → prescrizioni/scorte/People/Soldi → History/performance + integrazione col DB globale → UI/navigation/QA finale. Solo la fase finale esegue il passaggio end-to-end su Pixel e TCL.
 - `personalhub-substances-core-integrity-command-stock-archive.md` crea prima le invarianti dati condivise, compresa l'unicità del nome/pulsante sostanza, su cui si appoggiano tutte le fasi successive.
 - `personalhub-substances-therapy-intake-interactions-notifications.md` mantiene scheduling, intake, interazioni, countdown e notifiche nello stesso task perché condividono la stessa macchina di stato temporale. Le prescrizioni sono separate per evitare un mega-task che includa anche People e Soldi.
