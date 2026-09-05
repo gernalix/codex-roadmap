@@ -2,42 +2,34 @@ PROMPT_ID: 348615
 
 project_id: 49
 Recommended model: GPT-5.5
-Reasoning: medium
+Reasoning: low
 MegaVault: FAST
 
 # Goal
-Fix two localized regressions in the current Soldi module: account inclusion must affect only aggregate owned-money totals, and in-progress editor/navigation state must survive Activity recreation.
+Fix the localized Soldi lifecycle regression so in-progress editor and navigation/filter state survives normal Activity/configuration recreation.
 
 ## Exact starting files — verified on PersonalHub/main
 Read these in one grouped pass only:
 - `feature/soldi/src/main/java/com/gernalix/personalhub/soldi/SoldiActivity.kt`
-- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/soldi/FinanceCapsule.kt`
-- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/soldi/FinanceDao.kt`
-- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/soldi/FinanceEntities.kt`
 - `app/src/androidTest/java/com/gernalix/personalhub/FinanceAccountsInstrumentedTest.kt`
 - `app/src/androidTest/java/com/gernalix/personalhub/FinanceInstrumentedTest.kt`
 
-Do not explore other finance/Git-exchange files unless a targeted test proves the bug reaches them. If an earlier task renamed a listed symbol/file, use one targeted search for it; no repository sweep.
+Open a directly referenced Soldi state/model file only if required by the selected save-state mechanism. If an earlier task renamed a listed symbol/file, use one targeted search only; no repository sweep.
 
 ## Known evidence
-1. `SoldiActivity.kt` currently filters transaction rows through account `included`, causing an account excluded from the bottom total to disappear from transaction history too. Intended semantics: `included` selects which account balances contribute to the aggregate total; it does not hide transactions.
-2. `SoldiScreen` keeps transaction/account/reconcile/product draft, tab, search and month in plain `remember` state. Configuration/Activity recreation drops unsaved user input and navigation state.
+`SoldiScreen` keeps transaction/account/reconcile/product draft, tab, search and month in plain `remember` state. Configuration/Activity recreation drops unsaved user input and navigation state.
 
 ## Work
-- Remove `included` from transaction-history visibility. Preserve normal month/search filters.
-- Keep `FinanceCapsule.totals()` inclusion semantics unchanged unless a concrete bug is found.
-- Preserve in-progress editor state and relevant navigation/filter state across `ActivityScenario.recreate()` / configuration recreation using the minimum robust mechanism (`rememberSaveable` with explicit Saver for simple state, or ViewModel/SavedStateHandle where required).
-- Do not persist transient `busy/error` state in a way that can replay a write after recreation.
+- Preserve in-progress transaction/account/reconcile/product editor state and relevant tab/search/month state across `ActivityScenario.recreate()` / configuration recreation using the minimum robust mechanism (`rememberSaveable` with explicit Saver for simple state, or ViewModel/SavedStateHandle where required).
+- Do not persist transient `busy/error` state in a way that can replay or duplicate a write after recreation.
+- Preserve existing accounting, account inclusion, totals and transaction-history behavior unchanged.
 - No Soldi redesign, accounting refactor, Git-sync work or unrelated cleanup.
 
 ## Tests
-- excluded account remains absent from aggregate total but all its transactions remain visible/searchable;
-- inclusion preference still persists;
-- recreate during transaction/account/reconcile editor preserves entered fields and selected screen;
+- recreate during transaction/account/reconcile/product editor preserves entered fields and selected screen;
+- tab/search/month state survives recreation where user-visible;
 - no save/write is duplicated by recreation.
 
-Focused emulator/instrumentation check only if needed to prove recreation behavior.
+Use only the focused emulator/instrumentation check needed to prove recreation behavior. Stop after targeted PASS.
 
-Stop after targeted PASS.
-
-Final output only: `PROMPT_ID`, `RESULT`, filter fix, lifecycle mechanism, tests, commit SHA.
+Final output only: `PROMPT_ID`, `RESULT`, lifecycle mechanism, preserved state, tests, commit SHA.
