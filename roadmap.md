@@ -16,18 +16,19 @@ Finding tecnici ancora pendenti dall'audit: People call-overlay deep-link/race/P
 4. [[prompts/personalhub-substances-prescriptions-stock-crossmodule|personalhub-substances-prescriptions-stock-crossmodule]]
 5. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]]
 6. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]]
-7. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
-8. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
-9. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
-10. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
-11. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
-12. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
-13. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]]
-14. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]]
-15. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]]
-16. [[prompts/personalhub-dark-theme|personalhub-dark-theme]]
-17. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]]
-18. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]]
+7. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
+8. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
+9. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
+10. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
+11. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
+12. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
+13. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
+14. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]]
+15. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]]
+16. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]]
+17. [[prompts/personalhub-dark-theme|personalhub-dark-theme]]
+18. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]]
+19. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]]
 
 ## Dipendenze / motivazione dell'ordine
 
@@ -38,7 +39,8 @@ Finding tecnici ancora pendenti dall'audit: People call-overlay deep-link/race/P
 - `personalhub-substances-prescriptions-stock-crossmodule.md` ricostruisce la tab Prescriptions su un modello 1 entry = 1 prescrizione, collegandola alla sostanza canonica, al medico People e alla transazione Soldi selezionata; condivide con l'intake solo il minimo contratto necessario per decrementare/ripristinare le dosi residue.
 - `personalhub-substances-history-data-integration.md` viene dopo che intake e prescrizioni hanno identità definitive; rende History modificabile/cancellabile, stabile e scalabile e rimuove i vecchi percorsi DB autorevoli del modulo.
 - `personalhub-substances-ui-navigation-final-qa.md` chiude il modulo sopra i contratti definitivi: pulsanti che restano visibili dopo il tap, prossimo orario in piccolo, countdown interazioni, FAB contestuale e verifica finale sui due device.
-- People e il widget Timer restano correttivi localizzati e indipendenti, quindi separati e vengono eseguiti dopo il blocco Substances.
+- `personalhub-database-schema-upgrade-safety.md` viene subito dopo il blocco Substances perché consolida lo schema risultante e rende sicuri tutti gli aggiornamenti successivi: ogni vecchia versione supportata deve avere una catena di migrazione completa, il primo avvio del nuovo APK deve validare/migrare senza perdita dati e un futuro bump dello schema deve fallire nei test se manca una migrazione. GPT-5.6 Sol / medium / STRICT.
+- People e il widget Timer restano correttivi localizzati e indipendenti, quindi separati e vengono eseguiti dopo il blocco Substances e l'hardening globale degli upgrade DB.
 - `personalhub-timer-legacy-runtime-cleanup.md` accorpa i due residui dello stesso sottosistema legacy Timer: versione/AutoConsistency e vecchio first-run backup. Condividono bootstrap e contesto runtime e possono essere verificati insieme senza riaprire gli alert già completati.
 - `personalhub-complete-module-capsulization.md` resta autonomo: è il refactor architetturale trasversale più ampio, mantiene il singolo `personalhub.db`, sposta persistence feature-owned dietro contratti espliciti e restringe Room. GPT-5.6 Sol / medium / STRICT.
 - `personalhub-cross-module-entity-linking.md` accorpa fondazione DB/query e UX People ↔ Timer ↔ Places perché sono due metà della stessa feature e condividono schema, repository e test end-to-end. Un Timer interval collegato a un Place è la stessa fonte temporale usata da Places history/stats, senza doppio conteggio; i selector Timer consentono inline `+ Nuova persona` / `+ Nuovo luogo`, con nuovo Place a radius predefinito 75 m. GPT-5.6 Sol / medium / STRICT.
