@@ -8,12 +8,17 @@ MegaVault: FAST
 # Goal
 Remove the obsolete Timer-owned first-run database-folder/restore gate from PersonalHub so Timer relies exclusively on PH's single global `personalhub.db` backup/import UI.
 
-## Known evidence / starting files
-Start only from:
-- Timer `MainActivity.kt` first-run setup flow;
-- `export/BackupFolderStore.kt` (`multitimetracker_backup` prefs / legacy `MultiTimer data` semantics);
-- `persistence/SqliteVault.kt`;
-- PH `DatabaseNavigation`/global backup UI only as needed.
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/MainActivity.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/FirstRunRestoreContract.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/export/BackupFolderStore.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/persistence/SqliteVault.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/capsules/system/ImportExportCapsule.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/DatabaseNavigation.kt`
+- `app/src/main/java/com/gernalix/personalhub/DatabaseActivity.kt`
+
+Inspect `ImportExportCapsuleViewModel.kt` only if the current Timer action routing cannot be resolved from the files above. If a prior task renamed a symbol, one targeted symbol search is allowed; no Timer/module scan.
 
 Current state: Timer is a PH library using canonical `personalhub.db`. Its `SqliteVault` DB-transfer methods are adapters/stubs that open global Database UI or return no restorable data, but Timer Activity still contains an active first-run SAF selection/restore gate. On a fresh state this can ask for a Timer-specific folder that neither configures `DatabaseVault` nor performs the global restore it appears to offer.
 
