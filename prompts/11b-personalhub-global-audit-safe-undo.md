@@ -11,6 +11,19 @@ Global activity register — phase 2. Add safe compensating undo on top of the c
 ## Prerequisite
 Use MegaVault/`AGENTS.md`, then verify narrowly that phase 1 provides the canonical append-only global audit model, semantic before/after snapshots, grouping, stable entity identity, redaction and complete current-module capture. If materially absent, stop `BLOCKED`; do not recreate phase 1.
 
+## Exact starting files — verified/current boundaries
+Phase 1 will create audit service/DAO/model files whose names do not yet exist at roadmap-authoring time. Locate them **once** by the exact audit entity/service names registered in `PersonalHubDatabase.kt`, then read only those resolved audit files plus these authoritative inverse boundaries:
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/PersonalHubDatabase.kt`
+- `app/src/main/java/com/gernalix/personalhub/capsules/settings/HubSettings.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/soldi/FinanceCapsule.kt`
+- `feature/supercontacts/src/main/java/com/supercontacts/app/data/repository/ContactsRepository.kt`
+- `feature/multitimetracker/src/main/java/com/example/multitimetracker/persistence/SessionRepository.kt`
+- `feature/luoghi/src/main/java/com/gernalix/luoghi/data/PlaceRepository.kt`
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/data/SostanzeRepository.kt`
+- `feature/wordpulse/src/main/java/com/wordpulse/app/data/WordRepository.kt`
+
+If earlier tasks introduced a newer authoritative command type for a module, resolve it only through the import/call in the listed boundary and use that command file; do not scan that module. If a listed file was renamed, one targeted symbol search is allowed.
+
 After prerequisite verification and before code changes, increment `version.txt` exactly once by `+1`.
 
 ## Undo semantics
@@ -55,6 +68,6 @@ Targeted tests must prove:
 - representative handlers across current mutable modules preserve domain invariants.
 
 ## Scope / resource discipline
-No register/home/filter UI, no event-sourcing rewrite, no raw DB rollback framework, no unrelated module cleanup. Start from phase-1 audit service plus existing domain commands. Expand only to concrete inverse handlers needed for current modules. Stop immediately after PASS.
+No register/home/filter UI, no event-sourcing rewrite, no raw DB rollback framework, no unrelated module cleanup. Use only the phase-1 audit files resolved once and the exact inverse boundaries above; expand only to a direct command collaborator required for a tested inverse. Stop immediately after PASS.
 
 Final output only: `PROMPT_ID`, `RESULT`, inverse architecture, covered reversible operations, conflict/group semantics, non-reversible cases, tests, commit SHA.
