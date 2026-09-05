@@ -10,16 +10,16 @@ Finding tecnici ancora pendenti dall'audit: People call-overlay deep-link/race/P
 
 ## Ordine pendente
 
-1. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]]
-2. [[prompts/personalhub-substances-therapy-intake-interactions-notifications|personalhub-substances-therapy-intake-interactions-notifications]]
-3. [[prompts/personalhub-substances-prescriptions-stock-crossmodule|personalhub-substances-prescriptions-stock-crossmodule]]
-4. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]]
-5. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]]
-6. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
-7. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
-8. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
-9. [[prompts/personalhub-timer-alerts|personalhub-timer-alerts]]
-10. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]]
+1. [[prompts/personalhub-timer-alerts|personalhub-timer-alerts]]
+2. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]]
+3. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]]
+4. [[prompts/personalhub-substances-therapy-intake-interactions-notifications|personalhub-substances-therapy-intake-interactions-notifications]]
+5. [[prompts/personalhub-substances-prescriptions-stock-crossmodule|personalhub-substances-prescriptions-stock-crossmodule]]
+6. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]]
+7. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]]
+8. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
+9. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
+10. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
 11. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
 12. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
 13. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
@@ -32,20 +32,20 @@ Finding tecnici ancora pendenti dall'audit: People call-overlay deep-link/race/P
 
 ## Dipendenze / motivazione dell'ordine
 
-- Substances è ora la priorità iniziale e viene completato in cinque fasi consecutive, così nessun altro task interrompe il lavoro sul modulo: integrità/command-stock-archive → terapia/intake/interazioni/countdown/notifiche → prescrizioni/scorte/People/Soldi → History/performance + integrazione col DB globale → UI/navigation/QA finale. Solo la fase finale esegue il passaggio end-to-end su Pixel e TCL.
+- `personalhub-timer-alerts.md` è la priorità assoluta corrente: resta un correttivo localizzato del sottosistema Timer, rende gli alert semplici notifiche Android, aggiunge il routing al tap per URL/deep link e completa il ripristino dopo reboot/update senza dipendere dagli altri task.
+- `personalhub-remove-idle-polling.md` è secondo e resta separato: rimuove/riduce il poll idle solo dopo aver verificato trigger durevoli/event-driven equivalenti per export e sync.
+- Substances viene poi completato in cinque fasi consecutive, così nessun altro task interrompe il lavoro sul modulo: integrità/command-stock-archive → terapia/intake/interazioni/countdown/notifiche → prescrizioni/scorte/People/Soldi → History/performance + integrazione col DB globale → UI/navigation/QA finale. Solo la fase finale esegue il passaggio end-to-end su Pixel e TCL.
 - `personalhub-substances-core-integrity-command-stock-archive.md` crea prima le invarianti dati condivise, compresa l'unicità del nome/pulsante sostanza, su cui si appoggiano tutte le fasi successive.
 - `personalhub-substances-therapy-intake-interactions-notifications.md` mantiene scheduling, intake, interazioni, countdown e notifiche nello stesso task perché condividono la stessa macchina di stato temporale. Le prescrizioni sono separate per evitare un mega-task che includa anche People e Soldi.
 - `personalhub-substances-prescriptions-stock-crossmodule.md` ricostruisce la tab Prescriptions su un modello 1 entry = 1 prescrizione, collegandola alla sostanza canonica, al medico People e alla transazione Soldi selezionata; condivide con l'intake solo il minimo contratto necessario per decrementare/ripristinare le dosi residue.
 - `personalhub-substances-history-data-integration.md` viene dopo che intake e prescrizioni hanno identità definitive; rende History modificabile/cancellabile, stabile e scalabile e rimuove i vecchi percorsi DB autorevoli del modulo.
 - `personalhub-substances-ui-navigation-final-qa.md` chiude il modulo sopra i contratti definitivi: pulsanti che restano visibili dopo il tap, prossimo orario in piccolo, countdown interazioni, FAB contestuale e verifica finale sui due device.
 - People e il widget Timer restano correttivi localizzati e indipendenti, quindi separati e vengono eseguiti dopo il blocco Substances.
-- `personalhub-timer-legacy-runtime-cleanup.md` accorpa i due residui dello stesso sottosistema legacy Timer: versione/AutoConsistency e vecchio first-run backup. Condividono bootstrap e contesto runtime e possono essere verificati insieme senza allargarsi agli alert.
-- `personalhub-timer-alerts.md` resta separato perché scheduling, receiver, permessi e reboot/update hanno failure mode propri e costituiscono anche il precedente per i successivi geofence alert Places.
-- `personalhub-remove-idle-polling.md` resta separato e rimuove/riduce il poll idle solo dopo aver verificato trigger durevoli/event-driven equivalenti per export e sync.
+- `personalhub-timer-legacy-runtime-cleanup.md` accorpa i due residui dello stesso sottosistema legacy Timer: versione/AutoConsistency e vecchio first-run backup. Condividono bootstrap e contesto runtime e possono essere verificati insieme senza riaprire gli alert già completati.
 - `personalhub-complete-module-capsulization.md` resta autonomo: è il refactor architetturale trasversale più ampio, mantiene il singolo `personalhub.db`, sposta persistence feature-owned dietro contratti espliciti e restringe Room. GPT-5.6 Sol / medium / STRICT.
 - `personalhub-cross-module-entity-linking.md` accorpa fondazione DB/query e UX People ↔ Timer ↔ Places perché sono due metà della stessa feature e condividono schema, repository e test end-to-end. Un Timer interval collegato a un Place è la stessa fonte temporale usata da Places history/stats, senza doppio conteggio; i selector Timer consentono inline `+ Nuova persona` / `+ Nuovo luogo`, con nuovo Place a radius predefinito 75 m. GPT-5.6 Sol / medium / STRICT.
 - `personalhub-places-visit-history-checkin.md` accorpa overlap disambiguation, check-in storico manuale e “Dov'ero?” perché lavorano sullo stesso modello/query di visita canonica. Prima rende affidabile l'identità della visita, poi completa la history e infine la interroga.
-- `personalhub-places-sorting-map-navigation.md` resta separato perché è principalmente lista/mappa/query UI sulle metriche canoniche finali. `personalhub-places-geofence-alerts.md` resta separato perché coinvolge background location/notification.
+- `personalhub-places-sorting-map-navigation.md` resta separato perché è principalmente lista/mappa/query UI sulle metriche canoniche finali. `personalhub-places-geofence-alerts.md` resta separato perché coinvolge background location/notification; può riusare solo pattern Android già dimostrati dal task Timer Alerts, senza condividere il dominio.
 - `personalhub-autoexport-status-indicator.md` resta una feature UI localizzata; `personalhub-dark-theme.md` viene dopo la UI Substances definitiva.
 - `personalhub-global-audit-foundation-safe-undo.md` accorpa modello/cattura semantica e undo compensativo conflict-safe perché la progettazione delle snapshot e della reversibilità deve servire direttamente l'inverso sicuro. La UI del registro resta separata e viene costruita solo sul backend definitivo.
 
