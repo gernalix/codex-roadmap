@@ -8,17 +8,23 @@ MegaVault: STANDARD
 # Goal
 Remove or substantially reduce PersonalHub's permanent 2-second in-process dirty/sync poll without weakening durable SAF auto-export or Datasette sync recovery.
 
-## Known evidence
-Start only from:
-- `core/database/.../HubAutoExport.kt`
-- `DatabaseGate.kt`
-- `capsules/sync/DatasetteSync` / `SyncJournal` scheduling paths directly reached from mutations;
-- existing auto-export durability/sync tests.
+## Exact starting files — verified on PersonalHub/main
+Read these in one grouped pass only:
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/HubAutoExport.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/DatabaseGate.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/PersonalHubDatabase.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/sync/DatasetteSync.kt`
+- `core/database/src/main/java/com/gernalix/personalhub/core/database/capsules/sync/SyncJournal.kt`
+- `app/src/androidTest/java/com/gernalix/personalhub/DatasetteSyncInstrumentedTest.kt`
+- `app/src/androidTest/java/com/gernalix/personalhub/GlobalDatabaseInstrumentedTest.kt`
 
-`HubAutoExport.start()` currently creates a daemon scheduled executor with `scheduleWithFixedDelay(..., 0, 2s)` that repeatedly calls `dirty()`/`request()` and `DatasetteSync.checkForChanges()`. Canonical writes already pass through DB generation triggers/`DatabaseGate.afterMutation()`, and durable WorkManager recovery exists. Do not assume Datasette has an equivalent event trigger: verify the narrow mutation→sync scheduling path before removing its poll dependency.
+Open `DatasetteClient.kt` or a WorkManager helper only if these files directly show that scheduling/recovery depends on it. If an earlier task renamed a listed symbol, use one targeted symbol search only; no general database/sync exploration.
+
+## Known evidence
+`HubAutoExport.start()` currently creates a daemon scheduled executor with `scheduleWithFixedDelay(..., 0, 2s)` that repeatedly calls dirty/request logic and `DatasetteSync.checkForChanges()`. Canonical writes already pass through DB generation triggers/`DatabaseGate`, and durable recovery exists. Do not assume Datasette has an equivalent event trigger: verify the narrow mutation→sync scheduling path before removing its poll dependency.
 
 ## Work
-1. Map only the canonical mutation → generation/journal → export/sync trigger chain.
+1. Map only the canonical mutation → generation/journal → export/sync trigger chain from the exact files above.
 2. If export no longer needs in-process polling, remove that polling dependency.
 3. If Datasette currently depends on the 2s loop for prompt scheduling, replace it with the smallest event-driven trigger at the canonical mutation/journal boundary; retain periodic WorkManager recovery as a safety net where appropriate.
 4. Preserve the commit-before-enqueue/process-death recovery guarantee. A crash window may be recovered by durable/periodic work, but SAF/sync must not silently remain stale for hours.
@@ -34,6 +40,6 @@ Prove with targeted tests:
 - clean idle process performs no 2-second DB/network polling loop.
 
 ## Resource discipline
-This is not a second auto-export audit. Reuse completed durability evidence, inspect only the files above, batch commands and stop immediately after the invariants pass.
+This is not a second auto-export audit. Reuse completed durability evidence, inspect only the exact starting files and directly referenced scheduler helper if necessary, batch commands and stop immediately after the invariants pass.
 
 Final output only: `PROMPT_ID`, `RESULT`, removed polling, event trigger, recovery fallback, tests, commit SHA.
