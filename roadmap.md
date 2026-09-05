@@ -19,16 +19,18 @@ Finding tecnici ancora pendenti dall'audit: People call-overlay deep-link/race/P
 7. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
 8. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
 9. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
-10. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
-11. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
-12. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
-13. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
-14. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]]
-15. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]]
-16. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]]
-17. [[prompts/personalhub-dark-theme|personalhub-dark-theme]]
-18. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]]
-19. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]]
+10. [[prompts/personalhub-timer-session-tag-picker-ux|personalhub-timer-session-tag-picker-ux]]
+11. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
+12. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
+13. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
+14. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
+15. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]]
+16. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]]
+17. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]]
+18. [[prompts/personalhub-global-screen-version-footer|personalhub-global-screen-version-footer]]
+19. [[prompts/personalhub-dark-theme|personalhub-dark-theme]]
+20. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]]
+21. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]]
 
 ## Dipendenze / motivazione dell'ordine
 
@@ -41,12 +43,13 @@ Finding tecnici ancora pendenti dall'audit: People call-overlay deep-link/race/P
 - `personalhub-substances-ui-navigation-final-qa.md` chiude il modulo sopra i contratti definitivi: pulsanti che restano visibili dopo il tap, prossimo orario in piccolo, countdown interazioni, FAB contestuale e verifica finale sui due device.
 - `personalhub-database-schema-upgrade-safety.md` viene subito dopo il blocco Substances perché consolida lo schema risultante e rende sicuri tutti gli aggiornamenti successivi: ogni vecchia versione supportata deve avere una catena di migrazione completa, il primo avvio del nuovo APK deve validare/migrare senza perdita dati e un futuro bump dello schema deve fallire nei test se manca una migrazione. GPT-5.6 Sol / medium / STRICT.
 - People e il widget Timer restano correttivi localizzati e indipendenti, quindi separati e vengono eseguiti dopo il blocco Substances e l'hardening globale degli upgrade DB.
+- `personalhub-timer-session-tag-picker-ux.md` viene subito dopo il widget perché è un correttivo UI Timer localizzato: mantiene i tag selezionati come chip/card ben distinguibili e rende sempre disponibile la creazione del nome digitato quando non esiste già esattamente, anche se la ricerca mostra match più lunghi come `shopping` per `shop`.
 - `personalhub-timer-legacy-runtime-cleanup.md` accorpa i due residui dello stesso sottosistema legacy Timer: versione/AutoConsistency e vecchio first-run backup. Condividono bootstrap e contesto runtime e possono essere verificati insieme senza riaprire gli alert già completati.
 - `personalhub-complete-module-capsulization.md` resta autonomo: è il refactor architetturale trasversale più ampio, mantiene il singolo `personalhub.db`, sposta persistence feature-owned dietro contratti espliciti e restringe Room. GPT-5.6 Sol / medium / STRICT.
 - `personalhub-cross-module-entity-linking.md` accorpa fondazione DB/query e UX People ↔ Timer ↔ Places perché sono due metà della stessa feature e condividono schema, repository e test end-to-end. Un Timer interval collegato a un Place è la stessa fonte temporale usata da Places history/stats, senza doppio conteggio; i selector Timer consentono inline `+ Nuova persona` / `+ Nuovo luogo`, con nuovo Place a radius predefinito 75 m. GPT-5.6 Sol / medium / STRICT.
 - `personalhub-places-visit-history-checkin.md` accorpa overlap disambiguation, check-in storico manuale e “Dov'ero?” perché lavorano sullo stesso modello/query di visita canonica. Prima rende affidabile l'identità della visita, poi completa la history e infine la interroga.
 - `personalhub-places-sorting-map-navigation.md` resta separato perché è principalmente lista/mappa/query UI sulle metriche canoniche finali. `personalhub-places-geofence-alerts.md` resta separato perché coinvolge background location/notification; può riusare solo pattern Android già dimostrati dal task Timer Alerts, senza condividere il dominio.
-- `personalhub-autoexport-status-indicator.md` resta una feature UI localizzata; `personalhub-dark-theme.md` viene dopo la UI Substances definitiva.
+- `personalhub-autoexport-status-indicator.md` resta una feature UI localizzata. `personalhub-global-screen-version-footer.md` viene dopo perché uniforma un dettaglio visivo trasversale su tutte le schermate usando la versione host canonica e sostituendo i residui di versione delle vecchie app; resta separato dal tema scuro e dai refactor runtime. `personalhub-dark-theme.md` viene dopo la UI definitiva dei moduli.
 - `personalhub-global-audit-foundation-safe-undo.md` accorpa modello/cattura semantica e undo compensativo conflict-safe perché la progettazione delle snapshot e della reversibilità deve servire direttamente l'inverso sicuro. La UI del registro resta separata e viene costruita solo sul backend definitivo.
 
 ## Disciplina globale
