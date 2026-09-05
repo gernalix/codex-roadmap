@@ -6,38 +6,40 @@ Ordine consigliato di esecuzione, riesaminato end-to-end sullo stato corrente di
 
 Stato già acquisito e da NON reimplementare nei task futuri: database PH unificato; Settings/Database & Backup integrati; sync Datasette local-first; Places API key/address suggestions; shortcut pinnabili e percorso diretto ai moduli; protezione dell'app reale dai benchmark/test distruttivi; auto-export SAF generation-based con WorkManager/recovery/error state; hardening del Database Vault con import marker atomico/fail-safe e rollback SAF verificato; Soldi integrato con account, saldi, prodotto canonico e Git exchange; policy delete/FK Places↔Soldi corretta; Timer Alerts passati su `PersonalHub/main` a prompt in-app centrati e immediati con link/deep link cliccabili.
 
-Finding tecnici ancora pendenti: il validator MegaVault rifiuta il proprio bootstrap PH specializzato `ai/personalhubdoc.md`; la migrazione Timer Alerts lascia ancora UI `timerMinutes` e rami AlarmManager/notifica non più coerenti col comportamento in-app, mentre il restore boot/update va conservato per le timed-session; People call-overlay deep-link/race/PII; Timer widget write-result; residui runtime/backup legacy Timer; polling permanente 2 s in `HubAutoExport.start()`; capsulizzazione architetturale incompleta nel data layer. Dettagli storici: `audits/2026-09-05-personalhub-main-audit.md`.
+Finding tecnici ancora pendenti: il validator MegaVault rifiuta il proprio bootstrap PH specializzato `ai/personalhubdoc.md`; la migrazione Timer Alerts lascia ancora UI `timerMinutes` e rami AlarmManager/notifica non più coerenti col comportamento in-app, mentre il restore boot/update va conservato per le timed-session; Soldi usa ancora `FinanceAccount.included` per nascondere transazioni invece di limitarlo ai totali; People call-overlay deep-link/race/PII; Timer widget write-result; residui runtime/backup legacy Timer; polling permanente 2 s in `HubAutoExport.start()`; capsulizzazione architetturale incompleta nel data layer. Dettagli storici: `audits/2026-09-05-personalhub-main-audit.md`.
 
 ## Ordine pendente
 
 1. [[prompts/megavault-personalhub-bootstrap-token-efficiency-hardening|megavault-personalhub-bootstrap-token-efficiency-hardening]]
 2. [[prompts/personalhub-timer-inapp-alert-cleanup|personalhub-timer-inapp-alert-cleanup]]
-3. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]]
-4. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]]
-5. [[prompts/personalhub-substances-therapy-intake-interactions-notifications|personalhub-substances-therapy-intake-interactions-notifications]]
-6. [[prompts/personalhub-substances-prescriptions-stock-crossmodule|personalhub-substances-prescriptions-stock-crossmodule]]
-7. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]]
-8. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]]
-9. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
-10. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
-11. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
-12. [[prompts/personalhub-timer-session-tag-picker-ux|personalhub-timer-session-tag-picker-ux]]
-13. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
-14. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
-15. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
-16. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
-17. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]]
-18. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]]
-19. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]]
-20. [[prompts/personalhub-global-screen-version-footer|personalhub-global-screen-version-footer]]
-21. [[prompts/personalhub-dark-theme|personalhub-dark-theme]]
-22. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]]
-23. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]]
+3. [[prompts/personalhub-soldi-account-inclusion-filter-semantics|personalhub-soldi-account-inclusion-filter-semantics]]
+4. [[prompts/personalhub-remove-idle-polling|personalhub-remove-idle-polling]]
+5. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]]
+6. [[prompts/personalhub-substances-therapy-intake-interactions-notifications|personalhub-substances-therapy-intake-interactions-notifications]]
+7. [[prompts/personalhub-substances-prescriptions-stock-crossmodule|personalhub-substances-prescriptions-stock-crossmodule]]
+8. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]]
+9. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]]
+10. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
+11. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
+12. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]]
+13. [[prompts/personalhub-timer-session-tag-picker-ux|personalhub-timer-session-tag-picker-ux]]
+14. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]]
+15. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
+16. [[prompts/personalhub-cross-module-entity-linking|personalhub-cross-module-entity-linking]]
+17. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]]
+18. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]]
+19. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]]
+20. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]]
+21. [[prompts/personalhub-global-screen-version-footer|personalhub-global-screen-version-footer]]
+22. [[prompts/personalhub-dark-theme|personalhub-dark-theme]]
+23. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]]
+24. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]]
 
 ## Dipendenze / motivazione dell'ordine
 
 - `megavault-personalhub-bootstrap-token-efficiency-hardening.md` viene per primo perché oggi ogni task PH può partire con un falso FAIL di `megavault.py validate`: `ai/personalhubdoc.md` è il bootstrap PH specializzato ma il validator lo classifica come Markdown vietato. Lo stesso task irrigidisce solo i punti di esecuzione realmente responsabili del recente spreco di tool/token: versione target unica per goal, device QA in una fase compatta, niente dump UI/retry equivalenti, niente APK path indovinati e messaggi di successo solo dopo successo verificato. GPT-5.5 / low / FAST.
 - `personalhub-timer-inapp-alert-cleanup.md` chiude subito il lavoro Timer appena modificato, prima di cambiare sottosistemi indipendenti. Rimuove il vecchio significato di `timerMinutes` e i rami di scheduling/notifica esclusivi dei Timer Alerts, senza toccare le timed-session; nello stesso confine shared receiver/scheduler completa il ripristino idempotente degli alarm delle timed-session dopo reboot/update. GPT-5.5 / medium / FAST.
+- `personalhub-soldi-account-inclusion-filter-semantics.md` ripristina un correttivo P2 dell'audit che era scomparso dalla roadmap durante il consolidamento: escludere un conto deve toglierlo solo dal totale, non dalla cronologia delle transazioni. È localizzato e indipendente. GPT-5.5 / low / FAST.
 - `personalhub-remove-idle-polling.md` resta separato: rimuove/riduce il poll idle solo dopo aver verificato trigger durevoli/event-driven equivalenti per export e sync.
 - Substances viene poi completato in cinque fasi consecutive, così nessun altro task interrompe il lavoro sul modulo: integrità/command-stock-archive → terapia/intake/interazioni/countdown/notifiche → prescrizioni/scorte/People/Soldi → History/performance + integrazione col DB globale → UI/navigation/QA finale. Solo la fase finale esegue il passaggio end-to-end su Pixel e TCL.
 - `personalhub-substances-core-integrity-command-stock-archive.md` crea prima le invarianti dati condivise, compresa l'unicità del nome/pulsante sostanza, su cui si appoggiano tutte le fasi successive.
