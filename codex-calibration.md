@@ -28,6 +28,8 @@ Optimize **total Codex work**, not prompt character count. Token/quota consumpti
 9. Keep progress narration minimal and final output concise.
 10. For directly related changes to the same feature, one coherent task can reduce duplicated bootstrap/exploration. Keep independent objectives separate; use a fresh session when carrying a long unrelated context would cost more.
 11. Treat **tool-call count as an explicit budget**. For a narrowly scoped task, each additional shell/tool round-trip should be justified by new evidence, implementation, or a distinct acceptance criterion. Prefer one batched inspection over many serial reads and one targeted verification command over multiple overlapping checks.
+12. For a localized task with verified starting files and no unexpected failure, target **≤50 total tool calls**. This is a soft ceiling, never a safety/correctness cap; exceed it only when a concrete new dependency, blocker, failed test, or unmet acceptance criterion provides new evidence that requires more work.
+13. Avoid repeated repository-state probes: do not rerun `git status`, `git diff`, `git log`, identical searches/file reads, or equivalent tests/builds while state is unchanged. One final state/diff check before commit/push is normally enough.
 
 ## Empirical benchmark: PROMPT_ID 428619
 
@@ -65,6 +67,27 @@ Interpretation:
 - 80 shell round-trips caused repeated large cached-context processing. Future prompts should be more aggressive about **batched reads/searches and command budgets**, and should avoid serial one-file/one-query exploration when a single grouped command can answer the same question.
 - Acceptance criteria should distinguish **must-prove** from optional robustness checks. Once the must-prove criteria pass, stop; do not spend calls on additional reassurance.
 - When a task already names likely components/failure modes, instruct Codex to inspect those in a small number of grouped commands before branching into additional hypotheses.
+
+## Empirical benchmark: PROMPT_ID 412907
+
+Completed task: PersonalHub canonical DB import/export recovery hardening (`personalhub-database-vault-transfer-hardening.md`).
+
+- Model: **GPT-5.5**
+- Reasoning: **Medium**
+- MegaVault: **STRICT**
+- Duration: **637.6 s (~10m38s)**.
+- Rollout/API accounting: **3,861,535 total tokens** = **3,841,683 input**, of which **3,720,448 cached (~96.84%)** and **121,235 non-cached**, plus **19,852 output**; reasoning output observed: **3,091**.
+- Tool calls: **84 total**.
+- User-facing quota moved **34% → 35%** during the session.
+- Independent remote review verified commit `e4f05d4fef76975a567b3c83a46496138c8250b2`: the requested atomic/fail-safe import-marker handling and SAF rollback hardening are present on `PersonalHub/main`, with targeted durability tests. GitHub exposes no CI status for that commit, so test execution remains supported by the Codex session report rather than GitHub Actions.
+
+Interpretation:
+
+- GPT-5.5 Medium remained appropriate because the task involved process-death durability, filesystem atomicity/fsync semantics and failure-safe recovery. The good technical result is evidence **against** lowering reasoning merely to save quota.
+- **84 tool calls are excessive for this localized task**, which already supplied exact starting files/failure modes and produced a concentrated implementation/test diff. This is the clearest benchmark so far that execution discipline, not reasoning depth, is the primary optimization lever.
+- The large API-token total is mostly cached context and translated into only a one-point user-facing quota movement, so raw API accounting alone can overstate practical quota cost. Nevertheless every avoidable round-trip still reprocesses large context and is worth eliminating.
+- For analogous localized hardening tasks: target **≤50 tool calls**, perform the initial file inspection in one grouped pass, use grouped evidence-driven searches rather than serial probes, batch targeted verification, avoid repeated Git/status/diff/read checks, and stop immediately once must-prove acceptance criteria pass.
+- Exceed the soft target only when a new failure, dependency or acceptance gap creates genuinely new work. Never truncate required safety verification just to hit the number.
 
 ## How to calibrate future prompts
 

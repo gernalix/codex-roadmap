@@ -45,6 +45,20 @@ Each prompt should also state, when applicable:
 
 Optimize prompts for total Codex resource usage: minimize repository exploration, tool calls, redundant verification, retries, reasoning, and session duration. Prefer targeted tests and stop immediately after acceptance criteria pass.
 
+### Empirical execution discipline
+
+Completed-session bundles show that the main avoidable cost can be repeated tool/context round-trips even when reasoning is appropriate. `PROMPT_ID 412907`, a localized PersonalHub DB-transfer hardening task with exact starting files, finished with a technically satisfactory remote diff but still used **84 tool calls** and about **3.86M API-accounted tokens**, with **96.84% of input cached**; the user-facing quota moved only **34% → 35%**. Therefore optimize execution first rather than reflexively downgrading model/reasoning.
+
+For every task, where applicable:
+
+- read all exact starting files in **one grouped command/pass**; if more discovery is needed, use a grouped targeted search tied to a concrete unknown instead of serial one-file/one-query probes;
+- batch coherent edits in as few write/patch operations as practical; avoid iterative style-only or reassurance edits;
+- batch the smallest targeted tests that prove the acceptance criteria; broaden only after a concrete failure or risk requires it;
+- do not repeat `git status`, `git diff`, `git log`, the same file reads/searches, or equivalent tests/builds while repository state is unchanged; one final repository-state/diff check before commit is normally sufficient;
+- for a localized task with verified starting files and no unexpected failures, use **≤50 total tool calls as a soft target**. This is not a safety cap: exceed it only when new evidence, a blocker, or a failed acceptance check genuinely requires more investigation;
+- larger cross-cutting/architectural tasks have no fixed call ceiling, but every additional round-trip should answer a new question, perform implementation, or prove a distinct acceptance criterion;
+- after PASS, do not perform a reassurance audit, re-open already verified files, or inspect later roadmap tasks.
+
 ## Workflow "primo task pendente"
 
 Codex must:
@@ -56,7 +70,7 @@ Codex must:
 5. use the model, reasoning level, MegaVault mode, and scope stated in the selected prompt;
 6. not expand the task beyond what the selected prompt requests;
 7. reuse MegaVault, `AGENTS.md`, and the evidence already included in the selected prompt;
-8. avoid redundant exploration, tool calls, retries, and tests;
+8. avoid redundant exploration, tool calls, retries, and tests, following the empirical execution discipline above;
 9. stop as soon as the selected prompt's acceptance criteria are verified.
 
 ## Roadmap Management After Execution
