@@ -50,6 +50,22 @@ Each prompt should also state, when applicable:
 
 Do **not** duplicate those global rules in this README, `roadmap.md`, or individual prompt files. Prompts may add only task-specific constraints or stricter requirements needed for that task. `codex-calibration.md` stores empirical usage evidence and model/reasoning calibration, not a competing execution protocol.
 
+### Keep `spiegazioni.md` synchronized
+
+`spiegazioni.md` is the plain-language companion to the pending roadmap and MUST stay synchronized with it.
+
+Whenever `roadmap.md` is changed, or any prompt currently referenced by `roadmap.md` is added, removed, renamed, reordered, or materially changed, update `spiegazioni.md` in the same repository change.
+
+Requirements:
+
+- include exactly one explanation for every pending prompt in `roadmap.md`, in the same order;
+- remove explanations for prompts that are no longer pending;
+- keep each explanation understandable to a reader with no programming knowledge;
+- explain primarily what problem the task solves and what will change for the user, avoiding implementation jargon unless indispensable;
+- if a prompt's behavior or scope changes materially, update its explanation even if its filename and roadmap position do not change.
+
+A roadmap/prompt maintenance change is incomplete until this synchronization has been checked.
+
 ## Workflow "primo task pendente"
 
 Codex must:
@@ -74,9 +90,10 @@ If the selected prompt ends with PASS and all acceptance criteria are truly sati
 2. remove that entry from `roadmap.md`;
 3. preserve the relative order of all remaining entries and renumber the ordered list consecutively from `1` to `N`;
 4. never rename remaining prompt files because their roadmap position changed;
-5. commit and push the target project's changes;
-6. commit and push the `codex-roadmap` update;
-7. do not automatically start the next prompt.
+5. update `spiegazioni.md` so it again contains exactly the pending prompts in `roadmap.md`, in the same order;
+6. commit and push the target project's changes;
+7. commit and push the `codex-roadmap` update;
+8. do not automatically start the next prompt.
 
 If the task fails, remains blocked, or the acceptance criteria are not satisfied:
 
