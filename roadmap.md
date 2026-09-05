@@ -10,7 +10,10 @@ Stato già acquisito e quindi NON da duplicare nei task futuri: database PH unif
 4. `prompts/08-personalhub-places-where-was-i.md`
 5. `prompts/09-personalhub-timer-places-alerts.md`
 6. `prompts/10-personalhub-dark-theme.md`
+7. `prompts/11-personalhub-global-activity-audit-undo.md`
 
 Il correttivo Soldi 05b precede l'architettura cross-module: completa account/balance, identità prodotto e interscambio Git prima che il task 04 definisca le relazioni condivise sullo schema finance definitivo.
 
 L'indicatore home `✅/❌` con dettaglio stato/ultimo export è intenzionalmente accorpato al task UI/theme 10: non merita bootstrap, esplorazione, build e test di una sessione Codex autonoma. I task devono preservare le garanzie auto-export già verificate e non riesplorare/reimplementare tali feature salvo dipendenza strettamente necessaria.
+
+Il registro attività globale 11 viene eseguito dopo i task funzionali e UI/theme già pianificati perché deve intercettare lo stato persistente e i write-path definitivi di tutti i moduli, incluse le impostazioni del tema, evitando di dover reintegrare l'audit dopo modifiche strutturali immediatamente successive.
