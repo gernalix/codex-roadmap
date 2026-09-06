@@ -2,7 +2,7 @@
 
 [[README|README]] · [[spiegazioni|Spiegazioni]]
 
-Ordine consigliato di esecuzione, riesaminato end-to-end sullo stato corrente di `PersonalHub/main`, sul dump Codex del 2026-09-05 e sull'audit statico dello stesso giorno. Eseguire **un solo task Codex alla volta** sullo stesso progetto secondo il workflow del README.
+Ordine consigliato di esecuzione, riesaminato end-to-end sullo stato corrente di `PersonalHub/main`, sul dump Codex del 2026-09-05 e sull'audit statico dello stesso giorno. Eseguire **un solo task Codex alla volta** sullo stesso progetto secondo il workflow del README, salvo i blocchi esplicitamente marcati come continuous campaign.
 
 Stato già acquisito e da NON reimplementare nei task futuri: database PH unificato; Settings/Database & Backup integrati; sync Datasette local-first; Places API key/address suggestions; shortcut pinnabili e percorso diretto ai moduli; protezione dell'app reale dai benchmark/test distruttivi; auto-export SAF generation-based con WorkManager/recovery/error state; hardening del Database Vault con import marker atomico/fail-safe e rollback SAF verificato; Soldi integrato con account, saldi, prodotto canonico e Git exchange; policy delete/FK Places↔Soldi corretta; Timer Alerts passati su `PersonalHub/main` a prompt in-app centrati e immediati con link/deep link cliccabili.
 
@@ -11,6 +11,10 @@ Finding tecnici ancora pendenti: People call-overlay deep-link/race/PII; Timer w
 ## Ordine pendente
 
 La raccomandazione `Recommended model` + `Reasoning` già contenuta in ciascun prompt resta **invariata** per l'esecuzione autonoma del singolo file. Accanto a ogni voce qui sotto è aggiunta una seconda scelta, `nuova policy 5.6`, da usare come alternativa sperimentale quando vuoi verificare se un modello più capace riduce errori, retry, tool-call e consumo quota complessivo.
+
+### Continuous campaign: Hub Context Graph — task 1–6
+
+I task **1–6** costituiscono un'unica **continuous campaign** ai sensi del README. Se il primo task pendente è il task 1, Codex deve eseguire consecutivamente **tutti e sei i task nella stessa sessione**, passando alla fase successiva solo dopo i targeted acceptance check della fase corrente; `FAIL`/`BLOCKED` interrompe immediatamente la campagna. **Campaign recommendation: GPT-5.6 Sol / medium.** Valgono le regole campaign del README: riuso del contesto già verificato, un solo target `version.txt = base + 1` per l'intero blocco, niente final APK/build-install/QA completi nelle fasi 1–5, una sola build/installazione/QA consolidata alla fine della fase 6 e aggiornamento della roadmap soltanto al completamento dell'intera campagna.
 
 1. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]] — **nuova policy 5.6: GPT-5.6 Sol / high**
 2. [[prompts/personalhub-hub-context-graph-foundation|personalhub-hub-context-graph-foundation]] — **nuova policy 5.6: GPT-5.6 Sol / high**
@@ -34,7 +38,7 @@ La raccomandazione `Recommended model` + `Reasoning` già contenuta in ciascun p
 
 ## Dipendenze / motivazione dell'ordine
 
-- I primi sei task da `personalhub-complete-module-capsulization.md` a `personalhub-hub-context-all-modules-resources-hardening.md` sono la priorità assoluta della roadmap e formano una sequenza architetturale obbligatoria, ma restano **goal separati**, non una continuous campaign: ogni fase deve raggiungere PASS e stabilizzare il proprio failure-domain prima di iniziare la successiva.
+- I primi sei task da `personalhub-complete-module-capsulization.md` a `personalhub-hub-context-all-modules-resources-hardening.md` sono la priorità assoluta e formano la **continuous campaign Hub Context Graph**. Restano prompt/fasi separati e self-contained, ma quando il blocco parte dalla posizione 1 vengono eseguiti nella stessa sessione secondo il README, riusando contesto e compilazioni già effettuate e rimandando build/installazione/QA finale alla fase 6. Campaign recommendation: GPT-5.6 Sol / medium.
 - `personalhub-complete-module-capsulization.md` è il prerequisito: mantiene il singolo `personalhub.db`, elimina dipendenze feature-implementation → feature-implementation, mette persistence e contratti al posto giusto e prepara un composition root capace di ospitare in seguito un servizio neutro cross-module senza far controllare i moduli fra loro. GPT-5.6 Sol / medium / STRICT.
 - `personalhub-hub-context-graph-foundation.md` crea il layer neutro HubEntity/Context N-ario, adapter registry, Context Type come dati e query forward/reverse/intersection. È deliberatamente privo di UI e adapter reali: nuove combinazioni future devono diventare configurazione, non nuove tabelle pairwise. GPT-5.6 Sol / medium / STRICT.
 - `personalhub-hub-context-people-timer-places-vertical-slice.md` è il primo uso reale della fondazione: collega Person, Timer Session e Place canonici tramite lo stesso Context. Un Timer interval collegato a un Place resta l'unica fonte temporale della visita Places, senza doppio conteggio; selector e inline creation mantengono il nuovo Place a radius 75 m. GPT-5.5 / medium / STRICT.
