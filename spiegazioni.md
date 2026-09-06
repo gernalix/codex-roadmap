@@ -6,6 +6,8 @@ Questo file spiega in parole semplici a cosa serve ciascun prompt ancora present
 
 **L'ordine e la numerazione qui sotto devono corrispondere esattamente a `roadmap.md`.** I valori `Recommended model`/`Reasoning` originali restano dentro i singoli prompt; in `roadmap.md` trovi accanto a ogni voce anche la nuova alternativa sperimentale GPT-5.6, così puoi scegliere di volta in volta quale configurazione usare.
 
+**I task 1–6 sono una continuous campaign Hub Context Graph.** Quando il task 1 è il primo pendente, Codex li esegue tutti e sei in sequenza nella stessa sessione: riusa ciò che ha già verificato, fa nelle prime cinque fasi solo i controlli mirati necessari, usa un solo incremento di versione per l'intero blocco e rimanda build APK, installazione e controllo finale complessivo alla fase 6. Se una fase fallisce o resta bloccata, la campagna si ferma lì. La configurazione consigliata per l'intera campagna è GPT-5.6 Sol con reasoning medium.
+
 ## 1. [[prompts/personalhub-complete-module-capsulization|personalhub-complete-module-capsulization]]
 
 Mette ordine nell'architettura interna prima di costruire i collegamenti tra moduli. Ogni modulo deve possedere i propri dettagli e comunicare solo attraverso interfacce chiare, pur continuando a usare l'unico database PersonalHub. In questo modo il futuro sistema di Context potrà mettere insieme dati di moduli diversi senza far sì che People controlli Places, Places controlli Timer, ecc. È un refactor tecnico importante ma non dovrebbe cambiare il comportamento visibile.
