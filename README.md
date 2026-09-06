@@ -84,25 +84,44 @@ Requirements:
 
 A roadmap/prompt maintenance change is incomplete until this synchronization has been checked.
 
+## Continuous roadmap campaigns
+
+The default remains one pending prompt per Codex session. `roadmap.md` may explicitly mark a consecutive set of prompts as a **continuous campaign** when they are tightly coupled phases of the same feature and repeating bootstrap, exploration, final APK build/install and end-to-end QA would waste quota without improving safety.
+
+Campaign rules:
+
+1. The individual prompt files remain self-contained and independently runnable in a fresh session. Campaign mode changes orchestration only; it does not merge their scopes into an unbounded mega-task.
+2. If the first pending roadmap item belongs to a campaign, Codex executes the campaign phases sequentially in the **same session**, opening the next phase only after the current phase's targeted acceptance checks pass. Carry forward already verified files, symbols and facts; do not re-bootstrap or rediscover them unless evidence changed.
+3. A phase-local `PASS` before the final campaign phase is an internal checkpoint, not a final task completion. In campaign mode, phase-local instructions such as `stop immediately after PASS`, final-output-only fields, per-phase commit SHA requirements and automatic roadmap movement are deferred until the final campaign phase. `BLOCKED` or `FAIL` still stops the campaign immediately.
+4. Versioning is campaign-wide: capture the PersonalHub base version once at campaign start and set `target = base + 1`. Any later phase instruction to increment `version.txt` again is ignored in campaign mode. Resume of the same unfinished campaign reuses the already chosen target and never increments it again.
+5. Phases before the final campaign phase run only the narrow targeted tests/checks needed to validate their own contracts. Do not perform a standalone final PersonalHub APK assemble/install or full Pixel/TCL end-to-end pass in those phases. Test commands may still trigger the minimum incremental compilation required by the targeted tests; “one final build” means one explicit final full APK build/install pass, not zero compilation by Gradle during tests.
+6. The final campaign phase performs the single final main APK build, safe install/update on the required devices and the campaign's consolidated end-to-end QA.
+7. Avoid intermediate roadmap churn. If the whole campaign passes, commit/push the target project as appropriate, move all campaign prompt files to `completed/`, remove all campaign entries from `roadmap.md`, renumber once, update `spiegazioni.md` once, and commit/push the roadmap repository. If the campaign stops early, leave roadmap membership unchanged and report the last completed phase plus the blocker; a later run must verify and reuse already implemented state rather than redo it.
+8. Model/reasoning for an explicitly marked campaign is the campaign recommendation in `roadmap.md`; phase-specific MegaVault modes and scope constraints still apply.
+
+This section is the only exception to the normal one-task-per-session and post-PASS stop rules below.
+
 ## Workflow "primo task pendente"
 
 Codex must:
 
 1. open `roadmap.md`;
-2. execute ONLY the first pending prompt in the list;
-3. treat that prompt file as a self-contained task;
-4. NOT execute or investigate later prompts;
-5. use the model, reasoning level, MegaVault mode, and scope stated in the selected prompt;
-6. not expand the task beyond what the selected prompt requests;
-7. reuse MegaVault, `AGENTS.md`, and the evidence already included in the selected prompt;
-8. follow the authoritative execution discipline in `MegaVault/ai/MEGAVAULT_PROTOCOL.md` plus only the selected prompt's task-specific constraints;
-9. stop as soon as the selected prompt's acceptance criteria are verified.
+2. execute ONLY the first pending prompt in the list, **unless it belongs to an explicitly marked continuous campaign**; in that case execute that entire campaign according to the rules above;
+3. treat a normal prompt file as a self-contained task, and each campaign prompt as a self-contained phase whose scope remains bounded by that file;
+4. NOT execute or investigate later prompts outside the selected task/campaign;
+5. use the model, reasoning level, MegaVault mode, and scope stated in the selected prompt, except that an explicit campaign-level model/reasoning recommendation in `roadmap.md` governs the continuous session;
+6. not expand the task/campaign beyond what the selected prompt(s) request;
+7. reuse MegaVault, `AGENTS.md`, and the evidence already included in the selected prompt, and within a campaign reuse verified context from earlier phases rather than rediscover it;
+8. follow the authoritative execution discipline in `MegaVault/ai/MEGAVAULT_PROTOCOL.md` plus only the selected prompt's/task campaign's specific constraints;
+9. stop as soon as the selected normal prompt's acceptance criteria are verified, or after the final campaign phase passes; stop earlier on `BLOCKED`/`FAIL`.
 
 ## Roadmap Management After Execution
 
 `roadmap.md` contains only pending tasks. `completed/` contains only prompts completed with PASS.
 
-If the selected prompt ends with PASS and all acceptance criteria are truly satisfied:
+For an explicitly marked continuous campaign, the campaign rules above override per-prompt movement until the campaign reaches its final phase.
+
+If the selected normal prompt ends with PASS and all acceptance criteria are truly satisfied:
 
 1. move the related file from `prompts/` to `completed/`, preserving its semantic filename;
 2. remove that entry from `roadmap.md`;
@@ -126,5 +145,5 @@ If the task fails, remains blocked, or the acceptance criteria are not satisfied
 Use this minimal launcher in a new Codex session:
 
 ```text
-Esegui il primo task pendente di gernalix/codex-roadmap seguendo integralmente il workflow definito nel README. Esegui un solo task e fermati.
+Esegui il primo task pendente di gernalix/codex-roadmap seguendo integralmente il workflow definito nel README. Se il primo task appartiene a un blocco continuo esplicitamente marcato in roadmap.md, esegui tutto quel blocco nella stessa sessione e fermati al termine; altrimenti esegui un solo task e fermati.
 ```
