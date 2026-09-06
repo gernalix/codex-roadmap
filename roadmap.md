@@ -2,7 +2,7 @@
 
 [[README|README]] · [[spiegazioni|Spiegazioni]]
 
-Ordine consigliato di esecuzione, riesaminato end-to-end sullo stato corrente di `PersonalHub/main`, sul dump Codex del 2026-09-05 e sull'audit statico dello stesso giorno. Eseguire **un solo task Codex alla volta** sullo stesso progetto secondo il workflow del README.
+Ordine consigliato di esecuzione, riesaminato end-to-end sullo stato corrente di `PersonalHub/main`, sul dump Codex del 2026-09-05 e sull'audit statico dello stesso giorno. Di norma eseguire **un solo task Codex alla volta** sullo stesso progetto secondo il workflow del README; l'unica eccezione attualmente marcata è il blocco continuo Substances nelle voci 1–5.
 
 Stato già acquisito e da NON reimplementare nei task futuri: database PH unificato; Settings/Database & Backup integrati; sync Datasette local-first; Places API key/address suggestions; shortcut pinnabili e percorso diretto ai moduli; protezione dell'app reale dai benchmark/test distruttivi; auto-export SAF generation-based con WorkManager/recovery/error state; hardening del Database Vault con import marker atomico/fail-safe e rollback SAF verificato; Soldi integrato con account, saldi, prodotto canonico e Git exchange; policy delete/FK Places↔Soldi corretta; Timer Alerts passati su `PersonalHub/main` a prompt in-app centrati e immediati con link/deep link cliccabili.
 
@@ -10,7 +10,18 @@ Finding tecnici ancora pendenti: People call-overlay deep-link/race/PII; Timer w
 
 ## Ordine pendente
 
-La raccomandazione `Recommended model` + `Reasoning` già contenuta in ciascun prompt resta **invariata**. Accanto a ogni voce qui sotto è aggiunta una seconda scelta, `nuova policy 5.6`, da usare come alternativa sperimentale quando vuoi verificare se un modello più capace riduce errori, retry, tool-call e consumo quota complessivo.
+La raccomandazione `Recommended model` + `Reasoning` già contenuta in ciascun prompt resta **invariata** per l'esecuzione autonoma del singolo file. Accanto a ogni voce qui sotto è aggiunta una seconda scelta, `nuova policy 5.6`, da usare come alternativa sperimentale quando vuoi verificare se un modello più capace riduce errori, retry, tool-call e consumo quota complessivo.
+
+### Blocco continuo Substances — voci 1–5
+
+Le prime cinque voci costituiscono una **continuous campaign** secondo il README: sono cinque fasi con scope e acceptance check distinti, ma vanno eseguite consecutivamente nella **stessa sessione Codex** senza bootstrap/esplorazione ripetuti e senza trasformarle in un unico prompt monolitico.
+
+- **Configurazione consigliata per l'intero blocco:** GPT-5.6 Sol / reasoning **medium**. I MegaVault mode e i limiti di scope restano quelli dei singoli prompt.
+- Catturare `version.txt` una sola volta all'inizio e fissare per tutta la campaign `target = base + 1`; le istruzioni di incremento presenti nelle fasi successive non devono causare ulteriori bump in campaign mode.
+- Fasi 1–4: eseguire i soli test/controlli mirati necessari alla fase. **Nessuna build APK finale, nessuna installazione Pixel/TCL e nessun QA end-to-end completo**. È consentita solo la compilazione incrementale inevitabilmente richiesta dai test mirati.
+- Fase 5: eseguire **un solo pass finale** di build del main APK, installazione/aggiornamento sicuro su Pixel e TCL e QA end-to-end consolidato dell'intero blocco Substances.
+- Dopo un PASS locale delle fasi 1–4, proseguire direttamente alla fase successiva riusando il contesto già verificato; non fare commit/report/roadmap churn intermedi salvo necessità concreta. `BLOCKED` o `FAIL` interrompono immediatamente il blocco.
+- Solo dopo il PASS della fase 5 completare output/commit finali e spostare insieme le cinque voci in `completed/`, aggiornando/renumerando roadmap e `spiegazioni.md` una sola volta.
 
 1. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]] — **nuova policy 5.6: GPT-5.6 Sol / high**
 2. [[prompts/personalhub-substances-therapy-intake-interactions-notifications|personalhub-substances-therapy-intake-interactions-notifications]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
@@ -35,12 +46,12 @@ La raccomandazione `Recommended model` + `Reasoning` già contenuta in ciascun p
 
 ## Dipendenze / motivazione dell'ordine
 
-- Substances viene poi completato in cinque fasi consecutive, così nessun altro task interrompe il lavoro sul modulo: integrità/command-stock-archive → terapia/intake/interazioni/countdown/notifiche → prescrizioni/scorte/People/Soldi → History/performance + integrazione col DB globale → UI/navigation/QA finale. Solo la fase finale esegue il passaggio end-to-end su Pixel e TCL.
+- Substances viene completato come un unico blocco continuo di cinque fasi consecutive: integrità/command-stock-archive → terapia/intake/interazioni/countdown/notifiche → prescrizioni/scorte/People/Soldi → History/performance + integrazione col DB globale → UI/navigation/QA finale. Le fasi mantengono scope e test mirati separati, ma condividono la stessa sessione e lo stesso target di versione; solo la fase finale esegue build/installazione e passaggio end-to-end su Pixel e TCL.
 - `personalhub-substances-core-integrity-command-stock-archive.md` crea prima le invarianti dati condivise, compresa l'unicità del nome/pulsante sostanza, su cui si appoggiano tutte le fasi successive.
 - `personalhub-substances-therapy-intake-interactions-notifications.md` mantiene scheduling, intake, interazioni, countdown e notifiche nello stesso task perché condividono la stessa macchina di stato temporale. Le prescrizioni sono separate per evitare un mega-task che includa anche People e Soldi.
 - `personalhub-substances-prescriptions-stock-crossmodule.md` ricostruisce la tab Prescriptions su un modello 1 entry = 1 prescrizione, collegandola alla sostanza canonica, al medico People e alla transazione Soldi selezionata; condivide con l'intake solo il minimo contratto necessario per decrementare/ripristinare le dosi residue.
 - `personalhub-substances-history-data-integration.md` viene dopo che intake e prescrizioni hanno identità definitive; rende History modificabile/cancellabile, stabile e scalabile e rimuove i vecchi percorsi DB autorevoli del modulo.
-- `personalhub-substances-ui-navigation-final-qa.md` chiude il modulo sopra i contratti definitivi: pulsanti che restano visibili dopo il tap, prossimo orario in piccolo, countdown interazioni, FAB contestuale e verifica finale sui due device.
+- `personalhub-substances-ui-navigation-final-qa.md` chiude il blocco sopra i contratti definitivi: pulsanti che restano visibili dopo il tap, prossimo orario in piccolo, countdown interazioni, FAB contestuale e unica verifica finale consolidata sui due device.
 - `personalhub-database-schema-upgrade-safety.md` viene subito dopo il blocco Substances perché consolida lo schema risultante e rende sicuri tutti gli aggiornamenti successivi: ogni vecchia versione supportata deve avere una catena di migrazione completa, il primo avvio del nuovo APK deve validare/migrare senza perdita dati e un futuro bump dello schema deve fallire nei test se manca una migrazione. GPT-5.6 Sol / medium / STRICT.
 - People e il widget Timer restano correttivi localizzati e indipendenti, quindi separati e vengono eseguiti dopo il blocco Substances e l'hardening globale degli upgrade DB.
 - `personalhub-timer-session-tag-picker-ux.md` viene subito dopo il widget perché è un correttivo UI Timer localizzato: mantiene i tag selezionati come chip/card ben distinguibili e rende sempre disponibile la creazione del nome digitato quando non esiste già esattamente, anche se la ricerca mostra match più lunghi come `shopping` per `shop`.
@@ -54,9 +65,9 @@ La raccomandazione `Recommended model` + `Reasoning` già contenuta in ciascun p
 
 ## Disciplina globale
 
-Ogni prompt deve restare self-contained per una sessione Codex nuova, verificare esplicitamente eventuali prerequisiti invece di assumere una chat precedente e rispettare `AGENTS.md`. Per i task PersonalHub, il bootstrap specializzato autorevole è `MegaVault/ai/personalhubdoc.md`; il protocollo globale va letto solo nei casi di fallback esplicitamente previsti da quel file.
+Ogni prompt deve restare self-contained e verificare esplicitamente eventuali prerequisiti; fuori da un blocco continuo non deve assumere una chat precedente. Per i task PersonalHub, il bootstrap specializzato autorevole è `MegaVault/ai/personalhubdoc.md`; il protocollo globale va letto solo nei casi di fallback esplicitamente previsti da quel file. Nei blocchi continui esplicitamente marcati, le fasi successive possono riusare esclusivamente il contesto verificato nelle fasi precedenti della stessa sessione, senza rilanciare bootstrap/esplorazione equivalenti.
 
-Quando un prompt modifica PersonalHub, deve catturare la versione iniziale una sola volta e fissare per quel goal `target = base + 1`. Retry, rebuild, test o seconde patch dello stesso goal non possono incrementarla di nuovo.
+Quando un prompt modifica PersonalHub, deve catturare la versione iniziale una sola volta e fissare per quel goal `target = base + 1`. Per una continuous campaign l'intero blocco è un unico goal di versionamento: il target viene fissato alla prima fase e riusato fino alla fine. Retry, rebuild, test o fasi successive dello stesso goal non possono incrementarlo di nuovo.
 
 **Ordine solo numerico in roadmap:** l'ordine canonico è esclusivamente la posizione `1.`, `2.`, `3.`, ... in questa lista. I filename/titoli dei prompt devono essere semantici e non devono contenere prefissi o suffissi numerici/alfanumerici d'ordine. Inserire, rimuovere o riordinare un task richiede solo di rinumerare consecutivamente la lista; non si rinominano i file per la posizione. `PROMPT_ID` resta consentito perché è un identificatore casuale, non un indicatore d'ordine.
 
