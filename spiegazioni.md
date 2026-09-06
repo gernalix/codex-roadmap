@@ -6,25 +6,27 @@ Questo file spiega in parole semplici a cosa serve ciascun prompt ancora present
 
 **L'ordine e la numerazione qui sotto devono corrispondere esattamente a `roadmap.md`.** I valori `Recommended model`/`Reasoning` originali restano dentro i singoli prompt; in `roadmap.md` trovi accanto a ogni voce anche la nuova alternativa sperimentale GPT-5.6, così puoi scegliere di volta in volta quale configurazione usare.
 
+**Le voci 1–5 sono un unico blocco continuo Substances.** Codex le esegue una dopo l'altra nella stessa sessione, ma ogni fase mantiene un compito preciso. Le prime quattro fanno soltanto i controlli mirati necessari; la quinta esegue l'unica build/installazione finale dell'app e il controllo completo su Pixel e TCL. Anche il numero di versione viene aumentato una sola volta per l'intero blocco.
+
 ## 1. [[prompts/personalhub-substances-core-integrity-command-stock-archive|personalhub-substances-core-integrity-command-stock-archive]]
 
-Prima fase Substances: mette in sicurezza i dati di base. Modificare una sostanza non deve cancellarne lo storico; le scorte e gli annullamenti devono tornare sempre; archiviazione e ripristino devono essere reversibili; non si possono creare due pulsanti/sostanze con lo stesso nome.
+Prima fase Substances: mette in sicurezza i dati di base. Modificare una sostanza non deve cancellarne lo storico; le scorte e gli annullamenti devono tornare sempre; archiviazione e ripristino devono essere reversibili; non si possono creare due pulsanti/sostanze con lo stesso nome. Nel blocco continuo, dopo i test mirati Codex passa direttamente alla fase 2 senza creare/installare l'APK finale.
 
 ## 2. [[prompts/personalhub-substances-therapy-intake-interactions-notifications|personalhub-substances-therapy-intake-interactions-notifications]]
 
-Sistema assunzioni, orari, interazioni e notifiche. Dopo un'assunzione il pulsante della sostanza resta disponibile e il sistema sa qual è il prossimo orario consigliato. Le interazioni non fanno sparire o disabilitare pulsanti: se una combinazione è bloccata, il blocco viene spiegato al tap. Le finestre di attesa mostrano dati per un conto alla rovescia e producono una notifica alla scadenza. Corregge anche il bug per cui modificare un'interazione continuava a conservare il primo valore inserito.
+Sistema assunzioni, orari, interazioni e notifiche. Dopo un'assunzione il pulsante della sostanza resta disponibile e il sistema sa qual è il prossimo orario consigliato. Le interazioni non fanno sparire o disabilitare pulsanti: se una combinazione è bloccata, il blocco viene spiegato al tap. Le finestre di attesa mostrano dati per un conto alla rovescia e producono una notifica alla scadenza. Corregge anche il bug per cui modificare un'interazione continuava a conservare il primo valore inserito. Nel blocco continuo riusa quanto verificato nella fase 1 e, superati i controlli mirati, prosegue senza build/installazione finale.
 
 ## 3. [[prompts/personalhub-substances-prescriptions-stock-crossmodule|personalhub-substances-prescriptions-stock-crossmodule]]
 
-Rifà completamente Prescriptions. Ogni riga rappresenta una singola prescrizione, ma lo stesso farmaco può avere più prescrizioni senza creare più pulsanti in Home. Gestisce dosi residue, dose in mg, frequenza giornaliera/settimanale, date e data stimata di esaurimento. Il medico viene scelto da People e il costo da una delle cinque voci Soldi più recenti con lo stesso nome. Una nuova prescrizione con un nome mai usato crea automaticamente la sostanza; con un nome già esistente riusa quella esistente.
+Rifà completamente Prescriptions. Ogni riga rappresenta una singola prescrizione, ma lo stesso farmaco può avere più prescrizioni senza creare più pulsanti in Home. Gestisce dosi residue, dose in mg, frequenza giornaliera/settimanale, date e data stimata di esaurimento. Il medico viene scelto da People e il costo da una delle cinque voci Soldi più recenti con lo stesso nome. Una nuova prescrizione con un nome mai usato crea automaticamente la sostanza; con un nome già esistente riusa quella esistente. Nel blocco continuo passa poi direttamente alla fase 4 senza ripetere esplorazione, build finale o installazione sui telefoni.
 
 ## 4. [[prompts/personalhub-substances-history-data-integration|personalhub-substances-history-data-integration]]
 
-Rende History corretto e veloce anche con molti dati. Ogni voce ha matita per modificarla e cestino per eliminarla, mantenendo coerenti scorte e dosi residue delle prescrizioni. Nello stesso task vengono eliminati i vecchi percorsi che trattano Substances come se avesse un proprio database/backup: importazione e backup autorevoli usano l'unico `personalhub.db`.
+Rende History corretto e veloce anche con molti dati. Ogni voce ha matita per modificarla e cestino per eliminarla, mantenendo coerenti scorte e dosi residue delle prescrizioni. Nello stesso task vengono eliminati i vecchi percorsi che trattano Substances come se avesse un proprio database/backup: importazione e backup autorevoli usano l'unico `personalhub.db`. Nel blocco continuo questa è l'ultima fase backend: fa i soli controlli mirati e passa alla fase finale senza una build/installazione completa separata.
 
 ## 5. [[prompts/personalhub-substances-ui-navigation-final-qa|personalhub-substances-ui-navigation-final-qa]]
 
-Fase finale Substances: sistema schermate e navigazione sopra il backend definitivo. I pulsanti restano visibili dopo il tap e mostrano in piccolo il prossimo orario; le interazioni mostrano countdown con il nome della sostanza; il `+` cambia funzione in modo logico in base alla tab senza creare duplicati. Verifica inoltre Prescriptions, History e tutti i flussi principali su Pixel e TCL.
+Fase finale Substances: sistema schermate e navigazione sopra il backend definitivo. I pulsanti restano visibili dopo il tap e mostrano in piccolo il prossimo orario; le interazioni mostrano countdown con il nome della sostanza; il `+` cambia funzione in modo logico in base alla tab senza creare duplicati. Chiude l'intero blocco continuo con l'unica build finale del main APK, installazione/aggiornamento su Pixel e TCL e verifica end-to-end consolidata di tutte e cinque le fasi.
 
 ## 6. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
 
