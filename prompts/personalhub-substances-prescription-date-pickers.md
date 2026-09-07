@@ -6,72 +6,42 @@ Reasoning: low
 MegaVault: FAST
 
 # Goal
-In PersonalHub → Substances → Prescriptions, replace the raw numeric/epoch-day editing of the two prescription date fields with normal calendar date pickers.
+In PersonalHub → Substances → Prescriptions, replace the two technical epoch-day text fields with normal calendar date selectors while preserving the existing persistence representation.
 
-The two affected fields are:
-- prescription order date (`orderEpochDay` / current `Order epoch day` UI);
-- prescription date (`prescriptionEpochDay` / current `Prescription epoch day` UI).
+# Verified current state — reuse it
+Current `PersonalHub/main` already does part of the requested behavior:
+- `PrescriptionCreateDialog` computes `LocalDate.now().toEpochDay()` and passes that same `today` value as both `orderEpochDay` and `prescriptionEpochDay` when creating a prescription. The requested new-prescription default-to-today behavior therefore already exists and must be PRESERVED, not reimplemented elsewhere.
+- `PrescriptionEditDialog` still exposes `orderEpochDay` and `prescriptionEpochDay` as free-form numeric text with visible labels `Order epoch day` and `Prescription epoch day`.
+- persisted prescription data already uses epoch-day values, and the history screen already converts `prescriptionEpochDay` to a human date for display.
 
-For a **new prescription**, both date fields must default to the device's current local calendar date. Tapping either field opens a calendar/date selector. The user must never need to type or understand an epoch-day number.
+Therefore the remaining defect is the create/edit UI boundary and date selection, not schema/repository/default-date logic.
 
-For an **existing prescription**, editing must initialize each picker from the date already stored for that field and preserve it unless the user changes it.
+# Exact scope / starting files
+Start only from:
+- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeApp.kt` — `PrescriptionCreateDialog`, `PrescriptionEditDialog`, existing `LocalDate`/`formatDateOnly` helpers;
+- Substances `values/strings.xml` and `values-it/strings.xml` only for user-visible date labels/actions.
 
-# Scope
-This is a localized Substances UI/data-boundary fix. Do not redesign Prescriptions or change unrelated fields, persistence, schema, scheduling, People/Soldi links, stock logic, or dosage behavior.
-
-Keep the existing persisted representation unless a change is strictly required; the preferred solution is UI conversion between the existing epoch-day representation and a local calendar date. Respect the PersonalHub datetime rule: user-facing date is local; persisted/exported semantics must remain compatible with the existing model.
-
-All user-visible strings must exist in English and Italian. Do not leave technical labels such as `Order epoch day` or `Prescription epoch day` visible.
-
-# Remote source rule
-When MegaVault or codex-roadmap context is needed, consult only the current remote repositories, never local MegaVault/codex-roadmap checkouts, per the current remote `MegaVault/ai/personalhubdoc.md`.
-
-# Pre-localized starting files
-Start only from these current PersonalHub files; expand only if a referenced symbol forces one narrow lookup:
-- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeApp.kt` — `PrescriptionCreateDialog`, `PrescriptionEditDialog`, and current raw date fields;
-- `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeViewModel.kt` — only if new-prescription defaults are constructed there;
-- `feature/sostanze/src/main/java/com/gernalix/sostanze/data/SostanzeRepository.kt` — only if needed to confirm existing epoch-day persistence semantics;
-- Substances `values/strings.xml` and `values-it/strings.xml` for the two date labels/actions.
-
-Do not scan the repository generally.
+Do NOT read `SostanzeViewModel`, repository, DAO, database schema or other modules unless a concrete compile/test failure proves they are required. Do not change the persisted epoch-day representation.
 
 # Required behavior
-1. New prescription:
-   - order date defaults to today in the device local timezone;
-   - prescription date defaults to today in the device local timezone;
-   - each field displays a normal localized human-readable date, not an epoch number;
-   - tapping it opens a calendar/date picker.
-2. Edit prescription:
-   - each picker opens on and displays the currently stored date;
-   - saving without changing the dates preserves the exact existing dates;
-   - changing one date updates only that date.
-3. Validation:
-   - no free-form epoch-day input remains for these two fields;
-   - locale/timezone conversion must not shift the selected calendar date by ±1 day;
-   - persistence remains compatible with current prescription records.
+- New prescription: both dates still default to the device's current local calendar date; display them as normal human-readable dates and allow tapping each to open a calendar/date picker.
+- Existing prescription: each picker initializes from its stored epoch day and saving without changes preserves that exact date.
+- Changing one picker changes only that field.
+- No free-form epoch-day field or technical epoch-day label remains visible.
+- Calendar ↔ epoch-day conversion must be based on `LocalDate` semantics so timezone conversion cannot shift the selected day by ±1.
+- English and Italian user-visible text must be present.
 
-Prefer a small reusable date-picker boundary/helper if that makes timezone/date conversion directly unit-testable; do not create a generalized date framework.
+Prefer the smallest local reusable date-field/picker composable/helper inside the existing UI file if useful; do not create a generalized date framework.
 
-# Validation
-Use the smallest sufficient tests first:
-- focused unit test for today/local-date ↔ stored epoch-day conversion if conversion logic is extracted;
-- focused Compose/UI or equivalent test proving default-today, existing-date initialization, and one changed date persists correctly;
-- one focused live Android check of the Prescriptions create/edit flow because the calendar interaction is user-facing platform/UI behavior.
+# Verification
+Use the smallest sufficient coverage:
+- focused conversion/helper unit test only if new conversion logic warrants one;
+- focused UI test for new-prescription today display, existing-date initialization and changing one date;
+- one focused live Android create/edit check of the two date pickers.
 
-Follow the current PersonalHub bootstrap for version bump, build/device QA, final Pixel installation, clone cleanup if a QA clone is used, and final APK Telegram artifact delivery. Do not send Telegram progress/test/install status messages.
+Do not test unrelated Substances behavior. Follow the current remote PersonalHub bootstrap for one version bump, final tested APK, Pixel install, Telegram APK delivery and clone cleanup if applicable.
 
-# Acceptance criteria
-PASS only if:
-- both Prescriptions date fields use calendar selectors;
-- both default to today's local date when creating a new prescription;
-- existing stored dates initialize correctly when editing;
-- save/reopen preserves the selected calendar dates without timezone off-by-one errors;
-- raw epoch-day numbers/labels are gone from the user-facing form;
-- English and Italian UI text are present;
-- focused automated tests pass;
-- focused live Android validation passes;
-- all mandatory final PersonalHub delivery steps from the current bootstrap pass.
+# Acceptance / stop
+PASS only if both date fields use calendar selectors, the already-working default-to-today behavior remains intact, existing dates round-trip exactly, raw epoch-day UI is gone, i18n is complete and targeted checks pass. Stop immediately after PASS.
 
-Stop immediately after acceptance passes. Do not start the next roadmap task.
-
-Final output concise: `PROMPT_ID`, `RESULT`, date-picker behavior, tests/device verification, version, Pixel install, APK delivery, commit/push, blocker if any.
+Final output concise: `PROMPT_ID`, `RESULT`, preserved today default, create/edit picker behavior, tests/device check, version, Pixel install, APK delivery, commit/push, blocker if any.
