@@ -68,6 +68,34 @@ A roadmap/prompt maintenance change is incomplete until Obsidian navigation and 
 
 Do **not** duplicate those global rules in this README, `roadmap.md`, or individual prompt files. Prompts may add only task-specific constraints or stricter requirements needed for that task. `codex-calibration.md` stores empirical usage evidence and model/reasoning calibration, not a competing execution protocol.
 
+### Consolidation-first roadmap policy
+
+The roadmap SHOULD prefer a smaller number of substantial, coherent prompts over many micro-prompts when doing so reduces total Codex work.
+
+Before adding a new pending prompt, compare it against the existing pending work and merge it into an existing/new consolidated goal when most of the following are true:
+
+- same target project/module or tightly coupled feature area;
+- overlapping authoritative starting files/symbols or domain model;
+- the later work directly consumes state/contracts created by the earlier work;
+- compatible recommended model, reasoning level and MegaVault risk mode;
+- meaningful opportunity to reuse bootstrap, exploration, build/install, device setup or QA;
+- the combined task can remain bounded with explicit internal phases and acceptance criteria.
+
+A consolidated prompt MUST:
+
+- preserve every material requirement and acceptance criterion from the absorbed prompts;
+- organize distinct concerns as explicit internal phases rather than mixing them into an unstructured mega-task;
+- read phase-local files only when needed and reuse already verified context across phases;
+- capture the PersonalHub base version once and increment once for the whole goal;
+- run narrow phase checks as needed but perform one explicit final APK build/install/end-to-end QA unless a safety requirement genuinely demands otherwise;
+- stop immediately after the consolidated acceptance criteria pass.
+
+Keep prompts separate when consolidation would force materially more expensive model/reasoning over unrelated work, mix incompatible risk modes, combine unrelated repositories/domains, make rollback/diagnosis substantially harder, or carry a large irrelevant context into a later independent task. Fewer prompt files is not itself the objective; lower total reasoning/tool-call/build/QA cost is.
+
+Do not restructure, rename, reorder or absorb a prompt that is actively being executed by Codex. Treat active work as immutable until that execution has finished/published its result.
+
+If two tasks are too large to merge safely but would still save substantial quota by sharing one session, prefer an explicitly marked continuous campaign instead of keeping fully independent sessions.
+
 ### Keep `spiegazioni.md` synchronized
 
 `spiegazioni.md` is the plain-language companion to the pending roadmap and MUST stay synchronized with it.
