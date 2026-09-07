@@ -23,7 +23,7 @@ La roadmap è stata consolidata da **15 a 7 goal sostanziali**. L'accorpamento �
 ## Cosa è stato accorpato e perché
 
 - **Timer: un unico goal rimanente.** Il widget `Events` è già implementato, ma il suo picker presenta ora un bug UX concreto: lista lunga non scrollabile e nessun filtro. La correzione resta nello stesso goal Timer insieme a Quick Session write-result, tag-picker e cleanup runtime/backup, così si riusano modulo, build e QA senza riaprire il widget come task separato.
-- **Places: 3 → 1.** visite/check-in/`Dov'ero?`, sorting+mappa e geofence condividono `PlaceRepository`, location, Place detail, metriche e navigazione. La fase visite definisce la semantica canonica usata dalla fase lista/mappa; le geofence restano notifiche e non creano visite. Un solo passaggio finale verifica l'intero modulo.
+- **Places: 3 → 1.** visite/check-in/`Dov'ero?`, sorting+mappa e geofence condividono `PlaceRepository`, location, Place detail, metriche e navigazione. La fase visite definisce la semantica canonica riusata dalle altre fasi; il geofencing resta opzionale e battery-efficient tramite Android `GeofencingClient`, mai GPS continuo. Per ogni Place può operare come sola notifica oppure, se esplicitamente configurato, tradurre ENTER/EXIT nel medesimo check-in/check-out canonico, con protezioni contro duplicati e ambiguità. L'intera capability dipendente da background location deve restare isolata e degradare senza rompere Places quando il permesso manca o una futura variante Play non la include. Un solo passaggio finale verifica l'intero modulo.
 - **UI globale: 3 → 1.** indicatore auto-export, footer versione e dark theme richiedevano tutti di percorrere shell e moduli. Il goal costruisce una sola inventory delle schermate e la riusa per footer e tema, verificando anche il nuovo indicatore nello stesso passaggio.
 - **Registro attività: 2 → 1.** backend audit/undo e UI erano due metà della stessa feature. Il read model viene ora progettato una volta per paging, filtri, grouping e undo, evitando che una seconda sessione debba riscoprire l'API appena creata.
 
@@ -36,7 +36,7 @@ La roadmap è stata consolidata da **15 a 7 goal sostanziali**. L'accorpamento �
 ## Dipendenze / motivazione dell'ordine
 
 - Il goal Timer resta primo perché include il bug appena verificato del picker `Events` oltre alle richieste Timer rimanenti; tutto può essere corretto con un solo ri-bootstrap, incremento versione e passaggio finale sui device.
-- Il goal Places viene subito dopo. Include anche l'eventuale schema necessario alle geofence, così il successivo framework di sicurezza delle migrazioni può validare lo schema risultante invece di essere immediatamente seguito da un'altra modifica DB non ancora coperta.
+- Il goal Places viene subito dopo. Include anche l'eventuale schema necessario alla configurazione geofence/automazione, così il successivo framework di sicurezza delle migrazioni può validare lo schema risultante invece di essere immediatamente seguito da un'altra modifica DB non ancora coperta. La parte background-location resta opzionale e separabile dalla funzionalità core di Places.
 - `personalhub-context-composer-redesign.md` resta separato e prima della sicurezza schema perché può introdurre/assestare gli ultimi contratti Hub Context da consolidare.
 - `personalhub-database-schema-upgrade-safety.md` viene quindi eseguito sullo schema risultante da Timer/Places/Composer e rende obbligatoria una catena di migrazione completa per i bump futuri.
 - People call-overlay resta un fix indipendente e localizzato.
