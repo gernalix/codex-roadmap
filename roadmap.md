@@ -6,30 +6,32 @@ Ordine consigliato di esecuzione, riesaminato end-to-end sullo stato corrente di
 
 Stato già acquisito e da NON reimplementare nei task futuri: database PH unificato; Settings/Database & Backup integrati; sync Datasette local-first; Places API key/address suggestions; shortcut pinnabili e percorso diretto ai moduli; protezione dell'app reale dai benchmark/test distruttivi; auto-export SAF generation-based con WorkManager/recovery/error state; hardening del Database Vault con import marker atomico/fail-safe e rollback SAF verificato; Soldi integrato con account, saldi, prodotto canonico e Git exchange; policy delete/FK Places↔Soldi corretta; Timer Alerts passati su `PersonalHub/main` a prompt in-app centrati e immediati con link/deep link cliccabili; capsulizzazione dei moduli completata; Hub Context Graph generico disponibile per People, Timer, Places, Soldi, Substances, WordPulse e Resources, con navigazione all'entità esatta, risoluzione batch, ricerca Timer/Places bounded e Context Type di sistema bloccati.
 
-Finding tecnici ancora pendenti: UI Composer v29 embedded/nested in Timer giudicata inutilizzabile e da sostituire con una sezione top-level dedicata; People call-overlay deep-link/race/PII; Timer widget write-result; residui runtime/backup legacy Timer. Dettagli storici: `audits/2026-09-05-personalhub-main-audit.md`.
+Finding tecnici ancora pendenti: blocco New session Timer dovuto al tentativo di salvare Hub Context contro il draft ID `-1` prima della creazione della sessione reale; UI Composer v29 embedded/nested in Timer giudicata inutilizzabile e da sostituire con una sezione top-level dedicata; People call-overlay deep-link/race/PII; Timer widget write-result; residui runtime/backup legacy Timer. Dettagli storici: `audits/2026-09-05-personalhub-main-audit.md`.
 
 ## Ordine pendente
 
 La raccomandazione `Recommended model` + `Reasoning` già contenuta in ciascun prompt resta **invariata** per l'esecuzione autonoma del singolo file. Accanto a ogni voce qui sotto è aggiunta una seconda scelta, `nuova policy 5.6`, da usare come alternativa sperimentale quando vuoi verificare se un modello più capace riduce errori, retry, tool-call e consumo quota complessivo.
 
-1. [[prompts/personalhub-context-composer-redesign|personalhub-context-composer-redesign]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-2. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]] — **nuova policy 5.6: GPT-5.6 Sol / high**
-3. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-4. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-5. [[prompts/personalhub-timer-session-tag-picker-ux|personalhub-timer-session-tag-picker-ux]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-6. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-7. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-8. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-9. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-10. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-11. [[prompts/personalhub-global-screen-version-footer|personalhub-global-screen-version-footer]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-12. [[prompts/personalhub-dark-theme|personalhub-dark-theme]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-13. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]] — **nuova policy 5.6: GPT-5.6 Sol / high**
-14. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+1. [[prompts/personalhub-timer-new-session-canonical-entity-save-bug|personalhub-timer-new-session-canonical-entity-save-bug]] — **nuova policy 5.6: GPT-5.6 Terra / medium**
+2. [[prompts/personalhub-context-composer-redesign|personalhub-context-composer-redesign]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+3. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+4. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+5. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+6. [[prompts/personalhub-timer-session-tag-picker-ux|personalhub-timer-session-tag-picker-ux]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+7. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+8. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+9. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+10. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+11. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+12. [[prompts/personalhub-global-screen-version-footer|personalhub-global-screen-version-footer]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+13. [[prompts/personalhub-dark-theme|personalhub-dark-theme]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
+14. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]] — **nuova policy 5.6: GPT-5.6 Sol / high**
+15. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]] — **nuova policy 5.6: GPT-5.6 Terra / low**
 
 ## Dipendenze / motivazione dell'ordine
 
-- `personalhub-context-composer-redesign.md` viene per primo e sostituisce la UI Hub Context v29 embedded/nested in Timer con una sezione top-level `Composer`: ripristina il New Session originale, usa geolocalizzazione e tempo come anchor automatici/editabili, mostra solo pochi suggerimenti ad alta probabilità, impara deterministicamente dalle co-occorrenze storiche e rileva automaticamente transazioni/intake/WordSession dal tempo selezionato. GPT-5.6 Sol / medium / STRICT.
+- `personalhub-timer-new-session-canonical-entity-save-bug.md` viene per primo perché l'app corrente non riesce ad avviare una nuova sessione Timer: il draft usa ID `-1`, ma il dialog prova a salvare i link Hub Context prima che `createNewSession` abbia creato la sessione canonica. Il fix deve usare l'ID reale restituito dalla creazione senza indebolire gli invarianti del graph e senza anticipare il redesign Composer. GPT-5.5 / medium / FAST.
+- `personalhub-context-composer-redesign.md` viene subito dopo e sostituisce la UI Hub Context v29 embedded/nested in Timer con una sezione top-level `Composer`: ripristina il New Session originale, usa geolocalizzazione e tempo come anchor automatici/editabili, mostra solo pochi suggerimenti ad alta probabilità, impara deterministicamente dalle co-occorrenze storiche e rileva automaticamente transazioni/intake/WordSession dal tempo selezionato. GPT-5.6 Sol / medium / STRICT.
 - `personalhub-database-schema-upgrade-safety.md` viene dopo i task Hub Context perché consolida lo schema risultante e rende sicuri tutti gli aggiornamenti successivi: ogni vecchia versione supportata deve avere una catena di migrazione completa, il primo avvio del nuovo APK deve validare/migrare senza perdita dati e un futuro bump dello schema deve fallire nei test se manca una migrazione. GPT-5.6 Sol / medium / STRICT.
 - People, widget Timer e tag picker restano correttivi localizzati e indipendenti e vengono eseguiti dopo il consolidamento Hub Context e DB.
 - `personalhub-timer-session-tag-picker-ux.md` mantiene i tag selezionati come chip/card ben distinguibili e rende sempre disponibile la creazione del nome digitato quando non esiste già esattamente, anche se la ricerca mostra match più lunghi come `shopping` per `shop`.
