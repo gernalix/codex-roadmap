@@ -16,7 +16,7 @@ Una parte richiesta esiste già: quando crei una prescrizione nuova, entrambe le
 
 ## 3. [[prompts/personalhub-context-composer-redesign|personalhub-context-composer-redesign]]
 
-È ancora necessario. Il motore Hub Context e i relativi adapter esistono già, ma la home PersonalHub non ha una sezione Composer e l'editor sessione Timer contiene ancora `SessionContextEditor` e `HubContextLinks`. Il prompt riusa il motore esistente, toglie l'interfaccia Context dal dialogo Timer e crea una schermata principale dedicata con tempo/luogo suggeriti, poche proposte pertinenti, ricerca, rilevazione dei dati avvenuti nell'intervallo scelto e Context retroattivi.
+È ancora necessario, ma una parte sostanziale del motore esiste già: lo stato Composer sa già salvare e ripristinare membri e ricerca, cercare tramite gli adapter, creare entità/risorse, salvare Context e gestire template; esiste anche un test che prova crea → salva → riapri → aggiungi un'altra entità. Il problema è soprattutto come tutto questo viene presentato: oggi è ancora un dialogo tecnico incastrato nel flusso Timer, con tipi interni poco leggibili, e la home non ha una vera schermata Composer. Il prompt ora riusa e rifattorizza queste basi invece di ricostruirle, aggiungendo inferenza di tempo/luogo, suggerimenti limitati e rilevazione dei dati già registrati nell'intervallo scelto.
 
 ## 4. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
 
@@ -28,7 +28,7 @@ Il controllo del codice conferma che i tre difetti sono ancora presenti: il puls
 
 ## 6. [[prompts/personalhub-global-ui-theme-version-backup-status|personalhub-global-ui-theme-version-backup-status]]
 
-Anche qui alcune basi esistono già. La home mostra già correttamente la versione PersonalHub e `DatabaseVault` espone già tutti i dati necessari per sapere se l'auto-export è sano; non serve modificare il sistema di backup. Restano da aggiungere il piccolo indicatore ✅/❌ sulla home, la versione PersonalHub su tutte le vere schermate dei moduli e il dark mode. Il tema host è infatti ancora solo chiaro e Substances mostra ancora una propria versione `BuildConfig`, che va sostituita con quella dell'app principale. I tre lavori restano accorpati perché usano la stessa lista di schermate e lo stesso giro finale di QA.
+Anche qui molte basi esistono già. La home mostra già correttamente la versione PersonalHub e `DatabaseVault` espone già tutti i dati necessari per sapere se l'auto-export è sano; non serve modificare il sistema di backup. Inoltre People, Places, Substances e WordPulse seguono già il tema scuro di sistema. Restano il piccolo indicatore ✅/❌ sulla home, la versione PersonalHub su tutte le vere schermate dei moduli e i soli buchi di dark mode ancora reali: il tema principale di PersonalHub è light-only, Timer possiede già colori scuri ma non li seleziona automaticamente e Soldi usa ancora un tema generico. Substances e Timer mostrano inoltre ancora versioni proprie da sostituire con quella dell'app principale. I tre lavori restano accorpati perché usano la stessa lista di schermate e lo stesso giro finale di QA.
 
 ## 7. [[prompts/personalhub-global-activity-register-safe-undo|personalhub-global-activity-register-safe-undo]]
 
