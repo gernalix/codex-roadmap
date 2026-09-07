@@ -10,45 +10,47 @@ Finding tecnici/funzionali ancora pendenti: manca un widget configurabile per az
 
 ## Ordine pendente
 
-La raccomandazione `Recommended model` + `Reasoning` già contenuta in ciascun prompt resta **invariata** per l'esecuzione autonoma del singolo file. Accanto a ogni voce qui sotto è aggiunta una seconda scelta, `nuova policy 5.6`, da usare come alternativa sperimentale quando vuoi verificare se un modello più capace riduce errori, retry, tool-call e consumo quota complessivo.
+La roadmap è stata consolidata da **15 a 7 goal sostanziali**. L'accorpamento è basato sul costo Codex reale: stesso modulo/modello, file e dominio condivisi, possibilità di riusare esplorazione e test, un solo incremento versione e soprattutto una sola build/installazione/QA finale per goal. I task rimasti separati lo sono perché unirli trascinerebbe contesto non pertinente o un rischio/modello più costoso senza sufficiente riuso.
 
-1. [[prompts/personalhub-timer-quick-event-widget|personalhub-timer-quick-event-widget]] — **nuova policy 5.6: GPT-5.6 Terra / medium**
-2. [[prompts/personalhub-places-visit-history-checkin|personalhub-places-visit-history-checkin]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-3. [[prompts/personalhub-context-composer-redesign|personalhub-context-composer-redesign]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-4. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]] — **nuova policy 5.6: GPT-5.6 Sol / high**
-5. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-6. [[prompts/personalhub-timer-widget-write-result|personalhub-timer-widget-write-result]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-7. [[prompts/personalhub-timer-session-tag-picker-ux|personalhub-timer-session-tag-picker-ux]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-8. [[prompts/personalhub-timer-legacy-runtime-cleanup|personalhub-timer-legacy-runtime-cleanup]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-9. [[prompts/personalhub-places-sorting-map-navigation|personalhub-places-sorting-map-navigation]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-10. [[prompts/personalhub-places-geofence-alerts|personalhub-places-geofence-alerts]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-11. [[prompts/personalhub-autoexport-status-indicator|personalhub-autoexport-status-indicator]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-12. [[prompts/personalhub-global-screen-version-footer|personalhub-global-screen-version-footer]] — **nuova policy 5.6: GPT-5.6 Terra / low**
-13. [[prompts/personalhub-dark-theme|personalhub-dark-theme]] — **nuova policy 5.6: GPT-5.6 Sol / medium**
-14. [[prompts/personalhub-global-audit-foundation-safe-undo|personalhub-global-audit-foundation-safe-undo]] — **nuova policy 5.6: GPT-5.6 Sol / high**
-15. [[prompts/personalhub-global-audit-register-ui|personalhub-global-audit-register-ui]] — **nuova policy 5.6: GPT-5.6 Terra / low**
+1. [[prompts/personalhub-timer-widgets-ux-runtime-hardening|personalhub-timer-widgets-ux-runtime-hardening]] — **GPT-5.5 / medium / FAST** · alternativa 5.6: **GPT-5.6 Terra / medium**
+2. [[prompts/personalhub-places-history-map-geofencing|personalhub-places-history-map-geofencing]] — **GPT-5.5 / medium / STANDARD** · alternativa 5.6: **GPT-5.6 Sol / medium**
+3. [[prompts/personalhub-context-composer-redesign|personalhub-context-composer-redesign]] — **GPT-5.6 Sol / medium / STRICT**
+4. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]] — **GPT-5.6 Sol / medium / STRICT**
+5. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]] — **GPT-5.5 / medium / FAST** · alternativa 5.6: **GPT-5.6 Sol / medium**
+6. [[prompts/personalhub-global-ui-theme-version-backup-status|personalhub-global-ui-theme-version-backup-status]] — **GPT-5.5 / medium / STANDARD** · alternativa 5.6: **GPT-5.6 Terra / medium**
+7. [[prompts/personalhub-global-activity-register-safe-undo|personalhub-global-activity-register-safe-undo]] — **GPT-5.6 Sol / medium / STRICT**
+
+## Cosa è stato accorpato e perché
+
+- **Timer: 4 → 1.** `Events` widget, correzione del Quick Session widget, tag-picker e cleanup runtime/backup vivono tutti dentro Timer. Il nuovo goal li esegue come fasi interne, riusa gli stessi componenti e fa un solo build/install/QA. Non riapre Timer fuori dalle aree elencate nel prompt.
+- **Places: 3 → 1.** visite/check-in/`Dov'ero?`, sorting+mappa e geofence condividono `PlaceRepository`, location, Place detail, metriche e navigazione. La fase visite definisce la semantica canonica usata dalla fase lista/mappa; le geofence restano notifiche e non creano visite. Un solo passaggio finale verifica l'intero modulo.
+- **UI globale: 3 → 1.** indicatore auto-export, footer versione e dark theme richiedevano tutti di percorrere shell e moduli. Il goal costruisce una sola inventory delle schermate e la riusa per footer e tema, verificando anche il nuovo indicatore nello stesso passaggio.
+- **Registro attività: 2 → 1.** backend audit/undo e UI erano due metà della stessa feature. Il read model viene ora progettato una volta per paging, filtri, grouping e undo, evitando che una seconda sessione debba riscoprire l'API appena creata.
+
+## Perché i tre restanti non sono stati accorpati ulteriormente
+
+- `personalhub-context-composer-redesign.md` è già un goal molto grande e cross-module. Fonderlo con altro trascinerebbe un contesto enorme nelle fasi successive.
+- `personalhub-database-schema-upgrade-safety.md` è infrastruttura DB ad alto rischio e richiede test di migrazione storica dedicati. Unirlo a una feature UI renderebbe diagnosi/rollback più difficili e costringerebbe quella feature a pagare il costo STRICT del lavoro DB.
+- `personalhub-people-call-overlay-hardening.md` è un fix telephony/overlay/race/PII molto localizzato: non condivide abbastanza file o QA con i goal globali per giustificare il contesto aggiuntivo.
 
 ## Dipendenze / motivazione dell'ordine
 
-- `personalhub-timer-quick-event-widget.md` è prioritario: aggiunge un widget separato e configurabile che punta a un singolo pulsante `Events` di Timer e ne riusa l'azione canonica. Più istanze possono puntare a pulsanti diversi; i target che richiedono input aprono direttamente il relativo flusso pre-selezionato invece di inventare valori. Non sostituisce né ridisegna il Quick Session widget esistente. GPT-5.5 / medium / FAST.
-- `personalhub-places-visit-history-checkin.md` viene subito dopo e concentra sullo stesso storico canonico Places il check-in manuale “adesso”, il check-in retroattivo, la disambiguazione dei luoghi sovrapposti e “Dov'ero?”. Evita tabelle o storici paralleli e gestisce conflitti/duplicati sul modello definitivo delle visite. GPT-5.5 / medium / FAST.
-- `personalhub-context-composer-redesign.md` sostituisce la UI Hub Context v29 embedded/nested in Timer con una sezione top-level `Composer`: ripristina il New Session originale, usa geolocalizzazione e tempo come anchor automatici/editabili, mostra solo pochi suggerimenti ad alta probabilità, impara deterministicamente dalle co-occorrenze storiche e rileva automaticamente transazioni/intake/WordSession dal tempo selezionato. GPT-5.6 Sol / medium / STRICT.
-- `personalhub-database-schema-upgrade-safety.md` viene dopo i task Hub Context perché consolida lo schema risultante e rende sicuri tutti gli aggiornamenti successivi: ogni vecchia versione supportata deve avere una catena di migrazione completa, il primo avvio del nuovo APK deve validare/migrare senza perdita dati e un futuro bump dello schema deve fallire nei test se manca una migrazione. GPT-5.6 Sol / medium / STRICT.
-- People, Quick Session widget write-result e tag picker restano correttivi localizzati e indipendenti e vengono eseguiti dopo il consolidamento Hub Context e DB.
-- `personalhub-timer-session-tag-picker-ux.md` mantiene i tag selezionati come chip/card ben distinguibili e rende sempre disponibile la creazione del nome digitato quando non esiste già esattamente, anche se la ricerca mostra match più lunghi come `shopping` per `shop`.
-- `personalhub-timer-legacy-runtime-cleanup.md` accorpa i residui del vecchio MultiTimeTracker su versione/AutoConsistency e first-run backup. Resta separato dal task Timer Alerts perché non deve riaprire il comportamento in-app appena consolidato.
-- `personalhub-places-sorting-map-navigation.md` resta separato dal nuovo flusso di check-in perché è principalmente lista/mappa/query UI sulle metriche canoniche finali. `personalhub-places-geofence-alerts.md` resta separato perché coinvolge background location/notification e non deve riusare il vecchio Timer Alert system-notification path appena rimosso; può riusare solo infrastruttura Android realmente condivisa e ancora valida.
-- `personalhub-autoexport-status-indicator.md` resta una feature UI localizzata. `personalhub-global-screen-version-footer.md` uniforma poi il dettaglio visivo della versione host su tutte le schermate. `personalhub-dark-theme.md` viene dopo la UI definitiva dei moduli.
-- `personalhub-global-audit-foundation-safe-undo.md` accorpa modello/cattura semantica e undo compensativo conflict-safe perché la progettazione delle snapshot e della reversibilità deve servire direttamente l'inverso sicuro. La UI del registro resta separata e viene costruita solo sul backend definitivo.
+- Il goal Timer resta primo perché raccoglie le richieste Timer già prioritarie e consente di eliminare in una sola sessione quattro ri-bootstrap del modulo.
+- Il goal Places viene subito dopo. Include anche l'eventuale schema necessario alle geofence, così il successivo framework di sicurezza delle migrazioni può validare lo schema risultante invece di essere immediatamente seguito da un'altra modifica DB non ancora coperta.
+- `personalhub-context-composer-redesign.md` resta separato e prima della sicurezza schema perché può introdurre/assestare gli ultimi contratti Hub Context da consolidare.
+- `personalhub-database-schema-upgrade-safety.md` viene quindi eseguito sullo schema risultante da Timer/Places/Composer e rende obbligatoria una catena di migrazione completa per i bump futuri.
+- People call-overlay resta un fix indipendente e localizzato.
+- Il goal UI globale viene dopo le principali modifiche funzionali, così footer/tema/status vengono applicati alle schermate definitive una sola volta.
+- Il Registro attività resta ultimo: è il goal più cross-module e può appoggiarsi sia al framework definitivo di migrazione DB sia alle superfici/moduli ormai stabilizzati.
 
 ## Disciplina globale
 
 Ogni prompt deve restare self-contained e verificare esplicitamente eventuali prerequisiti; fuori da un blocco continuo non deve assumere una chat precedente. Per i task PersonalHub, il bootstrap specializzato autorevole è `MegaVault/ai/personalhubdoc.md`; il protocollo globale va letto solo nei casi di fallback esplicitamente previsti da quel file. Nei blocchi continui esplicitamente marcati, le fasi successive possono riusare esclusivamente il contesto verificato nelle fasi precedenti della stessa sessione, senza rilanciare bootstrap/esplorazione equivalenti.
 
-Quando un prompt modifica PersonalHub, deve catturare la versione iniziale una sola volta e fissare per quel goal `target = base + 1`. Per una continuous campaign l'intero blocco è un unico goal di versionamento: il target viene fissato alla prima fase e riusato fino alla fine. Retry, rebuild, test o fasi successive dello stesso goal non possono incrementarlo di nuovo.
+Quando un prompt modifica PersonalHub, deve catturare la versione iniziale una sola volta e fissare per quel goal `target = base + 1`. Nei prompt consolidati le fasi interne condividono lo stesso target: retry, rebuild, test o fasi successive dello stesso goal non possono incrementarlo di nuovo.
 
 **Ordine solo numerico in roadmap:** l'ordine canonico è esclusivamente la posizione `1.`, `2.`, `3.`, ... in questa lista. I filename/titoli dei prompt devono essere semantici e non devono contenere prefissi o suffissi numerici/alfanumerici d'ordine. Inserire, rimuovere o riordinare un task richiede solo di rinumerare consecutivamente la lista; non si rinominano i file per la posizione. `PROMPT_ID` resta consentito perché è un identificatore casuale, non un indicatore d'ordine.
 
-**Pre-localizzazione obbligatoria:** ogni prompt pendente deve indicare un set iniziale di file/classi reali verificati sullo stato corrente del repository target, sufficiente a iniziare il task senza scansione generale. Se un task precedente ha rinominato/spostato un file indicato, il prompt può autorizzare una singola ricerca mirata per il simbolo/classe noto. La disciplina operativa dettagliata su esplorazione, batching, tool call, retry, device QA, test, Git e stop resta definita dal bootstrap MegaVault governante e non va duplicata nei prompt.
+**Pre-localizzazione obbligatoria:** ogni prompt pendente deve indicare un set iniziale di file/classi reali verificati sullo stato corrente del repository target, sufficiente a iniziare il task senza scansione generale. Nei prompt consolidati è preferibile una pre-localizzazione per fase: Codex legge i file della fase solo quando vi entra, invece di caricare subito l'intera unione. Se un task precedente ha rinominato/spostato un file indicato, il prompt può autorizzare una singola ricerca mirata per il simbolo/classe noto. La disciplina operativa dettagliata su esplorazione, batching, tool call, retry, device QA, test, Git e stop resta definita dal bootstrap MegaVault governante e non va duplicata nei prompt.
 
-Le fasi successive non devono riaprire l'architettura delle fasi precedenti salvo che un acceptance check dimostri una regressione o un prerequisito mancante.
+Le fasi interne e i task successivi non devono riaprire l'architettura già verificata salvo che un acceptance check dimostri una regressione o un prerequisito mancante.
