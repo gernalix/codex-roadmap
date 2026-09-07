@@ -8,13 +8,15 @@ Questo file spiega in parole semplici a cosa serve ciascun prompt ancora present
 
 **Regola di test comune:** se Codex installa sul Pixel una copia clone/QA di PersonalHub solo per fare test senza rischiare i dati dell'app reale, deve disinstallare quella copia temporanea prima di dichiarare il task completato.
 
-## 1. [[prompts/personalhub-telegram-apk-channel-delivery-readiness|personalhub-telegram-apk-channel-delivery-readiness]]
+La verifica e la consegna Telegram dell'APK finale non sono più un prompt della roadmap: sono regole permanenti del bootstrap PersonalHub in MegaVault.
 
-Verifica prima di tutto che il sistema Telegram condiviso usato da Codex possa davvero inviare l'APK alla **stessa destinazione predefinita che in passato veniva usata per le notifiche Codex di progresso/stato**, senza usare né inventare un altro chat ID. Le notifiche Telegram di progresso, test e installazione di PersonalHub restano disabilitate: quella destinazione viene riusata soltanto per consegnare l'APK finale. Deve usare il notifier comune a tutti i progetti, non quello specifico di `amici_fb`. Oltre a un normale messaggio di prova, controlla anche ciò che servirà davvero a PersonalHub: inviare un file come documento, scegliendone il nome e senza aggiungere caption o altro testo. Se qualcosa non funziona, Codex prova a correggere soltanto il notifier condiviso o la sua configurazione; se invece manca un permesso che puoi concedere solo tu, si ferma spiegando esattamente cosa serve. Questo test evita di scoprire il problema solo alla fine di un futuro task, quando l'APK sarebbe già pronto.
-
-## 2. [[prompts/personalhub-timer-event-title-success-toast|personalhub-timer-event-title-success-toast]]
+## 1. [[prompts/personalhub-timer-event-title-success-toast|personalhub-timer-event-title-success-toast]]
 
 Corregge il messaggio che compare quando tocchi un pulsante `Events` di Timer. Invece del generico `Event recorded`, dopo un inserimento riuscito deve comparire `<titolo del pulsante> added`: per esempio, toccando `Coffee` deve apparire `Coffee added`. La regola deve essere identica sia quando tocchi il pulsante dentro PersonalHub sia quando usi il relativo widget sulla home Android. Anche i pulsanti-macro devono mostrare il proprio titolo, non un conteggio generico. Il messaggio di successo deve apparire solo se il salvataggio è realmente riuscito.
+
+## 2. [[prompts/personalhub-substances-prescription-date-pickers|personalhub-substances-prescription-date-pickers]]
+
+Sostituisce i due campi data tecnici delle prescrizioni di Substances con normali selettori calendario. Quando crei una nuova prescrizione, sia la data dell'ordine sia la data della prescrizione partono da oggi; quando ne modifichi una esistente, mostrano invece le date già salvate. Non devi più vedere né digitare numeri `epoch-day`, e il salvataggio deve mantenere la stessa data scelta senza slittamenti dovuti al fuso orario.
 
 ## 3. [[prompts/personalhub-context-composer-redesign|personalhub-context-composer-redesign]]
 
