@@ -10,7 +10,7 @@ Complete the pending Places work as one coherent substantial goal so Codex reuse
 
 1. canonical manual check-in now + retroactive visit creation, overlap disambiguation and `Dov'ero?` history queries;
 2. sortable canonical place metrics plus current-location map centering and marker→Place navigation;
-3. optional, battery-efficient Android geofencing with per-Place ENTER/EXIT behavior, including notification-only and automatic canonical check-in/check-out modes, while keeping background-location-dependent functionality isolated so Places still works cleanly without that permission or in a Play build where it is unavailable.
+3. optional, battery-efficient Android geofencing with per-Place ENTER/EXIT behavior, including notification-only and automatic canonical check-in/check-out modes; every successful automatic check-in/out must also generate a user-visible notification, while background-location-dependent functionality remains isolated so Places still works cleanly without that permission or in a Play build where it is unavailable.
 
 These are internal phases of ONE Places goal. Capture the PersonalHub base version once and set `target = base + 1`; increment `version.txt` exactly once. Run narrow checks after each phase, but perform only one explicit final APK build/install/device QA after all phases pass.
 
@@ -123,20 +123,21 @@ Required behavior:
 - Each canonical Place may independently enable ENTER, EXIT or both and choose the action for relevant transitions: `notification only` or `automatic canonical check-in/check-out`.
 - `notification only` must never mutate visit history.
 - In automatic mode, ENTER maps to the SAME canonical check-in path established in Phase A and EXIT maps to its canonical checkout/close path. Never create a parallel geofence visit model.
+- Every successful automatic ENTER check-in and automatic EXIT check-out MUST also emit exactly one user-visible notification identifying the Place and whether a check-in or check-out was recorded. This notification is mandatory in automatic mode, not a separate optional setting.
 - Automatic mode must apply the same conflict/duplicate/overlap safety rules as manual visits. Ambiguous overlapping geofences must not silently choose a Place or corrupt history; require/notify for disambiguation rather than fabricating certainty.
 - Reconcile register/unregister idempotently when Places/config changes; restore registrations after reboot/app update when permission still allows it; permission revocation must degrade safely without crash loops.
-- Deduplicate repeated platform transitions so one logical ENTER/EXIT does not spam notifications or duplicate check-ins/check-outs.
+- Deduplicate repeated platform transitions so one logical ENTER/EXIT produces at most one corresponding automatic visit mutation and one automatic check-in/out notification; do not spam notifications or duplicate check-ins/check-outs.
 - Notification `contentIntent` opens the relevant Place/module.
 - Keep human-readable settings/disclosure sufficient for the user to understand when background location is used and what each Place will do. Do not add policy theater or unsupported claims of Play approval.
 
-Targeted proof: configuration persistence; notification-only mode does not alter visits; automatic ENTER creates exactly one canonical check-in and EXIT closes exactly that visit; conflict/overlap handling; reconciliation/dedup; permission-disabled state; core Places behavior without background permission; reboot/update restoration; representative transition handling. If deterministic platform transition simulation is unavailable, verify receiver handling through the narrowest reliable injection and report the platform limitation; do not fake PASS.
+Targeted proof: configuration persistence; notification-only mode does not alter visits; automatic ENTER creates exactly one canonical check-in plus exactly one check-in notification and EXIT closes exactly that visit plus exactly one check-out notification; conflict/overlap handling; reconciliation/dedup; permission-disabled state; core Places behavior without background permission; reboot/update restoration; representative transition handling. If deterministic platform transition simulation is unavailable, verify receiver handling through the narrowest reliable injection and report the platform limitation; do not fake PASS.
 
 # Consolidated final verification
 After A+B+C targeted checks pass:
 - run the minimum combined Places regression tests covering canonical history/stats, map/location and geofence configuration;
 - perform ONE explicit final PersonalHub APK build;
 - safely install/update that final APK on the project-required Android targets per the governing PersonalHub protocol;
-- perform ONE concise integrated QA pass covering manual current check-in, retroactive visit, `Dov'ero?`, one sort, map current-location center, marker→detail navigation, geofence permission/configuration, notification-only behavior, automatic canonical ENTER/EXIT behavior, and graceful operation with background location unavailable;
+- perform ONE concise integrated QA pass covering manual current check-in, retroactive visit, `Dov'ero?`, one sort, map current-location center, marker→detail navigation, geofence permission/configuration, notification-only behavior, automatic canonical ENTER/EXIT behavior including the mandatory notification for each successful automatic check-in/out, and graceful operation with background location unavailable;
 - do not repeat already-proven tests unless final integration contradicts them.
 
 # Non-goals
@@ -145,4 +146,4 @@ No map-engine replacement, routes/directions, continuous GPS tracking, generic a
 # Acceptance / stop
 PASS only when all three Places phases are satisfied together and consolidated final verification passes. Stop immediately after PASS; do not inspect later roadmap tasks.
 
-Final output only: `PROMPT_ID`, `RESULT`, canonical manual/retroactive visit semantics, overlap/Dov'ero behavior, sorting/map behavior, geofence modes/permissions/dedup/Play-safe isolation, targeted tests, final device QA, version, commit SHA.
+Final output only: `PROMPT_ID`, `RESULT`, canonical manual/retroactive visit semantics, overlap/Dov'ero behavior, sorting/map behavior, geofence modes/permissions/dedup/Play-safe isolation including automatic check-in/out notifications, targeted tests, final device QA, version, commit SHA.
