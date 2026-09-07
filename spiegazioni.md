@@ -6,6 +6,8 @@ Questo file spiega in parole semplici a cosa serve ciascun prompt ancora present
 
 **L'ordine e la numerazione qui sotto devono corrispondere esattamente a `roadmap.md`.** La roadmap è stata accorpata per ridurre sessioni Codex, esplorazioni ripetute, build/installazioni e passaggi di test duplicati: i task strettamente correlati sono ora fasi dello stesso goal.
 
+**Regola di test comune:** se Codex installa sul Pixel una copia clone/QA di PersonalHub solo per fare test senza rischiare i dati dell'app reale, deve disinstallare quella copia temporanea prima di dichiarare il task completato.
+
 ## 1. [[prompts/personalhub-timer-widgets-ux-runtime-hardening|personalhub-timer-widgets-ux-runtime-hardening]]
 
 Riunisce in un solo lavoro gli interventi Timer rimasti. Corregge anzitutto la schermata con cui scegli quale pulsante `Events` assegnare al widget: con molte voci la lista deve finalmente scorrere e deve esserci un campo `Cerca` che filtra subito i pulsanti per nome, lasciando il tasto di salvataggio sempre raggiungibile. Corregge poi il widget Quick Session perché dica “avviato” soltanto quando la sessione è stata davvero salvata; migliora la scelta dei tag nelle sessioni, mantenendo visibili i tag selezionati e permettendo di creare esattamente il nome digitato anche se esistono risultati simili; infine elimina alcuni residui del vecchio MultiTimeTracker, facendo usare a Timer la versione reale di PersonalHub, rendendo affidabili i retry delle riparazioni automatiche e spostando backup/ripristino del database sul sistema globale di PH. Le parti vengono testate separatamente quanto basta, ma l'APK viene costruito/installato e verificato nel suo insieme una sola volta.
