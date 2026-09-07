@@ -10,7 +10,7 @@ La readiness e la consegna Telegram dell'APK finale **non sono più un goal dell
 
 Il riesame di `PersonalHub/main` mostra 8 goal pendenti. In più c'è 1 goal infrastrutturale Fedora, prioritario perché riduce lavoro Git ripetuto nelle sessioni Codex. Le parti già implementate restano incorporate nei prompt per evitare riesplorazione:
 
-- **Fedora GitHub autosync + Git completion guard:** `codex-usage-monitor` contiene già il publisher Fedora e le unit `codex-usage-publisher`, quindi non serve un secondo watcher delle sessioni. `ghorg` supporta oggi `--protect-local`, che consente di clonare nuovi repo e aggiornare quelli sicuri saltando working tree dirty o commit non pushati. Il prompt usa ghorg + `systemd --user`, vieta prune distruttivo/push automatici e aggiunge al publisher esistente un audit Git passivo su `task_complete`; aggiorna inoltre la disciplina MegaVault a un solo push/verifica finale per repo.
+- **Fedora GitHub autosync + Git completion guard:** `codex-usage-monitor` contiene già il publisher Fedora e le unit `codex-usage-publisher`, quindi non serve un secondo watcher delle sessioni. `ghorg` supporta oggi `--protect-local`, che consente di clonare nuovi repo e aggiornare quelli sicuri saltando working tree dirty o commit non pushati. Il prompt usa ghorg + `systemd --user`, vieta prune distruttivo/push automatici sui repo applicativi, registra automaticamente in `megavault.sqlite` ogni nuovo repo `gernalix` con `project_id` permanente senza duplicati, aggiunge al publisher esistente un audit Git passivo su `task_complete` e aggiorna la disciplina MegaVault a un solo push/verifica finale per repo.
 - **Places history mutations — regressione prioritaria:** il commit Places `45edd082fe8323478cf7826cabe845129be57ad3` ha reso globale il controllo overlap. `PlaceRepository.validateNewEvents(...)` e `validateEventReplacement(...)` possono rifiutare una nuova modifica valida quando `HistorySessionCalculator.hasAnyOverlap(...)` trova una sovrapposizione preesistente e non correlata in qualunque punto dello storico. Questo spiega il blocco di check-in/out, visite retroattive e modifica orari sul DB reale. Il precedente test Robolectric ricreava un DB pulito per ogni test; il precedente smoke fisico usava TCL-6102H ma verificava solo sort, `Where was I?` e assenza crash, senza eseguire mutazioni. Il nuovo prompt riproduce uno storico già sovrapposto, corregge la validazione incrementale e richiede uno smoke di mutazione su Pixel con dati QA isolati.
 - **Timer Events:** ancora pendente. Il ViewModel in-app usa feedback generico (`showEntryRecorded` / `showMacroRecorded`) e il widget usa ancora `quick_event_recorded` o il conteggio macro. Il prompt parte direttamente da questi call-site; niente nuovo audit Timer.
 - **Substances Prescriptions:** il default a oggi per entrambe le date di una nuova prescrizione è **già implementato**. Restano i campi tecnici `Order epoch day` / `Prescription epoch day` nell'editor: il prompt modifica soltanto la UI calendario e preserva la persistenza epoch-day esistente.
@@ -36,7 +36,7 @@ Il riesame di `PersonalHub/main` mostra 8 goal pendenti. In più c'è 1 goal inf
 
 L'accorpamento utile resta al limite corretto:
 
-- **Fedora GitHub autosync** resta autonoma: condivide il publisher Fedora e la disciplina Git globale, ma non codice/app/QA Android con i goal PersonalHub. `ghorg` evita di reimplementare discovery/clone/pull e riduce il task a integrazione/configurazione + guard passivo.
+- **Fedora GitHub autosync** resta autonoma: condivide il publisher Fedora e la disciplina Git/MegaVault globale, ma non codice/app/QA Android con i goal PersonalHub. `ghorg` evita di reimplementare discovery/clone/pull; la sola logica aggiuntiva necessaria è la registrazione idempotente dei repo nuovi in MegaVault e il guard passivo post-task.
 - **Places regression** resta autonoma e prima degli altri goal PersonalHub: è un malfunzionamento dei write-path fondamentali già pre-localizzato, da correggere senza trascinare altro lavoro Places già completato.
 - **Timer** e **Substances** restano separati: sono fix FAST in moduli diversi, senza esplorazione/test condivisibili.
 - **Composer** resta separato: è già un goal cross-module grande e architetturale.
@@ -49,7 +49,7 @@ Non creare ulteriori mega-task contenenti obiettivi indipendenti. Ottimizzare de
 
 ## Dipendenze / ordine
 
-- Fedora GitHub autosync viene **prima di tutto** perché rende automatici clone/pull sicuri dei repo e riduce lavoro Git ripetuto nelle sessioni successive; è indipendente da PersonalHub.
+- Fedora GitHub autosync viene **prima di tutto** perché rende automatici clone/pull sicuri dei repo, mantiene MegaVault aggiornato quando nasce un nuovo progetto e riduce lavoro Git ripetuto nelle sessioni successive; è indipendente da PersonalHub.
 - Places viene subito dopo perché il modulo non riesce attualmente a eseguire normali mutazioni di storico sui dati reali; la causa è già localizzata ed è un fix FAST.
 - Timer e Substances seguono perché sono fix localizzati e chiudibili con GPT-5.5/low.
 - Composer viene prima della sicurezza schema perché può introdurre gli ultimi contratti/identità Hub Context da consolidare.
