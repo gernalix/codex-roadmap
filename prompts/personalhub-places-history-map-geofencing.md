@@ -10,7 +10,7 @@ Complete the pending Places work as one coherent substantial goal so Codex reuse
 
 1. canonical manual check-in now + retroactive visit creation, overlap disambiguation and `Dov'ero?` history queries;
 2. sortable canonical place metrics plus current-location map centering and marker→Place navigation;
-3. persistent ENTER/EXIT geofence alerts using Android geofencing, without turning alerts into visits.
+3. optional, battery-efficient Android geofencing with per-Place ENTER/EXIT behavior, including notification-only and automatic canonical check-in/check-out modes, while keeping background-location-dependent functionality isolated so Places still works cleanly without that permission or in a Play build where it is unavailable.
 
 These are internal phases of ONE Places goal. Capture the PersonalHub base version once and set `target = base + 1`; increment `version.txt` exactly once. Run narrow checks after each phase, but perform only one explicit final APK build/install/device QA after all phases pass.
 
@@ -88,43 +88,19 @@ Reuse Phase A files where already read and add only:
 Known starting facts: `PlaceListUiModel` already exposes total time, visit count and last visit; global map currently centers on marker averages; marker identity exists upstream but is dropped by the overlay model. Reuse the final canonical visit/stats projection from Phase A rather than rediscovering it.
 
 ## B1. Sorting
-Add compact sorting by:
-- distance from current location;
-- last visit;
-- total time;
-- visit count;
-with explicit ASC/DESC for each.
-
-Semantics:
-- distance ASC nearest, DESC farthest;
-- last visit ASC oldest, DESC newest;
-- total time/count numeric ASC/DESC;
-- unknown distance sorts after known distance in both directions;
-- never-visited sorts after known last visit in both directions;
-- stable final tie-breaker such as normalized nickname;
-- no persisted Place mutation just to sort.
+Add compact sorting by distance from current location, last visit, total time and visit count, with explicit ASC/DESC for each. Unknown distance and never-visited sort after known values in both directions; use a stable final tie-breaker such as normalized nickname; do not mutate Places just to sort.
 
 Distance must reuse the existing foreground/current-location pipeline, refresh reasonably when relevant/resumed, calculate straight-line local distance, avoid continuous polling/network routing, and degrade clearly when permission/location is unavailable. Preserve selected sort through normal recreation; persist across restarts only if trivial within an existing preference pattern.
 
 ## B2. Map center
-When opening the global Places map:
-- if foreground location permission + current/recent location are available, center automatically on current position at useful zoom;
-- optionally show current-position indicator if cheap with existing osmdroid setup;
-- do not keep recentering after user manual pan/zoom;
-- if unavailable/denied, safely fall back to current marker-based bounds/centering.
-
-No background permission is added for this foreground map behavior.
+When opening the global Places map, center on current/recent position at useful zoom when foreground permission/location are available; optionally show current position if cheap; never keep recentering after manual pan/zoom; otherwise fall back safely to marker-based bounds. No background permission is added for this foreground map behavior.
 
 ## B3. Marker navigation
-- Every individual Place marker opens the canonical Place detail by stable UUID.
-- Preserve UUID through overlay model; never resolve by title/coordinates.
-- Reuse the smallest existing in-app navigation/intent contract; do not export a public Activity unnecessarily.
-- Back stack remains coherent.
-- Cluster marker never arbitrarily opens one member; preserve/implement sensible cluster zoom/info behavior.
+Every individual Place marker opens canonical Place detail by stable UUID. Preserve UUID through overlay model; never resolve by title/coordinates. Reuse the smallest in-app navigation/intent contract. Cluster markers must not arbitrarily open one member.
 
 Targeted proof: all sort criteria both directions with deterministic null handling; current-location center + unavailable fallback; individual marker opens correct UUID; cluster does not choose arbitrary member.
 
-# Phase C — geofence ENTER/EXIT alerts
+# Phase C — optional geofence ENTER/EXIT automation
 
 ## Starting files
 Reuse already-read Places/location files and add only:
@@ -139,30 +115,34 @@ Only if it materially reduces code, read exactly these Timer notification-patter
 Create the minimum new geofence registration/receiver classes required.
 
 Required behavior:
-- A canonical Place can configure enabled ENTER, EXIT or both, with a human-readable notification message/settings sufficient for the feature.
-- Use Android `GeofencingClient`/platform geofences, never continuous background polling.
+- Use Android `GeofencingClient`/platform geofences. NEVER implement continuous background GPS polling or a permanent foreground service merely to emulate geofencing.
+- Geofencing is optional. Core Places, manual check-in/out, history, map and foreground location must remain fully usable when background location is denied/unavailable.
+- Keep the background-location/geofence capability sufficiently isolated that a future Play-distribution variant can disable/remove it without redesigning Places or its canonical visit model.
+- Request/guide foreground/background location permissions only when the user enables functionality that actually requires them, according to target Android/Google Play rules. Do not request background location merely for the foreground map. Never claim background geofencing works without the required permission.
 - Persist configuration in the canonical PH database; if schema changes, add the safe migration required by current architecture. Do not invent a second DB.
-- Request/guide foreground/background location permissions according to target Android rules. Never claim background geofencing works without required permission.
-- Reconcile register/unregister idempotently when Places/config changes.
-- Restore registrations after reboot and app update; permission revocation must not crash-loop.
-- Deduplicate repeated platform transitions so one logical transition does not spam notifications.
+- Each canonical Place may independently enable ENTER, EXIT or both and choose the action for relevant transitions: `notification only` or `automatic canonical check-in/check-out`.
+- `notification only` must never mutate visit history.
+- In automatic mode, ENTER maps to the SAME canonical check-in path established in Phase A and EXIT maps to its canonical checkout/close path. Never create a parallel geofence visit model.
+- Automatic mode must apply the same conflict/duplicate/overlap safety rules as manual visits. Ambiguous overlapping geofences must not silently choose a Place or corrupt history; require/notify for disambiguation rather than fabricating certainty.
+- Reconcile register/unregister idempotently when Places/config changes; restore registrations after reboot/app update when permission still allows it; permission revocation must degrade safely without crash loops.
+- Deduplicate repeated platform transitions so one logical ENTER/EXIT does not spam notifications or duplicate check-ins/check-outs.
 - Notification `contentIntent` opens the relevant Place/module.
-- Geofence alerts do NOT create visits/check-ins merely because an ENTER/EXIT notification fires. Canonical visit semantics from Phase A remain separate unless an existing explicit product rule already says otherwise.
+- Keep human-readable settings/disclosure sufficient for the user to understand when background location is used and what each Place will do. Do not add policy theater or unsupported claims of Play approval.
 
-Targeted proof: configuration persistence, ENTER/EXIT mapping, reconciliation, dedup, permission-disabled state, reboot/update restoration, and one representative transition handling check. If deterministic platform transition simulation is unavailable, verify receiver handling through the narrowest reliable injection and report the platform limitation; do not fake PASS.
+Targeted proof: configuration persistence; notification-only mode does not alter visits; automatic ENTER creates exactly one canonical check-in and EXIT closes exactly that visit; conflict/overlap handling; reconciliation/dedup; permission-disabled state; core Places behavior without background permission; reboot/update restoration; representative transition handling. If deterministic platform transition simulation is unavailable, verify receiver handling through the narrowest reliable injection and report the platform limitation; do not fake PASS.
 
 # Consolidated final verification
 After A+B+C targeted checks pass:
 - run the minimum combined Places regression tests covering canonical history/stats, map/location and geofence configuration;
 - perform ONE explicit final PersonalHub APK build;
 - safely install/update that final APK on the project-required Android targets per the governing PersonalHub protocol;
-- perform ONE concise integrated QA pass covering: manual current check-in, retroactive visit, `Dov'ero?`, one sort, map current-location center, marker→detail navigation, geofence configuration/permission state and representative transition handling;
+- perform ONE concise integrated QA pass covering manual current check-in, retroactive visit, `Dov'ero?`, one sort, map current-location center, marker→detail navigation, geofence permission/configuration, notification-only behavior, automatic canonical ENTER/EXIT behavior, and graceful operation with background location unavailable;
 - do not repeat already-proven tests unless final integration contradicts them.
 
 # Non-goals
 No map-engine replacement, routes/directions, continuous GPS tracking, generic automation framework, Timer alert redesign, duplicate visit system, broad Places redesign or unrelated statistics cleanup.
 
 # Acceptance / stop
-PASS only when all three original Places tasks are satisfied together and the consolidated final verification passes. Stop immediately after PASS; do not inspect later roadmap tasks.
+PASS only when all three Places phases are satisfied together and consolidated final verification passes. Stop immediately after PASS; do not inspect later roadmap tasks.
 
-Final output only: `PROMPT_ID`, `RESULT`, canonical manual/retroactive visit semantics, overlap/Dov'ero behavior, sorting/map behavior, geofence config/permissions/dedup, targeted tests, final device QA, version, commit SHA.
+Final output only: `PROMPT_ID`, `RESULT`, canonical manual/retroactive visit semantics, overlap/Dov'ero behavior, sorting/map behavior, geofence modes/permissions/dedup/Play-safe isolation, targeted tests, final device QA, version, commit SHA.
