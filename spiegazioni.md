@@ -10,7 +10,7 @@ Quando tocchi un pulsante nella sezione Events di Timer, il messaggio di conferm
 
 ## 2. [[prompts/personalhub-substances-prescription-date-pickers|personalhub-substances-prescription-date-pickers]]
 
-Nelle prescrizioni di Substances non dovrai più inserire le date come numeri incomprensibili. Potrai sceglierle da un normale calendario e le vedrai scritte in modo leggibile. Quando crei una prescrizione, le date continueranno a partire da oggi.
+Nelle prescrizioni di Substances non dovrai più inserire le date come numeri incomprensibili. Potrai sceglierle da un normale calendario e le vedrai scritte in modo leggibile. Quando crei una prescrizione, le date continueranno a partire da oggi. Inoltre, quando tocchi un pulsante configurato in Substances, l’azione verrà registrata anche se lo stock della sostanza è pari a zero.
 
 ## 3. [[prompts/personalhub-context-composer-redesign|personalhub-context-composer-redesign]]
 
