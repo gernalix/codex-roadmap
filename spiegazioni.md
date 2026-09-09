@@ -6,7 +6,7 @@ Qui trovi, nello stesso ordine della roadmap, una spiegazione semplice di ciò c
 
 ## 1. [[prompts/personalhub-timer-event-title-success-toast|personalhub-timer-event-title-success-toast]]
 
-Quando tocchi un pulsante nella sezione Events di Timer, il messaggio di conferma dirà chiaramente che cosa è stato aggiunto. Per esempio, toccando “Coffee” comparirà “Coffee added”. Funzionerà allo stesso modo sia dentro l’app sia dal widget.
+Quando tocchi un pulsante nella sezione Events di Timer o un pulsante configurato in Substances, il messaggio di conferma dirà chiaramente che cosa è stato aggiunto. Per esempio, toccando “Coffee” comparirà “Coffee added” e toccando “Pregabalin” comparirà “Pregabalin added”. I messaggi di Substances avranno la stessa forma di quelli di Timer e funzioneranno allo stesso modo dentro l’app e dai widget disponibili.
 
 ## 2. [[prompts/personalhub-substances-prescription-date-pickers|personalhub-substances-prescription-date-pickers]]
 
