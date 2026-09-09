@@ -1,9 +1,6 @@
-PROMPT_ID: 214756
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-project_id: 49
-Recommended model: GPT-5.6 Sol
-Reasoning: medium
-MegaVault: STRICT
+`PROMPT_ID=214756 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT`
 
 # Goal
 Replace the current embedded Hub Context UI with a dedicated top-level PersonalHub **Composer** optimized for fast context construction. Reuse the existing N-ary Hub Context engine, state, adapters, templates and Explorer; do NOT build a second graph/composition architecture.

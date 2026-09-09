@@ -1,10 +1,8 @@
 # Fedora Codex usage publisher — runtime isolation + final guard hardening
 
-PROMPT_ID: 264913
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-**Modello consigliato:** GPT-5.5  
-**Reasoning:** low  
-**MegaVault:** FAST
+`PROMPT_ID=264913 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
 
 ## Goal
 

@@ -1,9 +1,6 @@
-PROMPT_ID: 731468
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-project_id: 49
-Recommended model: GPT-5.5
-Reasoning: low
-MegaVault: FAST
+`PROMPT_ID=731468 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
 
 # Goal
 Fix the current Places/Luoghi regression where valid history mutations can be rejected because an unrelated overlap already exists somewhere else in the user's historical visit data.

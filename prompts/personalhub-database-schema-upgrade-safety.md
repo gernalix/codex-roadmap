@@ -1,9 +1,6 @@
-PROMPT_ID: 592604
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-project_id: 49
-Recommended model: GPT-5.6 Sol
-Reasoning: medium
-MegaVault: STRICT
+`PROMPT_ID=592604 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT`
 
 # Goal
 Make PersonalHub database upgrades fail-safe: on first launch of a newly installed/updated APK, validate the inherited `personalhub.db`, migrate older supported schemas through the real Room chain before feature writes, reject newer/unsupported/broken databases without destructive replacement, and enforce tested migration coverage for future schema bumps.

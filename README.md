@@ -2,7 +2,16 @@
 
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-Repository of ready-to-run Codex prompts and their execution roadmap.
+Repository di prompt Codex pronti all'uso, con indice operativo e spiegazioni separate.
+
+## Separazione canonica dei contenuti
+
+- `roadmap.md` contiene **solo** la lista numerata e ordinata dei prompt pendenti: una riga per prompt, senza titolo, introduzioni, audit, spiegazioni, dipendenze, raccomandazioni, regole o note.
+- `spiegazioni.md` contiene **solo** le spiegazioni in linguaggio umano dei prompt pendenti, nello stesso ordine e una per prompt. Qui va spiegato il problema e il cambiamento percepibile dall'utente; non vi si duplicano istruzioni operative dettagliate.
+- `prompts/*.md` contiene le sole istruzioni eseguibili da Codex, in formato compatto e AI-friendly: metadati brevi, goal, evidenza già verificata, scope/starting point, requisiti, verifiche, acceptance/stop e output. Eliminare narrazione, motivazioni ripetute, riepiloghi da audit e regole globali già definite dal protocollo MegaVault; conservare però ogni fatto e vincolo necessario a rendere il prompt autosufficiente.
+- Le regole di manutenzione e di esecuzione appartengono a questo `README.md`, non a `roadmap.md` o `spiegazioni.md`.
+
+Ogni modifica deve preservare questa separazione. Se un'informazione non serve a eseguire il task ma serve a capirne il motivo, va soltanto in `spiegazioni.md`; se serve a governare tutti i task, va soltanto nel README.
 
 ## Permanent prompt policy
 
@@ -54,8 +63,8 @@ Requirements:
 
 - every pending prompt listed in `roadmap.md` MUST be a clickable Obsidian wikilink to its file under `prompts/`;
 - every corresponding heading in `spiegazioni.md` MUST link to the same prompt;
-- Obsidian's automatic Backlinks view is the canonical reverse navigation from a prompt back to `roadmap.md` and `spiegazioni.md`; do **not** add redundant manual backlinks inside every prompt solely for this purpose;
-- `README.md`, `roadmap.md` and `spiegazioni.md` SHOULD link to each other with Obsidian wikilinks;
+- every pending prompt MUST contain explicit links back to both `[[roadmap|Roadmap]]` and `[[spiegazioni|Spiegazioni]]`, so navigation is bidirectional even outside Obsidian's Backlinks view;
+- `README.md` and `spiegazioni.md` SHOULD link to each other; `roadmap.md` links only to prompts, while every pending prompt links back to roadmap and explanations;
 - use stable path-based links such as `[[prompts/personalhub-example|personalhub-example]]`; do not use ordering numbers as link targets;
 - when a prompt is renamed, moved to `completed/`, added or removed, update all affected wikilinks in the same repository change;
 - do not leave dangling wikilinks to removed pending prompts.
@@ -109,12 +118,13 @@ Requirements:
 - keep each explanation understandable to a reader with no programming knowledge;
 - explain primarily what problem the task solves and what will change for the user, avoiding implementation jargon unless indispensable;
 - if a prompt's behavior or scope changes materially, update its explanation even if its filename and roadmap position do not change.
+- never copy audit evidence, model/risk metadata, execution constraints or acceptance criteria into `spiegazioni.md`; those belong to the prompt.
 
 A roadmap/prompt maintenance change is incomplete until this synchronization has been checked.
 
 ## Continuous roadmap campaigns
 
-The default remains one pending prompt per Codex session. `roadmap.md` may explicitly mark a consecutive set of prompts as a **continuous campaign** when they are tightly coupled phases of the same feature and repeating bootstrap, exploration, final APK build/install and end-to-end QA would waste quota without improving safety.
+The default remains one pending prompt per Codex session. A consecutive set may form a **continuous campaign** when every participating prompt declares the same `campaign_id` plus its `phase`/`phases` metadata. Campaign metadata belongs only in prompt files; `roadmap.md` remains a plain list.
 
 Campaign rules:
 
@@ -125,7 +135,7 @@ Campaign rules:
 5. Phases before the final campaign phase run only the narrow targeted tests/checks needed to validate their own contracts. Do not perform a standalone final PersonalHub APK assemble/install or full Pixel/TCL end-to-end pass in those phases. Test commands may still trigger the minimum incremental compilation required by the targeted tests; “one final build” means one explicit final full APK build/install pass, not zero compilation by Gradle during tests.
 6. The final campaign phase performs the single final main APK build, safe install/update on the required devices and the campaign's consolidated end-to-end QA.
 7. Avoid intermediate roadmap churn. If the whole campaign passes, commit/push the target project as appropriate, move all campaign prompt files to `completed/`, remove all campaign entries from `roadmap.md`, renumber once, update `spiegazioni.md` once, and commit/push the roadmap repository. If the campaign stops early, leave roadmap membership unchanged and report the last completed phase plus the blocker; a later run must verify and reuse already implemented state rather than redo it.
-8. Model/reasoning for an explicitly marked campaign is the campaign recommendation in `roadmap.md`; phase-specific MegaVault modes and scope constraints still apply.
+8. Campaign model/reasoning is declared consistently in the participating prompt metadata; phase-specific MegaVault modes and scope constraints still apply.
 
 This section is the only exception to the normal one-task-per-session and post-PASS stop rules below.
 
@@ -137,7 +147,7 @@ Codex must:
 2. execute ONLY the first pending prompt in the list, **unless it belongs to an explicitly marked continuous campaign**; in that case execute that entire campaign according to the rules above;
 3. treat a normal prompt file as a self-contained task, and each campaign prompt as a self-contained phase whose scope remains bounded by that file;
 4. NOT execute or investigate later prompts outside the selected task/campaign;
-5. use the model, reasoning level, MegaVault mode, and scope stated in the selected prompt, except that an explicit campaign-level model/reasoning recommendation in `roadmap.md` governs the continuous session;
+5. use the model, reasoning level, MegaVault mode, scope and any campaign metadata stated in the selected prompt;
 6. not expand the task/campaign beyond what the selected prompt(s) request;
 7. reuse MegaVault, `AGENTS.md`, and the evidence already included in the selected prompt, and within a campaign reuse verified context from earlier phases rather than rediscover it;
 8. follow the authoritative execution discipline in `MegaVault/ai/MEGAVAULT_PROTOCOL.md` plus only the selected prompt's/task campaign's specific constraints;
@@ -173,5 +183,5 @@ If the task fails, remains blocked, or the acceptance criteria are not satisfied
 Use this minimal launcher in a new Codex session:
 
 ```text
-Esegui il primo task pendente di gernalix/codex-roadmap seguendo integralmente il workflow definito nel README. Se il primo task appartiene a un blocco continuo esplicitamente marcato in roadmap.md, esegui tutto quel blocco nella stessa sessione e fermati al termine; altrimenti esegui un solo task e fermati.
+Esegui il primo task pendente di gernalix/codex-roadmap seguendo integralmente il workflow definito nel README. Se il primo prompt dichiara una campagna continua, esegui nello stesso ordine tutte le sue fasi consecutive con lo stesso `campaign_id` e fermati al termine; altrimenti esegui un solo task e fermati.
 ```

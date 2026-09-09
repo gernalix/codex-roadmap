@@ -1,9 +1,6 @@
-PROMPT_ID: 742618
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-project_id: 49
-Recommended model: GPT-5.5
-Reasoning: medium
-MegaVault: STANDARD
+`PROMPT_ID=742618 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD`
 
 # Goal
 Use one cross-module UI pass to finish three related consistency gaps:

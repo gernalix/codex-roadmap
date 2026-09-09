@@ -1,9 +1,6 @@
-PROMPT_ID: 925471
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-project_id: 49
-Recommended model: GPT-5.5
-Reasoning: medium
-MegaVault: FAST
+`PROMPT_ID=925471 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST`
 
 # Goal
 Fix the three concrete People/SuperContacts call-overlay defects without redesigning the feature.

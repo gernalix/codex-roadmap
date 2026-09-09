@@ -2,9 +2,7 @@
 
 [[README|README]] · [[roadmap|Roadmap]]
 
-Questo file spiega in parole semplici a cosa serve ciascun prompt ancora presente in `roadmap.md`. L'ordine deve corrispondere esattamente alla roadmap.
-
-**Regola comune:** se Codex installa sul Pixel una copia clone/QA temporanea, deve rimuoverla prima del PASS. La verifica e consegna Telegram dell'APK finale non sono più un prompt: sono regole permanenti del bootstrap PersonalHub remoto in MegaVault.
+Questo file contiene, nello stesso ordine di `roadmap.md`, l'unica spiegazione in linguaggio umano dei prompt pendenti. I dettagli operativi restano nei prompt collegati.
 
 ## 1. [[prompts/fedora-codex-usage-runtime-isolation-finalization|fedora-codex-usage-runtime-isolation-finalization]]
 

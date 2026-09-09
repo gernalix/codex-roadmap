@@ -1,9 +1,6 @@
-PROMPT_ID: 842731
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-project_id: 49
-Recommended model: GPT-5.5
-Reasoning: low
-MegaVault: FAST
+`PROMPT_ID=842731 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
 
 # Goal
 Fix one bounded Timer `Events` UX defect: after a successful Event-button tap, show exactly `<X> added`, where `<X>` is the human-visible title of the exact tapped Event button. Behavior must match in-app and the configured Android widget, including macros.

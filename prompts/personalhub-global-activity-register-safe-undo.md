@@ -1,9 +1,6 @@
-PROMPT_ID: 835204
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-project_id: 49
-Recommended model: GPT-5.6 Sol
-Reasoning: medium
-MegaVault: STRICT
+`PROMPT_ID=835204 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT`
 
 # Goal
 Build one canonical PersonalHub `Registro attività` end-to-end:

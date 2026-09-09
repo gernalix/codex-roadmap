@@ -1,9 +1,6 @@
-PROMPT_ID: 684731
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-project_id: 49
-Recommended model: GPT-5.5
-Reasoning: low
-MegaVault: FAST
+`PROMPT_ID=684731 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
 
 # Goal
 In PersonalHub → Substances → Prescriptions, replace the two technical epoch-day text fields with normal calendar date selectors while preserving the existing persistence representation.
