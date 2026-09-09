@@ -2,36 +2,36 @@
 
 [[README|README]] · [[roadmap|Roadmap]]
 
-Questo file contiene, nello stesso ordine di `roadmap.md`, l'unica spiegazione in linguaggio umano dei prompt pendenti. I dettagli operativi restano nei prompt collegati.
+Qui trovi, nello stesso ordine della roadmap, una spiegazione semplice di ciò che farà ogni prompt.
 
 ## 1. [[prompts/fedora-codex-usage-runtime-isolation-finalization|fedora-codex-usage-runtime-isolation-finalization]]
 
-Chiude il problema strutturale rimasto nel monitor Codex. Oggi il timer systemd esegue direttamente il file Python dentro il repository su cui Codex sta lavorando: quindi, mentre Codex applica patch ancora non testate, il timer può eseguire proprio quella versione intermedia. È già successo durante l'ultimo fix e ha causato due ripubblicazioni da 502 cicli. Il prompt ferma temporaneamente il timer prima degli edit e sposta il publisher live in release user-local immutabili, identificate dal commit e attivate con uno switch atomico soltanto dopo test, commit e push. Nello stesso lavoro rende esplicita la versione del fingerprint per migrare i vecchi record senza nuovi backfill, completa i controlli Git su `status` e upstream e distingue i repo con una vera evidenza strutturata di scrittura da quelli usati solo come directory di appoggio, evitando falsi allarmi.
+Rende più sicuro il sistema che registra quanto Codex viene usato. Impedisce che parta mentre Codex lo sta ancora modificando, evita di ripubblicare per errore centinaia di vecchi risultati e riduce i falsi allarmi. Non cambia PersonalHub.
 
 ## 2. [[prompts/personalhub-timer-event-title-success-toast|personalhub-timer-event-title-success-toast]]
 
-Il codice è stato ricontrollato e questo bug è ancora presente. Dentro Timer, dopo un successo, il ViewModel usa ancora un messaggio generico; dal widget Android il codice mostra ancora `Event recorded` oppure il numero di elementi creati dalla macro. Il prompt cambia solo questo feedback: toccando `Coffee` deve apparire `Coffee added`, sia nell'app sia dal widget; una macro deve mostrare il proprio titolo e non un conteggio. Il resto di Events non viene riaperto.
+Quando tocchi un pulsante nella sezione Events di Timer, il messaggio di conferma dirà chiaramente che cosa è stato aggiunto. Per esempio, toccando “Coffee” comparirà “Coffee added”. Funzionerà allo stesso modo sia dentro l’app sia dal widget.
 
 ## 3. [[prompts/personalhub-substances-prescription-date-pickers|personalhub-substances-prescription-date-pickers]]
 
-Una parte richiesta esiste già: quando crei una prescrizione nuova, entrambe le date vengono già salvate con la data odierna. Il problema rimanente è la UI: nella modifica compaiono ancora `Order epoch day` e `Prescription epoch day` come numeri tecnici. Il prompt è stato ristretto a sostituire quei campi con normali calendari e a mostrare date leggibili, senza cambiare database o logica già corretta.
+Nelle prescrizioni di Substances non dovrai più inserire le date come numeri incomprensibili. Potrai sceglierle da un normale calendario e le vedrai scritte in modo leggibile. Quando crei una prescrizione, le date continueranno a partire da oggi.
 
 ## 4. [[prompts/personalhub-context-composer-redesign|personalhub-context-composer-redesign]]
 
-È ancora necessario, ma una parte sostanziale del motore esiste già: lo stato Composer sa già salvare e ripristinare membri e ricerca, cercare tramite gli adapter, creare entità/risorse, salvare Context e gestire template; esiste anche un test che prova crea → salva → riapri → aggiungi un'altra entità. Il problema è soprattutto come tutto questo viene presentato: oggi è ancora un dialogo tecnico incastrato nel flusso Timer, con tipi interni poco leggibili, e la home non ha una vera schermata Composer. Il prompt ora riusa e rifattorizza queste basi invece di ricostruirle, aggiungendo inferenza di tempo/luogo, suggerimenti limitati e rilevazione dei dati già registrati nell'intervallo scelto.
+Aggiunge alla schermata principale un Composer per collegare facilmente ciò che stavi facendo, il luogo, le persone e altri dati di PersonalHub. L’app proporrà automaticamente gli elementi più probabili, ma potrai sempre cambiarli. La creazione e modifica delle sessioni di Timer tornerà più semplice perché questi collegamenti non saranno più inseriti direttamente lì.
 
 ## 5. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
 
-PersonalHub è già più avanti di quanto descriveva la vecchia versione del prompt: il database è alla versione 10, esistono gli snapshot 1–10 e sono registrate migrazioni fino alla 10. Mancano però due protezioni importanti: una verifica reale che la catena di migrazioni sia completa (oggi `canMigrateFrom` presume semplicemente che tutte le versioni da 1 a 10 vadano bene) e un vero gate al primo avvio dopo l'aggiornamento, prima che i moduli inizino a scrivere. Il prompt ora lavora solo su queste parti mancanti e sui test automatici di tutte le versioni storiche.
+Protegge i tuoi dati quando installi una nuova versione di PersonalHub. Prima di usare il vecchio archivio, l’app controllerà che possa essere aggiornato senza rischi. Se trova un problema, si fermerà senza cancellare o sostituire i dati.
 
 ## 6. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
 
-Il controllo del codice conferma che i tre difetti sono ancora presenti: il pulsante del riquadro chiamata usa ancora un intent implicito, una ricerca contatto lenta può ancora terminare dopo `dismiss()` e mostrare un overlay vecchio, e il log di successo contiene ancora il numero di telefono completo. Il prompt resta quindi separato e molto localizzato.
+Corregge tre problemi del riquadro che appare durante le chiamate: il pulsante per aprire un contatto, la possibile ricomparsa di un riquadro appartenente a una chiamata già finita e la presenza del numero di telefono nei registri tecnici. Il funzionamento generale delle chiamate non verrà ridisegnato.
 
 ## 7. [[prompts/personalhub-global-ui-theme-version-backup-status|personalhub-global-ui-theme-version-backup-status]]
 
-Anche qui molte basi esistono già. La home mostra già correttamente la versione PersonalHub e `DatabaseVault.autoExportStatus()` espone già tutti i dati necessari per sapere se l'auto-export è sano; non serve modificare il sistema di backup. Inoltre People, Places, Substances e WordPulse seguono già il tema scuro di sistema. Restano il piccolo indicatore ✅/❌ sulla home, la versione PersonalHub su tutte le vere schermate dei moduli e i soli buchi di dark mode ancora reali: il tema principale di PersonalHub è light-only, Timer possiede già colori scuri ma non li seleziona automaticamente e Soldi usa ancora un tema generico. Substances e Timer mostrano inoltre ancora versioni proprie da sostituire con quella dell'app principale. I tre lavori restano accorpati perché usano la stessa lista di schermate e lo stesso giro finale di QA.
+Rende l’aspetto di PersonalHub più coerente. La schermata principale mostrerà subito se il salvataggio automatico dei dati funziona, tutte le sezioni mostreranno la stessa versione dell’app e il tema chiaro o scuro seguirà correttamente quello del telefono.
 
 ## 8. [[prompts/personalhub-global-activity-register-safe-undo|personalhub-global-activity-register-safe-undo]]
 
-Esistono già registri parziali specifici, per esempio l'audit di Timer e lo storico/audit di Places, ma non esiste ancora un registro globale né una card `Registro attività` nella home. Il prompt riusa o collega ciò che è già disponibile invece di creare doppioni, poi costruisce un'unica cronologia leggibile e paginata, filtri, gruppi di modifiche e annullamento sicuro che rifiuta conflitti e registra a sua volta l'operazione di ripristino.
+Aggiunge un unico Registro attività in cui vedere le modifiche fatte nelle varie sezioni di PersonalHub. Potrai cercarle e filtrarle e, quando è sicuro, annullare un’azione. Se nel frattempo i dati sono cambiati e l’annullamento potrebbe creare problemi, l’app lo impedirà.
