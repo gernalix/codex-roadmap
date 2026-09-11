@@ -24,6 +24,7 @@ Regole:
 - raggruppa check/comandi indipendenti nella stessa tool-call quando è sicuro e non riduce la chiarezza del failure point;
 - non separare in più tool-call status/pull/test o verifiche analoghe quando una singola shell condizionale può preservare esattamente le stesse garanzie;
 - limita l'output dei tool all'evidenza necessaria: niente dump ampi, log completi o `max_output` sovradimensionati se non richiesti dal task/failure;
+- quando esegui suite Python `unittest` e stdout/stderr dei test non sono essi stessi acceptance evidence, usa `-b/--buffer`: su PASS scarta il rumore, su failure conserva l'output diagnostico;
 - esegui prima i test mirati richiesti; amplia solo se una failure o il rischio concreto lo richiede;
 - non usare force/reset/stash distruttivi e non perdere modifiche locali;
 - non aggirare un blocker esplicito per ottenere artificialmente PASS: se il task dice che una condizione implica BLOCKED, rispettala;
