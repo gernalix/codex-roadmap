@@ -16,9 +16,14 @@ REASONING_RE = re.compile(r"\breasoning=([a-z_]+)\b", re.I)
 EXECUTION_CONTRACT = (
     "Use prompt_content as the complete selected task. Do not reread roadmap.md, "
     "spiegazioni.md, README.md, or the prompt file unless this pack is inconsistent "
-    "or a concrete blocker requires it. Do not inspect later prompts. Reuse verified "
-    "session evidence, keep exploration and tests targeted, avoid equivalent retries, "
-    "and stop at PASS/BLOCKED/FAIL. On PASS finalize once with roadmap_guard complete."
+    "or a concrete blocker requires it. Do not read MEMORY/history or run roadmap "
+    "preflight pwd/ls/status/pull/fetch: select already fetched canonical origin/main. "
+    "Do not inspect later prompts. Reuse verified session evidence, keep exploration "
+    "and tests targeted, group independent checks into one tool call when safe, avoid "
+    "equivalent retries, and stop at PASS/BLOCKED/FAIL. On PASS run dry-run and real "
+    "complete in one shell invocation when possible. A successful complete response "
+    "with push_verified=git_push_exit_0 is authoritative proof of roadmap push success; "
+    "do not run follow-up git status/rev-parse/ls-remote on the roadmap checkout."
 )
 
 
@@ -155,7 +160,7 @@ def complete(repo: Path, prompt_id: str, *, dry_run: bool = False) -> dict[str, 
         if push.returncode != 0:
             keep_on_failure = True
             raise RoadmapError(f"push_blocked:{push.stderr.strip()}:isolated_worktree={worktree}")
-        return {**selected, "status": "completed", "commit": sha}
+        return {**selected, "status": "completed", "commit": sha, "push_verified": "git_push_exit_0"}
     finally:
         if worktree.exists() and not keep_on_failure:
             run(repo, "worktree", "remove", "--force", str(worktree), check=False)
