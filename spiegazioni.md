@@ -6,7 +6,7 @@ Qui trovi, nello stesso ordine della roadmap, una spiegazione semplice di ciò c
 
 ## 1. [[prompts/telegram-notification-signal-hygiene|telegram-notification-signal-hygiene]]
 
-Riduce il rumore Telegram visto oggi: niente messaggi per piccole oscillazioni disco, snapshot Facebook senza cambiamenti, normali push Codex o ogni singolo punto percentuale di quota. Migliora invece i messaggi T7 distinguendo disco assente da vero errore, deduplica i problemi finché non cambiano, rende i `senza PROMPT_ID` un unico alert utile e aggiunge soglie/digest Codex più informativi. Evita anche test Telegram PersonalHub ripetuti quando la readiness è già valida.
+Migliora le notifiche Telegram senza cambiare due comportamenti che devono restare come sono: le notifiche Fedora continuano a scattare con la stessa soglia/cadenza già configurata per le variazioni dello spazio libero, e la quota Codex continua a notificare ogni variazione anche minima. Riduce invece il rumore di snapshot Facebook senza cambiamenti, normali push Codex, test PersonalHub ripetuti e messaggi T7 poco chiari. In più, ogni messaggio o allegato Telegram dovrà iniziare con il `project_id` MegaVault del progetto che lo ha generato, così sarà subito chiaro da dove arriva.
 
 ## 2. [[prompts/codex-workflow-foundation-hardening|codex-workflow-foundation-hardening]]
 
