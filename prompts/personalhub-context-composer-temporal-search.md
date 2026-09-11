@@ -2,6 +2,8 @@
 
 `PROMPT_ID=526841 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STANDARD`
 
+> Esecuzione diretta: questo file è il task Codex completo. Non eseguire `roadmap_guard.py select` e non rileggere roadmap/README/spiegazioni. Usa direttamente quanto segue come specifica autoritativa.
+
 # Goal
 Completare in un solo passaggio cross-module due superfici che condividono adapter e semantica temporale: (A) Composer top-level per Context N-ari persistenti; (B) Home → Cerca read-only su `[from,to)`. L'architettura temporale di base è già stata preparata: **non ridisegnarla e non fare inventory generale**.
 
@@ -73,6 +75,8 @@ Non leggere interi moduli. Per Places apri soltanto query visite/location dirett
 - UNA build, un solo bump versione, install Pixel e QA consolidata Composer + Search; Telegram delivery; commit/push.
 
 # PASS / stop
-Timer editor senza Context editing/coupling; Composer top-level con anchor/ranking/detection/edit retroattivo; tutti i kind manualmente raggiungibili; Cerca corretta/paginata/read-only sui moduli temporali; dati/sync/import invariati; test+QA PASS. Nessun audit generale o refactor fuori scope. Stop immediato.
+Timer editor senza Context editing/coupling; Composer top-level con anchor/ranking/detection/edit retroattivo; tutti i kind manualmente raggiungibili; Cerca corretta/paginata/read-only sui moduli temporali; dati/sync/import invariati; test+QA PASS. Nessun audit generale o refactor fuori scope.
+
+Su PASS, dopo il push del repo target, finalizza questo task nella roadmap con `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 526841 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 526841`. `push_verified=git_push_exit_0` è prova sufficiente: non fare verifiche Git successive sulla roadmap e non aprire il task successivo. Su BLOCKED/FAIL non avanzare la roadmap. Stop immediato.
 
 Output conciso: `PROMPT_ID`, `RESULT`, Composer/Timer changes, temporal providers/modules, ranking/detection, schema impact, test/QA, version/APK/delivery, SHA, blocker.
