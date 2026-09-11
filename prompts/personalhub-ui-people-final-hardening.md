@@ -17,7 +17,8 @@ Sul `main` corrente di `gernalix/PersonalHub` sono già presenti:
 ## Theme
 - host `app/.../ui/theme/Theme.kt`: `isSystemInDarkTheme()` + light/dark;
 - Timer `ui/theme/Theme.kt`: default `isSystemInDarkTheme()` usando gli schemi già esistenti;
-- `feature/soldi/.../SoldiTheme.kt` è già stato aggiunto come boundary light/dark system-aware; resta solo usarlo in `SoldiActivity.setContent` al posto del `MaterialTheme` generico;
+- `feature/soldi/src/main/java/com/gernalix/personalhub/soldi/SoldiTheme.kt` è già stato aggiunto come boundary light/dark system-aware;
+- `feature/soldi/src/main/java/com/gernalix/personalhub/soldi/SoldiActivity.kt` contiene ancora esattamente `setContent { MaterialTheme { Surface { SoldiScreen(capsule, ::finish, hubTransactionUuid) } } }`. Sostituiscilo direttamente con `setContent { SoldiTheme { Surface { SoldiScreen(capsule, ::finish, hubTransactionUuid) } } }`; `SoldiTheme` è nella stessa package, quindi non serve cercare un altro theme/import;
 - People/Places/Substances/WordPulse erano già system-aware: non ri-auditarli salvo regressione concreta.
 
 ## Versione — matrix già verificata
@@ -43,7 +44,7 @@ Non rifare questa inventory:
    - `CallOverlayRequestGateTest`;
    - compile/test mirati app + Timer + Places + WordPulse + Soldi + People solo per le modifiche già note.
    Correggi solo failure concrete.
-2. In `SoldiActivity.setContent`, sostituisci soltanto il `MaterialTheme` generico con `SoldiTheme`; nessun redesign.
+2. Applica la sostituzione letterale `MaterialTheme`→`SoldiTheme` indicata sopra; non cercare alternative e nessun redesign.
 3. Applica i cinque micro-fix versione già descritti nella matrix: Timer label; Places alignment; WordPulse posizione/unicità; Soldi footer; People host version + alignment. Non ispezionare schermate figlie.
 4. Test di intent esplicito/log redaction solo nei file People già indicati; non auditare manifest/repository salvo compile/test failure.
 
