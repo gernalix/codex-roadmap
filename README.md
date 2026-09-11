@@ -71,7 +71,7 @@ Dopo `select`:
 5. usa starting point/CODE_MAP/file indicati; amplia solo su failure o lacuna concreta;
 6. raggruppa check/comandi indipendenti nella stessa tool-call quando sicuro e riusa evidenza già verificata finché lo stato non cambia;
 7. niente audit generale, retry equivalente, schema discovery ripetuta, test duplicati, cleanup/refactor fuori scope;
-8. limita output/log/dump alla sola evidenza necessaria;
+8. limita output/log/dump alla sola evidenza necessaria; per suite Python `unittest`, usa `-b/--buffer` quando stdout/stderr dei test non sono acceptance evidence, così il rumore dei test verdi viene scartato ma resta disponibile sulle failure;
 9. test mirati prima; allarga solo se rischio o failure lo richiedono;
 10. durante l'esecuzione **non inviare progress report narrativi**: usa direttamente i tool; scrivi testo intermedio solo per un blocker che richiede una decisione dell'utente;
 11. termina a PASS, BLOCKED o FAIL e produci un solo report finale conciso.
@@ -142,5 +142,5 @@ Quando si modifica la roadmap:
 Scorciatoia compatta derivata dal prompt standard; in caso di divergenza prevale `STANDARD_PROMPT.md`.
 
 ```text
-Esegui il primo task pendente di gernalix/codex-roadmap. Come prima tool-call esegui direttamente `python3 tools/roadmap_guard.py select`, senza MEMORY/storia né preflight `pwd/ls/status/pull/fetch` della roadmap. Usa l'execution pack come unica sorgente roadmap; non rileggere README, roadmap.md, spiegazioni.md o il prompt salvo blocker/incoerenza. Raggruppa check indipendenti quando sicuro, limita output e non inviare progress report narrativi. Se c'è una campagna continua esegui solo le fasi consecutive consentite; altrimenti un solo task. Su PASS esegui dry-run + complete nella stessa tool-call quando possibile e considera `push_verified=git_push_exit_0` verifica canonica: niente controlli Git successivi sulla roadmap. Produci un solo report finale conciso e fermati.
+Esegui il primo task pendente di gernalix/codex-roadmap. Come prima tool-call esegui direttamente `python3 tools/roadmap_guard.py select`, senza MEMORY/storia né preflight `pwd/ls/status/pull/fetch` della roadmap. Usa l'execution pack come unica sorgente roadmap; non rileggere README, roadmap.md, spiegazioni.md o il prompt salvo blocker/incoerenza. Raggruppa check indipendenti quando sicuro, limita output e usa `unittest -b` quando stdout dei test non è acceptance evidence. Se c'è una campagna continua esegui solo le fasi consecutive consentite; altrimenti un solo task. Su PASS esegui dry-run + complete nella stessa tool-call quando possibile e considera `push_verified=git_push_exit_0` verifica canonica: niente controlli Git successivi sulla roadmap. Produci un solo report finale conciso e fermati.
 ```
