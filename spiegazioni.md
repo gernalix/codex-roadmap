@@ -6,60 +6,32 @@ Qui trovi, nello stesso ordine della roadmap, una spiegazione semplice di ciò c
 
 ## 1. [[prompts/github-autosync-fedora-migration|github-autosync-fedora-migration]]
 
-Sposta definitivamente sul Fedora l'autosync dei repository nel nuovo repo dedicato `github-autosync`. Codex clonerà o sincronizzerà il nuovo repo locale, spegnerà il vecchio timer che partiva da `codex-usage-monitor`, installerà il nuovo service/timer ogni 5 minuti e verificherà che non possano esistere due autosync concorrenti. La prima esecuzione controllerà anche che il nuovo repo sia registrato una sola volta in MegaVault.
+Completa sul Fedora lo spostamento dell'autosync nel nuovo repo dedicato `github-autosync`: spegne il vecchio timer, clona il nuovo repo, installa i nuovi unit systemd, esegue un solo test reale e verifica che MegaVault registri il repo una sola volta.
 
-## 2. [[prompts/codex-roadmap-worktree-sync-hardening|codex-roadmap-worktree-sync-hardening]]
+## 2. [[prompts/codex-workflow-foundation-hardening|codex-workflow-foundation-hardening]]
 
-Rende più sicuro e veloce il modo in cui Codex apre e chiude i task. Una modifica locale non dovrà più costringerlo a creare stash solo per leggere la roadmap, un prompt ad-hoc non potrà più essere scambiato per un diverso prompt pendente, e un commit non dovrà inglobare automaticamente modifiche che erano già presenti prima del task.
+Accorpa due lavori che riducono il costo di quasi tutti i task futuri: rende la roadmap sicura anche con checkout locali sporchi e impedisce che Codex archivi il prompt sbagliato o committi modifiche altrui; inoltre aggiunge a MegaVault comandi stabili per registrare e validare un evento senza riscoprire ogni volta schema SQLite e INSERT manuali.
 
-## 3. [[prompts/megavault-event-cli-scoped-validation|megavault-event-cli-scoped-validation]]
+## 3. [[prompts/personalhub-qa-delivery-tooling|personalhub-qa-delivery-tooling]]
 
-Aggiunge a MegaVault un modo stabile per registrare gli eventi senza far riscoprire ogni volta a Codex colonne SQLite, esempi e INSERT manuali. Introduce anche una verifica limitata al progetto o evento appena modificato, così errori globali preesistenti e non collegati non bloccheranno inutilmente un task valido.
+Crea in un solo passaggio gli strumenti riutilizzabili per i task PersonalHub: preflight ADB per scegliere Pixel/TCL/emulatore, harness stabile per testare i widget senza setup SQLite manuale o toast scraping, e un comando Telegram file-only per consegnare l'APK. Non cambia funzioni dell'app e non richiede una release.
 
-## 4. [[prompts/personalhub-telegram-file-delivery-cli|personalhub-telegram-file-delivery-cli]]
+## 4. [[prompts/personalhub-context-composer-temporal-search|personalhub-context-composer-temporal-search]]
 
-Semplifica l’ultimo passo dei task PersonalHub: Codex potrà inviare l’APK su Telegram con un solo comando file-only, senza provare argomenti vuoti, leggere il codice interno del notifier o usare Python inline. Il comportamento Telegram già esistente resterà compatibile.
+Unisce Composer e Cerca perché entrambi devono capire persone, luoghi, Timer, Soldi, Substances e WordPulse. Codex inventaria adapter e semantica temporale una sola volta: Composer crea Context persistenti con suggerimenti e rilevazioni, mentre Cerca ricostruisce in sola lettura ciò che è successo in un intervallo senza creare collegamenti permanenti.
 
-## 5. [[prompts/personalhub-widget-qa-harness|personalhub-widget-qa-harness]]
+## 5. [[prompts/personalhub-random-timing-substances|personalhub-random-timing-substances]]
 
-Rende molto più semplice testare i widget di PersonalHub. Invece di far perdere tempo a Codex ogni volta con comandi ADB, dati di prova creati a mano e tentativi poco affidabili per leggere i toast, crea un percorso di test unico e riutilizzabile che prepara i dati, simula i tap e verifica successo o errore in modo stabile.
+Unisce in un solo giro Timer/Substances tre lavori che condividono impostazioni, notifiche, scheduling e QA: Random timer per misurare il tempo percepito, Random alerts configurabili per i pulsanti Timer/Substances e le piccole correzioni Substances su calendari prescrizioni e registrazione dei pulsanti anche con stock zero.
 
-## 6. [[prompts/personalhub-adb-device-preflight|personalhub-adb-device-preflight]]
+## 6. [[prompts/personalhub-global-activity-register-safe-undo|personalhub-global-activity-register-safe-undo]]
 
-Aggiunge un controllo iniziale unico per capire subito quali dispositivi Android sono disponibili. Codex saprà se può usare Pixel, TCL o emulatore, tenterà solo recuperi ADB sicuri e limitati e non perderà più tempo a riscoprire ogni volta quale device è collegato o se deve avviare l’emulatore.
+Aggiunge un unico Registro attività per le modifiche di tutti i moduli, con cronologia paginata, filtri e annullamento sicuro. Riusa gli audit già presenti in Timer/Places, evita doppioni e registra l'undo come nuova operazione invece di cancellare la storia.
 
-## 7. [[prompts/personalhub-substances-prescription-date-pickers|personalhub-substances-prescription-date-pickers]]
+## 7. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
 
-Nelle prescrizioni di Substances non dovrai più inserire le date come numeri incomprensibili. Potrai sceglierle da un normale calendario e le vedrai scritte in modo leggibile. Quando crei una prescrizione, le date continueranno a partire da oggi. Inoltre, quando tocchi un pulsante configurato in Substances, l’azione verrà registrata anche se lo stock della sostanza è pari a zero.
+Viene eseguito dopo i task che possono cambiare lo schema, così controlla una sola volta lo schema finale. Costruisce un'unica catena autorevole di migrazioni, testa tutte le versioni storiche verso quella corrente e impedisce che un aggiornamento incompatibile o fallito sostituisca i dati con un database vuoto.
 
-## 8. [[prompts/personalhub-context-composer-redesign|personalhub-context-composer-redesign]]
+## 8. [[prompts/personalhub-ui-people-final-hardening|personalhub-ui-people-final-hardening]]
 
-Aggiunge alla schermata principale un Composer per collegare facilmente ciò che stavi facendo, il luogo, le persone e altri dati di PersonalHub. L’app proporrà automaticamente gli elementi più probabili, ma potrai sempre cambiarli. La creazione e modifica delle sessioni di Timer tornerà più semplice perché questi collegamenti non saranno più inseriti direttamente lì.
-
-## 9. [[prompts/personalhub-temporal-context-search|personalhub-temporal-context-search]]
-
-Aggiunge alla Home una funzione Cerca basata sul tempo. Scegli una data e ora di inizio e una di fine e PersonalHub raccoglie in un’unica schermata tutto ciò che è successo in quell’intervallo nei vari moduli, ordinandolo nel tempo. È come ricostruire automaticamente il contesto di quel periodo, ma senza creare collegamenti permanenti tra i dati.
-
-## 10. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
-
-Protegge i tuoi dati quando installi una nuova versione di PersonalHub. Prima di usare il vecchio archivio, l’app controllerà che possa essere aggiornato senza rischi. Se trova un problema, si fermerà senza cancellare o sostituire i dati.
-
-## 11. [[prompts/personalhub-random-timer-time-perception|personalhub-random-timer-time-perception]]
-
-Aggiunge alla Home Random timer. Premi Avvia e parte un timer di durata casuale che non puoi vedere. Quando finisce ricevi una notifica che ti chiede quanto tempo pensi sia passato. Solo dopo aver inserito la tua risposta PersonalHub mostra il tempo reale, confronta tempo percepito e tempo reale e salva entrambi per poter misurare nel tempo la tua percezione del passare dei minuti.
-
-## 12. [[prompts/personalhub-timer-substances-random-alerts|personalhub-timer-substances-random-alerts]]
-
-Ogni pulsante Events di Timer e ogni pulsante configurato di Substances potrà avere i propri Random alerts. Per ogni pulsante scegli se attivarli e quanti riceverne ogni ora o ogni giorno; gli orari vengono scelti casualmente. Un unico interruttore generale può sospendere tutti i Random alerts senza perdere le impostazioni dei singoli pulsanti, che tornano come prima quando li riattivi.
-
-## 13. [[prompts/personalhub-people-call-overlay-hardening|personalhub-people-call-overlay-hardening]]
-
-Corregge tre problemi del riquadro che appare durante le chiamate: il pulsante per aprire un contatto, la possibile ricomparsa di un riquadro appartenente a una chiamata già finita e la presenza del numero di telefono nei registri tecnici. Il funzionamento generale delle chiamate non verrà ridisegnato.
-
-## 14. [[prompts/personalhub-global-ui-theme-version-backup-status|personalhub-global-ui-theme-version-backup-status]]
-
-Rende l’aspetto di PersonalHub più coerente. La schermata principale mostrerà subito se il salvataggio automatico dei dati funziona, tutte le sezioni mostreranno la stessa versione dell’app e il tema chiaro o scuro seguirà correttamente quello del telefono.
-
-## 15. [[prompts/personalhub-global-activity-register-safe-undo|personalhub-global-activity-register-safe-undo]]
-
-Aggiunge un unico Registro attività in cui vedere le modifiche fatte nelle varie sezioni di PersonalHub. Potrai cercarle e filtrarle e, quando è sicuro, annullare un’azione. Se nel frattempo i dati sono cambiati e l’annullamento potrebbe creare problemi, l’app lo impedirà.
+Chiude con un solo passaggio visuale/QA i lavori che non richiedono nuovi modelli dati: indicatore backup, versione PersonalHub coerente, dark mode sulle schermate mancanti e i tre bug del riquadro chiamate People. Un solo build/install e una sola navigazione finale evitano QA ripetuta.
