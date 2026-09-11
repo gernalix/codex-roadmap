@@ -5,7 +5,7 @@
 > Esecuzione diretta: questo file è il task Codex completo. Non eseguire `roadmap_guard.py select` e non rileggere roadmap/README/spiegazioni. Usa direttamente quanto segue come specifica autoritativa.
 
 # Goal
-Completare Random timer + Random alerts e cablare il date picker Substances già preparato. Riusa lo stato verificato qui sotto: **non rifare inventory di stock/date-picker/scheduler**. Un solo bump versione, una sola build/install/device QA.
+Completare Random timer + Random alerts, cablare il date picker Substances già preparato e aggiungere la chiusura multipla dei periodi attivi in Since When. Riusa lo stato verificato qui sotto: **non rifare inventory di stock/date-picker/scheduler/Since When**. Un solo bump versione, una sola build/install/device QA.
 
 # Stato già verificato sul remoto
 - `SostanzeRepository.recordIntake()` registra già correttamente anche con `stockCurrent=0`: usa `appliedStockDelta=-minOf(stockCurrent, appliedDose)` e crea comunque l'intake; non modificare questa semantica.
@@ -30,6 +30,11 @@ Identità pulsanti Timer:
 - parti solo da `capsules/quickevents/controller/QuickEventsCapsuleViewModel.kt`, `core/quickevent/QuickEventExecution.kt` e `persistence/QuickEventRepository.kt`;
 - amplia a UI/model solo se manca concretamente uno stable ID necessario alla config.
 
+Since When — starting point verificato:
+- `capsules/sincewhen/controller/SinceWhenCapsuleViewModel.kt` gestisce già `lifePeriods`, `updateLifePeriod(...)`, persistence e backup;
+- `capsules/sincewhen/ui/LifePeriodsScreen.kt` mostra i periodi e oggi consente edit/delete di una singola entry, ma non ha selection mode/bulk end;
+- `LifePeriod.endMs == null` rappresenta il periodo non ancora terminato; non cambiare modello/schema per questa feature.
+
 I deep-link/notifier esistenti devono essere estesi, non sostituiti. Non cercare altri scheduler/reboot receiver prima di una failure concreta nei file sopra.
 
 # A — completa solo il cablaggio Substances
@@ -53,11 +58,20 @@ Con clock/random testabili genera esattamente N istanti unici per finestra attiv
 
 Riusa `TimeFenceTimerScheduler`/restore per Timer e `SostanzeNotificationScheduler`/restore per Substances dove compatibile; estrai una piccola logica condivisa pura solo se elimina duplicazione reale senza creare un nuovo framework.
 
-# Verification
-Test focalizzati: `EpochDayPickerFieldTest` + stock0 esistente + picker wiring; hidden timer/one-active/deep-link/ratio/recreation; multi-button random alerts/master OFF-ON/N bounds/no duplicates. Riusa/estendi `TimeFenceAlarmReconciliationTest` per Timer e `SostanzeCampaignTest` per Substances quando sufficiente invece di creare harness paralleli. UNA smoke Pixel: date picker+stock0, Random timer breve controllato, un Timer + un Substances Random alert forzato. Niente broad QA.
+# D — Since When: termina più periodi insieme
+In `SinceWhenCapsuleViewModel.kt` + `LifePeriodsScreen.kt` aggiungi il minimo flusso bulk:
+- deve essere possibile entrare in selection mode e selezionare contemporaneamente più periodi **attivi**;
+- mostra checkbox solo/abilitate per periodi realmente terminabili; non rendere selezionabili come “da terminare ora” periodi già conclusi o non ancora iniziati;
+- azione unica `Termina selezionati ora` (testo/localizzazione coerente EN+IT) cattura **un solo timestamp corrente** e assegna esattamente quel medesimo `endMs` a tutti gli ID selezionati;
+- implementa nel ViewModel una sola operazione bulk autorevole, non N callback UI indipendenti; valida che `endMs > startMs` per ogni periodo e ignora/fail-safe gli ID non più validi;
+- dopo il batch fai refresh/persist/auto-backup una sola volta quando l'architettura corrente lo consente;
+- selection state deve essere salvabile durante recreation e ripulito dopo successo/cancel; nessun cambiamento schema.
 
-PASS solo se A+B+C passano; poi un bump, una build APK, Pixel install, Telegram delivery, commit/push.
+# Verification
+Test focalizzati: `EpochDayPickerFieldTest` + stock0 esistente + picker wiring; hidden timer/one-active/deep-link/ratio/recreation; multi-button random alerts/master OFF-ON/N bounds/no duplicates; Since When multi-select con almeno 2 periodi attivi, stesso `endMs`, esclusione ended/future, recreation e singolo persist/backup batch dove verificabile. Riusa/estendi `TimeFenceAlarmReconciliationTest` e i test Since When/Timer più vicini; non creare harness paralleli se non necessario. UNA smoke Pixel: date picker+stock0, Random timer breve controllato, un Timer + un Substances Random alert forzato, selezione di 2 Since When attivi e chiusura simultanea. Niente broad QA.
+
+PASS solo se A+B+C+D passano; poi un bump, una build APK, Pixel install, Telegram delivery, commit/push.
 
 Su PASS, dopo il push del repo target, finalizza questo task nella roadmap con `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 381527 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 381527`. `push_verified=git_push_exit_0` è prova sufficiente: non fare verifiche Git successive sulla roadmap e non aprire il task successivo. Su BLOCKED/FAIL non avanzare la roadmap. Stop immediato.
 
-Output conciso: `PROMPT_ID`, `RESULT`, date-picker wiring/stock0 test, scheduler riusato, Random timer semantics, Random alerts/master, test/Pixel, version/APK/delivery, SHA, blocker.
+Output conciso: `PROMPT_ID`, `RESULT`, date-picker wiring/stock0 test, scheduler riusato, Random timer semantics, Random alerts/master, Since When bulk-end, test/Pixel, version/APK/delivery, SHA, blocker.
