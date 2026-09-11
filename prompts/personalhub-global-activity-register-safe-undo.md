@@ -2,6 +2,8 @@
 
 `PROMPT_ID=835204 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT`
 
+> Esecuzione diretta: questo file è il task Codex completo. Non eseguire `roadmap_guard.py select` e non rileggere roadmap/README/spiegazioni. Usa direttamente quanto segue come specifica autoritativa.
+
 # Goal
 Creare un unico `Registro attività` app-wide: audit semantico append-only, lettura paginata, undo compensativo sicuro e UI Home/history sopra LO STESSO modello. Un solo bump/versione e un solo QA finale.
 
@@ -53,6 +55,8 @@ L'inventory iniziale è già fatta sopra: **non ripeterla**. Usa la Room/migrati
 # Verification
 Representative coverage, non combinatoria: almeno un evento semantico per ogni modulo/settings; deleted identity leggibile e secret redaction; Timer/Places no double log; INSERT/UPDATE/DELETE/settings undo; stale/dependency/group/double/non-reversible; paging/filter persistence/future category. Una QA disposable: Home→registro→filter→group→azione reversibile→undo/compensating event. Una sola build/install/delivery finale.
 
-PASS solo con un modello canonico per capture+undo+UI, nessuna recursion/export storm e test/QA PASS. Commit/push, roadmap, STOP.
+PASS solo con un modello canonico per capture+undo+UI, nessuna recursion/export storm e test/QA PASS. Commit/push.
+
+Su PASS, dopo il push del repo target, finalizza questo task nella roadmap con `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 835204 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 835204`. `push_verified=git_push_exit_0` è prova sufficiente: non fare verifiche Git successive sulla roadmap e non aprire il task successivo. Su BLOCKED/FAIL non avanzare la roadmap. Stop immediato.
 
 Output: `PROMPT_ID`, `RESULT`, schema/coverage, Timer/Places bridge, undo/conflicts, paging/filters, no-recursion checks, test/QA, version/APK/delivery, SHA, blocker.
