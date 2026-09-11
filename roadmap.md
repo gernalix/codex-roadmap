@@ -3,3 +3,4 @@
 3. [[prompts/personalhub-global-activity-register-safe-undo|personalhub-global-activity-register-safe-undo]]
 4. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
 5. [[prompts/personalhub-ui-people-final-hardening|personalhub-ui-people-final-hardening]]
+6. [[prompts/wordpulse-alertness-local-verification-release|wordpulse-alertness-local-verification-release]]
