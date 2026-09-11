@@ -2,6 +2,8 @@
 
 `PROMPT_ID=592604 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT`
 
+> Esecuzione diretta: questo file è il task Codex completo. Non eseguire `roadmap_guard.py select` e non rileggere roadmap/README/spiegazioni. Usa direttamente quanto segue come specifica autoritativa.
+
 # Goal
 Dopo i task che possono cambiare lo schema, rendere fail-safe gli upgrade del `personalhub.db` sullo SCHEMA FINALE: un'unica migration registry produzione/test, gate al primo avvio dopo update, nessun fallback distruttivo e test da ogni snapshot storico alla versione corrente.
 
@@ -37,6 +39,8 @@ Copri: current→current, fresh, newer reject, missing/failing path no data repl
 # Discipline
 Questo è il task schema-safety finale: STRICT è giustificato. Non allargare però a refactor database, backup redesign o audit di tutte le entity. Parti dai cinque file sopra, esegui test mirati, amplia solo su failure concreta. Nessun retry equivalente. Stop immediato al PASS.
 
-PASS solo se produzione e test condividono lo stesso grafo, tutti gli snapshot storici raggiungono current, startup è fail-safe e recovery esistente resta integro. Un solo bump/build/install/delivery se richiesto dal bootstrap; commit/push, roadmap, STOP.
+PASS solo se produzione e test condividono lo stesso grafo, tutti gli snapshot storici raggiungono current, startup è fail-safe e recovery esistente resta integro. Un solo bump/build/install/delivery se richiesto dal bootstrap; commit/push.
+
+Su PASS, dopo il push del repo target, finalizza questo task nella roadmap con `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 592604 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 592604`. `push_verified=git_push_exit_0` è prova sufficiente: non fare verifiche Git successive sulla roadmap e non aprire il task successivo. Su BLOCKED/FAIL non avanzare la roadmap. Stop immediato.
 
 Output conciso: `PROMPT_ID`, `RESULT`, current schema, migration graph/versions tested, `canMigrateFrom`, startup gate/failure behavior, recovery ordering, Android check, version/APK/delivery, SHA, blocker.
