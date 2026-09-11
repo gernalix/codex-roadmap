@@ -5,7 +5,7 @@
 > Esecuzione diretta: questo file è il task Codex completo. Non eseguire `roadmap_guard.py select` e non rileggere roadmap/README/spiegazioni. Usa direttamente quanto segue come specifica autoritativa.
 
 # Goal
-Verificare/finalizzare i fix UI/People già in gran parte implementati sul remoto. **Non rifare inventory generale**: la root matrix è già stata verificata e i residui sono elencati sotto. Correggi solo residui/failure concrete, poi una build/install/QA finale.
+Verificare/finalizzare i fix UI/People già in gran parte implementati sul remoto e rimuovere definitivamente dalle UI dei moduli i vecchi numeri versione ereditati da quando erano app standalone. **L'unico numero versione visibile deve restare quello autentico di PersonalHub nella Home principale.** Non rifare inventory generale: la root matrix è già verificata. Correggi solo residui/failure concrete, poi una build/install/QA finale.
 
 # Stato remoto già implementato
 Sul `main` corrente di `gernalix/PersonalHub` sono già presenti:
@@ -13,7 +13,8 @@ Sul `main` corrente di `gernalix/PersonalHub` sono già presenti:
 ## Home / export
 - `app/.../HomeAutoExportStatus.kt`: indicatore tappabile derivato esclusivamente da `DatabaseVault.autoExportStatus()`, con stato healthy/problem e dettaglio folder/generation/stale/last success/error;
 - `HomeAutoExportStatusTest`: healthy + missing folder + stale + error + unavailable;
-- `MainActivity.kt`: indicatore integrato accanto a Settings; footer Home usa host `BuildConfig.VERSION_NAME`;
+- `MainActivity.kt`: indicatore integrato accanto a Settings;
+- la Home principale mostra già `BuildConfig.VERSION_NAME` del package host in basso a destra: **questa è l'unica versione che deve restare visibile**;
 - stringhe EN+IT già aggiunte.
 
 ## Theme
@@ -23,15 +24,19 @@ Sul `main` corrente di `gernalix/PersonalHub` sono già presenti:
 - `feature/soldi/src/main/java/com/gernalix/personalhub/soldi/SoldiActivity.kt` contiene ancora esattamente `setContent { MaterialTheme { Surface { SoldiScreen(capsule, ::finish, hubTransactionUuid) } } }`. Sostituiscilo direttamente con `setContent { SoldiTheme { Surface { SoldiScreen(capsule, ::finish, hubTransactionUuid) } } }`; `SoldiTheme` è nella stessa package, quindi non serve cercare un altro theme/import;
 - People/Places/Substances/WordPulse erano già system-aware: non ri-auditarli salvo regressione concreta.
 
-## Versione — matrix già verificata
-Non rifare questa inventory:
-- **Home**: già `BuildConfig.VERSION_NAME` host, footer bottom-right;
-- **Timer**: `AppPatchVersion.current()` ora legge `versionName` del package host; footer esiste. Resta solo la label Info `R.string.versione_patch_v` ancora descritta come “Patch version”;
-- **Substances**: `build.gradle.kts` già deriva `VERSION_CODE`/`VERSION_NAME` da root `version.txt`; footer usa `BuildConfig.VERSION_NAME`, quindi valore già canonico;
-- **Places**: `AppPatchVersion.current()` ora legge il package host. `HomeScreen` ha già item `footer`, ma il testo non è allineato bottom-right: rendi solo quel footer right-aligned, preservando il resto del contenuto/folder label;
-- **WordPulse**: `build.gradle.kts` ora deriva `BuildConfig.VERSION_NAME` da root `version.txt`; `WordPulseScreen.Header` mostra ancora `v${BuildConfig.VERSION_NAME}` **in alto**, non come footer. Sposta/rendi una sola visualizzazione bottom-right e rimuovi la duplicazione in header;
-- **Soldi**: `build.gradle.kts` ora deriva `BuildConfig.VERSION_NAME` da root `version.txt` e abilita BuildConfig, ma `SoldiScreen` non mostra ancora footer: aggiungi una sola footer bottom-right;
-- **People**: `SuperContactsApp` continua a caricare `assets/patch-version.txt` via `loadPatchVersion()` e mostra `v$patchVersion`; `feature/supercontacts/build.gradle.kts` ha ancora versioni feature hardcoded. Non sincronizzare manualmente l'asset. Modifica il path minimo affinché il valore visibile derivi dal package host `versionName` (come Timer/Places), quindi elimina l'uso visibile dell'asset legacy. Il footer esistente va reso bottom-right se non lo è già.
+## Versioni legacy dei moduli — matrix già verificata
+Questi numeri non sono più feature da allineare: sono residui di app standalone e **vanno rimossi dalla UI**, non spostati o sincronizzati.
+
+Non rifare inventory oltre ai punti già localizzati:
+- **Home PersonalHub**: conserva una sola visualizzazione `BuildConfig.VERSION_NAME` host, bottom-right;
+- **Timer**: esiste ancora footer/version UI basata su `AppPatchVersion.current()` e label Info `R.string.versione_patch_v`; rimuovi le visualizzazioni/version label dalla UI Timer. Non sostituirle con la versione host;
+- **Substances**: il footer mostra `BuildConfig.VERSION_NAME`; rimuovi solo la visualizzazione dalla UI;
+- **Places**: `HomeScreen` contiene già l'item/footer versione; rimuovilo dalla UI invece di riallinearlo;
+- **WordPulse**: `WordPulseScreen.Header` mostra `v${BuildConfig.VERSION_NAME}`; rimuovi questa visualizzazione e qualsiasi duplicato/footer versione della root WordPulse;
+- **Soldi**: non aggiungere alcun footer versione; se esiste una visualizzazione versione nella root, rimuovila;
+- **People**: `SuperContactsApp` carica ancora `assets/patch-version.txt` tramite `loadPatchVersion()` per mostrare `v$patchVersion`; elimina l'uso **visibile** di questa versione legacy. Se asset/helper servono ancora a compatibilità tecnica fuori dalla UI non fare cleanup non necessario.
+
+Le versioni/build config interne dei feature module possono restare se servono alla build o ad altre logiche: il requisito è **nessun numero versione visibile dentro i moduli**. Non fare refactor Gradle solo per cancellare metadata non mostrati.
 
 ## People call overlay
 `CallSystemOverlayController.kt` già:
@@ -47,14 +52,19 @@ Non rifare questa inventory:
    - compile/test mirati app + Timer + Places + WordPulse + Soldi + People solo per le modifiche già note.
    Correggi solo failure concrete.
 2. Applica la sostituzione letterale `MaterialTheme`→`SoldiTheme` indicata sopra; non cercare alternative e nessun redesign.
-3. Applica i cinque micro-fix versione già descritti nella matrix: Timer label; Places alignment; WordPulse posizione/unicità; Soldi footer; People host version + alignment. Non ispezionare schermate figlie.
+3. Rimuovi tutte le visualizzazioni versione dalle root UI Timer, Substances, Places, WordPulse, Soldi e People usando esclusivamente i punti della matrix. **Non aggiungere nuovi footer/version label nei moduli.** Conserva soltanto `BuildConfig.VERSION_NAME` nella Home PersonalHub.
 4. Test di intent esplicito/log redaction solo nei file People già indicati; non auditare manifest/repository salvo compile/test failure.
 
 # Verification
-Test mirati sopra + una sola build preliminare. Poi **un solo bump** `version.txt`, rebuild finale, install Pixel e una navigation QA consolidata: Home export status; una root rappresentativa di ogni modulo; light/dark; call-overlay disposable/strumentato. Verifica una sola versione visibile bottom-right per root e nessuna “patch version” legacy.
+Test mirati sopra + una sola build preliminare. Poi **un solo bump** `version.txt`, rebuild finale, install Pixel e una navigation QA consolidata: Home export status; una root rappresentativa di ogni modulo; light/dark; call-overlay disposable/strumentato.
+
+Acceptance UI versione:
+- Home PersonalHub: esattamente una versione autentica host visibile, bottom-right;
+- Timer, Places, Substances, WordPulse, Soldi, People: **zero** numeri/version label visibili nelle rispettive root;
+- nessuna stringa “Patch version”/equivalente visibile.
 
 Niente redesign estetico/navigation/backup, niente broad suite, niente secondo giro di inventory. Telegram delivery, commit/push.
 
 Su PASS, dopo il push del repo target, finalizza questo task nella roadmap con `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 694153 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 694153`. `push_verified=git_push_exit_0` è prova sufficiente: non fare verifiche Git successive sulla roadmap e non aprire il task successivo. Su BLOCKED/FAIL non avanzare la roadmap. Stop immediato.
 
-Output conciso: `PROMPT_ID`, `RESULT`, indicator, host version/footer matrix, host+Timer+Soldi theme, overlay intent/race/privacy, test/device QA, version/APK/delivery, SHA, blocker.
+Output conciso: `PROMPT_ID`, `RESULT`, indicator, visible-version matrix, host+Timer+Soldi theme, overlay intent/race/privacy, test/device QA, version/APK/delivery, SHA, blocker.
