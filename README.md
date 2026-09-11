@@ -2,171 +2,113 @@
 
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-Repository dei prompt operativi Codex. Le regole generali di scope, efficienza, test, gestione side issue e stop sono in `/home/daniele/.codex/AGENTS.md`; questo README definisce solo il comportamento specifico della roadmap.
+Repository dei task operativi Codex. Le regole globali di scope, test, side issue e stop sono in `/home/daniele/.codex/AGENTS.md`; qui restano solo le regole specifiche della roadmap.
 
-## Struttura Canonica
+**Per una normale esecuzione leggere solo `Esecuzione: fast path`.** Le altre sezioni servono quando si modifica/manutiene la roadmap o quando il guard segnala un'incoerenza.
 
-- `roadmap.md`: lista numerata e ordinata dei prompt pendenti, una riga per prompt, senza spiegazioni o regole operative.
-- `spiegazioni.md`: tabella Markdown con esattamente una riga per ogni voce pendente di `roadmap.md`, nello stesso ordine.
-- `prompts/*.md`: prompt pendenti, autosufficienti e compatti.
-- `completed/*.md`: prompt completati con PASS.
-- `tools/roadmap_guard.py`: entrypoint canonico per selezionare/finalizzare il primo pendente senza dipendere dallo stato del worktree locale.
-- `tests/test_roadmap_guard.py`: test mirati del guard.
+## Struttura canonica
 
-Ogni modifica alla roadmap deve mantenere coerenti `roadmap.md`, `spiegazioni.md`, prompt file e wikilink.
+- `roadmap.md`: lista numerata dei pendenti, una riga per prompt, nessuna spiegazione.
+- `spiegazioni.md`: una riga per pendente, stesso ordine.
+- `prompts/*.md`: task pendenti autosufficienti.
+- `completed/*.md`: task completati con PASS.
+- `tools/roadmap_guard.py`: selezione/finalizzazione canonica da `origin/main`, senza dipendere dal worktree locale.
+- `tests/test_roadmap_guard.py`: test del guard.
 
-### Tabella obbligatoria di `spiegazioni.md`
-
-La tabella deve avere esattamente queste colonne, in questo ordine:
+`spiegazioni.md` usa esattamente:
 
 `# | Prompt | Spiegazioni | Livello ragionamento | Tipo prompt`
 
-Regole:
+`#`, ordine e link devono essere 1:1 con `roadmap.md`; `Livello ragionamento` deve coincidere con `reasoning=` del prompt; `Tipo prompt` è solo `Prompt` o `Goal`.
 
-- `#`: stessa numerazione di `roadmap.md`;
-- `Prompt`: wikilink allo stesso file presente nella corrispondente riga di `roadmap.md`; preferire `[[prompts/nome]]` per non introdurre `|` aggiuntivi nella tabella Markdown;
-- `Spiegazioni`: spiegazione semplice in linguaggio umano, senza duplicare acceptance criteria o dettagli tecnici non necessari;
-- `Livello ragionamento`: deve rispecchiare esattamente il `reasoning=` dichiarato nel prompt; se cambia uno dei due, aggiornare anche l'altro nello stesso cambiamento;
-- `Tipo prompt`: deve essere `Prompt` oppure `Goal`;
-- numero di righe, ordine e identità dei prompt devono essere sempre 1:1 con `roadmap.md`.
+## Contratto dei prompt
 
-## Tipo Prompt: Prompt vs Goal
+Ogni prompt deve poter partire in una nuova sessione usando solo il proprio contenuto, `project_id`/MegaVault quando richiesti, AGENTS e questo workflow. Non dipendere da chat precedenti salvo dipendenza esplicita verificabile.
 
-### `Prompt`
+Quando applicabile dichiarare: `PROMPT_ID`, `project_id`, modello, reasoning, MegaVault, goal, starting point, non-goal, verification, acceptance/stop e output finale.
 
-Usare `Prompt` quando scope, punti di intervento, comportamento richiesto e verifica sono già delimitati. Codex deve privilegiare esecuzione diretta, letture mirate e diff minimo.
+- `Prompt`: percorso già delimitato; esecuzione diretta, diff minimo.
+- `Goal`: risultato ampio/cross-component; Codex sceglie i sottopassi senza ampliare scope.
+- Il titolo interno `# Goal` non determina `Tipo prompt`.
+- Filename semantici stabili; `PROMPT_ID` non ordina i task.
+- Ogni pendente linka `[[roadmap|Roadmap]]` e `[[spiegazioni|Spiegazioni]]`; niente wikilink pendenti.
 
-### `Goal`
+## Esecuzione: fast path
 
-Usare `Goal` quando il risultato è ampio, architetturale o cross-module/cross-system e richiede di scegliere internamente una sequenza di sottopassi. Un Goal non autorizza audit generali, redesign fuori scope o espansione illimitata.
-
-Il heading interno `# Goal` non determina il valore della colonna `Tipo prompt`.
-
-## Prompt Permanenti
-
-Ogni prompt in `prompts/` deve essere eseguibile in una nuova sessione Codex. Può assumere solo:
-
-1. il proprio contenuto;
-2. il `project_id` dichiarato e i fatti risolvibili da MegaVault quando richiesto;
-3. `/home/daniele/.codex/AGENTS.md` e questo README per l'orchestrazione roadmap.
-
-Non deve dipendere da chat precedenti o altri prompt già eseguiti salvo dipendenza esplicita verificata. Quando serve evidenza storica, includere nel prompt solo i fatti decisivi.
-
-Ogni prompt dovrebbe dichiarare, quando applicabile: `PROMPT_ID`, `project_id`, modello/ragionamento, modalità MegaVault, goal, starting point, non-goal, verifiche, acceptance, stop e output finale.
-
-## Ordine e Nomi
-
-L'ordine di esecuzione esiste solo in `roadmap.md`; `spiegazioni.md` ne copia ordine e numerazione.
-
-- filename semantici e stabili; niente prefissi di ordinamento;
-- quando cambia l'ordine, rinumerare solo `roadmap.md` e la colonna `#` di `spiegazioni.md`;
-- `PROMPT_ID` è un identificatore casuale, non un ordinamento.
-
-## Obsidian
-
-- ogni prompt pendente in `roadmap.md` è un wikilink al file in `prompts/`;
-- la riga corrispondente in `spiegazioni.md` linka lo stesso file;
-- ogni prompt pendente linka `[[roadmap|Roadmap]]` e `[[spiegazioni|Spiegazioni]]`;
-- `README.md` e `spiegazioni.md` devono linkarsi tra loro;
-- non lasciare wikilink pendenti.
-
-## Lettura e Finalizzazione Sicura
-
-Il worktree locale di `codex-roadmap` può contenere modifiche dell'utente. Non usare stash/reset/checkout del worktree per leggere o chiudere un task.
-
-Entry point canonico:
+Per eseguire il primo pendente:
 
 ```bash
 python3 tools/roadmap_guard.py select
+```
+
+`select` fa un solo fetch canonico e restituisce un **execution pack** con identità, modello, reasoning, MegaVault, tipo, eventuale `campaign_id`, `execution_contract` e `prompt_content` direttamente da `origin/main`.
+
+Dopo `select`:
+
+1. usa `prompt_content` come task completo;
+2. **non rileggere** `roadmap.md`, `spiegazioni.md`, README o il file prompt separatamente, salvo incoerenza/blocker concreto;
+3. non leggere/investigare prompt successivi;
+4. non leggere MEMORY/storia se execution pack + AGENTS + MegaVault pertinente bastano;
+5. usa starting point/CODE_MAP/file indicati; amplia solo su failure o lacuna concreta;
+6. raggruppa check indipendenti e riusa evidenza già verificata finché lo stato non cambia;
+7. niente audit generale, retry equivalente, schema discovery ripetuta, test duplicati, cleanup/refactor fuori scope;
+8. test mirati prima; allarga solo se rischio o failure lo richiedono;
+9. termina a PASS, BLOCKED o FAIL.
+
+Default: **un solo task per sessione**. Eseguire più fasi solo se il prompt selezionato dichiara `campaign_id` e le fasi consecutive sono compatibili.
+
+### PASS
+
+```bash
 python3 tools/roadmap_guard.py complete --prompt-id PROMPT_ID --dry-run
 python3 tools/roadmap_guard.py complete --prompt-id PROMPT_ID
 ```
 
-`select` esegue un solo fetch del branch canonico e legge `roadmap.md`, prompt selezionato e riga di `spiegazioni.md` direttamente da `origin/main`; non modifica il worktree locale.
+Eseguire `complete` una volta, verificare una sola volta commit/push risultante e **STOP**. Non aprire il task successivo.
+
+### BLOCKED / FAIL
+
+Non archiviare, non rinumerare, non avanzare. Riportare solo blocker/evidenza utile e fermarsi.
+
+## Sicurezza del guard
+
+Il worktree locale può essere sporco: non usare stash/reset/checkout per selezionare o completare task.
+
+`select` legge solo `origin/main` e non modifica il worktree.
 
 `complete`:
 
 - accetta solo il `PROMPT_ID` del primo pendente corrente;
-- crea un worktree temporaneo detached da `origin/main`;
-- sposta esclusivamente quel prompt in `completed/`, aggiorna `roadmap.md` e `spiegazioni.md`;
-- verifica che lo staged diff contenga solo i quattro path task-owned attesi;
-- committa nel worktree isolato e pusha con fast-forward normale `HEAD:main`, mai force;
-- se il push è bloccato preserva il worktree isolato e restituisce il path per risoluzione esplicita;
-- non ingloba dirt preesistente e non archivia task per somiglianza.
+- usa un worktree detached temporaneo da `origin/main`;
+- sposta solo quel prompt in `completed/` e aggiorna roadmap/spiegazioni;
+- consente nello staged diff solo i path task-owned attesi;
+- commit + push fast-forward `HEAD:main`, mai force;
+- su push bloccato preserva il worktree isolato e restituisce il path.
 
-Prima di modificare questo workflow eseguire solo:
+Prima di modificare guard/workflow eseguire solo:
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ```
 
-## Esecuzione Del Primo Pendente
+## Campagne continue
 
-Quando l'utente chiede di eseguire la roadmap:
-
-1. usare `python3 tools/roadmap_guard.py select` invece di stash/fetch/show ripetuti;
-2. selezionare solo il primo prompt pendente;
-3. usare i metadata restituiti e il contenuto del prompt selezionato;
-4. se dichiara un `campaign_id`, eseguire le fasi consecutive compatibili; altrimenti un solo prompt;
-5. non leggere, investigare o avviare prompt successivi;
-6. usare modello, ragionamento, modalità MegaVault, scope e vincoli dichiarati;
-7. se `Tipo prompt=Prompt`, seguire il percorso già prescritto; se `Goal`, pianificare internamente senza ampliare scope;
-8. fermarsi a PASS, BLOCKED o FAIL.
-
-### Regole di efficienza
-
-- non leggere `/home/daniele/.codex/memories/MEMORY.md` se prompt selezionato + AGENTS/README + MegaVault pertinente contengono già i fatti necessari;
-- consultare memoria/storia solo per una lacuna concreta dichiarabile;
-- raggruppare letture/check indipendenti;
-- riutilizzare risultati già verificati nella sessione finché lo stato non cambia;
-- non ripetere status, schema discovery, test o comandi equivalenti senza nuova evidenza;
-- non fare audit generale dei repository;
-- partire da CODE_MAP/MegaVault/file indicati e ampliare solo su failure concreta;
-- dopo acceptance PASS, finalizzare una volta con `roadmap_guard.py complete` e STOP.
-
-## Campagne Continue
-
-Il default è un prompt per sessione. Una sequenza è campagna continua solo se ogni prompt dichiara lo stesso `campaign_id` e metadata di fase compatibili.
-
-1. ogni prompt resta autosufficiente e con scope proprio;
-2. le fasi vengono eseguite in ordine;
-3. il PASS intermedio è checkpoint interno;
-4. BLOCKED o FAIL ferma subito la campagna;
-5. per PersonalHub, la versione è unica per l'intera campagna: base una volta, target `base + 1`;
-6. build/install/QA finali consolidati nella fase finale salvo esigenza di sicurezza;
-7. se tutta la campagna passa, archiviare le fasi e rinumerare una volta;
-8. se si ferma prima, lasciare invariata la roadmap.
-
-## Dopo L'Esecuzione
-
-Se il prompt normale selezionato termina con PASS:
-
-1. eseguire `python3 tools/roadmap_guard.py complete --prompt-id PROMPT_ID --dry-run`;
-2. se `ready`, eseguire lo stesso comando senza `--dry-run`;
-3. verificare una sola volta il commit/push risultante;
-4. non iniziare il prompt successivo.
-
-Non ricreare manualmente la sequenza sposta/rimuovi/rinumera/commit salvo blocker del guard.
-
-Se il prompt è BLOCKED, FAIL o non soddisfa acceptance:
-
-- non spostare il prompt;
-- non rimuovere la voce;
-- non avanzare al task successivo;
-- riportare il blocker e fermarsi.
+Una campagna esiste solo con stesso `campaign_id` e metadata compatibili. Ogni fase resta autosufficiente e ordinata; PASS intermedio è checkpoint; BLOCKED/FAIL ferma tutto. Build/install/QA comuni vanno consolidati nella fase finale quando sicuro. Per PersonalHub usare una sola versione per campagna (`base + 1`). Archiviare/rinumerare una volta solo a campagna interamente PASS.
 
 ## Manutenzione
 
-- quando `roadmap.md` cambia, aggiornare sempre `spiegazioni.md` nello stesso cambiamento;
-- `Spiegazioni` resta comprensibile senza gergo tecnico non necessario;
-- `Livello ragionamento` e `reasoning=` devono restare sincronizzati;
-- rivalutare `Tipo prompt` quando cambia materialmente scope/autonomia;
-- consolidare prompt solo quando riduce davvero bootstrap/build/QA/tool-call;
-- non ristrutturare o assorbire prompt attivamente in esecuzione;
-- eventuali stash/branch locali storici non vanno cancellati per nome: ispezionarli una volta e rimuoverli solo se provatamente ridondanti.
+Quando si modifica la roadmap:
 
-## Launcher Minimo
+- mantenere `roadmap.md`, `spiegazioni.md`, prompt e wikilink coerenti;
+- `Spiegazioni` resta semplice e non duplica acceptance/dettagli tecnici;
+- sincronizzare `reasoning=` e colonna `Livello ragionamento`;
+- rivalutare `Tipo prompt` solo se cambia davvero autonomia/scope;
+- consolidare task solo se riduce realmente bootstrap/build/QA/tool-call senza creare mega-task indipendenti;
+- non modificare/assorbire task attivamente in esecuzione;
+- non cancellare stash/branch storici senza provarne la ridondanza.
+
+## Launcher minimo
 
 ```text
-Esegui il primo task pendente di gernalix/codex-roadmap seguendo il README. Usa tools/roadmap_guard.py per selezione/finalizzazione, senza stash del worktree locale. Usa il livello ragionamento e il tipo indicati nella riga corrispondente di spiegazioni.md. Se il primo prompt dichiara una campagna continua, esegui nello stesso ordine tutte le sue fasi consecutive; altrimenti esegui un solo task e fermati.
+Esegui il primo task pendente di gernalix/codex-roadmap. Esegui `python3 tools/roadmap_guard.py select` e usa l'execution pack restituito come unica sorgente roadmap per il task: non rileggere README, roadmap.md, spiegazioni.md o il prompt separatamente salvo blocker/incoerenza. Se c'è una campagna continua esegui le fasi consecutive compatibili; altrimenti un solo task. Finalizza con roadmap_guard e fermati.
 ```
