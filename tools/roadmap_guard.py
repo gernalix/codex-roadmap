@@ -13,6 +13,14 @@ PROMPT_LINK_RE = re.compile(r"^\s*\d+\.\s+\[\[prompts/([^|\]]+)(?:\|[^\]]+)?\]\]
 PROMPT_ID_RE = re.compile(r"\bPROMPT_ID=(\d{6})\b")
 REASONING_RE = re.compile(r"\breasoning=([a-z_]+)\b", re.I)
 
+EXECUTION_CONTRACT = (
+    "Use prompt_content as the complete selected task. Do not reread roadmap.md, "
+    "spiegazioni.md, README.md, or the prompt file unless this pack is inconsistent "
+    "or a concrete blocker requires it. Do not inspect later prompts. Reuse verified "
+    "session evidence, keep exploration and tests targeted, avoid equivalent retries, "
+    "and stop at PASS/BLOCKED/FAIL. On PASS finalize once with roadmap_guard complete."
+)
+
 
 class RoadmapError(RuntimeError):
     pass
@@ -39,7 +47,12 @@ def remote_text(repo: Path, path: str) -> str:
     return result.stdout
 
 
-def first_prompt(repo: Path) -> dict[str, str]:
+def _metadata_value(prompt: str, key: str) -> str:
+    match = re.search(rf"\b{re.escape(key)}=([^|`\n]+)", prompt)
+    return match.group(1).strip() if match else ""
+
+
+def first_prompt(repo: Path, *, include_prompt: bool = False) -> dict[str, str]:
     fetch_canonical(repo)
     roadmap = remote_text(repo, "roadmap.md")
     first_name: str | None = None
@@ -60,14 +73,22 @@ def first_prompt(repo: Path) -> dict[str, str]:
     row = next((line for line in explanation.splitlines() if f"[[prompts/{first_name}|" in line or f"[[prompts/{first_name}]]" in line), "")
     type_match = re.search(r"\|\s*(Prompt|Goal)\s*\|\s*$", row) if row else None
     prompt_type = type_match.group(1) if type_match else ""
-    return {
+    payload = {
         "name": first_name,
         "path": prompt_path,
         "prompt_id": prompt_id_match.group(1),
+        "project_id": _metadata_value(prompt, "project_id"),
+        "model": _metadata_value(prompt, "model"),
         "reasoning": reasoning_match.group(1) if reasoning_match else "",
+        "megavault": _metadata_value(prompt, "MegaVault"),
+        "campaign_id": _metadata_value(prompt, "campaign_id"),
         "type": prompt_type,
         "source": "origin/main",
     }
+    if include_prompt:
+        payload["execution_contract"] = EXECUTION_CONTRACT
+        payload["prompt_content"] = prompt
+    return payload
 
 
 def _renumber_roadmap(text: str, completed_name: str) -> str:
@@ -157,7 +178,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         repo = git_root(Path(args.repo).expanduser())
         if args.cmd == "select":
-            payload = first_prompt(repo)
+            payload = first_prompt(repo, include_prompt=True)
         else:
             payload = complete(repo, args.prompt_id, dry_run=args.dry_run)
     except RoadmapError as exc:
