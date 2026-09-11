@@ -36,7 +36,10 @@ class RoadmapGuardTests(unittest.TestCase):
             "| 2 | [[prompts/second|second]] | Second | low | Prompt |\n",
             encoding="utf-8",
         )
-        (seed / "prompts" / "first.md").write_text("`PROMPT_ID=123456 | reasoning=medium`\n", encoding="utf-8")
+        (seed / "prompts" / "first.md").write_text(
+            "`PROMPT_ID=123456 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST`\n\n# Goal\nDo first thing.\n",
+            encoding="utf-8",
+        )
         (seed / "prompts" / "second.md").write_text("`PROMPT_ID=654321 | reasoning=low`\n", encoding="utf-8")
         (seed / "README.md").write_text("base\n", encoding="utf-8")
         git(["add", "."], seed)
@@ -59,12 +62,27 @@ class RoadmapGuardTests(unittest.TestCase):
             self.assertEqual("123456", selected["prompt_id"])
             self.assertEqual(before, after)
 
+    def test_select_execution_pack_contains_prompt_and_metadata(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            local, _ = self.fixture(Path(tmp))
+            selected = guard.first_prompt(local, include_prompt=True)
+            self.assertEqual("49", selected["project_id"])
+            self.assertEqual("GPT-5.5", selected["model"])
+            self.assertEqual("FAST", selected["megavault"])
+            self.assertEqual("Prompt", selected["type"])
+            self.assertIn("PROMPT_ID=123456", selected["prompt_content"])
+            self.assertIn("Do not reread roadmap.md", selected["execution_contract"])
+            compact = guard.first_prompt(local)
+            self.assertNotIn("prompt_content", compact)
+            self.assertNotIn("execution_contract", compact)
+
     def test_complete_uses_isolated_worktree_and_preserves_local_dirt(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             local, bare = self.fixture(Path(tmp))
             (local / "README.md").write_text("dirty\n", encoding="utf-8")
             result = guard.complete(local, "123456")
             self.assertEqual("completed", result["status"])
+            self.assertNotIn("prompt_content", result)
             self.assertEqual("dirty\n", (local / "README.md").read_text(encoding="utf-8"))
             verify = Path(tmp) / "verify"
             self.assertEqual(0, git(["clone", "--branch", "main", str(bare), str(verify)]).returncode)
