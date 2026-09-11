@@ -72,6 +72,9 @@ class RoadmapGuardTests(unittest.TestCase):
             self.assertEqual("Prompt", selected["type"])
             self.assertIn("PROMPT_ID=123456", selected["prompt_content"])
             self.assertIn("Do not reread roadmap.md", selected["execution_contract"])
+            self.assertIn("Do not read MEMORY/history", selected["execution_contract"])
+            self.assertIn("select already fetched canonical origin/main", selected["execution_contract"])
+            self.assertIn("push_verified=git_push_exit_0", selected["execution_contract"])
             compact = guard.first_prompt(local)
             self.assertNotIn("prompt_content", compact)
             self.assertNotIn("execution_contract", compact)
@@ -82,6 +85,7 @@ class RoadmapGuardTests(unittest.TestCase):
             (local / "README.md").write_text("dirty\n", encoding="utf-8")
             result = guard.complete(local, "123456")
             self.assertEqual("completed", result["status"])
+            self.assertEqual("git_push_exit_0", result["push_verified"])
             self.assertNotIn("prompt_content", result)
             self.assertEqual("dirty\n", (local / "README.md").read_text(encoding="utf-8"))
             verify = Path(tmp) / "verify"
