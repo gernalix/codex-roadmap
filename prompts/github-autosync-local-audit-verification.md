@@ -2,7 +2,7 @@
 
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=417806 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
+`PROMPT_ID=417806 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST`
 
 # Goal
 Verificare localmente i fix già implementati sul remoto `gernalix/github-autosync` dopo il task 684217. Il codice è già stato corretto: **non rifare discovery, redesign o reimplementazione**. Correggi soltanto eventuali failure concrete di test/runtime.
