@@ -3,7 +3,7 @@
 `PROMPT_ID=694153 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
 
 # Goal
-Verificare/finalizzare i fix UI/People già in gran parte implementati sul remoto. **Non rifare l'inventory iniziale generale**: parti dai file e fatti elencati sotto, correggi solo residui/failure concrete, poi una build/install/QA finale.
+Verificare/finalizzare i fix UI/People già in gran parte implementati sul remoto. **Non rifare inventory generale**: la root matrix è già stata verificata e i residui sono elencati sotto. Correggi solo residui/failure concrete, poi una build/install/QA finale.
 
 # Stato remoto già implementato
 Sul `main` corrente di `gernalix/PersonalHub` sono già presenti:
@@ -11,17 +11,24 @@ Sul `main` corrente di `gernalix/PersonalHub` sono già presenti:
 ## Home / export
 - `app/.../HomeAutoExportStatus.kt`: indicatore tappabile derivato esclusivamente da `DatabaseVault.autoExportStatus()`, con stato healthy/problem e dettaglio folder/generation/stale/last success/error;
 - `HomeAutoExportStatusTest`: healthy + missing folder + stale + error + unavailable;
-- `MainActivity.kt`: indicatore integrato accanto a Settings; footer Home continua a usare host `BuildConfig.VERSION_NAME`;
+- `MainActivity.kt`: indicatore integrato accanto a Settings; footer Home usa host `BuildConfig.VERSION_NAME`;
 - stringhe EN+IT già aggiunte.
 
 ## Theme
-- `app/.../ui/theme/Theme.kt`: host PersonalHub ora usa `isSystemInDarkTheme()` e schemi light/dark;
-- Timer `ui/theme/Theme.kt`: default `darkTheme=isSystemInDarkTheme()` usando gli schemi Light/Dark già esistenti;
-- People/Places/Substances/WordPulse erano già noti system-aware: non ri-auditarli salvo regressione concreta.
+- host `app/.../ui/theme/Theme.kt`: `isSystemInDarkTheme()` + light/dark;
+- Timer `ui/theme/Theme.kt`: default `isSystemInDarkTheme()` usando gli schemi già esistenti;
+- `feature/soldi/.../SoldiTheme.kt` è già stato aggiunto come boundary light/dark system-aware; resta solo usarlo in `SoldiActivity.setContent` al posto del `MaterialTheme` generico;
+- People/Places/Substances/WordPulse erano già system-aware: non ri-auditarli salvo regressione concreta.
 
-## Versione
-- Substances `build.gradle.kts` già deriva `VERSION_CODE`/`VERSION_NAME` da root `version.txt`, quindi il suo footer `BuildConfig.VERSION_NAME` è già host-canonical: non rifarlo;
-- Timer `AppPatchVersion.current()` è stato trasformato in compatibility wrapper che legge il `versionName` del package host. Il footer quindi mostra il valore PersonalHub; resta da eliminare solo eventuale **label testuale** che dica ancora “Patch version”.
+## Versione — matrix già verificata
+Non rifare questa inventory:
+- **Home**: già `BuildConfig.VERSION_NAME` host, footer bottom-right;
+- **Timer**: `AppPatchVersion.current()` ora legge `versionName` del package host; footer esiste. Resta solo la label Info `R.string.versione_patch_v` ancora descritta come “Patch version”;
+- **Substances**: `build.gradle.kts` già deriva `VERSION_CODE`/`VERSION_NAME` da root `version.txt`; footer usa `BuildConfig.VERSION_NAME`, quindi valore già canonico;
+- **Places**: `AppPatchVersion.current()` ora legge il package host. `HomeScreen` ha già item `footer`, ma il testo non è allineato bottom-right: rendi solo quel footer right-aligned, preservando il resto del contenuto/folder label;
+- **WordPulse**: `build.gradle.kts` ora deriva `BuildConfig.VERSION_NAME` da root `version.txt`; `WordPulseScreen.Header` mostra ancora `v${BuildConfig.VERSION_NAME}` **in alto**, non come footer. Sposta/rendi una sola visualizzazione bottom-right e rimuovi la duplicazione in header;
+- **Soldi**: `build.gradle.kts` ora deriva `BuildConfig.VERSION_NAME` da root `version.txt` e abilita BuildConfig, ma `SoldiScreen` non mostra ancora footer: aggiungi una sola footer bottom-right;
+- **People**: `SuperContactsApp` continua a caricare `assets/patch-version.txt` via `loadPatchVersion()` e mostra `v$patchVersion`; `feature/supercontacts/build.gradle.kts` ha ancora versioni feature hardcoded. Non sincronizzare manualmente l'asset. Modifica il path minimo affinché il valore visibile derivi dal package host `versionName` (come Timer/Places), quindi elimina l'uso visibile dell'asset legacy. Il footer esistente va reso bottom-right se non lo è già.
 
 ## People call overlay
 `CallSystemOverlayController.kt` già:
@@ -34,15 +41,14 @@ Sul `main` corrente di `gernalix/PersonalHub` sono già presenti:
 1. **Prima compila/testa i file già modificati**, senza nuova discovery:
    - `HomeAutoExportStatusTest`;
    - `CallOverlayRequestGateTest`;
-   - test/compile mirati app + Timer/People.
+   - compile/test mirati app + Timer + Places + WordPulse + Soldi + People solo per le modifiche già note.
    Correggi solo failure concrete.
-2. **Soldi theme**: `SoldiActivity.kt` usa ancora `MaterialTheme { ... }` generico. Aggiungi il boundary system-aware minimo (light/dark), senza redesign.
-3. **Version label Timer**: sostituisci l'eventuale testo “Patch version” con “Version”/traduzione; non reintrodurre patch-version asset come valore visibile.
-4. **Footer matrix, una sola lettura mirata**: controlla esclusivamente le root full-page People/Timer/Places/Substances/Soldi/WordPulse. Ognuna deve mostrare una sola footer bottom-right con **host PersonalHub versionName**. Se una root non ha footer, aggiungi il minimo; se già conforme non toccarla. Non seguire schermate figlie.
-5. Test di intent esplicito/log redaction solo nei file People già indicati; non auditare manifest/repository salvo compile/test failure.
+2. In `SoldiActivity.setContent`, sostituisci soltanto il `MaterialTheme` generico con `SoldiTheme`; nessun redesign.
+3. Applica i cinque micro-fix versione già descritti nella matrix: Timer label; Places alignment; WordPulse posizione/unicità; Soldi footer; People host version + alignment. Non ispezionare schermate figlie.
+4. Test di intent esplicito/log redaction solo nei file People già indicati; non auditare manifest/repository salvo compile/test failure.
 
 # Verification
-Test mirati sopra + una sola build. Poi **un solo bump** `version.txt`, rebuild finale, install Pixel e una navigation QA consolidata: Home export status; una root rappresentativa di ogni modulo; light/dark; call-overlay disposable/strumentato. Controlla contrasto/insets/FAB solo nella matrix finale.
+Test mirati sopra + una sola build preliminare. Poi **un solo bump** `version.txt`, rebuild finale, install Pixel e una navigation QA consolidata: Home export status; una root rappresentativa di ogni modulo; light/dark; call-overlay disposable/strumentato. Verifica una sola versione visibile bottom-right per root e nessuna “patch version” legacy.
 
 Niente redesign estetico/navigation/backup, niente broad suite, niente secondo giro di inventory. Telegram delivery, commit/push, roadmap e STOP.
 
