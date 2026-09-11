@@ -71,7 +71,7 @@ Il remoto contiene già il commit `57e66a7066e8d040f88cd4dadf25b70289247ed1`, ch
 
 Lavora solo in `gernalix/github-autosync` e, se necessario per registrare il risultato secondo protocollo, MegaVault. Non fare refactor, cleanup o modifiche a PersonalHub/codex-roadmap oltre alla finalizzazione standard del task.
 
-Parti da `autosync_core.py` e `tests/test_github_autosync.py`; non esplorare il repository oltre questi file salvo failure concreta.
+Parti da `autosync_core.py` e `tests/test_github_autosync.py`; non esplorare il repository oltre questi file salvo failure concreta. Dentro `autosync_core.py` parti **solo** da `github_repos`, `_worktree_basics`, `sync_changed_repo`, `command_run`, `load_repo_state`/`save_repo_state` e `normalize_remote`; apri altri helper soltanto se chiamati direttamente dal percorso modificato o da un test fallito.
 
 ## Verification
 
