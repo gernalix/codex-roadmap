@@ -2,6 +2,8 @@
 
 `PROMPT_ID=694153 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST`
 
+> Esecuzione diretta: questo file è il task Codex completo. Non eseguire `roadmap_guard.py select` e non rileggere roadmap/README/spiegazioni. Usa direttamente quanto segue come specifica autoritativa.
+
 # Goal
 Verificare/finalizzare i fix UI/People già in gran parte implementati sul remoto. **Non rifare inventory generale**: la root matrix è già stata verificata e i residui sono elencati sotto. Correggi solo residui/failure concrete, poi una build/install/QA finale.
 
@@ -51,6 +53,8 @@ Non rifare questa inventory:
 # Verification
 Test mirati sopra + una sola build preliminare. Poi **un solo bump** `version.txt`, rebuild finale, install Pixel e una navigation QA consolidata: Home export status; una root rappresentativa di ogni modulo; light/dark; call-overlay disposable/strumentato. Verifica una sola versione visibile bottom-right per root e nessuna “patch version” legacy.
 
-Niente redesign estetico/navigation/backup, niente broad suite, niente secondo giro di inventory. Telegram delivery, commit/push, roadmap e STOP.
+Niente redesign estetico/navigation/backup, niente broad suite, niente secondo giro di inventory. Telegram delivery, commit/push.
+
+Su PASS, dopo il push del repo target, finalizza questo task nella roadmap con `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 694153 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 694153`. `push_verified=git_push_exit_0` è prova sufficiente: non fare verifiche Git successive sulla roadmap e non aprire il task successivo. Su BLOCKED/FAIL non avanzare la roadmap. Stop immediato.
 
 Output conciso: `PROMPT_ID`, `RESULT`, indicator, host version/footer matrix, host+Timer+Soldi theme, overlay intent/race/privacy, test/device QA, version/APK/delivery, SHA, blocker.
