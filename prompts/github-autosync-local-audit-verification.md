@@ -15,7 +15,7 @@ Sul `main` di `gernalix/github-autosync` sono già presenti:
 - clone di un worktree canonico MegaVault mancante ora usa il path canonico, non crea automaticamente un duplicato in `~/projects/<repo>`;
 - `sync_changed_repo(..., dry_run=True)` con upstream mancante usa `show-ref`/`git ls-remote` e non esegue `git fetch` o `branch --set-upstream-to`;
 - nuovo contatore JSON `audited_unchanged`, distinto da `skipped_unchanged`;
-- commit `aede1d11825b423ff0ac7316220853e4b3888a6a`: `tests/test_github_autosync_regressions.py` copre local audit/auto-push path, dirty invariato, canonical clone, dry-run senza fetch e dedup del fetch di upstream repair;
+- `tests/test_github_autosync_regressions.py`, finalizzato nel commit `1a210a57383bbafda9a8545f6018846bda55e2a9`, copre local audit/auto-push path, dirty invariato, canonical clone, dry-run senza fetch e dedup del fetch di upstream repair;
 - commit `f5d62c0d9e1fda9c29863a62ee169552edd12505`: README allineato alla allowlist rigida e al nuovo comportamento.
 
 Non ispezionare altri repository per capire questi fix.
