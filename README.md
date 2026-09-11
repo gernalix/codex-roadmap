@@ -33,6 +33,18 @@ Quando applicabile dichiarare: `PROMPT_ID`, `project_id`, modello, reasoning, Me
 - Filename semantici stabili; `PROMPT_ID` non ordina i task.
 - Ogni pendente linka `[[roadmap|Roadmap]]` e `[[spiegazioni|Spiegazioni]]`; niente wikilink pendenti.
 
+### Scelta modello/reasoning
+
+I valori `model=` e `reasoning=` nel prompt sono **indicazioni operative per il selettore di Codex Desktop**: non cambiano automaticamente il modello o il livello attivo, quindi l'operatore deve impostarli manualmente prima dell'esecuzione.
+
+Regola minima per `reasoning=`:
+
+- `low` **solo** per task realmente lineari/meccanici: file e modifica già determinati, nessuna decisione operativa significativa, nessun blocker condizionale da gestire, nessuna orchestrazione tra runtime/tool esterni;
+- `medium` è il default quando Codex deve prendere decisioni durante l'esecuzione, mantenere invarianti/condizioni di stop, gestire blocker, ADB/systemd/Git/filesystem/tool esterni, più repository o più fasi di verifica;
+- `high` solo quando la difficoltà/rischio lo giustifica concretamente.
+
+Regola modello: usa GPT-5.5 per task delimitati; passa a GPT-5.6 Sol quando il task è cross-module/architetturale, coinvolge schema/migrazioni/undo-audit/rischio dati o richiede ragionamento più robusto. Non abbassare reasoning solo per risparmiare token se aumenta il rischio di violare istruzioni esplicite o produrre retry/tool-call aggiuntivi.
+
 ## Esecuzione: fast path
 
 Per eseguire il primo pendente:
@@ -103,6 +115,7 @@ Quando si modifica la roadmap:
 - mantenere `roadmap.md`, `spiegazioni.md`, prompt e wikilink coerenti;
 - `Spiegazioni` resta semplice e non duplica acceptance/dettagli tecnici;
 - sincronizzare `reasoning=` e colonna `Livello ragionamento`;
+- rivalutare modello/reasoning con la policy sopra quando cambiano i requisiti operativi del task;
 - rivalutare `Tipo prompt` solo se cambia davvero autonomia/scope;
 - consolidare task solo se riduce realmente bootstrap/build/QA/tool-call senza creare mega-task indipendenti;
 - non modificare/assorbire task attivamente in esecuzione;
