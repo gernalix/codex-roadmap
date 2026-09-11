@@ -53,7 +53,8 @@ Dopo `select`:
 6. raggruppa check indipendenti e riusa evidenza già verificata finché lo stato non cambia;
 7. niente audit generale, retry equivalente, schema discovery ripetuta, test duplicati, cleanup/refactor fuori scope;
 8. test mirati prima; allarga solo se rischio o failure lo richiedono;
-9. termina a PASS, BLOCKED o FAIL.
+9. durante l'esecuzione **non inviare progress report narrativi**: usa direttamente i tool; scrivi testo intermedio solo per un blocker che richiede una decisione dell'utente;
+10. termina a PASS, BLOCKED o FAIL e produci un solo report finale conciso.
 
 Default: **un solo task per sessione**. Eseguire più fasi solo se il prompt selezionato dichiara `campaign_id` e le fasi consecutive sono compatibili.
 
@@ -110,5 +111,5 @@ Quando si modifica la roadmap:
 ## Launcher minimo
 
 ```text
-Esegui il primo task pendente di gernalix/codex-roadmap. Esegui `python3 tools/roadmap_guard.py select` e usa l'execution pack restituito come unica sorgente roadmap per il task: non rileggere README, roadmap.md, spiegazioni.md o il prompt separatamente salvo blocker/incoerenza. Se c'è una campagna continua esegui le fasi consecutive compatibili; altrimenti un solo task. Finalizza con roadmap_guard e fermati.
+Esegui il primo task pendente di gernalix/codex-roadmap. Esegui `python3 tools/roadmap_guard.py select` e usa l'execution pack restituito come unica sorgente roadmap per il task: non rileggere README, roadmap.md, spiegazioni.md o il prompt separatamente salvo blocker/incoerenza. Non inviare progress report narrativi durante l'esecuzione: usa i tool direttamente e scrivi testo intermedio solo se serve una mia decisione. Se c'è una campagna continua esegui le fasi consecutive compatibili; altrimenti un solo task. Finalizza con roadmap_guard, produci un solo report finale conciso e fermati.
 ```
