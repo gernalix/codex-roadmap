@@ -7,6 +7,8 @@
 # Goal
 Verificare localmente i fix già implementati sul remoto `gernalix/github-autosync` dopo il task 684217. Il codice è già stato corretto: **non rifare discovery, redesign o reimplementazione**. Correggi soltanto eventuali failure concrete di test/runtime.
 
+Durante l'esecuzione non inviare progress report narrativi: usa direttamente i tool. Scrivi testo intermedio solo se emerge un blocker che richiede una decisione dell'utente; altrimenti produci soltanto il report finale.
+
 # Stato remoto già preparato
 Sul `main` di `gernalix/github-autosync` sono già presenti:
 
