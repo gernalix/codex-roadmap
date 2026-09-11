@@ -1,28 +1,49 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=694153 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD`
+`PROMPT_ID=694153 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
 
 # Goal
-Chiudere in un solo pass finale i fix non-schema di UI/People, condividendo inventory schermate, build, install e device QA: auto-export status, versione host coerente, system light/dark e tre bug call-overlay People.
+Verificare/finalizzare i fix UI/People già in gran parte implementati sul remoto. **Non rifare l'inventory iniziale generale**: parti dai file e fatti elencati sotto, correggi solo residui/failure concrete, poi una build/install/QA finale.
 
-Assorbe `742618` + `925471`. Un solo bump versione e UNA build/install/navigation finale.
+# Stato remoto già implementato
+Sul `main` corrente di `gernalix/PersonalHub` sono già presenti:
 
-# Pass iniziale unico
-Inventaria una volta Home + full-page destinations People/Timer/Places/Substances/Soldi/WordPulse. Riusa fatti noti: Home già usa host `BuildConfig.VERSION_NAME`; `DatabaseVault.autoExportStatus()` ha già i dati; People/Places/Substances/WordPulse seguono già system dark; Timer ha Light/Dark ma default light; Soldi usa MaterialTheme generico; Substances mostra feature BuildConfig; Timer mostra legacy patch version. Non ri-auditare temi già corretti salvo regression failure.
+## Home / export
+- `app/.../HomeAutoExportStatus.kt`: indicatore tappabile derivato esclusivamente da `DatabaseVault.autoExportStatus()`, con stato healthy/problem e dettaglio folder/generation/stale/last success/error;
+- `HomeAutoExportStatusTest`: healthy + missing folder + stale + error + unavailable;
+- `MainActivity.kt`: indicatore integrato accanto a Settings; footer Home continua a usare host `BuildConfig.VERSION_NAME`;
+- stringhe EN+IT già aggiunte.
 
-# A — Home/export + versione + theme
-- Home: piccolo status tappabile ✅/❌ con semantic label, derivato solo da `DatabaseVault.autoExportStatus`; dettaglio config/last success/generation/stale/error. Nessun cambio backup/WorkManager.
-- Versione visibile canonica = host PersonalHub `versionName`. Ogni full-page destination mostra una sola footer bottom-right; rimuovi Substances feature version e Timer patch version, niente duplicate/dialog footer.
-- Host theme segue sistema; Timer seleziona scheme già esistenti via system default; Soldi aggiunge boundary system-aware minimo. Patch altro solo se la singola navigation matrix dimostra un difetto concreto. Verifica contrasto/insets/FAB e recreation state.
+## Theme
+- `app/.../ui/theme/Theme.kt`: host PersonalHub ora usa `isSystemInDarkTheme()` e schemi light/dark;
+- Timer `ui/theme/Theme.kt`: default `darkTheme=isSystemInDarkTheme()` usando gli schemi Light/Dark già esistenti;
+- People/Places/Substances/WordPulse erano già noti system-aware: non ri-auditarli salvo regressione concreta.
 
-# B — People call overlay
-Parti solo da `CallSystemOverlayController`, `CallStateReceiver`, People MainActivity/repository e app manifest.
-- `openContact()` usa intent esplicito alla People MainActivity mantenendo URI `supercontacts://contact/<publicId>`; non esportare Activity per il fix.
-- invalida pending async lookup su dismiss/nuova call, impedendo overlay stale o overwrite da request vecchia.
-- elimina/redigi phone number dai log mantenendo solo metadata non sensibili.
+## Versione
+- Substances `build.gradle.kts` già deriva `VERSION_CODE`/`VERSION_NAME` da root `version.txt`, quindi il suo footer `BuildConfig.VERSION_NAME` è già host-canonical: non rifarlo;
+- Timer `AppPatchVersion.current()` è stato trasformato in compatibility wrapper che legge il `versionName` del package host. Il footer quindi mostra il valore PersonalHub; resta da eliminare solo eventuale **label testuale** che dica ancora “Patch version”.
 
-Test mirati: export indicator states; una canonical host version per inventory; host+Timer+Soldi light/dark e regressione rappresentativa altri moduli; state recreation; explicit contact intent; delayed show→dismiss; two successive shows; log senza raw number.
+## People call overlay
+`CallSystemOverlayController.kt` già:
+- usa intent esplicito `MainActivity::class.java` preservando `ContactDeepLink` URI;
+- usa `CallOverlayRequestGate` per invalidare lookup pendenti su dismiss/nuova call;
+- non include più il numero di telefono nel log di show.
+`CallOverlayRequestGateTest` copre dismiss→stale e nuova call→vecchia stale.
 
-Poi UNA build, Pixel install e UNA QA: Home + schermate rappresentative in light/dark + call-overlay disposable/strumentato. Telegram delivery, commit/push, roadmap, STOP. Nessun redesign estetico/navigation/backup.
+# Residui da fare
+1. **Prima compila/testa i file già modificati**, senza nuova discovery:
+   - `HomeAutoExportStatusTest`;
+   - `CallOverlayRequestGateTest`;
+   - test/compile mirati app + Timer/People.
+   Correggi solo failure concrete.
+2. **Soldi theme**: `SoldiActivity.kt` usa ancora `MaterialTheme { ... }` generico. Aggiungi il boundary system-aware minimo (light/dark), senza redesign.
+3. **Version label Timer**: sostituisci l'eventuale testo “Patch version” con “Version”/traduzione; non reintrodurre patch-version asset come valore visibile.
+4. **Footer matrix, una sola lettura mirata**: controlla esclusivamente le root full-page People/Timer/Places/Substances/Soldi/WordPulse. Ognuna deve mostrare una sola footer bottom-right con **host PersonalHub versionName**. Se una root non ha footer, aggiungi il minimo; se già conforme non toccarla. Non seguire schermate figlie.
+5. Test di intent esplicito/log redaction solo nei file People già indicati; non auditare manifest/repository salvo compile/test failure.
 
-Output: `PROMPT_ID`, `RESULT`, indicator/version/theme, overlay intent/race/privacy, test/device QA, version/APK/delivery, SHA, blocker.
+# Verification
+Test mirati sopra + una sola build. Poi **un solo bump** `version.txt`, rebuild finale, install Pixel e una navigation QA consolidata: Home export status; una root rappresentativa di ogni modulo; light/dark; call-overlay disposable/strumentato. Controlla contrasto/insets/FAB solo nella matrix finale.
+
+Niente redesign estetico/navigation/backup, niente broad suite, niente secondo giro di inventory. Telegram delivery, commit/push, roadmap e STOP.
+
+Output conciso: `PROMPT_ID`, `RESULT`, indicator, host version/footer matrix, host+Timer+Soldi theme, overlay intent/race/privacy, test/device QA, version/APK/delivery, SHA, blocker.
