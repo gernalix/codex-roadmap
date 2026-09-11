@@ -1,6 +1,6 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=694153 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
+`PROMPT_ID=694153 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST`
 
 # Goal
 Verificare/finalizzare i fix UI/People già in gran parte implementati sul remoto. **Non rifare inventory generale**: la root matrix è già stata verificata e i residui sono elencati sotto. Correggi solo residui/failure concrete, poi una build/install/QA finale.
