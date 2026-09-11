@@ -40,8 +40,8 @@ I valori `model=` e `reasoning=` nel prompt sono **indicazioni operative per il 
 
 Regola minima per `reasoning=`:
 
-- `low` **solo** per task realmente lineari/meccanici: file e modifica già determinati, nessuna decisione operativa significativa, nessun blocker condizionale da gestire, nessuna orchestrazione tra runtime/tool esterni;
-- `medium` è il default quando Codex deve prendere decisioni durante l'esecuzione, mantenere invarianti/condizioni di stop, gestire blocker, ADB/systemd/Git/filesystem/tool esterni, più repository o più fasi di verifica;
+- `low` per task lineari/meccanici **e per verifiche deterministiche già preparate**: file/comandi/acceptance già determinati, nessuna scelta architetturale, nessuna discovery generale e nessuna correzione prevista. L'uso di Git/systemd/ADB non richiede da solo `medium` se il task prescrive esattamente i comandi e il comportamento su PASS/failure; se emerge una failure non banale, il task successivo/correttivo può salire a `medium`;
+- `medium` è il default quando Codex deve prendere decisioni durante l'esecuzione, diagnosticare failure ambigue, mantenere più invarianti/condizioni di stop, gestire blocker non deterministici, modificare più componenti o orchestrare più fasi con branching reale;
 - `high` solo quando la difficoltà/rischio lo giustifica concretamente.
 
 Regola modello: usa GPT-5.5 per task delimitati; passa a GPT-5.6 Sol quando il task è cross-module/architetturale, coinvolge schema/migrazioni/undo-audit/rischio dati o richiede ragionamento più robusto. Non abbassare reasoning solo per risparmiare token se aumenta il rischio di violare istruzioni esplicite o produrre retry/tool-call aggiuntivi.
@@ -54,37 +54,42 @@ Il prompt canonico da copiare nelle normali sessioni Codex Desktop è in **`STAN
 
 ## Esecuzione: fast path
 
-Per eseguire il primo pendente:
+Per eseguire il primo pendente, la **prima azione di tool** deve essere:
 
 ```bash
 python3 tools/roadmap_guard.py select
 ```
 
-`select` fa un solo fetch canonico e restituisce un **execution pack** con identità, modello, reasoning, MegaVault, tipo, eventuale `campaign_id`, `execution_contract` e `prompt_content` direttamente da `origin/main`.
+Prima di `select` non servono `pwd`, `ls`, `git status`, `git pull`, `git fetch`, lettura MEMORY/storia o altri preflight della roadmap. `select` fa il fetch canonico e restituisce un **execution pack** con identità, modello, reasoning, MegaVault, tipo, eventuale `campaign_id`, `execution_contract` e `prompt_content` direttamente da `origin/main`.
 
 Dopo `select`:
 
 1. usa `prompt_content` come task completo;
 2. **non rileggere** `roadmap.md`, `spiegazioni.md`, README o il file prompt separatamente, salvo incoerenza/blocker concreto;
 3. non leggere/investigare prompt successivi;
-4. non leggere MEMORY/storia se execution pack + AGENTS + MegaVault pertinente bastano;
+4. non leggere MEMORY/storia salvo che `prompt_content` dichiari una lacuna concreta non risolvibile con AGENTS/MegaVault/source-of-truth pertinente;
 5. usa starting point/CODE_MAP/file indicati; amplia solo su failure o lacuna concreta;
-6. raggruppa check indipendenti e riusa evidenza già verificata finché lo stato non cambia;
+6. raggruppa check/comandi indipendenti nella stessa tool-call quando sicuro e riusa evidenza già verificata finché lo stato non cambia;
 7. niente audit generale, retry equivalente, schema discovery ripetuta, test duplicati, cleanup/refactor fuori scope;
-8. test mirati prima; allarga solo se rischio o failure lo richiedono;
-9. durante l'esecuzione **non inviare progress report narrativi**: usa direttamente i tool; scrivi testo intermedio solo per un blocker che richiede una decisione dell'utente;
-10. termina a PASS, BLOCKED o FAIL e produci un solo report finale conciso.
+8. limita output/log/dump alla sola evidenza necessaria;
+9. test mirati prima; allarga solo se rischio o failure lo richiedono;
+10. durante l'esecuzione **non inviare progress report narrativi**: usa direttamente i tool; scrivi testo intermedio solo per un blocker che richiede una decisione dell'utente;
+11. termina a PASS, BLOCKED o FAIL e produci un solo report finale conciso.
 
 Default: **un solo task per sessione**. Eseguire più fasi solo se il prompt selezionato dichiara `campaign_id` e le fasi consecutive sono compatibili.
 
 ### PASS
 
+Quando possibile usa una sola tool-call shell:
+
 ```bash
-python3 tools/roadmap_guard.py complete --prompt-id PROMPT_ID --dry-run
+python3 tools/roadmap_guard.py complete --prompt-id PROMPT_ID --dry-run && \
 python3 tools/roadmap_guard.py complete --prompt-id PROMPT_ID
 ```
 
-Eseguire `complete` una volta, verificare una sola volta commit/push risultante e **STOP**. Non aprire il task successivo.
+La risposta reale `status=completed`, `commit=<SHA>`, `push_verified=git_push_exit_0` è la prova canonica che il push della roadmap è riuscito. **Non** eseguire dopo `git status`, `git rev-parse`, `git ls-remote`, pull/fetch o verifiche equivalenti sulla roadmap e non sincronizzare il checkout locale solo per il report: `complete` usa intenzionalmente un worktree isolato, quindi il checkout locale può restare indietro.
+
+Produrre il report finale richiesto e **STOP**. Non aprire il task successivo.
 
 ### BLOCKED / FAIL
 
@@ -103,6 +108,7 @@ Il worktree locale può essere sporco: non usare stash/reset/checkout per selezi
 - sposta solo quel prompt in `completed/` e aggiorna roadmap/spiegazioni;
 - consente nello staged diff solo i path task-owned attesi;
 - commit + push fast-forward `HEAD:main`, mai force;
+- considera il push verificato solo se `git push` termina con exit code 0 e restituisce `push_verified=git_push_exit_0`;
 - su push bloccato preserva il worktree isolato e restituisce il path.
 
 Prima di modificare guard/workflow eseguire solo:
@@ -123,6 +129,7 @@ Quando si modifica la roadmap:
 - `Spiegazioni` resta semplice e non duplica acceptance/dettagli tecnici;
 - sincronizzare `reasoning=` e colonna `Livello ragionamento`;
 - rivalutare modello/reasoning con la policy sopra quando cambiano i requisiti operativi del task;
+- per task di sola verifica già preparata, preferire `GPT-5.5 + low` e riservare `medium` alla diagnosi/correzione se una failure concreta lo richiede;
 - rivalutare `Tipo prompt` solo se cambia davvero autonomia/scope;
 - consolidare task solo se riduce realmente bootstrap/build/QA/tool-call senza creare mega-task indipendenti;
 - **riesaminare e aggiornare `STANDARD_PROMPT.md` ogni volta che serve**, soprattutto dopo modifiche al workflow/guard o quando un run reale rivela una lezione generale riutilizzabile; non lasciare che il prompt standard diverga dalle regole operative correnti;
@@ -135,5 +142,5 @@ Quando si modifica la roadmap:
 Scorciatoia compatta derivata dal prompt standard; in caso di divergenza prevale `STANDARD_PROMPT.md`.
 
 ```text
-Esegui il primo task pendente di gernalix/codex-roadmap. Esegui `python3 tools/roadmap_guard.py select` e usa l'execution pack restituito come unica sorgente roadmap per il task: non rileggere README, roadmap.md, spiegazioni.md o il prompt separatamente salvo blocker/incoerenza. Non inviare progress report narrativi durante l'esecuzione: usa i tool direttamente e scrivi testo intermedio solo se serve una mia decisione. Se c'è una campagna continua esegui le fasi consecutive compatibili; altrimenti un solo task. Finalizza con roadmap_guard, produci un solo report finale conciso e fermati.
+Esegui il primo task pendente di gernalix/codex-roadmap. Come prima tool-call esegui direttamente `python3 tools/roadmap_guard.py select`, senza MEMORY/storia né preflight `pwd/ls/status/pull/fetch` della roadmap. Usa l'execution pack come unica sorgente roadmap; non rileggere README, roadmap.md, spiegazioni.md o il prompt salvo blocker/incoerenza. Raggruppa check indipendenti quando sicuro, limita output e non inviare progress report narrativi. Se c'è una campagna continua esegui solo le fasi consecutive consentite; altrimenti un solo task. Su PASS esegui dry-run + complete nella stessa tool-call quando possibile e considera `push_verified=git_push_exit_0` verifica canonica: niente controlli Git successivi sulla roadmap. Produci un solo report finale conciso e fermati.
 ```
