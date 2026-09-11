@@ -2,6 +2,8 @@
 
 `PROMPT_ID=381527 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD`
 
+> Esecuzione diretta: questo file è il task Codex completo. Non eseguire `roadmap_guard.py select` e non rileggere roadmap/README/spiegazioni. Usa direttamente quanto segue come specifica autoritativa.
+
 # Goal
 Completare Random timer + Random alerts e cablare il date picker Substances già preparato. Riusa lo stato verificato qui sotto: **non rifare inventory di stock/date-picker/scheduler**. Un solo bump versione, una sola build/install/device QA.
 
@@ -54,6 +56,8 @@ Riusa `TimeFenceTimerScheduler`/restore per Timer e `SostanzeNotificationSchedul
 # Verification
 Test focalizzati: `EpochDayPickerFieldTest` + stock0 esistente + picker wiring; hidden timer/one-active/deep-link/ratio/recreation; multi-button random alerts/master OFF-ON/N bounds/no duplicates. Riusa/estendi `TimeFenceAlarmReconciliationTest` per Timer e `SostanzeCampaignTest` per Substances quando sufficiente invece di creare harness paralleli. UNA smoke Pixel: date picker+stock0, Random timer breve controllato, un Timer + un Substances Random alert forzato. Niente broad QA.
 
-PASS solo se A+B+C passano; poi un bump, una build APK, Pixel install, Telegram delivery, commit/push e STOP.
+PASS solo se A+B+C passano; poi un bump, una build APK, Pixel install, Telegram delivery, commit/push.
+
+Su PASS, dopo il push del repo target, finalizza questo task nella roadmap con `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 381527 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 381527`. `push_verified=git_push_exit_0` è prova sufficiente: non fare verifiche Git successive sulla roadmap e non aprire il task successivo. Su BLOCKED/FAIL non avanzare la roadmap. Stop immediato.
 
 Output conciso: `PROMPT_ID`, `RESULT`, date-picker wiring/stock0 test, scheduler riusato, Random timer semantics, Random alerts/master, test/Pixel, version/APK/delivery, SHA, blocker.
