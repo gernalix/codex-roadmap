@@ -1,6 +1,6 @@
 # codex-roadmap
 
-[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]] · [[STANDARD_PROMPT|Prompt standard Codex]]
 
 Repository dei task operativi Codex. Le regole globali di scope, test, side issue e stop sono in `/home/daniele/.codex/AGENTS.md`; qui restano solo le regole specifiche della roadmap.
 
@@ -12,6 +12,7 @@ Repository dei task operativi Codex. Le regole globali di scope, test, side issu
 - `spiegazioni.md`: una riga per pendente, stesso ordine.
 - `prompts/*.md`: task pendenti autosufficienti.
 - `completed/*.md`: task completati con PASS.
+- `STANDARD_PROMPT.md`: prompt canonico da copiare in Codex Desktop; va mantenuto aggiornato quando workflow o lezioni post-run cambiano.
 - `tools/roadmap_guard.py`: selezione/finalizzazione canonica da `origin/main`, senza dipendere dal worktree locale.
 - `tests/test_roadmap_guard.py`: test del guard.
 
@@ -44,6 +45,12 @@ Regola minima per `reasoning=`:
 - `high` solo quando la difficoltà/rischio lo giustifica concretamente.
 
 Regola modello: usa GPT-5.5 per task delimitati; passa a GPT-5.6 Sol quando il task è cross-module/architetturale, coinvolge schema/migrazioni/undo-audit/rischio dati o richiede ragionamento più robusto. Non abbassare reasoning solo per risparmiare token se aumenta il rischio di violare istruzioni esplicite o produrre retry/tool-call aggiuntivi.
+
+## Prompt standard Codex Desktop
+
+Il prompt canonico da copiare nelle normali sessioni Codex Desktop è in **`STANDARD_PROMPT.md`**. Prima dell'invio, impostare manualmente progetto Codex Desktop, modello e reasoning adatti al task.
+
+`STANDARD_PROMPT.md` è parte del workflow, non semplice documentazione: se un cambiamento del guard/workflow o un'analisi post-run mostra che una regola generale può prevenire instruction-loss, workaround non autorizzati, discovery/retry inutili, spreco token o rischi operativi, il prompt standard va aggiornato nello stesso intervento quando applicabile.
 
 ## Esecuzione: fast path
 
@@ -118,10 +125,14 @@ Quando si modifica la roadmap:
 - rivalutare modello/reasoning con la policy sopra quando cambiano i requisiti operativi del task;
 - rivalutare `Tipo prompt` solo se cambia davvero autonomia/scope;
 - consolidare task solo se riduce realmente bootstrap/build/QA/tool-call senza creare mega-task indipendenti;
+- **riesaminare e aggiornare `STANDARD_PROMPT.md` ogni volta che serve**, soprattutto dopo modifiche al workflow/guard o quando un run reale rivela una lezione generale riutilizzabile; non lasciare che il prompt standard diverga dalle regole operative correnti;
+- se una modifica al workflow rende obsoleto il prompt standard, aggiornarlo nello stesso intervento;
 - non modificare/assorbire task attivamente in esecuzione;
 - non cancellare stash/branch storici senza provarne la ridondanza.
 
 ## Launcher minimo
+
+Scorciatoia compatta derivata dal prompt standard; in caso di divergenza prevale `STANDARD_PROMPT.md`.
 
 ```text
 Esegui il primo task pendente di gernalix/codex-roadmap. Esegui `python3 tools/roadmap_guard.py select` e usa l'execution pack restituito come unica sorgente roadmap per il task: non rileggere README, roadmap.md, spiegazioni.md o il prompt separatamente salvo blocker/incoerenza. Non inviare progress report narrativi durante l'esecuzione: usa i tool direttamente e scrivi testo intermedio solo se serve una mia decisione. Se c'è una campagna continua esegui le fasi consecutive compatibili; altrimenti un solo task. Finalizza con roadmap_guard, produci un solo report finale conciso e fermati.
