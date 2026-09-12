@@ -15,6 +15,17 @@ Questo è il percorso preferito perché evita il round-trip `launcher → select
 
 La roadmap contiene soltanto attività che richiedono realmente Codex (filesystem/toolchain locale, device, VM, segreti/config runtime o servizi locali). Modifiche eseguibili direttamente sui repository remoti non vanno rimandate a Codex.
 
+## Efficienza di esecuzione
+
+Per task già pre-localizzati il costo principale è spesso il numero di round-trip modello↔tool, non il reasoning. I prompt devono quindi imporre queste regole quando applicabili:
+
+- se lo starting point è dichiarato autoritativo, non leggere `~/.codex/memories/MEMORY.md`, README, roadmap, spiegazioni, MegaVault o altra memoria/documentazione aggiuntiva salvo un dato realmente mancante che blocchi l'esecuzione;
+- raggruppare in una sola tool-call i controlli read-only indipendenti compatibili (stato Git, simboli/file già noti, stato runtime), invece di fare una chiamata per ciascun controllo;
+- riusare output già ottenuti: niente rilettura di file invariati, retry identici o verifiche equivalenti dopo un PASS;
+- usare direttamente il runner/test command indicato dal prompt; non sondare framework alternativi se il runner canonico è già noto;
+- niente messaggi intermedi di avanzamento: tool-call dirette, testo intermedio solo per un blocker/decisione dell'utente, poi report finale conciso;
+- per un task localizzato e pre-localizzato, **obiettivo indicativo ≤10 tool-call**; superarlo solo quando una failure o nuova evidenza rende davvero necessaria ulteriore indagine. Non sacrificare correttezza o safety per rispettare il numero.
+
 ## Campagne
 
 Se più prompt condividono `campaign_id`, ogni fase resta autosufficiente ma deve rispettare il contratto della campagna. Per PersonalHub le fasi intermedie non fanno bump versione, final APK, installazione del package reale Pixel o Telegram delivery; queste operazioni comuni si eseguono una sola volta nella fase finale. Non eseguire task PersonalHub concorrenti della stessa o di altre campagne.
