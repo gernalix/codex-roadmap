@@ -33,6 +33,8 @@ Apri il primo file indicato da `roadmap.md`, imposta modello/reasoning dai metad
 
 Default: un task per sessione. Raggruppa letture/comandi indipendenti; non ripetere test PASS; retry solo dopo nuova evidenza o stato cambiato; stop immediato a PASS/BLOCKED/FAIL. Per build/comandi lunghi già avviati, preferisci una sola attesa bloccante o controlli radi: niente polling ravvicinato né messaggi che riportano solo stato invariato.
 
+**Ordine dei gate:** esegui sempre prima i controlli più economici e indipendenti dal device (static check/unit test/build), poi avvia emulatore/device/servizi solo se quei gate sono PASS. Se l'APK è già stato costruito nello stesso task, installa esattamente quell'artefatto senza una seconda invocazione Gradle. Fanno eccezione solo i test il cui prerequisito tecnico richiede esplicitamente il runtime prima del gate host.
+
 ## Campagne
 Usa `campaign_id` per più fasi dello stesso prodotto quando questo evita release ripetute.
 
