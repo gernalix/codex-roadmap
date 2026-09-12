@@ -13,6 +13,12 @@ Il file `prompts/<task>.md` è la specifica autoritativa e deve essere autosuffi
 
 Questo è il percorso preferito perché evita il round-trip `launcher → select → execution pack → prompt_content` e usa la quota Codex direttamente sul task reale.
 
+La roadmap contiene soltanto attività che richiedono realmente Codex (filesystem/toolchain locale, device, VM, segreti/config runtime o servizi locali). Modifiche eseguibili direttamente sui repository remoti non vanno rimandate a Codex.
+
+## Campagne
+
+Se più prompt condividono `campaign_id`, ogni fase resta autosufficiente ma deve rispettare il contratto della campagna. Per PersonalHub le fasi intermedie non fanno bump versione, final APK, installazione del package reale Pixel o Telegram delivery; queste operazioni comuni si eseguono una sola volta nella fase finale. Non eseguire task PersonalHub concorrenti della stessa o di altre campagne.
+
 ## `roadmap_guard.py`
 
 Il guard resta utile per due scopi:
@@ -42,6 +48,7 @@ Ogni nuovo prompt o modifica sostanziale di un prompt pendente deve preservare l
 - contenere direttamente goal, starting point/source-of-truth, scope/non-goal, verification e PASS/stop;
 - vietare discovery/audit già sostituiti da evidenza preparata;
 - richiedere solo test proporzionati al rischio;
+- consolidare build/device/delivery nella fase finale quando appartiene a una campagna compatibile;
 - contenere la finalizzazione roadmap su PASS con il proprio `PROMPT_ID`;
 - non dipendere dal launcher generico o dall'output di `select` per informazioni necessarie all'esecuzione.
 
