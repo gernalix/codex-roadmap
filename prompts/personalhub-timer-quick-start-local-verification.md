@@ -16,7 +16,7 @@ Verificare localmente la PR #2 `feature/timer-quick-start-tags` e integrarla nel
 - `QuickStartIdleLayoutInstrumentedTest.kt` copre layout senza sessioni attive, ricerca/no-results, FAB legacy e Loading→Error;
 - `QuickStartTimedHierarchyInstrumentedTest.kt` copre timed tag + gerarchia: durata/expectedEnd, confine di scadenza, regole di scheduling, notification NONE, timed+normale, rifiuto secondo timed, closure transitiva, parent condivisi e timed introdotto indirettamente dalla gerarchia;
 - `SessionEditDialogRegressionInstrumentedTest.kt` copre il normale editor: create singola, titolo/tag, gerarchia, regola singolo timed, cleanup draft fantasma, delete con conferma, vincoli sugli orari e read-only;
-- `NowTimerRulesRegressionInstrumentedTest.kt` copre le regole Timer storiche attraverso la vera `NowScreen`: tap=stop, long-press=editor, metadata save senza stop, delete confermato, read-only, toggle remaining/elapsed timed e filtro di righe ended/deleted;
+- `NowTimerRulesRegressionInstrumentedTest.kt` copre le regole Timer storiche attraverso la vera `NowScreen`: tap=stop, long-press=editor, swipe right=editor, swipe left=delete, metadata save senza stop, delete confermato, read-only, toggle remaining/elapsed timed e filtro di righe ended/deleted;
 - `version.txt` della feature branch è 44; non fare un secondo bump per i test. Il remoto corrente al momento dell'esecuzione resta l'autorità se nel frattempo è avanzato.
 
 # Procedura minima
@@ -74,6 +74,8 @@ Verificare localmente la PR #2 `feature/timer-quick-start-tags` e integrarla nel
 ## `NowTimerRulesRegressionInstrumentedTest`
 - tap sulla card running ferma esattamente quella sessione a `effectiveNow`;
 - long-press apre il normale editor senza fermare/cancellare la sessione;
+- swipe right apre il normale editor senza stop/delete;
+- swipe left cancella esattamente la sessione indicata senza passare dallo stop;
 - Save dell'editor esistente aggiorna solo metadata, non tempi/delete;
 - delete da Now → editor richiede conferma e cancella esattamente la sessione selezionata;
 - read-only impedisce stop/editor e non emette write;
