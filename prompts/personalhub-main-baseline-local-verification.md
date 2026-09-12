@@ -14,7 +14,7 @@ Verifica SOLO il repair Timer sullo stato reale già persistito nell'AVD `Pixel_
 - Niente discovery del codice, architecture audit, smoke di altri moduli o query DB manuali.
 
 # Esegui
-1. Leggi solo `AGENTS.md`; acquisisci lock PH `913284`. Se occupato: `RESULT=BLOCKED` e STOP, niente polling. Un solo `git fetch origin`; fast-forward sicuro a `origin/main`; vietati stash/reset/force/cleanup. Verifica solo `457c6b9c` ancestor di `origin/main`.
+1. Vai direttamente nel checkout operativo: `cd /home/daniele/projects/PersonalHub`. Leggi solo `AGENTS.md`; acquisisci lock PH `913284`. Se occupato: `RESULT=BLOCKED` e STOP, niente polling. Un solo `git fetch origin`; fast-forward sicuro a `origin/main`; vietati stash/reset/force/cleanup. Verifica solo `457c6b9c` ancestor di `origin/main`.
 2. Unica invocazione Gradle, prima dell'AVD:
    `./gradlew :feature:multitimetracker:testDebugUnitTest --tests com.example.multitimetracker.persistence.LegacyTagSessionRepairTest :app:assembleDebug --no-configuration-cache --no-daemon`
    Primo FAIL => errore utile e STOP. Nessun fix, retry identico o altro Gradle.
