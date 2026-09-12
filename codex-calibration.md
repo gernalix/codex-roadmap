@@ -99,6 +99,26 @@ Interpretation:
 - Future Android notification/alarm tasks must prefer one focused live-platform acceptance check over additional static/reassurance probes when platform behavior is part of the acceptance criteria.
 - For similar localized debugging, keep GPT-5.5 Medium; reduce tool round-trips rather than lowering reasoning merely to save quota.
 
+## Empirical benchmark: PROMPT_ID 184639
+
+Completed task: `codex-usage-monitor` full-quota metadata NO-OP fix + local Fedora runtime verification.
+
+- Model: **GPT-5.5**
+- Reasoning: **Medium**
+- MegaVault mode: **FAST**
+- Duration: **81.6 s**.
+- Rollout/API accounting: **39,661 total tokens** = **39,105 input**, of which **38,272 cached (~97.9%)** and only **833 uncached**, plus **556 output**; reasoning output **324**.
+- Tool calls: **18 total** = **17 `exec_command` + 1 patch**.
+- Observed weekly quota movement: **0 pp** (`100% → 100%`).
+- Result: PASS; two-line behavioral change, targeted tests 34/34, push and Fedora systemd/timer verification succeeded without Telegram delivery.
+
+Interpretation:
+
+- Practical quota cost was negligible: this is a useful lower-bound benchmark showing that high cache ratio / tens of thousands of API tokens need not imply visible weekly-quota movement.
+- The remaining inefficiency was tool orchestration: **18 calls are still high for a fully pre-localized two-file change**. The transcript shows an unnecessary initial grep of `~/.codex/memories/MEMORY.md`, producing a large irrelevant output despite the prompt already containing the authoritative starting point.
+- For comparable self-contained maintenance tasks, skip memory/document discovery, batch independent status/runtime checks, reuse outputs and target roughly **≤10 tool calls** unless a concrete failure appears.
+- Medium was harmless here, but a purely mechanical variant without systemd/runtime judgment would be a candidate for GPT-5.5 Low. Do not lower reasoning when lifecycle/runtime decisions are still part of acceptance.
+
 ## How to calibrate future prompts
 
 Before saving a new prompt, choose model/reasoning from task characteristics and the measured evidence above. Encode only task-specific scope, decisive known evidence, pre-localized starting files/symbols, safety/non-goals, acceptance criteria and concise output requirements. Let the governing MegaVault/PersonalHub bootstrap supply global execution behavior.
