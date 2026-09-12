@@ -1,46 +1,46 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=592604 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT`
+`PROMPT_ID=592604 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT | campaign_id=PH_FINAL_20260912`
 
-> Esecuzione diretta: questo file è il task Codex completo. Non eseguire `roadmap_guard.py select` e non rileggere roadmap/README/spiegazioni. Usa direttamente quanto segue come specifica autoritativa.
+> Esecuzione diretta. Non usare `select` e non rileggere roadmap/README/spiegazioni. Fase 4/4 e **unica fase di release** della campagna PersonalHub.
 
 # Goal
-Dopo i task che possono cambiare lo schema, rendere fail-safe gli upgrade del `personalhub.db` sullo SCHEMA FINALE: un'unica migration registry produzione/test, gate al primo avvio dopo update, nessun fallback distruttivo e test da ogni snapshot storico alla versione corrente.
+Rendere fail-safe gli upgrade del `personalhub.db` sullo schema finale della campagna e poi eseguire **un solo bump versione, una sola build finale, una sola installazione Pixel e una sola delivery Telegram** per tutte le fasi PersonalHub precedenti.
 
-# Starting point già verificato
-Non fare discovery generale. Al momento della preparazione remota:
-- `PersonalHubDatabase` dichiara schema `10`, ma al momento dell'esecuzione usa sempre la versione finale corrente, senza hardcodare 10;
-- le production migrations sono ancora concatenate inline con ripetuti `.addMigrations(...)` dentro `PersonalHubDatabase.build()`;
-- `canMigrateFrom(version)` è ancora `version in 1..SCHEMA_VERSION`: **questo è un difetto reale** perché non verifica il grafo;
-- non è presente `fallbackToDestructiveMigration` nel file verificato: preserva questa proprietà e non perdere tempo a cercare un fallback inesistente salvo failure/test;
-- `DatabaseVault` possiede già validation, snapshot, import rollback e interrupted-import recovery: riusali, non riscriverli;
-- `PersonalHubApplication.onCreate()` oggi esegue `DatabaseVault.recoverInterruptedImport(this)` prima di `super.onCreate()` e inizializza poi gli adapter; **non esiste ancora il migration/startup gate richiesto**;
-- `GlobalDatabaseInstrumentedTest` ha già recovery/import/export safety e database disposable: estendilo, non creare una seconda harness.
+# Starting point
+Usa il `main` remoto corrente dopo le tre fasi della stessa campagna. Non hardcodare schema/versione: rilevali una volta. Sono già esistenti `DatabaseVault`, recovery/import rollback e test database disposable; riusali. Nessun fallback distruttivo.
 
-Primo pass **solo** su:
-`PersonalHubDatabase.kt`, `DatabaseVault.kt`, `PersonalHubApplication.kt`, `GlobalDatabaseInstrumentedTest.kt` e Gradle migration-test support. Apri una migration/schema specifica soltanto quando un test guidato da snapshot fallisce.
+Acquisisci il lock PersonalHub introdotto dal task infrastrutturale. Se un altro task PH è attivo, `BLOCKED`; non aspettare/pollare. Se `origin/main` avanza con commit PH estranei dopo l'acquire/inizio QA, fermati come concurrency blocker invece di assorbirli e rifare la QA.
 
-# Design
-- Esporre la lista esatta delle production migrations in un registry riusato da Room opening, temporary/import opening, path check e test.
-- `canMigrateFrom(v)` deve verificare un path reale nel grafo fino al current, non un range numerico.
-- Nessun `fallbackToDestructiveMigration`/delete-recreate.
-- Startup/update gate prima delle feature writes:
-  - fresh/current: open+validate;
-  - older con path: snapshot recoverable → Room migrate → validate → abilita app;
-  - older senza path, newer DB, migration/validation failure: non sostituire né abilitare writes; conserva/ripristina DB recuperabile e mostra stato utente conciso.
-- Mantieni `recoverInterruptedImport` prima del gate e memorizza successo per app-version/schema, evitando il gate costoso a ogni Activity.
-- Non cambiare import/export o schema feature salvo necessità dimostrata da failure.
+# Schema safety
+Primo pass solo su `PersonalHubDatabase.kt`, `DatabaseVault.kt`, `PersonalHubApplication.kt`, `GlobalDatabaseInstrumentedTest.kt` e supporto Gradle migration test. Apri migration/schema specifiche solo su failure.
 
-# Tests
-Guidati automaticamente dagli snapshot Room esistenti: enumera versioni/file una sola volta, poi ogni historical version deve avere path completo e Room deve accettare lo schema finale. Usa representative data survival per core + tabelle introdotte dalle principali feature, non ogni colonna/tabella.
+Implementa/chiudi:
+- registry unico delle production migrations riusato da Room open, temporary/import open, path check e test;
+- `canMigrateFrom(v)` basato sul grafo reale fino a `SCHEMA_VERSION`, non su range numerico;
+- nessun `fallbackToDestructiveMigration`/delete-recreate;
+- startup/update gate prima delle feature writes: current/fresh validate; older con path => snapshot recuperabile→migrate→validate; older senza path/newer/failure => niente replace e niente writes, DB recuperabile preservato + stato utente conciso;
+- `recoverInterruptedImport` resta prima del gate;
+- successo memoizzato per app-version/schema, non gate costoso a ogni Activity.
 
-Copri: current→current, fresh, newer reject, missing/failing path no data replacement, destructive fallback absent, recovery ordering. Una sola upgrade QA su DB disposable, mai downgrade/mutazione del DB reale.
+Test automaticamente da tutti gli snapshot Room storici disponibili verso current, con representative data survival; niente audit di ogni colonna.
 
-# Discipline
-Questo è il task schema-safety finale: STRICT è giustificato. Non allargare però a refactor database, backup redesign o audit di tutte le entity. Parti dai cinque file sopra, esegui test mirati, amplia solo su failure concreta. Nessun retry equivalente. Stop immediato al PASS.
+# Gate finali campagna
+Prima del bump esegui i test mirati delle tre fasi precedenti e `HubActivityRegisterTest`, più architecture gate. Non rifare manualmente casi già provati da unit/integration test.
 
-PASS solo se produzione e test condividono lo stesso grafo, tutti gli snapshot storici raggiungono current, startup è fail-safe e recovery esistente resta integro. Un solo bump/build/install/delivery se richiesto dal bootstrap; commit/push.
+Poi:
+1. incrementa `version.txt` **una sola volta** rispetto al valore corrente remoto; nessuna fase precedente della campagna deve averlo cambiato;
+2. build canonica signed debug `<version>.apk` una sola volta dopo tutti i gate;
+3. verifica firma/versione/hash una volta;
+4. QA finale Pixel compatta e non distruttiva sul package reale: Home/versione, un Random timer controllato, Cerca→sezioni→Salva episodio subset, root moduli senza versioni legacy, startup DB current. Usa package QA/disposable per qualunque prova schema distruttiva;
+5. installa sul Pixel l'esatto APK finale già verificato;
+6. invia **gli stessi byte** via `telegram_notify` attraverso il Local Bot API configurato;
+7. se Telegram fallisce per trasporto, `BLOCKED`: **vietato** rebuild release, R8, ABI split, post-processing o re-signing per ridurre dimensione;
+8. commit/push PersonalHub + evento MegaVault richiesto; release lock; completa roadmap e stop.
 
-Su PASS, dopo il push del repo target, finalizza questo task nella roadmap con `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 592604 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 592604`. `push_verified=git_push_exit_0` è prova sufficiente: non fare verifiche Git successive sulla roadmap e non aprire il task successivo. Su BLOCKED/FAIL non avanzare la roadmap. Stop immediato.
+# Acceptance
+PASS solo se migration graph/storici/startup fail-safe passano, regressioni campagna passano, un solo bump è avvenuto, stesso APK è su Pixel+Telegram e nessun lavoro concorrente è stato incorporato durante QA.
 
-Output conciso: `PROMPT_ID`, `RESULT`, current schema, migration graph/versions tested, `canMigrateFrom`, startup gate/failure behavior, recovery ordering, Android check, version/APK/delivery, SHA, blocker.
+Su PASS completa solo `PROMPT_ID=592604`; `push_verified=git_push_exit_0` è terminale, niente follow-up Git sulla roadmap.
+
+Output ≤9 righe: RESULT, schema/grafo, historical versions, startup gate, campaign tests, version/APK/hash, Pixel, Telegram, SHA/blocker.

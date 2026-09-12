@@ -1,77 +1,40 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=381527 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD`
+`PROMPT_ID=381527 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD | campaign_id=PH_FINAL_20260912`
 
-> Esecuzione diretta: questo file è il task Codex completo. Non eseguire `roadmap_guard.py select` e non rileggere roadmap/README/spiegazioni. Usa direttamente quanto segue come specifica autoritativa.
+> Esecuzione diretta. Non usare `roadmap_guard.py select`, non rileggere roadmap/README/spiegazioni. Fase 1/4 della campagna PersonalHub: **niente bump versione, final APK, Pixel main install o Telegram delivery**. Questi avverranno una sola volta nella fase finale.
 
 # Goal
-Completare Random timer + Random alerts, cablare il date picker Substances già preparato e aggiungere la chiusura multipla dei periodi attivi in Since When. Riusa lo stato verificato qui sotto: **non rifare inventory di stock/date-picker/scheduler/Since When**. Un solo bump versione, una sola build/install/device QA.
+Completare: date picker prescrizioni Substances, Random timer, Random alerts Timer+Substances e chiusura multipla Since When. Riusa i boundary già localizzati; nessuna inventory generale.
 
-# Stato già verificato sul remoto
-- `SostanzeRepository.recordIntake()` registra già correttamente anche con `stockCurrent=0`: usa `appliedStockDelta=-minOf(stockCurrent, appliedDose)` e crea comunque l'intake; non modificare questa semantica.
-- `SostanzeCampaignTest.zeroStockStillRecordsIntakeWithoutMakingStockNegative` copre già stock=0 + undo. Eseguilo, non riscriverlo.
-- è già presente `feature/sostanze/.../ui/EpochDayPickerField.kt` con conversione `epoch-day ↔ UTC millis` e UI Material DatePicker;
-- `EpochDayPickerFieldTest` copre il round-trip anche su date DST;
-- stringhe EN/IT `order_date` e `prescription_date` sono già presenti.
+# Starting point verificato
+- stock=0 registra già l'intake correttamente ed è testato: non cambiare questa semantica;
+- `EpochDayPickerField.kt` + test DST esistono già;
+- Timer scheduling: `TimeFenceTimerScheduler/Receiver/RestoreReceiver/Notifier`, `AlertsCapsuleViewModel`, `TimeFenceAlarmReconciliation`;
+- Substances scheduling: `SostanzeNotificationScheduler` + receiver/restore, `SostanzeViewModel`, `SostanzeApp`, `SostanzeRepository`;
+- Timer quick-event identity: `QuickEventsCapsuleViewModel`, `QuickEventExecution`, `QuickEventRepository`;
+- Since When: `SinceWhenCapsuleViewModel` + `LifePeriodsScreen`; `endMs=null` = attivo.
 
-## Infrastruttura scheduling già localizzata — NON inventariare
-Timer:
-- scheduler AlarmManager esistente: `feature/multitimetracker/src/main/java/com/example/multitimetracker/TimeFenceTimerScheduler.kt`;
-- receiver/reboot/notifier: `TimeFenceTimerReceiver.kt`, `TimeFenceRestoreReceiver.kt`, `TimeFenceNotifier.kt` nella stessa package root;
-- regole/stato: `capsules/alerts/controller/AlertsCapsuleViewModel.kt` e `capsules/alerts/core/TimeFenceAlarmReconciliation.kt`;
-- test mirato esistente: `feature/multitimetracker/src/test/java/com/example/multitimetracker/TimeFenceAlarmReconciliationTest.kt`.
+# Implementazione
+## Substances date picker
+Sostituisci solo i due campi raw order/prescription epoch-day con `EpochDayPickerField`; EN+IT già esistenti. New=oggi, edit round-trip esatto, cambiare una data non cambia l'altra. Nessuna migration.
 
-Substances:
-- `feature/sostanze/src/main/java/com/gernalix/sostanze/notifications/SostanzeNotificationScheduler.kt` contiene già scheduler, `SostanzeNotificationReceiver` e `SostanzeNotificationRestoreReceiver`;
-- il restore legge già lo stato notifiche dal DB e rischedula; riusa questo boundary, non creare un secondo motore/reboot path;
-- UI/config: `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeViewModel.kt` + `SostanzeApp.kt`; persistence: `SostanzeRepository.kt`/DAO solo se serve davvero persistere nuova config.
+## Random timer
+Home card + max minuti configurabile (default 60, >0). Un solo run attivo. Target casuale `0<target<=max` totalmente nascosto da UI/accessibility/notification fino alla risposta. Persisti run e ripristinalo dopo process death/reboot riusando scheduling esistente. A scadenza notifica `Quanto tempo è passato?`; tap→input numerico; solo submit mostra elapsed reale e rapporto percepito/reale. Test con clock/random controllati, mai attese reali.
 
-Identità pulsanti Timer:
-- parti solo da `capsules/quickevents/controller/QuickEventsCapsuleViewModel.kt`, `core/quickevent/QuickEventExecution.kt` e `persistence/QuickEventRepository.kt`;
-- amplia a UI/model solo se manca concretamente uno stable ID necessario alla config.
+## Random alerts Timer + Substances
+Per ogni pulsante configurabile: enabled, N positivo, per-hour/per-day, stable identity persistita. Master globale OFF cancella/sospende future delivery senza perdere config; ON riparte solo dal futuro. Genera esattamente N istanti unici per finestra con clock/random testabili, persisti pending state, reboot-safe, no duplicati, stale cancel su config/delete. Notifica identifica modulo+pulsante e **non registra/esegue** l'azione.
 
-Since When — starting point verificato:
-- `capsules/sincewhen/controller/SinceWhenCapsuleViewModel.kt` gestisce già `lifePeriods`, `updateLifePeriod(...)`, persistence e backup;
-- `capsules/sincewhen/ui/LifePeriodsScreen.kt` mostra i periodi e oggi consente edit/delete di una singola entry, ma non ha selection mode/bulk end;
-- `LifePeriod.endMs == null` rappresenta il periodo non ancora terminato; non cambiare modello/schema per questa feature.
+Riusa gli scheduler/restore già indicati; niente secondo motore.
 
-I deep-link/notifier esistenti devono essere estesi, non sostituiti. Non cercare altri scheduler/reboot receiver prima di una failure concreta nei file sopra.
+## Since When bulk end
+Selection mode per più periodi realmente attivi. Azione unica `Termina selezionati ora`: cattura un solo timestamp e assegna lo stesso `endMs` a tutti gli ID validi; `endMs>startMs`. ViewModel con una singola operazione bulk, refresh/persist/backup una volta. Selection state saveable e pulito su success/cancel. Nessuna migration.
 
-# A — completa solo il cablaggio Substances
-In `feature/sostanze/src/main/java/com/gernalix/sostanze/ui/SostanzeApp.kt`, nei dialog prescrizione:
-- sostituisci esclusivamente i due `OutlinedTextField` raw `Order epoch day` / `Prescription epoch day` con `EpochDayPickerField`, usando `R.string.order_date` / `R.string.prescription_date`;
-- mantieni i valori nello stato come epoch-day, senza cambiare persistence/schema;
-- new prescription: entrambe default=today;
-- existing: round-trip esatto; cambiare una data non modifica l'altra.
+# Verification fase
+Esegui solo test mirati: picker + stock0; random timer hidden/one-active/recreation/deep-link; random alerts N/master/reboot/no-duplicate; Since When 2+ attivi con identico timestamp e singolo persist. Una QA isolata emulator/TCL solo per i flussi non dimostrabili dai test. Non installare il package reale sul Pixel.
 
-Non toccare la logica stock salvo test failure concreto.
+Commit/push PersonalHub al PASS. **Non cambiare `version.txt`** e non produrre/consegnare l'APK finale: la campagna usa una sola versione nella fase `personalhub-database-schema-upgrade-safety`.
 
-# B — Random timer
-Home card + setting max minuti (default 60, >0). Un solo run attivo; target casuale `0<target<=max` completamente nascosto fino alla risposta, anche da accessibility/notification. Persisti run per process death/reboot **estendendo il scheduling già localizzato sopra**, non introducendo un scheduler parallelo. Alla scadenza notifica `Quanto tempo è passato?`; tap apre input numerico focalizzato. Solo dopo submit mostra elapsed reale e `perceived/actual`, persistendo attempt/timestamp/precisione sufficiente. QA usa clock/duration controllati, non attese reali.
+Su PASS completa solo questo prompt con `roadmap_guard.py complete --prompt-id 381527` (dry-run + real nello stesso comando). `push_verified=git_push_exit_0` basta; niente controlli roadmap successivi.
 
-# C — Random alerts Timer + Substances
-Usa direttamente i boundary elencati in `Infrastruttura scheduling già localizzata`; **nessuna nuova inventory scheduler/reboot/deep-link**.
-
-Per ogni button configurabile: enabled, N positivo, per-hour/per-day, persistiti per stable button identity. Master switch globale sospende/cancella delivery senza cancellare config e al ri-enable riparte dal futuro senza catch-up.
-
-Con clock/random testabili genera esattamente N istanti unici per finestra attiva (60m/24h), persisti pending state, sopravvivi process death/reboot, cancella stale schedule su config/delete e impedisci duplicati. Notifica identifica modulo/button e NON esegue/recorda automaticamente l'azione.
-
-Riusa `TimeFenceTimerScheduler`/restore per Timer e `SostanzeNotificationScheduler`/restore per Substances dove compatibile; estrai una piccola logica condivisa pura solo se elimina duplicazione reale senza creare un nuovo framework.
-
-# D — Since When: termina più periodi insieme
-In `SinceWhenCapsuleViewModel.kt` + `LifePeriodsScreen.kt` aggiungi il minimo flusso bulk:
-- deve essere possibile entrare in selection mode e selezionare contemporaneamente più periodi **attivi**;
-- mostra checkbox solo/abilitate per periodi realmente terminabili; non rendere selezionabili come “da terminare ora” periodi già conclusi o non ancora iniziati;
-- azione unica `Termina selezionati ora` (testo/localizzazione coerente EN+IT) cattura **un solo timestamp corrente** e assegna esattamente quel medesimo `endMs` a tutti gli ID selezionati;
-- implementa nel ViewModel una sola operazione bulk autorevole, non N callback UI indipendenti; valida che `endMs > startMs` per ogni periodo e ignora/fail-safe gli ID non più validi;
-- dopo il batch fai refresh/persist/auto-backup una sola volta quando l'architettura corrente lo consente;
-- selection state deve essere salvabile durante recreation e ripulito dopo successo/cancel; nessun cambiamento schema.
-
-# Verification
-Test focalizzati: `EpochDayPickerFieldTest` + stock0 esistente + picker wiring; hidden timer/one-active/deep-link/ratio/recreation; multi-button random alerts/master OFF-ON/N bounds/no duplicates; Since When multi-select con almeno 2 periodi attivi, stesso `endMs`, esclusione ended/future, recreation e singolo persist/backup batch dove verificabile. Riusa/estendi `TimeFenceAlarmReconciliationTest` e i test Since When/Timer più vicini; non creare harness paralleli se non necessario. UNA smoke Pixel: date picker+stock0, Random timer breve controllato, un Timer + un Substances Random alert forzato, selezione di 2 Since When attivi e chiusura simultanea. Niente broad QA.
-
-PASS solo se A+B+C+D passano; poi un bump, una build APK, Pixel install, Telegram delivery, commit/push.
-
-Su PASS, dopo il push del repo target, finalizza questo task nella roadmap con `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 381527 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 381527`. `push_verified=git_push_exit_0` è prova sufficiente: non fare verifiche Git successive sulla roadmap e non aprire il task successivo. Su BLOCKED/FAIL non avanzare la roadmap. Stop immediato.
-
-Output conciso: `PROMPT_ID`, `RESULT`, date-picker wiring/stock0 test, scheduler riusato, Random timer semantics, Random alerts/master, Since When bulk-end, test/Pixel, version/APK/delivery, SHA, blocker.
+Output ≤7 righe: RESULT, date picker, Random timer, Random alerts, Since When bulk, test/QA isolata, SHA/blocker.

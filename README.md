@@ -2,122 +2,74 @@
 
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]] · [[STANDARD_PROMPT|Esecuzione Codex]]
 
-Repository dei task operativi Codex. Le regole globali di scope, test, side issue e stop sono in `/home/daniele/.codex/AGENTS.md`; qui restano solo le regole specifiche della roadmap.
+Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain locale, device/emulatore, VM, segreti/config runtime, servizi locali o altre risorse non disponibili nella normale chat. Se una modifica può essere completata direttamente sui repository remoti in chat, va fatta subito e **non** aggiunta alla roadmap.
 
-## Struttura canonica
+## Struttura
+- `roadmap.md`: lista numerata dei soli pendenti, una riga per task.
+- `spiegazioni.md`: stessa sequenza, spiegazioni semplici.
+- `prompts/*.md`: task autosufficienti da incollare direttamente in Codex.
+- `completed/*.md`: task conclusi con PASS.
+- `tools/roadmap_guard.py`: selezione unattended/finalizzazione canonica.
 
-- `roadmap.md`: lista numerata dei pendenti, una riga per prompt, nessuna spiegazione.
-- `spiegazioni.md`: una riga per pendente, stesso ordine.
-- `prompts/*.md`: task pendenti **autosufficienti e direttamente incollabili in Codex**.
-- `completed/*.md`: task completati con PASS.
-- `STANDARD_PROMPT.md`: descrive il fast path diretto e il fallback unattended; non è più un wrapper da incollare nelle normali sessioni manuali.
-- `tools/roadmap_guard.py`: selezione unattended e finalizzazione canonica da `origin/main`, senza dipendere dal worktree locale.
-- `tests/test_roadmap_guard.py`: test del guard.
+`spiegazioni.md` usa `# | Prompt | Spiegazioni | Livello ragionamento | Tipo prompt`; ordine, reasoning e link devono coincidere con la roadmap.
 
-`spiegazioni.md` usa esattamente:
+## Contratto prompt
+Ogni prompt deve bastare da solo insieme alle regole globali già caricate. Deve dichiarare almeno metadata, goal, starting point verificato, scope/non-goal, verification, stop e comando di finalizzazione. Vietati inventory/audit generali quando file/boundary sono già noti.
 
-`# | Prompt | Spiegazioni | Livello ragionamento | Tipo prompt`
+Tipi:
+- **Prompt**: lavoro già delimitato, diff/test minimi.
+- **Goal**: risultato cross-component, ma scope e stop restano espliciti.
 
-`#`, ordine e link devono essere 1:1 con `roadmap.md`; `Livello ragionamento` deve coincidere con `reasoning=` del prompt; `Tipo prompt` è solo `Prompt` o `Goal`.
+### Modello/reasoning
+- GPT-5.5 `low`: task meccanico/localizzato con poche decisioni.
+- GPT-5.5 `medium`: default per runtime, ADB, systemd, Git, filesystem, tool esterni e diagnosi mirate.
+- GPT-5.6 Sol `medium`: schema/migrazioni, rischio dati, undo/audit o architettura realmente cross-module.
+- `high`: solo con difficoltà concreta non gestibile bene a medium.
 
-## Contratto dei prompt
+Non usare GPT-5.6 solo perché il task è lungo: prima riduci scope e contesto.
 
-Ogni prompt deve poter partire in una nuova sessione usando **il solo contenuto del proprio file**, oltre alle regole globali già caricate da Codex e alle fonti esplicitamente autorizzate dal task. Non deve dipendere da un launcher generico, dall'output di `roadmap_guard.py select` o da chat precedenti.
+## Esecuzione manuale
+Apri il primo file indicato da `roadmap.md`, imposta modello/reasoning dai metadata e incolla **solo quel file**. Non inviare meta-prompt, non far leggere roadmap/README/spiegazioni e non eseguire `select` nelle sessioni manuali.
 
-Quando applicabile deve dichiarare: `PROMPT_ID`, `project_id`, modello, reasoning, MegaVault, goal, starting point verificato, scope/non-goal, verification, acceptance/stop, finalizzazione roadmap e output finale.
+Default: un task per sessione. Raggruppa letture/comandi indipendenti; non ripetere test PASS; retry solo dopo nuova evidenza o stato cambiato; stop immediato a PASS/BLOCKED/FAIL.
 
-Ogni pendente deve inoltre contenere una breve istruzione di esecuzione diretta: non eseguire `select`, non rileggere roadmap/README/spiegazioni e usare il file stesso come specifica autoritativa.
+## Campagne
+Usa `campaign_id` per più fasi dello stesso prodotto quando questo evita release ripetute.
 
-- `Prompt`: percorso già delimitato; esecuzione diretta, diff minimo.
-- `Goal`: risultato ampio/cross-component; Codex sceglie i sottopassi senza ampliare scope.
-- Il titolo interno `# Goal` non determina `Tipo prompt`.
-- Filename semantici stabili; `PROMPT_ID` non ordina i task.
+Per PersonalHub:
+- le fasi intermedie fanno implementazione, test mirati, eventuale QA isolata e push;
+- **non** incrementano `version.txt`, non installano il package reale Pixel e non inviano APK;
+- l'ultima fase fa un solo bump, gate finali consolidati, un solo APK finale, una sola installazione Pixel e una sola Telegram delivery;
+- una campagna PH deve essere seriale: niente task PH concorrenti.
 
-### Scelta modello/reasoning
+Non creare mega-task se le fasi hanno failure domains indipendenti; consolida solo build/install/delivery e gate comuni.
 
-I valori `model=` e `reasoning=` sono indicazioni operative per il selettore Codex Desktop e vanno impostati manualmente prima dell'esecuzione.
-
-- `low`: task lineari/meccanici o verifiche deterministiche già preparate.
-- `medium`: default quando servono decisioni, diagnosi di failure, più invarianti o modifiche cross-component.
-- `high`: solo quando rischio/difficoltà lo giustificano concretamente.
-
-Usa GPT-5.5 per task delimitati; passa a GPT-5.6 Sol quando il task è cross-module/architetturale, coinvolge schema/migrazioni/undo-audit/rischio dati o richiede ragionamento più robusto.
-
-## Esecuzione manuale: fast path
-
-Per eseguire il primo pendente:
-
-1. individua **fuori da Codex** il primo link in `roadmap.md`;
-2. apri il relativo `prompts/<task>.md`;
-3. imposta progetto, modello e reasoning dai metadata;
-4. incolla in Codex **l'intero contenuto di quel file e nient'altro**.
-
-Non inviare prima un prompt tipo “esegui il primo task”, non chiedere a Codex di leggere la roadmap e non fargli eseguire `roadmap_guard.py select`.
-
-Il vantaggio è che Codex parte direttamente dal task reale: niente tool-call di selezione, niente execution pack aggiunto al contesto e niente reasoning per trasformare un meta-prompt nel lavoro effettivo.
-
-Durante l'esecuzione valgono le restrizioni scritte nel singolo prompt: starting point già verificato, letture consentite, test mirati, nessun audit/refactor fuori scope e stop immediato a PASS/BLOCKED/FAIL.
-
-Default: **un solo task per sessione**. Fasi multiple solo se il prompt dichiara esplicitamente una campagna compatibile.
-
-### PASS
-
-Ogni prompt contiene direttamente il proprio comando di finalizzazione, nella forma:
-
+## PASS
+Ogni prompt include:
 ```bash
 python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id PROMPT_ID --dry-run && \
 python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id PROMPT_ID
 ```
 
-La risposta reale `status=completed`, `commit=<SHA>`, `push_verified=git_push_exit_0` è prova canonica del push della roadmap. Non eseguire dopo `git status`, `git rev-parse`, `git ls-remote`, pull/fetch o verifiche equivalenti sulla roadmap. Non aprire il task successivo.
+`status=completed` + `push_verified=git_push_exit_0` è prova terminale. Dopo non eseguire `git status`, `rev-parse`, `ls-remote`, pull/fetch o verifiche equivalenti sulla roadmap e non aprire il task successivo.
 
-### BLOCKED / FAIL
+## BLOCKED/FAIL
+Non archiviare né avanzare. Riporta solo blocker/evidenza minima e fermati.
 
-Non archiviare, non rinumerare e non avanzare. Riportare solo blocker/evidenza utile e fermarsi.
+## `roadmap_guard.py`
+`select` è solo fallback unattended. `complete` lavora su worktree isolato, accetta soltanto il primo pendente, limita i path modificabili e fa push fast-forward senza force. Il worktree principale può essere sporco e non va stashato/reset.
 
-## Selezione unattended/automatica
-
-`python3 tools/roadmap_guard.py select` resta disponibile **solo quando non c'è un operatore che sceglie il file prompt**. In quel caso il guard fa fetch di `origin/main` e restituisce identità, metadata, execution contract e `prompt_content`.
-
-Il launcher unattended compatto è documentato in `STANDARD_PROMPT.md`. Non usarlo nelle normali sessioni manuali.
-
-## Sicurezza del guard
-
-Il worktree locale può essere sporco: non usare stash/reset/checkout per selezionare o completare task.
-
-`select` legge `origin/main` e non modifica il worktree.
-
-`complete`:
-
-- accetta solo il `PROMPT_ID` del primo pendente corrente;
-- usa un worktree detached temporaneo da `origin/main`;
-- sposta solo quel prompt in `completed/` e aggiorna roadmap/spiegazioni;
-- consente nello staged diff solo i path task-owned attesi;
-- commit + push fast-forward `HEAD:main`, mai force;
-- considera il push verificato solo con exit code 0 e `push_verified=git_push_exit_0`;
-- su push bloccato preserva il worktree isolato e restituisce il path.
-
-Prima di modificare guard/workflow eseguire:
-
+Prima di modificare guard/workflow:
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ```
 
-## Campagne continue
-
-Una campagna esiste solo con stesso `campaign_id` e metadata compatibili. Ogni fase resta autosufficiente e ordinata; PASS intermedio è checkpoint; BLOCKED/FAIL ferma tutto. Build/install/QA comuni vanno consolidati nella fase finale quando sicuro. Per PersonalHub usare una sola versione per campagna (`base + 1`).
-
 ## Manutenzione
-
-Quando si modifica la roadmap:
-
-- mantenere `roadmap.md`, `spiegazioni.md`, prompt e wikilink coerenti;
-- `Spiegazioni` resta semplice e non duplica acceptance/dettagli tecnici;
-- sincronizzare `reasoning=` e colonna `Livello ragionamento`;
-- rivalutare modello/reasoning quando cambiano requisiti o rischio;
-- consolidare task solo se riduce realmente bootstrap/build/QA/tool-call senza creare mega-task indipendenti;
-- ogni nuovo prompt deve essere direttamente incollabile in Codex e includere la propria finalizzazione su PASS;
-- non reintrodurre un wrapper obbligatorio per l'esecuzione manuale;
-- mantenere `select` come fallback per automazione/unattended;
-- non modificare/assorbire task attivamente in esecuzione;
-- non cancellare stash/branch storici senza provarne la ridondanza.
+Quando aggiorni la roadmap:
+- mantieni roadmap/spiegazioni/prompt 1:1;
+- elimina dal prompt facts ormai già implementati o verificabili automaticamente;
+- preferisci test automatici a QA manuale ripetitiva;
+- sposta build/device/delivery alla fase finale di una campagna quando sicuro;
+- non aggiungere task che ChatGPT può già completare direttamente sui repo remoti;
+- non assorbire task già in esecuzione;
+- non usare la roadmap come backlog generico: deve restare una coda Codex minima e operativa.
