@@ -6,3 +6,4 @@
 6. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
 7. [[prompts/wordpulse-alertness-local-verification-release|wordpulse-alertness-local-verification-release]]
 8. [[prompts/personalhub-capsule-boundaries-local-verification|personalhub-capsule-boundaries-local-verification]]
+9. [[prompts/personalhub-emulator-control-efficiency-local-verification|personalhub-emulator-control-efficiency-local-verification]]
