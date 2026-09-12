@@ -9,12 +9,14 @@ Verificare localmente la PR #2 `feature/timer-quick-start-tags` e integrarla nel
 
 # Starting point verificato
 - PR: `https://github.com/gernalix/PersonalHub/pull/2`, branch `feature/timer-quick-start-tags`;
-- implementazione già fatta: launcher tag nella schermata Timer/Now, ricerca, tap singolo=start immediato, long-press=multiselect, selezioni persistenti durante la ricerca, ✔️ per avvio multi-tag, ranking recenza+frequenza 65/35, Snackbar Undo sull'esatta sessione appena creata, gerarchia tag/timed-tag, FAB legacy conservato;
+- implementazione già fatta: launcher tag nella schermata Timer/Now, ricerca, tap singolo=start immediato, long-press=multiselect, selezioni persistenti durante la ricerca, ✔️ per avvio multi-tag, ranking recenza+frequenza 65/35, Snackbar Undo sull'esatta sessione appena creata, gerarchia tag/timed-tag, FAB/editor legacy conservato;
 - nessuna migration DB;
 - test JVM ranking già presenti in `QuickStartTagRankingTest.kt`;
 - `QuickStartTagLauncherInstrumentedTest.kt` copre tap breve, long-press, multiselect, ricerca, Undo e layout con una/più sessioni attive;
 - `QuickStartIdleLayoutInstrumentedTest.kt` copre layout senza sessioni attive, ricerca/no-results, FAB legacy e Loading→Error;
 - `QuickStartTimedHierarchyInstrumentedTest.kt` copre timed tag + gerarchia: durata/expectedEnd, confine di scadenza, regole di scheduling, notification NONE, timed+normale, rifiuto secondo timed, closure transitiva, parent condivisi e timed introdotto indirettamente dalla gerarchia;
+- `SessionEditDialogRegressionInstrumentedTest.kt` copre il normale editor: create singola, titolo/tag, gerarchia, regola singolo timed, cleanup draft fantasma, delete con conferma, vincoli sugli orari e read-only;
+- `NowTimerRulesRegressionInstrumentedTest.kt` copre le regole Timer storiche attraverso la vera `NowScreen`: tap=stop, long-press=editor, metadata save senza stop, delete confermato, read-only, toggle remaining/elapsed timed e filtro di righe ended/deleted;
 - `version.txt` della feature branch è 44; non fare un secondo bump per i test. Il remoto corrente al momento dell'esecuzione resta l'autorità se nel frattempo è avanzato.
 
 # Procedura minima
@@ -23,12 +25,14 @@ Verificare localmente la PR #2 `feature/timer-quick-start-tags` e integrarla nel
 3. Se l'unico conflitto è `version.txt`, mantieni monotonicità: se 44 non è più maggiore della versione canonica, usa esattamente `current_main + 1`; nessun altro bump.
 4. Esegui il test JVM mirato del ranking e il minimo compile/assemble necessario. Non eseguire suite/lint generali salvo failure concreta.
 5. Avvia l'emulatore esclusivamente con `python3 tools/android_target_preflight.py --target emulator`; usa il serial restituito. Non usare il Pixel reale.
-6. Esegui integralmente SOLO queste tre classi strumentali:
+6. Esegui integralmente SOLO queste cinque classi strumentali:
    - `QuickStartTagLauncherInstrumentedTest`
    - `QuickStartIdleLayoutInstrumentedTest`
    - `QuickStartTimedHierarchyInstrumentedTest`
+   - `SessionEditDialogRegressionInstrumentedTest`
+   - `NowTimerRulesRegressionInstrumentedTest`
    Su failure correggi solo la causa diretta e ripeti solo la classe/test fallito.
-7. Non duplicare manualmente i casi già coperti dalle tre classi. Nel QA manuale verifica soltanto gli aspetti residui elencati sotto.
+7. Non duplicare manualmente i casi già coperti dalle cinque classi. Nel QA manuale verifica soltanto gli aspetti residui elencati sotto.
 8. Dopo PASS rifai un solo `fetch`: se il branch canonico è avanzato da quando hai creato la candidate => `BLOCKED` e non rifare QA. Altrimenti integra/pusha la candidate sul branch canonico senza force e chiudi/mergea la PR #2. Stop immediato.
 
 # Copertura strumentale obbligatoria
@@ -57,6 +61,25 @@ Verificare localmente la PR #2 `feature/timer-quick-start-tags` e integrarla nel
 - due child con parent condiviso producono un solo parent nella sessione;
 - un parent timed aggiunto automaticamente dalla closure + un altro timed esplicito viene bloccato dopo l'espansione gerarchica, senza write invalida.
 
+## `SessionEditDialogRegressionInstrumentedTest`
+- il normale editor crea un nuovo draft una sola volta con titolo/start/tag corretti;
+- la selezione tag applica la closure transitiva dei parent;
+- il secondo timed tag viene rifiutato preservando il primo;
+- annullare una nuova sessione già materializzata elimina esattamente il draft fantasma;
+- cancellare una sessione esistente richiede conferma e usa l'ID corretto;
+- una sessione running con start futuro non può salvare gli orari;
+- una sessione chiusa con end < start mostra errore e non salva;
+- in read-only Save ed Edit times sono disabilitati.
+
+## `NowTimerRulesRegressionInstrumentedTest`
+- tap sulla card running ferma esattamente quella sessione a `effectiveNow`;
+- long-press apre il normale editor senza fermare/cancellare la sessione;
+- Save dell'editor esistente aggiorna solo metadata, non tempi/delete;
+- delete da Now → editor richiede conferma e cancella esattamente la sessione selezionata;
+- read-only impedisce stop/editor e non emette write;
+- tap sulla durata timed alterna remaining→elapsed senza fermare la sessione;
+- righe già concluse o soft-deleted non vengono mostrate come running.
+
 # QA manuale residuo — solo ciò che i test non possono certificare bene
 
 ## Android alarm/notification
@@ -65,19 +88,17 @@ Verificare localmente la PR #2 `feature/timer-quick-start-tags` e integrarla nel
 ## Layout residuo
 - Solo controllo visivo rapido che scroll, FAB e Snackbar non si sovrappongano in modo impeditivo.
 
-## Ranking
-- Tag recenti/frequenti prima secondo 65/35; ordine stabile; archiviati/eliminati assenti; tie deterministico.
+## Ranking visivo
+- Conferma rapidamente che l'ordine mostrato corrisponda al ranking 65/35 già coperto dal test JVM e che archiviati/eliminati non compaiano.
 
-## Read-only / Time Machine
-- Nessuna scrittura tramite quick-start in stato read-only.
+## Persistenza/lifecycle
+- Background/foreground e riapertura Timer non causano crash o perdita delle sessioni quick-start persistite.
 
-## Regressioni minime
-- Stop/modifica/cancellazione sessioni esistenti ancora funzionanti.
+## UI data safety
 - Nessun ID/epoch/encoding backend visibile.
-- Background/foreground e riapertura Timer non causano crash o perdita di sessioni quick-start persistite.
 
 # Acceptance
-PASS solo se test ranking + compile/assemble + tutte e tre le classi strumentali + QA manuale residuo passano; nessun crash/doppio insert/perdita selezione; scope PR stretto; nessun lavoro PH concorrente assorbito; integrazione pushata senza force.
+PASS solo se test ranking + compile/assemble + tutte e cinque le classi strumentali + QA manuale residuo passano; nessun crash/doppio insert/perdita selezione; scope PR stretto; nessun lavoro PH concorrente assorbito; integrazione pushata senza force.
 
 Su PASS completa solo `PROMPT_ID=742618` con `roadmap_guard complete`; nessuna build Pixel, APK finale o Telegram in questo task: restano nella fase finale già prevista della campagna.
 
