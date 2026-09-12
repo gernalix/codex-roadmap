@@ -15,6 +15,7 @@ L'implementazione contiene già:
 - `HubActivityCapture.kt`: bridge semantici People/Timer/Places e cattura selettiva degli altri write root, con soppressione di duplicati/derived writes;
 - `HubActivityUndo.kt`: undo compensativo fail-closed con conflict detection;
 - `HubActivityRegisterScreen.kt`: UI leggibile, filtri, navigazione tramite adapter e pulsante Undo solo quando sicuro;
+- `HubContextRepository.kt`: una modifica ai soli membri di un episodio genera una sola attività semantica, non righe tecniche per ogni membro;
 - integrazione Home;
 - DB Room portato a schema 11 con migrazione 10→11;
 - test sorgente `HubActivityRegisterTest` e aspettative migration aggiornate;
@@ -34,13 +35,13 @@ Parti SOLO dai file già modificati sul branch e dagli errori prodotti da build/
 - `core/database/.../HubActivityUndo.kt`
 - `core/database/.../PersonalHubDatabase.kt`
 - `core/database/.../capsules/sync/SyncJournal.kt`
+- `core/hub-context/.../HubContextRepository.kt`
 - `app/.../HubActivityRegisterScreen.kt`
 - `app/.../MainActivity.kt`
 - `app/src/main/res/values*/strings.xml`
 - `core/database/src/test/.../HubActivityRegisterTest.kt`
 - `core/database/src/test/.../HubContextMigrationTest.kt`
-- schema Room 11 generato
-- `.codex/CODE_MAP.tsv` solo se serve ad aggiungere l'entry della nuova feature.
+- schema Room 11 generato localmente da KSP.
 
 Apri altri file soltanto se una failure concreta punta direttamente lì. Nessun audit generale del repository.
 
@@ -49,7 +50,7 @@ Apri altri file soltanto se una failure concreta punta direttamente lì. Nessun 
 2. `git fetch` mirato di `origin/main` e `origin/feature/global-activity-register`. Non perdere modifiche locali: se il checkout PersonalHub non è pulito, usa un worktree isolato invece di stash/reset.
 3. Verifica che il branch contenga l'attuale `origin/main`. Se `main` è avanzato, integra solo le nuove modifiche necessarie senza force/reset. Mantieni la versione monotona: `42` se resta valida; se `origin/main` ha già versione >=42, imposta una sola volta `version.txt = versione_main + 1` e non incrementare ancora per retry/build/test.
 4. Esegui subito i controlli mirati, senza inventory:
-   - compilazione Kotlin di `:core:database` e `:app` sufficiente a far girare KSP/Room;
+   - compilazione Kotlin di `:core:database`, `:core:hub-context` e `:app` sufficiente a far girare KSP/Room;
    - test `HubActivityRegisterTest` e `HubContextMigrationTest`;
    - `tools/check_architecture_boundaries.py`.
 5. Assicurati che KSP generi `core/database/schemas/com.gernalix.personalhub.core.database.PersonalHubDatabase/11.json`; verifica migrazione 10→11 e compatibilità con gli upgrade precedenti. Correggi solo incongruenze concrete tra entity, migration e schema.
@@ -61,7 +62,8 @@ Apri altri file soltanto se una failure concreta punta direttamente lì. Nessun 
    - un caso stale/dipendente non viene annullato;
    - filtri/paging non mostrano raw ID/UUID;
    - Cerca continua a mostrare dati per il loro tempo di dominio e non per `occurred_at` del Registro;
-   - Composer continua a usare relazioni persistenti e non viene alterato.
+   - Composer continua a usare relazioni persistenti e non viene alterato;
+   - cambiare solo i membri di un episodio genera una sola voce semantica nel Registro.
 8. Solo dopo PASS: integra il branch in `main` senza force e senza perdere commit remoti, esegui il minimo smoke post-merge se il merge ha introdotto differenze, commit/push PersonalHub.
 9. Crea il final main APK della versione risultante, senza rebuild successivi; installa **quello stesso artefatto** sul Pixel fisico secondo il bootstrap PersonalHub e invia **quello stesso APK** via Telegram col filename `<versione>.apk`, senza caption/testo extra.
 10. Registra l'evento MegaVault richiesto dalle regole PersonalHub. Poi finalizza questo prompt nella roadmap con il comando canonico sotto e fermati.
