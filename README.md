@@ -31,7 +31,7 @@ Non usare GPT-5.6 solo perché il task è lungo: prima riduci scope e contesto.
 ## Esecuzione manuale
 Apri il primo file indicato da `roadmap.md`, imposta modello/reasoning dai metadata e incolla **solo quel file**. Non inviare meta-prompt, non far leggere roadmap/README/spiegazioni e non eseguire `select` nelle sessioni manuali.
 
-Default: un task per sessione. Raggruppa letture/comandi indipendenti; non ripetere test PASS; retry solo dopo nuova evidenza o stato cambiato; stop immediato a PASS/BLOCKED/FAIL.
+Default: un task per sessione. Raggruppa letture/comandi indipendenti; non ripetere test PASS; retry solo dopo nuova evidenza o stato cambiato; stop immediato a PASS/BLOCKED/FAIL. Per build/comandi lunghi già avviati, preferisci una sola attesa bloccante o controlli radi: niente polling ravvicinato né messaggi che riportano solo stato invariato.
 
 ## Campagne
 Usa `campaign_id` per più fasi dello stesso prodotto quando questo evita release ripetute.
@@ -58,6 +58,13 @@ Non archiviare né avanzare. Riporta solo blocker/evidenza minima e fermati.
 
 ## `roadmap_guard.py`
 `select` è solo fallback unattended. `complete` lavora su worktree isolato, accetta soltanto il primo pendente, limita i path modificabili e fa push fast-forward senza force. Il worktree principale può essere sporco e non va stashato/reset.
+
+Eccezione di bookkeeping: se l'implementazione di un prompt è **già stata completata e pushata**, ma nel frattempo la roadmap è avanzata e `complete` restituisce `prompt_identity_mismatch`, non replicare manualmente la logica del guard. Usa:
+```bash
+python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap reconcile --prompt-id PROMPT_ID --dry-run && \
+python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap reconcile --prompt-id PROMPT_ID --confirm-executed
+```
+`reconcile` non può sostituire `complete` per il task attualmente selezionato, richiede conferma esplicita prima di mutare la roadmap ed è idempotente se il prompt è già in `completed/`.
 
 Prima di modificare guard/workflow:
 ```bash

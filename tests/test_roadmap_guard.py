@@ -74,6 +74,8 @@ class RoadmapGuardTests(unittest.TestCase):
             self.assertIn("Do not reread roadmap.md", selected["execution_contract"])
             self.assertIn("Do not read MEMORY/history", selected["execution_contract"])
             self.assertIn("select already fetched canonical origin/main", selected["execution_contract"])
+            self.assertIn("sparse status checks", selected["execution_contract"])
+            self.assertIn("use reconcile --dry-run", selected["execution_contract"])
             self.assertIn("push_verified=git_push_exit_0", selected["execution_contract"])
             compact = guard.first_prompt(local)
             self.assertNotIn("prompt_content", compact)
@@ -97,14 +99,58 @@ class RoadmapGuardTests(unittest.TestCase):
             changed = git(["show", "--name-only", "--format="], verify).stdout.splitlines()
             self.assertNotIn("README.md", changed)
 
-    def test_wrong_prompt_id_blocks_without_changes(self) -> None:
+    def test_wrong_prompt_id_blocks_without_changes_and_points_to_reconcile(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             local, bare = self.fixture(Path(tmp))
             before = git(["--git-dir", str(bare), "rev-parse", "refs/heads/main"]).stdout.strip()
-            with self.assertRaises(guard.RoadmapError):
+            with self.assertRaisesRegex(guard.RoadmapError, "use_reconcile"):
                 guard.complete(local, "654321")
             after = git(["--git-dir", str(bare), "rev-parse", "refs/heads/main"]).stdout.strip()
             self.assertEqual(before, after)
+
+    def test_reconcile_selected_prompt_requires_normal_complete(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            local, _ = self.fixture(Path(tmp))
+            with self.assertRaisesRegex(guard.RoadmapError, "prompt_is_selected_use_complete"):
+                guard.reconcile(local, "123456", dry_run=True)
+
+    def test_reconcile_nonselected_prompt_preserves_selected_prompt(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            local, bare = self.fixture(Path(tmp))
+            dry = guard.reconcile(local, "654321", dry_run=True)
+            self.assertEqual("reconcile_ready", dry["status"])
+            self.assertEqual("123456", dry["selected_prompt_id"])
+            result = guard.reconcile(local, "654321", confirm_executed=True)
+            self.assertEqual("completed", result["status"])
+            self.assertEqual("reconcile", result["mode"])
+            self.assertEqual("123456", result["selected_prompt_id"])
+            verify = Path(tmp) / "verify-reconcile"
+            self.assertEqual(0, git(["clone", "--branch", "main", str(bare), str(verify)]).returncode)
+            self.assertTrue((verify / "prompts" / "first.md").exists())
+            self.assertFalse((verify / "prompts" / "second.md").exists())
+            self.assertTrue((verify / "completed" / "second.md").exists())
+            self.assertEqual("1. [[prompts/first|first]]\n", (verify / "roadmap.md").read_text(encoding="utf-8"))
+            self.assertIn("| 1 | [[prompts/first|first]]", (verify / "spiegazioni.md").read_text(encoding="utf-8"))
+
+    def test_reconcile_requires_explicit_confirmation_before_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            local, bare = self.fixture(Path(tmp))
+            before = git(["--git-dir", str(bare), "rev-parse", "refs/heads/main"]).stdout.strip()
+            with self.assertRaisesRegex(guard.RoadmapError, "reconcile_requires_confirm_executed"):
+                guard.reconcile(local, "654321")
+            after = git(["--git-dir", str(bare), "rev-parse", "refs/heads/main"]).stdout.strip()
+            self.assertEqual(before, after)
+
+    def test_reconcile_is_idempotent_after_completion(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            local, bare = self.fixture(Path(tmp))
+            first = guard.reconcile(local, "654321", confirm_executed=True)
+            self.assertEqual("completed", first["status"])
+            commit_after_first = git(["--git-dir", str(bare), "rev-parse", "refs/heads/main"]).stdout.strip()
+            second = guard.reconcile(local, "654321", confirm_executed=True)
+            commit_after_second = git(["--git-dir", str(bare), "rev-parse", "refs/heads/main"]).stdout.strip()
+            self.assertEqual("already_completed", second["status"])
+            self.assertEqual(commit_after_first, commit_after_second)
 
 
 if __name__ == "__main__":
