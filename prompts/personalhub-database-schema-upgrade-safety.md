@@ -5,10 +5,12 @@
 > Esecuzione diretta. Non usare `select` e non rileggere roadmap/README/spiegazioni. Fase 4/4 e **unica fase di release** della campagna PersonalHub.
 
 # Goal
-Rendere fail-safe gli upgrade del `personalhub.db` sullo schema finale della campagna e poi eseguire **un solo bump versione, una sola build finale, una sola installazione Pixel e una sola delivery Telegram** per tutte le fasi PersonalHub precedenti.
+Rendere fail-safe gli upgrade del `personalhub.db` sullo schema finale della campagna e poi eseguire **un solo bump versione, una sola build finale, una sola installazione Pixel e una sola delivery di produzione** per tutte le fasi PersonalHub precedenti.
 
 # Starting point
 Usa il `main` remoto corrente dopo le tre fasi della stessa campagna. Non hardcodare schema/versione: rilevali una volta. Sono già esistenti `DatabaseVault`, recovery/import rollback e test database disposable; riusali. Nessun fallback distruttivo.
+
+La delivery è già implementata in `tools/deliver_personalhub_apk.py`: APK `<=50 MiB` via Telegram cloud, APK `>50 MiB` via prerelease stabile GitHub `personalhub-dev-apk` + link Telegram. `tools/smoke_large_apk_delivery.py` prova end-to-end il ramo `>50 MiB` su una prerelease isolata `personalhub-dev-apk-smoke`, accetta solo un vero APK ZIP con `AndroidManifest.xml` e verifica l'asset dopo l'upload. **Non usare Local Bot API/TDLib e non reinventare questa logica.**
 
 Acquisisci il lock PersonalHub introdotto dal task infrastrutturale. Se un altro task PH è attivo, `BLOCKED`; non aspettare/pollare. Se `origin/main` avanza con commit PH estranei dopo l'acquire/inizio QA, fermati come concurrency blocker invece di assorbirli e rifare la QA.
 
@@ -34,13 +36,16 @@ Poi:
 3. verifica firma/versione/hash una volta;
 4. QA finale Pixel compatta e non distruttiva sul package reale: Home/versione, un Random timer controllato, Cerca→sezioni→Salva episodio subset, root moduli senza versioni legacy, startup DB current. Usa package QA/disposable per qualunque prova schema distruttiva;
 5. installa sul Pixel l'esatto APK finale già verificato;
-6. invia **gli stessi byte** via `telegram_notify` attraverso il Local Bot API configurato;
-7. se Telegram fallisce per trasporto, `BLOCKED`: **vietato** rebuild release, R8, ABI split, post-processing o re-signing per ridurre dimensione;
+6. delivery senza ricostruire/modificare l'APK:
+   - se `<=50 MiB`, usa una sola volta `tools/deliver_personalhub_apk.py` e verifica successo Telegram cloud;
+   - se `>50 MiB`, esegui **una sola volta** `tools/smoke_large_apk_delivery.py` sullo stesso APK reale per provare GitHub autenticato + upload su `personalhub-dev-apk-smoke` + notifica Telegram + verifica asset; dopo PASS usa `tools/deliver_personalhub_apk.py` sullo stesso file per la delivery di produzione `personalhub-dev-apk` + link Telegram;
+   - non creare/paddare un falso APK per forzare il ramo `>50 MiB`: se l'APK reale è `<=50 MiB`, il smoke grande è semplicemente non applicabile;
+7. qualunque failure di transport/auth => fix minimo solo se evidente; altrimenti `BLOCKED`. **Vietato** Local Bot API/TDLib, rebuild release, R8, ABI split, post-processing o re-signing per ridurre dimensione;
 8. commit/push PersonalHub + evento MegaVault richiesto; release lock; completa roadmap e stop.
 
 # Acceptance
-PASS solo se migration graph/storici/startup fail-safe passano, regressioni campagna passano, un solo bump è avvenuto, stesso APK è su Pixel+Telegram e nessun lavoro concorrente è stato incorporato durante QA.
+PASS solo se migration graph/storici/startup fail-safe passano, regressioni campagna passano, un solo bump è avvenuto, l'esatto APK verificato è installato sul Pixel e la delivery di produzione usa quegli stessi byte: documento Telegram cloud se `<=50 MiB`, oppure asset GitHub stabile + link Telegram se `>50 MiB`. Per un APK reale `>50 MiB`, anche lo smoke isolato deve essere PASS. Nessun lavoro concorrente deve essere incorporato durante QA.
 
 Su PASS completa solo `PROMPT_ID=592604`; `push_verified=git_push_exit_0` è terminale, niente follow-up Git sulla roadmap.
 
-Output ≤9 righe: RESULT, schema/grafo, historical versions, startup gate, campaign tests, version/APK/hash, Pixel, Telegram, SHA/blocker.
+Output ≤9 righe: RESULT, schema/grafo, historical versions, startup gate, campaign tests, version/APK/hash, Pixel, delivery/smoke, SHA/blocker.
