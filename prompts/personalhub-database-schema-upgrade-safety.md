@@ -1,51 +1,35 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=592604 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT | campaign_id=PH_FINAL_20260912`
+`PROMPT_ID=592604 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT | campaign_id=PH_FINAL_20260912 | type=Goal`
 
-> Esecuzione diretta. Non usare `select` e non rileggere roadmap/README/spiegazioni. Fase 4/4 e **unica fase di release** della campagna PersonalHub.
+# Goal — fase 3/3, unica release
+Rendi fail-safe gli upgrade `personalhub.db` sullo schema finale dopo le fasi `381527` e `742913`, poi fai **1 bump + 1 build finale + 1 install Pixel + 1 delivery** dell'esatto stesso APK.
 
-# Goal
-Rendere fail-safe gli upgrade del `personalhub.db` sullo schema finale della campagna e poi eseguire **un solo bump versione, una sola build finale, una sola installazione Pixel e una sola delivery di produzione** per tutte le fasi PersonalHub precedenti.
-
-# Starting point
-Usa il `main` remoto corrente dopo le tre fasi della stessa campagna. Non hardcodare schema/versione: rilevali una volta. Sono già esistenti `DatabaseVault`, recovery/import rollback e test database disposable; riusali. Nessun fallback distruttivo.
-
-La delivery è già implementata in `tools/deliver_personalhub_apk.py`: APK `<=50 MiB` via Telegram cloud, APK `>50 MiB` via prerelease stabile GitHub `personalhub-dev-apk` + link Telegram. `tools/smoke_large_apk_delivery.py` prova end-to-end il ramo `>50 MiB` su una prerelease isolata `personalhub-dev-apk-smoke`, accetta solo un vero APK ZIP con `AndroidManifest.xml` e verifica l'asset dopo l'upload. **Non usare Local Bot API/TDLib e non reinventare questa logica.**
-
-Acquisisci il lock PersonalHub introdotto dal task infrastrutturale. Se un altro task PH è attivo, `BLOCKED`; non aspettare/pollare. Se `origin/main` avanza con commit PH estranei dopo l'acquire/inizio QA, fermati come concurrency blocker invece di assorbirli e rifare la QA.
+# Starting point/sicurezza
+Usa `origin/main` corrente; rileva schema/versione una volta, non hardcodare. Riusa `DatabaseVault`, rollback/recovery e test DB disposable. Nessun fallback distruttivo. `tools/deliver_personalhub_apk.py`: ≤50 MiB Telegram cloud; >50 MiB prerelease GitHub `personalhub-dev-apk` + link Telegram. `tools/smoke_large_apk_delivery.py`: smoke isolato `personalhub-dev-apk-smoke`. Vietati Local Bot API/TDLib, R8/ABI split/post-processing/re-sign per aggirare size.
+Acquisisci lock PH; occupato => `BLOCKED`, no polling. Se `origin/main` avanza con commit PH estranei dopo inizio QA => `BLOCKED`, non incorporarli.
 
 # Schema safety
-Primo pass solo su `PersonalHubDatabase.kt`, `DatabaseVault.kt`, `PersonalHubApplication.kt`, `GlobalDatabaseInstrumentedTest.kt` e supporto Gradle migration test. Apri migration/schema specifiche solo su failure.
+Primo pass solo `PersonalHubDatabase.kt`, `DatabaseVault.kt`, `PersonalHubApplication.kt`, `GlobalDatabaseInstrumentedTest.kt` + supporto Gradle migration-test; apri migration/schema specifiche solo su failure.
+- registry unico production migrations riusato da Room open, temporary/import open, path check e test;
+- `canMigrateFrom(v)` dal grafo reale fino a `SCHEMA_VERSION`, non range;
+- vietati destructive migration/delete-recreate;
+- startup/update gate prima di feature writes: current/fresh validate; older con path => snapshot recuperabile→migrate→validate; older senza path/newer/failure => preserva DB, niente replace/writes, stato utente conciso;
+- `recoverInterruptedImport` prima del gate; successo memoizzato per app-version/schema;
+- test automatico da tutti gli snapshot Room storici disponibili→current con representative data survival; niente audit colonna-per-colonna.
 
-Implementa/chiudi:
-- registry unico delle production migrations riusato da Room open, temporary/import open, path check e test;
-- `canMigrateFrom(v)` basato sul grafo reale fino a `SCHEMA_VERSION`, non su range numerico;
-- nessun `fallbackToDestructiveMigration`/delete-recreate;
-- startup/update gate prima delle feature writes: current/fresh validate; older con path => snapshot recuperabile→migrate→validate; older senza path/newer/failure => niente replace e niente writes, DB recuperabile preservato + stato utente conciso;
-- `recoverInterruptedImport` resta prima del gate;
-- successo memoizzato per app-version/schema, non gate costoso a ogni Activity.
+# Gate/release una volta sola
+1. Prima del bump esegui solo test mirati delle fasi `381527`+`742913`, `HubActivityRegisterTest` e architecture gate; non ripetere casi già coperti.
+2. Incrementa `version.txt` una volta dal remoto corrente.
+3. Build canonica signed debug `<version>.apk` una volta; verifica firma/versione/hash una volta.
+4. QA Pixel reale, compatta/non distruttiva: Home/versione; Random timer controllato; Cerca→sezioni→Salva subset; root moduli senza versioni legacy + Soldi theme; startup DB current. Test schema distruttivi solo QA/disposable.
+5. Installa sul Pixel l'esatto APK verificato.
+6. Delivery senza rebuild/modifica byte: se ≤50 MiB, una sola `deliver_personalhub_apk.py`; se >50 MiB, una sola `smoke_large_apk_delivery.py` sul vero APK e poi `deliver_personalhub_apk.py` sullo stesso file. Non creare APK finto/padded.
+7. Failure transport/auth: fix minimo solo se evidente, altrimenti BLOCKED. Commit/push PH + evento MegaVault richiesto; release lock.
 
-Test automaticamente da tutti gli snapshot Room storici disponibili verso current, con representative data survival; niente audit di ogni colonna.
+PASS = migration graph/storici/startup fail-safe + regressioni campagna + unico bump + stesso hash APK verificato/installato/consegnato. Stop immediato dopo completion.
 
-# Gate finali campagna
-Prima del bump esegui i test mirati delle tre fasi precedenti e `HubActivityRegisterTest`, più architecture gate. Non rifare manualmente casi già provati da unit/integration test.
+Su PASS:
+`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 592604 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 592604`
 
-Poi:
-1. incrementa `version.txt` **una sola volta** rispetto al valore corrente remoto; nessuna fase precedente della campagna deve averlo cambiato;
-2. build canonica signed debug `<version>.apk` una sola volta dopo tutti i gate;
-3. verifica firma/versione/hash una volta;
-4. QA finale Pixel compatta e non distruttiva sul package reale: Home/versione, un Random timer controllato, Cerca→sezioni→Salva episodio subset, root moduli senza versioni legacy, startup DB current. Usa package QA/disposable per qualunque prova schema distruttiva;
-5. installa sul Pixel l'esatto APK finale già verificato;
-6. delivery senza ricostruire/modificare l'APK:
-   - se `<=50 MiB`, usa una sola volta `tools/deliver_personalhub_apk.py` e verifica successo Telegram cloud;
-   - se `>50 MiB`, esegui **una sola volta** `tools/smoke_large_apk_delivery.py` sullo stesso APK reale per provare GitHub autenticato + upload su `personalhub-dev-apk-smoke` + notifica Telegram + verifica asset; dopo PASS usa `tools/deliver_personalhub_apk.py` sullo stesso file per la delivery di produzione `personalhub-dev-apk` + link Telegram;
-   - non creare/paddare un falso APK per forzare il ramo `>50 MiB`: se l'APK reale è `<=50 MiB`, il smoke grande è semplicemente non applicabile;
-7. qualunque failure di transport/auth => fix minimo solo se evidente; altrimenti `BLOCKED`. **Vietato** Local Bot API/TDLib, rebuild release, R8, ABI split, post-processing o re-signing per ridurre dimensione;
-8. commit/push PersonalHub + evento MegaVault richiesto; release lock; completa roadmap e stop.
-
-# Acceptance
-PASS solo se migration graph/storici/startup fail-safe passano, regressioni campagna passano, un solo bump è avvenuto, l'esatto APK verificato è installato sul Pixel e la delivery di produzione usa quegli stessi byte: documento Telegram cloud se `<=50 MiB`, oppure asset GitHub stabile + link Telegram se `>50 MiB`. Per un APK reale `>50 MiB`, anche lo smoke isolato deve essere PASS. Nessun lavoro concorrente deve essere incorporato durante QA.
-
-Su PASS completa solo `PROMPT_ID=592604`; `push_verified=git_push_exit_0` è terminale, niente follow-up Git sulla roadmap.
-
-Output ≤9 righe: RESULT, schema/grafo, historical versions, startup gate, campaign tests, version/APK/hash, Pixel, delivery/smoke, SHA/blocker.
+Output ≤9 righe: RESULT, schema/grafo, historical/startup, campaign gates, version/APK/hash, Pixel, delivery/smoke, SHA, blocker.

@@ -1,42 +1,25 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=742913 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST | campaign_id=PH_FINAL_20260912`
+`PROMPT_ID=742913 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD | campaign_id=PH_FINAL_20260912 | type=Goal`
 
-> Esecuzione diretta. Non usare `select` e non rileggere roadmap/README/spiegazioni. Fase 2/4 della campagna: **niente bump versione/final APK/Pixel main/Telegram**.
+# Goal — fase 2/3
+Rifinisci Home→Cerca/Composer come unica vista temporale per moduli e consenti di salvare un subset come episodio titolato. Niente redesign Context, registry o migration. **Niente bump/final APK/Pixel main/Telegram**.
 
-# Goal
-Rifinire Home→Cerca/Composer come vista temporale unica per moduli, con salvataggio selettivo di un episodio titolato. Nessun redesign del modello Context e nessuna nuova migration.
+# Starting point
+`HubTemporalSearchScreen` usa già `temporalProviders()`, `[from,to)`, cursori e `mergeTemporalSlices`; `HubContextComposer` rileva record temporali/`HubEntityRef`; repository/runtime persistono `title`; Context richiede ≥2 membri. People del periodo = solo link/Context dei record bounded, mai scan globale. WordPulse usa solo `fatigueScore 0..100` canonico.
 
-# Starting point verificato
-- Cerca: `HubTemporalSearchScreen.kt` usa già `temporalProviders()`, query `[from,to)`, cursori e `mergeTemporalSlices`;
-- Composer: `HubContextComposer.kt` rileva record temporali e risolve `HubEntityRef`; repository/runtime supportano già `title` persistente;
-- Context richiede almeno 2 membri;
-- People del periodo vanno derivati solo da link/Context dei record bounded, mai da scan globale;
-- fatigue canonica WordPulse è `fatigueScore 0..100`; non inventare una seconda formula.
+# Implementa
+- Condividi state/componenti Cerca/Composer solo dove elimina duplicazione reale.
+- UI primaria: periodo leggibile + sezioni deterministiche per modulo, tutte aperte default e collassabili/saveable; niente chip modulo/kind, raw ID/UUID/moduleId/entityKind. Empty state compatto; paging `Altri` resta per-provider.
+- WordPulse: una sola riga `Stanchezza media: N/100`, oppure `non disponibile`; non mostrare sessioni/speed/rhythm/control/sleep/PVT/baseline. Media solo dei fatigueScore validi del periodo; conserva internamente i canonical refs sottostanti.
+- `Salva` entra in selection mode senza rifare query già disponibile: checkbox entry, titolo obbligatorio, salva solo refs selezionati, minimo 2 membri. Checkbox WordPulse salva i refs sottostanti; People derivati salva refs People canonici. Selection/title/collapse sopravvivono a recreation; cambiare Da/A invalida risultati/selezioni fuori intervallo.
+- Mantieni aggiunta manuale avanzata in `Aggiungi altro`; nessun nuovo registry.
 
-# UX
-Condividi state/componenti tra Cerca e Composer dove riduce duplicazione reale.
+# Scope/verifica
+Parti solo da `HubTemporalSearchScreen.kt`, `HubContextComposer.kt`, `HubContextRuntime.kt`, `HubContextRepository.kt` e provider/adapter direttamente coinvolti; Timer→People/WordPulse solo su necessità concreta. Niente lettura moduli interi/refactor fuori scope.
+Test mirati: grouping/collapse/no-chip, paging, People bounded, fatigue aggregate, handoff senza doppia query, selection/title/min-2/recreation/persistenza. Una sola QA isolata emulator/TCL su intervallo noto + salvataggio subset. Commit/push PH; non cambiare `version.txt`. Stop a PASS; side issue non bloccanti solo segnalati.
 
-Mostra sempre il periodo leggibile e sezioni deterministiche per modulo (Places, People, Transazioni, Timer, Substances, WordPulse…), tutte aperte di default e collassabili singolarmente con stato saveable. Elimina chip modulo/kind dalla UI primaria. Le sezioni senza risultati possono avere empty-state compatto. Mantieni paging per-provider: `Altri` appartiene alla sua sezione.
+Su PASS:
+`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 742913 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 742913`
 
-Niente raw moduleId/entityKind/ID/UUID.
-
-## WordPulse
-Una sola riga aggregata: `Stanchezza media: N/100`; `non disponibile` senza campioni validi. Non mostrare sessioni, speed/rhythm/control/sleep/PVT/baseline. Usa solo fatigueScore canonici del periodo. Conserva internamente i canonical refs sottostanti.
-
-## Salva come episodio
-Browsing normale senza checkbox. `Salva` entra nello stesso selection flow preservando intervallo/risultati senza query duplicata quando già disponibili. In selection mode: checkbox sulle entry selezionabili, titolo obbligatorio, salva solo refs selezionati, minimo 2 membri. Checkbox WordPulse aggregata salva i refs sottostanti; People derivati salva refs People canonici. Selection/title/collapse sopravvivono a recreation; cambiare Da/A invalida deterministically risultati/selezioni fuori intervallo.
-
-Mantieni l'aggiunta manuale/advanced del Composer in una sezione secondaria `Aggiungi altro`; niente nuovo registry.
-
-# Letture iniziali
-`HubTemporalSearchScreen.kt`, `HubContextComposer.kt`, `HubContextRuntime.kt`, `HubContextRepository.kt`, temporal provider/adapter direttamente coinvolti. Timer→People e WordPulse solo se necessari. Niente lettura di interi moduli.
-
-# Verification fase
-Test mirati per grouping/collapse, assenza chip primari, paging invariato, People bounded, fatigue aggregate, handoff senza doppia query, selection/title/min-2/recreation e persistenza titolo. QA isolata emulator/TCL su un intervallo noto e salvataggio subset. Niente package reale Pixel.
-
-Commit/push PersonalHub al PASS; **non modificare `version.txt`** e non fare final delivery.
-
-Su PASS completa solo `PROMPT_ID=742913`; `push_verified=git_push_exit_0` è terminale.
-
-Output ≤7 righe: RESULT, grouping/collapse, People, fatigue, episode selection/title, test/QA, SHA/blocker.
+Output ≤7 righe: RESULT, grouping, People, fatigue, episode selection/title, test/QA, SHA/blocker.
