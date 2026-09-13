@@ -1,6 +1,6 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=483217 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD | type=Prompt`
+`PROMPT_ID=483217 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=STANDARD | type=Prompt`
 
 # Goal
 Finalizza localmente l'Alertness/Fatigue già implementato in `gernalix/wordpulse`: genera schema Room 4 con toolchain reale, verifica migration/build e fai una QA Pixel **solo package `.qa`**. Correggi solo failure concrete.
@@ -15,7 +15,7 @@ Checkout `/home/daniele/projects/wordpulse`; feature già presente: typing metri
 4. QA Pixel solo `.qa`: overlay Alertness, baseline insufficiente, Health Connect presente/assente senza loggare dati personali, PVT attesa→stimolo→tap→annulla, fallback typing-only. Non installare sopra app reale.
 5. Disinstalla sempre `.qa`. Commit/push solo schema + fix indispensabili; niente APK/cache/log/runtime DB.
 
-PASS = test/lint/build + schema/migration + QA isolata + cleanup QA; Health Connect può essere indisponibile se fallback è provato.
+PASS = test/lint/build + schema/migration + QA isolata + cleanup QA; Health Connect può essere indisponibile se fallback è provato. **Dopo PASS il sottosistema è chiuso: niente prompt successivi di micro-ottimizzazione o ri-validazione senza bug concreto.**
 
 Su PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 483217 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 483217`
