@@ -17,7 +17,7 @@ Primo pass solo `PersonalHubDatabase.kt`, `DatabaseVault.kt`, `PersonalHubApplic
 - startup/update gate prima di feature writes: current/fresh validate; older con path => snapshot recuperabile→migrate→validate; older senza path/newer/failure => preserva DB, niente replace/writes, stato utente conciso;
 - `recoverInterruptedImport` prima del gate; successo memoizzato per app-version/schema;
 - test automatico da tutti gli snapshot Room storici disponibili→current con representative data survival; niente audit colonna-per-colonna.
-- Per la prova migration Android disposable, se presente usa `tools/android_room_fixture.py --launch-and-verify` con `--target-version`, `--expect-table` e una query di preservazione. Una sola invocazione per fixture+launch+verifica; vietati loop manuali equivalenti `adb shell sqlite3`/quoting/push/cp/.read salvo failure concreta dell'helper.
+- Per la prova migration Android disposable, se presente usa `tools/android_room_fixture.py --launch-and-verify` con `--target-version`, `--expect-table` e una query di preservazione. Una sola invocazione per fixture+launch+verifica; il JSON dell'helper deve attestare anche `migration.integrity="ok"` e `migration.foreign_keys="ok"`. Non ripetere questi PRAGMA manualmente. Vietati loop equivalenti `adb shell sqlite3`/quoting/push/cp/.read salvo failure concreta dell'helper.
 
 # Gate/release una volta sola
 1. Prima del bump esegui solo test mirati delle fasi `381527`+`742913`, `HubActivityRegisterTest` e architecture gate; non ripetere casi già coperti.
