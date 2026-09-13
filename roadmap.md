@@ -1,4 +1,3 @@
-1. [[prompts/personalhub-random-timing-substances|personalhub-random-timing-substances]]
-2. [[prompts/personalhub-temporal-episode-composer|personalhub-temporal-episode-composer]]
-3. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
-4. [[prompts/wordpulse-alertness-local-verification-release|wordpulse-alertness-local-verification-release]]
+1. [[prompts/personalhub-temporal-episode-composer|personalhub-temporal-episode-composer]]
+2. [[prompts/personalhub-database-schema-upgrade-safety|personalhub-database-schema-upgrade-safety]]
+3. [[prompts/wordpulse-alertness-local-verification-release|wordpulse-alertness-local-verification-release]]
