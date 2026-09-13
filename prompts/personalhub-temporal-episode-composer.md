@@ -10,6 +10,8 @@ Rifinisci Home→Cerca/Composer come unica vista temporale per moduli e consenti
 
 Il fix Places accuracy-aware che prima viveva su `fix/places-accuracy-aware-checkin` è **già stato integrato su `main` direttamente da ChatGPT** dopo la fase 1 (`CheckInPolicy.kt`, `LocationCapsule.kt`, `CheckInAccuracyPolicyTest.kt`). Non fare merge/cherry-pick di quel branch e non riaprire Places salvo failure concreta causata dal normale build/test di questa fase.
 
+Niente progress narration: tra un tool call e l'altro non scrivere aggiornamenti di stato salvo nuovo failure/blocker che cambia il piano. Raggruppa operazioni indipendenti.
+
 # Implementa
 - Condividi state/componenti Cerca/Composer solo dove elimina duplicazione reale.
 - UI primaria: periodo leggibile + sezioni deterministiche per modulo, tutte aperte default e collassabili/saveable; niente chip modulo/kind, raw ID/UUID/moduleId/entityKind. Empty state compatto; paging `Altri` resta per-provider.
@@ -30,5 +32,7 @@ PASS = feature Cerca/Composer + test mirati + host gate + una QA subset. Dopo PA
 
 Su PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 742913 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 742913`
+
+Dopo il secondo comando, **STOP immediato**: niente `git status`, `pull`, `log`, `rev-parse` o altre verifiche sulla roadmap.
 
 Output ≤7 righe: RESULT, grouping, People, fatigue, episode selection/title, test/QA, SHA/blocker.
