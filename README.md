@@ -13,6 +13,22 @@ Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain
 
 `spiegazioni.md` usa `# | Prompt | Spiegazioni | Livello ragionamento | Tipo prompt`; ordine, reasoning e link devono coincidere con la roadmap.
 
+## Regola di ammissione — niente spirali
+Un nuovo task entra in roadmap solo se soddisfa **entrambi**:
+1. richiede davvero una risorsa locale non disponibile in chat;
+2. risolve un bug/blocco, rischio dati, requisito funzionale o verifica indispensabile prima di una release.
+
+Non creare task Codex per:
+- micro-ottimizzare un helper/monitor/gate che ha già PASS;
+- misurare il costo del prompt precedente;
+- validare una micro-ottimizzazione appena introdotta da ChatGPT quando test statici/remoti sono sufficienti;
+- investigare colli di bottiglia solo potenziali o senza impatto pratico osservato;
+- ripetere un PASS con un helper “ancora più efficiente”.
+
+**PASS chiude il sottosistema.** Un follow-up dopo PASS è ammesso solo con nuova evidenza concreta emersa nell'uso reale. Le ottimizzazioni marginali si riportano in chat e si fermano lì.
+
+Quando due task dello stesso repo/campagna richiedono lo stesso checkout/build/emulatore e hanno failure domain compatibili, accorpa i gate nel task funzionale invece di creare un prompt di sola verifica separato. Non accorpare invece migrazioni/rischio dati con feature ordinarie se questo rende il failure domain ambiguo.
+
 ## Contratto prompt
 Ogni prompt deve bastare da solo insieme alle regole globali già caricate. Deve dichiarare almeno metadata, goal, starting point verificato, scope/non-goal, verification, stop e comando di finalizzazione. Vietati inventory/audit generali quando file/boundary sono già noti.
 
@@ -21,12 +37,12 @@ Tipi:
 - **Goal**: risultato cross-component, ma scope e stop restano espliciti.
 
 ### Modello/reasoning
-- GPT-5.5 `low`: task meccanico/localizzato con poche decisioni.
-- GPT-5.5 `medium`: default per runtime, ADB, systemd, Git, filesystem, tool esterni e diagnosi mirate.
+- GPT-5.5 `low`: default per gate deterministici, test/build/ADB mirati e task localizzati con stop chiaro.
+- GPT-5.5 `medium`: solo quando serve diagnosi runtime non banale o scelta tra più fix plausibili.
 - GPT-5.6 Sol `medium`: schema/migrazioni, rischio dati, undo/audit o architettura realmente cross-module.
 - `high`: solo con difficoltà concreta non gestibile bene a medium.
 
-Non usare GPT-5.6 solo perché il task è lungo: prima riduci scope e contesto.
+Non usare GPT-5.6 o reasoning superiore solo perché il task è lungo: prima riduci scope, round-trip e contesto.
 
 ## Esecuzione manuale
 Apri il primo file indicato da `roadmap.md`, imposta modello/reasoning dai metadata e incolla **solo quel file**. Non inviare meta-prompt, non far leggere roadmap/README/spiegazioni e non eseguire `select` nelle sessioni manuali.
@@ -44,7 +60,7 @@ Per PersonalHub:
 - l'ultima fase fa un solo bump, gate finali consolidati, un solo APK finale, una sola installazione Pixel e una sola Telegram delivery;
 - una campagna PH deve essere seriale: niente task PH concorrenti.
 
-Non creare mega-task se le fasi hanno failure domains indipendenti; consolida solo build/install/delivery e gate comuni.
+Non creare mega-task se le fasi hanno failure domains indipendenti; consolida build/install/delivery e gate comuni. Una verifica locale di fix già pushati va assorbita nella fase funzionale successiva dello stesso repo quando può condividere lo stesso host gate e la stessa QA.
 
 ## PASS
 Ogni prompt include:
@@ -75,10 +91,11 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 
 ## Manutenzione
 Quando aggiorni la roadmap:
-- mantieni roadmap/spiegazioni/prompt 1:1;
+- mantieni roadmap/spiegazioni/prompt pendenti 1:1;
 - elimina dal prompt facts ormai già implementati o verificabili automaticamente;
 - preferisci test automatici a QA manuale ripetitiva;
 - sposta build/device/delivery alla fase finale di una campagna quando sicuro;
 - non aggiungere task che ChatGPT può già completare direttamente sui repo remoti;
 - non assorbire task già in esecuzione;
-- non usare la roadmap come backlog generico: deve restare una coda Codex minima e operativa.
+- non usare la roadmap come backlog generico: deve restare una coda Codex minima e operativa;
+- dopo un PASS, non cercare “il prossimo collo di bottiglia” salvo evidenza concreta di malfunzionamento o rischio.
