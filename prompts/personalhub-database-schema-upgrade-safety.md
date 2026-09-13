@@ -19,16 +19,19 @@ Primo pass solo `PersonalHubDatabase.kt`, `DatabaseVault.kt`, `PersonalHubApplic
 - test automatico da tutti gli snapshot Room storici disponibili→current con representative data survival; niente audit colonna-per-colonna.
 - Per la prova migration Android disposable, se presente usa `tools/android_room_fixture.py --launch-and-verify` con `--target-version`, `--expect-table` e una query di preservazione. Una sola invocazione per fixture+launch+verifica; il JSON dell'helper deve attestare anche `migration.integrity="ok"` e `migration.foreign_keys="ok"`. Non ripetere questi PRAGMA manualmente. Vietati loop equivalenti `adb shell sqlite3`/quoting/push/cp/.read salvo failure concreta dell'helper.
 
+# Disciplina verifica prima della release
+Durante l'implementazione schema esegui soltanto compile/test migration mirati. Se un test/lint fallisce, leggi l'intero report del leaf task, correggi in batch e rilancia **solo quel leaf task**. Non usare il gate campagna/finale come inner loop e non rilanciare un full `check` dopo ogni fix.
+
 # Gate/release una volta sola
-1. Prima del bump esegui solo test mirati delle fasi `381527`+`742913`, `HubActivityRegisterTest` e architecture gate; non ripetere casi già coperti.
+1. Quando schema + leaf test sono verdi, esegui un unico gate campagna pre-bump con i test mirati delle fasi `381527`+`742913`, `HubActivityRegisterTest` e architecture gate; non ripetere casi già coperti. Se questo gate trova un nuovo failure, risolvi con il solo leaf task coinvolto e poi ripeti il gate campagna **una sola volta**.
 2. Incrementa `version.txt` una volta dal remoto corrente.
-3. Build canonica signed debug `<version>.apk` una volta; verifica firma/versione/hash una volta.
+3. Build canonica signed debug `<version>.apk` una volta; verifica firma/versione/hash una volta. Se la build fallisce, correggi il leaf compile/package task e poi rifai questa build una sola volta: nessun ciclo full gate.
 4. QA Pixel reale, compatta/non distruttiva: Home/versione; Random timer controllato; Cerca→sezioni→Salva subset; root moduli senza versioni legacy + Soldi theme; startup DB current. Test schema distruttivi solo QA/disposable.
 5. Installa sul Pixel l'esatto APK verificato.
 6. Delivery senza rebuild/modifica byte: se ≤50 MiB, una sola `deliver_personalhub_apk.py`; se >50 MiB, una sola `smoke_large_apk_delivery.py` sul vero APK e poi `deliver_personalhub_apk.py` sullo stesso file. Non creare APK finto/padded.
 7. Failure transport/auth: fix minimo solo se evidente, altrimenti BLOCKED. Commit/push PH + evento MegaVault richiesto; release lock.
 
-PASS = migration graph/storici/startup fail-safe + regressioni campagna + unico bump + stesso hash APK verificato/installato/consegnato. Stop immediato dopo completion.
+PASS = migration graph/storici/startup fail-safe + regressioni campagna + unico bump + stesso hash APK verificato/installato/consegnato. Stop immediato dopo completion; niente audit/ottimizzazione post-PASS.
 
 Su PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 592604 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 592604`
