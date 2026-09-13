@@ -1,6 +1,6 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=706214 | project_id=51 | model=GPT-5.5 | reasoning=low | MegaVault=FAST | type=Prompt`
+`PROMPT_ID=706214 | project_id=8 | model=GPT-5.5 | reasoning=low | MegaVault=FAST | type=Prompt`
 
 # Goal
 Valida **solo** il nuovo supporto per costi Codex per `PROMPT_ID` già pushato su `gernalix/codex-usage-monitor/main`, poi usa i rollout nativi locali per riportare il costo esatto dei prompt `917364`, `463218` e `284731`. Correggi solo failure concrete. Non modificare PersonalHub.
@@ -14,7 +14,7 @@ Il transcript UI/Markdown copiato da Codex non contiene gli eventi nativi `event
 - Niente refactor generale, monitor Oracle, notifiche Telegram, systemd o modifiche PH/roadmap oltre al completion guard finale.
 
 # Gate locale
-1. Esegui una volta: `python3 -m pytest -q tests/test_task_costs.py tests/test_session_archive.py::SessionArchiveTests::test_diagnostic_bundle_includes_redacted_diagnostic_sources`.
+1. Esegui una volta: `python3 -m unittest tests.test_task_costs tests.test_session_archive.SessionArchiveTests.test_diagnostic_bundle_includes_redacted_diagnostic_sources`.
 2. Esegui **una sola ricostruzione** reale: `python3 codex_task_costs.py`.
 3. Interroga `~/.local/share/codex-session-archive/index/task_costs.sqlite` in read-only e verifica:
    - tabella `prompt_costs` presente;
