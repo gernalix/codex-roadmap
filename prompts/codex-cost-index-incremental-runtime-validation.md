@@ -7,12 +7,12 @@ Valida **solo** l'indicizzazione incrementale dei costi Codex già implementata 
 
 # Scope
 - Repo `~/projects/codex-usage-monitor`: worktree pulito, un solo fetch + `pull --ff-only origin main`; sporco non-task => `BLOCKED`, niente stash/reset.
-- Parti solo da `codex_task_costs_incremental.py`, `tests/test_task_costs_incremental.py`, `codex_prompt_cost_query.py`, relativo test e `systemd/codex-session-archive.service`.
+- Parti solo da `codex_task_costs_incremental.py`, `tests/test_task_costs_incremental.py`, `codex_prompt_cost_query.py`, `tests/test_prompt_cost_query.py`, `tests/test_prompt_cost_state_sync.py` e `systemd/codex-session-archive.service`.
 - Nessun monitor Oracle, Telegram, PersonalHub, benchmark generale o scansione manuale dei rollout.
 - Non chiamare `codex_task_costs.py` manualmente: il primo `codex_task_costs_incremental.py` può fare internamente il bootstrap una tantum se `cost_source_state` non esiste.
 
 # Gate locale
-1. Esegui una sola volta: `python3 -m unittest tests.test_task_costs_incremental tests.test_prompt_cost_query`.
+1. Esegui una sola volta: `python3 -m unittest tests.test_task_costs_incremental tests.test_prompt_cost_query tests.test_prompt_cost_state_sync`.
 2. Registra count `session_costs`/`prompt_costs` e i valori noti di `835917` (`total=704885`, `uncached=19471`, `tools=11`).
 3. Esegui `python3 codex_task_costs_incremental.py` una prima volta. Se lo stato incrementale non esiste ancora è ammesso `mode=bootstrap`; dopo il bootstrap `cost_source_state` deve essere popolata e `835917` deve restare invariato.
 4. Registra size+mtime_ns di `task_costs.sqlite`, `task_costs.csv`, `prompt_costs.csv`, quindi esegui immediatamente una seconda volta `python3 codex_task_costs_incremental.py`. PASS richiede `mode=incremental sources_parsed=0 sources_removed=0` e nessuno dei tre file modificato.
