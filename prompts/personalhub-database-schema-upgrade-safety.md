@@ -9,6 +9,8 @@ Rendi fail-safe gli upgrade `personalhub.db` sullo schema finale dopo le fasi `3
 Usa `origin/main` corrente; rileva schema/versione una volta, non hardcodare. Riusa `DatabaseVault`, rollback/recovery e test DB disposable. Nessun fallback distruttivo. `tools/deliver_personalhub_apk.py`: ≤50 MiB Telegram cloud; >50 MiB prerelease GitHub `personalhub-dev-apk` + link Telegram. `tools/smoke_large_apk_delivery.py`: smoke isolato `personalhub-dev-apk-smoke`. Vietati Local Bot API/TDLib, R8/ABI split/post-processing/re-sign per aggirare size.
 Acquisisci lock PH; occupato => `BLOCKED`, no polling. Se `origin/main` avanza con commit PH estranei dopo inizio QA => `BLOCKED`, non incorporarli.
 
+Niente progress narration: tra tool call non scrivere aggiornamenti di stato salvo nuovo failure/blocker che cambia il piano. Raggruppa operazioni indipendenti.
+
 # Schema safety
 Primo pass solo `PersonalHubDatabase.kt`, `DatabaseVault.kt`, `PersonalHubApplication.kt`, `GlobalDatabaseInstrumentedTest.kt` + supporto Gradle migration-test; apri migration/schema specifiche solo su failure.
 - registry unico production migrations riusato da Room open, temporary/import open, path check e test;
@@ -35,5 +37,7 @@ PASS = migration graph/storici/startup fail-safe + regressioni campagna + unico 
 
 Su PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 592604 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 592604`
+
+Dopo il secondo comando, **STOP immediato**: niente `git status`, `pull`, `log`, `rev-parse` o verifiche aggiuntive della roadmap.
 
 Output ≤9 righe: RESULT, schema/grafo, historical/startup, campaign gates, version/APK/hash, Pixel, delivery/smoke, SHA, blocker.
