@@ -6,4 +6,3 @@ La roadmap contiene solo lavoro che richiede Codex/local runtime. Le modifiche r
 
 | # | Prompt | Spiegazioni | Livello ragionamento | Tipo prompt |
 | --: | --- | --- | --- | --- |
-| 1 | [[prompts/personalhub-database-schema-upgrade-safety]] | **Cosa fa:** integra nel WordPulse incorporato in PH il boundary Alertness/Fatigue v4 appena verificato, rende disponibile il fatigue score canonico al provider temporale, poi completa migration fail-safe e unica release PH. **Perché:** porting nel DB Room condiviso di PH + migration storiche + release sono un unico failure domain ad alto rischio dati e richiedono toolchain/device locali. | medium | Goal |
