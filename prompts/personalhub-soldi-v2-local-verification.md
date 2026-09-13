@@ -1,42 +1,37 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=917364 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD | campaign_id=PH_SOLDI_V2_PREMERGE_20260913 | type=Prompt`
+`PROMPT_ID=917364 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST | campaign_id=PH_SOLDI_V2_PREMERGE_20260913 | type=Prompt`
 
 # Goal
-Esegui la verifica **locale pre-merge** della PR PersonalHub `#7` / branch remoto `feature/soldi-ui-v2`: toolchain Android 37, Gradle, schema/migrazione Room 11→12 e QA isolata su emulatore. Correggi solo failure concrete necessarie a far passare questi gate e pusha lo stesso branch. Non fare release.
+Completa **solo i due gate locali rimasti** della PR PersonalHub `#7` / branch `feature/soldi-ui-v2`, poi pusha eventuali fix minimi e completa la roadmap. Non rifare review, test host o smoke già PASS.
 
-# Starting point verificato
-La review statica remota dei 20 file è già stata fatta: non rifarla. Il branch contiene Soldi v2, `PersonalHubDatabase` schema 12 e `FinanceAdvancedMigration(11,12)`. Il tentativo GitHub Actions non ha eseguito Gradle perché il runner pubblico non offre `platforms;android-37`; quindi la prova richiesta è deliberatamente locale. La PR ha anche un commento di review con regressioni funzionali note: non ampliare il task in un redesign; segnala soltanto se una di esse impedisce i gate locali.
+# Già verificato: NON ripetere
+Commit precedente `ac11c70`: `checkArchitectureBoundaries`, unit `core:database` + `feature:soldi`, `:app:compileDebugKotlin`, `:app:assembleQa`, schema Room `12.json`, migrazione Room reale 11→12 su host, editor Spesa/Entrata/Trasferimento, trasferimento EUR→DKK, ricorrenza giorno fisso, modifica `solo questa` / `questa e successive`, forecast per valuta e calendario sono già PASS. Non rieseguire questi gate salvo che un tuo fix tocchi direttamente il relativo codice.
 
-# Sicurezza / scope
-- Acquisisci subito il lock PH con `python3 tools/personalhub_task_lock.py acquire --prompt-id 917364`; lock occupato => `BLOCKED`, nessun polling.
-- Lavora su `~/projects/PersonalHub`, fetch una volta e usa `origin/feature/soldi-ui-v2`. Worktree sporco non riconducibile al task => `BLOCKED`; non stash/reset.
-- **Nessun bump di `version.txt`**, nessun merge in `main`, nessuna installazione del package reale `com.gernalix.personalhub`, nessuna Telegram/GitHub-release delivery.
-- Non toccare DB personale reale. Migrazione solo su DB/test copy disposable; QA Android solo package `qa`/ambiente isolato.
-- Parti dai file già noti: `PersonalHubDatabase.kt`, `FinanceAdvancedMigration.kt`, `FinanceEntities.kt`, `FinanceCapsule.kt`, test Soldi e `feature/soldi` UI. Niente discovery generale.
+Il branch contiene inoltre `tools/android_room_fixture.py` (commit `6122361`), aggiunto per evitare la precedente sequenza ad-hoc `push/cp/cat/.read/SELinux` nella creazione della fixture Room sul device.
 
-# Gate host, in quest'ordine
-1. Conferma una volta che SDK/platform Android 37 locale e Java richiesto dal progetto sono disponibili; se manca una dipendenza locale non installabile senza cambiare il progetto => `BLOCKED`.
-2. Esegui `./gradlew --no-daemon checkArchitectureBoundaries`.
-3. Esegui i test unitari minimi pertinenti: `:core:database:testDebugUnitTest` e `:feature:soldi:testDebugUnitTest`.
-4. Esegui `:app:compileDebugKotlin` e poi una sola build isolata `:app:assembleQa --no-configuration-cache` usando la configurazione signing canonica già prevista dal repo.
-5. Verifica che KSP produca/aggiorni lo schema Room `12.json`. Se è un output tracked necessario, includilo nel branch; nessuna modifica manuale del JSON.
-6. Il test attuale della migrazione è solo contrattuale: aggiungi/rafforza **un test reale 11→12** con DB disposable e validazione Room/schema, preservando almeno una transazione/conta finance rappresentativa. Esegui solo quel test + il minimo necessario. Se fallisce, correggi la migrazione/schema, non usare destructive migration.
-7. Su qualunque failure: apri soltanto il file/simbolo direttamente indicato dall'errore, fix minimo, rerun del solo gate fallito; niente refactor/cleanup collaterale.
+# Scope / sicurezza
+- `python3 tools/personalhub_task_lock.py acquire --prompt-id 917364`; lock occupato => `BLOCKED`, nessun polling.
+- `~/projects/PersonalHub`, fetch una volta, branch `feature/soldi-ui-v2`; worktree sporco non-task => `BLOCKED`, niente stash/reset.
+- Nessun merge/main, bump versione, release, Telegram, package reale o DB personale.
+- QA esclusivamente `com.gernalix.personalhub.qa` su `Pixel_8a` canonico.
+- Niente discovery generale. Parti da `tools/android_room_fixture.py` e dal codice ricorrenze Soldi solo se un gate fallisce.
 
-# QA emulatore isolata
-Solo dopo host gate PASS:
-- usa `python3 tools/android_emulator_control.py start` / `wait` e il serial restituito; niente discovery ADB parallela;
-- installa l'APK **QA** già costruito, senza seconda build;
-- smoke Soldi: apertura modulo; tab Transazioni/Overview/Statistiche/Grafici/Calendario; editor Spesa/Entrata/Trasferimento; trasferimento trans-valuta EUR→DKK; ricorrenza giorno fisso e ultimo giorno lavorativo; modifica importo `solo questa` / `questa e successive`; forecast fine mese per valuta; calendario; nessun crash;
-- verifica con `tools/android_ui_summary.py --serial <serial>` solo label/errori mirati, niente XML completo salvo blocker;
-- esegui almeno una migrazione 11→12 in ambiente disposable e riapertura Room; nessuna perdita dei record campione;
-- se la QA evidenzia un bug runtime nuovo e localizzato, fix minimo + gate direttamente correlato. I problemi già elencati nella review PR che richiedono decisione prodotto vanno solo riportati, non reinterpretati.
+# Gate locale A — migrazione Android 11→12
+1. Controlla sintassi helper una volta (`python3 -m py_compile tools/android_room_fixture.py`).
+2. Avvia/attendi il Pixel_8a con `tools/android_emulator_control.py` e installa **l'APK QA già esistente** se ancora disponibile. Costruisci `:app:assembleQa --no-configuration-cache` solo se l'APK manca.
+3. Crea un piccolo seed SQL v11 con almeno un account EUR e una transazione finance riconoscibile.
+4. Esegui **una sola volta** `tools/android_room_fixture.py` con schema `11.json`, package QA e seed SQL.
+5. Avvia l'app QA per far eseguire Room 11→12; verifica via `run-as ... sqlite3` soltanto: `user_version=12`, record campione preservato e nuova superficie v12 presente.
+6. Se l'helper fallisce, correggi solo l'helper sulla base dell'errore concreto e ripeti questo gate. Vietati tentativi manuali alternativi equivalenti finché non emerge nuova evidenza.
 
-# Stop / push
-PASS solo se architecture + unit test + compile + assembleQa + schema 12 + migrazione reale + smoke emulatore sono tutti PASS. Commit/pusha soltanto modifiche necessarie su `feature/soldi-ui-v2`; verifica push una volta; ferma emulatore e rilascia lock. Non mergiare la PR.
+# Gate locale B — ultimo giorno lavorativo
+Verifica nel package QA una ricorrenza `Ultimo giorno lavorativo`: creazione/salvataggio e presenza corretta dopo riapertura. Usa `android_ui_summary.py` e il minimo numero di input ADB; niente XML completo. Se esiste già un test mirato capace di provarlo, preferiscilo alla navigazione manuale. Un bug reale e localizzato può essere corretto con fix minimo + test mirato; non ridisegnare UX/ricorrenze.
+
+# Stop
+PASS appena A+B sono verdi. Non eseguire ulteriori audit/test dopo PASS. Commit/push solo eventuali fix necessari sul branch e verifica divergenza una volta; ferma emulatore e rilascia lock.
 
 Su PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 917364 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 917364`
 
-Output ≤8 righe: RESULT, host gates, Room 11→12/schema12, APK QA, emulator smoke, fix/commit SHA, push, blocker.
+Output ≤6 righe: RESULT, gate A, gate B, fix/commit, push, blocker.
