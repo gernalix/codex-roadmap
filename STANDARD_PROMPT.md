@@ -37,9 +37,11 @@ Il guard resta utile per due scopi:
 - **selezione unattended/automatica**: `python3 tools/roadmap_guard.py select` può ancora restituire l'execution pack quando non c'è un operatore che sceglie il file;
 - **finalizzazione su PASS**: ogni prompt pendente deve contenere direttamente il proprio comando `complete --prompt-id ...`, con dry-run seguito da complete.
 
+Per un prompt riattivato dopo un esito `BLOCKED` o `FAIL`, conserva l'esito nei metadata (`last_result=BLOCKED` / `last_result=FAIL`). In quel caso il guard rifiuta l'archiviazione finché il nuovo run non dichiara esplicitamente `--result PASS`; il comando di finalizzazione del prompt deve quindi includerlo sia nel dry-run sia nel complete reale. Un `--result BLOCKED` o `--result FAIL` viene sempre rifiutato come tentativo di completion.
+
 Una risposta `complete` con `status=completed`, `commit=<SHA>` e `push_verified=git_push_exit_0` è prova canonica del push della roadmap. Non fare controlli Git equivalenti dopo il PASS e non aprire il task successivo nella stessa sessione.
 
-Su BLOCKED/FAIL non archiviare, non rinumerare e non avanzare la roadmap.
+Su BLOCKED/FAIL non archiviare, non rinumerare e non avanzare la roadmap. Non spostare manualmente file tra `prompts/` e `completed/` per aggirare il guard.
 
 ## Fallback unattended
 
@@ -56,6 +58,7 @@ Questo fallback non è il workflow manuale normale.
 Ogni nuovo prompt o modifica sostanziale di un prompt pendente deve preservare l'esecuzione diretta. In particolare il file deve:
 
 - dichiarare `PROMPT_ID`, `project_id`, modello, reasoning e MegaVault quando applicabili;
+- se riprende un run fallito/bloccato, dichiarare anche `last_result=BLOCKED` o `last_result=FAIL` e usare `--result PASS` nella finalizzazione;
 - contenere direttamente goal, starting point/source-of-truth, scope/non-goal, verification e PASS/stop;
 - vietare discovery/audit già sostituiti da evidenza preparata;
 - richiedere solo test proporzionati al rischio;
