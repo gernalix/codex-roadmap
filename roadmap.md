@@ -1,5 +1,5 @@
 1. [[prompts/personalhub-startup-pixel-verification|personalhub-startup-pixel-verification]]
-2. [[prompts/codex-usage-publisher-telemetry-runtime-validation|codex-usage-publisher-telemetry-runtime-validation]]
+2. [[prompts/codex-usage-fedora-only-runtime-cutover|codex-usage-fedora-only-runtime-cutover]]
 3. [[prompts/repository-publication-secret-audit|repository-publication-secret-audit]]
 4. [[prompts/apply-repository-visibility-matrix|apply-repository-visibility-matrix]]
 5. [[prompts/personalhub-github-actions-ci-and-fedora-runner|personalhub-github-actions-ci-and-fedora-runner]]
