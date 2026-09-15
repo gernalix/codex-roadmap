@@ -37,7 +37,7 @@ class RoadmapGuardTests(unittest.TestCase):
             encoding="utf-8",
         )
         (seed / "prompts" / "first.md").write_text(
-            "`PROMPT_ID=123456 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST`\n\n# Goal\nDo first thing.\n",
+            "`PROMPT_ID=123456 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST | last_result=BLOCKED`\n\n# Goal\nDo first thing.\n",
             encoding="utf-8",
         )
         (seed / "prompts" / "second.md").write_text("`PROMPT_ID=654321 | reasoning=low`\n", encoding="utf-8")
@@ -69,12 +69,14 @@ class RoadmapGuardTests(unittest.TestCase):
             self.assertEqual("49", selected["project_id"])
             self.assertEqual("GPT-5.5", selected["model"])
             self.assertEqual("FAST", selected["megavault"])
+            self.assertEqual("BLOCKED", selected["last_result"])
             self.assertEqual("Prompt", selected["type"])
             self.assertIn("PROMPT_ID=123456", selected["prompt_content"])
             self.assertIn("Do not reread roadmap.md", selected["execution_contract"])
             self.assertIn("Do not read MEMORY/history", selected["execution_contract"])
             self.assertIn("select already fetched canonical origin/main", selected["execution_contract"])
             self.assertIn("sparse status checks", selected["execution_contract"])
+            self.assertIn("--result PASS", selected["execution_contract"])
             self.assertIn("use reconcile --dry-run", selected["execution_contract"])
             self.assertIn("push_verified=git_push_exit_0", selected["execution_contract"])
             compact = guard.first_prompt(local)
@@ -85,7 +87,7 @@ class RoadmapGuardTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             local, bare = self.fixture(Path(tmp))
             (local / "README.md").write_text("dirty\n", encoding="utf-8")
-            result = guard.complete(local, "123456")
+            result = guard.complete(local, "123456", result="PASS")
             self.assertEqual("completed", result["status"])
             self.assertEqual("git_push_exit_0", result["push_verified"])
             self.assertNotIn("prompt_content", result)
@@ -98,6 +100,19 @@ class RoadmapGuardTests(unittest.TestCase):
             self.assertIn("| 1 | [[prompts/second|second]]", (verify / "spiegazioni.md").read_text(encoding="utf-8"))
             changed = git(["show", "--name-only", "--format="], verify).stdout.splitlines()
             self.assertNotIn("README.md", changed)
+
+    def test_blocked_prompt_requires_explicit_pass_before_completion(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            local, bare = self.fixture(Path(tmp))
+            before = git(["--git-dir", str(bare), "rev-parse", "refs/heads/main"]).stdout.strip()
+            with self.assertRaisesRegex(guard.RoadmapError, "completion_requires_explicit_pass"):
+                guard.complete(local, "123456")
+            with self.assertRaisesRegex(guard.RoadmapError, "completion_refused_result:blocked"):
+                guard.complete(local, "123456", result="BLOCKED")
+            dry = guard.complete(local, "123456", result="PASS", dry_run=True)
+            self.assertEqual("ready", dry["status"])
+            after = git(["--git-dir", str(bare), "rev-parse", "refs/heads/main"]).stdout.strip()
+            self.assertEqual(before, after)
 
     def test_wrong_prompt_id_blocks_without_changes_and_points_to_reconcile(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
