@@ -13,7 +13,7 @@ Ritirare definitivamente i repository standalone ormai sostituiti dai moduli di 
 Elimina i repository remoti GitHub e le rispettive copie locali solo dopo i gate distruttivi sotto. Mantieni invece la storia operativa in MegaVault come **archiviata/superseded da PersonalHub**, non cancellare record storici né riusare `project_id`.
 
 # Fatti autoritativi — non ridiscutere
-- L'utente ha dichiarato i quattro repository sopra obsoleti perché le relative funzioni sono ora moduli di PersonalHub.
+- L'utente ha dichiarato i cinque repository sopra obsoleti perché le relative funzioni sono ora moduli di PersonalHub.
 - PersonalHub è `project_id=49`.
 - Non serve confrontare intere codebase o storie Git per decidere se mantenerli.
 - Non fare audit generale di `~/projects` o di tutti i repository GitHub.
@@ -42,7 +42,7 @@ Se tutti i gate sono PASS:
 - non cancellare `PersonalHub` o altri repo simili;
 - niente refactor dei moduli PH;
 - niente migrazione dati: l'utente ha già dichiarato conclusa la sostituzione;
-- niente backup permanente dei quattro repo salvo blocker concreto; non creare nuovi archivi che li mantengano artificialmente in vita;
+- niente backup permanente dei cinque repo salvo blocker concreto; non creare nuovi archivi che li mantengano artificialmente in vita;
 - niente audit di branch storici, release, issue o PR;
 - niente browser se `gh` funziona;
 - niente retry identici.
