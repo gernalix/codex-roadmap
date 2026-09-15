@@ -1,2 +1,8 @@
 1. [[prompts/personalhub-startup-pixel-verification|personalhub-startup-pixel-verification]]
 2. [[prompts/codex-usage-publisher-telemetry-runtime-validation|codex-usage-publisher-telemetry-runtime-validation]]
+3. [[prompts/retire-obsolete-standalone-module-repositories|retire-obsolete-standalone-module-repositories]]
+4. [[prompts/personalhub-github-actions-ci-and-fedora-runner|personalhub-github-actions-ci-and-fedora-runner]]
+5. [[prompts/standalone-android-github-actions-ci|standalone-android-github-actions-ci]]
+6. [[prompts/python-automation-github-actions-ci|python-automation-github-actions-ci]]
+7. [[prompts/fedora-oracle-services-github-actions-ci|fedora-oracle-services-github-actions-ci]]
+8. [[prompts/browser-downloader-github-actions-ci|browser-downloader-github-actions-ci]]
