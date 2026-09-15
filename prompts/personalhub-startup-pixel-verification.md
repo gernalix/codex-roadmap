@@ -2,77 +2,52 @@
 
 `PROMPT_ID=734581 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
 
-> Continuazione diretta del run precedente. Non eseguire `roadmap_guard.py select`, non rileggere roadmap/README/spiegazioni e non ripetere la root-cause discovery già fatta. Usa solo i file/tool direttamente pertinenti.
+> Continuazione del debugging startup già pre-localizzato. Non eseguire `roadmap_guard.py select`, non rileggere roadmap/README/spiegazioni/MEMORY e non rifare root-cause discovery. Usa solo i file/tool richiesti sotto.
 
 # Goal
-Verificare sul Pixel 8a fisico che il `main` remoto corrente di PersonalHub sia non solo rapido da visualizzare ma anche realmente responsivo dopo il cold start. Correggi al massimo **un** hotspot ulteriore solo se una traccia lo dimostra in modo univoco.
+Verificare sul Pixel 8a fisico che PersonalHub `main` sia rapido **e responsivo** dopo cold start. Se il gate fallisce, usa una sola traccia Perfetto e correggi al massimo un hotspot dimostrato.
 
-# Fatti già verificati — non ripetere
-- Baseline originaria sul Pixel reale: `Displayed ...MainActivity: +13s293ms`, launch timeout e `Skipped 687 frames`.
-- Il primo fix remoto ha tolto `LegacyTagSessionRepair` da `Application.onCreate()` e ha abbattuto il tempo di visualizzazione: nel run precedente il `main` remoto ha misurato `1.411 / 1.485 / 2.939 s` su tre cold start.
-- Quel run è terminato `BLOCKED`: non c'erano launch timeout, ma sono comparsi ANR `Input dispatching timed out ... FocusEvent` e frame skip massivi.
-- Nel run precedente è stato provato **solo localmente e non pushato** un defer arbitrario di 12 s in `PersonalHubApplication.kt`: ha portato i tempi circa a `0.847–1.359 s` ma **non** ha risolto il problema (`Skipped 233/272/504 frames` e un altro input timeout). Quella modifica non è autorevole e non va riusata.
-- Il `main` remoto corrente contiene invece il fix strutturale successivo: `HubContextRuntime` materializza `HubContextRepository`/Room solo al primo uso reale; il worker post-first-frame usa `THREAD_PRIORITY_BACKGROUND`; le fasi startup hanno marker Perfetto `PH.*` (`PH.ensureStartupReady`, `PH.hubRuntimeInit`, `PH.bg.timerRepair`, ecc.).
-- `DatabaseVault.recoverInterruptedImport()` e `ensureStartupReady()` restano volutamente sincroni per sicurezza dati.
-- Package reale: `com.gernalix.personalhub`; il requisito è il Pixel fisico.
+# Fatti verificati — non ripetere
+- Baseline originaria: `Displayed ...MainActivity: +13s293ms`, launch timeout, `Skipped 687 frames`.
+- Dopo il primo fix: 3 cold start `1.411 / 1.485 / 2.939 s`, ma run `BLOCKED` per `Input dispatching timed out ... FocusEvent` e frame skip massivi.
+- Il defer locale di 12 s era un esperimento fallito ed è stato eliminato.
+- Il merge conflict successivo è già risolto e pushato in `main`; `:app:compileDebugKotlin` era PASS. Non riaprire quel problema.
+- `main` autorevole contiene: Hub repository/Room lazy, worker post-frame `THREAD_PRIORITY_BACKGROUND`, repair Timer off-main e marker Perfetto `PH.*`.
+- Recovery DB e `DatabaseVault.ensureStartupReady()` restano sincroni per sicurezza dati.
+- Package reale: `com.gernalix.personalhub`.
 
-# Preflight locale minimo
-1. Esegui **un solo** `git status --short` in PersonalHub.
-2. Se l'unica modifica locale è il vecchio defer 12 s in `app/src/main/java/com/gernalix/personalhub/PersonalHubApplication.kt`, scarta **solo quel file** con `git restore -- <path>`; non usare reset/stash generici.
-3. Se esistono modifiche locali diverse/non riconducibili a quel defer, `BLOCKED` e STOP senza toccarle.
-4. `fetch` + `pull --ff-only` di `main`; nessun branch.
+# Preflight + host gate
+1. `git status --short` una volta. Se ci sono modifiche locali, conflitti o file non committati: `BLOCKED` e STOP senza toccarli.
+2. `git fetch origin && git pull --ff-only origin main`.
+3. Esegui in una sola invocazione Gradle:
+   - `:core:hub-context:testDebugUnitTest`
+   - `:feature:multitimetracker:testDebugUnitTest`
+   - `:app:compileDebugKotlin`
+4. Se PASS, una sola `:app:assembleDebug`; installa quella stessa APK con `adb install -r`, senza uninstall/clear/reset dati.
 
-# Gate host economico
-Esegui insieme, senza discovery di task/suite larghe salvo errore reale:
-- `:core:hub-context:testDebugUnitTest`
-- `:feature:multitimetracker:testDebugUnitTest`
-- `:app:compileDebugKotlin`
+# Pixel gate — 3 cold start
+Per ogni prova: `logcat -c` → `am force-stop` → un solo `am start -W`; osserva ~8 s, salva una sola cattura logcat bounded e filtra localmente quel file. Rileva una volta focus/window dopo il display.
 
-Se PASS, esegui **una sola** `:app:assembleDebug`; installa esattamente quell'APK con `adb install -r`, senza uninstall/clear/reset dati e senza ricostruirla tra test.
+Registra solo: `Status`, `TotalTime/WaitTime`, focus, launch timeout, ANR/input timeout/FATAL, `Skipped N frames`, `PH.*`, `MTT_STARTUP`, `PersonalHubStartup`.
 
-# Gate Pixel — 3 cold start
-Per ciascuna delle tre prove:
-1. usa una directory temporanea univoca; **non** fare cleanup `rm -rf`;
-2. `logcat -c`, `am force-stop`, quindi un solo `am start -W`;
-3. osserva per circa **8 s**: è sufficiente a coprire il timeout input di 5 s senza i vecchi sleep da 15 s;
-4. salva **una sola** cattura logcat bounded per prova e filtra localmente quel file; non rieseguire `logcat -d` per fare filtri equivalenti;
-5. registra una volta lo stato focus/window dopo il display per confermare che `MainActivity` sia realmente focused, non solo “Displayed”.
-
-Raccogli: `Status`, `TotalTime/WaitTime`, focus, `Launch timeout`, `ANR in com.gernalix.personalhub`, `Input dispatching timed out`, `FATAL EXCEPTION`, `Skipped N frames`, marker `PH.*`, `MTT_STARTUP`, `PersonalHubStartup`.
-
-## PASS immediato
-PASS e STOP senza Perfetto se **tutte e tre** le prove hanno:
-- `Status: ok`;
-- `MainActivity` focused;
-- nessun launch timeout;
-- nessun ANR/input timeout/FATAL;
-- nessun frame skip massivo (>=100);
+PASS immediato se tutte e 3 le prove hanno:
+- `Status: ok` e `MainActivity` focused;
+- nessun launch timeout, ANR/input timeout o FATAL;
+- nessun `Skipped N frames` con N >= 100;
 - mediana `TotalTime` <= 2.5 s.
 
-# Solo se una prova fallisce
-Acquisisci **una sola** traccia Perfetto/System Trace usando il workflow Android-performance già disponibile. Nella traccia:
-- usa i marker `PH.*` per separare le fasi;
-- ispeziona il **main thread e scheduler slices** durante focus/input timeout;
-- non attribuire causalità a `LegacyTagSessionRepair` o ad altro solo perché un log è temporalmente vicino;
-- identifica un hotspot solo se la traccia dimostra thread/lock/CPU/DB contention concreta.
+# Solo se il gate fallisce
+Passa a **GPT-5.5 medium** e acquisisci **una sola** Perfetto/System Trace. Usa `PH.*` e main-thread/scheduler slices per attribuire un blocco reale; non inferire causalità dalla sola vicinanza temporale dei log.
 
-Se c'è un hotspot univoco, applica **un solo** fix minimo, poi ripeti una volta i gate host necessari, build/install della nuova APK e le stesse tre prove. Se l'hotspot non è univoco o il secondo gate resta fallito: `BLOCKED` con evidenza minima e STOP. Nessuna seconda indagine generica.
+Se emerge un hotspot univoco: applica un solo fix minimo, esegui solo i gate host direttamente pertinenti, rebuild/install una volta e ripeti le 3 prove. Se la traccia non identifica un hotspot univoco o il secondo gate fallisce: `BLOCKED` e STOP.
 
 # Non-goal
-- niente defer temporali arbitrari, sleep “risolutivi” o nascondere il lavoro dopo N secondi;
-- niente audit/refactor/cleanup generale;
-- niente modifica a `DatabaseVault.ensureStartupReady()` senza prova diretta Perfetto;
-- niente TCL/emulatore in sostituzione del Pixel;
-- niente bump `version.txt`, release, final APK delivery o Telegram;
-- niente branch/PR.
+Niente delay/sleep risolutivi, audit/refactor generale, modifica a `ensureStartupReady()` senza prova Perfetto, TCL/emulatore, bump versione, release/Telegram, branch/PR, test suite globali o retry equivalenti.
 
-# Modello
-Resta su **GPT-5.5 low** per preflight/build/ADB. Passa a **GPT-5.5 medium solo se il gate Pixel fallisce e devi interpretare l'unica traccia Perfetto**. Nessun GPT-5.6.
+# Stop / roadmap
+- **PASS:** completa `734581` con dry-run + complete e poi STOP:
+  `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 734581 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 734581`
+- **BLOCKED/FAIL:** lascia `734581` attivo. **Non spostarlo manualmente in `completed/`, non rinumerare la roadmap e non eseguire `complete`.**
+- `push_verified=git_push_exit_0` è terminale: niente status/fetch/rev-parse successivi sulla roadmap.
 
-# Stop
-Su PASS completa solo questo prompt:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 734581 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 734581`
-
-`push_verified=git_push_exit_0` è terminale: niente status/fetch/rev-parse successivi sulla roadmap.
-
-Output massimo 7 righe: RESULT, tempi min/mediana/max, focus+ANR/frame, eventuale hotspot Perfetto+fix, test/build, Pixel install/test, commit/push o blocker.
+Output massimo 7 righe: RESULT, tempi min/mediana/max, focus+ANR/frame, eventuale hotspot+fix, test/build, Pixel install/test, commit/push o blocker.
