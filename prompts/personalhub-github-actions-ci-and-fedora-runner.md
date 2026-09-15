@@ -1,83 +1,69 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=392659 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STANDARD`
+`PROMPT_ID=392659 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD`
 
 # Goal
-Portare PersonalHub a una pipeline CI automatica e a basso consumo:
-1. GitHub Actions hosted per build/lint/unit test a ogni PR/push rilevante;
-2. test Android su emulatore con frequenza controllata;
-3. test strumentati completi nightly/manuali;
-4. un runner self-hosted Fedora **solo per PersonalHub privato**, manuale e hardenizzato, per smoke test su hardware reale quando Pixel/TCL sono collegati.
+Portare PersonalHub a CI automatica con **costo GitHub minimo/zero**, scegliendo runner e frequenza in base alla visibility già applicata da `PROMPT_ID=643812`.
 
-Codex deve creare, eseguire e correggere la pipeline autonomamente usando `gh`; Chrome è fallback solo se una configurazione GitHub indispensabile non è disponibile via CLI/API.
+Sorgente decisione:
+`/home/daniele/projects/MegaVault/ai/repository-public-private-matrix.md`
 
-# Starting point verificato
-- Repo: `/home/daniele/projects/PersonalHub`, branch `main`.
-- Esistono già `app/src/test` e `app/src/androidTest`, inclusi test DB/Finance/Hub Context/widget/Datasette: riusali, non riscriverli.
-- Al momento della preparazione del task non risultava una `.github/workflows` nel repo.
-- Esiste già il workflow locale canonico per avvio emulatore `tools/android_target_preflight.py`.
-- Il package reale e i dati del Pixel non devono essere alterati da CI cloud.
+# Starting point
+- Repo `/home/daniele/projects/PersonalHub`, `main`.
+- Riusa `app/src/test`, `app/src/androidTest` e `tools/android_target_preflight.py`; non riscrivere test esistenti.
+- Nessun audit applicativo, feature/refactor, release/bump/Telegram.
 
-# Scope minimo
-Prima leggi solo:
-- `settings.gradle.kts`, root/app `build.gradle.kts`;
-- `.github/workflows/` se nel frattempo esiste;
-- nomi dei test in `app/src/test` e `app/src/androidTest`;
-- eventuale `.codex/CODE_MAP.tsv` solo per righe CI/test pertinenti.
+Leggi una sola volta: riga PH della matrice + `settings.gradle.kts`, root/app `build.gradle.kts`, `.github/workflows` se presente e soli nomi dei test. `.codex/CODE_MAP.tsv` soltanto con grep CI/test mirato.
 
-Non fare audit del codice applicativo.
+# Gate visibility — vincolante
+Verifica una sola volta la visibility reale con `gh repo view`.
 
-# CI hosted
-Crea il minimo numero di workflow leggibili, con cache Gradle e concurrency cancel-in-progress:
-- **host gate** su PR e push a `main`: compile/build debug + unit test esistenti + lint strettamente necessario;
-- **emulator smoke** su push a `main` e `workflow_dispatch`, non su ogni PR: usa una piccola selezione di test strumentati già esistenti e stabili;
-- **full instrumentation** nightly + `workflow_dispatch`: suite Android strumentata completa sull'emulatore.
+## Se PUBLIC
+Usa runner GitHub-hosted standard:
+1. **host gate** PR + push `main`: compile/assemble debug + unit test esistenti + lint necessario;
+2. **emulator smoke** push `main` + `workflow_dispatch`, non ogni PR;
+3. **full instrumentation** schedule notturno + manuale.
 
-Usa versioni correnti e affidabili delle action; evita matrix di JDK/API inutili. Carica report/logcat/screenshot solo su failure. Nessun secret per i test che possono usare fixture/mocks.
+NON registrare self-hosted runner su un repo pubblico. Pixel/TCL reali restano QA locale Codex separata, non requisito di questo task.
 
-Per scegliere i comandi Gradle:
-- riusa task noti dal progetto;
-- al massimo una `./gradlew tasks --all` se un nome è realmente incerto;
-- niente sequenze di `check` equivalenti.
+## Se PRIVATE
+Non spendere hosted minutes per job pesanti:
+1. registra/riusa un runner Fedora **repo-level PH-only** con label dedicata `fedora-personalhub-ci`;
+2. host gate PR/push e emulator smoke girano sul self-hosted;
+3. full instrumentation solo `workflow_dispatch` (nessun nightly se il laptop può essere offline);
+4. workflow self-hosted mai `pull_request_target`; permessi token minimi.
 
-# Runner Fedora reale
-Solo dopo PASS della CI hosted:
-1. verifica se esiste già un runner repo-level PersonalHub; se sì riusalo;
-2. altrimenti registra sul ThinkPad Fedora un runner GitHub **repo-level** per `gernalix/PersonalHub`, con label dedicata `fedora-personalhub-real`;
-3. il workflow real-device deve essere solo `workflow_dispatch`, mai `pull_request`, `pull_request_target` o trigger da fork;
-4. permessi `GITHUB_TOKEN` minimi e nessun secret stampato;
-5. prima di ADB usa il preflight canonico; se nessun device reale autorizzato è presente, termina `SKIPPED`/chiaro, non avvia una caccia ai device;
-6. non usare `pm clear`, uninstall o reset dati del package reale; smoke non distruttivo: build/install `-r` solo se esplicitamente sicuro per la variante di test e avvio/health/logcat limitato;
-7. non dare al runner accesso ad altri repository privati.
+Se il runner non è registrabile via CLI/API, Chrome locale è ammesso una sola volta solo per setup; nessun cookie/token nei log.
 
-Se la registrazione runner richiede un passaggio browser non ottenibile con `gh`, Codex può controllare Chrome locale una sola volta; non deve copiare cookie/token nel terminale o nei log.
+# Workflow efficiency
+- path filters: niente run per docs-only; modifica workflow/build/test/code deve triggerare;
+- Gradle cache e `concurrency` con cancel-in-progress;
+- una sola API/JDK coerente col progetto, niente matrix esplorative;
+- report/logcat/screenshot solo su failure, retention breve (<=3 giorni);
+- nessun secret di produzione;
+- riusa task Gradle noti; `./gradlew tasks --all` massimo una volta solo se realmente necessario.
 
-# Ciclo GitHub autonomo
-Dopo il push:
-- `gh run list`/`gh run watch` per il run pertinente;
-- su failure leggi solo il job/log fallito;
-- correggi la causa concreta;
-- massimo un retry identico per stato invariato;
-- appena hosted + workflow manuale syntax/dispatch sono PASS, STOP. Non attendere che un Pixel sia fisicamente collegato per considerare valida la CI hosted.
+# Ciclo autonomo
+Non duplicare in locale l'intera CI. Fai solo syntax/preflight minimo necessario a evitare un push palesemente rotto, poi push una volta e usa il run GitHub come gate canonico.
 
-# Non-goal
-- niente feature/refactor PH;
-- niente bump `version.txt`, release APK o Telegram;
-- niente test Pixel automatici da eventi PR;
-- niente installazione di runner globali/organization;
-- niente browser automation per testare la UI Android;
-- niente test distruttivi su dati reali.
+Per ciascun workflow pertinente:
+- identifica il singolo run creato;
+- `gh run watch --exit-status` una volta;
+- failure -> leggi solo job/log fallito -> fix minimo -> nuovo run;
+- niente retry identico o audit post-PASS.
+
+Per il self-hosted emulator usa il preflight canonico; non fare discovery AVD/SDK alternativa finché non fallisce con evidenza concreta.
+
+# Sicurezza real-device
+Nessun workflow deve fare automaticamente uninstall, `pm clear`, reset dati o test distruttivi sul Pixel/TCL. La CI usa emulatori; hardware reale resta locale/manuale.
 
 # Acceptance
-- PR/push host gate verde;
-- emulator smoke avviabile e verde;
-- full instrumentation nightly/manuale definito e almeno un run manuale PASS;
-- runner Fedora repo-level installato/hardenizzato oppure già esistente e validato;
-- real-device workflow solo manuale e non distruttivo;
-- documentazione breve dei comandi/runbook nel repo, senza duplicare MegaVault.
+- PUBLIC: host gate + emulator smoke + full instrumentation hosted definiti e almeno un run manuale/full PASS; nessun self-hosted runner collegato al repo.
+- PRIVATE: runner PH-only validato; host gate + emulator smoke self-hosted PASS; full instrumentation manuale avviabile; nessun hosted job pesante ricorrente.
+- in entrambi: workflow path-filtered, concurrency attiva, artifacts failure-only/short retention.
 
 # Stop
-Dopo PASS completa solo questo task con:
+Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 392659 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 392659`
 
-Output massimo 8 righe: RESULT, hosted gate, emulator smoke, nightly, runner Fedora, real-device workflow, commit/push, blocker.
+Output massimo 7 righe: RESULT, visibility+runner strategy, host gate, emulator, full instrumentation, commit/push, blocker.
