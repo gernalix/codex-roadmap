@@ -22,13 +22,14 @@ EXECUTION_CONTRACT = (
     "and tests targeted, group independent checks into one tool call when safe, avoid "
     "equivalent retries, and stop at PASS/BLOCKED/FAIL. For long-running commands, "
     "prefer one blocking wait or sparse status checks and do not narrate unchanged "
-    "polls. On PASS run dry-run and real complete in one shell invocation when possible. "
-    "If implementation was already pushed but complete reports prompt_identity_mismatch "
-    "because the roadmap advanced, use reconcile --dry-run and then reconcile "
-    "--confirm-executed; never reproduce roadmap bookkeeping manually. A successful "
-    "complete or reconcile response with push_verified=git_push_exit_0 is authoritative "
-    "proof of roadmap push success; do not run follow-up git status/rev-parse/ls-remote "
-    "on the roadmap checkout."
+    "polls. On PASS run dry-run and real complete in one shell invocation when possible; "
+    "if prompt metadata contains last_result, pass --result PASS to both. On BLOCKED/FAIL "
+    "leave the prompt pending and never move it manually to completed. If implementation "
+    "was already pushed but complete reports prompt_identity_mismatch because the roadmap "
+    "advanced, use reconcile --dry-run and then reconcile --confirm-executed; never "
+    "reproduce roadmap bookkeeping manually. A successful complete or reconcile response "
+    "with push_verified=git_push_exit_0 is authoritative proof of roadmap push success; "
+    "do not run follow-up git status/rev-parse/ls-remote on the roadmap checkout."
 )
 
 
@@ -96,6 +97,7 @@ def _prompt_payload(repo: Path, name: str, path: str, *, include_prompt: bool = 
         "reasoning": reasoning_match.group(1) if reasoning_match else "",
         "megavault": _metadata_value(prompt, "MegaVault"),
         "campaign_id": _metadata_value(prompt, "campaign_id"),
+        "last_result": _metadata_value(prompt, "last_result").upper(),
         "type": prompt_type,
         "source": "origin/main",
     }
@@ -159,6 +161,17 @@ def _prompt_by_id(repo: Path, prompt_id: str, *, fetch: bool = True) -> tuple[di
     if payload["prompt_id"] != prompt_id:
         raise RoadmapError(f"prompt_identity_mismatch:requested={prompt_id}:found={payload['prompt_id']}")
     return payload, location
+
+
+def _validate_completion_result(target: dict[str, str], result: str | None) -> None:
+    normalized = (result or "").upper()
+    if normalized and normalized != "PASS":
+        raise RoadmapError(f"completion_refused_result:{normalized.lower()}")
+    last_result = target.get("last_result", "").upper()
+    if last_result and last_result != "PASS" and normalized != "PASS":
+        raise RoadmapError(
+            f"completion_requires_explicit_pass:last_result={last_result.lower()}:use_--result_PASS"
+        )
 
 
 def _renumber_roadmap(text: str, completed_name: str) -> str:
@@ -234,13 +247,20 @@ def _finalize_prompt(repo: Path, target: dict[str, str], *, commit_message: str)
             shutil.rmtree(parent, ignore_errors=True)
 
 
-def complete(repo: Path, prompt_id: str, *, dry_run: bool = False) -> dict[str, str]:
+def complete(
+    repo: Path,
+    prompt_id: str,
+    *,
+    dry_run: bool = False,
+    result: str | None = None,
+) -> dict[str, str]:
     selected = first_prompt(repo)
     if selected["prompt_id"] != prompt_id:
         raise RoadmapError(
             f"prompt_identity_mismatch:selected={selected['prompt_id']}:requested={prompt_id}:"
             f"if_requested_task_is_already_executed_use_reconcile"
         )
+    _validate_completion_result(selected, result)
     if dry_run:
         return {**selected, "status": "ready"}
     return _finalize_prompt(repo, selected, commit_message=f"Complete roadmap prompt {prompt_id}")
@@ -252,6 +272,7 @@ def reconcile(
     *,
     dry_run: bool = False,
     confirm_executed: bool = False,
+    result: str | None = None,
 ) -> dict[str, str]:
     target, location = _prompt_by_id(repo, prompt_id)
     if location == "completed":
@@ -269,6 +290,7 @@ def reconcile(
     selected = first_prompt(repo, fetch=False)
     if selected["prompt_id"] == prompt_id:
         raise RoadmapError("prompt_is_selected_use_complete")
+    _validate_completion_result(target, result)
     context = {
         **target,
         "mode": "reconcile",
@@ -279,8 +301,8 @@ def reconcile(
         return {**context, "status": "reconcile_ready"}
     if not confirm_executed:
         raise RoadmapError("reconcile_requires_confirm_executed")
-    result = _finalize_prompt(repo, target, commit_message=f"Reconcile completed roadmap prompt {prompt_id}")
-    return {**result, "mode": "reconcile", "selected_prompt_id": selected["prompt_id"]}
+    result_payload = _finalize_prompt(repo, target, commit_message=f"Reconcile completed roadmap prompt {prompt_id}")
+    return {**result_payload, "mode": "reconcile", "selected_prompt_id": selected["prompt_id"]}
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -291,12 +313,14 @@ def build_parser() -> argparse.ArgumentParser:
     complete_p = sub.add_parser("complete")
     complete_p.add_argument("--prompt-id", required=True)
     complete_p.add_argument("--dry-run", action="store_true")
+    complete_p.add_argument("--result", choices=("PASS", "BLOCKED", "FAIL"))
     reconcile_p = sub.add_parser(
         "reconcile",
         help="Archive an already-executed pending prompt that is no longer selected.",
     )
     reconcile_p.add_argument("--prompt-id", required=True)
     reconcile_p.add_argument("--dry-run", action="store_true")
+    reconcile_p.add_argument("--result", choices=("PASS", "BLOCKED", "FAIL"))
     reconcile_p.add_argument(
         "--confirm-executed",
         action="store_true",
@@ -312,13 +336,14 @@ def main(argv: list[str] | None = None) -> int:
         if args.cmd == "select":
             payload = first_prompt(repo, include_prompt=True)
         elif args.cmd == "complete":
-            payload = complete(repo, args.prompt_id, dry_run=args.dry_run)
+            payload = complete(repo, args.prompt_id, dry_run=args.dry_run, result=args.result)
         else:
             payload = reconcile(
                 repo,
                 args.prompt_id,
                 dry_run=args.dry_run,
                 confirm_executed=args.confirm_executed,
+                result=args.result,
             )
     except RoadmapError as exc:
         print(json.dumps({"status": "blocked", "error": str(exc)}, sort_keys=True))
