@@ -7,9 +7,8 @@ Aggiungere CI GitHub Actions minimale ai repository Android standalone ancora at
 - `gernalix/SuperContacts`
 - `gernalix/MultiTimeTracker`
 - `gernalix/android-app-template`
-- `gernalix/luoghi-app`
 
-NON includere `Soldi`, `wordpulse`, `Sostanze`, `Luoghi`: sono stati ritirati nel task precedente.
+NON includere `Soldi`, `wordpulse`, `Sostanze`, `Luoghi`, `luoghi-app`: sono stati ritirati nel task precedente.
 
 # Routing / starting point
 Per ogni slug risolvi una sola volta il vero `project_id` con `megavault.py project <slug>` e lo stato attivo. Se MegaVault lo marca già archived/superseded, riportalo `SKIPPED` e non modificarlo.
@@ -32,7 +31,7 @@ Applica lo stesso schema senza forzare test che il repo non possiede:
 6. concurrency con cancellazione dei run superseded;
 7. niente release/signing secrets.
 
-Non creare una shared-action cross-repo: per quattro repo piccoli è più semplice e robusto mantenere workflow locali minimali.
+Non creare una shared-action cross-repo: per tre repo piccoli è più semplice e robusto mantenere workflow locali minimali.
 
 # Verifica efficiente
 Per ciascun repo:
@@ -42,7 +41,7 @@ Per ciascun repo:
 - se fallisce, leggi solo log/job fallito e correggi la causa;
 - dopo PASS passa al repo successivo senza audit post-PASS.
 
-Raggruppa le sole letture indipendenti; non lanciare quattro emulatori in parallelo sul laptop.
+Raggruppa le sole letture indipendenti; non lanciare più emulatori in parallelo sul laptop.
 
 # Non-goal
 - nessun refactor/cleanup;
