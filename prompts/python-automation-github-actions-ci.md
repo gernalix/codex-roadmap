@@ -3,60 +3,50 @@
 `PROMPT_ID=286671 | project_id=8 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD`
 
 # Goal
-Portare a CI GitHub Actions i repository Python/automation già identificati:
+Aggiungere/normalizzare CI GitHub Actions SOLO per:
 - `gernalix/codex-usage-monitor`
 - `gernalix/github-autosync`
 - `gernalix/workflowy-import`
-- `gernalix/MegaVault`
 - `gernalix/codex-roadmap`
 
-Obiettivo: far eseguire a GitHub i test deterministici che oggi consumano round-trip Codex locali, senza inventare nuove architetture.
+**MegaVault è fuori scope:** il workflow esistente `validate.yml` già copre validate + unittest + clean-tree; non rileggerlo né modificarlo salvo blocker diretto di questo task.
 
-# Starting point già verificato
-- `codex-usage-monitor` ha già una suite `tests/` ampia e `scripts/secret_scan.sh`.
-- `github-autosync` ha `tests/test_github_autosync.py` e regressioni.
-- `workflowy-import` ha `test_workflowy_days.py`.
-- MegaVault ha già `.github/workflows/validate.yml` che esegue `megavault.py validate`, unittest e clean-tree check: non duplicarlo.
-- `codex-roadmap` ha test per `roadmap_guard`/workflow locali: usa quelli esistenti.
+# Routing minimo
+Per ogni target risolvi una volta project_id/stato e leggi soltanto:
+- riga relativa nella matrice `/home/daniele/projects/MegaVault/ai/repository-public-private-matrix.md`;
+- packaging/runtime declaration;
+- test runner/test files esistenti;
+- `.github/workflows`.
 
-# Procedura per repo
-Risolvi una volta il `project_id` reale di ciascun repo con MegaVault. Poi, per ciascuno:
-1. leggi solo packaging (`pyproject`, requirements se presenti), test runner esistente e `.github/workflows`;
-2. se esiste già CI equivalente, non crearne una seconda;
-3. usa la versione Python canonica del repo; se non dichiarata, una sola versione stabile coerente col runtime reale, niente matrix;
-4. workflow su PR + push default branch, concurrency cancel-in-progress;
-5. niente credenziali reali: GitHub API, Telegram, Uptime Kuma, filesystem Codex e rete esterna vanno mockati/fixture quando i test lo consentono;
-6. carica output solo su failure.
+Niente README/source audit generale.
 
-Specifiche:
-- **codex-usage-monitor:** esegui il runner/test suite canonico e secret scan; includi quota notification policy, parsing/archive/publisher già coperti.
-- **github-autosync:** usa repository Git temporanei e fixture; copri `no_upstream`, dirty worktree, dedup e notification state senza toccare repo reali.
-- **workflowy-import:** testa fixture JSON -> parser/SQLite, idempotenza e deep-link/date-node; se questi ultimi non sono ancora coperti, aggiungi solo test mirati usando fixture sintetiche.
-- **MegaVault:** estendi `validate.yml` solo se trovi un gap reale rispetto a validate + unittest + clean-tree; altrimenti lascialo invariato e conta il workflow esistente come PASS.
-- **codex-roadmap:** esegui unittest e un check read-only di coerenza roadmap/spiegazioni/prompts; non chiamare `complete` né mutare la roadmap durante CI.
+# CI
+Se esiste CI equivalente, riusala e non duplicare.
+Usa una sola Python version coerente col runtime, niente matrix. PR + push default branch, path filters per evitare docs-only, concurrency cancel-in-progress, output/artifact solo su failure e retention breve.
 
-# Ciclo remoto
-Per ogni repo modificato:
-- gate locale mirato una volta;
-- push;
-- osserva il singolo run con `gh`;
-- failure -> solo log del job fallito -> fix minimo -> retry;
-- niente retry identici senza nuova evidenza;
-- PASS -> repo chiuso.
+Visibility/costo:
+- PUBLIC: standard GitHub-hosted automatico;
+- PRIVATE: mantieni solo suite veloce deterministica su hosted, senza schedule/job pesanti; se esiste già un runner repo-level sicuro puoi riusarlo, ma NON installarne uno nuovo solo per questi test piccoli.
+
+Nessun secret reale: API GitHub/Telegram/Kuma/filesystem Codex/rete esterna devono essere mock/fixture quando necessari.
+
+# Copertura minima per repo
+- `codex-usage-monitor`: usa il runner canonico risultante dal task precedente; parsing/archive/publisher/quota/Kuma + secret scan esistente, senza inventare un secondo runner.
+- `github-autosync`: test esistenti con repo Git temporanei; `no_upstream`, dirty worktree, dedup, notification state.
+- `workflowy-import`: fixture JSON -> parser/SQLite, idempotenza, deep-link/date-node; aggiungi test solo se il comportamento esiste ma manca una regressione mirata.
+- `codex-roadmap`: unittest + check read-only 1:1 roadmap/spiegazioni/prompts; mai `complete`/mutation in CI.
+
+# Ciclo efficiente
+Niente duplicazione locale dell'intera suite: syntax/preflight minimo -> push -> singolo run GitHub canonico. `gh run watch --exit-status` una volta; su failure leggi solo il job fallito, fix minimo, nuovo run. Nessun retry identico o audit post-PASS.
 
 # Non-goal
-- niente refactor dei parser/monitor;
-- niente backfill di dati reali;
-- niente accesso a `~/.codex/sessions` in GitHub cloud;
-- niente dipendenze CI nuove se stdlib/runner esistente basta;
-- niente browser;
-- niente modifiche a MegaVault fuori dal necessario per CI/test.
+Niente refactor parser/monitor, backfill dati, browser, accesso a `~/.codex/sessions`, nuove dipendenze CI se stdlib/runner esistente basta.
 
 # Acceptance
-Tutti i repo attivi hanno CI verde o, per MegaVault, il workflow esistente è verificato sufficiente. I test non richiedono secret di produzione e sono ripetibili.
+I quattro repo attivi hanno CI verde e ripetibile, senza production secrets e senza workflow duplicati; repo archived sono SKIPPED.
 
 # Stop
 Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 286671 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 286671`
 
-Output massimo 8 righe: RESULT + stato dei cinque repo + eventuale test aggiunto + blocker.
+Output massimo 7 righe: RESULT + una riga per repo + test mirato aggiunto eventuale + blocker.
