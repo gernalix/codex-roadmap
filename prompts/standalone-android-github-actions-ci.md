@@ -3,59 +3,51 @@
 `PROMPT_ID=195098 | project_id=51 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD`
 
 # Goal
-Aggiungere CI GitHub Actions minimale ai repository Android standalone ancora attivi che erano stati indicati come candidati:
+CI minima per i soli Android standalone attivi:
 - `gernalix/SuperContacts`
 - `gernalix/MultiTimeTracker`
 - `gernalix/android-app-template`
 
-NON includere `Soldi`, `wordpulse`, `Sostanze`, `Luoghi`, `luoghi-app`: sono stati ritirati nel task precedente.
+`Soldi`, `wordpulse`, `Sostanze`, `Luoghi`, `luoghi-app` sono RETIRE e fuori scope anche se non ancora cancellati.
 
-# Routing / starting point
-Per ogni slug risolvi una sola volta il vero `project_id` con `megavault.py project <slug>` e lo stato attivo. Se MegaVault lo marca già archived/superseded, riportalo `SKIPPED` e non modificarlo.
+# Routing minimo
+Per ogni target risolvi una volta project_id/stato e leggi soltanto: riga matrice pubblico/privato, `settings.gradle*`, root/app `build.gradle*`, `.github/workflows`, nomi di `src/test`/`src/androidTest`. README solo se manca il comando build canonico.
 
-Per ogni repo attivo leggi soltanto:
-- `settings.gradle*`, root/app `build.gradle*`;
-- `.github/workflows/` se presente;
-- directory `src/test` e `src/androidTest`;
-- README solo se serve a identificare il comando build canonico.
+Repo archived/superseded => `SKIPPED` senza modifica.
 
-Nessun audit applicativo.
+# Strategia per visibility
+## PUBLIC
+GitHub-hosted standard:
+- PR + push default branch: compile/assemble debug + unit test esistenti + lint necessario;
+- se ci sono test strumentati significativi: emulator smoke su push default + `workflow_dispatch`, non ogni PR.
 
-# Implementazione per repo
-Applica lo stesso schema senza forzare test che il repo non possiede:
-1. workflow PR + push `main` con checkout, JDK/Android setup, Gradle cache;
-2. compile/assemble debug + unit test esistenti + lint disponibile;
-3. se esistono test strumentati significativi, aggiungi emulator job su push `main`/manuale; non renderlo obbligatorio su ogni PR se aumenta molto i minuti;
-4. per `android-app-template` il gate richiesto è che il template/config corrente compili e produca un APK valido; non inventare feature test;
-5. artifact/report solo su failure o quando utile per diagnosticare;
-6. concurrency con cancellazione dei run superseded;
-7. niente release/signing secrets.
+## PRIVATE
+Per ridurre consumo Actions:
+- automatico solo host gate veloce (compile/unit/lint);
+- niente emulator hosted automatico/scheduled;
+- instrumentation resta `workflow_dispatch` solo se già leggera oppure locale/Codex; non installare nuovi self-hosted runner per questi piccoli repo.
 
-Non creare una shared-action cross-repo: per tre repo piccoli è più semplice e robusto mantenere workflow locali minimali.
+# Efficienza workflow
+- path filters: niente run docs-only;
+- Gradle cache + concurrency cancel-in-progress;
+- una sola JDK/API coerente, niente matrix esplorative;
+- report/artifact solo su failure, retention <=3 giorni;
+- niente signing/release secrets;
+- `android-app-template`: basta che template/config compili e produca APK valido; non inventare feature test.
 
-# Verifica efficiente
-Per ciascun repo:
-- un solo gate locale economico corrispondente al workflow;
-- commit/push;
-- osserva con `gh` solo il run appena creato;
-- se fallisce, leggi solo log/job fallito e correggi la causa;
-- dopo PASS passa al repo successivo senza audit post-PASS.
+Non creare shared action cross-repo.
 
-Raggruppa le sole letture indipendenti; non lanciare più emulatori in parallelo sul laptop.
+# Ciclo Codex
+Niente full gate locale duplicato: preflight minimo -> push -> run GitHub canonico. Osserva solo il run creato; failure -> solo job/log fallito -> fix minimo -> nuovo run. Nessun retry identico, nessun audit post-PASS, nessun Pixel/TCL.
 
 # Non-goal
-- nessun refactor/cleanup;
-- niente modifiche funzionali alle app;
-- niente Pixel/TCL, release, Telegram;
-- niente matrix multi-API/JDK salvo requisito già presente;
-- niente nuovi test voluminosi: aggiungi al massimo uno smoke test se il repo è completamente privo di test e serve a validare il bootstrap;
-- niente Chrome.
+Niente refactor/cleanup/feature, release/Telegram, matrix multi-API/JDK, nuovi test voluminosi. Al massimo uno smoke se repo totalmente privo di test e serve al bootstrap CI.
 
 # Acceptance
-Ogni repo attivo deve avere un workflow verde coerente con i test realmente disponibili. Repo archived sono `SKIPPED`, non "ripristinati".
+Ogni repo attivo ha host gate verde; emulator CI automatico solo quando PUBLIC e utile; PRIVATE non spreca minuti in emulator/schedule. Archived => SKIPPED.
 
 # Stop
-Dopo PASS completa:
+Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 195098 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 195098`
 
-Output massimo 8 righe: RESULT + una riga per repo con hosted/emulator/SKIPPED + commit/push/blocker.
+Output massimo 6 righe: RESULT + una riga per repo + blocker eventuale.
