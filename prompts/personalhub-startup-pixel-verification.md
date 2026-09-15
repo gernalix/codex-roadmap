@@ -1,6 +1,6 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=734581 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
+`PROMPT_ID=734581 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST | last_result=BLOCKED`
 
 > Continuazione del debugging startup già pre-localizzato. Non eseguire `roadmap_guard.py select`, non rileggere roadmap/README/spiegazioni/MEMORY e non rifare root-cause discovery. Usa solo i file/tool richiesti sotto.
 
@@ -45,8 +45,8 @@ Se emerge un hotspot univoco: applica un solo fix minimo, esegui solo i gate hos
 Niente delay/sleep risolutivi, audit/refactor generale, modifica a `ensureStartupReady()` senza prova Perfetto, TCL/emulatore, bump versione, release/Telegram, branch/PR, test suite globali o retry equivalenti.
 
 # Stop / roadmap
-- **PASS:** completa `734581` con dry-run + complete e poi STOP:
-  `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 734581 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 734581`
+- **PASS:** completa `734581` dichiarando esplicitamente l'esito PASS, poi STOP:
+  `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 734581 --result PASS --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 734581 --result PASS`
 - **BLOCKED/FAIL:** lascia `734581` attivo. **Non spostarlo manualmente in `completed/`, non rinumerare la roadmap e non eseguire `complete`.**
 - `push_verified=git_push_exit_0` è terminale: niente status/fetch/rev-parse successivi sulla roadmap.
 
