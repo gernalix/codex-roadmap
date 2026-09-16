@@ -119,6 +119,26 @@ Interpretation:
 - For comparable self-contained maintenance tasks, skip memory/document discovery, batch independent status/runtime checks, reuse outputs and target roughly **≤10 tool calls** unless a concrete failure appears.
 - Medium was harmless here, but a purely mechanical variant without systemd/runtime judgment would be a candidate for GPT-5.5 Low. Do not lower reasoning when lifecycle/runtime decisions are still part of acceptance.
 
+## Empirical benchmark: PROMPT_ID 814627
+
+Completed diagnostic attempt: intermittent Fedora switch from `Performance` to `Power Saver`.
+
+- Model: **GPT-5.5**
+- Reasoning: **Medium**
+- Duration: **223.991 s (~3m44s)**.
+- Prompt accounting: **92,133 total tokens** = **91,346 input**, of which **90,496 cached (~99.07%)** and only **850 uncached**, plus **787 output**; reasoning output **386**.
+- Tool calls: **35 total** = **32 `exec_command` + 3 patch calls**, about **9.38 calls/minute**.
+- Observed weekly quota movement: **0 pp** (`82% → 82%`).
+- Outcome: `WAITING_FOR_EVENT`. The run proved that `tuned-ppd` applied TuneD `powersave`, but did not prove the exact caller/trigger for the 2026-09-16 transition.
+
+Interpretation:
+
+- GPT-5.5 Medium was appropriate: several plausible mechanisms existed (D-Bus profile request/hold, GNOME power policy, ACPI/platform-profile monitoring), and the task required separating the component applying the profile from the component triggering it. Lowering reasoning is not the relevant optimization.
+- The main waste was orchestration/output: an unnecessary `MEMORY.md` grep produced thousands of tokens; a broad boot-journal scan produced **13,705 tool-output tokens and was truncated**; a later TuneD log read produced another **6,834**. Once `tuned-ppd` was identified, dedicated logs and a narrow event-time window should have replaced full-boot scans.
+- The run created an ad-hoc user `power-profile-watch` even though `fedora-system-monitor` already had a root D-Bus power-profile watcher. The new watcher then hit system-bus monitor authorization fallback and needed follow-up patch/restart churn because its first change detector included the observation timestamp. Future diagnostics should do one targeted canonical-monitor lookup before creating a persistent watcher and should compare timestamp-free semantic snapshots.
+- Historical `tuned-ppd` evidence on the same host showed prior `power-saver` holds by `org.gnome.SettingsDaemon.Power`; that is relevant prior evidence, but it does **not** prove the 2026-09-16 trigger. Reports should surface such evidence without promoting it to root cause.
+- The publisher stored this run as `UNKNOWN` even though the final report explicitly said `STATUS: WAITING_FOR_EVENT`; efficiency/report tooling should treat that as a status-parsing mismatch rather than a task result.
+
 ## How to calibrate future prompts
 
 Before saving a new prompt, choose model/reasoning from task characteristics and the measured evidence above. Encode only task-specific scope, decisive known evidence, pre-localized starting files/symbols, safety/non-goals, acceptance criteria and concise output requirements. Let the governing MegaVault/PersonalHub bootstrap supply global execution behavior.
