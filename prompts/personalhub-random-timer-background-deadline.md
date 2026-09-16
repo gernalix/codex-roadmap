@@ -44,9 +44,9 @@ PASS se il deadline è OS-driven/UI-independent, la sessione termina a `expected
 Niente redesign Now, nuovo motore Alerts, refactor Timer, statistiche Random Timer, nuova distribuzione, workaround force-stop, bump versione, Pixel reale o delivery APK.
 
 # Stop
-Dopo PASS tecnico commit/push una volta, poi:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 232198 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 232198`
+Dopo PASS tecnico commit/push una volta, poi esegui una sola volta:
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 232198 --confirm-executed`
 
-Se il guard richiede `reconcile` per bookkeeping concorrente, usalo solo secondo la policy canonica già presente nel repo. Dopo PASS niente audit aggiuntivi.
+Dopo PASS niente audit aggiuntivi.
 
 Prima riga output `RESULT=PASS|BLOCKED|FAIL`; massimo 6 righe: `IMPLEMENTATION`, `HOST_TEST`, `EMULATOR`, `BOUNDARY`, `PUSH/GUARD`.
