@@ -40,6 +40,11 @@ class RepositoryConsistencyTests(unittest.TestCase):
         prompt_files = {path.stem for path in (ROOT / "prompts").glob("*.md")}
         self.assertEqual(set(name for _, name in roadmap), prompt_files)
 
+    def test_explanation_intro_has_no_numbered_task_narrative(self):
+        text = (ROOT / "spiegazioni.md").read_text(encoding="utf-8")
+        intro = text.split("|   # |", 1)[0]
+        self.assertNotRegex(intro, re.compile(r"\btask\s+\d+\b", re.IGNORECASE))
+
     def test_pending_prompt_metadata_is_canonical(self):
         explanations = {name: reasoning for _, name, reasoning, _ in self._explanations()}
         prompt_ids = []
