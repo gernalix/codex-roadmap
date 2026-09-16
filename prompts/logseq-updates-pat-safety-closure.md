@@ -1,17 +1,18 @@
-[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
-
-`PROMPT_ID=518264 | project_id=23 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT`
+PROMPT_ID=518264 | project_id=23 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT
 
 # Goal
 Bonifica in modo fail-closed SOLO la vecchia history di `gernalix/logseq_updates` dal finding `github-pat`, verifica lo stato della credential senza esporla e aggiorna la decisione di pubblicabilità.
 
 # Starting point autoritativo
 - repo remoto attualmente PRIVATE, branch `master`;
+- HEAD remoto corrente: `229e999ca6073d70cac01eedf520d5062843b04f`;
 - finding noto: `github-pat` nella history, path `logseq_updates.bat`, commit abbreviato `41ff0d119e3c`;
-- il tree corrente è già sanificato su `229e999ca6073d70cac01eedf520d5062843b04f` o successivo: il batch usa `GITHUB_TOKEN` dall'ambiente e non contiene più il PAT;
+- il tree corrente è già sanificato: il batch usa `GITHUB_TOKEN` dall'ambiente e non contiene più il PAT;
 - nello stesso fix remoto lo updater usa state/download atomici e aggiorna `last_run_number` solo dopo successo: NON toccare codice applicativo in questo task;
 - checkout canonici: `/home/daniele/projects/logseq_updates`, `/home/daniele/projects/MegaVault`, `/home/daniele/projects/codex-roadmap`;
 - output MegaVault modificabili SOLO per `logseq_updates`: `ai/repository-publication-audit.json`, `ai/repository-ci-handoff.json`, `ai/repository-public-private-matrix.md`.
+
+Prompt autosufficiente: non rileggere README/roadmap/spiegazioni/MEMORY o audit globali; usa solo i file/output esplicitamente necessari sotto.
 
 # Safety
 - Mai stampare secret, fingerprint, raw finding, header Authorization o replace-map.
@@ -20,7 +21,7 @@ Bonifica in modo fail-closed SOLO la vecchia history di `gernalix/logseq_updates
 - Repo PRIVATE finché history e credential non sono provate sicure.
 
 # Esecuzione minima
-1. Fotografia Git dei tre checkout interessati. `logseq_updates` deve includere `229e999...`; se il remoto avanza durante il task, `BLOCKED`, niente merge/rebase.
+1. In un solo blocco read-only fai la fotografia Git dei tre checkout interessati. `logseq_updates` deve includere `229e999...`; se il remoto avanza durante il task, `BLOCKED`, niente merge/rebase.
 2. Nel mirror `/tmp` esegui UNA gitleaks full-history/all-refs con `--redact` e report raw protetto. Conferma programmaticamente il finding target senza stamparlo.
 3. Se il valore può essere estratto in-memory senza output, fai al massimo UNA verifica read-only verso GitHub e registra solo `credential_state=active|inactive|unknown`. `unknown` non è safe.
 4. Se `git-filter-repo` non è già disponibile: `BLOCKED`, non installare. Se disponibile, riscrivi SOLO il secret target usando replace-map temporaneo protetto.
@@ -36,7 +37,8 @@ PASS solo se il PAT non appare mai nel transcript, la history remota finale è g
 Niente modifica del codice updater, CI generale, audit altri repo, secondo scanner o cleanup non correlato.
 
 # Stop
-Dopo PASS:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 518264 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 518264`
+Dopo PASS esegui una sola volta:
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 518264 --confirm-executed`
 
-Output massimo 6 righe: `RESULT`, `HISTORY`, `CREDENTIAL_STATE`, `SCANNED_HEAD`, `MEGAVAULT`, `BLOCKER`.
+Non fare dry-run separati né controlli Git equivalenti dopo finalizzazione.
+Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 6 righe: `RESULT`, `HISTORY`, `CREDENTIAL_STATE`, `SCANNED_HEAD`, `MEGAVAULT`, `BLOCKER`.
