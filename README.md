@@ -23,7 +23,8 @@ Non creare task Codex per:
 - misurare il costo del prompt precedente;
 - validare una micro-ottimizzazione appena introdotta da ChatGPT quando test statici/remoti sono sufficienti;
 - investigare colli di bottiglia solo potenziali o senza impatto pratico osservato;
-- ripetere un PASS con un helper “ancora più efficiente”.
+- ripetere un PASS con un helper “ancora più efficiente”;
+- modificare soltanto repository/workflow/Actions GitHub quando ChatGPT può farlo direttamente tramite GitHub. Se serve prima un audit locale, Codex deve produrre un handoff strutturato e fermarsi lì.
 
 **PASS chiude il sottosistema.** Un follow-up dopo PASS è ammesso solo con nuova evidenza concreta emersa nell'uso reale. Le ottimizzazioni marginali si riportano in chat e si fermano lì.
 
@@ -39,12 +40,12 @@ Tipi:
 - **Goal**: risultato cross-component, ma scope e stop restano espliciti.
 
 ### Modello/reasoning
-- GPT-5.5 `low`: default per gate deterministici, test/build/ADB mirati e task localizzati con stop chiaro.
-- GPT-5.5 `medium`: solo quando serve diagnosi runtime non banale o scelta tra più fix plausibili.
-- GPT-5.6 Sol `medium`: schema/migrazioni, rischio dati, undo/audit o architettura realmente cross-module.
+- GPT-5.5 `low`: gate deterministici, test/build/ADB mirati e task localizzati con implementazione ovvia.
+- GPT-5.5 `medium`: **default per lavoro non banale**, inclusi debugging runtime, lifecycle, migrazioni/schema già pre-localizzati e audit guidati da scanner/test deterministici.
+- GPT-5.6 Sol `medium`: solo quando rimane vera ambiguità progettuale/architetturale, rischio dati con scelta non localizzata, o analisi cross-component che GPT-5.5 non può seguire affidabilmente con starting point e gate già preparati.
 - `high`: solo con difficoltà concreta non gestibile bene a medium.
 
-Non usare GPT-5.6 o reasoning superiore solo perché il task è lungo: prima riduci scope, round-trip e contesto.
+Una migrazione, un audit o un task lungo **non giustificano da soli GPT-5.6**. Prima riduci scope, discovery, round-trip e output tool; passa a 5.6 solo se resta complessità di ragionamento reale.
 
 ## Esecuzione manuale
 Apri il primo file indicato da `roadmap.md`, imposta modello/reasoning dai metadata e incolla **solo quel file**. Non inviare meta-prompt, non far leggere roadmap/README/spiegazioni e non eseguire `select` nelle sessioni manuali.
