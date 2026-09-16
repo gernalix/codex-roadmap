@@ -11,6 +11,8 @@ Per una normale sessione Codex Desktop **non incollare un launcher generico** e 
 
 Il file `prompts/<task>.md` è la specifica autoritativa e deve essere autosufficiente: starting point già verificato, scope, test, PASS/stop, output e finalizzazione della roadmap devono stare nel file stesso. Codex non deve eseguire `roadmap_guard.py select`, né rileggere README/roadmap/spiegazioni per capire cosa fare.
 
+Per i task localizzati questa autorità va ribadita **dentro il singolo prompt**, non lasciata soltanto in questo documento: il prompt deve dire esplicitamente di non leggere README/roadmap/spiegazioni, `~/.codex/memories/MEMORY.md`, MegaVault o documentazione di contesto già sostituita dallo starting point, salvo un blocker concreto. In questo modo il workflow manuale non deve spendere tool-call per leggere `STANDARD_PROMPT.md` o altra metadocumentazione prima di iniziare.
+
 Questo è il percorso preferito perché evita il round-trip `launcher → select → execution pack → prompt_content` e usa la quota Codex direttamente sul task reale.
 
 La roadmap contiene soltanto attività che richiedono realmente Codex (filesystem/toolchain locale, device, VM, segreti/config runtime o servizi locali). Modifiche eseguibili direttamente sui repository remoti non vanno rimandate a Codex.
@@ -23,6 +25,7 @@ Per task già pre-localizzati il costo principale è spesso il numero di round-t
 - raggruppare in una sola tool-call i controlli read-only indipendenti compatibili (stato Git, simboli/file già noti, stato runtime), invece di fare una chiamata per ciascun controllo;
 - riusare output già ottenuti: niente rilettura di file invariati, retry identici o verifiche equivalenti dopo un PASS;
 - usare direttamente il runner/test command indicato dal prompt; non sondare framework alternativi se il runner canonico è già noto;
+- non leggere test di riferimento o inventariare `tests/` quando il prompt indica già il file/test target; fallo solo se serve per una failure concreta o per una convenzione non specificata;
 - niente messaggi intermedi di avanzamento: tool-call dirette, testo intermedio solo per un blocker/decisione dell'utente, poi report finale conciso;
 - per un task localizzato e pre-localizzato, **obiettivo indicativo ≤10 tool-call**; superarlo solo quando una failure o nuova evidenza rende davvero necessaria ulteriore indagine. Non sacrificare correttezza o safety per rispettare il numero.
 
@@ -60,7 +63,8 @@ Ogni nuovo prompt o modifica sostanziale di un prompt pendente deve preservare l
 - dichiarare `PROMPT_ID`, `project_id`, modello, reasoning e MegaVault quando applicabili;
 - se riprende un run fallito/bloccato, dichiarare anche `last_result=BLOCKED` o `last_result=FAIL` e usare `--result PASS` nella finalizzazione;
 - contenere direttamente goal, starting point/source-of-truth, scope/non-goal, verification e PASS/stop;
-- vietare discovery/audit già sostituiti da evidenza preparata;
+- dichiarare esplicitamente, quando lo starting point è completo, che README/roadmap/spiegazioni/MEMORY/MegaVault non vanno riletti salvo blocker concreto;
+- vietare discovery/audit già sostituiti da evidenza preparata e, quando il target test è già noto, evitare inventory/letture di test di riferimento non necessarie;
 - richiedere solo test proporzionati al rischio;
 - consolidare build/device/delivery nella fase finale quando appartiene a una campagna compatibile;
 - contenere la finalizzazione roadmap su PASS con il proprio `PROMPT_ID`;
