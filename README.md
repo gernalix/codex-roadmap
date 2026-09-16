@@ -51,6 +51,16 @@ Apri il primo file indicato da `roadmap.md`, imposta modello/reasoning dai metad
 
 Default: un task per sessione. Raggruppa letture/comandi indipendenti; non ripetere test PASS; retry solo dopo nuova evidenza o stato cambiato; stop immediato a PASS/BLOCKED/FAIL. Per build/comandi lunghi già avviati, preferisci una sola attesa bloccante o controlli radi: niente polling ravvicinato né messaggi che riportano solo stato invariato.
 
+## Diagnostica runtime a basso round-trip
+Per task locali/VM/servizi, il costo principale è spesso il numero di round-trip modello↔tool, non i token uncached. Quindi:
+- se prompt/starting point forniscono path, helper, unit, DB, monitor ID o schema già verificati, trattali come autoritativi e non rifare discovery generale;
+- raggruppa nello stesso batch i controlli indipendenti; evita sequenze di micro-comandi quando una sola query/lettura mirata può rispondere;
+- SQLite: non indovinare colonne. Se lo schema non è già noto, fai **una sola** `PRAGMA table_info`/schema query e poi la query corretta. Per WAL read-only usa helper del progetto o URI `mode=ro&immutable=1`, non tentativi `sqlite3 -readonly` destinati a creare `-shm`;
+- se è già noto un helper privilegiato/canonico (SSH wrapper, installer Android, emulator facade, ecc.), usalo direttamente: niente probe preliminari con permessi insufficienti o reimplementazioni manuali;
+- limita `rg`, `journalctl`, tree/XML/log e query a file/unit/finestra pertinenti; evita output da migliaia di token e output troncati. Un dump ampio è ammesso solo dopo failure concreta di una query stretta;
+- usa subito l'invocazione test canonica già dichiarata (`PYTHONPATH`, cwd, serial, runner). Non eseguire prima una variante nota destinata a fallire per “provare”; dopo un failure cambia approccio usando la nuova evidenza, niente retry quasi equivalenti;
+- dopo PASS dei criteri richiesti non fare audit, status o readback aggiuntivi “per sicurezza”.
+
 **Ordine dei gate:** esegui sempre prima i controlli più economici e indipendenti dal device (static check/unit test/build), poi avvia emulatore/device/servizi solo se quei gate sono PASS. Se l'APK è già stato costruito nello stesso task, installa esattamente quell'artefatto senza una seconda invocazione Gradle. Fanno eccezione solo i test il cui prerequisito tecnico richiede esplicitamente il runtime prima del gate host.
 
 **Disciplina dei retry Gradle:** un gate aggregato serve per scoprire problemi e per la conferma finale, non come inner loop. Se un gate aggregato fallisce:
