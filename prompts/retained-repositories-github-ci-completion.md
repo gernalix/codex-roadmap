@@ -44,6 +44,7 @@ Copri quando applicabile:
 ## Python / script / automazioni
 - Riusa unittest/pytest esistenti, temp repo/DB/filesystem e mock per GitHub/Telegram/Kuma/rete quando necessari.
 - Una sola versione Python coerente col runtime; niente test contro account o servizi reali.
+- Per eseguire test esistenti usa il comando/runner già dichiarato dal repo o dal workflow CI; non inventare una nuova invocation che cambi cwd, `PYTHONPATH` o import semantics. Se manca un comando canonico, ricavalo dai test/packaging una volta e mantienilo stabile.
 
 ## Browser / downloader / extension
 - Chromium/Playwright headless con fixture HTML e server HTTP locali/mock.
