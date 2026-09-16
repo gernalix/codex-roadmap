@@ -3,50 +3,47 @@
 `PROMPT_ID=893806 | project_id=49 | campaign_id=personalhub-20260916-usability-reliability | phase=3/4 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT`
 
 # Goal
-Aggiungere a Luoghi un journal diagnostico persistente di OGNI tentativo di check-in basato sul riconoscimento della posizione, inclusi tentativi falliti/ambigui/annullati/interrotti, senza contaminare la cronologia delle visite reali.
+Aggiungere a Luoghi un journal diagnostico persistente di OGNI tentativo **utente** di check-in basato sul riconoscimento della posizione, inclusi falliti/ambigui/annullati/interrotti, senza contaminare le visite reali.
 
-# Starting point verificato
-Usa `.codex/CODE_MAP.tsv` (`places.checkin`, `places.data`, `database.schema`) e parti SOLO dai path mappati. In chat è già stato verificato che:
-- `LuoghiHomeViewModel.checkInAtCurrentLocation()` oggi ottiene la posizione con `runCatching(...).getOrNull()`, poi decide match/ambiguous/unknown e persiste una visita solo nel ramo matched;
-- permission denied, location unavailable, unknown place, ambiguous choice/cancel e molti failure path restano solo stato UI e non vengono persistiti come tentativi;
-- `CheckInCapsule`/PlaceEvent rappresentano visite effettive, quindi NON vanno riusati per i tentativi falliti;
-- `CheckInPolicy` usa matching su distanza/raggio/accuracy e dispone già delle informazioni utili alla diagnosi.
-Questo task modifica lo schema Room condiviso: trattalo come migrazione/rischio dati, non come refactor generale.
+# Routing — scope stretto
+Usa `.codex/CODE_MAP.tsv` solo per `places.checkin`, `places.data`, `database.schema`. Parti da `LuoghiHomeViewModel.checkInAtCurrentLocation()`, `CheckInCapsule`, `CheckInPolicy`, repository/DAO/schema già mappati. Niente audit Luoghi/core.
+Facts già verificati:
+- oggi permission denied/location unavailable/unknown/ambiguous/cancel/failure non hanno un journal persistente;
+- `PlaceEvent` rappresenta visite effettive e NON va riusato per failure diagnostici;
+- matching dispone già di distanza/raggio/accuracy utili alla diagnosi.
 
-# Modello dati richiesto
-Introduci un journal separato e normalizzato nel `personalhub.db` (nomi finali coerenti col repo), preferibilmente:
-- tabella tentativi: id stabile, `startedAt`, `finishedAt`, source, stage/outcome, posizione osservata quando disponibile (lat/lon/accuracy/timestamp/provider o equivalente realmente disponibile), matched/selected place id quando esiste, error code + messaggio diagnostico sanificato;
-- tabella candidate per attempt: attempt id, place id, distanza, soglia/raggio effettivo e ranking/esito necessario a ricostruire perché il matching ha vinto/fallito.
-Evita blob JSON opachi se le colonne sono stabili. FK/index minimi utili a query per tempo/outcome/place.
+# Modello dati minimo
+Nel `personalhub.db`, con migrazione canonica:
+- attempt: id stabile, `startedAt`, `finishedAt`, source, stage/outcome, location disponibile (solo campi realmente forniti), selected/matched place id, error code + messaggio sanificato;
+- candidate: attempt id, place id, distanza, soglia/raggio effettivo, ranking/esito minimo necessario.
+Colonne normali + FK/index essenziali; niente JSON opaco se lo schema è stabile.
 
 # Lifecycle obbligatorio
-1. Crea/persisti l'attempt PRIMA del primo punto che può abortire la procedura.
-2. Ogni tentativo deve finire in uno stato terminale esplicito. Copri almeno: `SUCCESS`, `PERMISSION_DENIED`, `LOCATION_UNAVAILABLE`, `NO_MATCH/UNKNOWN_PLACE`, `AMBIGUOUS`, `USER_CANCELLED`, `PERSISTENCE_FAILED`, `INTERRUPTED`; usa naming coerente col progetto.
-3. Non perdere le eccezioni tramite `getOrNull()`: registra categoria/messaggio diagnostico, mantenendo però la UI user-friendly.
-4. Se viene mostrato il form “crea nuovo luogo” dopo un unknown match, lo stesso attempt deve rimanere collegato fino a create/cancel; non creare un secondo tentativo fittizio.
-5. Se il processo muore con attempt `IN_PROGRESS`, al successivo avvio/recovery marcane il terminale `INTERRUPTED` in modo idempotente.
-6. Includi anche i percorsi automatici/geofence SOLO quando eseguono davvero una decisione di check-in/matching; NON registrare come tentativi i meri update di posizione né i check-in retroattivi già indirizzati a un luogo noto.
-7. Il journal non deve creare false visite né riempire il Registro globale di eventi tecnici ad ogni attempt.
+1. Persisti l'attempt prima del primo abort possibile.
+2. Stati terminali almeno equivalenti a `SUCCESS`, `PERMISSION_DENIED`, `LOCATION_UNAVAILABLE`, `NO_MATCH`, `AMBIGUOUS`, `USER_CANCELLED`, `PERSISTENCE_FAILED`, `INTERRUPTED`.
+3. Non usare `getOrNull()` perdendo la causa: registra categoria/messaggio sanificato, UI invariata/user-friendly.
+4. Unknown -> form nuovo luogo: conserva lo stesso attempt fino a create/cancel.
+5. `IN_PROGRESS` lasciato da process death -> `INTERRUPTED` al recovery, idempotente.
+6. Scope funzionale = flow di check-in user-triggered dalla posizione corrente e sue continuazioni. **Geofence/automatic check-in sono fuori scope** salvo riuso naturale dello stesso journal senza nuova esplorazione o codice dedicato. Check-in retroattivi verso luogo già noto restano esclusi.
+7. Nessun failure attempt deve creare visita o rumore nel Registro globale.
 
-# Superficie diagnostica minima
-Da Luoghi aggiungi una voce discreta `Diagnostica check-in` con lista recente newest-first e filtri minimi outcome/place. Ogni riga deve spiegare in linguaggio comprensibile cosa è successo; dettaglio espandibile con timestamp, accuracy, candidate/distanze/raggi ed errore. Deve essere possibile copiare un singolo report testuale per debugging. Non inviare coordinate o report a servizi esterni.
+# UI diagnostica minima
+Una voce discreta `Diagnostica check-in`: recenti newest-first, filtro outcome/place, riga comprensibile + dettaglio con timestamp/accuracy/candidate-distanze-raggi/error; copia report testuale singolo. Nessuna telemetria/coordinate esterne.
 
-# Migrazione e test
-- applica la migrazione Room canonica dalla versione corrente alla nuova senza distruzione dati;
-- aggiungi/aggiorna schema export e migration test;
-- unit test mirati per lifecycle attempt + candidate matching + recovery `IN_PROGRESS -> INTERRUPTED`;
-- test strumentale minimo: permission denied e un percorso unknown/ambiguous simulabile devono produrre un attempt terminale senza PlaceEvent falso; success path deve produrre attempt SUCCESS + normale visita;
-- esegui `checkArchitectureBoundaries` perché tocchi persistence ownership/public boundary;
-- poi un solo build debug finale. Niente audit completo, benchmark, Pixel/TCL o release in questa fase.
+# Verifica a costo controllato
+1. Prima: migration/unit test mirati per schema, lifecycle, candidate e recovery. Failure => leaf fix, niente suite globale.
+2. Esegui `checkArchitectureBoundaries` una volta perché cambia persistence ownership/schema.
+3. Solo dopo host PASS, avvia UNA sessione Pixel_8a emulator e una sola invocazione androidTest filtrata ai nuovi test: permission denied + unknown/ambiguous + success. Verifica: failure non produce `PlaceEvent`; success produce attempt SUCCESS + visita normale; migration preserva dati fixture.
+4. L'invocazione androidTest compila gli APK necessari: niente `assembleDebug` separato. Nessun Pixel/TCL/release in questa fase.
 
 # Non-goal
-Niente tuning del raggio 75 m, redesign mappa/Luoghi, nuovo algoritmo di geofencing, cleanup storico, sync cloud o telemetria remota. Se scopri un bug collaterale non bloccante, riportalo senza investigarlo.
+Niente tuning raggio 75 m, geofence redesign/instrumentazione, mappa, sync cloud, cleanup storico, telemetria remota o bug collaterali non bloccanti.
 
-# Campagna / release
-Fase intermedia: NON incrementare `version.txt`, NON installare sul Pixel e NON inviare APK/Telegram. Push una sola volta dopo PASS.
+# Campagna
+Fase intermedia: niente bump `version.txt`, Pixel reale, APK/Telegram. Push una volta dopo PASS. La fase 4 NON dovrà ripetere migration/UI test di questa fase se i relativi file restano invariati.
 
 # Acceptance
-PASS se ogni attempt di riconoscimento è ricostruibile a posteriori con outcome e prove sufficienti, nessun attempt fallito diventa visita reale, migrazione preserva i dati, recovery è idempotente e i test mirati/build PASS.
+PASS se ogni tentativo user-triggered è ricostruibile, failure non crea visite, migrazione preserva dati, recovery è idempotente, diagnostica è leggibile e i gate mirati PASS.
 
 # Stop
 Acquisisci/rilascia il lease PH secondo `AGENTS.md`. Dopo PASS:
