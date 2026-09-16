@@ -50,10 +50,13 @@ class SafeFastForwardTests(unittest.TestCase):
         git(self.seed, "push", "origin", "main")
         return git(self.seed, "rev-parse", "HEAD")
 
-    def test_disjoint_dirty_file_is_preserved_while_tracked_db_updates(self):
-        dirty = self.local / "notes.md"
-        dirty.write_text("local unsaved note\n", encoding="utf-8")
-        expected_dirty = dirty.read_bytes()
+    def test_all_disjoint_dirty_files_are_preserved_while_tracked_db_updates(self):
+        modified = self.local / "notes.md"
+        modified.write_text("local unsaved note\n", encoding="utf-8")
+        untracked = self.local / "scratch.txt"
+        untracked.write_text("local scratch\n", encoding="utf-8")
+        expected_modified = modified.read_bytes()
+        expected_untracked = untracked.read_bytes()
         remote_head = self.push_remote_change("data.sqlite", b"db-v2\x00")
 
         result = safe_fast_forward(
@@ -61,14 +64,38 @@ class SafeFastForwardTests(unittest.TestCase):
             remote="origin",
             branch="main",
             required_ancestor=remote_head,
-            preserve=("notes.md",),
         )
 
         self.assertEqual("PASS", result["status"])
         self.assertEqual(remote_head, git(self.local, "rev-parse", "HEAD"))
         self.assertEqual(b"db-v2\x00", (self.local / "data.sqlite").read_bytes())
-        self.assertEqual(expected_dirty, dirty.read_bytes())
-        self.assertIn("notes.md", git(self.local, "status", "--porcelain"))
+        self.assertEqual(expected_modified, modified.read_bytes())
+        self.assertEqual(expected_untracked, untracked.read_bytes())
+        self.assertEqual(["notes.md", "scratch.txt"], result["dirty_preserved"])
+
+    def test_disjoint_deleted_file_stays_deleted(self):
+        (self.local / "notes.md").unlink()
+        remote_head = self.push_remote_change("data.sqlite", b"db-v2\x00")
+
+        result = safe_fast_forward(
+            self.local,
+            remote="origin",
+            branch="main",
+            required_ancestor=remote_head,
+        )
+
+        self.assertEqual("PASS", result["status"])
+        self.assertFalse((self.local / "notes.md").exists())
+        self.assertIn("notes.md", result["dirty_preserved"])
+
+    def test_requested_preserve_path_must_actually_be_dirty(self):
+        with self.assertRaisesRegex(SafeFFBlocked, "requested preserve path is not dirty"):
+            safe_fast_forward(
+                self.local,
+                remote="origin",
+                branch="main",
+                preserve=("notes.md",),
+            )
 
     def test_dirty_overlap_blocks_without_advancing_head(self):
         (self.local / "tracked.txt").write_text("local change\n", encoding="utf-8")
