@@ -1,37 +1,37 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=838979 | project_id=49 | campaign_id=personalhub-20260916-usability-reliability | phase=1/4 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD`
+`PROMPT_ID=838979 | project_id=49 | campaign_id=personalhub-20260916-usability-reliability | phase=1/4 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST`
 
 # Goal
-Rendere comprensibili e richiamabili le utility Hub di PersonalHub senza cambiare il modello dati: chiarire Context/Search/Activity nella UI, mostrare le sessioni Timer in Context con titolo/tag leggibili, e rendere gli episodi salvati realmente ritrovabili e riapribili.
+Rendere comprensibili e richiamabili le utility Hub di PersonalHub senza cambiare schema: chiarire Context/Search/Activity, mostrare le sessioni Timer con titolo/tag leggibili e rendere gli episodi titolati elencabili/riapribili.
 
-# Starting point verificato
-Usa `.codex/CODE_MAP.tsv` come router e apri SOLO i path pertinenti. In chat è già stato verificato che:
-- Home instrada `Context` -> `HubContextComposerScreen`, `Search` -> `HubTemporalSearchScreen`, `Activity` -> `HubActivityRegisterScreen`;
-- Search salva un “episode” chiamando `HubContextRuntime.createContext(..., title=episodeTitle)`: non esiste un tipo persistence separato per gli episodi;
-- `TimerSessionHubAdapter` usa oggi il titolo sessione e, se vuoto, un fallback basato sull'id; i tag non entrano nel summary;
-- non esiste una superficie globale chiara per elencare/richiamare tutti i context titolati salvati come episodi;
-- la media fatigue mostrata da Search è un segnale 0–100 personalizzato, non una percentuale clinica.
-Path iniziali: `app/src/main/java/com/gernalix/personalhub/MainActivity.kt`, `app/src/main/java/com/gernalix/personalhub/HubTemporalSearchScreen.kt`, `app/src/main/java/com/gernalix/personalhub/HubActivityRegisterScreen.kt`, `core/hub-context/.../HubContextRuntime.kt`, `HubContextRepository.kt`, `HubContextComposer.kt`, `feature/multitimetracker/.../hub/TimerSessionHubAdapter.kt`, WordPulse solo per riusare wording/calcolo già esistente. Niente repo-wide audit.
+# Routing verificato — niente discovery
+Usa `.codex/CODE_MAP.tsv` e apri SOLO le righe `app.shell`, `hub.context`, `hub.temporal_search`, `timer.sessions`. Per il fatigue usa direttamente `docs/HUB_USER_GUIDE.md`: NON riaprire l'algoritmo WordPulse salvo errore di compilazione/test che lo richieda.
+Facts già verificati:
+- Search salva gli episodi come normali Hub context con `title`, senza persistence separata;
+- manca una lista globale dei context titolati;
+- `TimerSessionHubAdapter` oggi non include i tag nel summary e può ricadere su un label con id;
+- Activity/deep-link/undo esistono già e non vanno ridisegnati.
 
 # Implementazione minima
-1. Home: rendi autoesplicative Context/Search/Activity con etichette/sottotitoli/help brevi, senza ridisegnare Home. Semantica da comunicare: Context=collega entità tra moduli; Search=cerca eventi/entità in un intervallo; Activity=registro modifiche/undo.
-2. Timer in Context/Search: il label primario delle sessioni deve essere umano. Regola: titolo non vuoto + tag risolti quando presenti; se titolo vuoto usa i nomi tag; se anche i tag mancano usa un fallback localizzato tipo “Sessione senza titolo” con data/ora utile. MAI id DB/UUID come testo primario visibile. Gli id restano solo interni.
-3. Episodi: aggiungi da Search una superficie `Episodi salvati` che elenca i context con `title` non vuoto, ordinati dal più recente. Deve mostrare titolo + riassunto membri leggibile e permettere di riaprire/modificare lo stesso context. Riusa tabelle/DAO esistenti; NON aggiungere schema/migrazione. Nessun nuovo concetto persistence “episode”.
-4. Fatigue: dove Search mostra la fatigue media, aggiungi help conciso: 0–100 relativo al baseline personale, più alto = maggiore deviazione fatigue-like; nessuna banda clinica fissa. Non cambiare algoritmo/pesi.
-5. Mantieni deep link, undo Activity e behavior Context esistenti. Se un dettaglio collaterale è brutto ma non blocca questi acceptance criteria, segnalalo e non investigarlo.
+1. Home: etichette/help brevi che chiariscano Context=collega entità, Search=ricerca per intervallo, Activity=registro modifiche/undo. Nessun redesign Home.
+2. Timer summary: titolo + nomi tag quando presenti; se titolo vuoto usa i tag; se entrambi vuoti fallback localizzato umano con data/ora utile. MAI DB id/UUID come label primario.
+3. Search: aggiungi `Episodi salvati` riusando context/DAO esistenti, solo `title` non vuoto, newest-first, titolo + membri leggibili, riapertura/modifica dello stesso context. Nessuna migrazione e nessun nuovo tipo `Episode`.
+4. Fatigue: help conciso coerente con `docs/HUB_USER_GUIDE.md`; non cambiare pesi/algoritmo.
+5. Mantieni invariati deep link, Activity undo e semantica Context. Problemi collaterali non bloccanti: segnala e STOP.
 
-# Verifica mirata
-- aggiungi/aggiorna test unitari solo per label Timer e query/lista episodi;
-- test Compose/instrumented mirato: Context non espone raw session id come label primario; un episodio titolato salvato da Search compare in `Episodi salvati` e si riapre con gli stessi membri; help fatigue presente;
-- esegui `checkArchitectureBoundaries` solo se tocchi wiring/public integration boundary;
-- un solo build debug finale dopo i leaf test PASS. Niente full suite, benchmark, Pixel/TCL, Perfetto o audit generale.
+# Verifica host-only
+Questa fase NON avvia emulatore/device. La QA UI strumentale di fase 1 viene accorpata alla fase 2, che deve già avviare Pixel_8a emulator.
+- aggiungi/aggiorna unit test mirati per Timer label e query/lista episodi;
+- esegui solo quei leaf test;
+- `checkArchitectureBoundaries` solo se il diff cambia wiring/public integration;
+- chiudi con UNA compilazione `:app:compileDebugKotlin` (o leaf compile equivalente sufficiente), non `assembleDebug` e non full suite.
 
-# Campagna / release
-Fase intermedia: NON incrementare `version.txt`, NON installare sul Pixel e NON inviare APK/Telegram. Push sul branch canonico remoto una sola volta dopo PASS. La release consolidata è nella fase 4.
+# Campagna
+Fase intermedia: niente bump `version.txt`, Pixel reale, APK/Telegram. Push una volta dopo PASS. La fase 2 eseguirà in un'unica sessione emulator la UI QA necessaria per fase 1 + fase 2.
 
 # Acceptance
-PASS se le tre utility sono autoesplicative, le sessioni Timer sono leggibili senza raw id, gli episodi titolati sono elencabili e riapribili, il fatigue score è spiegato senza cambiare algoritmo, test mirati + build PASS.
+PASS host-side se codice/test mirati/compile dimostrano: utility autoesplicative, Timer label umano, query episodi riapribili e wording fatigue corretto. La verifica visuale/device è esplicitamente deferred alla fase 2.
 
 # Stop
 Acquisisci/rilascia il lease PH secondo `AGENTS.md`. Dopo PASS:
