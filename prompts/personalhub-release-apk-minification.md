@@ -28,13 +28,14 @@ Niente audit repo-wide, README/roadmap/MegaVault o emulatori salvo blocker concr
    `./gradlew --no-configuration-cache --quiet --console=plain :app:assembleRelease`
 6. Risolvi `FINAL_APK` da `app/build/outputs/apk/release/output-metadata.json`; registra byte/MiB e delta rispetto al debug esistente o ~146 MB. Se la riduzione è evidente, non analizzare altro. Solo se resta sorprendentemente vicino alla baseline usa UN analyzer locale già disponibile e al massimo un fix evidente/localizzato + UNA seconda release.
 7. Installa ESATTAMENTE `FINAL_APK` sul Pixel senza uninstall/clear usando l'helper canonico.
-8. Fai una sola QA Random Timer reale che copra anche il restore: avvia un Random Timer breve, porta l'app fuori foreground/swipala via senza force-stop e riavvia il Pixel prima o intorno al deadline. Dopo boot il timer deve risultare chiuso a `expectedEndMs` e deve comparire una sola notifica `Quanto tempo è passato?`; tap → Timer/Now/dialog corretto; reopen non deve duplicare. Se il deadline cade mentre il device è spento, è valido il path overdue purché finalizzi/notifichi una sola volta dopo boot.
-9. Launch smoke minimo degli altri componenti solo quanto necessario a confermare che l'APK release si apre. Niente esplorazione UI generale.
-10. Consegna lo STESSO `FINAL_APK` già testato con `tools/deliver_personalhub_apk.py`; nessun rebuild dopo la QA.
-11. Prima del commit/push fai UNA `git fetch origin`; se `origin/main` è avanzato dalla base, `BLOCKED`, niente rebase/merge/rerun. Altrimenti commit/push una volta.
+8. Prima della QA temporale verifica UNA volta sul Pixel che `com.gernalix.personalhub` abbia effettivamente l'accesso **Alarms & reminders / exact alarms** (usa il readback ADB più diretto disponibile, per esempio app-op, senza audit generale). Se negato/default non affidabile, apri l'impostazione di sistema già supportata dall'app, abilitala e verifica di nuovo. Non giudicare la precisione del Random Timer finché l'accesso exact non è confermato. Se l'accesso non è ottenibile o l'app non riesce a richiederlo per il Random Timer, fai al massimo un fix leaf di questa UX/precondizione + test mirato + UNA seconda release, che diventa il nuovo `FINAL_APK`; reinstalla solo quella.
+9. Fai una sola QA Random Timer reale che copra anche il restore: avvia un Random Timer breve, porta l'app fuori foreground/swipala via senza force-stop e riavvia il Pixel prima o intorno al deadline. Dopo boot il timer deve risultare chiuso a `expectedEndMs` e deve comparire una sola notifica `Quanto tempo è passato?`; tap → Timer/Now/dialog corretto; reopen non deve duplicare. Se il deadline cade mentre il device è spento, è valido il path overdue purché finalizzi/notifichi una sola volta dopo boot.
+10. Launch smoke minimo degli altri componenti solo quanto necessario a confermare che l'APK release si apre. Niente esplorazione UI generale.
+11. Consegna lo STESSO `FINAL_APK` già testato con `tools/deliver_personalhub_apk.py`; nessun rebuild dopo la QA.
+12. Prima del commit/push fai UNA `git fetch origin`; se `origin/main` è avanzato dalla base, `BLOCKED`, niente rebase/merge/rerun. Altrimenti commit/push una volta.
 
 # Acceptance
-PASS se test Random Timer mirato PASS, release shrunk è materialmente più piccola della baseline, lo stesso APK installato supera smoke + Random Timer con reboot/restore senza duplicati ed è lo stesso artefatto consegnato.
+PASS se test Random Timer mirato PASS, accesso exact-alarm è confermato, release shrunk è materialmente più piccola della baseline, lo stesso APK installato supera smoke + Random Timer con reboot/restore senza duplicati ed è lo stesso artefatto consegnato.
 
 # Non-goal
 Niente nuovo scheduler/minifier, emulatori, dependency upgrade, suite generale, AAB/Play Store, refactor o QA non pertinente.
@@ -43,4 +44,4 @@ Niente nuovo scheduler/minifier, emulatori, dependency upgrade, suite generale, 
 Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 684731 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 684731`
 
-Stop immediato dopo PASS/BLOCKED/FAIL. Output massimo 7 righe: `RESULT`, `RANDOM_TIMER_TEST`, `APK_BEFORE`, `APK_RELEASE`, `PIXEL_RANDOM_TIMER`, `DELIVERY`, `PUSH/BLOCKER`.
+Stop immediato dopo PASS/BLOCKED/FAIL. Output massimo 8 righe: `RESULT`, `RANDOM_TIMER_TEST`, `EXACT_ALARM`, `APK_BEFORE`, `APK_RELEASE`, `PIXEL_RANDOM_TIMER`, `DELIVERY`, `PUSH/BLOCKER`.
