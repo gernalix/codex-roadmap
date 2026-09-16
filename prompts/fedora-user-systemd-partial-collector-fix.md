@@ -33,7 +33,7 @@ Niente fix storage/Kuma/Telegram, modifiche alle unità utente non necessarie, a
 
 # Stop
 
-Dopo PASS:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 615438 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 615438`
+Dopo PASS esegui una sola volta:
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 615438 --confirm-executed`
 
 Output massimo 5 righe: `RESULT`, `ROOT_CAUSE`, `FIX`, `THREE_RUNS`, `PUSH/BLOCKER`.
