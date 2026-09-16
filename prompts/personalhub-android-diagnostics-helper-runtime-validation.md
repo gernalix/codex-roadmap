@@ -3,7 +3,10 @@
 `PROMPT_ID=815306 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST`
 
 # Goal
-Validare e integrare SOLO PR PersonalHub #10 (`chatgpt/android-diagnostics-efficiency`), che rende deterministici install APK su Pixel fisico e query Perfetto. Nessuna modifica al comportamento dell'app.
+Se PersonalHub è stato conservato dalla retention review, validare e integrare SOLO PR PersonalHub #10 (`chatgpt/android-diagnostics-efficiency`), che rende deterministici install APK su Pixel fisico e query Perfetto. Nessuna modifica al comportamento dell'app.
+
+# Gate retention
+Verifica una sola volta che `gernalix/PersonalHub` esista ancora e non sia `RETIRE` nella matrice MegaVault. Se è stato eliminato: chiudi PR #10 senza merge se ancora aperta, marca `SKIPPED_DELETED` e completa il task. Non ricreare PH.
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`;
@@ -35,10 +38,10 @@ Validare e integrare SOLO PR PersonalHub #10 (`chatgpt/android-diagnostics-effic
 Niente modifica widget, app startup, UI, DB, Gradle dependencies, emulatore/TCL, full test suite, Perfetto root-cause analysis, release o cleanup generale.
 
 # Acceptance
-Test helper PASS; install Pixel serial-scoped con APK da `output-metadata.json`; query Perfetto helper PASS senza discovery manuale; PR #10 integrata in `main` e pushata.
+PASS: test helper, install Pixel e query Perfetto PASS; PR #10 integrata in `main` e pushata. SKIPPED: PH eliminato dalla retention review e PR chiusa senza merge.
 
 # Stop
-Dopo PASS:
+Dopo PASS/SKIPPED:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 815306 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 815306`
 
-`push_verified=git_push_exit_0` è terminale. Output massimo 6 righe: RESULT, tests, Pixel install, Perfetto query, main SHA/push, blocker.
+`push_verified=git_push_exit_0` è terminale. Output massimo 6 righe: RESULT, tests/SKIPPED, Pixel install, Perfetto query, main SHA/push, blocker.
