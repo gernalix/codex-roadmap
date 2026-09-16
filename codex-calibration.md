@@ -139,6 +139,61 @@ Interpretation:
 - Historical `tuned-ppd` evidence on the same host showed prior `power-saver` holds by `org.gnome.SettingsDaemon.Power`; that is relevant prior evidence, but it does **not** prove the 2026-09-16 trigger. Reports should surface such evidence without promoting it to root cause.
 - The publisher stored this run as `UNKNOWN` even though the final report explicitly said `STATUS: WAITING_FOR_EVENT`; efficiency/report tooling should treat that as a status-parsing mismatch rather than a task result.
 
+## Empirical benchmark: PROMPT_ID 815306
+
+Completed task: deterministic PersonalHub Pixel-install + Perfetto-helper runtime validation.
+
+- Model: **GPT-5.5**
+- Reasoning: **Low**
+- Duration: **74.673 s**.
+- Tool calls: **12**, all `exec_command`.
+- Input **41,009**, cached **40,320 (~98.32%)**, uncached **689**; output **177**; reasoning **75**.
+- Weekly quota movement: **0 pp** (`80% → 80%`).
+- Result: PASS.
+
+Interpretation:
+
+- GPT-5.5 Low is a good fit for a truly narrow helper/runtime smoke with known commands and deterministic acceptance.
+- Even here, small discovery around artifact/Perfetto paths was avoidable; canonical helpers should absorb that lookup.
+- This is the benchmark for tasks that should remain Low: few decisions, one runtime target, no cross-module design or iterative UI debugging.
+
+## Empirical benchmark: PROMPT_ID 838979
+
+Completed host-side PersonalHub Hub/episodes usability phase.
+
+- Model: **GPT-5.5**
+- Reasoning: **Medium**
+- Duration: **653.545 s (~10m54s)**.
+- Tool calls: **93** = 78 `exec_command`, 14 patch, 1 wait.
+- Input **168,478**, cached **167,296 (~99.30%)**, uncached **1,182**; output **295**; reasoning **115**.
+- Weekly quota movement: **1 pp**.
+
+Interpretation:
+
+- Medium was sufficient for a 16-file cross-module UI/repository change; GPT-5.6 was not needed.
+- The main failures were wrong initial workdir, unnecessary MEMORY/MegaVault reads, wide grep, repeated Gradle sets and a remote-advance/rebase cycle.
+- Cross-module scope alone does not justify GPT-5.6 when boundaries, desired behavior and tests are already specified.
+
+## Empirical benchmark: PROMPT_ID 314719
+
+Completed Timer Now implementation + emulator QA attempt.
+
+- Model: **GPT-5.5**
+- Reasoning: **Low**
+- Duration: **1,589.003 s (~26m29s)**.
+- Tool calls: **139** = 109 `exec_command`, 19 patch, 11 waits.
+- Input **182,121**, cached **181,632 (~99.73%)**, uncached **489**; output **314**; reasoning **141**.
+- Weekly quota movement: **2 pp** (`79% → 77%`).
+- Timer Now implementation/QA succeeded; roadmap bookkeeping was blocked and inherited Hub QA was not actually proven by the intended focused emulator test.
+
+Interpretation:
+
+- Low was too aggressive for a task combining Compose implementation, Gradle multi-module instrumentation, emulator state and inherited acceptance from another phase. **Use GPT-5.5 Medium for this class of task.**
+- The 2-point quota movement tracks 26 minutes / 139 tool calls far more plausibly than the tiny 489 uncached input or 141 reasoning tokens.
+- Wrong workdir, task-name discovery, 30-second polling, manual UI navigation, first-run gate setup, repeated instrumentation runs and post-PASS cosmetic patching created most of the avoidable churn.
+- A physical-device test guard must never be weakened merely to reuse it on the emulator; create one dedicated emulator-safe test instead.
+- Known Gradle module/task, exact test class, canonical helper and delivery command should be encoded directly into the prompt.
+
 ## How to calibrate future prompts
 
 Before saving a new prompt, choose model/reasoning from task characteristics and the measured evidence above. Encode only task-specific scope, decisive known evidence, pre-localized starting files/symbols, safety/non-goals, acceptance criteria and concise output requirements. Let the governing MegaVault/PersonalHub bootstrap supply global execution behavior.
