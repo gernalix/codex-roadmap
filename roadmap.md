@@ -1,5 +1,5 @@
 1. [[prompts/fedora-host-kuma-red-active-alert-diagnosis|fedora-host-kuma-red-active-alert-diagnosis]]
-2. [[prompts/fedora-software-kuma-pending-diagnosis|fedora-software-kuma-pending-diagnosis]]
+2. [[prompts/fedora-software-kuma-pending-diagnosis|fedora-storage-software-kuma-heartbeat-diagnosis]]
 3. [[prompts/personalhub-android-diagnostics-helper-runtime-validation|personalhub-android-diagnostics-helper-runtime-validation]]
 4. [[prompts/personalhub-hub-discoverability-episodes|personalhub-hub-discoverability-episodes]]
 5. [[prompts/personalhub-timer-now-simplify|personalhub-timer-now-simplify]]
