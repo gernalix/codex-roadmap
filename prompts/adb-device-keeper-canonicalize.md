@@ -1,67 +1,44 @@
-PROMPT_ID=635814 | project_id=15 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST
+PROMPT_ID=635814 | project_id=15 | model=GPT-5.5 | reasoning=low | MegaVault=FAST
 
 # Goal
-Rendi `adb-device-keeper.service` riproducibile e versionato partendo ESCLUSIVAMENTE dal runtime Fedora attuale già funzionante: conserva la versione live, porta script/unit/config schema in una sorgente Git canonica, aggiungi i test deterministici minimi che avrebbero impedito la regressione cross-device vista in `742615`, elimina il coupling WhatsApp estraneo all'ADB keeper, quindi ridistribuisci e prova una sola riconnessione reale Pixel via Tailscale.
+Distribuisci sul Fedora reale la sorgente canonica già pronta di `adb-device-keeper`, verifica la unit user-systemd e prova UNA sola riconnessione reale del Pixel 8a via Tailscale dopo disconnect controllato.
 
 # Starting point autoritativo
-- host/runtime: Fedora locale;
-- unit live: `~/.config/systemd/user/adb-device-keeper.service`;
-- script live: `~/.local/bin/adb-device-keeper`;
-- config live: `~/.config/adb-device-keeper/config`;
-- state live: `~/.local/state/adb-device-keeper/`;
-- `742615` ha già dimostrato che il Pixel 8a si riconnette automaticamente via Tailscale quando la LAN pubblica non espone la porta ADB;
-- il primo tentativo di fix di `742615` accettava qualunque endpoint Tailscale come candidato per qualunque device e il controllo TCL ha scollegato il transport del Pixel; il secondo fix ha ristretto il candidato all'IP Tailscale del device corretto;
-- la unit live punta a `file:///home/daniele/MegaVault/ai/global/ADB_DEVICE_KEEPER.md`, path risultato mancante durante `742615`;
-- il codice live contiene ancora logica WhatsApp disabilitata: questa responsabilità non appartiene al keeper ADB;
-- non esiste oggi una sorgente GitHub indicizzata per `adb-device-keeper`: NON partire da vecchio `adb-wifi-autoconnect`.
+- repo canonico già esistente: `/home/daniele/projects/adb-device-keeper`, remote `gernalix/adb-device-keeper`, branch `main`;
+- commit minimo richiesto: `170df291e930adb66da485bcdc18781519f99be1` o successivo;
+- GitHub Actions run `35086497954` sul commit minimo è **PASS**: NON rieseguire test deterministici localmente;
+- sorgente, unit, config example, deploy helper e CI sono già versionati;
+- la logica WhatsApp estranea è già rimossa;
+- i test CI coprono Tailscale `100.64.0.0/10`, mapping device→peer, preservazione porta ADB, rigetto cross-device, config sanificata e unit systemd;
+- runtime Fedora atteso:
+  - script: `~/.local/bin/adb-device-keeper`;
+  - unit: `~/.config/systemd/user/adb-device-keeper.service`;
+  - config privata: `~/.config/codex/secrets/adb-device-keeper/config`;
+  - state: `~/.local/state/adb-device-keeper/`;
+- MegaVault ha già registrato il repository: NON aggiornarlo in questo task;
+- `742615` ha già dimostrato che il Pixel può riconnettersi via Tailscale quando la LAN pubblica non espone la porta ADB.
 
-# Scope stretto
-1. Prima di modificare altro, salva una copia timestamped locale dei tre file live pertinenti: script, unit, config. Non copiare secret in Git.
-2. Verifica con UNA query MegaVault mirata se esiste già un owner Git canonico per `adb-device-keeper`. Se esiste, usa quello. Se non esiste, crea un piccolo repo dedicato `~/projects/adb-device-keeper` + remoto `gernalix/adb-device-keeper`; non infilare il servizio in repo non correlati.
-3. Porta nel repo solo:
-   - script keeper;
-   - unit systemd user come template/versionata;
-   - config example senza serial/IP/secret reali;
-   - install/deploy minimale e idempotente;
-   - README operativo breve;
-   - test mirati.
-4. Mantieni il comportamento live già verificato LAN -> Tailscale fallback. Non ridisegnare il protocollo.
-5. Rimuovi completamente dallo script versionato costanti/funzioni/chiamate WhatsApp ormai disabilitate; niente feature nuove.
-6. Correggi `Documentation=` della unit verso una fonte realmente esistente e stabile.
+Prompt autosufficiente: non leggere README/roadmap/spiegazioni/MEMORY/MegaVault, non fare audit repo-wide e non modificare codice salvo blocker concreto che renda impossibile il deploy verificato.
 
-# Test deterministici obbligatori
-Copri almeno:
-- syntax `bash -n`;
-- endpoint Tailscale `100.64.0.0/10` valido e porta valida;
-- Pixel Tailscale transport NON è candidato per TCL e viceversa;
-- mapping device -> peer Tailscale usa il peer corretto;
-- fallback conserva la porta ADB scoperta/cached ma sostituisce solo l'host con quello Tailscale del device;
-- config example non contiene serial/IP/secret reali;
-- nessun riferimento WhatsApp rimane nel keeper;
-- unit installata punta all'eseguibile canonico ed ha `Restart=on-failure` con backoff esistente.
-
-Preferisci test puri/mocked; nessun device reale in CI. Se il repo è pubblico, aggiungi una CI minima per questi test. Non installare framework di test nuovo se stdlib/shell bastano.
-
-# Deploy/runtime finale — una sola volta
-1. Solo dopo PASS dei test mirati: deploy dal repo canonico ai path live e `systemctl --user daemon-reload` + restart/enable della sola unit.
-2. Verifica `is-enabled`, `is-active`, `systemctl --user show` per `Restart/RestartUSec/ExecStart` e journal recente della sola unit.
-3. Se il Pixel è già `device`, esegui UNA prova reale: `adb disconnect <transport Pixel>`; attendi al massimo un ciclo keeper + margine con timeout esplicito; verifica riconnessione automatica e identità `model:Pixel_8a`.
-4. Non testare un `adb connect` LAN noto irraggiungibile senza `timeout`. Nessun retry identico.
-5. Commit/push sorgente canonica e aggiorna MegaVault solo con owner/path/comandi operativi essenziali.
-
-# Stop conditions
-- Se worktree destinazione dirty con modifiche non pertinenti: `BLOCKED`, stop.
-- Se serve pairing manuale nuovo: `BLOCKED`, indica solo il singolo passo richiesto; non aprire UI a caso.
-- Se i test deterministici PASS e la riconnessione reale PASS: stop immediato, niente audit aggiuntivi.
+# Esecuzione minima
+1. Una fotografia Git del solo checkout `adb-device-keeper`. Se pulito: UNA sync `timeout 20s git fetch origin main && git merge --ff-only origin/main`; se dirty non pertinente, fetch/merge fallisce o diverge: `BLOCKED`, stop. Nessun stash/rebase/retry.
+2. Verifica soltanto che `170df291e930adb66da485bcdc18781519f99be1` sia antenato di HEAD. La CI è già PASS: nessuna suite locale duplicata.
+3. Verifica senza stampare valori sensibili che il file config atteso esista e sia leggibile. Non mostrare il contenuto.
+4. Esegui UNA volta `bash scripts/deploy.sh` dal checkout pulito.
+5. Verifica in un solo blocco bounded: `is-enabled`, `is-active` e `systemctl --user show` limitato a `ExecStart`, `Restart`, `RestartUSec`; poi journal recente della sola unit con massimo 50 righe. Nessun dump globale.
+6. Se il Pixel 8a è già `device`, individua il suo transport dall'output `adb devices -l`, esegui UNA volta `adb disconnect <transport Pixel>`, poi osserva per al massimo un ciclo keeper + margine con un unico watcher bounded. PASS solo se ricompare come `device` e `model:Pixel_8a`. Non disconnettere né testare realmente il TCL.
+7. Se serve nuovo pairing manuale o il Pixel non è disponibile per una prova sicura: `BLOCKED` con il solo passo necessario. Nessun retry identico.
+8. Dopo PASS stop immediato: niente audit, test aggiuntivi, modifica sorgente o controlli remoti equivalenti.
 
 # Acceptance
-PASS solo se il servizio live continua a riconnettere il Pixel, la sorgente esatta è ora versionata/riproducibile, la regressione cross-device è coperta da test, il coupling WhatsApp è rimosso, `Documentation=` non è stale e il remoto contiene il commit finale.
+PASS solo se HEAD include il commit minimo già testato, il deploy helper completa, la unit installata usa l'eseguibile canonico ed è enabled/active con restart policy prevista, e il Pixel torna automaticamente `device model:Pixel_8a` dopo l'unico disconnect controllato.
 
 # Non-goal
-Niente PersonalHub, APK, WhatsApp settings, ExpressVPN, rete globale/firewall, refactor generali Fedora, audit di altri repo o test TCL reali.
+Niente nuove modifiche codice, CI, MegaVault, WhatsApp, PersonalHub, APK, test TCL reali, firewall/rete globale, audit altri repo o pairing nuovo.
 
 # Stop roadmap
-Dopo PASS:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 635814 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 635814`
+Dopo PASS esegui una sola volta:
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 635814 --confirm-executed`
 
-Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 7 righe: `OWNER`, `COMMIT`, `TEST`, `DEPLOY`, `SYSTEMD`, `PIXEL_RECONNECT`, `BLOCKER`.
+Non fare dry-run separati né controlli Git equivalenti dopo `status=completed|already_completed`.
+Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 6 righe: `COMMIT`, `DEPLOY`, `SYSTEMD`, `PIXEL_RECONNECT`, `CI`, `BLOCKER`.
