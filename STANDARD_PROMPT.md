@@ -22,14 +22,18 @@ La roadmap contiene soltanto attività che richiedono realmente Codex (filesyste
 Per task già pre-localizzati il costo principale è spesso il numero di round-trip modello↔tool, non il reasoning. I prompt devono quindi imporre queste regole quando applicabili:
 
 - se lo starting point è dichiarato autoritativo, non leggere `~/.codex/memories/MEMORY.md`, README, roadmap, spiegazioni, MegaVault o altra memoria/documentazione aggiuntiva salvo un dato realmente mancante che blocchi l'esecuzione;
+- dichiarare il **checkout/workdir canonico esatto** quando il task è legato a un repo e usarlo dalla prima tool-call; non partire da una directory ChatGPT/progetto incidentale e poi cercare il repository tramite memoria/documentazione;
 - se il task richiede un lease/lock già standardizzato, il prompt deve contenere direttamente i comandi esatti di acquire/release con il proprio `PROMPT_ID`; non obbligare Codex a cercarli in `AGENTS.md`, `/tmp` o nel repository. Per PersonalHub: `python3 tools/personalhub_task_lock.py acquire --prompt-id <PROMPT_ID>` e `python3 tools/personalhub_task_lock.py release --prompt-id <PROMPT_ID>`;
+- per task che scrivono su un branch condiviso, sincronizzare **prima** delle modifiche con fetch + fast-forward only e registrare lo SHA remoto iniziale; subito prima del commit/push fare un solo fetch finale. Se il remoto è avanzato durante il task, fermarsi BLOCKED invece di rebase/merge + ripetizione dei gate, salvo compatibilità concorrente dichiarata esplicitamente dal prompt;
 - raggruppare in una sola tool-call i controlli read-only indipendenti compatibili (stato Git, simboli/file già noti, stato runtime), invece di fare una chiamata per ciascun controllo;
 - riusare output già ottenuti: niente rilettura di file invariati, retry identici o verifiche equivalenti dopo un PASS;
 - per log e journal partire dalla sorgente/produttore già identificato e da una finestra temporale stretta; evitare `journalctl -b`/dump globali senza `--since`/`--until`/`-n` salvo che l'evidenza mirata sia insufficiente. Un output già troncato o di migliaia di token è un segnale per restringere la query, non per ripeterla più ampia;
 - per build/compile usate soltanto come gate di exit-code, preferire output quiet/bounded (per Gradle normalmente `--quiet --console=plain`) e riaprire output dettagliato solo in caso di failure; non spendere migliaia di token per liste `UP-TO-DATE` su un PASS;
+- dopo un test FAIL, leggere il **minimo failure artifact** necessario e rerunnare solo il test/leaf fallito dopo una correzione basata su nuova evidenza; non rilanciare identico l'intero set dopo ogni ipotesi. Il set completo mirato si riconferma una sola volta alla fine;
 - quando un helper canonico risolve già device, APK, processor o altri artifact, usarne direttamente i resolver/default invece di fare `--help`, `rg --files`, `find`, `adb devices` o probing equivalente. Per artifact generati/gitignored non usare `rg --files` come prima sorgente;
 - prima di creare watcher/script/service diagnostici persistenti, fare **un solo controllo mirato** per verificare se il progetto/runtime canonico possiede già un collector/watcher equivalente; riusarlo o estenderlo localmente invece di creare un duplicato. Validare privilegi e cattura dell'evento reale prima di abilitarlo stabilmente;
 - per watcher basati su snapshot/change detection, confrontare solo lo stato semantico stabile: timestamp/`observed_at` non devono rendere ogni campione artificialmente “diverso”;
+- costruire patch coerenti per file: evitare un'unica patch che contiene più operazioni incompatibili sullo stesso path e, dopo una patch applicata con successo, non riscrivere lo stesso file a piccoli passi salvo failure/evidenza concreta;
 - usare direttamente il runner/test command indicato dal prompt; non sondare framework alternativi se il runner canonico è già noto;
 - non leggere test di riferimento o inventariare `tests/` quando il prompt indica già il file/test target; fallo solo se serve per una failure concreta o per una convenzione non specificata;
 - niente messaggi intermedi di avanzamento: tool-call dirette, testo intermedio solo per un blocker/decisione dell'utente, poi report finale conciso;
@@ -52,6 +56,8 @@ Una risposta `complete` con `status=completed`, `commit=<SHA>` e `push_verified=
 
 Su BLOCKED/FAIL non archiviare, non rinumerare e non avanzare la roadmap. Non spostare manualmente file tra `prompts/` e `completed/` per aggirare il guard.
 
+I prompt devono richiedere una prima riga finale non ambigua `RESULT=PASS|BLOCKED|FAIL`. Se codice/test sono PASS ma una finalizzazione obbligatoria (push, guard, lease, delivery) fallisce, il risultato complessivo non è PASS: usare `RESULT=BLOCKED` o `RESULT=FAIL` secondo la causa e riportare il PASS tecnico in un campo separato.
+
 ## Fallback unattended
 
 Solo quando la selezione deve essere fatta automaticamente da Codex si può usare questo launcher compatto:
@@ -68,13 +74,15 @@ Ogni nuovo prompt o modifica sostanziale di un prompt pendente deve preservare l
 
 - dichiarare `PROMPT_ID`, `project_id`, modello, reasoning e MegaVault quando applicabili;
 - se riprende un run fallito/bloccato, dichiarare anche `last_result=BLOCKED` o `last_result=FAIL` e usare `--result PASS` nella finalizzazione;
-- contenere direttamente goal, starting point/source-of-truth, scope/non-goal, verification e PASS/stop;
+- contenere direttamente goal, starting point/source-of-truth, checkout/workdir canonico, scope/non-goal, verification e PASS/stop;
 - dichiarare esplicitamente, quando lo starting point è completo, che README/roadmap/spiegazioni/MEMORY/MegaVault non vanno riletti salvo blocker concreto;
 - includere direttamente comandi operativi standard necessari al task (lease/lock, runner canonico, helper già noto) invece di rimandare a discovery documentale;
 - vietare discovery/audit già sostituiti da evidenza preparata e, quando il target test è già noto, evitare inventory/letture di test di riferimento non necessarie;
 - richiedere solo test proporzionati al rischio;
+- per branch condivisi, specificare la policy di sync iniziale e di remote-advance prima del push;
 - consolidare build/device/delivery nella fase finale quando appartiene a una campagna compatibile;
 - contenere la finalizzazione roadmap su PASS con il proprio `PROMPT_ID`;
+- richiedere `RESULT=PASS|BLOCKED|FAIL` come prima riga finale;
 - non dipendere dal launcher generico o dall'output di `select` per informazioni necessarie all'esecuzione.
 
 Quando workflow o guard cambiano, aggiornare questo file solo se il cambiamento modifica davvero uno dei due percorsi: esecuzione diretta manuale o fallback unattended.
