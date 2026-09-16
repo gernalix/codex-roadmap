@@ -5,8 +5,8 @@ Distribuisci sul Fedora reale l'ultimo `codex-usage-monitor/main`, che include s
 
 # Starting point autoritativo
 - repo locale: `/home/daniele/projects/codex-usage-monitor`, branch `main`, project_id `8`;
-- commit minimo richiesto: `a916dceb6e553967bfc219ec0a4c1fa1c6ec3fb0` o successivo;
-- GitHub Actions run `35085456040` sul commit minimo è già **PASS**: NON duplicare la suite localmente;
+- commit minimo richiesto: `4d8432b03cadeca1252696e1ee4846ac57378b2a` o successivo;
+- GitHub Actions run `35085784139` sul commit minimo è già **PASS**: NON duplicare la suite localmente;
 - runtime canonico: Fedora locale; Oracle VM NON è runtime;
 - il codice e i test deterministici sono già sul remoto: NON reimplementare i fix;
 - repo dati privato: `/home/daniele/projects/codex-usage`;
@@ -18,7 +18,7 @@ Prompt autosufficiente: niente audit repo-wide, README/roadmap/MegaVault, refact
 
 # Esecuzione minima
 1. Fotografia Git del solo `codex-usage-monitor`. Se pulito: UNA sync `git fetch origin main && git merge --ff-only origin/main`. Se dirty non pertinente/divergente: `BLOCKED`, stop.
-2. Verifica solo che `a916dceb6e553967bfc219ec0a4c1fa1c6ec3fb0` sia antenato di HEAD. Non rieseguire test già coperti dalla CI PASS.
+2. Verifica solo che `4d8432b03cadeca1252696e1ee4846ac57378b2a` sia antenato di HEAD. Non rieseguire test già coperti dalla CI PASS.
 3. Esegui UNA volta il deploy canonico già documentato (`python3 deploy_runtime.py`) dal checkout pulito/sincronizzato.
 4. Avvia UNA volta `codex-usage-publisher.service` oppure l'equivalente comando runtime canonico già installato, lasciando che completi backfill/push. Nessun loop/retry identico.
 5. Verifica nel checkout locale `codex-usage`, senza audit generale:
