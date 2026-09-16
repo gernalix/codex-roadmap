@@ -22,14 +22,12 @@ EXECUTION_CONTRACT = (
     "and tests targeted, group independent checks into one tool call when safe, avoid "
     "equivalent retries, and stop at PASS/BLOCKED/FAIL. For long-running commands, "
     "prefer one blocking wait or sparse status checks and do not narrate unchanged "
-    "polls. On PASS run dry-run and real complete in one shell invocation when possible; "
-    "if prompt metadata contains last_result, pass --result PASS to both. On BLOCKED/FAIL "
-    "leave the prompt pending and never move it manually to completed. If implementation "
-    "was already pushed but complete reports prompt_identity_mismatch because the roadmap "
-    "advanced, use reconcile --dry-run and then reconcile --confirm-executed; never "
-    "reproduce roadmap bookkeeping manually. A successful complete or reconcile response "
-    "with push_verified=git_push_exit_0 is authoritative proof of roadmap push success; "
-    "do not run follow-up git status/rev-parse/ls-remote on the roadmap checkout."
+    "polls. On PASS invoke roadmap_finish.py exactly once with --confirm-executed; it "
+    "handles selected-task completion, out-of-order reconcile and bounded concurrent "
+    "ref-advance push races from fresh origin/main. On BLOCKED/FAIL leave the prompt "
+    "pending and never move it manually to completed. A successful roadmap_finish.py "
+    "response with status=completed|already_completed is authoritative; do not run "
+    "follow-up git status/rev-parse/ls-remote or equivalent roadmap checks."
 )
 
 
