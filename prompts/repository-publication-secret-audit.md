@@ -3,7 +3,7 @@
 `PROMPT_ID=940316 | project_id=23 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT`
 
 # Goal
-Eseguire una sola campagna fail-closed che: (1) protegga subito i repo già pubblici ma classificati `PRIVATE`; (2) auditi history/tree/Actions dei repo pubblici o `PUBLIC_AFTER_AUDIT`; (3) applichi la visibility finale senza un secondo task.
+Eseguire una sola campagna fail-closed che: (1) protegga subito i repo già pubblici ma classificati `PRIVATE`; (2) auditi history/tree/Actions dei repo pubblici o `PUBLIC_AFTER_AUDIT`; (3) applichi la visibility finale senza un secondo task; (4) produca un handoff compatto per la CI successiva.
 
 Sorgenti private uniche:
 - `/home/daniele/projects/MegaVault/ai/repository-public-private-matrix.md`
@@ -23,7 +23,7 @@ Conserva soltanto repo, categoria/regola, path, commit abbreviato, `current|hist
 Solo dove esistono workflow, controlla rischi concreti: `pull_request_target` con codice non fidato, write permissions eccessive, secret esposti a contributori, self-hosted su PR pubbliche, action terze parti debolmente pin quando rilevante. Niente supply-chain audit generale.
 
 # Classificazione + visibility nella stessa sessione
-Per ogni repo compila: `audit_status`, finding counts, artefatti/path redatti, `history_clean`, remediation, `final_recommendation`, `publication_ready`, confidence, `current_visibility`, `visibility_apply_status`.
+Per ogni repo compila: `audit_status`, finding counts, artefatti/path redatti, `history_clean`, remediation, `final_recommendation`, `publication_ready`, confidence, `current_visibility`, `visibility_apply_status`, `default_branch`.
 
 `publication_ready=yes` solo con `PASS`, history/tree puliti, nessuna remediation obbligatoria, confidence high.
 - `final_recommendation=PUBLIC` + `publication_ready=yes` -> PUBLIC.
@@ -35,11 +35,20 @@ Applica i cambi via `gh`/API con flag esplicito per le conseguenze della visibil
 
 Credential potenzialmente attivo => `rotate/revoke + history cleanup before republication`, mai valore. Non eseguire remediation distruttive o history rewrite in questo task.
 
+# Handoff CI — nessuna seconda inventory nel task successivo
+Crea `/home/daniele/projects/MegaVault/ai/repository-ci-handoff.json` con schema minimo:
+- `schema_version: 1`;
+- `generated_by_prompt_id: 940316`;
+- `generated_at_utc`;
+- `repositories`: una entry per ogni repo **esistente e non RETIRE** con soli campi `name`, `visibility`, `default_branch`, `audit_status`, `publication_ready`.
+
+L'handoff deve derivare esclusivamente dall'inventory finale e dalla classificazione appena completata; niente nuova discovery. Ordina per `name`. Non includere finding, path sensibili o dettagli che il task CI non usa.
+
 # Output privato / verifica
-Aggiorna i due file MegaVault, con report redatto e conteggi finali PUBLIC/PRIVATE/RETIRE. `git diff --check` solo su questi file; un solo commit+push MegaVault. Niente README/source audit generale, scanner duplicati, retry identici o audit post-applicazione.
+Aggiorna matrice, audit e handoff JSON. `git diff --check` sui Markdown + parse JSON dell'handoff; un solo commit+push MegaVault. Niente README/source audit generale, scanner duplicati, retry identici o audit post-applicazione.
 
 # Acceptance
-Tutti i repo in scope classificati; history+tree coperti; nessun repo non pronto reso pubblico; baseline PRIVATE pubblici portati private oppure P0 esplicito; visibility finale verificata una volta; report/matrice redatti e pushati.
+Tutti i repo in scope classificati; history+tree coperti; nessun repo non pronto reso pubblico; baseline PRIVATE pubblici portati private oppure P0 esplicito; visibility finale verificata una volta; report/matrice redatti e pushati; handoff CI completo per tutti i repo esistenti non RETIRE.
 
 # Stop
 Dopo `AUDIT_APPLY_COMPLETE` o `AUDIT_APPLY_COMPLETE_WITH_BLOCKERS`:
