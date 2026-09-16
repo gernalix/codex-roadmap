@@ -1,6 +1,6 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=815306 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST`
+`PROMPT_ID=815306 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
 
 # Goal
 Se PersonalHub è stato conservato dalla retention review, validare e integrare SOLO PR PersonalHub #10 (`chatgpt/android-diagnostics-efficiency`), che rende deterministici install APK su Pixel fisico e query Perfetto. Nessuna modifica al comportamento dell'app.
