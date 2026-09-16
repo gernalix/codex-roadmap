@@ -4,3 +4,4 @@
 4. [[prompts/logseq-updates-pat-safety-closure|logseq-updates-pat-safety-closure]]
 5. [[prompts/codex-usage-monitor-capsule-boundaries|codex-usage-monitor-capsule-boundaries]]
 6. [[prompts/megavault-internal-capsule-boundaries|megavault-internal-capsule-boundaries]]
+7. [[prompts/retained-repositories-github-ci-completion|retained-repositories-github-ci-completion]]
