@@ -35,7 +35,7 @@ Regole obbligatorie:
 7. aggiorna `deploy_runtime.py` affinché il package venga distribuito atomicamente insieme ai wrapper, senza doppia sorgente runtime.
 
 # Esecuzione a costo controllato
-1. Fotografia Git; se pulito `git fetch origin && git pull --ff-only origin main`. Se dirty non pertinente o remoto divergente: `BLOCKED`, niente stash/rebase.
+1. Fotografia Git; se pulito esegui UNA sola sync: `timeout 20s git fetch origin main && git merge --ff-only origin/main`. Se dirty non pertinente, fetch/merge fallisce o il remoto diverge: `BLOCKED`, niente stash/rebase/retry.
 2. Esegui UNA inventory locale compatta basata su AST per: file Python runtime, import tra moduli, entrypoint richiamati da `systemd/`/`deploy_runtime.py`, line count. Non stampare sorgenti interi.
 3. Migra per domini mantenendo shim compatibili. Evita modifiche funzionali; se un test espone comportamento ambiguo, conserva il comportamento corrente.
 4. Aggiungi `scripts/check_architecture_boundaries.py` con test dedicati. Il gate deve almeno fallire su: runtime logic top-level oltre agli adapter consentiti, wildcard import, re-export dinamico, monkey-patching di namespace e import cross-capsule che bypassano la superficie pubblica.
