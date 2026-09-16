@@ -3,19 +3,21 @@
 `PROMPT_ID=483921 | project_id=23 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD`
 
 # Goal
-Per **tutti e soli** i repository marcati `[x]` nella checklist di retention, rendere GitHub Actions la sede canonica di **tutto il testing deterministico/sandboxabile ragionevolmente disponibile**, senza duplicare CI già adeguata.
+Per tutti i repository **esistenti e non RETIRE** già consegnati dall'audit precedente, rendere GitHub Actions la sede canonica di **tutto il testing deterministico/sandboxabile ragionevolmente disponibile**, senza duplicare CI già adeguata.
 
-Sorgente autoritativa:
-`/home/daniele/projects/MegaVault/ai/repository-retention-checklist.md`
+Sorgente autoritativa unica:
+`/home/daniele/projects/MegaVault/ai/repository-ci-handoff.json`
 
-Questo task sostituisce le precedenti campagne CI separate per Python/Android/browser/Fedora/PersonalHub. `codex-usage-monitor` può avere già CI dal cutover precedente e `codex-roadmap` ha già CI: in tal caso verifica il minimo necessario e marca `NOOP_COMPLETE`.
+L'handoff è prodotto da `PROMPT_ID=940316` e contiene già scope, visibility e default branch finali. Non rileggere la checklist, non rifare `gh repo list`, non rivalutare PUBLIC/PRIVATE e non riaprire l'audit sicurezza.
 
-# Inventory minima
-1. Leggi la checklist una sola volta; scope = sole righe `- [x] NAME` / `- [X] NAME`.
-2. Una sola inventory GitHub owned con visibility/default branch.
-3. `[x]` non più esistente => `MISSING_RETAINED_REPO`, blocker solo per quel repo; non ricrearlo.
-4. `[ ]` o assente => fuori scope assoluto.
-5. Per ogni `[x]` leggi solo manifest/build/packaging, directory test, `.github/workflows` ed entrypoint/config direttamente necessari a capire come testarlo. Niente audit generale, history, issue o README salvo blocker concreto.
+`codex-usage-monitor` può avere già CI dal cutover precedente e `codex-roadmap` ha già CI: in tal caso verifica il minimo necessario e marca `NOOP_COMPLETE`.
+
+# Gate handoff
+1. Leggi e parsea l'handoff una sola volta.
+2. Richiedi `schema_version=1` e `generated_by_prompt_id=940316`; mismatch/missing => BLOCKED, niente discovery sostitutiva.
+3. Scope = esattamente le entry `repositories` dell'handoff.
+4. Se una push/fetch mirata dimostra che un repo dell'handoff non esiste più, `MISSING_RETAINED_REPO` solo per quel repo; non fare inventory globale e non ricrearlo.
+5. Per ogni repo leggi solo manifest/build/packaging, directory test, `.github/workflows` ed entrypoint/config direttamente necessari a capire come testarlo. Niente audit generale, history, issue o README salvo blocker concreto.
 
 # Principio vincolante
 Un check va su GitHub Actions se è deterministico o stabilizzabile con fixture/mock e può girare senza dati personali, hardware fisico, account/sessioni reali, secret di produzione o infrastruttura live.
@@ -53,6 +55,7 @@ Copri quando applicabile:
 - Backup→restore solo in temp dir; mai mount/dischi reali, SSH, VM, restart host o secret di produzione.
 
 # Strategia visibility/costo
+Usa `visibility` dell'handoff, senza query ridondanti:
 - **PUBLIC:** GitHub-hosted standard; gate veloci automatici PR+push, job più costosi solo con frequenza utile.
 - **PRIVATE:** anche qui tutto il testing sandboxabile deve essere definito in Actions; gate veloci automatici, job pesanti preferibilmente manuali. Visibility cambia trigger/frequenza, non la copertura disponibile.
 
@@ -64,13 +67,13 @@ Copri quando applicabile:
 5. Preflight locale minimo -> push -> singolo run GitHub canonico. Failure: solo job/log fallito -> fix minimo -> nuovo run. Vietati retry identici e audit post-PASS.
 6. Chiudi un repo appena raggiunge COMPLETE; non riaprirlo nella stessa sessione.
 
-Se i repo `[x]` sono numerosi, processali serialmente ma senza rileggere checklist/inventory globale: mantieni la stessa inventory in memoria e apri solo il prossimo repo. Non fare discovery trasversale.
+Mantieni in memoria l'handoff e processa i repo serialmente; nessuna discovery trasversale, nessuna rilettura globale tra un repo e l'altro.
 
 # Esclusioni locali ammesse
 Solo test che richiedono realmente hardware fisico, account/browser autenticato reale, secret di produzione, VM/host/dischi/rete live non simulabili o comportamento umano non riducibile a fixture affidabile. Per ogni esclusione registra una motivazione tecnica concreta.
 
 # Report finale
-Crea/aggiorna `/home/daniele/projects/MegaVault/ai/repository-ci-coverage.md` con una riga per ogni `[x]`:
+Crea/aggiorna `/home/daniele/projects/MegaVault/ai/repository-ci-coverage.md` con una riga per ogni entry dell'handoff:
 - `COMPLETE|NOOP_COMPLETE|PARTIAL_BLOCKED`;
 - workflow/gate principali;
 - eventuale test rimasto locale + motivo tecnico.
@@ -78,10 +81,10 @@ Crea/aggiorna `/home/daniele/projects/MegaVault/ai/repository-ci-coverage.md` co
 Non duplicare dettagli dei log CI.
 
 # Non-goal
-Niente refactor/cleanup/modernizzazione, feature, release, dependency upgrade generale, security audit, history rewrite, cambio visibility, test live quando fixture/headless bastano, shared action cross-repo salvo beneficio concreto già evidente.
+Niente refactor/cleanup/modernizzazione, feature, release, dependency upgrade generale, security audit, history rewrite, cambio visibility, inventory globale, test live quando fixture/headless bastano, shared action cross-repo salvo beneficio concreto già evidente.
 
 # Acceptance
-PASS solo se ogni repo `[x]` esistente ha tutto il testing deterministico/sandboxabile ragionevolmente disponibile in GitHub Actions oppure un blocker tecnico esplicito; workflow modificati verdi; nessuna CI duplicata; ciò che resta locale richiede davvero risorse non sandboxabili; report finale completo.
+PASS solo se ogni repo dell'handoff ancora esistente ha tutto il testing deterministico/sandboxabile ragionevolmente disponibile in GitHub Actions oppure un blocker tecnico esplicito; workflow modificati verdi; nessuna CI duplicata; ciò che resta locale richiede davvero risorse non sandboxabili; report finale completo.
 
 # Stop
 Dopo PASS:
