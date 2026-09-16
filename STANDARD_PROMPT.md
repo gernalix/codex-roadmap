@@ -53,27 +53,30 @@ Per task già pre-localizzati il costo principale è spesso il numero di round-t
 
 Se più prompt condividono `campaign_id`, ogni fase resta autosufficiente ma deve rispettare il contratto della campagna. Per PersonalHub le fasi intermedie non fanno bump versione, final APK, installazione del package reale Pixel o Telegram delivery; queste operazioni comuni si eseguono una sola volta nella fase finale. Non eseguire task PersonalHub concorrenti della stessa o di altre campagne.
 
-## `roadmap_guard.py`
+## Finalizzazione roadmap
 
-Il guard resta utile per due scopi:
+`roadmap_guard.py` resta la primitive fail-closed per selezione, `complete` e `reconcile`. Per i prompt normali, però, la finalizzazione PASS deve usare il wrapper race-safe **in una sola invocazione**:
 
-- **selezione unattended/automatica**: `python3 tools/roadmap_guard.py select` può ancora restituire l'execution pack quando non c'è un operatore che sceglie il file;
-- **finalizzazione su PASS**: ogni prompt pendente deve contenere direttamente il proprio comando `complete --prompt-id ...`, con dry-run seguito da complete.
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID> --confirm-executed`
 
-Per un prompt riattivato dopo un esito `BLOCKED` o `FAIL`, conserva l'esito nei metadata (`last_result=BLOCKED` / `last_result=FAIL`). In quel caso il guard rifiuta l'archiviazione finché il nuovo run non dichiara esplicitamente `--result PASS`; il comando di finalizzazione del prompt deve quindi includerlo sia nel dry-run sia nel complete reale. Un `--result BLOCKED` o `--result FAIL` viene sempre rifiutato come tentativo di completion.
+`roadmap_finish.py` prova prima la normale `complete`; se nel frattempo un altro task ha avanzato `roadmap.md`, usa automaticamente il `reconcile` canonico nello stesso processo. Il fallback mutante resta fail-closed: `--confirm-executed` è necessario per attestare che il lavoro del prompt è realmente già stato eseguito. Errori diversi dal solo `prompt_identity_mismatch` non vengono convertiti in reconcile.
 
-Una risposta `complete` con `status=completed`, `commit=<SHA>` e `push_verified=git_push_exit_0` è prova canonica del push della roadmap. Non fare controlli Git equivalenti dopo il PASS e non aprire il task successivo nella stessa sessione.
+Non anteporre un dry-run nel percorso normale: il wrapper e il guard validano le precondizioni prima della mutazione, mentre un secondo processo raddoppierebbe round-trip e aprirebbe un'ulteriore finestra di race. `--dry-run` resta disponibile solo per diagnosi/manual review.
 
-Su BLOCKED/FAIL non archiviare, non rinumerare e non avanzare la roadmap. Non spostare manualmente file tra `prompts/` e `completed/` per aggirare il guard.
+Per un prompt riattivato dopo `BLOCKED` o `FAIL`, conserva `last_result=BLOCKED` / `last_result=FAIL` nei metadata. Il wrapper dichiara internamente `result=PASS` al guard: deve quindi essere invocato **solo dopo** che tutti gli acceptance criteria del nuovo run sono PASS.
 
-I prompt devono richiedere una prima riga finale non ambigua `RESULT=PASS|BLOCKED|FAIL`. Se codice/test sono PASS ma una finalizzazione obbligatoria (push, guard, lease, delivery) fallisce, il risultato complessivo non è PASS: usare `RESULT=BLOCKED` o `RESULT=FAIL` secondo la causa e riportare il PASS tecnico in un campo separato.
+Una risposta del wrapper con `status=completed` oppure `status=already_completed`, `finish_mode=complete|reconcile` e, quando c'è una nuova mutazione, `push_verified=git_push_exit_0`, è prova canonica della finalizzazione. Non fare controlli Git equivalenti dopo il PASS e non aprire il task successivo nella stessa sessione.
+
+Su BLOCKED/FAIL non invocare il finalizzatore, non archiviare, non rinumerare e non avanzare la roadmap. Non spostare manualmente file tra `prompts/` e `completed/` per aggirare il guard.
+
+I prompt devono richiedere una prima riga finale non ambigua `RESULT=PASS|BLOCKED|FAIL`. Se codice/test sono PASS ma una finalizzazione obbligatoria (push, guard/finalizer, lease, delivery) fallisce, il risultato complessivo non è PASS: usare `RESULT=BLOCKED` o `RESULT=FAIL` secondo la causa e riportare il PASS tecnico in un campo separato.
 
 ## Fallback unattended
 
 Solo quando la selezione deve essere fatta automaticamente da Codex si può usare questo launcher compatto:
 
 ```text
-Esegui SOLO il primo task pendente di gernalix/codex-roadmap. Come prima tool-call esegui `python3 tools/roadmap_guard.py select`, usa `prompt_content` come task completo e non rileggere README/roadmap/spiegazioni salvo incoerenza concreta. Considera già verificato ciò che il task dichiara verificato, mantieni scope e test mirati e fermati a PASS/BLOCKED/FAIL. Su PASS usa il `complete` previsto dal task; non aprire il task successivo.
+Esegui SOLO il primo task pendente di gernalix/codex-roadmap. Come prima tool-call esegui `python3 tools/roadmap_guard.py select`, usa `prompt_content` come task completo e non rileggere README/roadmap/spiegazioni salvo incoerenza concreta. Considera già verificato ciò che il task dichiara verificato, mantieni scope e test mirati e fermati a PASS/BLOCKED/FAIL. Su PASS usa una sola volta `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID> --confirm-executed`; non aprire il task successivo.
 ```
 
 Questo fallback non è il workflow manuale normale.
@@ -83,7 +86,7 @@ Questo fallback non è il workflow manuale normale.
 Ogni nuovo prompt o modifica sostanziale di un prompt pendente deve preservare l'esecuzione diretta. In particolare il file deve:
 
 - dichiarare `PROMPT_ID`, `project_id`, modello, reasoning e MegaVault quando applicabili;
-- se riprende un run fallito/bloccato, dichiarare anche `last_result=BLOCKED` o `last_result=FAIL` e usare `--result PASS` nella finalizzazione;
+- se riprende un run fallito/bloccato, dichiarare anche `last_result=BLOCKED` o `last_result=FAIL`;
 - contenere direttamente goal, starting point/source-of-truth, checkout/workdir canonico, scope/non-goal, verification e PASS/stop;
 - dichiarare esplicitamente, quando lo starting point è completo, che README/roadmap/spiegazioni/MEMORY/MegaVault non vanno riletti salvo blocker concreto;
 - includere direttamente comandi operativi standard necessari al task (lease/lock, runner canonico, helper già noto) invece di rimandare a discovery documentale;
@@ -91,7 +94,7 @@ Ogni nuovo prompt o modifica sostanziale di un prompt pendente deve preservare l
 - richiedere solo test proporzionati al rischio;
 - per branch condivisi, specificare la policy di sync iniziale e di remote-advance prima del push;
 - consolidare build/device/delivery nella fase finale quando appartiene a una campagna compatibile;
-- contenere la finalizzazione roadmap su PASS con il proprio `PROMPT_ID`;
+- contenere su PASS la singola invocazione `roadmap_finish.py` con il proprio `PROMPT_ID` e `--confirm-executed`;
 - richiedere `RESULT=PASS|BLOCKED|FAIL` come prima riga finale;
 - non dipendere dal launcher generico o dall'output di `select` per informazioni necessarie all'esecuzione.
 
