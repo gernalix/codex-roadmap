@@ -64,6 +64,6 @@ Fase intermedia: niente bump `version.txt`, Pixel reale, APK/Telegram. Push una 
 PASS se ogni tentativo user-triggered è ricostruibile, failure non crea visite, migrazione preserva dati, recovery è idempotente, diagnostica è leggibile, i gate Luoghi mirati PASS e il singolo test emulator-safe chiude davvero Home/Search/Episodi/fatigue della fase 1.
 
 # Stop
-Solo dopo acceptance PASS e base remota invariata: commit/push PersonalHub una volta, quindi
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 893806 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 893806`.
-Se `roadmap_guard` rifiuta il completamento, `RESULT=BLOCKED` anche con codice PASS; non manipolare manualmente la roadmap. Rilascia il lease. Prima riga output `RESULT=PASS|BLOCKED|FAIL`; massimo 6 righe.
+Dopo acceptance PASS e base remota invariata: commit/push PersonalHub una volta. Poi prova il dry-run `complete` per `893806`. Se restituisce `status=ready`, esegui il `complete` reale. Se e SOLO se restituisce `prompt_identity_mismatch` perché un task indipendente precedente è ancora selezionato, usa invece:
+`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap reconcile --prompt-id 893806 --result PASS --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap reconcile --prompt-id 893806 --result PASS --confirm-executed`.
+Un `status=completed` o `status=already_completed`/reconcile riuscito con `push_verified=git_push_exit_0` chiude il bookkeeping. Per qualunque altro errore guard, `RESULT=BLOCKED`; non manipolare manualmente la roadmap. Rilascia il lease. Prima riga output `RESULT=PASS|BLOCKED|FAIL`; massimo 6 righe.
