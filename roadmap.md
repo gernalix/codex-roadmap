@@ -2,6 +2,5 @@
 2. [[prompts/fedora-runtime-validation|fedora-runtime-validation]]
 3. [[prompts/personalhub-release-apk-minification|personalhub-release-apk-minification]]
 4. [[prompts/logseq-updates-pat-safety-closure|logseq-updates-pat-safety-closure]]
-5. [[prompts/codex-usage-monitor-capsule-boundaries|codex-usage-monitor-capsule-boundaries]]
-6. [[prompts/megavault-internal-capsule-boundaries|megavault-internal-capsule-boundaries]]
-7. [[prompts/retained-repositories-github-ci-completion|retained-repositories-github-ci-completion]]
+5. [[prompts/megavault-internal-capsule-boundaries|megavault-internal-capsule-boundaries]]
+6. [[prompts/retained-repositories-github-ci-completion|retained-repositories-github-ci-completion]]
