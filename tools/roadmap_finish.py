@@ -12,10 +12,8 @@ from roadmap_guard import RoadmapError, complete, git_root, reconcile, run
 PROMPT_MISMATCH_PREFIX = "prompt_identity_mismatch:"
 MAX_PUSH_RACE_RETRIES = 3
 _RETRYABLE_PUSH_MARKERS = (
-    "[rejected]",
     "fetch first",
     "non-fast-forward",
-    "failed to push some refs",
 )
 _FAILED_WORKTREE_RE = re.compile(r"isolated_worktree=([^\s]+)")
 
@@ -73,7 +71,7 @@ def finish(
 
     Identity races are handled by complete -> reconcile. A concurrent non-fast-forward
     push is retried from fresh origin/main up to MAX_PUSH_RACE_RETRIES times. Auth,
-    network and other push failures remain fail-closed and are never retried blindly.
+    network, policy and other push failures remain fail-closed and are never retried.
     """
     retries = 0
     while True:
