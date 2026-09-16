@@ -1,6 +1,4 @@
-[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
-
-`PROMPT_ID=483921 | project_id=23 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD`
+PROMPT_ID=483921 | project_id=23 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD
 
 # Goal
 Per tutti i repository **esistenti e non RETIRE** già consegnati dall'audit precedente, rendere GitHub Actions la sede canonica di **tutto il testing deterministico/sandboxabile ragionevolmente disponibile**, senza duplicare CI già adeguata.
@@ -88,7 +86,8 @@ Niente refactor/cleanup/modernizzazione, feature, release, dependency upgrade ge
 PASS solo se ogni repo dell'handoff ancora esistente ha tutto il testing deterministico/sandboxabile ragionevolmente disponibile in GitHub Actions oppure un blocker tecnico esplicito; workflow modificati verdi; nessuna CI duplicata; ciò che resta locale richiede davvero risorse non sandboxabili; report JSON parseabile e completo.
 
 # Stop
-Dopo PASS:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 483921 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 483921`
+Dopo PASS esegui una sola volta:
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 483921 --confirm-executed`
 
-Output massimo 7 righe: RESULT, retained count, NOOP_COMPLETE, changed, blocked, coverage report, blocker eventuale.
+Non fare dry-run separati né controlli Git equivalenti dopo finalizzazione.
+Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 7 righe: `RESULT`, `RETAINED`, `NOOP_COMPLETE`, `CHANGED`, `BLOCKED`, `COVERAGE_REPORT`, `BLOCKER`.
