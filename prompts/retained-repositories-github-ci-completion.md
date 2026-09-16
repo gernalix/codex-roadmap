@@ -8,9 +8,9 @@ Sorgente autoritativa principale:
 
 Il file corrente usa `schema_version=2`; usa sempre la versione presente nel checkout sincronizzato al momento dell'esecuzione perché task precedenti possono aver aggiornato singole entry di pubblicabilità. Non rifare `gh repo list`, non rivalutare PUBLIC/PRIVATE e non riaprire l'audit sicurezza.
 
-Supplemento post-handoff già verificato:
-- `adb-device-keeper`, visibility `PRIVATE`, default branch `main`;
-- il repo esiste già e ha CI deterministica; se al momento del task la CI copre già tutto, marcarlo `NOOP_COMPLETE` senza nuova implementazione.
+Supplementi/post-audit già verificati:
+- `adb-device-keeper`, visibility `PRIVATE`, default branch `main`; il repo esiste già e ha CI deterministica: se copre già tutto, `NOOP_COMPLETE`;
+- `PersonalHub` ha già una Play Store preflight dedicata che esegue `lintPlay`, merged-manifest policy check e costruisce/controlla un AAB `play` minified/shrunk senza secret; baseline minima `4038b2dcc4bdae017e0f5d2f0cd144138d0edd2c` o successiva. NON creare un secondo workflow Play e NON spostare signing/keystore reali su GitHub Actions.
 
 `codex-usage-monitor`, `codex-roadmap`, `fedora-system-monitor` e altri repo toccati dai task precedenti possono avere CI già completa: verifica il minimo necessario e marca `NOOP_COMPLETE` quando appropriato.
 
@@ -39,6 +39,7 @@ Copri quando applicabile:
 # Routing per tipologia — niente task separati
 ## Android / PersonalHub
 - Riusa task Gradle e test esistenti; una sola JDK/API coerente, niente matrix esplorative.
+- Per PersonalHub, tratta la Play preflight esistente come gate canonico per il variant Store: verifica soltanto che sia verde sul codice pertinente e copra bundle/lint/manifest. Il gate firmato con segreti + smoke AAB-derived sull'emulatore è già separato nel task locale `294731` e NON va duplicato qui.
 - PUBLIC: host gate PR+push; emulator smoke su push/main o manuale; instrumentation più pesante manuale/schedule solo se utile.
 - PRIVATE: host gate veloce automatico; emulator/instrumentation pesanti definiti comunque in Actions ma preferibilmente `workflow_dispatch` per contenere i minuti. Riusa un self-hosted repo-specific già sicuro se esiste; non creare runner general-purpose.
 - Pixel/TCL restano locali solo perché hardware fisico.
