@@ -3,5 +3,4 @@
 3. [[prompts/fedora-kuma-inversion-preservation-runtime-validation|fedora-kuma-inversion-preservation-runtime-validation]]
 4. [[prompts/personalhub-random-timer-background-deadline|personalhub-random-timer-background-deadline]]
 5. [[prompts/personalhub-release-apk-minification|personalhub-release-apk-minification]]
-6. [[prompts/repository-publication-audit-correction-apply|repository-publication-audit-correction-apply]]
-7. [[prompts/logseq-updates-pat-safety-closure|logseq-updates-pat-safety-closure]]
+6. [[prompts/logseq-updates-pat-safety-closure|logseq-updates-pat-safety-closure]]
