@@ -6,8 +6,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import subprocess
-import sys
 from pathlib import Path
 
 
@@ -81,6 +81,20 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _snapshot_path(path: Path) -> tuple[str, str]:
+    if path.is_symlink():
+        return ("symlink", os.readlink(path))
+    if path.is_file():
+        return ("file", _sha256(path))
+    if not path.exists():
+        return ("missing", "")
+    raise SafeFFBlocked(f"dirty path is not safely snapshotable: {path}")
+
+
+def snapshot_dirty(repo: Path, paths: set[str]) -> dict[str, tuple[str, str]]:
+    return {relative: _snapshot_path(repo / relative) for relative in sorted(paths)}
+
+
 def safe_fast_forward(
     repo: Path,
     *,
@@ -100,14 +114,12 @@ def safe_fast_forward(
 
     before_head = _git_ok(repo, "rev-parse", "HEAD")
     dirty_before = dirty_paths(repo)
-    preserve_hashes: dict[str, str] = {}
-    for relative in preserve:
-        if relative not in dirty_before:
-            continue
-        path = repo / relative
-        if not path.is_file():
-            raise SafeFFBlocked(f"preserve path is not a regular file: {relative}")
-        preserve_hashes[relative] = _sha256(path)
+    missing_requested = sorted(set(preserve) - dirty_before)
+    if missing_requested:
+        raise SafeFFBlocked(
+            "requested preserve path is not dirty: " + ", ".join(missing_requested)
+        )
+    dirty_snapshot = snapshot_dirty(repo, dirty_before)
 
     # Update the configured remote-tracking ref explicitly. This keeps the
     # subsequent ancestry/diff checks tied to the exact branch being fetched.
@@ -140,10 +152,16 @@ def safe_fast_forward(
         if required.returncode != 0:
             raise SafeFFBlocked(f"required ancestor missing: {required_ancestor}")
 
-    for relative, expected_hash in preserve_hashes.items():
-        path = repo / relative
-        if not path.is_file() or _sha256(path) != expected_hash:
-            raise SafeFFBlocked(f"preserved local file changed during fast-forward: {relative}")
+    dirty_after = snapshot_dirty(repo, dirty_before)
+    changed_dirty = sorted(
+        relative
+        for relative, before_state in dirty_snapshot.items()
+        if dirty_after.get(relative) != before_state
+    )
+    if changed_dirty:
+        raise SafeFFBlocked(
+            "local dirty work changed during fast-forward: " + ", ".join(changed_dirty)
+        )
 
     return {
         "status": "PASS",
@@ -152,7 +170,7 @@ def safe_fast_forward(
         "remote_ref": remote_ref,
         "remote_changed_count": len(remote_changed),
         "dirty_count": len(dirty_before),
-        "dirty_preserved": sorted(preserve_hashes),
+        "dirty_preserved": sorted(dirty_before),
     }
 
 
@@ -162,7 +180,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--remote", default="origin")
     parser.add_argument("--branch", required=True)
     parser.add_argument("--required-ancestor")
-    parser.add_argument("--preserve", action="append", default=[])
+    parser.add_argument(
+        "--preserve",
+        action="append",
+        default=[],
+        help="Optional dirty path that must be present; all dirty paths are preserved automatically.",
+    )
     parser.add_argument("--fetch-timeout", type=int, default=20)
     args = parser.parse_args(argv)
     try:
