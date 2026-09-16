@@ -3,5 +3,4 @@
 3. [[prompts/fedora-filesystem-telegram-typeerror-runtime-fix|fedora-filesystem-telegram-typeerror-runtime-fix]]
 4. [[prompts/fedora-user-systemd-partial-collector-fix|fedora-user-systemd-partial-collector-fix]]
 5. [[prompts/personalhub-random-timer-background-deadline|personalhub-random-timer-background-deadline]]
-6. [[prompts/repository-publication-secret-audit|repository-publication-secret-audit]]
-7. [[prompts/personalhub-release-apk-minification|personalhub-release-apk-minification]]
+6. [[prompts/personalhub-release-apk-minification|personalhub-release-apk-minification]]
