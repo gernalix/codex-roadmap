@@ -38,7 +38,7 @@ Niente cleanup Seagate, soglie/timeout, `spd5118`, heartbeat multi-ciclo, update
 
 # Stop
 
-Dopo PASS:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 528614 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 528614`
+Dopo PASS esegui una sola volta:
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 528614 --confirm-executed`
 
 Output massimo 6 righe: `RESULT`, `TEST`, `RUNTIME_REV`, `KUMA_CONFIGURE`, `READBACK`, `BLOCKER/PUSH`.
