@@ -1,44 +1,37 @@
 PROMPT_ID=681247 | project_id=8 | model=GPT-5.5 | reasoning=low | MegaVault=FAST
 
 # Goal
-Distribuisci sul Fedora reale l'ultimo `codex-usage-monitor/main`, che include sia il fix dei path univoci per cicli dello stesso `PROMPT_ID` sia il parser canonico degli stati terminali (`FIXED` incluso), quindi esegui un solo backfill/publish reale e verifica i casi concreti `583214` e `742615`.
+Distribuisci sul Fedora reale il fix già verde del backfill semantico di `codex-usage-monitor`, esegui UNA sola run reale del publisher e chiudi il precedente failure `742615=UNKNOWN` verificando anche che il layout cycle-aware di `583214` resti integro.
 
 # Starting point autoritativo
 - repo locale: `/home/daniele/projects/codex-usage-monitor`, branch `main`, project_id `8`;
-- commit minimo richiesto: `4d8432b03cadeca1252696e1ee4846ac57378b2a` o successivo;
-- GitHub Actions run `35085784139` sul commit minimo è già **PASS**: NON duplicare la suite localmente;
+- commit minimo richiesto: `87897b4372d5afd93a5c0cc68c5445cde7228494` o successivo;
+- GitHub Actions run `35107271755` sul commit minimo è **PASS**: NON rieseguire test deterministici/lint localmente;
+- il precedente run `681247` ha già provato: deploy precedente PASS, publisher PASS, timer enabled+active, `583214` cycle-aware PASS; unico failure: `742615` rimasto `UNKNOWN`;
+- root cause già corretta sul remoto: la vecchia migrazione fingerprint poteva assorbire una modifica semantica senza ripubblicare record già esistenti. `PUBLICATION_SEMANTICS_VERSION=2` ora sala il fingerprint, quindi i record pubblicati attraversano una volta il normale percorso pending/publish e lo state DB non viene anticipato prima del push riuscito;
+- il parser canonico riconosce già `FIXED`; NON modificarlo;
 - runtime canonico: Fedora locale; Oracle VM NON è runtime;
-- il codice e i test deterministici sono già sul remoto: NON reimplementare i fix;
 - repo dati privato: `/home/daniele/projects/codex-usage`;
-- il backfill parte anche se nel run non esiste alcun nuovo ciclo da pubblicare;
-- `PROMPT_ID=583214` ha più esecuzioni storiche ed è il caso di verifica per i path cycle-aware;
-- `PROMPT_ID=742615` è stato pubblicato storicamente con `status=UNKNOWN` benché la risposta finale inizi con `FIXED`; il nuovo parser deve riclassificarlo come `FIXED`.
+- `742615` può risultare già `FIXED` nel checkout dati a causa di publish successivi: non è un motivo per saltare deploy + singola run del nuovo runtime.
 
-Prompt autosufficiente: niente audit repo-wide, README/roadmap/MegaVault, refactor o nuova discovery architetturale.
+Prompt autosufficiente: niente README/roadmap/spiegazioni/MEMORY/MegaVault, audit repo-wide, modifica codice, test suite o discovery.
 
-# Esecuzione minima
-1. Fotografia Git del solo `codex-usage-monitor`. Se pulito: UNA sync `git fetch origin main && git merge --ff-only origin/main`. Se dirty non pertinente/divergente: `BLOCKED`, stop.
-2. Verifica solo che `4d8432b03cadeca1252696e1ee4846ac57378b2a` sia antenato di HEAD. Non rieseguire test già coperti dalla CI PASS.
-3. Esegui UNA volta il deploy canonico già documentato (`python3 deploy_runtime.py`) dal checkout pulito/sincronizzato.
-4. Avvia UNA volta `codex-usage-publisher.service` oppure l'equivalente comando runtime canonico già installato, lasciando che completi backfill/push. Nessun loop/retry identico.
-5. Verifica nel checkout locale `codex-usage`, senza audit generale:
-   - per `583214`, le righe correnti di `index/prompts.jsonl` devono puntare a path distinti `prompts/583214/cycles/<cycle_key>`;
-   - ogni path `583214` indicizzato deve contenere `metrics.json` e `transcript.jsonl` col `cycle_key` corretto;
-   - `prompts/583214/metrics.json` deve restare presente come alias dell'esecuzione cronologicamente più recente;
-   - nessuna esecuzione distinta `583214` deve essere persa/sovrascritta nel tree corrente;
-   - per `742615`, `prompts/742615/metrics.json` e la riga/ciclo corrispondente nell'indice devono riportare `status=FIXED`, non `UNKNOWN`.
-6. Verifica una sola volta che `codex-usage-publisher.timer` sia enabled/attivo secondo il contratto già esistente e che il run non abbia traceback/errori.
-7. Se tutto PASS, nessun'altra esplorazione/test/audit.
-
-# Acceptance
-PASS se il runtime Fedora usa il commit richiesto o successivo, il publisher reale completa e pusha, `583214` conserva i cicli in path distinti con alias flat compatibile, `742615` viene riclassificato `FIXED` e il timer rimane operativo.
-
-# Non-goal
-Niente nuove modifiche al formato metrics/transcript, quota monitor, Telegram, analyzer, capsule refactor, Oracle VM, full-suite locale o cleanup generale.
-
-# Stop
-Dopo PASS esegui una sola volta:
+# Esecuzione minima — massimo 4 blocchi operativi
+1. **Sync + deploy in un solo blocco bounded.** Nel checkout `codex-usage-monitor`: verifica branch/dirty state; se dirty non pertinente => `BLOCKED`. Altrimenti fai UNA `git fetch origin main`, UNA `git merge --ff-only origin/main`, verifica che `87897b4372d5afd93a5c0cc68c5445cde7228494` sia antenato di HEAD e lancia UNA volta `python3 deploy_runtime.py`. Nessun `rev-parse/status` duplicato dopo il deploy.
+2. **Publisher + systemd in un solo blocco bounded.** Esegui `timeout 120s systemctl --user start codex-usage-publisher.service`; subito dopo, nello stesso blocco, leggi solo `Result`, `ExecMainStatus`, `ExecMainCode`, `InvocationID`; verifica `codex-usage-publisher.timer` enabled+active e cerca nel journal della sola invocation `traceback|error|exception|failed|fatal`. Non fare polling: `systemctl start` deve attendere la oneshot; se timeout/failure => `BLOCKED/FAIL`, stop.
+3. **Verifica dati in un solo blocco** nel checkout `codex-usage`, preferibilmente con un unico Python/jq script compatto:
+   - `583214`: almeno i 3 cicli già provati devono essere ancora presenti; path indice univoci e tutti `prompts/583214/cycles/<cycle_key>`; ciascun path deve avere `metrics.json` + `transcript.jsonl`; alias flat presente e riferito al ciclo cronologicamente più recente;
+   - `742615`: tutte le righe correnti nell'indice per questo prompt e i relativi `metrics.json`, più alias flat, devono riportare `status=FIXED`; transcript del ciclo presente;
+   - emetti solo due righe `583214=PASS|FAIL ...` e `742615=PASS|FAIL ...`, senza dump JSON completi.
+4. Se 1–3 PASS, esegui una sola volta il finalizzatore race-safe:
 `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 681247 --confirm-executed`
 
-Non fare dry-run separati né controlli Git equivalenti dopo `status=completed|already_completed`.
-Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 7 righe: `COMMIT`, `CI`, `DEPLOY`, `PUBLISH`, `583214`, `742615`, `TIMER/BLOCKER`.
+# Acceptance
+PASS solo se il runtime Fedora include `87897b4...`, deploy e singola publisher run hanno successo senza errori, timer resta enabled+active, `583214` non perde cicli/layout e `742615` è `FIXED` in indice + ciclo + alias flat.
+
+# Non-goal
+Niente modifiche codice/formati, test CI locali, Telegram, quota monitor, analyzer, Oracle VM, cleanup, secondo publish, retry identici o audit post-PASS.
+
+# Stop/output
+Dopo `roadmap_finish.py` riuscito stop immediato. Nessun controllo Git successivo.
+Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 6 righe: `COMMIT/DEPLOY`, `PUBLISH`, `TIMER`, `583214`, `742615`, `BLOCKER`.
