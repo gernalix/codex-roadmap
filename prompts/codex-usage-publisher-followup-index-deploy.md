@@ -23,8 +23,8 @@ Dopo il backfill devono valere tutte:
 
 # Esecuzione minima
 1. Una sola fotografia Git. Dirty non riconducibile al task => BLOCKED; niente stash/reset.
-2. `git pull --ff-only origin main` una volta; verifica che HEAD includa `fa17bf13c9cc0816bc58c97ab5dbbf561ab90714`. Nessun audit o memory lookup: questo prompt è autosufficiente.
-3. Una sola volta:
+2. **Sequenziale, non in parallelo:** esegui `git pull --ff-only origin main` una volta e aspetta che termini; poi verifica che HEAD includa `fa17bf13c9cc0816bc58c97ab5dbbf561ab90714`. Nessun audit o memory lookup: questo prompt è autosufficiente.
+3. **Solo dopo il PASS del punto 2**, esegui una sola volta:
    `PYTHONDONTWRITEBYTECODE=1 python3 scripts/verify_repo.py tests.test_usage_publisher_regressions`
    Richiedi PASS con 9 test. Failure => BLOCKED immediato; nessun source edit/retry.
 4. `python3 deploy_runtime.py` una volta; `current` deve puntare al nuovo HEAD.
