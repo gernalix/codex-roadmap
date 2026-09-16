@@ -1,4 +1,4 @@
-PROMPT_ID=518264 | project_id=23 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT
+PROMPT_ID=518264 | project_id=23 | model=GPT-5.5 | reasoning=medium | MegaVault=STRICT
 
 # Goal
 Bonifica in modo fail-closed SOLO la vecchia history di `gernalix/logseq_updates` dal finding `github-pat`, verifica lo stato della credential senza esporla e aggiorna la decisione di pubblicabilità.
