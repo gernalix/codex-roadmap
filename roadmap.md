@@ -2,4 +2,3 @@
 2. [[prompts/personalhub-places-checkin-attempt-journal|personalhub-places-checkin-attempt-journal]]
 3. [[prompts/personalhub-random-timer-background-deadline|personalhub-random-timer-background-deadline]]
 4. [[prompts/repository-publication-secret-audit|repository-publication-secret-audit]]
-5. [[prompts/retained-repositories-github-ci-completion|retained-repositories-github-ci-completion]]
