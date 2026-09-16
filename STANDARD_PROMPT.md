@@ -22,9 +22,12 @@ La roadmap contiene soltanto attività che richiedono realmente Codex (filesyste
 Per task già pre-localizzati il costo principale è spesso il numero di round-trip modello↔tool, non il reasoning. I prompt devono quindi imporre queste regole quando applicabili:
 
 - se lo starting point è dichiarato autoritativo, non leggere `~/.codex/memories/MEMORY.md`, README, roadmap, spiegazioni, MegaVault o altra memoria/documentazione aggiuntiva salvo un dato realmente mancante che blocchi l'esecuzione;
+- se il task richiede un lease/lock già standardizzato, il prompt deve contenere direttamente i comandi esatti di acquire/release con il proprio `PROMPT_ID`; non obbligare Codex a cercarli in `AGENTS.md`, `/tmp` o nel repository. Per PersonalHub: `python3 tools/personalhub_task_lock.py acquire --prompt-id <PROMPT_ID>` e `python3 tools/personalhub_task_lock.py release --prompt-id <PROMPT_ID>`;
 - raggruppare in una sola tool-call i controlli read-only indipendenti compatibili (stato Git, simboli/file già noti, stato runtime), invece di fare una chiamata per ciascun controllo;
 - riusare output già ottenuti: niente rilettura di file invariati, retry identici o verifiche equivalenti dopo un PASS;
 - per log e journal partire dalla sorgente/produttore già identificato e da una finestra temporale stretta; evitare `journalctl -b`/dump globali senza `--since`/`--until`/`-n` salvo che l'evidenza mirata sia insufficiente. Un output già troncato o di migliaia di token è un segnale per restringere la query, non per ripeterla più ampia;
+- per build/compile usate soltanto come gate di exit-code, preferire output quiet/bounded (per Gradle normalmente `--quiet --console=plain`) e riaprire output dettagliato solo in caso di failure; non spendere migliaia di token per liste `UP-TO-DATE` su un PASS;
+- quando un helper canonico risolve già device, APK, processor o altri artifact, usarne direttamente i resolver/default invece di fare `--help`, `rg --files`, `find`, `adb devices` o probing equivalente. Per artifact generati/gitignored non usare `rg --files` come prima sorgente;
 - prima di creare watcher/script/service diagnostici persistenti, fare **un solo controllo mirato** per verificare se il progetto/runtime canonico possiede già un collector/watcher equivalente; riusarlo o estenderlo localmente invece di creare un duplicato. Validare privilegi e cattura dell'evento reale prima di abilitarlo stabilmente;
 - per watcher basati su snapshot/change detection, confrontare solo lo stato semantico stabile: timestamp/`observed_at` non devono rendere ogni campione artificialmente “diverso”;
 - usare direttamente il runner/test command indicato dal prompt; non sondare framework alternativi se il runner canonico è già noto;
@@ -67,6 +70,7 @@ Ogni nuovo prompt o modifica sostanziale di un prompt pendente deve preservare l
 - se riprende un run fallito/bloccato, dichiarare anche `last_result=BLOCKED` o `last_result=FAIL` e usare `--result PASS` nella finalizzazione;
 - contenere direttamente goal, starting point/source-of-truth, scope/non-goal, verification e PASS/stop;
 - dichiarare esplicitamente, quando lo starting point è completo, che README/roadmap/spiegazioni/MEMORY/MegaVault non vanno riletti salvo blocker concreto;
+- includere direttamente comandi operativi standard necessari al task (lease/lock, runner canonico, helper già noto) invece di rimandare a discovery documentale;
 - vietare discovery/audit già sostituiti da evidenza preparata e, quando il target test è già noto, evitare inventory/letture di test di riferimento non necessarie;
 - richiedere solo test proporzionati al rischio;
 - consolidare build/device/delivery nella fase finale quando appartiene a una campagna compatibile;
