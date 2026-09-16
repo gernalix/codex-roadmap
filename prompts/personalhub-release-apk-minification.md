@@ -39,8 +39,8 @@ PASS se: release build firmato riesce; R8/resource shrinking restano attivi; APK
 Niente nuovo minifier/script di build, dependency upgrades, split APK/AAB/Play Store, refactor, cleanup, suite generale o seconda QA di feature già coperte.
 
 # Stop
-Dopo PASS tecnico:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 684731 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 684731`
+Dopo PASS tecnico esegui una sola volta:
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 684731 --confirm-executed`
 
 Stop immediato dopo PASS/BLOCKED/FAIL; niente audit post-PASS.
 
