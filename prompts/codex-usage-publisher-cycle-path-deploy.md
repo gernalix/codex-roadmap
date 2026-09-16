@@ -37,7 +37,8 @@ PASS se il runtime Fedora usa il commit richiesto o successivo, il publisher rea
 Niente nuove modifiche al formato metrics/transcript, quota monitor, Telegram, analyzer, capsule refactor, Oracle VM, full-suite locale o cleanup generale.
 
 # Stop
-Dopo PASS:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 681247 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 681247`
+Dopo PASS esegui una sola volta:
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 681247 --confirm-executed`
 
+Non fare dry-run separati né controlli Git equivalenti dopo `status=completed|already_completed`.
 Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 7 righe: `COMMIT`, `CI`, `DEPLOY`, `PUBLISH`, `583214`, `742615`, `TIMER/BLOCKER`.
