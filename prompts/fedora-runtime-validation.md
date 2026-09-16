@@ -1,39 +1,46 @@
-PROMPT_ID=847392 | project_id=15 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST
+PROMPT_ID=362714 | project_id=15 | model=GPT-5.5 | reasoning=low | MegaVault=FAST
 
 # Goal
-Distribuisci UNA sola volta sul Fedora reale i fix già presenti in `fedora-system-monitor/main` e chiudi insieme i tre soli gate runtime rimasti: falso `user systemd ... status 1`, invio Telegram e riconciliazione Kuma con Fedora Storage ancora invertito.
+Chiudi l'unico gate Fedora rimasto dopo `847392`: distribuire l'ultimo `fedora-system-monitor/main`, ottenere una sessione Kuma valida dal SOLO profilo Chrome canonico e verificare che i monitor #39/#40 mantengano configurazione e inversione Storage corrette.
 
 # Starting point autoritativo
 - repo locale: `/home/daniele/projects/fedora-system-monitor`, branch `main`;
 - runtime canonico: Fedora locale, non Oracle VM;
-- `origin/main` contiene `8101273e476135c2ac7178b2cd1097c562fb49aa` o successivo;
-- in quella storia sono già inclusi: Kuma WAL/session recovery (`c223f372...`), `DBUS_SESSION_BUS_ADDRESS` per `operator_external` (`7a5777a5...`), relativo test (`fa8af004...`), fix firma `telegram_notify.send_message()` (`047117dd...`) e CI deterministica;
-- GitHub Actions su `8101273e...` è già PASS: NON rieseguire localmente unit test/suite coperti dalla CI;
-- monitor Kuma canonici: #39 interval/retry `180/60`; #40 Fedora Storage `480/180` con `upside_down=1`;
+- `847392` ha già verificato sul runtime reale: `USER_SYSTEMD=PASS` e `TELEGRAM=PASS`; NON ripetere quei gate;
+- il fix user-systemd è già su remoto (`19ab9384acf3c7533dd3b4dfbd0e4a16d169dc2c`) e la regressione è ora coperta dalla CI;
+- `main` remoto include almeno `dcba0a98fe652468d13e0217cdfd3599ec101b22`, con CI verde; include anche deploy systemd mirato, rilevamento drift delle unità e login Kuma che non ripete lo stesso token senza nuova evidenza;
+- profilo Chrome ammesso: `/home/daniele/.var/app/com.google.Chrome/config/google-chrome`; non cercare altri profili, cookie, password o secret;
+- monitor attesi: #39 interval/retry `180/60`; #40 Fedora Storage `480/180` con `upside_down=1`;
 - `/etc/fedora-system-monitor/config.toml` deve conservare `inverted_categories=["storage"]`.
 
-Prompt autosufficiente: niente README/roadmap/MegaVault, audit repo-wide, aggiornamenti Fedora o discovery Oracle.
+Prompt autosufficiente: niente README/roadmap/MegaVault, niente audit repo-wide, niente test user-systemd/Telegram, niente Oracle.
 
 # Esecuzione minima
-1. Una fotografia Git. Se worktree pulito: UNA `git fetch origin main` + `git merge --ff-only origin/main`. Se dirty non pertinente/divergente: `BLOCKED`, stop.
-2. Verifica solo che `8101273e476135c2ac7178b2cd1097c562fb49aa` sia antenato di HEAD. Nessun test locale duplicato.
-3. Esegui UNA volta `sudo scripts/deploy-runtime.sh`.
-4. **user-systemd:** avvia una volta ciascuna le unità reali `fedora-system-monitor-collect@minute.service` e `fedora-system-monitor-collect@five_minute.service`; usa il readback canonico più stretto già disponibile per i due run. PASS del gate se non compare più il falso `user systemd: command exited with status 1`. Un vero servizio utente failed/missing va riportato come failure reale, non silenziato.
-5. **Telegram:** invia UNA sola notifica di prova tramite il percorso Fedora System Monitor già esistente. PASS se non compare il precedente `TypeError`/errore di firma e l'invio risulta delivered. Non stampare token/chat id e non ispezionare secret.
-6. **Kuma:** esegui UNA volta:
-   `fedora-system-monitor kuma-configure --base-url https://kuma.danielegalati.com --chrome-profile /home/daniele/.var/app/com.google.Chrome/config/google-chrome`
-   Se la sessione è ancora rifiutata, `BLOCKED` con `KUMA_AUTH=STALE_AFTER_WAL_FIX`; niente ricerca di altri profili o retry identici.
-7. Se Kuma riesce, fai un solo readback autenticato/read-only di #39/#40 e verifica esclusivamente #39=`180/60`, #40=`480/180`, `upside_down=1`; verifica anche una volta il blocco `[notifications]` locale per `inverted_categories=["storage"]`.
-8. Se uno dei tre gate fallisce per una causa NUOVA e locale, raccogli soltanto evidenza del leaf interessato. È ammesso al massimo un fix leaf + relativo test mirato + redeploy; niente nuova discovery generale. Se non è evidente/localizzato, `BLOCKED`.
+1. Una fotografia Git (`status --short`, branch, HEAD). Se pulito: UNA `timeout 20s git fetch origin main` + `git merge --ff-only origin/main`; altrimenti `BLOCKED`. Nessun retry.
+2. Salva `RUN_HEAD` e verifica localmente `RUN_HEAD == origin/main` e che `dcba0a98fe652468d13e0217cdfd3599ec101b22` sia antenato. La CI è già verde: nessuna suite locale duplicata.
+3. Esegui UNA volta `sudo scripts/deploy-runtime.sh`. Se segnala drift systemd, sincronizza UNA sola volta esclusivamente le unità elencate con `sudo scripts/deploy-systemd-unit.sh <unit...>`. Non riavviare/riprovare minute, five_minute o Telegram.
+4. Esegui UNA sola volta, bounded:
+   `timeout 180s fedora-system-monitor kuma-configure --base-url https://kuma.danielegalati.com --chrome-profile /home/daniele/.var/app/com.google.Chrome/config/google-chrome`
+   Il codice può ritentare internamente solo se rileggendo Chrome trova un token realmente diverso.
+5. Se Kuma rifiuta ancora la sessione canonica, termina subito `BLOCKED` con `KUMA_AUTH=LOGIN_REQUIRED_OR_STALE`. Non cercare altri profili, non ispezionare/stampare token, non fare retry identici e non tentare credenziali.
+6. Se `kuma-configure` riesce, fai UN solo readback autenticato/read-only limitato ai monitor #39/#40 e verifica: #39 `180/60`; #40 `480/180`; #40 `upside_down=1`. Poi leggi UNA volta solo il blocco locale necessario a confermare `inverted_categories=["storage"]`.
+7. Qualunque mismatch nuovo => riporta solo il valore fallito e `BLOCKED`; niente patch o debugging esplorativo in questa sessione.
 
 # Acceptance
-PASS se il runtime usa `8101273e...` o successivo, minute/five_minute non hanno più il falso errore user-systemd, Telegram consegna senza TypeError, `kuma-configure` riesce e #39/#40 + inversione Storage restano corretti.
+PASS solo se:
+- runtime Fedora usa `RUN_HEAD` sincronizzato a `origin/main` e include `dcba0a98...`;
+- eventuale drift systemd segnalato dal deploy è stato sincronizzato con l'helper mirato;
+- `kuma-configure` completa con exit 0 usando il solo profilo Chrome canonico;
+- #39=`180/60`;
+- #40=`480/180` e `upside_down=1`;
+- config locale conserva `inverted_categories=["storage"]`;
+- nessun gate già PASS in `847392` è stato rieseguito.
 
 # Non-goal
-Niente Seagate/storage cleanup, soglie/timeout, refactor monitor, suite completa, CI rerun, update OS, Oracle VM o audit post-PASS.
+Niente modifiche codice, user-systemd, Telegram, Seagate/storage cleanup, soglie diverse da quelle sopra, suite test, CI rerun, aggiornamenti OS, Oracle VM, altri profili Chrome o audit post-PASS.
 
 # Stop
 Dopo PASS:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 847392 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 847392`
+`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 362714 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 362714`
 
-Stop al primo blocker. Output massimo 7 righe: `RESULT`, `RUNTIME`, `USER_SYSTEMD`, `TELEGRAM`, `KUMA`, `STORAGE_INVERSION`, `BLOCKER`.
+Stop al primo blocker. Output massimo 5 righe: `RESULT`, `RUNTIME`, `KUMA`, `STORAGE_INVERSION`, `BLOCKER`.
