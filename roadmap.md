@@ -8,3 +8,4 @@
 8. [[prompts/standalone-android-github-actions-ci|standalone-android-github-actions-ci]]
 9. [[prompts/browser-downloader-github-actions-ci|browser-downloader-github-actions-ci]]
 10. [[prompts/fedora-tools-github-actions-ci|fedora-tools-github-actions-ci]]
+11. [[prompts/retained-repositories-github-ci-completion|retained-repositories-github-ci-completion]]
