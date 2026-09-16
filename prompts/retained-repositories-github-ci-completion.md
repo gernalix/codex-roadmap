@@ -1,20 +1,24 @@
 PROMPT_ID=483921 | project_id=23 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD
 
 # Goal
-Per tutti i repository **esistenti e non RETIRE** già consegnati dall'audit precedente, rendere GitHub Actions la sede canonica di **tutto il testing deterministico/sandboxabile ragionevolmente disponibile**, senza duplicare CI già adeguata.
+Per tutti i repository **esistenti e non RETIRE** già consegnati dall'handoff MegaVault, più il repository `adb-device-keeper` creato dopo quell'audit, rendere GitHub Actions la sede canonica di **tutto il testing deterministico/sandboxabile ragionevolmente disponibile**, senza duplicare CI già adeguata.
 
-Sorgente autoritativa unica:
+Sorgente autoritativa principale:
 `/home/daniele/projects/MegaVault/ai/repository-ci-handoff.json`
 
-L'handoff è prodotto da `PROMPT_ID=940316` e contiene già scope, visibility e default branch finali. Non rileggere la checklist, non rifare `gh repo list`, non rivalutare PUBLIC/PRIVATE e non riaprire l'audit sicurezza.
+Il file corrente usa `schema_version=2`; usa sempre la versione presente nel checkout sincronizzato al momento dell'esecuzione perché task precedenti possono aver aggiornato singole entry di pubblicabilità. Non rifare `gh repo list`, non rivalutare PUBLIC/PRIVATE e non riaprire l'audit sicurezza.
 
-`codex-usage-monitor` può avere già CI dal cutover precedente e `codex-roadmap` ha già CI: in tal caso verifica il minimo necessario e marca `NOOP_COMPLETE`.
+Supplemento post-handoff già verificato:
+- `adb-device-keeper`, visibility `PRIVATE`, default branch `main`;
+- il repo esiste già e ha CI deterministica; se al momento del task la CI copre già tutto, marcarlo `NOOP_COMPLETE` senza nuova implementazione.
+
+`codex-usage-monitor`, `codex-roadmap`, `fedora-system-monitor` e altri repo toccati dai task precedenti possono avere CI già completa: verifica il minimo necessario e marca `NOOP_COMPLETE` quando appropriato.
 
 # Gate handoff
-1. Leggi e parsea l'handoff una sola volta.
-2. Richiedi `schema_version=1` e `generated_by_prompt_id=940316`; mismatch/missing => BLOCKED, niente discovery sostitutiva.
-3. Scope = esattamente le entry `repositories` dell'handoff.
-4. Se una push/fetch mirata dimostra che un repo dell'handoff non esiste più, `MISSING_RETAINED_REPO` solo per quel repo; non fare inventory globale e non ricrearlo.
+1. Leggi e parsea `repository-ci-handoff.json` una sola volta.
+2. Richiedi `schema_version=2` e una lista `repositories` valida/non vuota. Non bloccare in base a uno specifico `generated_by_prompt_id`: è metadata storico e non definisce lo scope operativo corrente.
+3. Scope = esattamente le entry `repositories` dell'handoff + `adb-device-keeper` se non già presente; deduplica per `name`.
+4. Se una push/fetch mirata dimostra che un repo dello scope non esiste più, `MISSING_RETAINED_REPO` solo per quel repo; non fare inventory globale e non ricrearlo.
 5. Per ogni repo leggi solo manifest/build/packaging, directory test, `.github/workflows` ed entrypoint/config direttamente necessari a capire come testarlo. Niente audit generale, history, issue o README salvo blocker concreto.
 
 # Principio vincolante
@@ -54,7 +58,7 @@ Copri quando applicabile:
 - Backup→restore solo in temp dir; mai mount/dischi reali, SSH, VM, restart host o secret di produzione.
 
 # Strategia visibility/costo
-Usa `visibility` dell'handoff, senza query ridondanti:
+Usa `visibility` dell'handoff e la visibility verificata sopra per `adb-device-keeper`, senza query ridondanti:
 - **PUBLIC:** GitHub-hosted standard; gate veloci automatici PR+push, job più costosi solo con frequenza utile.
 - **PRIVATE:** anche qui tutto il testing sandboxabile deve essere definito in Actions; gate veloci automatici, job pesanti preferibilmente manuali. Visibility cambia trigger/frequenza, non la copertura disponibile.
 
@@ -72,7 +76,7 @@ Mantieni in memoria l'handoff e processa i repo serialmente; nessuna discovery t
 Solo test che richiedono realmente hardware fisico, account/browser autenticato reale, secret di produzione, VM/host/dischi/rete live non simulabili o comportamento umano non riducibile a fixture affidabile. Per ogni esclusione registra una motivazione tecnica concreta.
 
 # Report finale JSON
-Crea/aggiorna `/home/daniele/projects/MegaVault/ai/repository-ci-coverage.json` con `schema_version: 1`, `generated_by_prompt_id: 483921`, `generated_at_utc` e una entry per ogni repo dell'handoff con:
+Crea/aggiorna `/home/daniele/projects/MegaVault/ai/repository-ci-coverage.json` con `schema_version: 1`, `generated_by_prompt_id: 483921`, `generated_at_utc` e una entry per ogni repo dello scope effettivo (handoff + supplemento post-handoff) con:
 - `status`: `COMPLETE|NOOP_COMPLETE|PARTIAL_BLOCKED`;
 - workflow/gate principali;
 - eventuale test rimasto locale + motivo tecnico.
@@ -83,7 +87,7 @@ Ordina per `name`. Non duplicare dettagli dei log CI e non creare un nuovo Markd
 Niente refactor/cleanup/modernizzazione, feature, release, dependency upgrade generale, security audit, history rewrite, cambio visibility, inventory globale, test live quando fixture/headless bastano, shared action cross-repo salvo beneficio concreto già evidente.
 
 # Acceptance
-PASS solo se ogni repo dell'handoff ancora esistente ha tutto il testing deterministico/sandboxabile ragionevolmente disponibile in GitHub Actions oppure un blocker tecnico esplicito; workflow modificati verdi; nessuna CI duplicata; ciò che resta locale richiede davvero risorse non sandboxabili; report JSON parseabile e completo.
+PASS solo se ogni repo dello scope ancora esistente ha tutto il testing deterministico/sandboxabile ragionevolmente disponibile in GitHub Actions oppure un blocker tecnico esplicito; workflow modificati verdi; nessuna CI duplicata; ciò che resta locale richiede davvero risorse non sandboxabili; report JSON parseabile e completo.
 
 # Stop
 Dopo PASS esegui una sola volta:
