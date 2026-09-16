@@ -5,6 +5,10 @@
 # Goal
 Aggiungere a Luoghi un journal diagnostico persistente di OGNI tentativo **utente** di check-in basato sul riconoscimento della posizione, inclusi falliti/ambigui/annullati/interrotti, senza contaminare le visite reali.
 
+# Lease + emulator helper
+Prima di implementazione/QA esegui direttamente `python3 tools/personalhub_task_lock.py acquire --prompt-id 893806`. Se non acquisisce, BLOCKED senza attesa. Dopo PASS/BLOCKED/FAIL esegui `python3 tools/personalhub_task_lock.py release --prompt-id 893806`.
+Per la QA emulator usa solo `python3 tools/android_emulator_control.py status|start|wait|stop`; riusa il `target.serial` restituito. Non aprire `AGENTS.md` soltanto per lease/emulator e non fare discovery ADB/AVD parallela salvo blocker concreto.
+
 # Routing — scope stretto
 Usa `.codex/CODE_MAP.tsv` solo per `places.checkin`, `places.data`, `database.schema`. Parti da `LuoghiHomeViewModel.checkInAtCurrentLocation()`, `CheckInCapsule`, `CheckInPolicy`, repository/DAO/schema già mappati. Niente audit Luoghi/core.
 Facts già verificati:
@@ -32,8 +36,8 @@ Una voce discreta `Diagnostica check-in`: recenti newest-first, filtro outcome/p
 
 # Verifica a costo controllato
 1. Prima: migration/unit test mirati per schema, lifecycle, candidate e recovery. Failure => leaf fix, niente suite globale.
-2. Esegui `checkArchitectureBoundaries` una volta perché cambia persistence ownership/schema.
-3. Solo dopo host PASS, avvia UNA sessione Pixel_8a emulator e una sola invocazione androidTest filtrata ai nuovi test: permission denied + unknown/ambiguous + success. Verifica: failure non produce `PlaceEvent`; success produce attempt SUCCESS + visita normale; migration preserva dati fixture.
+2. Esegui `./gradlew --quiet --console=plain checkArchitectureBoundaries` una volta perché cambia persistence ownership/schema.
+3. Solo dopo host PASS, avvia UNA sessione Pixel_8a emulator con `android_emulator_control.py start` + `wait` e una sola invocazione androidTest con `--quiet --console=plain`, filtrata ai nuovi test: permission denied + unknown/ambiguous + success. Verifica: failure non produce `PlaceEvent`; success produce attempt SUCCESS + visita normale; migration preserva dati fixture.
 4. L'invocazione androidTest compila gli APK necessari: niente `assembleDebug` separato. Nessun Pixel/TCL/release in questa fase.
 
 # Non-goal
@@ -46,7 +50,6 @@ Fase intermedia: niente bump `version.txt`, Pixel reale, APK/Telegram. Push una 
 PASS se ogni tentativo user-triggered è ricostruibile, failure non crea visite, migrazione preserva dati, recovery è idempotente, diagnostica è leggibile e i gate mirati PASS.
 
 # Stop
-Acquisisci/rilascia il lease PH secondo `AGENTS.md`. Dopo PASS:
+Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 893806 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 893806`
-
-Dopo `status=completed` + `push_verified=git_push_exit_0` fermati. Output massimo 6 righe.
+Poi rilascia il lease con il comando già indicato. Dopo `status=completed` + `push_verified=git_push_exit_0` fermati. Output massimo 6 righe.
