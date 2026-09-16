@@ -50,7 +50,7 @@ Usa un solo mirror e un solo flusso Python/script per parsing+replacement; nient
 - Nessun repo diverso da `logseq_updates` è modificato, salvo i tre output MegaVault e la finalizzazione roadmap.
 
 # Stop
-Dopo acceptance tecnica esegui:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 518264 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 518264`
+Dopo acceptance tecnica PASS esegui una sola volta:
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 518264 --confirm-executed`
 
 Se resta necessaria revoca/rotazione manuale, NON completare la roadmap: `RESULT=BLOCKED`. Prima riga finale obbligatoria `RESULT=PASS|BLOCKED|FAIL`; massimo 6 righe, senza secret o fingerprint sensibili.
