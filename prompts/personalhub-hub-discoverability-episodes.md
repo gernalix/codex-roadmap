@@ -5,6 +5,9 @@
 # Goal
 Rendere comprensibili e richiamabili le utility Hub di PersonalHub senza cambiare schema: chiarire Context/Search/Activity, mostrare le sessioni Timer con titolo/tag leggibili e rendere gli episodi titolati elencabili/riapribili.
 
+# Lease — nessuna discovery
+Prima di implementazione/QA esegui direttamente `python3 tools/personalhub_task_lock.py acquire --prompt-id 838979`. Se non acquisisce, BLOCKED senza attesa. Dopo PASS/BLOCKED/FAIL esegui `python3 tools/personalhub_task_lock.py release --prompt-id 838979`. Non aprire `AGENTS.md` soltanto per scoprire il lease.
+
 # Routing verificato — niente discovery
 Usa `.codex/CODE_MAP.tsv` e apri SOLO le righe `app.shell`, `hub.context`, `hub.temporal_search`, `timer.sessions`. Per il fatigue usa direttamente `docs/HUB_USER_GUIDE.md`: NON riaprire l'algoritmo WordPulse salvo errore di compilazione/test che lo richieda.
 Facts già verificati:
@@ -25,7 +28,7 @@ Questa fase NON avvia emulatore/device. La QA UI strumentale di fase 1 viene acc
 - aggiungi/aggiorna unit test mirati per Timer label e query/lista episodi;
 - esegui solo quei leaf test;
 - `checkArchitectureBoundaries` solo se il diff cambia wiring/public integration;
-- chiudi con UNA compilazione `:app:compileDebugKotlin` (o leaf compile equivalente sufficiente), non `assembleDebug` e non full suite.
+- chiudi con UNA compilazione `./gradlew --quiet --console=plain :app:compileDebugKotlin` (o leaf compile equivalente sufficiente con gli stessi flag), non `assembleDebug` e non full suite; su PASS non stampare liste task `UP-TO-DATE`.
 
 # Campagna
 Fase intermedia: niente bump `version.txt`, Pixel reale, APK/Telegram. Push una volta dopo PASS. La fase 2 eseguirà in un'unica sessione emulator la UI QA necessaria per fase 1 + fase 2.
@@ -34,7 +37,6 @@ Fase intermedia: niente bump `version.txt`, Pixel reale, APK/Telegram. Push una 
 PASS host-side se codice/test mirati/compile dimostrano: utility autoesplicative, Timer label umano, query episodi riapribili e wording fatigue corretto. La verifica visuale/device è esplicitamente deferred alla fase 2.
 
 # Stop
-Acquisisci/rilascia il lease PH secondo `AGENTS.md`. Dopo PASS:
+Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 838979 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 838979`
-
-Dopo `status=completed` + `push_verified=git_push_exit_0` fermati. Output massimo 6 righe.
+Poi rilascia il lease con il comando già indicato. Dopo `status=completed` + `push_verified=git_push_exit_0` fermati. Output massimo 6 righe.
