@@ -1,4 +1,4 @@
-PROMPT_ID=294731 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST
+PROMPT_ID=294731 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST
 
 # Goal
 Valida sul Fedora reale la variante Google Play di PersonalHub già preparata e impacchettata sul remoto, produci UNA volta l'Android App Bundle firmato con i segreti canonici locali, ispeziona bundle/manifest/firma e installa l'artefatto derivato dall'AAB sull'emulatore Pixel_8a per uno smoke test bounded. Non caricare nulla su Play Console.
@@ -17,7 +17,7 @@ Valida sul Fedora reale la variante Google Play di PersonalHub già preparata e 
 - `tools/check_play_bundle.py` fallisce se l'AAB manca/non è leggibile, supera il ceiling preflight o introduce librerie native `.so` senza una verifica esplicita di compatibilità 16 KiB;
 - la build Play remota rimuove background location, `READ_CALL_LOG`, `READ_PHONE_STATE`, `SYSTEM_ALERT_WINDOW`, `USE_FULL_SCREEN_INTENT`, receiver call-overlay e geofence receiver; non reintrodurli;
 - privacy policy e release guide sono già nel repo e il link Privacy è già esposto nelle Settings;
-- i test deterministici/sandboxabili globali vengono completati dal task roadmap `483921` prima di questo gate: NON duplicare suite host già verdi;
+- il gate locale dipende solo dal Play Store preflight pertinente di PersonalHub: NON attendere né duplicare la campagna CI globale degli altri repository e NON rieseguire suite host già coperte da quel preflight;
 - usa l'AVD canonico `Pixel_8a`; non installare la variante Play sul Pixel fisico e non rischiare il database reale.
 
 Prompt autosufficiente: non leggere README/roadmap/spiegazioni/MEMORY/MegaVault, non fare audit repo-wide e non modificare codice salvo blocker locale che impedisca di validare l'artefatto già preparato.
