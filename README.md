@@ -9,7 +9,8 @@ Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain
 - `spiegazioni.md`: stessa sequenza, spiegazioni semplici.
 - `prompts/*.md`: task autosufficienti da incollare direttamente in Codex.
 - `completed/*.md`: task conclusi con PASS.
-- `tools/roadmap_guard.py`: selezione unattended/finalizzazione canonica.
+- `tools/roadmap_guard.py`: primitive fail-closed per selezione/completamento/reconcile.
+- `tools/roadmap_finish.py`: finalizzatore PASS race-safe da usare nei prompt normali.
 
 `spiegazioni.md` usa `# | Prompt | Spiegazioni | Livello ragionamento | Tipo prompt`; ordine, reasoning e link devono coincidere con la roadmap.
 
@@ -36,8 +37,8 @@ Quando due fasi consecutive della stessa campagna richiedono lo stesso device/em
 Ogni prompt deve bastare da solo insieme alle regole globali già caricate. Deve dichiarare almeno metadata, goal, starting point verificato, scope/non-goal, verification, stop e comando di finalizzazione. Vietati inventory/audit generali quando file/boundary sono già noti.
 
 Tipi:
-- **Prompt**: lavoro già delimitato, diff/test minimi.
-- **Goal**: risultato cross-component, ma scope e stop restano espliciti.
+- **Prompt**: default. Usalo quando il lavoro è delimitato e può ragionevolmente concludersi in un singolo turno operativo, anche se tocca più componenti.
+- **Goal**: usalo solo quando la persistenza multi-turn è concretamente utile al risultato (per esempio campagne seriali lunghe multi-repo o verifiche che devono proseguire attraverso continuazioni). Complessità o rischio, da soli, non giustificano Goal.
 
 ### Modello/reasoning
 - GPT-5.5 `low`: gate deterministici, test/build/ADB mirati e task localizzati con implementazione ovvia.
@@ -85,26 +86,22 @@ Per PersonalHub:
 Non creare mega-task se le fasi hanno failure domains indipendenti; consolida build/install/delivery e gate comuni. Una verifica locale di fix già pushati va assorbita nella fase funzionale successiva dello stesso repo quando può condividere lo stesso host gate e la stessa QA.
 
 ## PASS
-Ogni prompt include:
+Ogni prompt normale deve finalizzare con **una sola invocazione** race-safe:
 ```bash
-python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id PROMPT_ID --dry-run && \
-python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id PROMPT_ID
+python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id PROMPT_ID --confirm-executed
 ```
 
-`status=completed` + `push_verified=git_push_exit_0` è prova terminale. Dopo non eseguire `git status`, `rev-parse`, `ls-remote`, pull/fetch o verifiche equivalenti sulla roadmap e non aprire il task successivo.
+`roadmap_finish.py` usa `complete` nel caso normale e passa automaticamente al `reconcile` canonico solo se la roadmap è avanzata mentre il task era in esecuzione. Non anteporre un dry-run nel percorso normale: raddoppia processi/round-trip e apre una finestra di race senza aggiungere sicurezza al guard fail-closed.
+
+`status=completed|already_completed` con `finish_mode=complete|reconcile` e, quando c'è una mutazione, `push_verified=git_push_exit_0` è prova terminale. Dopo non eseguire `git status`, `rev-parse`, `ls-remote`, pull/fetch o verifiche equivalenti sulla roadmap e non aprire il task successivo.
 
 ## BLOCKED/FAIL
-Non archiviare né avanzare. Riporta solo blocker/evidenza minima e fermati.
+Non invocare il finalizzatore, non archiviare né avanzare. Riporta solo blocker/evidenza minima e fermati.
 
-## `roadmap_guard.py`
-`select` è solo fallback unattended. `complete` lavora su worktree isolato, accetta soltanto il primo pendente, limita i path modificabili e fa push fast-forward senza force. Il worktree principale può essere sporco e non va stashato/reset.
+## `roadmap_guard.py` / `roadmap_finish.py`
+`select` è solo fallback unattended. `complete` e `reconcile` lavorano fail-closed; il worktree principale può essere sporco e non va stashato/reset. I prompt normali non devono orchestrare manualmente `complete`→`reconcile`: lo fa `roadmap_finish.py` nello stesso processo.
 
-Eccezione di bookkeeping: se l'implementazione di un prompt è **già stata completata e pushata**, ma nel frattempo la roadmap è avanzata e `complete` restituisce `prompt_identity_mismatch`, non replicare manualmente la logica del guard. Usa:
-```bash
-python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap reconcile --prompt-id PROMPT_ID --dry-run && \
-python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap reconcile --prompt-id PROMPT_ID --confirm-executed
-```
-`reconcile` non può sostituire `complete` per il task attualmente selezionato, richiede conferma esplicita prima di mutare la roadmap ed è idempotente se il prompt è già in `completed/`.
+Usa direttamente `roadmap_guard.py` solo per diagnostica/manutenzione del guard o per il fallback unattended documentato in `STANDARD_PROMPT.md`.
 
 Prima di modificare guard/workflow:
 ```bash
