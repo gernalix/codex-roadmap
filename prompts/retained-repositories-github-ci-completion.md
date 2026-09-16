@@ -72,19 +72,19 @@ Mantieni in memoria l'handoff e processa i repo serialmente; nessuna discovery t
 # Esclusioni locali ammesse
 Solo test che richiedono realmente hardware fisico, account/browser autenticato reale, secret di produzione, VM/host/dischi/rete live non simulabili o comportamento umano non riducibile a fixture affidabile. Per ogni esclusione registra una motivazione tecnica concreta.
 
-# Report finale
-Crea/aggiorna `/home/daniele/projects/MegaVault/ai/repository-ci-coverage.md` con una riga per ogni entry dell'handoff:
-- `COMPLETE|NOOP_COMPLETE|PARTIAL_BLOCKED`;
+# Report finale JSON
+Crea/aggiorna `/home/daniele/projects/MegaVault/ai/repository-ci-coverage.json` con `schema_version: 1`, `generated_by_prompt_id: 483921`, `generated_at_utc` e una entry per ogni repo dell'handoff con:
+- `status`: `COMPLETE|NOOP_COMPLETE|PARTIAL_BLOCKED`;
 - workflow/gate principali;
 - eventuale test rimasto locale + motivo tecnico.
 
-Non duplicare dettagli dei log CI.
+Ordina per `name`. Non duplicare dettagli dei log CI e non creare un nuovo Markdown di report in MegaVault.
 
 # Non-goal
 Niente refactor/cleanup/modernizzazione, feature, release, dependency upgrade generale, security audit, history rewrite, cambio visibility, inventory globale, test live quando fixture/headless bastano, shared action cross-repo salvo beneficio concreto già evidente.
 
 # Acceptance
-PASS solo se ogni repo dell'handoff ancora esistente ha tutto il testing deterministico/sandboxabile ragionevolmente disponibile in GitHub Actions oppure un blocker tecnico esplicito; workflow modificati verdi; nessuna CI duplicata; ciò che resta locale richiede davvero risorse non sandboxabili; report finale completo.
+PASS solo se ogni repo dell'handoff ancora esistente ha tutto il testing deterministico/sandboxabile ragionevolmente disponibile in GitHub Actions oppure un blocker tecnico esplicito; workflow modificati verdi; nessuna CI duplicata; ciò che resta locale richiede davvero risorse non sandboxabili; report JSON parseabile e completo.
 
 # Stop
 Dopo PASS:
