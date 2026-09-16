@@ -1,89 +1,48 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=940316 | project_id=23 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD`
+`PROMPT_ID=940316 | project_id=23 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT`
 
 # Goal
-Audit **read-only** di sicurezza dei repository `gernalix` già pubblici o candidati alla pubblicazione, includendo storia Git completa, tree corrente e rischi GitHub Actions. Aggiorna le sole fonti private:
+Eseguire una sola campagna fail-closed che: (1) protegga subito i repo già pubblici ma classificati `PRIVATE`; (2) auditi history/tree/Actions dei repo pubblici o `PUBLIC_AFTER_AUDIT`; (3) applichi la visibility finale senza un secondo task.
+
+Sorgenti private uniche:
 - `/home/daniele/projects/MegaVault/ai/repository-public-private-matrix.md`
 - `/home/daniele/projects/MegaVault/ai/repository-publication-audit.md`
 
-NON cambiare visibility né modificare i repo auditati.
+# Scope
+- Leggi la matrice una volta e fai una sola inventory: `gh repo list gernalix --limit 200 --json name,visibility,isArchived,url,defaultBranchRef`.
+- `RETIRE`: esclusi. Repo nuovo non classificato: aggiungi `PRIVATE`, `audit_status=UNKNOWN`, niente codebase discovery.
+- Scansione completa solo per repo attualmente pubblici o baseline `PUBLIC_AFTER_AUDIT`; `PRIVATE` viene scansionato solo se era pubblico.
+- Prima dello scan, ogni repo **attualmente pubblico + baseline PRIVATE** va portato PRIVATE con `gh` (nessun audit è necessario per rendere più restrittiva la visibility). Se il cambio fallisce, registra P0 e continua.
 
-# Scope autoritativo
-- Leggi la matrice una sola volta: è l'inventory iniziale.
-- Le righe `RETIRE` sono sempre escluse, indipendentemente dal fatto che i repo siano già stati cancellati.
-- Scansione completa SOLO per repo attualmente pubblici o baseline `PUBLIC_AFTER_AUDIT`; `PRIVATE` viene scansionato solo se risulta già pubblico.
-- Una sola inventory GitHub: `gh repo list gernalix --limit 200 --json name,visibility,isArchived,url,defaultBranchRef`.
-- Repo nuovo non classificato: aggiungi `PRIVATE`, `audit_status=UNKNOWN`; non esplorare la codebase.
-- Risolvi path tramite MegaVault/remote Git; niente `find ~/`.
+# Audit — una sola tecnologia
+Preferisci `gitleaks` già installato; altrimenti container ufficiale effimero se Docker/Podman è già disponibile. Un solo loop per target: `git fetch --all --prune --tags` una volta, scan completa history/all refs con redaction, `git ls-files` + una sola enumerazione path history per artefatti sensibili. Report raw solo `/tmp`; mai stampare valori di secret/cookie/token/webhook/dati personali.
 
-# Secret scan — una sola tecnologia
-Preferisci `gitleaks` già installato; altrimenti usa un container ufficiale effimero se Podman/Docker è già disponibile. Non installare/confrontare scanner alternativi.
+Conserva soltanto repo, categoria/regola, path, commit abbreviato, `current|history` e fingerprint redatto se sicuro. Cerca `.env*`, key/cert/credential, DB/dump/export reali, browser/session/cookie, auth/token/webhook, dataset personali e config operativa non necessaria. Non trattare automaticamente come finding fixture sintetiche, Room schema, `.env.example` placeholder o `${{ secrets.NAME }}`.
 
-Per tutti i target usa un unico loop/script temporaneo:
-1. `git fetch --all --prune --tags` una volta per repo;
-2. gitleaks sull'intera history/all refs con output machine-readable e massima redaction;
-3. report raw soltanto in `/tmp`;
-4. mai stampare secret value, token, password, key, cookie, webhook o payload personali.
+Solo dove esistono workflow, controlla rischi concreti: `pull_request_target` con codice non fidato, write permissions eccessive, secret esposti a contributori, self-hosted su PR pubbliche, action terze parti debolmente pin quando rilevante. Niente supply-chain audit generale.
 
-Per un finding conserva solo: repo, regola/categoria, path, commit abbreviato, `current|history`, fingerprint redatto se sicuro. Apri il contenuto solo per distinguere placeholder/falso positivo, mostrando esclusivamente contesto redatto.
+# Classificazione + visibility nella stessa sessione
+Per ogni repo compila: `audit_status`, finding counts, artefatti/path redatti, `history_clean`, remediation, `final_recommendation`, `publication_ready`, confidence, `current_visibility`, `visibility_apply_status`.
 
-# Artefatti sensibili — stesso loop
-Usa `git ls-files` sul tree corrente e **una sola** enumerazione path della history per cercare:
-- `.env*`, credential/secret/key/private certificate;
-- DB/dump/backup/export reali;
-- cookie/browser profile/session/Login Data;
-- file auth/token/webhook non chiaramente codice/test;
-- contatti, location, history o dataset personali non sintetici;
-- config con host/IP/URL operativi, home path o account identifier non necessari.
+`publication_ready=yes` solo con `PASS`, history/tree puliti, nessuna remediation obbligatoria, confidence high.
+- `final_recommendation=PUBLIC` + `publication_ready=yes` -> PUBLIC.
+- Qualsiasi altro stato (`PRIVATE`, `PASS_WITH_REMEDIATION`, `BLOCKED`, `UNKNOWN`, confidence < high) -> PRIVATE / resta PRIVATE.
+- `RETIRE` -> nessun cambio.
+- Repo archived -> non riattivare.
 
-Non considerare automaticamente sensibili: Room schema JSON, fixture esplicitamente sintetiche, `.env.example` placeholder, `${{ secrets.NAME }}`.
+Applica i cambi via `gh`/API con flag esplicito per le conseguenze della visibility. Nessuna decisione ad hoc per “far passare” la CI. Un cambio PUBLIC fallito lascia il repo private; un cambio PRIVATE fallito è P0. Dopo tutti i cambi fai **una sola** inventory finale, senza `gh repo view` per repo.
 
-Esegui grep/regex solo sui tracked text file e solo per categorie ad alto rischio. Nessun dump completo dei match.
+Credential potenzialmente attivo => `rotate/revoke + history cleanup before republication`, mai valore. Non eseguire remediation distruttive o history rewrite in questo task.
 
-# GitHub Actions risk check
-Solo dove `.github/workflows` esiste, segnala senza correggere:
-- `pull_request_target` che esegue/check-out codice non fidato;
-- `permissions: write-all` o write non necessario;
-- secrets raggiungibili da contributori esterni;
-- self-hosted runner esposto a trigger PR pubblici;
-- action terze parti non pin/debolmente pin solo quando il rischio è concreto.
-
-Niente audit supply-chain generale.
-
-# Matrice finale
-Per ogni repo compila:
-- `audit_status`: `PASS|PASS_WITH_REMEDIATION|PRIVATE_BY_POLICY|RETIRED|BLOCKED`;
-- `secret_findings`: soli conteggi per severità;
-- `sensitive_artifacts`: categorie/path redatti;
-- `history_clean`: `yes|no|unknown`;
-- `required_remediation`;
-- `final_recommendation`: `PUBLIC|PRIVATE|RETIRE`;
-- `publication_ready`: `yes|no`;
-- `confidence`: `high|medium|low`.
-
-`publication_ready=yes` SOLO se: `audit_status=PASS`, history/tree puliti, nessuna remediation obbligatoria e confidence high.
-Un repo pubblico con secret reale/dato sensibile/artefatto operativo non necessario => `PASS_WITH_REMEDIATION`, `PRIVATE`, `publication_ready=no`, P0.
-Credential potenzialmente attivo => remediation `rotate/revoke + history cleanup before republication`, mai valore.
-`PRIVATE` non viene promosso senza evidenza forte; `RETIRE` resta escluso.
-
-# Report privato
-Aggiorna `repository-publication-audit.md` con tool/versione, audited/skipped/retired, finding redatti, P0 remediation e conteggi PUBLIC/PRIVATE/RETIRE. Nessun valore sensibile.
-
-# Verifica / token discipline
-- modifiche ammesse solo ai due file MegaVault + bookkeeping roadmap;
-- `git diff --check` sui due file; niente suite MegaVault globale;
-- un solo commit+push MegaVault finale;
-- niente README/source audit generale, dependency audit, doppio scanner o retry identici;
-- batcha fetch+scan+path checks; apri solo path prodotti da evidenza concreta;
-- finding reali NON bloccano: completa come `AUDIT_COMPLETE_WITH_FINDINGS`;
-- `BLOCKED` solo se inventory/history scan affidabile è impossibile.
+# Output privato / verifica
+Aggiorna i due file MegaVault, con report redatto e conteggi finali PUBLIC/PRIVATE/RETIRE. `git diff --check` solo su questi file; un solo commit+push MegaVault. Niente README/source audit generale, scanner duplicati, retry identici o audit post-applicazione.
 
 # Acceptance
-Tutti i repo pubblici/candidati non-RETIRE sono classificati; history+tree sono coperti; ogni riga ha recommendation e `publication_ready`; report è redatto; nessuna visibility/codebase è stata modificata.
+Tutti i repo in scope classificati; history+tree coperti; nessun repo non pronto reso pubblico; baseline PRIVATE pubblici portati private oppure P0 esplicito; visibility finale verificata una volta; report/matrice redatti e pushati.
 
 # Stop
-Dopo `AUDIT_COMPLETE` o `AUDIT_COMPLETE_WITH_FINDINGS`:
+Dopo `AUDIT_APPLY_COMPLETE` o `AUDIT_APPLY_COMPLETE_WITH_BLOCKERS`:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 940316 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 940316`
 
-`push_verified=git_push_exit_0` è terminale. Output massimo 7 righe: RESULT, scanner+versione, audited/skipped, PUBLIC/PRIVATE/RETIRE counts, P0 repo names only, MegaVault commit, blocker eventuale.
+`push_verified=git_push_exit_0` è terminale. Output massimo 7 righe: RESULT, scanner/versione, audited/skipped, PUBLIC/PRIVATE/RETIRE counts, visibility applied/blocked, P0 repo names only, MegaVault commit.
