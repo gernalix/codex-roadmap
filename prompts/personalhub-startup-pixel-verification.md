@@ -1,11 +1,13 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=734581 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST | last_result=BLOCKED`
+`PROMPT_ID=734581 | project_id=49 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST | last_result=BLOCKED`
 
 > Continuazione del debugging startup già pre-localizzato. Non eseguire `roadmap_guard.py select`, non rileggere roadmap/README/spiegazioni/MEMORY e non rifare root-cause discovery. Usa solo i file/tool richiesti sotto.
 
 # Goal
-Verificare sul Pixel 8a fisico che PersonalHub `main` sia rapido **e responsivo** dopo cold start. Se il gate fallisce, usa una sola traccia Perfetto e correggi al massimo un hotspot dimostrato.
+Verificare sul Pixel 8a fisico che PersonalHub `main` sia rapido **e realmente responsivo al tocco** dopo cold start. Se il gate fallisce, usa una sola traccia Perfetto e correggi al massimo un hotspot dimostrato.
+
+**Reasoning fisso per l'intera sessione: GPT-5.5 medium. Non tentare di cambiare reasoning durante il task.**
 
 # Fatti verificati — non ripetere
 - Baseline originaria: `Displayed ...MainActivity: +13s293ms`, launch timeout, `Skipped 687 frames`.
@@ -25,24 +27,36 @@ Verificare sul Pixel 8a fisico che PersonalHub `main` sia rapido **e responsivo*
    - `:app:compileDebugKotlin`
 4. Se PASS, una sola `:app:assembleDebug`; installa quella stessa APK con `adb install -r`, senza uninstall/clear/reset dati.
 
-# Pixel gate — 3 cold start
-Per ogni prova: `logcat -c` → `am force-stop` → un solo `am start -W`; osserva ~8 s, salva una sola cattura logcat bounded e filtra localmente quel file. Rileva una volta focus/window dopo il display.
+# Pixel gate — 3 cold start + 1 tap innocuo per run
+Per ogni prova:
+1. `logcat -c` → `am force-stop` → un solo `am start -W`;
+2. osserva ~8 s, salva una sola cattura logcat bounded e filtra localmente quel file;
+3. verifica una volta focus/window dopo il display;
+4. esegui **un solo test di tocco non distruttivo**:
+   - acquisisci al massimo un `uiautomator dump` della schermata corrente;
+   - scegli un punto **dentro la finestra di PersonalHub ma fuori dai bounds di nodi `clickable=true` o `long-clickable=true`**, quindi invia un solo `adb shell input tap X Y`;
+   - non indovinare coordinate se non puoi dimostrare dal dump che il punto è innocuo;
+   - dopo il tap attendi ~1 s e verifica che `MainActivity` sia ancora focused e che non siano comparsi `Input dispatching timed out`, ANR o FATAL.
+5. non navigare tra moduli, non modificare dati e non eseguire altri tap/swipe.
 
-Registra solo: `Status`, `TotalTime/WaitTime`, focus, launch timeout, ANR/input timeout/FATAL, `Skipped N frames`, `PH.*`, `MTT_STARTUP`, `PersonalHubStartup`.
+Registra solo: `Status`, `TotalTime/WaitTime`, focus prima/dopo il tap, esito touch, launch timeout, ANR/input timeout/FATAL, `Skipped N frames`, `PH.*`, `MTT_STARTUP`, `PersonalHubStartup`.
 
 PASS immediato se tutte e 3 le prove hanno:
 - `Status: ok` e `MainActivity` focused;
-- nessun launch timeout, ANR/input timeout o FATAL;
+- il tap innocuo viene inviato e `MainActivity` resta focused subito dopo;
+- nessun launch timeout, ANR/input timeout o FATAL prima o dopo il tap;
 - nessun `Skipped N frames` con N >= 100;
 - mediana `TotalTime` <= 2.5 s.
 
-# Solo se il gate fallisce
-Passa a **GPT-5.5 medium** e acquisisci **una sola** Perfetto/System Trace. Usa `PH.*` e main-thread/scheduler slices per attribuire un blocco reale; non inferire causalità dalla sola vicinanza temporale dei log.
+Se in un run non esiste un punto innocuo dimostrabile dal dump, non tappare a caso: marca solo quel sottogate `TOUCH_NOT_PROVABLE`; il task non può PASS finché il touch gate non viene dimostrato in 3/3 run.
 
-Se emerge un hotspot univoco: applica un solo fix minimo, esegui solo i gate host direttamente pertinenti, rebuild/install una volta e ripeti le 3 prove. Se la traccia non identifica un hotspot univoco o il secondo gate fallisce: `BLOCKED` e STOP.
+# Solo se il gate fallisce
+Acquisisci **una sola** Perfetto/System Trace. Usa `PH.*` e main-thread/scheduler slices per attribuire un blocco reale; non inferire causalità dalla sola vicinanza temporale dei log.
+
+Se emerge un hotspot univoco: applica un solo fix minimo, esegui solo i gate host direttamente pertinenti, rebuild/install una volta e ripeti le 3 prove complete incluso il tap. Se la traccia non identifica un hotspot univoco o il secondo gate fallisce: `BLOCKED` e STOP.
 
 # Non-goal
-Niente delay/sleep risolutivi, audit/refactor generale, modifica a `ensureStartupReady()` senza prova Perfetto, TCL/emulatore, bump versione, release/Telegram, branch/PR, test suite globali o retry equivalenti.
+Niente delay/sleep risolutivi, audit/refactor generale, modifica a `ensureStartupReady()` senza prova Perfetto, TCL/emulatore, bump versione, release/Telegram, branch/PR, test suite globali, navigazione funzionale dell'app o retry equivalenti.
 
 # Stop / roadmap
 - **PASS:** completa `734581` dichiarando esplicitamente l'esito PASS, poi STOP:
@@ -50,4 +64,4 @@ Niente delay/sleep risolutivi, audit/refactor generale, modifica a `ensureStartu
 - **BLOCKED/FAIL:** lascia `734581` attivo. **Non spostarlo manualmente in `completed/`, non rinumerare la roadmap e non eseguire `complete`.**
 - `push_verified=git_push_exit_0` è terminale: niente status/fetch/rev-parse successivi sulla roadmap.
 
-Output massimo 7 righe: RESULT, tempi min/mediana/max, focus+ANR/frame, eventuale hotspot+fix, test/build, Pixel install/test, commit/push o blocker.
+Output massimo 7 righe: RESULT, tempi min/mediana/max, focus+touch+ANR/frame, eventuale hotspot+fix, test/build, Pixel install/test, commit/push o blocker.
