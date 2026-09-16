@@ -54,6 +54,6 @@ Niente redesign Now, nuovo motore Alerts, refactor Timer, statistiche Random Tim
 PASS se deadline è OS-driven/UI-independent, sessione termina a `expectedEndMs`, notifica arriva app non aperta, restore/cancel sono idempotenti, target resta segreto e release usa un solo APK testato/installato/consegnato.
 
 # Stop
-Solo dopo acceptance PASS e base remota invariata: commit/push PersonalHub una volta, quindi
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 232198 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 232198`.
-Se `roadmap_guard` rifiuta il completamento, `RESULT=BLOCKED` anche con codice PASS; non manipolare manualmente la roadmap. Rilascia il lease. Prima riga output `RESULT=PASS|BLOCKED|FAIL`; massimo 6 righe.
+Dopo acceptance PASS e base remota invariata: commit/push PersonalHub una volta. Poi prova il dry-run `complete` per `232198`. Se restituisce `status=ready`, esegui il `complete` reale. Se e SOLO se restituisce `prompt_identity_mismatch` perché un task indipendente precedente è ancora selezionato, usa invece:
+`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap reconcile --prompt-id 232198 --result PASS --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap reconcile --prompt-id 232198 --result PASS --confirm-executed`.
+Un `status=completed` o reconcile riuscito con `push_verified=git_push_exit_0` chiude il bookkeeping. Per qualunque altro errore guard, `RESULT=BLOCKED`; non manipolare manualmente la roadmap. Rilascia il lease. Prima riga output `RESULT=PASS|BLOCKED|FAIL`; massimo 6 righe.
