@@ -33,7 +33,6 @@ Prompt autosufficiente: non leggere MEMORY/MegaVault/README/roadmap, non fare au
    - il testo non è il follow-up “qual è il prompt id su cui hai lavorato?”.
 7. Nel checkout `/home/daniele/projects/codex-usage`, usa un solo `git status --short` + `git log -1 --oneline` e verifica che la ripubblicazione sia stata committata/pushata. Non cercare altri prompt.
 8. Se il publisher non ricostruisce `529184`, raccogli solo l'errore/log direttamente pertinente e termina `BLOCKED`; niente debugging esplorativo o patch in questa sessione.
-9. Dopo PASS, esegui una sola volta `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 978216 --confirm-executed`.
 
 # Acceptance
 
@@ -44,5 +43,8 @@ PASS se il runtime Fedora usa un commit che include `be19be45f1c01e8ba21b311cdc1
 Niente modifiche codice, niente MEMORY/MegaVault discovery, niente Android/PersonalHub, niente emulatori/Gradle, niente Oracle VM, niente ricostruzione globale archivi, niente retry identici, niente test duplicati.
 
 # Stop
+
+Dopo PASS:
+`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 978216 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 978216`
 
 Termina immediatamente dopo acceptance o primo blocker. Output massimo 5 righe: `RESULT`, `RUNTIME`, `529184`, `PUBLISH`, `BLOCKER`.
