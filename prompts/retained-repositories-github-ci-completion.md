@@ -3,89 +3,88 @@
 `PROMPT_ID=483921 | project_id=23 | model=GPT-5.5 | reasoning=medium | MegaVault=STANDARD`
 
 # Goal
-Per **tutti e soli** i repository che l'utente ha marcato `[x]` nella checklist di retention, rendere GitHub Actions la sede canonica di **tutto il testing deterministico e sandboxabile** ancora mancante, senza duplicare workflow/test già adeguati.
+Per **tutti e soli** i repository marcati `[x]` nella checklist di retention, rendere GitHub Actions la sede canonica di **tutto il testing deterministico/sandboxabile ragionevolmente disponibile**, senza duplicare CI già adeguata.
 
 Sorgente autoritativa:
 `/home/daniele/projects/MegaVault/ai/repository-retention-checklist.md`
 
-Questo è un task finale di copertura: i task CI precedenti possono aver già sistemato molti repo. Qui devi colmare soltanto i buchi residui.
+Questo task sostituisce le precedenti campagne CI separate per Python/Android/browser/Fedora/PersonalHub. `codex-usage-monitor` può avere già CI dal cutover precedente e `codex-roadmap` ha già CI: in tal caso verifica il minimo necessario e marca `NOOP_COMPLETE`.
 
 # Inventory minima
-1. Leggi la checklist una sola volta e considera in scope solo righe `- [x] NAME` / `- [X] NAME`.
-2. Fai una sola inventory GitHub dei repo owned ancora esistenti con visibility/default branch.
-3. Repo `[x]` non più esistente => segnala `MISSING_RETAINED_REPO` e BLOCKED per quel repo, senza ricrearlo.
-4. Repo `[ ]` o assente dalla checklist => fuori scope assoluto.
+1. Leggi la checklist una sola volta; scope = sole righe `- [x] NAME` / `- [X] NAME`.
+2. Una sola inventory GitHub owned con visibility/default branch.
+3. `[x]` non più esistente => `MISSING_RETAINED_REPO`, blocker solo per quel repo; non ricrearlo.
+4. `[ ]` o assente => fuori scope assoluto.
+5. Per ogni `[x]` leggi solo manifest/build/packaging, directory test, `.github/workflows` ed entrypoint/config direttamente necessari a capire come testarlo. Niente audit generale, history, issue o README salvo blocker concreto.
 
-Per ogni repo `[x]`, leggi soltanto ciò che serve a classificare test/runtime e CI esistente: manifest/packaging/build file, directory test, `.github/workflows`, entrypoint/config direttamente testabili. Niente audit generale di codebase, README/storia/issue salvo blocker concreto.
+# Principio vincolante
+Un check va su GitHub Actions se è deterministico o stabilizzabile con fixture/mock e può girare senza dati personali, hardware fisico, account/sessioni reali, secret di produzione o infrastruttura live.
 
-# Regola di delega a GitHub
-Ogni test/check deve finire in GitHub Actions se è:
-- deterministico o ragionevolmente stabilizzabile con fixture/mock;
-- eseguibile in sandbox/container/runner senza dati personali reali;
-- indipendente da hardware fisico, sessioni/account reali, secret di produzione o infrastruttura live.
+Non lasciare locale un test sandboxabile solo per comodità.
 
-Esempi pertinenti quando presenti:
-- unit/integration test;
+Copri quando applicabile:
+- unit/integration/regression test;
 - compile/build/lint/typecheck/static analysis;
-- parser/DB con fixture/temp DB;
+- parser/DB con fixture o DB temporanei;
 - Android build/unit/lint + emulator/instrumentation sandboxabile;
-- browser/extension con Chromium headless e fixture locali;
+- browser/extension con Chromium headless + fixture locali;
 - HTTP/network con mock/local server;
 - shell/systemd/YAML/Compose/nginx/config validation;
-- backup/restore solo in temp dir;
-- regression test per bug già coperti da fixture ripetibili.
+- backup/restore esclusivamente in temp dir.
 
-NON lasciare un test deterministico/sandboxabile come "solo locale" se può girare su GitHub senza dipendenze reali.
+# Routing per tipologia — niente task separati
+## Android / PersonalHub
+- Riusa task Gradle e test esistenti; una sola JDK/API coerente, niente matrix esplorative.
+- PUBLIC: host gate PR+push; emulator smoke su push/main o manuale; instrumentation più pesante manuale/schedule solo se utile.
+- PRIVATE: host gate veloce automatico; emulator/instrumentation pesanti definiti comunque in Actions ma preferibilmente `workflow_dispatch` per contenere i minuti. Riusa un self-hosted repo-specific già sicuro se esiste; non creare runner general-purpose.
+- Pixel/TCL restano locali solo perché hardware fisico.
 
-# Cosa resta locale
-Restano fuori GitHub soltanto test che richiedono realmente:
-- Pixel/TCL o altro hardware fisico;
-- account/browser autenticato reale;
-- secret/credential di produzione;
-- VM/host/dischi/rete/infrastruttura live non simulabile;
-- comportamento umano/non deterministico non riducibile a fixture affidabile.
+## Python / script / automazioni
+- Riusa unittest/pytest esistenti, temp repo/DB/filesystem e mock per GitHub/Telegram/Kuma/rete quando necessari.
+- Una sola versione Python coerente col runtime; niente test contro account o servizi reali.
 
-Per ogni esclusione registra una motivazione tecnica concreta; niente esclusioni per comodità.
+## Browser / downloader / extension
+- Chromium/Playwright headless con fixture HTML e server HTTP locali/mock.
+- Niente profili, cookie, account o siti live se il comportamento è riproducibile con fixture.
+- Browser autenticato reale resta locale solo quando una failure concreta non è riproducibile in sandbox.
+
+## Fedora / servizi / backup
+- Python/shell syntax e test, `bash -n`, shellcheck solo se già compatibile, parse/validation di systemd/YAML/Compose/nginx tramite fixture/temp dir.
+- Backup→restore solo in temp dir; mai mount/dischi reali, SSH, VM, restart host o secret di produzione.
 
 # Strategia visibility/costo
-- **PUBLIC:** usa GitHub-hosted standard; automatizza PR/push per gate veloci e aggiungi schedule/manuale solo quando il valore giustifica il costo/tempo. Emulator/browser/integration deterministici possono essere hosted.
-- **PRIVATE:** anche qui GitHub Actions deve contenere tutto il testing deterministico/sandboxabile; gate veloci automatici, job pesanti preferibilmente `workflow_dispatch` se consumerebbero minuti inutilmente. Riusa self-hosted repo-specific già esistenti solo se sicuri; non crearne di general-purpose.
+- **PUBLIC:** GitHub-hosted standard; gate veloci automatici PR+push, job più costosi solo con frequenza utile.
+- **PRIVATE:** anche qui tutto il testing sandboxabile deve essere definito in Actions; gate veloci automatici, job pesanti preferibilmente manuali. Visibility cambia trigger/frequenza, non la copertura disponibile.
 
-Visibility non giustifica lasciare test deterministici esclusivamente locali: può cambiare solo trigger/runner/frequenza.
+# Efficienza per repo
+1. Se CI esistente copre già tutto: `NOOP_COMPLETE` e passa oltre.
+2. Altrimenti modifica il minimo, riusando test/comandi esistenti.
+3. Aggiungi nuovi test solo per comportamento esistente importante che altrimenti non sarebbe verificabile.
+4. Path filter docs-only, concurrency/cancel-in-progress, permissions minime, cache solo utile, artifact failure-only con retention breve.
+5. Preflight locale minimo -> push -> singolo run GitHub canonico. Failure: solo job/log fallito -> fix minimo -> nuovo run. Vietati retry identici e audit post-PASS.
+6. Chiudi un repo appena raggiunge COMPLETE; non riaprirlo nella stessa sessione.
 
-# Efficienza
-Per ogni repo:
-1. se CI esistente copre già tutto il testabile, `NOOP_COMPLETE` e passa oltre;
-2. altrimenti aggiungi/modifica il minimo indispensabile, riusando test e comandi esistenti;
-3. niente nuovi test se non servono a rendere verificabile un comportamento già esistente e importante;
-4. niente matrix esplorative: una sola versione runtime/JDK/API coerente col repo;
-5. path filters docs-only, concurrency/cancel-in-progress, permissions minime, cache solo utile, artifact solo failure e retention breve;
-6. nessun secret reale nei workflow.
+Se i repo `[x]` sono numerosi, processali serialmente ma senza rileggere checklist/inventory globale: mantieni la stessa inventory in memoria e apri solo il prossimo repo. Non fare discovery trasversale.
 
-Non creare una shared action cross-repo salvo evidenza che riduca davvero duplicazione senza aumentare coupling.
+# Esclusioni locali ammesse
+Solo test che richiedono realmente hardware fisico, account/browser autenticato reale, secret di produzione, VM/host/dischi/rete live non simulabili o comportamento umano non riducibile a fixture affidabile. Per ogni esclusione registra una motivazione tecnica concreta.
 
-# Verifica
-Non duplicare localmente l'intera CI. Preflight/syntax minimo -> push -> usa il run GitHub come gate canonico.
-Per repo modificato: osserva il singolo run pertinente; failure -> leggi solo job/log fallito -> fix minimo -> nuovo run. Niente retry identici o audit post-PASS.
-
-Crea/aggiorna in MegaVault un report conciso `ai/repository-ci-coverage.md` con una riga per ogni repo `[x]`:
-- `COMPLETE|PARTIAL_BLOCKED|NOOP_COMPLETE`;
+# Report finale
+Crea/aggiorna `/home/daniele/projects/MegaVault/ai/repository-ci-coverage.md` con una riga per ogni `[x]`:
+- `COMPLETE|NOOP_COMPLETE|PARTIAL_BLOCKED`;
 - workflow/gate principali;
 - eventuale test rimasto locale + motivo tecnico.
 
+Non duplicare dettagli dei log CI.
+
 # Non-goal
-Niente refactor/cleanup/modernizzazione, feature, release, dependency upgrade generale, security audit, history rewrite, pubblicazione/cambio visibility, test live contro account reali o browser GUI se fixture/headless bastano.
+Niente refactor/cleanup/modernizzazione, feature, release, dependency upgrade generale, security audit, history rewrite, cambio visibility, test live quando fixture/headless bastano, shared action cross-repo salvo beneficio concreto già evidente.
 
 # Acceptance
-PASS solo se per ogni repo `[x]` ancora esistente:
-- tutto il testing deterministico/sandboxabile ragionevolmente disponibile è eseguito da GitHub Actions oppure esiste blocker tecnico esplicito;
-- workflow duplicati sono evitati;
-- i workflow modificati sono verdi;
-- ciò che resta locale richiede davvero risorse non sandboxabili;
-- `repository-ci-coverage.md` rende visibile la copertura finale.
+PASS solo se ogni repo `[x]` esistente ha tutto il testing deterministico/sandboxabile ragionevolmente disponibile in GitHub Actions oppure un blocker tecnico esplicito; workflow modificati verdi; nessuna CI duplicata; ciò che resta locale richiede davvero risorse non sandboxabili; report finale completo.
 
 # Stop
 Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 483921 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 483921`
 
-Output massimo 7 righe: RESULT, retained count, NOOP_COMPLETE count, changed count, blocked count, coverage report, blocker eventuale.
+Output massimo 7 righe: RESULT, retained count, NOOP_COMPLETE, changed, blocked, coverage report, blocker eventuale.
