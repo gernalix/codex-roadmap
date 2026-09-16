@@ -3,50 +3,46 @@
 `PROMPT_ID=467281 | project_id=15 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST`
 
 # Goal
-Diagnostica e correggi SOLO il monitor Uptime Kuma Push **“Fedora Software” (#43)**, attualmente giallo/**In attesa**. Determina la causa reale e ripristina un monitoraggio corretto con il minimo cambiamento necessario. Non forzare lo stato verde se esiste un problema reale.
+Diagnostica e correggi in UN SOLO PASS i problemi di heartbeat Uptime Kuma dei monitor Push **“Fedora Storage” (#40)** e **“Fedora Software” (#43)**. Determina se condividono la stessa root cause oppure hanno cause indipendenti e applica solo il minimo fix necessario. Non forzare mai uno stato verde: dopo il ripristino degli heartbeat, eventuali alert reali devono restare visibili.
 
 # Starting point autoritativo
 - repo locale: `/home/daniele/projects/fedora-system-monitor`;
 - MegaVault: progetto `15`, già esistente; non crearne duplicati;
-- DB runtime canonico già noto: `/var/lib/fedora-system-monitor/monitor.sqlite3`;
-- screenshot utente del 2026-09-16 03:36 mostra `kuma.danielegalati.com/dashboard/43`, monitor “Fedora Software”, stato **In attesa**, ping `N/D`, intervallo Kuma `5400 s (1 h 30 min)`;
-- descrizione monitor: `Fedora software health: package transactions, pending updates and inventory changes.`;
-- ultimo heartbeat verde visibile nello screenshot: `2026-09-15 13:00:26`, messaggio `software: collectors complete; active alerts=0`;
-- gli altri monitor Fedora continuano a produrre heartbeat; il toast `[Fedora Host] [DOWN] system: collectors complete; active alerts=1` visibile nello screenshot può essere un evento separato: non confonderlo con la causa del monitor Software senza evidenza.
+- DB runtime canonico: `/var/lib/fedora-system-monitor/monitor.sqlite3`;
+- **Storage #40**: screenshot utente del 2026-09-16 06:00 mostra `kuma.danielegalati.com/dashboard/40`, stato **Spento**, check ogni **480 s (8 min)**, cronologia verde→arancio→rosso e toast **`[Fedora Storage] [DOWN] No heartbeat in the time window`**; descrizione `Fedora storage health: free space, inodes, read-only mounts, I/O errors and SMART.`;
+- **Software #43**: screenshot utente del 2026-09-16 03:36 mostrava stato **In attesa**, ping `N/D`, intervallo Kuma **5400 s (1 h 30 min)**; ultimo heartbeat verde visibile `2026-09-15 13:00:26`, messaggio `software: collectors complete; active alerts=0`;
+- altri monitor Fedora continuano a produrre heartbeat; il problema separato di **Fedora Host #39** (`system: collectors complete; active alerts=1`) ha già un task dedicato: non assorbirlo qui;
+- nel repo esistono già collector/storage-software, coordinator, config Kuma e unit/timer systemd: parti dai mapping runtime concreti, non da un audit generale.
 
 # Esecuzione minima
-1. Fai una sola fotografia Git del repo e usa MegaVault FAST solo per i riferimenti già pertinenti. Niente audit generale del repository o del sistema.
-2. Trova direttamente il codice/config/unit/timer che genera il Push `Fedora Software` cercando solo riferimenti pertinenti (`software`, Kuma push, monitor #43, scheduler/interval). Non esplorare gli altri collector salvo confronto minimo indispensabile.
-3. Determina prima la semantica del giallo:
-   - ultimo heartbeat ricevuto e sua età;
-   - intervallo/grace/timeout attesi dal monitor #43;
-   - se `In attesa` deriva da heartbeat mancante/scaduto oppure da uno status esplicitamente inviato.
-4. Sul Fedora locale controlla SOLO il runner pertinente:
-   - stato unit/timer/processo;
+1. Fai una sola fotografia Git del repo. Usa MegaVault FAST solo per riferimenti pertinenti già esistenti. Niente audit generale del repository o del sistema.
+2. **Prima del codice**, leggi dal runtime/Kuma lo stato attuale di #40 e #43 e per ciascuno ricava: ultimo heartbeat, età, status/message, intervallo/grace/timeout attesi. Se uno si è già ripreso spontaneamente, conserva la finestra dell'incidente e continua solo quanto basta a determinarne la causa/recurrence risk.
+3. Mappa #40 e #43 ai rispettivi collector/runner/unit/timer/path e confronta in una sola tabella mentale:
+   - cadenza locale prevista;
    - ultimo run e prossimo run;
    - exit status;
-   - ultimi log pertinenti al software collector/push;
-   - ultimo payload/status/message inviato a Kuma.
-   Limita `journalctl` all'unit e alla finestra temporale necessaria.
-5. Confronta una sola volta con un monitor Fedora funzionante soltanto se serve a distinguere problema comune vs specifico del collector Software.
-6. Esegui UNA volta manualmente lo stesso check Software, in modalità sicura/non distruttiva, e osserva exit code + payload risultante. Non fare update/install/remove di pacchetti per provocare artificialmente eventi.
-7. Identifica la root cause concreta, ad esempio solo se confermata: timer non attivo, schedule errato, collector bloccato/fallito, eccezione che salta il Push, intervallo locale incoerente con 5400 s Kuma, URL/token/config obsoleti, networking, timeout o logica status errata.
-8. Applica SOLO il fix minimo nel boundary corretto. Se serve modificare Kuma/VM, fallo solo dopo evidenza che la causa è nella configurazione del monitor #43; non toccare gli altri monitor e non stampare Push URL/token/segreti.
-9. Se il giallo è corretto perché il monitor è configurato per attendere un heartbeat che il job invia intenzionalmente più di rado, correggi l'incoerenza di scheduling/heartbeat senza indebolire il rilevamento di failure reali.
+   - ultimo payload Push tentato/inviato;
+   - eventuale eccezione che impedisce il Push.
+   Limita `systemctl`/`journalctl` alle sole unit rilevanti e alla finestra temporale dell'incidente.
+4. Stabilisci subito se la root cause è **comune** (scheduler/coordinator/push/config/network/suspend-resume) o **specifica** di Storage/Software. Confronta con UN solo monitor Fedora funzionante soltanto se necessario per discriminare problema comune vs specifico.
+5. Leggi solo il ramo di codice/config direttamente responsabile della failure concreta. Starting points probabili, da usare solo se pertinenti: `src/fedora_system_monitor/capsules/runtime/coordinator.py`, `src/fedora_system_monitor/capsules/collectors/periodic.py`, `src/fedora_system_monitor/capsules/collectors/system.py`, `src/fedora_system_monitor/capsules/collectors/software.py`, config Kuma e unit/timer systemd.
+6. Verifica le cause plausibili soltanto se supportate da evidenza: timer/path non attivo, schedule locale incoerente con Kuma, job bloccato/fallito, eccezione che salta il Push, lock/concorrenza, resume/suspend non gestito, URL/config/token obsoleto, timeout/network oppure logica heartbeat/status errata.
+7. Applica SOLO il fix minimo nel boundary corretto. Se una sola correzione copre entrambi, non duplicarla. Se serve modificare Kuma/VM, fallo solo dopo evidenza che il difetto è nella configurazione server-side; non stampare Push URL/token/segreti.
+8. Non fare update/install/remove di pacchetti e non liberare spazio disco per rendere Storage verde. Se, una volta ripristinato l'heartbeat, #40 resta DOWN per un alert storage reale (per esempio spazio libero), quello è comportamento corretto e va riportato senza silenziarlo.
 
 # Verifica
 - test mirati solo sui file modificati;
-- esegui una sola run del check Software dopo il fix;
-- verifica che il Push venga ricevuto da #43 con stato/messaggio coerente;
-- verifica che il prossimo run sia schedulato correttamente rispetto all'intervallo Kuma;
-- PASS se #43 torna **UP/Operativo** quando non esistono alert reali, oppure resta non-UP con una causa reale e diagnostica corretta;
-- verifica solo che gli altri monitor Fedora non siano stati alterati.
+- esegui **al massimo una** nuova run Storage e **una** Software dopo il fix, riusando lo stesso bootstrap/runtime;
+- verifica che #40 e #43 ricevano nuovi Push con status/message coerenti;
+- verifica che i prossimi run siano schedulati entro le rispettive finestre Kuma;
+- PASS se il problema di heartbeat è risolto: #40/#43 possono restare non-UP solo se il nuovo Push espone una condizione reale distinta dall'assenza di heartbeat;
+- verifica soltanto che gli altri monitor Fedora non siano stati alterati.
 
 # Non-goal
-Niente audit generale Fedora, aggiornamenti di sistema/pacchetti, refactor/cleanup, tuning degli altri monitor, analisi del toast Fedora Host se non blocca direttamente il Software Push, o modifiche cosmetiche a Kuma.
+Niente audit generale Fedora, task Fedora Host #39, aggiornamenti di sistema/pacchetti, cleanup/refactor, tuning preventivo degli altri monitor, cancellazione manuale di alert/DB, liberazione spazio disco, o modifiche cosmetiche a Kuma.
 
 # Stop
 Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 467281 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 467281`
 
-`push_verified=git_push_exit_0` è terminale. Output massimo 6 righe: RESULT, ROOT_CAUSE, FIX, KUMA_NOW, TEST, CHANGES/BLOCKER.
+`push_verified=git_push_exit_0` è terminale. Output massimo 7 righe: RESULT, STORAGE_CAUSE, SOFTWARE_CAUSE, FIX, KUMA_STORAGE, KUMA_SOFTWARE, TEST/BLOCKER.
