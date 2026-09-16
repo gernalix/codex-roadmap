@@ -26,7 +26,7 @@ Usa il protocollo MegaVault corrente come autoritativo. Non creare nuovi Markdow
 7. Collega il gate alla validazione/test esistente o alla CI già presente senza creare workflow duplicati.
 
 # Esecuzione minima
-1. `git status --short`, branch, HEAD; se pulito `git fetch origin && git pull --ff-only origin master`. Dirty non pertinente o divergenza => `BLOCKED`.
+1. Fotografia Git; se pulito esegui UNA sola sync: `timeout 20s git fetch origin master && git merge --ff-only origin/master`. Dirty non pertinente, fetch/merge fallisce o divergenza => `BLOCKED`, niente stash/rebase/retry.
 2. Leggi solo: `megavault.py`, `ai/strict_tag_wrapper.py`, le firme/dispatcher pertinenti di `ai/megavault_core.py`, `ai/operational_indexes.py`, `ai/workflow_events.py` e i test che importano i simboli toccati. Per `megavault_core.py` usa ricerca simboli/firme, non dump completo.
 3. Prima delle modifiche cattura in un solo comando bounded l'output/exit code di un set minimo read-only di CLI sul DB reale: `project-show 23`, `project-path --status 23`, più `--help` o un altro comando puro necessario a coprire il dispatch toccato. Salva solo output non sensibile.
 4. Applica il refactor boundary con il minimo numero di file. Nessuna modifica a `megavault.sqlite`, schema, migrations o dati salvo che il protocollo richieda l'evento finale; in tal caso usa solo il comando canonico previsto dal protocollo.
