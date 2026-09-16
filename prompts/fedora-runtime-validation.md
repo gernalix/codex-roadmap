@@ -7,13 +7,14 @@ Chiudi l'unico gate Fedora rimasto dopo `847392`: distribuire l'ultimo `fedora-s
 - repo locale: `/home/daniele/projects/fedora-system-monitor`, branch `main`;
 - runtime canonico: Fedora locale, non Oracle VM;
 - `847392` ha già verificato sul runtime reale: `USER_SYSTEMD=PASS` e `TELEGRAM=PASS`; NON ripetere quei gate;
-- il fix user-systemd è già su remoto (`19ab9384acf3c7533dd3b4dfbd0e4a16d169dc2c`) e la regressione è ora coperta dalla CI;
-- `main` remoto include almeno `d4edd4a672bacf58f28c6e4a4025187d63d23928`, con CI verde; include deploy systemd mirato fail-closed, rilevamento drift delle unità e login Kuma che non ripete lo stesso token senza nuova evidenza;
+- `main` remoto corrente è `d4edd4a672bacf58f28c6e4a4025187d63d23928`; GitHub Actions run `35084115640` è **PASS**;
+- il fix user-systemd è già coperto dalla CI; il deploy systemd è mirato/fail-closed, rileva drift delle unità e rifiuta checkout dirty;
+- login Kuma non deve ripetere lo stesso token senza nuova evidenza;
 - profilo Chrome ammesso: `/home/daniele/.var/app/com.google.Chrome/config/google-chrome`; non cercare altri profili, cookie, password o secret;
 - monitor attesi: #39 interval/retry `180/60`; #40 Fedora Storage `480/180` con `upside_down=1`;
 - `/etc/fedora-system-monitor/config.toml` deve conservare `inverted_categories=["storage"]`.
 
-Prompt autosufficiente: niente README/roadmap/MegaVault, niente audit repo-wide, niente test user-systemd/Telegram, niente Oracle.
+Prompt autosufficiente: niente README/roadmap/MegaVault/MEMORY, niente audit repo-wide, niente test user-systemd/Telegram, niente Oracle.
 
 # Esecuzione minima
 1. Una fotografia Git (`status --short`, branch, HEAD). Se pulito: UNA `timeout 20s git fetch origin main` + `git merge --ff-only origin/main`; altrimenti `BLOCKED`. Nessun retry.
@@ -40,7 +41,8 @@ PASS solo se:
 Niente modifiche codice, user-systemd, Telegram, Seagate/storage cleanup, soglie diverse da quelle sopra, suite test, CI rerun, aggiornamenti OS, Oracle VM, altri profili Chrome o audit post-PASS.
 
 # Stop
-Dopo PASS:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 362714 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 362714`
+Dopo PASS esegui una sola volta:
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 362714 --confirm-executed`
 
+Non fare dry-run separati né verifiche Git equivalenti dopo finalizzazione.
 Stop al primo blocker. Output massimo 5 righe: `RESULT`, `RUNTIME`, `KUMA`, `STORAGE_INVERSION`, `BLOCKER`.
