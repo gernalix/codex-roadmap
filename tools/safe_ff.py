@@ -109,15 +109,20 @@ def safe_fast_forward(
             raise SafeFFBlocked(f"preserve path is not a regular file: {relative}")
         preserve_hashes[relative] = _sha256(path)
 
-    _git_ok(repo, "fetch", remote, branch, timeout=fetch_timeout)
+    # Update the configured remote-tracking ref explicitly. This keeps the
+    # subsequent ancestry/diff checks tied to the exact branch being fetched.
+    refspec = f"refs/heads/{branch}:refs/remotes/{remote}/{branch}"
+    _git_ok(repo, "fetch", remote, refspec, timeout=fetch_timeout)
     remote_ref = f"{remote}/{branch}"
     remote_head = _git_ok(repo, "rev-parse", remote_ref)
     ancestor = _git(repo, "merge-base", "--is-ancestor", before_head, remote_ref)
     if ancestor.returncode != 0:
         raise SafeFFBlocked(f"local HEAD is not an ancestor of {remote_ref}")
 
-    changed_raw = _git_ok(repo, "diff", "--name-only", "-z", before_head, remote_ref)
-    remote_changed = _nul_paths(changed_raw)
+    changed = _git(repo, "diff", "--name-only", "-z", before_head, remote_ref)
+    if changed.returncode != 0:
+        raise SafeFFBlocked("cannot inspect remote changed paths")
+    remote_changed = _nul_paths(changed.stdout)
     overlap = sorted(dirty_before & remote_changed)
     if overlap:
         raise SafeFFBlocked("dirty/remote overlap: " + ", ".join(overlap))
