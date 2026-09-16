@@ -9,7 +9,7 @@ Sorgente autoritativa principale:
 Il file corrente usa `schema_version=2`; usa sempre la versione presente nel checkout sincronizzato al momento dell'esecuzione perché task precedenti possono aver aggiornato singole entry di pubblicabilità. Non rifare `gh repo list`, non rivalutare PUBLIC/PRIVATE e non riaprire l'audit sicurezza.
 
 Supplementi/post-audit già verificati:
-- `adb-device-keeper`, visibility `PRIVATE`, default branch `main`; il repo esiste già e ha CI deterministica: se copre già tutto, `NOOP_COMPLETE`;
+- `adb-device-keeper`, visibility `PRIVATE`, default branch `main`: baseline `912a436174b9f655607cdd4f9e3ad0a4d650d14a`, GitHub Actions run `35110215967` **PASS**. La CI copre shell syntax, Tailscale CGNAT/mapping/porta, cross-device rejection, config/unit, restart esplicito del deploy e classificazione del runtime-check. Se `origin/main` è ancora quel commit o un discendente con CI verde e nessuna modifica pertinente a workflow/test/runtime, marca direttamente `NOOP_COMPLETE`; non rieseguire test locali né riaprire l'audit del repo.
 - `PersonalHub` ha già una Play Store preflight dedicata che esegue `lintPlay`, merged-manifest policy check e costruisce/controlla un AAB `play` minified/shrunk senza secret; baseline minima `4038b2dcc4bdae017e0f5d2f0cd144138d0edd2c` o successiva. NON creare un secondo workflow Play e NON spostare signing/keystore reali su GitHub Actions.
 
 `codex-usage-monitor`, `codex-roadmap`, `fedora-system-monitor` e altri repo toccati dai task precedenti possono avere CI già completa: verifica il minimo necessario e marca `NOOP_COMPLETE` quando appropriato.
@@ -19,7 +19,7 @@ Supplementi/post-audit già verificati:
 2. Richiedi `schema_version=2` e una lista `repositories` valida/non vuota. Non bloccare in base a uno specifico `generated_by_prompt_id`: è metadata storico e non definisce lo scope operativo corrente.
 3. Scope = esattamente le entry `repositories` dell'handoff + `adb-device-keeper` se non già presente; deduplica per `name`.
 4. Se una push/fetch mirata dimostra che un repo dello scope non esiste più, `MISSING_RETAINED_REPO` solo per quel repo; non fare inventory globale e non ricrearlo.
-5. Per ogni repo leggi solo manifest/build/packaging, directory test, `.github/workflows` ed entrypoint/config direttamente necessari a capire come testarlo. Niente audit generale, history, issue o README salvo blocker concreto.
+5. Per ogni repo leggi solo manifest/build/packaging, directory test, `.github/workflows` ed entrypoint/config direttamente necessari a capire come testarlo. Niente audit generale, history, issue o README salvo blocker concreto. Per `adb-device-keeper` applica invece il fast-path pre-verificato sopra finché la baseline resta valida.
 
 # Principio vincolante
 Un check va su GitHub Actions se è deterministico o stabilizzabile con fixture/mock e può girare senza dati personali, hardware fisico, account/sessioni reali, secret di produzione o infrastruttura live.
@@ -41,7 +41,7 @@ Copri quando applicabile:
 - Riusa task Gradle e test esistenti; una sola JDK/API coerente, niente matrix esplorative.
 - Per PersonalHub, tratta la Play preflight esistente come gate canonico per il variant Store: verifica soltanto che sia verde sul codice pertinente e copra bundle/lint/manifest. Il gate firmato con segreti + smoke AAB-derived sull'emulatore è già separato nel task locale `294731` e NON va duplicato qui.
 - PUBLIC: host gate PR+push; emulator smoke su push/main o manuale; instrumentation più pesante manuale/schedule solo se utile.
-- PRIVATE: host gate veloce automatico; emulator/instrumentation pesanti definiti comunque in Actions ma preferibilmente `workflow_dispatch` per contenere i minuti. Riusa un self-hosted repo-specific già sicuro se esiste; non creare runner general-purpose.
+- PRIVATE: anche qui tutto il testing sandboxabile deve essere definito in Actions; gate veloci automatici, job pesanti preferibilmente `workflow_dispatch` per contenere i minuti. Riusa un self-hosted repo-specific già sicuro se esiste; non creare runner general-purpose.
 - Pixel/TCL restano locali solo perché hardware fisico.
 
 ## Python / script / automazioni
