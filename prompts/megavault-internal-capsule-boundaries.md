@@ -1,55 +1,36 @@
-PROMPT_ID=805417 | project_id=23 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT
+PROMPT_ID=805417 | project_id=23 | model=GPT-5.5 | reasoning=low | MegaVault=FAST
 
 # Goal
-Rafforza i boundary interni di MegaVault eliminando il principale anti-pattern architetturale attuale (`import *` + re-export dinamico + monkey-patching tra `strict_tag_wrapper` e `megavault_core`) senza cambiare schema, dati o comportamento CLI. Blocca la regressione con un gate automatico.
+Sincronizza il checkout Fedora reale di MegaVault al refactor boundary già completato e verificato sul remoto, preservando byte-per-byte qualsiasi lavoro locale non pertinente, quindi esegui SOLO lo smoke read-only sul DB canonico locale che GitHub non può verificare.
 
 # Starting point autoritativo
-- repo: `/home/daniele/projects/MegaVault`, branch `master`, MegaVault project `23`;
-- baseline remota verificata: `a78d7b76e737a6e52103889e99575f75b1d9f309` o successiva;
-- `megavault.py` è il composition root e importa oggi `from ai.strict_tag_wrapper import *`;
-- `ai/strict_tag_wrapper.py` importa `ai.megavault_core as _core`, modifica attributi/funzioni su `_core`, re-esporta dinamicamente con loop + `globals()` e poi `globals().update(...)`;
-- moduli già separati esistenti: `ai/operational_indexes.py`, `ai/workflow_events.py`, `ai/reporting.py`;
-- `ai/megavault_core.py` resta il legacy core maggiore: NON fare un big-bang split solo per ridurre il numero di righe;
-- CI remota già esegue `python3 megavault.py validate` + unittest completi;
+- repo locale: `/home/daniele/projects/MegaVault`, branch `master`, project_id `23`;
+- il precedente tentativo `805417` non ha modificato nulla: si è fermato dopo un solo preflight perché il worktree era dirty su `ai/repository-retention-checklist.md`;
+- in quel run HEAD locale era `6ccea25e6fd1b8cfc46370520fbc00512d327800`;
+- il remoto ora contiene il refactor completo al commit minimo `ddf35223822359f6327ef5d6128ee2035bbea6e7`;
+- GitHub Actions `Validate MegaVault` run `35124387697` su `ddf3522...` è PASS: wildcard import, re-export dinamico e monkey-patching sono già rimossi; strict incident/tag policy è posseduta dal core; il gate architetturale, `megavault.py validate` e la suite unittest sono già verdi;
+- dal vecchio HEAD locale al remoto le modifiche versionate non includono `ai/repository-retention-checklist.md`; quindi quella modifica locale, se ancora presente, è attesa come lavoro utente non pertinente e NON è un blocker se resta disgiunta dai file aggiornati;
 - DB canonico locale: `/home/daniele/projects/MegaVault/megavault.sqlite`.
 
-Questo file è autosufficiente per il task: non leggere README/roadmap/spiegazioni/MEMORY/MEGAVAULT_PROTOCOL/GLOBAL_INDEX salvo blocker concreto. Non creare Markdown e non leggere repository esterni.
-
-# Target architetturale
-1. `megavault.py` deve importare e comporre API/dispatcher espliciti: niente wildcard import.
-2. Elimina da runtime code `globals().update(...)`/loop di re-export e l'assegnazione monkey-patch di funzioni su `megavault_core`.
-3. Sposta la logica incident/tag oggi nel wrapper in un modulo/capsule con ownership esplicita oppure integrala nel core tramite dipendenza/API esplicita; scegli la soluzione con meno churn e meno rischio.
-4. Mantieni `megavault_core.py` come legacy capsule temporanea se uno split ulteriore non porta beneficio concreto. Non trasformare il task in una riscrittura dell'intero CLI.
-5. Le API usate da test/moduli interni devono essere importate esplicitamente. Se serve compatibilità interna, crea un piccolo facade con `__all__` esplicito; niente namespace magici.
-6. Aggiungi un gate architetturale deterministico che fallisca almeno su wildcard import nel runtime MegaVault, re-export dinamici via `globals`, monkey-patching di funzioni tra moduli e logica non delegata nel root `megavault.py`.
-7. Collega il gate alla validazione/test esistente o alla CI già presente senza creare workflow duplicati.
+Prompt autosufficiente: non leggere README/roadmap/spiegazioni/MEMORY, non rieseguire audit, refactor, test suite o CI. Non modificare codice, DB o checklist.
 
 # Esecuzione minima
-1. Fotografia Git; se pulito esegui UNA sola sync: `timeout 20s git fetch origin master && git merge --ff-only origin/master`. Dirty non pertinente, fetch/merge fallisce o divergenza => `BLOCKED`, niente stash/rebase/retry.
-2. Leggi solo: `megavault.py`, `ai/strict_tag_wrapper.py`, le firme/dispatcher pertinenti di `ai/megavault_core.py`, `ai/operational_indexes.py`, `ai/workflow_events.py` e i test che importano i simboli toccati. Per `megavault_core.py` usa ricerca simboli/firme, non dump completo.
-3. Prima delle modifiche cattura in un solo comando bounded l'output/exit code di un set minimo read-only di CLI sul DB reale: `project-show 23`, `project-path --status 23`, più `--help` o un altro comando puro necessario a coprire il dispatch toccato. Salva solo output non sensibile.
-4. Applica il refactor boundary con il minimo numero di file. Nessuna modifica a `megavault.sqlite`, schema, migrations o dati.
-5. Aggiungi/aggiorna test di architettura e compatibilità import/dispatch.
-6. Esegui: gate architetturale, test mirati, `PYTHONDONTWRITEBYTECODE=1 python3 megavault.py validate`. Se PASS, esegui UNA sola suite unittest completa. Failure => leaf fix + riconferma leaf; non rilanciare la suite completa finché i leaf non passano.
-7. Ripeti UNA volta lo stesso smoke CLI read-only del punto 3 e confronta semanticamente exit code/identità/output rilevante.
-8. Commit/push una volta e verifica la CI finale. Se fallisce, apri solo il job/log fallito e correggi il failure domain relativo.
-9. Dopo tutti i PASS stop immediato: niente ulteriore audit architetturale o cleanup.
+1. In UN solo blocco bounded: verifica branch `master`, raccogli `HEAD`, dirty paths e presenza di merge/rebase; poi `timeout 20s git fetch origin master`. Merge/rebase attivo o fetch failure => `BLOCKED`.
+2. Calcola una sola volta i file versionati cambiati tra `HEAD` e `origin/master`. Il worktree dirty NON blocca automaticamente: blocca solo se un dirty path interseca quei file remoti o rende ambiguo/sicuro impossibile il fast-forward. Vietati stash, reset, checkout distruttivi o commit del lavoro utente.
+3. Prima della sync registra SHA-256 di `megavault.sqlite` e, se esiste/modificato, di `ai/repository-retention-checklist.md`. Esegui UNA sola `git merge --ff-only origin/master`. Deve risultare `HEAD == origin/master` e includere `ddf35223822359f6327ef5d6128ee2035bbea6e7`; altrimenti `BLOCKED` senza retry equivalente.
+4. Non rieseguire `validate`, unittest, gate architetturale o GitHub Actions: sono già PASS sul commit richiesto. Esegui soltanto questi smoke locali read-only sul DB reale:
+   - `PYTHONDONTWRITEBYTECODE=1 python3 megavault.py project-show 23` → exit 0 e `project_id=23`;
+   - `PYTHONDONTWRITEBYTECODE=1 python3 megavault.py project-path --status 23` → exit 0 e `LOCAL`.
+5. Ricalcola gli hash: `megavault.sqlite` deve essere identico; l'eventuale checklist locale deve essere identico byte-per-byte e restare non committato. Nessun altro readback o audit.
 
 # Acceptance
-PASS se:
-- `megavault.py` è composition root esplicito;
-- non restano wildcard import, re-export dinamici o monkey-patching nel percorso runtime toccato;
-- incident/tag handling ha ownership/API esplicita;
-- gate architetturale + test + `megavault.py validate` + CI finale PASS;
-- i CLI smoke sul DB canonico hanno comportamento equivalente;
-- schema e dati canonici non sono stati modificati dal refactor.
+PASS solo se il checkout locale è fast-forward a `origin/master` e include `ddf3522...`, qualunque dirty work non pertinente è stato preservato intatto, il DB canonico non è cambiato, entrambi gli smoke locali PASS e nessun gate remoto già verde è stato ripetuto.
 
 # Non-goal
-Niente split totale di `megavault_core.py`, redesign schema, migrazione DB, rinomina project_id, cambi Kuma/Telegram, cleanup Markdown, refactor reporting, audit repository esterni o ottimizzazioni non richieste.
+Niente modifica codice/schema/dati, migrate, validate, unittest, CI rerun, stash/reset, commit della checklist, MegaVault audit, altri repo o cleanup post-PASS.
 
 # Stop
 Dopo PASS esegui una sola volta:
 `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 805417 --confirm-executed`
 
-Non fare dry-run separati né controlli Git equivalenti dopo finalizzazione.
-Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 7 righe: `BOUNDARY`, `INCIDENT_API`, `GATE`, `VALIDATE`, `TESTS`, `CI`, `PUSH/BLOCKER`.
+Dopo `status=completed|already_completed` nessun altro comando. Output massimo 5 righe: `RESULT`, `SYNC`, `LOCAL_DIRTY_PRESERVED`, `DB_SMOKE`, `BLOCKER`.
