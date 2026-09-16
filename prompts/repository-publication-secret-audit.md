@@ -5,9 +5,12 @@
 # Goal
 Eseguire una sola campagna fail-closed che: (1) protegga subito i repo già pubblici ma classificati `PRIVATE`; (2) auditi history/tree/Actions dei repo pubblici o `PUBLIC_AFTER_AUDIT`; (3) applichi la visibility finale senza un secondo task; (4) produca un handoff compatto per la CI successiva.
 
-Sorgenti private uniche:
+Sorgenti/output privati autoritativi:
 - `/home/daniele/projects/MegaVault/ai/repository-public-private-matrix.md`
-- `/home/daniele/projects/MegaVault/ai/repository-publication-audit.md`
+- `/home/daniele/projects/MegaVault/ai/repository-publication-audit.json`
+- `/home/daniele/projects/MegaVault/ai/repository-ci-handoff.json`
+
+Usa JSON per report/handoff: non creare nuovi Markdown di report in MegaVault.
 
 # Scope
 - Leggi la matrice una volta e fai una sola inventory: `gh repo list gernalix --limit 200 --json name,visibility,isArchived,url,defaultBranchRef`.
@@ -35,8 +38,11 @@ Applica i cambi via `gh`/API con flag esplicito per le conseguenze della visibil
 
 Credential potenzialmente attivo => `rotate/revoke + history cleanup before republication`, mai valore. Non eseguire remediation distruttive o history rewrite in questo task.
 
+# Report audit JSON
+Scrivi `repository-publication-audit.json` con `schema_version: 1`, `generated_by_prompt_id: 940316`, `generated_at_utc`, conteggi finali e una entry per repo in scope con i soli campi necessari a preservare finding redatti, classificazione, remediation e applicazione visibility. Ordina per `name`. Nessun secret o contenuto raw.
+
 # Handoff CI — nessuna seconda inventory nel task successivo
-Crea `/home/daniele/projects/MegaVault/ai/repository-ci-handoff.json` con schema minimo:
+Crea `repository-ci-handoff.json` con:
 - `schema_version: 1`;
 - `generated_by_prompt_id: 940316`;
 - `generated_at_utc`;
@@ -45,10 +51,10 @@ Crea `/home/daniele/projects/MegaVault/ai/repository-ci-handoff.json` con schema
 L'handoff deve derivare esclusivamente dall'inventory finale e dalla classificazione appena completata; niente nuova discovery. Ordina per `name`. Non includere finding, path sensibili o dettagli che il task CI non usa.
 
 # Output privato / verifica
-Aggiorna matrice, audit e handoff JSON. `git diff --check` sui Markdown + parse JSON dell'handoff; un solo commit+push MegaVault. Niente README/source audit generale, scanner duplicati, retry identici o audit post-applicazione.
+Aggiorna matrice + i due JSON. `git diff --check` sulla matrice e parse JSON dei due output; un solo commit+push MegaVault. Niente README/source audit generale, scanner duplicati, retry identici o audit post-applicazione.
 
 # Acceptance
-Tutti i repo in scope classificati; history+tree coperti; nessun repo non pronto reso pubblico; baseline PRIVATE pubblici portati private oppure P0 esplicito; visibility finale verificata una volta; report/matrice redatti e pushati; handoff CI completo per tutti i repo esistenti non RETIRE.
+Tutti i repo in scope classificati; history+tree coperti; nessun repo non pronto reso pubblico; baseline PRIVATE pubblici portati private oppure P0 esplicito; visibility finale verificata una volta; matrice/report JSON redatti e pushati; handoff CI completo per tutti i repo esistenti non RETIRE.
 
 # Stop
 Dopo `AUDIT_APPLY_COMPLETE` o `AUDIT_APPLY_COMPLETE_WITH_BLOCKERS`:
