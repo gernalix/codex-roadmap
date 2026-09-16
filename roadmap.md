@@ -4,3 +4,4 @@
 4. [[prompts/fedora-runtime-validation|fedora-runtime-validation]]
 5. [[prompts/megavault-internal-capsule-boundaries|megavault-internal-capsule-boundaries]]
 6. [[prompts/retained-repositories-github-ci-completion|retained-repositories-github-ci-completion]]
+7. [[prompts/personalhub-play-release-local-validation|personalhub-play-release-local-validation]]
