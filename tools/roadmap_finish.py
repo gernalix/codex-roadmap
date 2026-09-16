@@ -14,6 +14,7 @@ MAX_PUSH_RACE_RETRIES = 3
 _RETRYABLE_PUSH_MARKERS = (
     "fetch first",
     "non-fast-forward",
+    "incorrect old value provided",
 )
 _FAILED_WORKTREE_RE = re.compile(r"isolated_worktree=([^\s]+)")
 
@@ -69,9 +70,9 @@ def finish(
 ) -> dict[str, str]:
     """Finalize one executed PASS task safely even when other tasks finish concurrently.
 
-    Identity races are handled by complete -> reconcile. A concurrent non-fast-forward
-    push is retried from fresh origin/main up to MAX_PUSH_RACE_RETRIES times. Auth,
-    network, policy and other push failures remain fail-closed and are never retried.
+    Identity races are handled by complete -> reconcile. A concurrent ref-advance push
+    is retried from fresh origin/main up to MAX_PUSH_RACE_RETRIES times. Auth, network,
+    policy and other push failures remain fail-closed and are never retried.
     """
     retries = 0
     while True:
