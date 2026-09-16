@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+import subprocess
 import sys
+import tempfile
+import threading
 import unittest
 
 TOOLS = Path(__file__).resolve().parents[1] / "tools"
@@ -12,6 +15,17 @@ spec = importlib.util.spec_from_file_location("roadmap_finish", MODULE)
 finish_module = importlib.util.module_from_spec(spec)
 assert spec and spec.loader
 spec.loader.exec_module(finish_module)
+
+
+def git(args: list[str], cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", *args],
+        cwd=cwd,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
 
 
 class RoadmapFinishTests(unittest.TestCase):
@@ -156,6 +170,102 @@ class RoadmapFinishTests(unittest.TestCase):
         with self.assertRaisesRegex(finish_module.RoadmapError, "non-fast-forward"):
             finish_module.finish(Path("/tmp/repo"), "123456", confirm_executed=True)
         self.assertEqual(finish_module.MAX_PUSH_RACE_RETRIES + 1, calls)
+
+    def test_real_concurrent_reconcile_pushes_both_complete(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            bare = root / "remote.git"
+            seed = root / "seed"
+            local_a = root / "local-a"
+            local_b = root / "local-b"
+
+            self.assertEqual(0, git(["init", "--bare", str(bare)]).returncode)
+            self.assertEqual(0, git(["clone", str(bare), str(seed)]).returncode)
+            git(["config", "user.email", "test@example.invalid"], seed)
+            git(["config", "user.name", "Test"], seed)
+            (seed / "prompts").mkdir()
+            (seed / "completed").mkdir()
+            names = (("first", "123456"), ("second", "654321"), ("third", "777777"))
+            (seed / "roadmap.md").write_text(
+                "".join(f"{idx}. [[prompts/{name}|{name}]]\n" for idx, (name, _) in enumerate(names, 1)),
+                encoding="utf-8",
+            )
+            (seed / "spiegazioni.md").write_text(
+                "| # | Prompt | Spiegazioni | Livello ragionamento | Tipo prompt |\n"
+                "|---|---|---|---|---|\n"
+                + "".join(
+                    f"| {idx} | [[prompts/{name}|{name}]] | {name} | low | Prompt |\n"
+                    for idx, (name, _) in enumerate(names, 1)
+                ),
+                encoding="utf-8",
+            )
+            for name, prompt_id in names:
+                (seed / "prompts" / f"{name}.md").write_text(
+                    f"PROMPT_ID={prompt_id} | reasoning=low\n",
+                    encoding="utf-8",
+                )
+            git(["add", "."], seed)
+            self.assertEqual(0, git(["commit", "-m", "seed"], seed).returncode)
+            self.assertEqual(0, git(["branch", "-M", "main"], seed).returncode)
+            self.assertEqual(0, git(["push", "-u", "origin", "main"], seed).returncode)
+
+            for local in (local_a, local_b):
+                self.assertEqual(0, git(["clone", "--branch", "main", str(bare), str(local)]).returncode)
+                git(["config", "user.email", "test@example.invalid"], local)
+                git(["config", "user.name", "Test"], local)
+
+            guard_globals = self.original_reconcile.__globals__
+            original_guard_run = guard_globals["run"]
+            first_push_barrier = threading.Barrier(2)
+            counter_lock = threading.Lock()
+            first_push_count = 0
+
+            def gated_run(repo: Path, *args: str, check: bool = True):
+                nonlocal first_push_count
+                should_wait = False
+                if args and args[0] == "push":
+                    with counter_lock:
+                        if first_push_count < 2:
+                            first_push_count += 1
+                            should_wait = True
+                if should_wait:
+                    first_push_barrier.wait(timeout=10)
+                return original_guard_run(repo, *args, check=check)
+
+            guard_globals["run"] = gated_run
+            results: dict[str, dict[str, str]] = {}
+            errors: list[BaseException] = []
+
+            def worker(label: str, repo: Path, prompt_id: str) -> None:
+                try:
+                    results[label] = finish_module.finish(repo, prompt_id, confirm_executed=True)
+                except BaseException as exc:  # captured for assertion in the main test thread
+                    errors.append(exc)
+
+            try:
+                threads = [
+                    threading.Thread(target=worker, args=("second", local_a, "654321")),
+                    threading.Thread(target=worker, args=("third", local_b, "777777")),
+                ]
+                for thread in threads:
+                    thread.start()
+                for thread in threads:
+                    thread.join(timeout=20)
+                self.assertTrue(all(not thread.is_alive() for thread in threads))
+            finally:
+                guard_globals["run"] = original_guard_run
+
+            self.assertEqual([], errors)
+            self.assertEqual({"second", "third"}, set(results))
+            self.assertTrue(any(int(result["push_race_retries"]) >= 1 for result in results.values()))
+
+            verify = root / "verify"
+            self.assertEqual(0, git(["clone", "--branch", "main", str(bare), str(verify)]).returncode)
+            self.assertTrue((verify / "prompts" / "first.md").is_file())
+            self.assertTrue((verify / "completed" / "second.md").is_file())
+            self.assertTrue((verify / "completed" / "third.md").is_file())
+            roadmap = (verify / "roadmap.md").read_text(encoding="utf-8")
+            self.assertEqual("1. [[prompts/first|first]]\n", roadmap)
 
 
 if __name__ == "__main__":
