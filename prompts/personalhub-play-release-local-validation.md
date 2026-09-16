@@ -1,70 +1,43 @@
 PROMPT_ID=294731 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST
 
 # Goal
-Valida sul Fedora reale la variante Google Play di PersonalHub già preparata e impacchettata sul remoto, produci UNA volta l'Android App Bundle firmato con i segreti canonici locali, ispeziona bundle/manifest/firma e installa l'artefatto derivato dall'AAB sull'emulatore Pixel_8a per uno smoke test bounded. Non caricare nulla su Play Console.
+Esegui SOLO la validazione locale finale della release Google Play di PersonalHub già preparata e verificata da remoto: crea una sola volta l'AAB firmato con i segreti canonici locali, ispezionalo e fai uno smoke bounded sull'AVD `Pixel_8a`. Nessun upload su Play Console.
 
-# Starting point autoritativo
-- repo canonico: `/home/daniele/projects/PersonalHub`, branch `main`, project_id `49`;
-- applicationId Play: `com.gernalix.personalhub`;
-- build type Play già definito: `play`, derivato da `release`, minified/shrunk e non debuggable;
-- commit remoto minimo con packaging Play CI: `4038b2dcc4bdae017e0f5d2f0cd144138d0edd2c` o successivo;
-- comando bundle canonico firmato locale: `./gradlew --no-configuration-cache :app:bundlePlay`;
-- directory segreti canonica: `/home/daniele/.config/codex/secrets/`;
-- signing: `/home/daniele/.config/codex/secrets/android_signing.env`;
-- Maps/Routes: `/home/daniele/.config/codex/secrets/map.env` (`MAP_API` o i nomi già supportati dal build); usa i valori reali locali per l'AAB firmato, senza stamparli;
-- non copiare secret nel repo, nei log, nell'output finale o in file temporanei non protetti;
-- il Play preflight remoto costruisce già un AAB minified/shrunk **senza signing secret**, usando placeholder Maps deliberatamente non validi ma non vuoti per preservare i code path durante R8/resource shrinking; esegue anche `lintPlay`, merged-manifest policy check e `tools/check_play_bundle.py`;
-- `tools/check_play_bundle.py` fallisce se l'AAB manca/non è leggibile, supera il ceiling preflight o introduce librerie native `.so` senza una verifica esplicita di compatibilità 16 KiB;
-- la build Play remota rimuove background location, `READ_CALL_LOG`, `READ_PHONE_STATE`, `SYSTEM_ALERT_WINDOW`, `USE_FULL_SCREEN_INTENT`, receiver call-overlay e geofence receiver; non reintrodurli;
-- privacy policy e release guide sono già nel repo e il link Privacy è già esposto nelle Settings;
-- il gate locale dipende solo dal Play Store preflight pertinente di PersonalHub: NON attendere né duplicare la campagna CI globale degli altri repository e NON rieseguire suite host già coperte da quel preflight;
-- usa l'AVD canonico `Pixel_8a`; non installare la variante Play sul Pixel fisico e non rischiare il database reale.
+# Gate già gestito fuori da Codex
+- repo: `/home/daniele/projects/PersonalHub`, branch `main`, project_id `49`;
+- HEAD remoto atteso: `bae45ddc5df93efa0e69af08b4943a43f5a73924`;
+- il Play Store preflight di questo HEAD deve essere già PASS prima di lanciare il prompt;
+- NON interrogare/rilanciare GitHub Actions e NON diagnosticare/fixare CI remoto;
+- se dopo un solo `git fetch origin main` `origin/main` non è esattamente l'HEAD atteso, `BLOCKED` e stop: serve una nuova verifica remota prima di consumare lavoro locale.
 
-Prompt autosufficiente: non leggere README/roadmap/spiegazioni/MEMORY/MegaVault, non fare audit repo-wide e non modificare codice salvo blocker locale che impedisca di validare l'artefatto già preparato.
+# Vincoli
+- Prompt autosufficiente: non leggere README/roadmap/spiegazioni/MEMORY/MegaVault e niente audit repo-wide.
+- Nessuna modifica al codice/repo in questo task. Un difetto prodotto rilevato => `BLOCKED`, riportalo senza investigazione estesa.
+- applicationId: `com.gernalix.personalhub`.
+- AAB: esegui esattamente una volta `./gradlew --no-configuration-cache :app:bundlePlay`.
+- signing: `/home/daniele/.config/codex/secrets/android_signing.env`; Maps/Routes: `/home/daniele/.config/codex/secrets/map.env`. Non stampare secret (`cat`, `env`, `set -x` vietati).
+- usa solo l'AVD canonico `Pixel_8a`; mai Pixel/TCL fisici. Helper canonico: `python3 tools/android_target_preflight.py start`.
 
 # Esecuzione minima
-1. Fotografia Git del solo checkout PersonalHub. Se pulito: UNA sync bounded `git fetch origin main && git merge --ff-only origin/main`; dirty non pertinente, fetch/merge fallisce o diverge => `BLOCKED`, stop. Niente stash/rebase/retry.
-2. Verifica che HEAD includa `4038b2d...` e che il **Play Store preflight** pertinente all'ultimo commit code-bearing sia verde. Se HEAD è più recente solo per documentazione/non-code, riusa quel PASS. Non rilanciare GitHub Actions e non rifare `lintPlay`, `processPlayMainManifest` o il bundle unsigned localmente.
-3. Verifica senza stampare valori:
-   - `/home/daniele/.config/codex/secrets/android_signing.env` esiste, è leggibile e contiene tutti gli `ANDROID_SHARED_*` richiesti;
-   - il keystore referenziato è file leggibile mode 0600;
-   - `/home/daniele/.config/codex/secrets/map.env` esiste, è leggibile e fornisce una chiave Maps/Routes accettata dal build.
-   Non fare `cat`, `env`, `set -x` o output che possa esporre valori.
-4. Costruisci UNA sola volta l'AAB firmato con i segreti canonici: `./gradlew --no-configuration-cache :app:bundlePlay`. Non fare bump di `version.txt` in questo task: usa il versionCode/versionName già presenti nell'HEAD remoto.
-5. Sul bundle prodotto, usando tooling Android/JDK già disponibile e preferendo il bundletool già presente nell'installazione/cache locale:
-   - verifica integrità/firma dell'AAB;
-   - registra solo fingerprint pubblico del certificato, SHA-256 del file, package, versionCode/versionName, min/target SDK;
-   - conferma dal manifest effettivo del bundle che NON compaiano `ACCESS_BACKGROUND_LOCATION`, `READ_CALL_LOG`, `READ_PHONE_STATE`, `SYSTEM_ALERT_WINDOW`, `USE_FULL_SCREEN_INTENT`, `com.supercontacts.app.CallStateReceiver`, `com.supercontacts.app.CallOverlayDebugReceiver`, `com.gernalix.luoghi.capsules.geofence.PlaceGeofenceReceiver`;
-   - conferma che `targetSdk >= 36`;
-   - se l'AAB contiene librerie native `.so`, `BLOCKED`: il preflight remoto dovrebbe averlo impedito e serve prima chiudere la compatibilità 16 KiB nel repo, non improvvisare qui.
-   Se manca soltanto bundletool e non esiste una copia ufficiale già presente nel toolchain/cache, scarica UNA versione ufficiale stabile in `/tmp` con checksum/source verificabile; non installarla globalmente.
-6. Avvia/riusa solo l'AVD `Pixel_8a`. Genera da QUELL'AAB un APK set per il device con bundletool, installalo sull'emulatore e non sul Pixel/TCL fisici. Nessuna seconda build Gradle.
-7. Smoke bounded sull'emulatore:
-   - package avvia senza crash;
-   - Home visibile;
-   - Settings si apre e mostra `Privacy policy`;
-   - apri People e Places una volta ciascuno e verifica che la variante Play non presenti richiesta call-log/phone/overlay/full-screen/background-location né crash da capability rimossa;
-   - apri una sola superficie Places che inizializza il client Maps/Places e verifica assenza di crash di configurazione; non fare richieste esplorative né stampare la chiave;
-   - non inserire dati personali reali e non testare sync contro endpoint di produzione.
-8. Conserva l'AAB verificato nel normale output Gradle e riporta path + SHA-256. Elimina solo APK set/temp bundletool creati in `/tmp`. Non caricare artifact su GitHub/Telegram/Play Console.
-9. PASS => stop immediato; niente benchmark, Pixel reale, audit dipendenze, test di altri moduli o build APK aggiuntive.
+1. In un unico preflight shell: verifica worktree pulito, fai un solo `git fetch origin main`, richiedi `origin/main == bae45ddc5df93efa0e69af08b4943a43f5a73924`, quindi `git merge --ff-only origin/main`. Dirty/divergenza/mismatch => `BLOCKED`, nessun retry/stash/rebase.
+2. In un unico controllo bounded verifica, senza mostrare valori: file dei segreti leggibili; tutti gli `ANDROID_SHARED_*` richiesti presenti/non vuoti; keystore referenziato leggibile e mode `0600`; una chiave Maps/Routes accettata dal build presente.
+3. Costruisci UNA sola volta l'AAB firmato col comando sopra. Nessun bump versione e nessuna seconda build Gradle.
+4. Sul solo AAB prodotto, riusa prima il tooling già nel repo/SDK/cache:
+   - `tools/check_play_bundle.py` deve PASS;
+   - verifica integrità/firma e registra SHA-256 + fingerprint pubblico del certificato;
+   - estrai package, versionCode/versionName, min/target SDK (`targetSdk >= 36`);
+   - dal manifest effettivo conferma assenza di `ACCESS_BACKGROUND_LOCATION`, `READ_CALL_LOG`, `READ_PHONE_STATE`, `SYSTEM_ALERT_WINDOW`, `USE_FULL_SCREEN_INTENT`, `com.supercontacts.app.CallStateReceiver`, `com.supercontacts.app.CallOverlayDebugReceiver`, `com.gernalix.luoghi.capsules.geofence.PlaceGeofenceReceiver`;
+   - qualsiasi `.so` => `BLOCKED` (serve verifica 16 KiB separata).
+   Se manca soltanto bundletool e non esiste nel toolchain/cache, scarica una sola release ufficiale stabile in `/tmp`; niente installazione globale.
+5. Avvia/riusa `Pixel_8a` con l'helper canonico. Da QUELL'AAB genera un solo APK set con bundletool per il seriale dell'emulatore e installalo lì; nessuna ricompilazione e nessun device fisico.
+6. Smoke bounded, senza dati personali/sync produzione: avvio senza crash; Home; Settings con `Privacy policy`; apri People e Places una volta; nessuna richiesta call-log/phone/overlay/full-screen/background-location; apri una sola superficie Places che inizializza Maps/Places e verifica assenza di crash di configurazione.
+7. Conserva l'AAB nel normale output Gradle; elimina solo APK set/temp bundletool in `/tmp`. PASS => stop immediato, senza benchmark, audit dipendenze, altri moduli o test aggiuntivi.
 
 # Acceptance
-PASS solo se:
-- checkout sincronizzato con `origin/main`, include il commit minimo e Play preflight remoto pertinente verde;
-- AAB `bundlePlay` costruito una sola volta con signing + Maps reali dalla directory segreti canonica e verificato;
-- package/version/SDK coerenti e policy surface proibita assente dal bundle effettivo;
-- nessuna libreria nativa non validata è presente;
-- AAB-derived APK set installato sull'emulatore Pixel_8a senza ricompilazione;
-- Home/Settings/People/Places smoke PASS, inizializzazione Maps non crasha e nessuna capability esclusa viene richiesta;
-- path AAB + SHA-256 + fingerprint pubblico del certificato sono riportati senza secret.
+PASS solo se AAB firmato e verificato, policy/SDK corretti, zero `.so`, APK set derivato dallo stesso AAB installato su `Pixel_8a`, smoke sopra PASS e output finale contiene path AAB + SHA-256 + fingerprint pubblico senza secret.
 
-# Non-goal
-Niente upload Play Console, store listing/Data safety/content rating, cambio Play App Signing, bump versione, nuove feature, refactor, lint/suite/bundle unsigned duplicati, Pixel/TCL fisici, APK Telegram o modifica MegaVault.
-
-# Stop
+# Finish/output
 Dopo PASS esegui una sola volta:
 `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 294731 --confirm-executed`
 
-Il finalizzatore è race-safe per push non-fast-forward concorrenti; niente dry-run separato né controlli Git equivalenti dopo `status=completed|already_completed`.
-Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 7 righe: `HEAD/CI`, `AAB`, `SHA256`, `SIGNING_CERT`, `MANIFEST`, `EMULATOR_SMOKE`, `BLOCKER`.
+Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 7 righe: `HEAD`, `AAB`, `SHA256`, `SIGNING_CERT`, `MANIFEST`, `EMULATOR_SMOKE`, `BLOCKER`.
