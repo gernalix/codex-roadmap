@@ -24,6 +24,9 @@ Per task già pre-localizzati il costo principale è spesso il numero di round-t
 - se lo starting point è dichiarato autoritativo, non leggere `~/.codex/memories/MEMORY.md`, README, roadmap, spiegazioni, MegaVault o altra memoria/documentazione aggiuntiva salvo un dato realmente mancante che blocchi l'esecuzione;
 - raggruppare in una sola tool-call i controlli read-only indipendenti compatibili (stato Git, simboli/file già noti, stato runtime), invece di fare una chiamata per ciascun controllo;
 - riusare output già ottenuti: niente rilettura di file invariati, retry identici o verifiche equivalenti dopo un PASS;
+- per log e journal partire dalla sorgente/produttore già identificato e da una finestra temporale stretta; evitare `journalctl -b`/dump globali senza `--since`/`--until`/`-n` salvo che l'evidenza mirata sia insufficiente. Un output già troncato o di migliaia di token è un segnale per restringere la query, non per ripeterla più ampia;
+- prima di creare watcher/script/service diagnostici persistenti, fare **un solo controllo mirato** per verificare se il progetto/runtime canonico possiede già un collector/watcher equivalente; riusarlo o estenderlo localmente invece di creare un duplicato. Validare privilegi e cattura dell'evento reale prima di abilitarlo stabilmente;
+- per watcher basati su snapshot/change detection, confrontare solo lo stato semantico stabile: timestamp/`observed_at` non devono rendere ogni campione artificialmente “diverso”;
 - usare direttamente il runner/test command indicato dal prompt; non sondare framework alternativi se il runner canonico è già noto;
 - non leggere test di riferimento o inventariare `tests/` quando il prompt indica già il file/test target; fallo solo se serve per una failure concreta o per una convenzione non specificata;
 - niente messaggi intermedi di avanzamento: tool-call dirette, testo intermedio solo per un blocker/decisione dell'utente, poi report finale conciso;
