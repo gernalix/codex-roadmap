@@ -34,7 +34,7 @@ Niente modifica soglie storage, cleanup Seagate, fix Kuma, refactor notifiche, u
 
 # Stop
 
-Dopo PASS:
-`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 427805 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 427805`
+Dopo PASS esegui una sola volta:
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 427805 --confirm-executed`
 
 Output massimo 5 righe: `RESULT`, `ROOT_CAUSE`, `FIX`, `REAL_TEST`, `PUSH/BLOCKER`.
