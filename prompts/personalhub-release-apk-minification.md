@@ -3,45 +3,44 @@
 `PROMPT_ID=684731 | project_id=49 | campaign_id=personalhub-20260916-usability-reliability | phase=5/5 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
 
 # Goal
-Esegui l'UNICA release finale della campagna PersonalHub: produci un APK `release` realmente shrunk, misurane la dimensione, verifica sul Pixel anche il Random Timer della fase 4/5 e consegna esattamente lo stesso artefatto. Evita qualsiasi build/install/delivery duplicato.
+Esegui l'UNICA release finale PersonalHub: valida il fix Random Timer già presente su `main`, produci un APK `release` realmente shrunk, installa e prova ESATTAMENTE quell'artefatto sul Pixel e consegnalo senza rebuild duplicati.
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`;
-- la fase 4/5 (`PROMPT_ID=232198`) deve essere già PASS prima di questa fase;
-- `app/build.gradle.kts`: `release` ha già `isMinifyEnabled = true`, `isShrinkResources = true` e `proguard-android-optimize.txt`; non reimplementare R8/ProGuard;
-- `app/proguard-rules.pro` esiste: modificalo solo in risposta a un errore release/smoke concreto;
-- `tools/android_pixel_apk.py` accetta `--metadata app/build/outputs/apk/release/output-metadata.json`;
-- `tools/deliver_personalhub_apk.py` accetta un path APK arbitrario;
-- baseline osservata dall'utente: APK ~146 MB, probabilmente debug/non shrunk. Se un debug già esiste, misuralo; non rebuildarlo solo per la baseline.
+- `origin/main` contiene `a0d1ba094681c192d9d96b25535b93ae628ae4cc` o successivo;
+- il fix Random Timer è già implementato remotamente: `expectedEndMs` resta autorevole, `TimedSessionSupport.syncScheduledAlarms()` include gli ID di `RandomTimerStore`, il restore boot/update riusa lo stesso scheduler e `TimeFenceTimerReceiver` chiude idempotentemente a `expectedEndMs`;
+- test regressivo già presente: `TimeFenceAlarmReconciliationTest.randomTimerRestoreSchedulesFutureDeadlineWithoutTimedTag`;
+- GitHub Actions `Architecture boundaries` su `a0d1ba...` è PASS;
+- `app/build.gradle.kts`: `release` ha già R8/resource shrinking; non reimplementare minificazione;
+- baseline utente APK ~146 MB, probabilmente debug/non shrunk;
+- helper canonici: `tools/android_pixel_apk.py` e `tools/deliver_personalhub_apk.py`.
 
-Niente discovery generale, README/roadmap/spiegazioni/MegaVault salvo blocker concreto.
+Niente audit repo-wide, README/roadmap/MegaVault o emulatori salvo blocker concreto.
 
 # Esecuzione minima
-1. `python3 tools/personalhub_task_lock.py acquire --prompt-id 684731`; failure => `BLOCKED`, niente attesa.
-2. Worktree pulito → `git fetch --prune origin && git pull --ff-only origin main`; registra la base. Non rebase/merge.
-3. Verifica una volta che la configurazione `release` sopra sia ancora presente. Se sì, non toccarla.
-4. Incrementa `version.txt` una sola volta secondo la convenzione esistente della release finale.
-5. Costruisci una sola release iniziale:
+1. `python3 tools/personalhub_task_lock.py acquire --prompt-id 684731`; failure => `BLOCKED`, stop. Rilascia sempre il lease.
+2. Worktree pulito → UNA `git fetch --prune origin` + `git merge --ff-only origin/main`. Se dirty non pertinente/divergente: `BLOCKED`.
+3. Verifica solo che `a0d1ba094681c192d9d96b25535b93ae628ae4cc` sia antenato di HEAD.
+4. Esegui UNA sola volta il test host mirato:
+   `./gradlew --quiet --console=plain :feature:multitimetracker:testDebugUnitTest --tests com.example.multitimetracker.TimeFenceAlarmReconciliationTest`
+   Se fallisce, correggi solo il leaf Random Timer indicato dal report e rilancia solo questo test. Niente suite generale.
+5. Incrementa `version.txt` una sola volta secondo convenzione esistente e costruisci UNA release iniziale:
    `./gradlew --no-configuration-cache --quiet --console=plain :app:assembleRelease`
-6. Risolvi l'APK da `app/build/outputs/apk/release/output-metadata.json`; registra byte/MiB e delta rispetto al debug esistente o alla baseline ~146 MB.
-7. Se la riduzione è materialmente evidente, usa quell'artefatto come `FINAL_APK`. Se resta sorprendentemente vicino alla baseline, usa UN solo analyzer locale già disponibile (`apkanalyzer`, `aapt` o equivalente) per trovare i componenti dominanti. Applica al massimo un fix evidente/localizzato/a basso rischio; solo in quel caso è ammessa UNA seconda build release, che sostituisce `FINAL_APK`. Se non esiste un fix sicuro, `FAIL` con massimo 3 cause dominanti: niente audit dipendenze generale.
-8. Installa ESATTAMENTE `FINAL_APK` sul Pixel con `python3 tools/android_pixel_apk.py install --metadata app/build/outputs/apk/release/output-metadata.json` (oppure il path finale se una seconda build controllata lo richiede). Nessun uninstall/clear.
-9. Sul Pixel fai solo questa QA finale: launch smoke + Random Timer breve (~1 min), app in background/swipata via senza force-stop, notifica entro tolleranza pratica <=5 s da `expectedEndMs`, tap → dialog corretto, reopen senza duplicato. Niente esplorazione UI generale.
-10. Se le istruzioni/helper canonici impongono ancora un APK debug come artefatto finale, cambia SOLO quei riferimenti necessari affinché le future release usino `release`; riusa gli helper esistenti, non crearne altri.
-11. Consegna lo STESSO `FINAL_APK` già testato:
-   `python3 tools/deliver_personalhub_apk.py "$FINAL_APK" --version "$(cat version.txt)" --telegram-title "PersonalHub APK"`
-12. Prima del commit/push fai UNA `git fetch origin`; se `origin/main` è avanzato dalla base => `BLOCKED`, niente rebase/merge/rerun. Altrimenti commit/push una volta. Rilascia sempre il lease.
+6. Risolvi `FINAL_APK` da `app/build/outputs/apk/release/output-metadata.json`; registra byte/MiB e delta rispetto al debug esistente o ~146 MB. Se la riduzione è evidente, non analizzare altro. Solo se resta sorprendentemente vicino alla baseline usa UN analyzer locale già disponibile e al massimo un fix evidente/localizzato + UNA seconda release.
+7. Installa ESATTAMENTE `FINAL_APK` sul Pixel senza uninstall/clear usando l'helper canonico.
+8. Fai una sola QA Random Timer reale che copra anche il restore: avvia un Random Timer breve, porta l'app fuori foreground/swipala via senza force-stop e riavvia il Pixel prima o intorno al deadline. Dopo boot il timer deve risultare chiuso a `expectedEndMs` e deve comparire una sola notifica `Quanto tempo è passato?`; tap → Timer/Now/dialog corretto; reopen non deve duplicare. Se il deadline cade mentre il device è spento, è valido il path overdue purché finalizzi/notifichi una sola volta dopo boot.
+9. Launch smoke minimo degli altri componenti solo quanto necessario a confermare che l'APK release si apre. Niente esplorazione UI generale.
+10. Consegna lo STESSO `FINAL_APK` già testato con `tools/deliver_personalhub_apk.py`; nessun rebuild dopo la QA.
+11. Prima del commit/push fai UNA `git fetch origin`; se `origin/main` è avanzato dalla base, `BLOCKED`, niente rebase/merge/rerun. Altrimenti commit/push una volta.
 
 # Acceptance
-PASS se: release build firmato riesce; R8/resource shrinking restano attivi; APK è materialmente più piccolo della baseline; lo stesso `FINAL_APK` viene installato, supera smoke + Random Timer sul Pixel e viene consegnato senza rebuild; la pipeline futura usa release anziché debug.
+PASS se test Random Timer mirato PASS, release shrunk è materialmente più piccola della baseline, lo stesso APK installato supera smoke + Random Timer con reboot/restore senza duplicati ed è lo stesso artefatto consegnato.
 
 # Non-goal
-Niente nuovo minifier/script di build, dependency upgrades, split APK/AAB/Play Store, refactor, cleanup, suite generale o seconda QA di feature già coperte.
+Niente nuovo scheduler/minifier, emulatori, dependency upgrade, suite generale, AAB/Play Store, refactor o QA non pertinente.
 
 # Stop
-Dopo PASS tecnico esegui una sola volta:
-`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 684731 --confirm-executed`
+Dopo PASS:
+`python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 684731 --dry-run && python3 ~/projects/codex-roadmap/tools/roadmap_guard.py --repo ~/projects/codex-roadmap complete --prompt-id 684731`
 
-Stop immediato dopo PASS/BLOCKED/FAIL; niente audit post-PASS.
-
-Prima riga output `RESULT=PASS|BLOCKED|FAIL`; massimo 6 righe includendo `APK_BEFORE`, `APK_RELEASE`, delta %, `PIXEL`, `DELIVERY/PUSH`.
+Stop immediato dopo PASS/BLOCKED/FAIL. Output massimo 7 righe: `RESULT`, `RANDOM_TIMER_TEST`, `APK_BEFORE`, `APK_RELEASE`, `PIXEL_RANDOM_TIMER`, `DELIVERY`, `PUSH/BLOCKER`.
