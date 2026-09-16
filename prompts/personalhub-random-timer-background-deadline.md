@@ -28,6 +28,9 @@ Correggi SOLO Random Timer affinché completi la sessione e notifichi al deadlin
 6. Se manca una capability notification/exact-alarm indispensabile, blocca lo start con azione esplicita per abilitarla; niente fallback che prometta exact ma arrivi tardi.
 7. Distribuzione random 1..max e segretezza target restano invariate. Niente nuove astrazioni generiche.
 
+# Preflight consumer obbligatorio prima di Gradle
+Se l'implementazione cambia firma/shape di un tipo, metodo, constructor, DAO o altra API Kotlin/Room consumata altrove, PRIMA del primo Gradle esegui una sola consumer-closure compatta con `python3 tools/android_consumer_preflight.py scan --symbol '<literal-esatto>'` ripetendo `--symbol` per ogni API cambiata. Il tool deve restituire solo path/moduli: apri e correggi tutti i consumer restituiti; niente `rg -n` repo-wide con alternanze generiche. Per simboli rimossi/rinominati richiedi poi `python3 tools/android_consumer_preflight.py gate --forbid '<vecchio-literal>'` PASS. Se il nome resta ma cambia la firma, riesegui `scan` sul nome esatto e verifica ogni consumer. Solo allora esegui il primo compile Gradle quiet del modulo consumer più alto interessato; un eventuale compile FAIL autorizza soltanto una correzione leaf guidata dall'errore, non nuova discovery generale.
+
 # Verification a costo controllato
 1. Host/unit mirati: identity, schedule/cancel, duplicate broadcast, overdue/future restore. Un failure => leggi il report mirato, correggi il leaf e riconferma solo ciò che è necessario.
 2. Se serve instrumentation usa SOLO `feature/multitimetracker/src/androidTest/java/com/example/multitimetracker/capsules/now/ui/RandomTimerDeadlineInstrumentedTest.kt`.
