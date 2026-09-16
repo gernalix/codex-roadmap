@@ -1,6 +1,6 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=286671 | project_id=8 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
+`PROMPT_ID=286671 | project_id=23 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
 
 # Goal
 Aggiungere/normalizzare CI GitHub Actions **solo** per:
