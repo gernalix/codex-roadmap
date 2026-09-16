@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+import sys
 import unittest
 
-MODULE = Path(__file__).resolve().parents[1] / "tools" / "roadmap_finish.py"
+TOOLS = Path(__file__).resolve().parents[1] / "tools"
+sys.path.insert(0, str(TOOLS))
+MODULE = TOOLS / "roadmap_finish.py"
 spec = importlib.util.spec_from_file_location("roadmap_finish", MODULE)
 finish_module = importlib.util.module_from_spec(spec)
 assert spec and spec.loader
