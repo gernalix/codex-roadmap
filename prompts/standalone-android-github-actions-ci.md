@@ -1,6 +1,6 @@
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]]
 
-`PROMPT_ID=195098 | project_id=51 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
+`PROMPT_ID=195098 | project_id=23 | model=GPT-5.5 | reasoning=low | MegaVault=FAST`
 
 # Goal
 CI minima per i soli Android standalone attivi:
