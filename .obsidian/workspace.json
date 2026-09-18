@@ -191,6 +191,10 @@
   },
   "active": "e82c697076a11c9c",
   "lastOpenFiles": [
+    "tools/__pycache__/safe_ff.cpython-314.pyc",
+    "prompts/workflowy-automation-local-activation.md",
+    "obsidian/Prompts/330522 workflowy-automation-local-activation.md",
+    "mutations/applied/chatgpt-workflowy-automation-local-activation-330522.json",
     "obsidian/Prompts/978216 prompt-978216.md",
     "obsidian/Prompts/953204 prompt-953204.md",
     "obsidian/Prompts/947261 prompt-947261.md",
@@ -214,9 +218,6 @@
     "obsidian/Prompts/842731 prompt-842731.md",
     "obsidian/Prompts/842617 prompt-842617.md",
     "obsidian/Prompts/838979 prompt-838979.md",
-    "obsidian/Prompts/835917 prompt-835917.md",
-    "obsidian/Prompts/835204 prompt-835204.md",
-    "obsidian/Prompts/827614 prompt-827614.md",
     "tools/__pycache__/roadmap_result.cpython-314.pyc.139725188769968",
     "tools/__pycache__/roadmap_result.cpython-314.pyc",
     "roadmap.sqlite-journal",
@@ -225,7 +226,6 @@
     "mutations/applied/chatgpt-rerender-wikilink-table-fix-20260918.json",
     "mutations/applied/chatgpt-roadmap-global-optimization-20260918.json",
     "mutations/applied/chatgpt-oracle-backup-antiflap-219473.json",
-    "mutations/applied/supersede-legacy-sqlite-migration.json",
-    "mutations/applied/regenerate-sqlite-projections-v1.json"
+    "mutations/applied/supersede-legacy-sqlite-migration.json"
   ]
 }
