@@ -16,9 +16,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../completed/codex-usage-publisher-append-fastpath-runtime|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-18T22:45:09Z
+- **Ultimo lancio:** 2026-09-18T22:45:09Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** sì (2 interventi)
 - **Fix:** —
@@ -36,7 +36,7 @@ Installa sul PC l’ottimizzazione che evita di rileggere tutte le vecchie sessi
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-18T22:45:09Z | 2026-09-18T22:46:50Z | PASS | 100.888 | gpt-5.6-luna | low | 12 | 38579 |
 
 ## Analisi ChatGPT
 
