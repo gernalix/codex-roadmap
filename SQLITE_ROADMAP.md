@@ -27,7 +27,9 @@ Il risultato immediato viene registrato da:
 python3 tools/roadmap_result.py --repo . --prompt-id 123456 --result PASS --confirm-executed
 ```
 
-`roadmap_finish.py` resta compatibile ed equivale a `PASS`.
+`roadmap_finish.py` resta compatibile ed equivale a `PASS`. Questo aggiornamento immediato modifica stato/audit ma **non** inventa una seconda esecuzione: le righe di `executions` vengono alimentate dai dati reali di `codex-usage`, evitando doppi conteggi.
+
+Prima dell'import ogni prompt attivo deve avere una fingerprint della propria materializzazione. Se un vecchio `PROMPT_ID` ricompare con testo diverso, il sistema registra una collisione e non sovrascrive automaticamente lo stato del prompt corrente.
 
 Sul Fedora reale, `codex-roadmap-sync.timer` riconcilia periodicamente `~/projects/codex-usage/prompts/*/metrics.json`. È la fonte per timestamp e metriche reali e permette il backfill storico. Importa solo metadati; non copia prompt completi, risposte finali o path raw delle sessioni nel repository pubblico.
 
