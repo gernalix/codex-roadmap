@@ -47,9 +47,9 @@ Le strutture storiche `analyses` e `analysis_code_changes` restano nel DB per co
 
 `roadmap.sqlite` è l'unica fonte autorevole dei metadati. `roadmap.md`, `spiegazioni.md`, `prompt-registry.md` e `obsidian/` sono generate.
 
-ChatGPT, Codex e il sync `codex-usage` inviano richieste strutturate in `mutations/inbox/`. Il workflow GitHub Actions le applica serialmente, in transazione, rigenera le viste e aggiorna `main`.
+ChatGPT, Codex e il sync `codex-usage` inviano richieste come **GitHub Issues** con titolo `[roadmap-mutation] <request_key>` e body JSON immutabile. Il workflow GitHub Actions le applica serialmente, materializza eventuali nuovi prompt, rigenera le viste, aggiorna `main` e chiude la Issue.
 
-Le CLI di mutazione diretta del DB sono solo manutenzione eccezionale.
+I client non committano più file di inbox, prompt, DB o viste. Le directory `mutations/inbox/` e `mutations/applied/` restano solo come storico del trasporto precedente. Le CLI di mutazione diretta del DB sono solo manutenzione eccezionale.
 
 Dettagli tecnici: [[SQLITE_ROADMAP|Roadmap SQLite]].
 
