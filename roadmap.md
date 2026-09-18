@@ -3,8 +3,8 @@
 > Generato da `roadmap.sqlite`. Non modificare manualmente.
 
 1. [[prompts/roadmap-ph-single-writer-full-local-activation|roadmap-ph-single-writer-full-local-activation]]
-2. [[prompts/codex-usage-publisher-attribution-fastpath-followup|codex-usage-publisher-attribution-fastpath-followup]]
-3. [[prompts/personalhub-100-capsule-isolation-local-validation-v2|personalhub-100-capsule-isolation-local-validation-v2]]
+2. [[prompts/personalhub-100-capsule-isolation-local-validation-v2|personalhub-100-capsule-isolation-local-validation-v2]]
+3. [[prompts/codex-usage-publisher-attribution-fastpath-runtime-fix|codex-usage-publisher-attribution-fastpath-runtime-fix]]
 4. [[prompts/oracle-backup-notification-antiflap-runtime|oracle-backup-notification-antiflap-runtime]]
 5. [[prompts/workflowy-importer-live-smoke-secret-file|workflowy-importer-live-smoke-secret-file]]
 6. [[prompts/datasette5-personalhub-explorer-security-deploy|datasette5-personalhub-explorer-security-deploy]]

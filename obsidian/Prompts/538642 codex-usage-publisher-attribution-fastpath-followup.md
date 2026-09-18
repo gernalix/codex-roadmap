@@ -1,6 +1,6 @@
 ---
 prompt_id: 538642
-status: pending
+status: blocked
 project_id: 8
 model: GPT-5.6 Luna
 reasoning: low
@@ -8,25 +8,25 @@ tags:
   - project/fedora
   - roadmap
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/blocked
   - roadmap/project/fedora
 ---
 
 # 538642 · Velocizzare e correggere il salvataggio dei dati Codex
 
-- **Stato:** pending
+- **Stato:** blocked
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/codex-usage-publisher-attribution-fastpath-followup|Apri prompt]]
+- **Prompt:** [[../../falliti/codex-usage-publisher-attribution-fastpath-followup|Apri prompt]]
 - **Primo lancio:** 2026-09-18T18:37:02Z
 - **Ultimo lancio:** 2026-09-18T18:37:02Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
-- **Codice modificato da ChatGPT:** no (0 interventi)
-- **Fix:** —
+- **Analizzato da ChatGPT:** sì
+- **Codice modificato da ChatGPT:** sì (1 interventi)
+- **Fix:** 371237
 - **Dipende da:** [[813383 codex-roadmap-sqlite-runtime-backfill|813383]]
-- **Sblocca:** [[219473 oracle-backup-notification-antiflap-runtime|219473]], [[445388 logseq-updates-pat-safety-closure|445388]], [[527184 datasette5-personalhub-explorer-security-deploy|527184]], [[617205 personalhub-shared-alerts-places-tags-validation|617205]], [[690049 fedora-runtime-validation|690049]], [[693572 workflowy-importer-live-smoke-secret-file|693572]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[319311 prompt-319311|319311]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237]]
 - **Chat Codex:** Nuova chat (non riusare 319311)
 
 ## Spiegazione
@@ -41,8 +41,8 @@ Installa sul PC la correzione già pronta del salvataggio Codex e verifica che i
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-18T21:02:10Z · colli di bottiglia: sì · fix: 371237 · Run efficiente (17.788 s, 1 tool-call). Root cause: il parser costi cercava due backslash prima dell'underscore invece di uno; nessun collo di bottiglia operativo rilevante. Fix remoto applicato e follow-up limitato al deploy/verifica Fedora.
 
 ## Modifiche di codice ChatGPT
 
-- Nessuna modifica di codice registrata.
+- 2026-09-18T21:02:10Z · `gernalix/codex-usage-monitor` · fix · commit `464fc49bced4499669758bcbb9ad78a6ebb057f7` · Corretto il riconoscimento di PROMPT\_ID nel parser dei costi sostituendo la normalizzazione del doppio backslash con quella del singolo backslash Markdown-escaped.

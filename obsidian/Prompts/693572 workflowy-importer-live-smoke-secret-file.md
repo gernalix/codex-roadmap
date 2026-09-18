@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[538642 codex-usage-publisher-attribution-fastpath-followup|538642]]
+- **Dipende da:** [[371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237]]
 - **Sblocca:** [[330522 workflowy-automation-local-activation|330522]]
 - **Padri/precedenti:** [[746193 workflowy-importer-local-live-validation|746193]]
 - **Figli/follow-up:** [[330522 workflowy-automation-local-activation|330522]]
