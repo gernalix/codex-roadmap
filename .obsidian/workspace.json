@@ -191,6 +191,7 @@
   },
   "active": "e82c697076a11c9c",
   "lastOpenFiles": [
+    "mutations/applied/chatgpt-rerender-wikilink-table-fix-20260918.json",
     "mutations/applied/chatgpt-roadmap-global-optimization-20260918.json",
     "prompts/oracle-backup-notification-antiflap-runtime.md",
     "obsidian/Prompts/219473 oracle-backup-notification-antiflap-runtime.md",
@@ -212,7 +213,6 @@
     "tests/test_apply_mutations.py",
     "seed/initial-roadmap.json",
     "seed",
-    "roadmap.sqlite",
     "prompts/workflowy-importer-live-smoke-secret-file.md",
     "prompts/codex-roadmap-sqlite-runtime-backfill.md",
     "prompt-registry.md",
