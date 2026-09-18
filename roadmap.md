@@ -17,6 +17,6 @@
 13. [[prompts/personalhub-obsidian-archive-projections-v2|personalhub-obsidian-archive-projections-v2]]
 14. [[prompts/personalhub-git-history-data-sync-validation-v2|personalhub-git-history-data-sync-validation-v2]]
 15. [[prompts/personalhub-datasette-lite-offline-runtime-v2|personalhub-datasette-lite-offline-runtime-v2]]
-16. [[prompts/fedora-runtime-validation|fedora-runtime-validation]]
-17. [[prompts/personalhub-play-release-local-validation-v2|personalhub-play-release-local-validation-v2]]
+16. [[prompts/personalhub-play-release-local-validation-v2|personalhub-play-release-local-validation-v2]]
+17. [[prompts/fedora-runtime-validation|fedora-runtime-validation]]
 18. [[prompts/logseq-updates-pat-safety-closure|logseq-updates-pat-safety-closure]]
