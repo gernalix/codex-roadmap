@@ -15,9 +15,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../falliti/codex-usage-publisher-attribution-fastpath-runtime-fix|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-18T21:32:25Z
+- **Ultimo lancio:** 2026-09-18T21:32:25Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Installa sul PC la correzione che fa riconoscere correttamente gli ID dei prompt
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-18T21:32:25Z | 2026-09-18T21:33:10Z | BLOCKED | 45.752 | gpt-5.6-luna | low | 5 | 38539 |
 
 ## Analisi ChatGPT
 
