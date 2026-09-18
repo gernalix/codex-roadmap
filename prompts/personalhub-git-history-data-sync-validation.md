@@ -5,7 +5,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
 
 # Starting point autoritativo
 - repo: /home/daniele/projects/PersonalHub, branch canonico main;
-- baseline Git History/Data già implementata: 45f9c0d380da8bf7d6b1b2419cbb1d1f4f7c3666 deve essere antenata di RUN_HEAD; commit successivi non correlati (es. Salute CI) vanno preservati;
+- baseline Git History/Data già implementata: 0efd93ed547ac8dad9d8de69083e572367800aec deve essere antenata di RUN_HEAD; commit successivi non correlati (es. Salute CI) vanno preservati;
 - version.txt resta 48: NON fare bump, NON installare il package reale sul Pixel, NON inviare APK; la release resta nel task PH successivo;
 - file/boundary già noti: core/database/.../capsules/gitdata/*, DeclarativeMigrations.kt, DatabaseVault.kt, DatabaseGate.kt, PersonalHubDatabase.kt, HubActivityCapture.kt, feature/multitimetracker/.../SnapshotSqlite.kt, app/.../capsules/settings/{HubSettings,GitHistorySettings}.kt, MainActivity.kt, docs/GIT_DATA_HISTORY.md;
 - SQLite resta source of truth runtime; Git è solo history/transport; Git OFF è il default; la configurazione Git deve accettare solo repository GitHub PRIVATI e scrivibili;
@@ -23,6 +23,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
    - Git ON: tracking installato, legacy HubActivityCapture rimosso; OFF lo reinstalla.
    - una transazione domain INSERT/UPDATE/DELETE genera event atomico con before/after, author, source, reason/group; rollback non genera history.
    - tutte le write della stessa outer SQLite transaction ricevono automaticamente lo stesso group_id; write fuori transazione restano eventi singoli; context espliciti remote_patch/history_revert prevalgono senza contaminare la transazione successiva.
+   - fault injection sul cleanup del context storico: la outer transaction deve sempre chiudersi/sbloccare; nessun context autore/source può contaminare la transazione seguente e l’esito commit/rollback deve restare non ambiguo.
    - snapshot/snapshot_history/snapshot_payloads e altri technical churn restano sincronizzabili nello state ma NON generano semantic history payload enormi.
    - push debounce 60 s, recovery persistente/offline e ack revision-safe: un edit committato non può sparire prima del push confermato.
    - JSONL deterministico + sharding 1/8/32/128; una modifica limitata non richiede upload di shard invariati.
@@ -35,6 +36,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
    - pull/sync NON applica patch remote: deve solo verificarle e pubblicare gli id pending per review; solo azione esplicita dopo preview può applicare una patch.
    - logical edit group revert: reverse order, atomicità, optimistic stale check e foreign_key_check; il revert genera nuova history; preview closure prova davvero l’inverso su copia e segnala safe/blocked.
    - full restore v1 e v2 sharded: staging, object hash, schema compatibility, declarative/remote migration consentita solo entro schema supportato dall'APK, quick_check/FK, atomic replacement e rollback su failure; restore deve poter risolvere anche un ref arbitrario più vecchio delle revisioni recenti mostrate.
+   - Time Machine globale: oltre alla lista recente, ref arbitrario e jump per data `YYYY-MM-DD` devono risolvere la revisione più recente entro fine giornata senza alterare il DB finché l’utente non conferma restore.
    - Timer: con Git ON writeSnapshot non cresce snapshot_history; loadAsOf usa Git per date coperte e fallback locale pre-Git.
    - Temporal Search PH: con Git ON include una sezione non selezionabile degli edit Git nello stesso intervallo di Places/Timer/Soldi/Substances/WordPulse/People; con Git OFF non aggiunge tale sezione.
 4. Verifica UI Compose mirata: checkbox Git OFF di default; se attivata senza config apre richiesta repo HTTPS + token; repo pubblico viene rifiutato e repo privato scrivibile accettato; Settings espone History/Time Machine; Home Registro usa Git History solo quando enabled; attention mostra force push; restore globale richiede conferma; deep restore per commit/tag/branch funziona; semantic diff, revert preview, patch pending verificata è visibile ma non auto-applicata; patch sandbox/cherry-pick e discard proposta sono accessibili; nessun token appare in state/log/db.
