@@ -1,0 +1,27 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "reorder",
+      "prompt_id": "243871",
+      "queue_position": 16,
+      "actor": "chatgpt",
+      "note": "Keep PH Play validation immediately after its PH dependency chain."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "690049",
+      "queue_position": 17,
+      "actor": "chatgpt",
+      "note": "Move independent Fedora monitor validation after PH Play validation in display order."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "445388",
+      "queue_position": 18,
+      "actor": "chatgpt",
+      "note": "Keep Logseq closure at end of current queue."
+    }
+  ]
+}
