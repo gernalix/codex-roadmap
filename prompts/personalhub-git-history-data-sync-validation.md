@@ -5,7 +5,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
 
 # Starting point autoritativo
 - repo: /home/daniele/projects/PersonalHub, branch canonico main;
-- baseline Git History/Data già implementata: ed18f0c28404fc6bbf0855f51d38a4c4937bd265 deve essere antenata di RUN_HEAD; commit successivi non correlati (es. Salute CI) vanno preservati;
+- baseline Git History/Data già implementata: 825d7926daaaafde41fdff805bc8e437cf4534a8 deve essere antenata di RUN_HEAD; commit successivi non correlati (es. Salute CI) vanno preservati;
 - version.txt resta 48: NON fare bump, NON installare il package reale sul Pixel, NON inviare APK; la release resta nel task PH successivo;
 - file/boundary già noti: core/database/.../capsules/gitdata/*, DeclarativeMigrations.kt, DatabaseVault.kt, DatabaseGate.kt, PersonalHubDatabase.kt, HubActivityCapture.kt, feature/multitimetracker/.../SnapshotSqlite.kt, app/.../capsules/settings/{HubSettings,GitHistorySettings}.kt, MainActivity.kt, docs/GIT_DATA_HISTORY.md;
 - SQLite resta source of truth runtime; Git è solo history/transport; Git OFF è il default; la configurazione Git deve accettare solo repository GitHub PRIVATI e scrivibili;
@@ -31,10 +31,11 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
    - local history index ricostruibile da Git; filtri/blame/stats/time window non leggono/replayano tutta Git history a ogni schermata.
    - anomaly gate: batch distruttivo resta locale/attention finché non viene esplicitamente force-pushato.
    - patch remote: hash + minimum_app_version + optimistic expect + FK; author/source provenance corretta; idempotenza; cherry-pick da ref senza Git merge; preview sandbox deve produrre conteggi +/~/- e tabelle senza mutare il DB live.
+   - pull/sync NON applica patch remote: deve solo verificarle e pubblicare gli id pending per review; solo azione esplicita dopo preview può applicare una patch.
    - logical edit group revert: reverse order, atomicità, optimistic stale check e foreign_key_check; il revert genera nuova history; preview closure prova davvero l’inverso su copia e segnala safe/blocked.
    - full restore v1 e v2 sharded: staging, object hash, schema compatibility, declarative/remote migration consentita solo entro schema supportato dall'APK, quick_check/FK, atomic replacement e rollback su failure; restore deve poter risolvere anche un ref arbitrario più vecchio delle revisioni recenti mostrate.
    - Timer: con Git ON writeSnapshot non cresce snapshot_history; loadAsOf usa Git per date coperte e fallback locale pre-Git.
-4. Verifica UI Compose mirata: checkbox Git OFF di default; se attivata senza config apre richiesta repo HTTPS + token; repo pubblico viene rifiutato e repo privato scrivibile accettato; Settings espone History/Time Machine; Home Registro usa Git History solo quando enabled; attention mostra force push; restore globale richiede conferma; deep restore per commit/tag/branch funziona; semantic diff, revert preview, patch sandbox e discard proposta sono accessibili; nessun token appare in state/log/db.
+4. Verifica UI Compose mirata: checkbox Git OFF di default; se attivata senza config apre richiesta repo HTTPS + token; repo pubblico viene rifiutato e repo privato scrivibile accettato; Settings espone History/Time Machine; Home Registro usa Git History solo quando enabled; attention mostra force push; restore globale richiede conferma; deep restore per commit/tag/branch funziona; semantic diff, revert preview, patch pending verificata è visibile ma non auto-applicata; patch sandbox/cherry-pick e discard proposta sono accessibili; nessun token appare in state/log/db.
 5. Verifica storage/performance con test sintetico bounded: almeno una tabella >500 righe e una >5k per shard policy, un BLOB ripetuto, almeno 1.000 history event. Richiedi che le normali letture Home/moduli non invochino Git e che nessun full DB binary venga committato. Aggiungi un fixture schema N→N+1 senza migration packaged e verifica che, con Git configurato, la chain remota migri SOLO staging e che con Git OFF fallisca chiuso senza rete/dati persi.
 6. Gate host finale UNA volta dopo i leaf PASS: test core/database + app/Timer pertinenti, compile debug e checkArchitectureBoundaries. Non eseguire audit/refactor/cleanup estranei.
 7. QA solo AVD canonico Pixel_8a tramite tools/android_emulator_control.py start|wait|stop. Usa dati sintetici/QA, non dati reali:
@@ -52,7 +53,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
 9. Push main solo per fix/test necessari emersi dai gate. Niente branch persistenti. Rilascia task lock in ogni esito. PASS => stop.
 
 # Acceptance
-PASS solo se compile + test mirati + architecture gate + AVD QA sono PASS; Git resta interamente opzionale; repository pubblico è rifiutato; history non duplica technical churn; provenance/undo+preview/restore profondo/diff semantico/sharding/BLOB/signature/patch sandbox+cherry-pick+discard/migration packaged+remote fallback/anomaly/Timer fallback sono verificati; nessun dato reale o credential finisce in Git/log; version.txt resta 48.
+PASS solo se compile + test mirati + architecture gate + AVD QA sono PASS; Git resta interamente opzionale; repository pubblico è rifiutato; history non duplica technical churn; provenance/undo+preview/restore profondo/diff semantico/sharding/BLOB/signature/pull-review-only+patch sandbox+cherry-pick+discard/migration packaged+remote fallback/anomaly/Timer fallback sono verificati; nessun dato reale o credential finisce in Git/log; version.txt resta 48.
 
 # Non-goal
 Niente Data Explorer/Datasette Lite, redesign moduli, nuovo backend, repository dati reale, migrazione distruttiva dello storico Timer pre-Git, cancellazione automatica di history legacy, bump/release/install Pixel/delivery, refactor generale o audit.
