@@ -60,7 +60,7 @@ Formato:
 }
 ```
 
-Operazioni supportate: `analysis`, `code_change`, `status`, `relation`, `dependency`, `tag`, `execution`, `register`. `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
+Operazioni supportate: `analysis`, `code_change`, `status`, `relation`, `dependency`, `dependency_replace`, `tag`, `execution`, `register`. `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
 
 ## Proiezioni generate
 
