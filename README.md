@@ -94,10 +94,11 @@ Ogni file in `prompts/` deve essere autosufficiente e contenere solo ciò che se
 - starting point autoritativo e workdir;
 - scope/non-goal;
 - test/verifiche proporzionati al rischio;
-- recovery minimo dai failure;
+- recovery autonomo dai failure;
+- libertà esplicita di modificare qualunque codice/test/config in-scope necessario al goal;
 - comandi terminali PASS/BLOCKED/FAIL.
 
-Non copiare interi protocolli globali dentro ogni prompt. Includere solo le regole realmente applicabili al task. Se starting point/path/helper/test sono già noti, vietare rediscovery generale.
+Non copiare interi protocolli globali dentro ogni prompt. Includere solo le regole realmente applicabili al task. Se starting point/path/helper/test sono già noti, evitare rediscovery generale **finché l'evidenza non smentisce lo starting point**. In quel caso Codex ha autonomia per fare discovery mirata e correggere codice/test/config adiacenti necessari allo stesso goal. I passi del prompt sono un piano iniziale, non una whitelist.
 
 Non usare **overlay di precedenza** del tipo “questa sezione prevale sulle istruzioni successive” per rattoppare un prompt già materializzato: aumenta token e ambiguità. Se una policy cambia in modo da rendere incoerente un prompt pendente, creare una nuova materializzazione completa e coerente con nuovo PROMPT_ID, collegarla al padre e supersedere/cancellare la vecchia. Non correggere in-place il testo di un PROMPT_ID già materializzato.
 
@@ -125,6 +126,8 @@ Prima di aumentare il modello/reasoning, ridurre scope, discovery, output e roun
 Apri il primo task lanciabile, imposta modello/reasoning e incolla **solo il file prompt**. Non inviare meta-prompt e non far rileggere roadmap/README/MegaVault se il prompt contiene già lo starting point necessario.
 
 Default: un task per sessione; stesso thread solo per una continuazione diretta che riusa davvero contesto utile.
+
+Durante il task, un failure locale correggibile non deve trasformarsi in un nuovo prompt: Codex deve correggerlo e continuare. BLOCKED/FAIL sono terminali solo per blocker esterni/safety o recovery realmente esaurito.
 
 Dopo PASS: finalizzazione e stop immediato.
 
