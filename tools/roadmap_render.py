@@ -89,8 +89,8 @@ def render(repo: Path) -> list[str]:
         "",
         "> Generato da `roadmap.sqlite`. Le spiegazioni sono volutamente non tecniche.",
         "",
-        "| # | Prompt | PROMPT_ID | Stato | Lanciato | Esito | Analizzato | Fix | Progetto | Chat Codex | Dipendenze | Spiegazione | Modello | Reasoning |",
-        "| --: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| # | Prompt | PROMPT_ID | Stato | Lanciato | Esito | Analizzato | Fix | Progetto | Chat Codex | Dipendenze | Spiegazione | Modello | Reasoning | Tipo prompt |",
+        "| --: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for i, r in enumerate(pending, 1):
         deps = conn.execute(
@@ -108,11 +108,11 @@ def render(repo: Path) -> list[str]:
                 f"[[{r['current_path'][:-3]}|{r['title']}]]" if r["current_path"].endswith(".md") else _wikilink_for_prompt(r),
                 r["prompt_id"], r["status"], _fmt(r["last_launched_at"]), _fmt(r["last_outcome"]),
                 "sì" if r["analyzed"] else "no", fix, _fmt(r["project_name"] or r["project_id"]),
-                _fmt(r["chat_guidance"]), dep_text, _fmt(r["explanation"]), _fmt(r["model"]), _fmt(r["reasoning"])
+                _fmt(r["chat_guidance"]), dep_text, _fmt(r["explanation"]), _fmt(r["model"]), _fmt(r["reasoning"]), _fmt(r["prompt_type"])
             ]) + " |"
         )
     if not pending:
-        spieg.append("| — | — | — | — | — | — | — | — | — | — | — | Nessun prompt pendente | — | — |")
+        spieg.append("| — | — | — | — | — | — | — | — | — | — | — | Nessun prompt pendente | — | — | — |")
     spieg.append("")
     (repo/"spiegazioni.md").write_text("\n".join(spieg), encoding="utf-8")
 
