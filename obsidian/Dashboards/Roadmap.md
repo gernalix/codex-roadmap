@@ -4,7 +4,7 @@
 
 ## Lanciabili adesso
 
-- [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill|813383 · Attivare il tracciamento SQLite della roadmap]]
+- [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup|538642 · Velocizzare e correggere il salvataggio dei dati Codex]]
 
 ## In esecuzione
 
