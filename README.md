@@ -41,12 +41,12 @@ Tipi:
 - **Goal**: usalo solo quando la persistenza multi-turn è concretamente utile al risultato (per esempio campagne seriali lunghe multi-repo o verifiche che devono proseguire attraverso continuazioni). Complessità o rischio, da soli, non giustificano Goal.
 
 ### Modello/reasoning
-- GPT-5.5 `low`: gate deterministici, test/build/ADB mirati e task localizzati con implementazione ovvia.
-- GPT-5.5 `medium`: **default per lavoro non banale**, inclusi debugging runtime, lifecycle, migrazioni/schema già pre-localizzati e audit guidati da scanner/test deterministici.
-- GPT-5.6 Sol `medium`: solo quando rimane vera ambiguità progettuale/architetturale, rischio dati con scelta non localizzata, o analisi cross-component che GPT-5.5 non può seguire affidabilmente con starting point e gate già preparati.
+- GPT-5.6 Luna `low`: task semplici, localizzati o meccanici, gate deterministici, test/build/ADB mirati e implementazioni con soluzione evidente.
+- GPT-5.6 Terra `medium`: **default** per il lavoro Codex non banale, inclusi debugging runtime già pre-localizzato, lifecycle, migrazioni/schema delimitati e audit guidati da scanner/test deterministici.
+- GPT-5.6 Sol `medium`: solo quando la capacità aggiuntiva è concretamente utile, per esempio debugging ambiguo/difficile, decisioni architetturali, modifiche trasversali complesse o task ad alto rischio che Terra non gestirebbe con sufficiente affidabilità.
 - `high`: solo con difficoltà concreta non gestibile bene a medium.
 
-Una migrazione, un audit o un task lungo **non giustificano da soli GPT-5.6**. Prima riduci scope, discovery, round-trip e output tool; passa a 5.6 solo se resta complessità di ragionamento reale.
+Una migrazione, un audit o un task lungo **non giustificano da soli Sol**. Prima riduci scope, discovery, round-trip e output tool; passa da Terra a Sol solo se resta complessità o rischio di ragionamento reale.
 
 ## Esecuzione manuale
 Apri il primo file indicato da `roadmap.md`, imposta modello/reasoning dai metadata e incolla **solo quel file**. Non inviare meta-prompt, non far leggere roadmap/README/spiegazioni e non eseguire `select` nelle sessioni manuali.
