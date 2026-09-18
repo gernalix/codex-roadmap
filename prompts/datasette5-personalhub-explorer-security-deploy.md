@@ -1,35 +1,46 @@
-PROMPT_ID=527184 | project_id=10 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STRICT
+PROMPT_ID=527184 | project_id=10 | model=GPT-5.5 | reasoning=medium | MegaVault=STRICT
 
 # Goal
-Valida e distribuisci SOLO l'accesso SQL read-only autenticato del Data Explorer PersonalHub già integrato in `main` nel runtime `datasette5`, senza modificare l'API mobile di sync.
+Valida e distribuisci SOLO la proiezione Datasette PersonalHub già implementata su `main`: SQL read-only autenticato, FK cross-modulo native e bridge Context persona-centrico. Nessun redesign.
 
 # Starting point autoritativo
-- repo locale: `/home/daniele/projects/datasette5`, project_id `10`, branch `main`;
-- remoto: unico branch persistente `main`;
-- HEAD remoto atteso: `b3fdddd3c7e6b8cbe35ba03aea982f17e7810a81`;
-- commit funzionale già integrato: `be112dd9fee631fe64b28d1df6f1d7d080f36b2b`; i commit successivi hanno solo aggiunto/rimosso il workflow one-shot di branch cleanup;
-- diff funzionale già delimitato a `scripts/personalhub_projection.py`, `tests/test_personalhub_projection.py`, `README.md`;
-- policy già codificata: `personalhub_read` è visibile e interrogabile con `execute-sql` solo dall'actor umano `root`; anonimo negato; write/schema/mutazioni negate; `personalhub-sync` resta limitato al solo envelope tecnico;
-- runtime canonico: Datasette 1.0a38, profilo Oracle privato esistente, `personalhub-projection.service` indipendente.
+- repo: `/home/daniele/projects/datasette5`, branch canonico `main`;
+- `origin/main` atteso: `d836d13ece57d9c57d413fc6e4d815367809b3d8`;
+- file pertinenti soltanto: `scripts/personalhub_projection.py`, `tests/test_personalhub_projection.py`, `README.md`;
+- Datasette runtime canonico: 1.0a38;
+- `personalhub_read`: browse + `execute-sql` solo actor umano `root`; anonimo negato; ogni write/schema mutation negata;
+- FK logiche già codificate: finance transaction/recurrence → People/Places/finance, prescription → doctor/finance transaction, intake → prescription;
+- `hub_person_relations` è derivata SOLO da Context esistenti e risolve binding tipizzati sullo stesso source device; non deve inferire per nome né scrivere nel DB Android;
+- API mobile `personalhub-sync` resta separata e non può interrogare/modificare la proiezione.
 
 # Esecuzione minima
-1. Preflight unico: worktree non in conflitto, branch `main`, un solo fetch di `origin/main`, fast-forward locale e requisito `HEAD=origin/main=b3fdddd3c7e6b8cbe35ba03aea982f17e7810a81`. Niente branch discovery, stash o rebase.
-2. Leggi SOLO i tre file funzionali sopra e, se serve per gli argomenti esatti di deploy, la sola sezione Oracle del README. Niente audit repo-wide.
-3. Esegui prima `tests.test_personalhub_projection.PersonalHubProjectionTest.test_datasette_native_clickable_fk_labels_and_read_only_permissions`. Se fallisce, correggi solo quel failure domain e rilancia solo quel test.
-4. Dopo PASS mirato esegui una sola volta `python3 -m unittest tests.test_personalhub_projection -v` e `python3 launch_datasette.py --check`. Nessun test duplicato.
-5. Se non hai modificato codice, non creare commit. Se una correzione strettamente necessaria è stata fatta, dopo i gate fai un solo fetch finale: se `origin/main` è avanzato rispetto allo starting HEAD => `BLOCKED`; altrimenti un solo commit/push diretto su `main`.
-6. Usa il deploy Oracle canonico già documentato, col profilo privato esistente e senza mostrare secret. Non cambiare autenticazione, nginx, token o servizi non pertinenti.
-7. Readback runtime bounded: actor umano autenticato può aprire `personalhub_read` ed eseguire una SELECT innocua; anonimo è negato; write SQL e mutazioni restano negate; un check read-only conferma che il route/envelope mobile esistente è ancora disponibile. Non inviare dati sintetici di produzione.
-8. PASS => stop immediato. Nessun plugin nuovo, tuning, benchmark, schema redesign o audit post-PASS.
+1. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == d836d13ece57d9c57d413fc6e4d815367809b3d8`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED, niente stash/rebase.
+2. Leggi SOLO i tre file sopra e gli helper deploy già nominati nel README se servono. Niente audit repo-wide.
+3. Esegui in un solo batch i tre test mirati:
+   - `test_cross_module_logical_relations_become_native_foreign_keys`
+   - `test_context_memberships_materialize_person_centric_native_foreign_keys`
+   - `test_datasette_native_clickable_fk_labels_and_read_only_permissions`
+   Failure => correggi solo quel failure domain e rilancia solo il test fallito.
+4. Dopo PASS mirato: una sola `python3 -m unittest tests.test_personalhub_projection -v` e una sola `python3 launch_datasette.py --check`.
+5. Se hai dovuto correggere codice, commit/push `main` una sola volta; altrimenti nessun commit cosmetico.
+6. Distribuisci col deploy Oracle canonico già documentato, senza stampare secret e senza cambiare nginx/auth/token non pertinenti.
+7. Readback runtime bounded e read-only:
+   - `personalhub_read` accessibile a `root`, anonimo negato;
+   - SELECT innocua via SQL UI/API autenticata;
+   - `PRAGMA foreign_key_list` conferma FK cross-modulo e FK di `hub_person_relations` verso contacts/contexts/bindings e target concreti;
+   - se i dati reali contengono almeno una relazione persona→altro modulo, verifica che Datasette la esponga come backlink/foreign-key link; se non esiste alcun esempio reale, il test sintetico mirato è sufficiente e NON creare dati produzione;
+   - write SQL/upsert/schema mutation sulla proiezione negati;
+   - endpoint mobile sync ancora disponibile, senza inviare dati sintetici.
+8. PASS => stop immediato. Nessun benchmark/plugin/tuning/audit successivo.
 
 # Acceptance
-PASS solo se test/suite/check PASS, `main` contiene la policy, runtime Oracle usa la configurazione aggiornata, SQL read-only autenticato funziona su `personalhub_read`, anonimo e ogni write sono negati e il sync mobile non è stato alterato.
+PASS solo se test mirati + suite + launcher check PASS, runtime Oracle aggiornato, FK native integre, `hub_person_relations` valida e read-only, SQL autenticato funziona, anonimo/write negati, API sync invariata.
 
 # Non-goal
-Niente modifiche PersonalHub Android, nuovi token, Tailscale/Cloudflare redesign, query salvate, plugin Datasette, benchmark, migrazioni DB o modifiche ai dati.
+Niente modifiche PH Android, nuovi token, dati sintetici produzione, redesign Context, plugin opzionali, query salvate, benchmark o refactor.
 
 # Stop
-Dopo PASS esegui una sola volta:
+Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 527184 --confirm-executed`
 
-Output massimo 6 righe: `RESULT`, `HEAD`, `TESTS`, `DEPLOY`, `ACCESS_POLICY`, `BLOCKER`.
+Output massimo 6 righe: `RESULT`, `HEAD`, `TESTS`, `FK_GRAPH`, `DEPLOY`, `BLOCKER`.
