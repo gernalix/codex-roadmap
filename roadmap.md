@@ -2,7 +2,7 @@
 
 > Generato da `roadmap.sqlite`. Non modificare manualmente.
 
-1. [[prompts/roadmap-ph-single-writer-local-activation|roadmap-ph-single-writer-local-activation]]
+1. [[prompts/roadmap-ph-single-writer-full-local-activation|roadmap-ph-single-writer-full-local-activation]]
 2. [[prompts/codex-usage-publisher-attribution-fastpath-followup|codex-usage-publisher-attribution-fastpath-followup]]
 3. [[prompts/oracle-backup-notification-antiflap-runtime|oracle-backup-notification-antiflap-runtime]]
 4. [[prompts/workflowy-importer-live-smoke-secret-file|workflowy-importer-live-smoke-secret-file]]

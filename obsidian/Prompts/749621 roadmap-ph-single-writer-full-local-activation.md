@@ -1,20 +1,20 @@
 ---
-prompt_id: 416024
-status: superseded
+prompt_id: 749621
+status: pending
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/personalhub-codex-roadmap
 ---
 
-# 416024 · Attiva single-writer roadmap e integrazione PH
+# 749621 · Attiva single-writer completo e integrazione PH
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/personalhub-codex-roadmap|PersonalHub + codex-roadmap]]
-- **Prompt:** [[../../falliti/roadmap-ph-single-writer-local-activation|Apri prompt]]
+- **Prompt:** [[../../prompts/roadmap-ph-single-writer-full-local-activation|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -23,13 +23,13 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[749621 roadmap-ph-single-writer-full-local-activation|749621]]
+- **Padri/precedenti:** [[416024 roadmap-ph-single-writer-local-activation|416024]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Attiva sul PC il nuovo sistema che evita che ChatGPT e Codex scrivano contemporaneamente sulla roadmap e verifica che PersonalHub permetta lavori separati in parallelo ma faccia entrare in main un solo lavoro alla volta, controllato da Codex.
+Verifica sul PC che solo il servizio remoto aggiorni davvero la roadmap, compreso l'import automatico delle metriche Codex, e che PersonalHub permetta lavori separati in parallelo facendo entrare in main un solo lavoro alla volta dopo controllo Codex.
 
 ## Esecuzioni
 
