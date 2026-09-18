@@ -1,4 +1,4 @@
-1. [[prompts/codex-usage-publisher-noop-fastpath-deploy|codex-usage-publisher-noop-fastpath-deploy]]
+1. [[prompts/codex-usage-publisher-attribution-fastpath-followup|codex-usage-publisher-attribution-fastpath-followup]]
 2. [[prompts/activity-watch-uploader-runtime-deploy|activity-watch-uploader-runtime-deploy]]
 3. [[prompts/personalhub-shared-alerts-places-tags-validation|personalhub-shared-alerts-places-tags-validation]]
 4. [[prompts/datasette5-personalhub-explorer-security-deploy|datasette5-personalhub-explorer-security-deploy]]
