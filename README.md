@@ -78,7 +78,7 @@ Una migrazione, un audit o un task lungo **non giustificano da soli Sol**. Prima
 ## Esecuzione manuale
 Apri il primo file indicato da `roadmap.md`, imposta modello/reasoning dai metadata e incolla **solo quel file**. Non inviare meta-prompt, non far leggere roadmap/README/spiegazioni e non eseguire `select` nelle sessioni manuali.
 
-Default: un task per sessione. Raggruppa letture/comandi indipendenti; non ripetere test PASS; retry solo dopo nuova evidenza o stato cambiato; stop immediato a PASS/BLOCKED/FAIL. Per build/comandi lunghi già avviati, preferisci una sola attesa bloccante o controlli radi: niente polling ravvicinato né messaggi che riportano solo stato invariato.
+Default: un task per sessione. Raggruppa letture/comandi indipendenti; non ripetere test PASS; retry solo dopo nuova evidenza o stato cambiato; stop immediato a PASS/BLOCKED/FAIL. Per build/comandi lunghi già avviati, preferisci una sola attesa bloccante. Se il tool richiede polling, usa intervalli di almeno 30 secondi salvo un evento concreto che giustifichi un controllo anticipato: niente loop da 5 secondi, polling ravvicinato o messaggi che riportano solo stato invariato.
 
 ## Diagnostica runtime a basso round-trip
 Per task locali/VM/servizi, il costo principale è spesso il numero di round-trip modello↔tool, non i token uncached. Quindi:
@@ -124,6 +124,8 @@ python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex
 `roadmap_finish.py` usa `complete` nel caso normale e passa automaticamente al `reconcile` canonico solo se la roadmap è avanzata mentre il task era in esecuzione. Non anteporre un dry-run nel percorso normale: raddoppia processi/round-trip e apre una finestra di race senza aggiungere sicurezza al guard fail-closed.
 
 `status=completed|already_completed` con `finish_mode=complete|reconcile` e, quando c'è una mutazione, `push_verified=git_push_exit_0` è prova terminale. Dopo non eseguire `git status`, `rev-parse`, `ls-remote`, pull/fetch o verifiche equivalenti sulla roadmap e non aprire il task successivo.
+
+Se il PASS arriva dopo un failure significativo realmente osservato nello stesso run — per esempio ANR/crash, rollback, recovery o un gate fallito poi corretto — l'output finale deve citarlo in forma compatta insieme all'evidenza del rerun riuscito. Non trasformare un PASS finale in un report che nasconde gli incidenti intermedi rilevanti.
 
 ## BLOCKED/FAIL
 Non invocare il finalizzatore, non archiviare né avanzare. Riporta solo blocker/evidenza minima e fermati.
