@@ -30,7 +30,7 @@ def sync(repo: Path, source: Path) -> dict[str,object]:
             p=subprocess.run(cmd,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             if p.returncode:
                 raise SyncError(f"import_failed:{p.stderr.strip()}")
-            status=run(wt,"status","--porcelain","--untracked-files=all").stdout.splitlines()
+            status=run(wt,"status","--porcelain=v1","-z","--untracked-files=all").stdout.split("\0")
             if not status:
                 return {"status":"noop","attempt":attempt,"import":json.loads(p.stdout or "{}")}
             allowed_prefixes=("roadmap.sqlite","roadmap.md","spiegazioni.md","prompt-registry.md","obsidian/","prompts/","completed/","falliti/")

@@ -42,7 +42,7 @@ class RepositoryConsistencyTests(unittest.TestCase):
         sentinel = "\x1f"
         masked = re.sub(
             r"\[\[[^\]]+\]\]",
-            lambda match: match.group(0).replace("|", sentinel),
+            lambda match: match.group(0).replace("\\|", "|").replace("|", sentinel),
             line,
         )
         return [cell.strip().replace(sentinel, "|") for cell in masked.strip("|").split("|")]
