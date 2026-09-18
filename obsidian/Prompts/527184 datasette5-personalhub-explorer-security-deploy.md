@@ -23,7 +23,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[538642 codex-usage-publisher-attribution-fastpath-followup|538642]]
+- **Dipende da:** [[371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237]]
 - **Sblocca:** [[861305 personalhub-datasette-lite-offline-runtime|861305]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —

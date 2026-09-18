@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "spiegazioni.md",
+                "file": "prompts/roadmap-ph-single-writer-full-local-activation.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "spiegazioni"
+              "title": "roadmap-ph-single-writer-full-local-activation"
             }
           }
         ]
@@ -191,11 +191,17 @@
   },
   "active": "e82c697076a11c9c",
   "lastOpenFiles": [
+    "tools/__pycache__/submit_mutation.cpython-314.pyc",
+    "prompts/codex-usage-publisher-attribution-fastpath-runtime-fix.md",
+    "obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix.md",
+    "mutations/applied/analysis-538642-fix-371237.json",
+    "falliti/codex-usage-publisher-attribution-fastpath-followup.md",
+    "spiegazioni.md",
+    "prompts/roadmap-ph-single-writer-full-local-activation.md",
     "sedAAJiRK",
     "tools/submit_mutation.py",
     "tests/test_usage_execution_single_writer.py",
     "tests/test_remote_single_writer.py",
-    "prompts/roadmap-ph-single-writer-full-local-activation.md",
     "prompts/personalhub-100-capsule-isolation-local-validation-v2.md",
     "obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation.md",
     "obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation.md",
@@ -210,10 +216,8 @@
     "mutations/applied/chatgpt-analysis-813383-20260918.json",
     "falliti/roadmap-ph-single-writer-local-activation.md",
     "falliti/personalhub-100-capsule-isolation-local-validation.md",
-    "tools/__pycache__/safe_ff.cpython-314.pyc",
     "prompts/workflowy-automation-local-activation.md",
     "obsidian/Prompts/330522 workflowy-automation-local-activation.md",
-    "mutations/applied/chatgpt-workflowy-automation-local-activation-330522.json",
     "obsidian/Prompts/978216 prompt-978216.md",
     "obsidian/Prompts/953204 prompt-953204.md",
     "obsidian/Prompts/947261 prompt-947261.md",
@@ -222,10 +226,6 @@
     "obsidian/Prompts/934572 prompt-934572.md",
     "obsidian/Prompts/917462 prompt-917462.md",
     "obsidian/Prompts/917364 prompt-917364.md",
-    "obsidian/Prompts/913284 prompt-913284.md",
-    "obsidian/Prompts/906314 prompt-906314.md",
-    "obsidian/Prompts/904217 prompt-904217.md",
-    "obsidian/Prompts/893806 prompt-893806.md",
-    "obsidian/Prompts/892067 prompt-892067.md"
+    "obsidian/Prompts/913284 prompt-913284.md"
   ]
 }
