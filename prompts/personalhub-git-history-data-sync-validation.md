@@ -5,7 +5,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
 
 # Starting point autoritativo
 - repo: /home/daniele/projects/PersonalHub, branch canonico main;
-- esegui SOLO dopo PROMPT_ID=724615 PASS/finalizzato E dopo che l'utente ha mergiato `feature/salute-canonical-domain` in main: main deve già contenere profili globali + schema timestamp epoch-ms + Salute canonica completa in personalhub.db;
+- esegui SOLO dopo PROMPT_ID=845312 PASS/finalizzato E dopo che l'utente ha mergiato sia `feature/salute-canonical-domain` sia `feature/obsidian-archive` in main: main deve già contenere profili globali + schema timestamp epoch-ms + Salute canonica completa + proiezione Obsidian opzionale;
 - baseline Git History/Data già implementata: 0efd93ed547ac8dad9d8de69083e572367800aec deve essere antenata di RUN_HEAD; commit successivi non correlati (es. Salute CI) vanno preservati;
 - version.txt resta 50: NON fare bump, NON installare il package reale sul Pixel, NON inviare APK; la release resta nel task PH successivo;
 - file/boundary già noti: core/database/.../capsules/gitdata/*, DeclarativeMigrations.kt, DatabaseVault.kt, DatabaseGate.kt, PersonalHubDatabase.kt, HubActivityCapture.kt, feature/multitimetracker/.../SnapshotSqlite.kt, app/.../capsules/settings/{HubSettings,GitHistorySettings}.kt, MainActivity.kt, docs/GIT_DATA_HISTORY.md;
@@ -26,7 +26,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
    - Salute canonica: una patch health sintetica con sample + più measurement + AI snapshot usa un unico group_id/import_batch, compare nella History, supporta preview/revert del singolo record e dell'intero gruppo e non genera un secondo motore history.
    - tutte le write della stessa outer SQLite transaction ricevono automaticamente lo stesso group_id; write fuori transazione restano eventi singoli; context espliciti remote_patch/history_revert prevalgono senza contaminare la transazione successiva.
    - fault injection sul cleanup del context storico: la outer transaction deve sempre chiudersi/sbloccare; nessun context autore/source può contaminare la transazione seguente e l’esito commit/rollback deve restare non ambiguo.
-   - snapshot/snapshot_history/snapshot_payloads e altri technical churn restano sincronizzabili nello state ma NON generano semantic history payload enormi.
+   - snapshot/snapshot_history/snapshot_payloads e altri technical churn restano sincronizzabili nello state ma NON generano semantic history payload enormi. Bookkeeping Obsidian (pending/manifest/version locale o equivalenti) resta tecnico/ricostruibile e NON entra in semantic history né nel logical state Git remoto.
    - push debounce 60 s, recovery persistente/offline e ack revision-safe: un edit committato non può sparire prima del push confermato.
    - JSONL deterministico + sharding 1/8/32/128; una modifica limitata non richiede upload di shard invariati.
    - BLOB content-addressed: stesso SHA => stesso object; hash mismatch in restore => FAIL.
