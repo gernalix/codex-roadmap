@@ -28,20 +28,33 @@ Un prompt deve essere autosufficiente ma piccolo. Deve contenere soltanto:
 
 Se path, file, helper, test, servizio o device sono già noti, trattarli come autoritativi e non rifare discovery generale.
 
-## Recovery
+## Autonomia e recovery
 
-Goal + acceptance criteria sono il contratto terminale. Un errore intermedio è evidenza, non automaticamente un esito terminale.
+**Goal + acceptance criteria definiscono lo scope; i passi del prompt sono il piano iniziale, non una whitelist di file o comandi.** Codex deve portare autonomamente il goal a termine quando può farlo in sicurezza.
 
+Dentro lo stesso failure domain Codex è autorizzato a:
+- leggere, modificare, aggiungere o rimuovere codice, test, adapter, config e documentazione tecnica necessari al goal, anche se il prompt non li nomina;
+- correggere un test obsoleto o incoerente quando l'evidenza dimostra che il test, non il comportamento richiesto, è errato;
+- sostituire un comando/helper/API non più valido con l'equivalente canonico corrente;
+- fare discovery **mirata** aggiuntiva quando un'assunzione del prompt risulta falsa;
+- gestire lock/transienti con attesa bounded, retry con stato cambiato, restart/reload di servizi in-scope e temp diagnostics;
+- correggere più blocker indipendenti dello stesso dominio in batch;
+- commit/pushare fix in-scope quando il repository/task lo richiede;
+- proseguire automaticamente dal leaf gate corretto fino agli acceptance criteria senza chiedere conferma.
+
+Non sono da soli motivi per BLOCKED/FAIL: simbolo/API mancante, test/compile failure, file diverso da quello atteso, helper obsoleto, warning riproducibile, remote advance riconciliabile, lock transitorio, servizio riavviabile o necessità di toccare un file adiacente.
+
+Codex deve fermarsi solo quando serve davvero qualcosa che non può ottenere autonomamente: credenziale/permesso o decisione utente indispensabile, hardware/runtime necessario indisponibile senza alternativa, conflitto semantico sostanziale fuori scope, rischio concreto di perdita dati, azione distruttiva/pubblicazione esterna non autorizzata o redesign materialmente diverso dal goal.
+
+Recovery:
 - diagnosticare il minimo artefatto utile;
-- applicare il fix minimo nello stesso failure domain;
+- correggere la causa più locale supportata dall'evidenza;
 - rilanciare prima il leaf gate fallito;
 - riprendere il goal originale;
-- niente retry identici senza nuova evidenza;
-- niente audit, cleanup, refactor o modernizzazione collaterali.
+- niente retry identici senza nuova evidenza/stato cambiato;
+- niente audit, cleanup o modernizzazione non necessari al goal.
 
-`BLOCKED` è riservato a dipendenze esterne/umane indispensabili, runtime richiesto indisponibile senza alternativa valida, concorrenza unsafe o azioni distruttive/ambigue che richiedono consenso.
-
-`FAIL` è ammesso solo quando il recovery ragionevole in-scope è esaurito o l'unico fix residuo sarebbe unsafe/materialmente fuori scope.
+`FAIL` è ammesso solo dopo recovery ragionevole realmente tentato e documentato. `BLOCKED` è riservato ai blocker esterni/safety sopra.
 
 Dopo PASS: stop immediato.
 
@@ -60,7 +73,7 @@ Regole di default:
 - un comando lungo già avviato va atteso, non controllato con polling ravvicinato;
 - niente comandi no-op o verifiche di rassicurazione dopo PASS.
 
-Per task localizzati l'obiettivo è ridurre soprattutto i round-trip modello↔tool. Un budget di tool-call è un obiettivo, non una ragione per sacrificare correttezza.
+Per task localizzati l'obiettivo è ridurre soprattutto i round-trip modello↔tool. Un budget di tool-call è un obiettivo, **mai un limite di autonomia**: se emerge nuova evidenza concreta, Codex può superarlo per risolvere lo stesso goal invece di terminare prematuramente.
 
 ## Git
 
