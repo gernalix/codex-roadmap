@@ -1,4 +1,4 @@
-PROMPT_ID=690049 | project_id=15 | model=GPT-5.5 | reasoning=low | MegaVault=FAST
+PROMPT_ID=690049 | project_id=15 | model=GPT-5.6 Luna | reasoning=low | MegaVault=FAST
 
 # Goal
 Chiudi SOLO il gate Kuma rimasto da `362714`, usando il runtime Fedora reale e il profilo Chrome canonico. Non ripetere deploy/test già conclusi.
