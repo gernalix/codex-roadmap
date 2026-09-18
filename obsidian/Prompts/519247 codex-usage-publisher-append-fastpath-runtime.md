@@ -1,20 +1,21 @@
 ---
 prompt_id: 519247
-status: pending
+status: completed
 project_id: 8
 model: GPT-5.6 Luna
 reasoning: low
 tags:
+  - single-writer-enforced
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/completed
   - roadmap/project/fedora
 ---
 
 # 519247 · Attivare il fast-path del publisher Codex
 
-- **Stato:** pending
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/codex-usage-publisher-append-fastpath-runtime|Apri prompt]]
+- **Prompt:** [[../../completed/codex-usage-publisher-append-fastpath-runtime|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
