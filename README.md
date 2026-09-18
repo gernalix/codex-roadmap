@@ -82,7 +82,9 @@ Per PersonalHub:
 - **non** incrementano `version.txt`, non installano il package reale Pixel e non inviano APK;
 - l'ultima fase fa un solo bump, gate finali consolidati, un solo APK finale, una sola installazione Pixel e una sola Telegram delivery;
 - l'ultima fase non ripete automaticamente gate già PASS delle fasi precedenti: li riesegue solo se il diff finale tocca i file, dipendenze o boundary che quei gate coprivano;
-- una campagna PH deve essere seriale: niente task PH concorrenti.
+- una campagna PH deve essere seriale: niente task PH concorrenti;
+- le fasi PH non devono dipendere dall'esistenza di branch remoti temporanei. Se un task usa un branch locale/temporaneo per isolamento, deve integrarlo in `main` ed eliminarlo nello stesso task prima del PASS, salvo eccezione esplicita e motivata nel prompt;
+- task di repository diversi possono essere eseguiti in parallelo solo quando non condividono checkout o runtime mutabili. `roadmap_finish.py` supporta il completamento out-of-order/race-safe; un task che modifica il checkout canonico MegaVault non va eseguito in parallelo con task che devono usare quello stesso checkout.
 
 Non creare mega-task se le fasi hanno failure domains indipendenti; consolida build/install/delivery e gate comuni. Una verifica locale di fix già pushati va assorbita nella fase funzionale successiva dello stesso repo quando può condividere lo stesso host gate e la stessa QA.
 
