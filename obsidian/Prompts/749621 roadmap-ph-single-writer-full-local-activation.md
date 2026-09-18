@@ -5,6 +5,7 @@ project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
+  - single-writer-e2e
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/personalhub-codex-roadmap
