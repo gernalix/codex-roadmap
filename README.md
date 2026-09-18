@@ -63,7 +63,7 @@ Quando due task dello stesso repo/campagna richiedono lo stesso checkout/build/e
 Quando due fasi consecutive della stessa campagna richiedono lo stesso device/emulatore, concentra la QA device non indispensabile alla prima fase nella prima fase successiva che deve già avviare quel target. La fase precedente resta host-only quando compile/test host forniscono sicurezza sufficiente.
 
 ## Contratto prompt
-Ogni prompt deve bastare da solo insieme alle regole globali già caricate. Deve dichiarare almeno metadata, goal, starting point verificato, scope/non-goal, verification, stop e comando di finalizzazione. Vietati inventory/audit generali quando file/boundary sono già noti.
+Ogni prompt deve bastare da solo insieme alle regole globali già caricate. Deve dichiarare almeno metadata, goal, starting point verificato, scope/non-goal, verification, stop e comandi di finalizzazione. Deve includere direttamente la sintassi esatta sia per PASS (`roadmap_finish.py`) sia per BLOCKED/FAIL (`roadmap_result.py --result ...`), così Codex non spende una tool-call per ispezionare la CLI. Vietati inventory/audit generali quando file/boundary sono già noti.
 
 ### Recovery autonomo obbligatorio
 Il **goal + acceptance criteria** sono il contratto terminale; i passi descritti nel prompt sono il percorso iniziale, non una procedura rigida da abbandonare al primo errore.
