@@ -1,0 +1,45 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "register",
+      "prompt_id": "886414",
+      "slug": "personalhub-100-capsule-isolation-local-validation",
+      "title": "PersonalHub 100% capsule isolation — validazione locale",
+      "current_path": "prompts/personalhub-100-capsule-isolation-local-validation.md",
+      "project_id": "49",
+      "project_name": "PersonalHub",
+      "repo": "gernalix/PersonalHub",
+      "chat_guidance": "Nuova chat",
+      "prompt_type": "Prompt",
+      "model": "GPT-5.6 Terra",
+      "reasoning": "medium",
+      "megavault_mode": "FAST",
+      "explanation": "Controlla sul PC reale che PersonalHub tenga davvero ogni modulo separato: i moduli devono possedere da soli le proprie schermate e funzioni Android, mentre la Home deve aprirli solo tramite ingressi pubblici stabili. Serve Codex perché bisogna compilare l'app, controllare il risultato finale di Android e provarlo sull'emulatore. Il lavoro resta nel ramo separato e non viene ancora unito alla versione principale.",
+      "status": "pending",
+      "queue_position": 2
+    },
+    {
+      "op": "dependency",
+      "prompt_id": "886414",
+      "depends_on_prompt_id": "749621",
+      "note": "Prima va attivato il nuovo coordinamento sicuro per i lavori PersonalHub su branch concorrenti."
+    },
+    {
+      "op": "tag",
+      "prompt_id": "886414",
+      "tag": "personalhub"
+    },
+    {
+      "op": "tag",
+      "prompt_id": "886414",
+      "tag": "architecture"
+    },
+    {
+      "op": "tag",
+      "prompt_id": "886414",
+      "tag": "capsules"
+    }
+  ]
+}
