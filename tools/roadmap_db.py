@@ -333,6 +333,62 @@ def record_analysis(
         (prompt_id, "analysis_recorded", ts, actor, json.dumps({"fix_prompt_id":fix_prompt_id}, sort_keys=True)),
     )
 
+def record_code_change(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    *,
+    repository: str,
+    change_type: str,
+    commit_sha: str | None = None,
+    summary: str | None = None,
+    analysis_id: int | None = None,
+    actor: str = "chatgpt",
+) -> int:
+    prompt_row(conn, prompt_id)
+    if analysis_id is None:
+        row = conn.execute(
+            "SELECT analysis_id FROM analyses WHERE prompt_id=? "
+            "ORDER BY analyzed_at DESC, analysis_id DESC LIMIT 1",
+            (prompt_id,),
+        ).fetchone()
+        if not row:
+            raise RoadmapDBError(f"analysis_required_before_code_change:{prompt_id}")
+        analysis_id = int(row["analysis_id"])
+    else:
+        row = conn.execute(
+            "SELECT prompt_id FROM analyses WHERE analysis_id=?",
+            (analysis_id,),
+        ).fetchone()
+        if not row or row["prompt_id"] != prompt_id:
+            raise RoadmapDBError(f"analysis_prompt_mismatch:{analysis_id}:{prompt_id}")
+    ts = now_utc()
+    cur = conn.execute(
+        """INSERT INTO analysis_code_changes(
+             analysis_id,prompt_id,repository,change_type,commit_sha,summary,created_at,actor
+           ) VALUES(?,?,?,?,?,?,?,?)""",
+        (analysis_id,prompt_id,repository,change_type,commit_sha,summary,ts,actor),
+    )
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "analysis_code_change_recorded",
+            ts,
+            actor,
+            json.dumps(
+                {
+                    "analysis_id": analysis_id,
+                    "repository": repository,
+                    "change_type": change_type,
+                    "commit_sha": commit_sha,
+                },
+                ensure_ascii=False,
+                sort_keys=True,
+            ),
+        ),
+    )
+    return int(cur.lastrowid)
+
 def next_runnable(conn: sqlite3.Connection) -> sqlite3.Row | None:
     return conn.execute("SELECT * FROM v_runnable_prompts LIMIT 1").fetchone()
 
@@ -378,6 +434,7 @@ def verify(repo: Path) -> dict[str, Any]:
         "prompts": conn.execute("SELECT COUNT(*) FROM prompts").fetchone()[0],
         "executions": conn.execute("SELECT COUNT(*) FROM executions").fetchone()[0],
         "analyses": conn.execute("SELECT COUNT(*) FROM analyses").fetchone()[0],
+        "chatgpt_code_changes": conn.execute("SELECT COUNT(*) FROM analysis_code_changes").fetchone()[0],
         "attention": conn.execute("SELECT COUNT(*) FROM v_attention").fetchone()[0],
     }
     conn.close()
@@ -401,6 +458,17 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
         add_dependency(conn,str(mutation["prompt_id"]),str(mutation["depends_on_prompt_id"]),note=mutation.get("note"))
     elif op=="tag":
         add_tag(conn,str(mutation["prompt_id"]),str(mutation["tag"]))
+    elif op=="code_change":
+        record_code_change(
+            conn,
+            str(mutation["prompt_id"]),
+            repository=str(mutation["repository"]),
+            change_type=str(mutation["change_type"]),
+            commit_sha=mutation.get("commit_sha"),
+            summary=mutation.get("summary"),
+            analysis_id=mutation.get("analysis_id"),
+            actor=actor,
+        )
     elif op=="execution":
         kwargs={k:mutation.get(k) for k in (
             "cycle_key","materialization_sha256","started_at","ended_at","outcome","duration_seconds",
