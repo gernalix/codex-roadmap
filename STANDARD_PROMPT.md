@@ -19,6 +19,20 @@ Questo è il percorso preferito perché evita il round-trip `launcher → select
 
 La roadmap contiene soltanto attività che richiedono realmente Codex (filesystem/toolchain locale, device, VM, segreti/config runtime o servizi locali). Modifiche eseguibili direttamente sui repository remoti non vanno rimandate a Codex.
 
+## Recovery autonomo obbligatorio
+
+Il prompt deve trattare **goal + acceptance criteria** come contratto terminale e i passi operativi come percorso adattabile. Al primo failure non deve fermarsi automaticamente: deve usare l'errore come evidenza, diagnosticare la causa minima, applicare il fix minimo in-scope, rilanciare il leaf gate e riprendere il goal originale.
+
+Regole terminali:
+- `BLOCKED` solo per dipendenza esterna/umana indispensabile, device/servizio richiesto indisponibile senza alternativa valida, lock/concorrenza unsafe o azione distruttiva/ambigua che richiede consenso;
+- `FAIL` solo dopo recovery in-scope ragionevole esaurito o quando l'unico fix residuo sarebbe unsafe/materialmente fuori scope;
+- remote advance, dirty non sovrapposto, compile/test failure, mismatch di configurazione o tool failure non sono di per sé terminali;
+- niente retry identici senza nuova evidenza/stato cambiato; niente audit/refactor/cleanup collaterali; ogni espansione deve essere direttamente causata dal failure concreto;
+- un budget tool-call può essere superato solo per failure o dipendenze nuove realmente osservate, senza sacrificare acceptance o safety;
+- dopo ogni recovery riuscito, tornare automaticamente alla sequenza di acceptance originaria; dopo PASS, stop immediato.
+
+Un prompt safety/validation-only può vietare la mutazione e quindi fermarsi su uno specifico gate soltanto quando quella mutazione è esplicitamente fuori scope per ragioni di sicurezza o richiede azione umana esterna.
+
 ## Efficienza di esecuzione
 
 Per task già pre-localizzati il costo principale è spesso il numero di round-trip modello↔tool, non il reasoning. I prompt devono quindi imporre queste regole quando applicabili:
@@ -28,7 +42,7 @@ Per task già pre-localizzati il costo principale è spesso il numero di round-t
 - dichiarare il **checkout/workdir canonico esatto** quando il task è legato a un repo e usarlo dalla prima tool-call; non partire da una directory ChatGPT/progetto incidentale e poi cercare il repository tramite memoria/documentazione;
 - se il prompt indica chiavi precise di `.codex/CODE_MAP.tsv`, leggere **solo quelle righe** (per esempio con un `rg` ancorato sulle chiavi), non fare dump del CODE_MAP né inventory del modulo;
 - se il task richiede un lease/lock già standardizzato, il prompt deve contenere direttamente i comandi esatti di acquire/release con il proprio `PROMPT_ID`; non obbligare Codex a cercarli in `AGENTS.md`, `/tmp` o nel repository. Per PersonalHub: `python3 tools/personalhub_task_lock.py acquire --prompt-id <PROMPT_ID>` e `python3 tools/personalhub_task_lock.py release --prompt-id <PROMPT_ID>`;
-- per task che scrivono su un branch condiviso, sincronizzare **prima** delle modifiche con fetch + fast-forward only e registrare lo SHA remoto iniziale; subito prima del commit/push fare un solo fetch finale. Se il remoto è avanzato durante il task, fermarsi BLOCKED invece di rebase/merge + ripetizione dei gate, salvo compatibilità concorrente dichiarata esplicitamente dal prompt;
+- per task che scrivono su un branch condiviso, sincronizzare **prima** delle modifiche con fetch + fast-forward only e registrare lo SHA remoto iniziale; subito prima del commit/push fare un solo fetch finale. Se il remoto è avanzato durante il task, trattarlo come condizione intermedia: ispezionare soltanto il diff concorrente rilevante, integrare automaticamente quando è chiaramente non sovrapposto/compatibile secondo la policy del repo e rieseguire solo i gate invalidati. Usare BLOCKED solo se overlap, ownership concorrente o ambiguità rendono unsafe scegliere autonomamente;
 - se il prompt richiede commit/push soltanto dopo i gate finali, **non creare commit intermedi**. In checkout soggetti ad autosync un commit locale può essere pubblicato da un altro servizio e trasformare una normale sincronizzazione finale in divergenza/rebase/conflitti; mantenere il diff non committato fino al PASS tecnico e fare un solo commit/push finale;
 - quando DB, log o servizi richiedono privilegi e il prompt indica già l'helper privilegiato canonico, usarlo dalla prima lettura. Non spendere un probe non privilegiato destinato a fallire; se lo schema SQL non è noto, fare una sola introspezione (`PRAGMA table_info` o equivalente) prima della query invece di indovinare nomi di colonne;
 - quando l'acceptance richiede N cicli schedulati reali, avviare **un solo watcher/verifier bounded** che osserva il timer/processo e termina appena N cicli validi sono provati. Evitare sequenze `sleep → readback → sleep → readback` e query remote ripetute equivalenti;
@@ -81,7 +95,7 @@ La prima riga finale resta `RESULT=PASS|BLOCKED|FAIL`. Se codice/test sono PASS 
 Solo quando la selezione deve essere fatta automaticamente da Codex si può usare questo launcher compatto:
 
 ```text
-Esegui SOLO il primo task pendente di gernalix/codex-roadmap. Come prima tool-call esegui `python3 tools/roadmap_guard.py select`, usa `prompt_content` come task completo e non rileggere README/roadmap/spiegazioni salvo incoerenza concreta. Considera già verificato ciò che il task dichiara verificato, mantieni scope e test mirati e fermati a PASS/BLOCKED/FAIL. Su PASS usa una sola volta `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID> --confirm-executed`; non aprire il task successivo.
+Esegui SOLO il primo task pendente di gernalix/codex-roadmap. Come prima tool-call esegui `python3 tools/roadmap_guard.py select`, usa `prompt_content` come task completo e non rileggere README/roadmap/spiegazioni salvo incoerenza concreta. Considera già verificato ciò che il task dichiara verificato, mantieni scope e test mirati, recupera autonomamente i failure intermedi con fix minimi e fermati solo a PASS o a un vero BLOCKED/FAIL terminale. Su PASS usa una sola volta `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID> --confirm-executed`; non aprire il task successivo.
 ```
 
 Questo fallback non è il workflow manuale normale.
@@ -100,6 +114,7 @@ Ogni nuovo prompt o modifica sostanziale di un prompt pendente deve preservare l
 - per branch condivisi, specificare la policy di sync iniziale e di remote-advance prima del push;
 - consolidare build/device/delivery nella fase finale quando appartiene a una campagna compatibile;
 - contenere su PASS la singola invocazione `roadmap_finish.py` con il proprio `PROMPT_ID` e `--confirm-executed`;
+- includere esplicitamente il contratto di recovery autonomo o una forma compatta equivalente, così il prompt resta autosufficiente anche senza rileggere README/STANDARD_PROMPT;
 - richiedere `RESULT=PASS|BLOCKED|FAIL` come prima riga finale;
 - non dipendere dal launcher generico o dall'output di `select` per informazioni necessarie all'esecuzione.
 
