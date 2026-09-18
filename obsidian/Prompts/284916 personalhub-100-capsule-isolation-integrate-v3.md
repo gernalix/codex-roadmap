@@ -19,7 +19,7 @@ tags:
 - **Ultimo lancio:** 2026-09-18T22:49:13Z
 - **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** sì
-- **Codice modificato da ChatGPT:** sì (5 interventi)
+- **Codice modificato da ChatGPT:** sì (6 interventi)
 - **Fix:** —
 - **Dipende da:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
 - **Sblocca:** —
@@ -48,3 +48,4 @@ Aggiorna e valida il ramo della capsulizzazione, poi lo integra nella versione p
 - 2026-09-18T23:08:29Z · `gernalix/PersonalHub` · qa-efficiency · commit `7335e506b56add134de9645e7a6a6d8455790925` · Aggiunto helper AVD deterministico per i sette shortcut alias: installa l'APK esatto con permessi preconcessi, isola ogni launch e verifica il target dichiarato.
 - 2026-09-18T23:08:29Z · `gernalix/PersonalHub` · prompt-efficiency · commit `b8acf194531a38d8215c8fefa1b68257c508a847` · AGENTS instrada la QA shortcut attraverso l'helper e vieta di rilanciare comandi lunghi equivalenti quando è scaduta solo la finestra di raccolta dell'output.
 - 2026-09-18T23:08:29Z · `gernalix/PersonalHub` · verification · commit `d334ba0339033f8ffa8f1e1381e644de49a45948` · La CI Architecture boundaries compila entrambi gli helper Python e poi esegue il gate architetturale; run PR 223 PASS.
+- 2026-09-18T23:09:11Z · `gernalix/PersonalHub` · integration · commit `83f052e8ad94a84baef983621f2df47dc1284655` · PR #14 integra in main la capsulizzazione e gli hardening derivati dall'analisi di 284916; il branch feature resta solo da eliminare perché il connettore GitHub disponibile non espone delete-ref.
