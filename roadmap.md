@@ -4,7 +4,7 @@
 
 1. [[prompts/codex-roadmap-sqlite-runtime-backfill|codex-roadmap-sqlite-runtime-backfill]]
 2. [[prompts/codex-usage-publisher-attribution-fastpath-followup|codex-usage-publisher-attribution-fastpath-followup]]
-3. [[prompts/workflowy-importer-local-live-validation|workflowy-importer-local-live-validation]]
+3. [[prompts/workflowy-importer-live-smoke-secret-file|workflowy-importer-live-smoke-secret-file]]
 4. [[prompts/personalhub-shared-alerts-places-tags-validation|personalhub-shared-alerts-places-tags-validation]]
 5. [[prompts/datasette5-personalhub-explorer-security-deploy|datasette5-personalhub-explorer-security-deploy]]
 6. [[prompts/personalhub-epoch-timestamps-migration|personalhub-epoch-timestamps-migration]]
