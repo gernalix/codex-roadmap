@@ -19,13 +19,13 @@ tags:
 - **Primo lancio:** 2026-09-18T21:58:59Z
 - **Ultimo lancio:** 2026-09-18T21:58:59Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
-- **Codice modificato da ChatGPT:** no (0 interventi)
-- **Fix:** —
+- **Analizzato da ChatGPT:** sì
+- **Codice modificato da ChatGPT:** sì (3 interventi)
+- **Fix:** 817264
 - **Dipende da:** —
-- **Sblocca:** [[219473 oracle-backup-notification-antiflap-runtime|219473]], [[284916 personalhub-100-capsule-isolation-integrate-v3|284916]], [[445388 logseq-updates-pat-safety-closure|445388]], [[527184 datasette5-personalhub-explorer-security-deploy|527184]], [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]], [[690049 fedora-runtime-validation|690049]], [[693572 workflowy-importer-live-smoke-secret-file|693572]]
+- **Sblocca:** [[219473 oracle-backup-notification-antiflap-runtime|219473]], [[445388 logseq-updates-pat-safety-closure|445388]], [[527184 datasette5-personalhub-explorer-security-deploy|527184]], [[690049 fedora-runtime-validation|690049]], [[693572 workflowy-importer-live-smoke-secret-file|693572]]
 - **Padri/precedenti:** [[371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
 - **Chat Codex:** Stessa chat di 371237
 
 ## Spiegazione
@@ -40,8 +40,10 @@ Installa sul PC le correzioni già preparate per evitare che il salvataggio Code
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-18T22:05:45Z · colli di bottiglia: sì · fix: 817264 · 642815 ha usato 43.962 token, 97,4% cached e 4 tool-call. Il problema non era il costo ma una policy troppo rigida: il leaf test ha trovato un adapter che non esportava init_db e ResourceWarning, ma il prompt ha trattato una modifica Python in-scope come fuori perimetro e si è fermato BLOCKED invece di correggerla. Root cause remota corretta e policy generale resa autonomy-first.
 
 ## Modifiche di codice ChatGPT
 
-- Nessuna modifica di codice registrata.
+- 2026-09-18T22:05:45Z · `gernalix/codex-usage-monitor` · fix · commit `4593ac67b3d699e824817c2a9fb17c27ef4f52d2` · Esporta init_db dall'adapter pubblico codex_session_archive usato dai test.
+- 2026-09-18T22:05:45Z · `gernalix/codex-usage-monitor` · fix · commit `f3eb60652a2384f673c0833b59402e8c3c7b1e62` · Chiude i restanti context SQLite noti nel session archive per eliminare ResourceWarning.
+- 2026-09-18T22:05:45Z · `gernalix/codex-roadmap` · prompt-policy · commit `36b5eeac919200a473276015d6cd3b7a3cd7e045` · Rende il contratto generale della roadmap autonomy-first: i passi sono piano iniziale, non whitelist, e i failure tecnici in-scope vanno corretti e superati.

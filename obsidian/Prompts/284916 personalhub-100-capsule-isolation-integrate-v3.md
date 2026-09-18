@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[642815 codex-usage-publisher-lock-runtime-closure|642815]]
+- **Dipende da:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[200725 personalhub-100-capsule-isolation-local-validation-v2|200725]]
 - **Figli/follow-up:** —
