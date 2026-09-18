@@ -37,8 +37,13 @@ def _prompt_links(conn: sqlite3.Connection, prompt_id: str, relation_sql: str, p
     if not rows:
         return "—"
     bits=[]
+    seen=set()
     for r in rows:
-        p=prompt_row(conn, r[0])
+        target_id=str(r[0])
+        if target_id in seen:
+            continue
+        seen.add(target_id)
+        p=prompt_row(conn, target_id)
         bits.append(f"[[{p['prompt_id']} {p['slug']}|{p['prompt_id']}]]")
     return ", ".join(bits)
 
