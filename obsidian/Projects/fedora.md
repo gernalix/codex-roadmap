@@ -5,6 +5,7 @@ tags:
 
 # Fedora
 
+- [[obsidian/Prompts/519247 codex-usage-publisher-append-fastpath-runtime|519247 · Attivare il fast-path del publisher Codex]] · `pending`
 - [[obsidian/Prompts/526713 fedora-runtime-validation-v2|526713 · Ultimo controllo del monitoraggio Fedora]] · `pending`
 - [[obsidian/Prompts/357862 logseq-updates-pat-safety-closure-v2|357862 · Chiusura sicurezza e attivazione updater Logseq]] · `pending`
 - [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill|813383 · Attivare il tracciamento SQLite della roadmap]] · `completed`
