@@ -17,9 +17,9 @@ tags:
 - **Stato:** pending
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../prompts/codex-usage-publisher-attribution-fastpath-followup|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-18T18:37:02Z
+- **Ultimo lancio:** 2026-09-18T18:37:02Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -37,7 +37,7 @@ Installa sul PC la correzione già pronta del salvataggio Codex e verifica che i
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-18T18:37:02Z | 2026-09-18T18:37:20Z | BLOCKED | 17.788 | gpt-5.6-luna | low | 1 | 33217 |
 
 ## Analisi ChatGPT
 
