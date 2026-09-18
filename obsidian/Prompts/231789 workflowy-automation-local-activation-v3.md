@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
 - **Prompt:** [[../../completed/workflowy-automation-local-activation-v3|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-18T23:33:09Z
+- **Ultimo lancio:** 2026-09-18T23:33:09Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Dopo il PASS di 856234 esegue solo l’attivazione locale, senza ripetere smoke 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-18T23:33:09Z | 2026-09-18T23:34:11Z | PASS | 61.616 | gpt-5.6-luna | low | 8 | 38204 |
 
 ## Analisi ChatGPT
 
