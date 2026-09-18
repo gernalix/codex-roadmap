@@ -20,8 +20,10 @@ class ImportTests(unittest.TestCase):
                 "duration_seconds":60,"total_tokens":100,"tool_call_count":2
             }),encoding="utf-8")
             s1=importer.import_metrics(repo,src,render_after=False)
+            db_bytes=(repo/"roadmap.sqlite").read_bytes()
             s2=importer.import_metrics(repo,src,render_after=False)
             self.assertEqual(1,s1["inserted"]); self.assertEqual(1,s2["existing"])
+            self.assertEqual(db_bytes,(repo/"roadmap.sqlite").read_bytes())
             conn=db.connect(repo,writable=False)
             self.assertEqual("completed",db.prompt_row(conn,"123456")["status"])
             self.assertEqual(1,conn.execute("select count(*) from executions").fetchone()[0])
