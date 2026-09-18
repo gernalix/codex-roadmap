@@ -26,7 +26,7 @@ class MutationTests(unittest.TestCase):
                     "new_depends_on_prompt_id":"222222"
                 }]
             }),encoding="utf-8")
-            out=apply_mutations.apply_inbox(repo)
+            out=apply_mutations.apply_inbox(repo, test_only=True)
             self.assertEqual(1,out["operations"])
             conn=db.connect(repo,writable=False)
             deps=conn.execute(
@@ -53,7 +53,7 @@ class MutationTests(unittest.TestCase):
                     {"op":"code_change","prompt_id":"123456","repository":"gernalix/example","change_type":"fix","commit_sha":"abc123"}
                 ]
             }),encoding="utf-8")
-            out=apply_mutations.apply_inbox(repo)
+            out=apply_mutations.apply_inbox(repo, test_only=True)
             self.assertEqual(2,out["operations"])
             self.assertFalse((inbox/"a.json").exists())
             self.assertTrue((repo/"mutations/applied/a.json").exists())
