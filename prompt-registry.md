@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/817264 codex-usage-publisher-autonomous-runtime-closure\|817264 · Chiudere autonomamente il publisher Codex sul PC]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/284916 personalhub-100-capsule-isolation-integrate-v3\|284916 · PersonalHub 100% capsule isolation — valida e integra]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/781352 oracle-backup-notification-antiflap-runtime-v2\|781352 · Ferma le notifiche backup Oracle transitorie]] | pending | — | — | — | no | no | — | Oracle VM | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/418906 workflowy-importer-live-smoke-secret-file-v2\|418906 · Ultima prova reale dell’importatore Workflowy]] | pending | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
@@ -27,6 +26,7 @@
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237 · Completa il fix del salvataggio Codex sul PC]] | blocked | 2026-09-18T21:32:25Z | 2026-09-18T21:32:25Z | BLOCKED | sì | sì | [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure\|642815]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure\|642815 · Chiudere il fix del publisher Codex sul PC]] | blocked | 2026-09-18T21:58:59Z | 2026-09-18T21:58:59Z | BLOCKED | sì | sì | [[obsidian/Prompts/817264 codex-usage-publisher-autonomous-runtime-closure\|817264]] | Fedora | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/817264 codex-usage-publisher-autonomous-runtime-closure\|817264 · Chiudere autonomamente il publisher Codex sul PC]] | completed | — | — | PASS | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | blocked | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | BLOCKED | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2\|200725 · PersonalHub 100% capsule isolation — integra main e valida]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |

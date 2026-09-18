@@ -1,21 +1,21 @@
 ---
 prompt_id: 817264
-status: pending
+status: completed
 project_id: 8
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - issue-queue-drain-v2
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/completed
   - roadmap/project/fedora
 ---
 
 # 817264 · Chiudere autonomamente il publisher Codex sul PC
 
-- **Stato:** pending
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/codex-usage-publisher-autonomous-runtime-closure|Apri prompt]]
+- **Prompt:** [[../../completed/codex-usage-publisher-autonomous-runtime-closure|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
