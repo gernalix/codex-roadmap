@@ -8,6 +8,7 @@ tags:
   - project/fedora
   - roadmap
   - roadmap/identity-protected
+  - roadmap/projections-v1
   - roadmap/sqlite-v1
   - roadmap/prompt
   - roadmap/status/pending
