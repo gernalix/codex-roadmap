@@ -1,0 +1,51 @@
+name: Roadmap integrity
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Reject direct canonical roadmap writes
+        if: github.event_name == 'push'
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          set -euo pipefail
+          if [ "$ACTOR" = "github-actions[bot]" ]; then
+            exit 0
+          fi
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            changed="$(git show --pretty='' --name-only "$AFTER")"
+          else
+            changed="$(git diff --name-only "$BEFORE" "$AFTER")"
+          fi
+          protected="$(printf '%s\n' "$changed" | grep -E '^(roadmap\.sqlite|roadmap\.md|spiegazioni\.md|prompt-registry\.md|obsidian/|prompts/|completed/|falliti/|mutations/(inbox|applied)/)' || true)"
+          if [ -n "$protected" ]; then
+            echo "Direct canonical/generated roadmap writes are forbidden; submit a [roadmap-mutation] Issue instead:" >&2
+            printf '%s\n' "$protected" >&2
+            exit 1
+          fi
+
+      - name: Python syntax
+        run: |
+          python3 -m py_compile             tools/roadmap_db.py             tools/submit_mutation.py             tools/roadmap_result.py             tools/roadmap_finish.py             tools/roadmap_sync.py             tools/import_codex_usage.py             tools/apply_mutations.py             tools/apply_issue_mutation.py             tools/bootstrap_roadmap.py
+
+      - name: Unit tests
+        run: PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
+
+      - name: Canonical DB integrity
+        run: python3 tools/roadmap_db.py --repo . verify
