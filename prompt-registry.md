@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | pending | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | pending | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | BLOCKED | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2\|200725 · PersonalHub 100% capsule isolation — integra main e valida]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237 · Completa il fix del salvataggio Codex sul PC]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/219473 oracle-backup-notification-antiflap-runtime\|219473 · Ferma le notifiche backup Oracle transitorie]] | pending | — | — | — | no | no | — | Oracle VM | GPT-5.6 Terra | medium |

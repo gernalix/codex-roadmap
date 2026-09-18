@@ -16,9 +16,9 @@ tags:
 - **Stato:** pending
 - **Progetto:** [[../Projects/personalhub-codex-roadmap|PersonalHub + codex-roadmap]]
 - **Prompt:** [[../../prompts/roadmap-ph-single-writer-full-local-activation|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-18T21:03:24Z
+- **Ultimo lancio:** 2026-09-18T21:03:24Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -36,7 +36,7 @@ Verifica sul PC che solo il servizio remoto aggiorni davvero la roadmap, compres
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-18T21:03:24Z | 2026-09-18T21:04:17Z | BLOCKED | 53.113 | gpt-5.6-terra | medium | 3 | 45716 |
 
 ## Analisi ChatGPT
 
