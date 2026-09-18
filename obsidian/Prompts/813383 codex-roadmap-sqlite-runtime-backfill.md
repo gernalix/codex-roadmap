@@ -20,9 +20,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../completed/codex-roadmap-sqlite-runtime-backfill|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-18T20:17:55Z
+- **Ultimo lancio:** 2026-09-18T20:17:55Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -40,7 +40,7 @@ Completa il passaggio alla nuova roadmap: importa lo storico reale delle esecuzi
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-18T20:17:55Z | 2026-09-18T20:25:37Z | PASS | 462.086 | gpt-5.6-terra | medium | 70 | 86895 |
 
 ## Analisi ChatGPT
 
