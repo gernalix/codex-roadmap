@@ -1,0 +1,82 @@
+PROMPT_ID=315972 | project_id=49 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
+
+
+# Contratto Git/integrazione PH aggiornato — prevale su ogni istruzione successiva incompatibile
+- `main` è baseline/target finale, non area di implementazione. Qualunque riferimento successivo a “branch obbligatorio main”, “lavora su main”, “push main”, “non creare PR”, “mantieni il branch separato” o equivalenti è superato da questo contratto.
+- Se il task parte già da un branch feature nominato nel prompt, continua su QUEL branch. Altrimenti crea/usa il branch dedicato `codex/315972-salute-ui-hub-obsidian` dal più recente `origin/main`.
+- Durante implementazione/fix branch-local NON acquisire il lock PH. Esegui i gate host branch-local necessari e pusha solo il branch candidato.
+- Quando il branch è pronto, apri/aggiorna una PR verso `main`. A quel punto la stessa sessione può diventare integratore: acquisisci `tools/personalhub_task_lock.py`, fai un solo refresh di `origin/main`, usa `tools/personalhub_integration_context.py --branch <branch>`, rileggi il diff rispetto al main corrente e valuta semanticamente le interazioni. Un merge Git senza conflitti non basta.
+- Se servono fix di compatibilità, applicali SOLO sul branch candidato e rilancia i gate pertinenti. Ambiguità sostanziale/out-of-scope => BLOCKED senza toccare `main`.
+- Solo dopo review semantica + gate pertinenti PASS, integra la PR in `main`, pusha il canonico, elimina subito il branch remoto+locale e rilascia il lock. Se il task include QA condivisa su AVD/device o release, il lock deve essere acquisito prima di quella fase e può restare detenuto fino a fine integrazione/release.
+- Se il task è davvero read-only e non produce alcuna modifica, branch/PR non sono necessari; resta comunque obbligatorio il lock per QA condivisa/release.
+
+# Goal
+Completa su PersonalHub `main` l'integrazione applicativa di Salute già resa canonica dal PROMPT_ID=862541: sostituisci l'attuale consumer di `salute.db` esterno con DAO/view di `personalhub.db`, aggiungi Hub/Temporal/Datasette e UI Android minimale read-only. **Non implementare Obsidian qui**: la proiezione Obsidian è stata promossa a feature globale PH nei prompt successivi.
+
+# Precondizioni autoritative
+- repo: `/home/daniele/projects/PersonalHub`;
+- esegui SOLO dopo PROMPT_ID=862541 PASS/finalizzato;
+- branch obbligatorio: `main`, già contenente schema/migration/DAO/view health validati dal task precedente; non ricreare il vecchio branch Salute;
+- usa come contratto `docs/HEALTH_MODULE.md`, `docs/health/HEALTH_DATA_MODEL.md`, `docs/health/android-minimal-ui.svg`, `docs/health/chatgpt-to-ph-workflow.svg`;
+- `version.txt` resta 50: fase intermedia della campagna;
+- l'Android UI Salute è read-only: niente Add/Edit/Delete/FAB, niente sync Salute separato;
+- `personalhub.db` resta l'unico datastore canonico;
+- nessun dato sanitario reale in fixture/source/log;
+- `docs/OBSIDIAN_ARCHIVE.md` su main è il contratto della futura feature Obsidian globale: non duplicarne una variante Salute-only in questo task.
+
+# Esecuzione
+1. Acquisisci task lock PH con PROMPT_ID 315972. Preflight unico: `main`, 862541 finalizzato, worktree/remote safe; un solo fetch/fast-forward. Usa CODE_MAP rows `health.root`, `health.data`, `health.workflow`, `hub.context`, `hub.temporal_search`, `database.datasette_sync`; niente audit repo-wide.
+2. Consumer closure prima delle rimozioni:
+   - usa `android_consumer_preflight.py` sui simboli `HealthRepository`, `GitReadOnlyArtifactClient` e qualunque API pubblica sostituita;
+   - rimuovi il download/cache di `gernalix/salute/salute.db`;
+   - rimuovi `GitReadOnlyArtifactClient` solo se il gate dimostra che non ha altri consumer;
+   - nessun secondo SQLite/cache/sync Salute deve restare.
+3. Repository/UI data path:
+   - `:feature:salute` legge solo il DB canonico tramite `HealthDao`/view;
+   - Recenti, Esami, Campioni, Diario;
+   - sample detail: data/ora collection, luogo, count, anomalie, turnaround, sample AI, lista measurement;
+   - measurement detail: risultato corrente, storico stesso analyte, commento AI, sample/evidence links; grafico opzionale, non richiesto;
+   - journal detail: NOTA CLINICA / META-PARERE AI / EVIDENZE / ORIGINALE DANESE collassato;
+   - nessun raw epoch/id/encoding tecnico visibile.
+4. Cross-module navigation:
+   - doctor chip → People;
+   - place chip → Places;
+   - medication/prescription link → Substances quando esiste evidenza canonica;
+   - purchase link → Soldi solo quando esiste relazione reale;
+   - nessuna inferenza per nome.
+5. Hub Context:
+   - implementa adapter Salute almeno per event, sample, measurement, journal;
+   - capability/search/summary/open target coerenti;
+   - nessuna feature→feature dependency;
+   - Context può collegare note/sample a People/Places/Substances/Soldi tramite binding canonici.
+6. Temporal Search:
+   - aggiungi provider Salute;
+   - health events ordinati da epoch-ms;
+   - stesso evento non va duplicato se già rappresentato via Context/relazione esplicita secondo le regole globali;
+   - People non viene inferito come “presente” solo perché un medico è citato in una nota.
+7. Datasette:
+   - assicurati che health_* e le view consumer siano incluse nel normale snapshot/replica senza special-case che le escluda;
+   - le FK a People/Places devono risultare navigabili dal layer già esistente;
+   - non implementare qui il runtime Datasette Lite: quello resta al prompt successivo dedicato.
+8. UI/QA:
+   - usa il wireframe SVG come limite superiore, non come invito al redesign;
+   - Home tile Salute resta;
+   - nessun pulsante “Aggiorna” Salute separato: stato dati segue PH;
+   - unit/UI tests sintetici per tabs, sample detail, journal authorship separation, cross-links;
+   - AVD Pixel_8a: Home→Salute, Recenti/Esami/Campioni/Diario, sample detail + turnaround, journal clinician-vs-AI, deep-link People/Places/Substances;
+   - nessun dato reale.
+9. Gate host finale: compile feature/app, Hub/Temporal tests, Datasette visibility test, `checkArchitectureBoundaries`. Failure => leaf correction, poi un solo aggregato finale.
+10. Aggiorna `docs/HEALTH_MODULE.md`, CODE_MAP e CI Salute solo se differiscono dal comportamento implementato. Rimuovi documentazione obsoleta del DB esterno e ogni riferimento a una proiezione Obsidian Salute-only.
+11. Solo dopo i gate PASS, commit/push `main` una sola volta. Non creare/pushare branch remoti temporanei: il task Obsidian successivo partirà direttamente da questo `main`. Rilascia lock.
+
+# Acceptance
+PASS solo se Android Salute usa esclusivamente il DB canonico, nessun cache/sync `salute.db` esterno resta, Hub/Temporal/Datasette sono integrati, UI minima read-only + AVD PASS, architecture gate PASS e `version.txt` resta 50. Nessuna implementazione Obsidian Salute-only deve essere introdotta.
+
+# Non-goal
+Obsidian exporter, nuove tabelle/schema salvo fix strettamente necessario emerso dai test del modello 862541, Logseq, Data Explorer Lite runtime, release/install Pixel fisico/delivery, redesign PH.
+
+# Stop
+Dopo PASS:
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 315972 --confirm-executed`
+
+Output massimo 8 righe: RESULT, HEAD, CANONICAL_UI, HUB, TEMPORAL, DATASETTE, AVD_QA, BLOCKER.
