@@ -1,4 +1,4 @@
-PROMPT_ID=527184 | project_id=10 | model=GPT-5.5 | reasoning=medium | MegaVault=STRICT
+PROMPT_ID=527184 | project_id=10 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STRICT
 
 # Goal
 Valida e distribuisci SOLO il nuovo accesso SQL read-only autenticato del Data Explorer PersonalHub nel runtime `datasette5`, senza modificare l'API mobile di sync.
