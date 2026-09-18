@@ -14,7 +14,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 - server task `527184` rende `personalhub_read` read-only e materializza FK cross-modulo + grafo simmetrico `hub_entity_relations`.
 
 # Esecuzione minima
-1. Acquisisci task lock PH con PROMPT_ID 861305. Preflight unico: worktree + un solo fetch `origin main`; fast-forward locale e fissa RUN_HEAD. Richiedi `version.txt=48`, che la baseline Git Data/History indicata sopra sia antenata e che il task 672418 risulti già finalizzato nella roadmap; divergenza/dirty overlap => BLOCKED. Non ripetere i gate Git History già PASS salvo che questo task tocchi direttamente quel boundary. Usa solo CODE_MAP row `database.data_explorer` più i file Luoghi già noti sotto `capsules/checkin` e i test indicati sotto; niente audit repo-wide.
+1. Acquisisci task lock PH con PROMPT_ID 861305. Preflight unico: worktree + un solo fetch `origin main`; fast-forward locale e fissa RUN_HEAD. Richiedi `version.txt=50`, che la baseline Git Data/History indicata sopra sia antenata e che il task 672418 risulti già finalizzato nella roadmap; divergenza/dirty overlap => BLOCKED. Non ripetere i gate Git History già PASS salvo che questo task tocchi direttamente quel boundary. Usa solo CODE_MAP row `database.data_explorer` più i file Luoghi già noti sotto `capsules/checkin` e i test indicati sotto; niente audit repo-wide.
 2. Vendorizza/pinna Datasette Lite + Pyodide + wheel/assets necessari sotto gli asset PH. Nessuna CDN/runtime fetch. NON allentare il network block locale.
 3. Dal detached snapshot costruisci, se necessario, una presentazione locale effimera read-only con semantica equivalente a `personalhub_read`:
    - vere SQLite FK e label leggibili;
