@@ -24,10 +24,11 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
+- **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
-- **Padri/precedenti:** —
+- **Padri/precedenti:** [[809537 roadmap-sqlite-state-migration|809537]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
@@ -44,3 +45,7 @@ Completa il passaggio alla nuova roadmap: importa lo storico reale delle esecuzi
 ## Analisi ChatGPT
 
 - Non ancora analizzato.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.

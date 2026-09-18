@@ -21,6 +21,7 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
+- **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[527184 datasette5-personalhub-explorer-security-deploy|527184]], [[672418 personalhub-git-history-data-sync-validation|672418]]
 - **Sblocca:** [[311947 personalhub-play-release-local-validation|311947]]
@@ -41,3 +42,7 @@ Completa l’esploratore dati direttamente sul telefono, anche senza Internet, m
 ## Analisi ChatGPT
 
 - Non ancora analizzato.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.

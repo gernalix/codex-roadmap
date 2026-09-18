@@ -21,6 +21,7 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
+- **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[617205 personalhub-shared-alerts-places-tags-validation|617205]]
 - **Sblocca:** [[418763 personalhub-salute-canonical-integration|418763]]
@@ -41,3 +42,7 @@ Controlla e uniforma date e ore di PersonalHub senza riscrivere inutilmente i da
 ## Analisi ChatGPT
 
 - Non ancora analizzato.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.

@@ -21,6 +21,7 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
+- **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[861305 personalhub-datasette-lite-offline-runtime|861305]]
 - **Sblocca:** —
@@ -41,3 +42,7 @@ Crea e controlla il pacchetto finale Android senza pubblicarlo e lo prova su un 
 ## Analisi ChatGPT
 
 - Non ancora analizzato.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.

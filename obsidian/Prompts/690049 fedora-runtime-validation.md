@@ -21,6 +21,7 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
+- **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
@@ -41,3 +42,7 @@ Controlla sul PC reale che i due monitor Fedora abbiano ancora le impostazioni c
 ## Analisi ChatGPT
 
 - Non ancora analizzato.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.

@@ -21,6 +21,7 @@ tags:
 - **Ultimo lancio:** 2026-09-18T19:11:43Z
 - **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
+- **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** 693572
 - **Dipende da:** —
 - **Sblocca:** —
@@ -41,3 +42,7 @@ Prova l’importatore Workflowy sul PC con dati finti e controlla che non crei d
 ## Analisi ChatGPT
 
 - 2026-09-18T19:34:30Z · colli di bottiglia: sì · fix: 693572 · Host gates e dry-run PASS. Il run è stato BLOCKED solo dalla chiave Workflowy assente; 16 tool-call includevano discovery segreti e cleanup evitabili. Il follow-up usa il file segreto canonico e un unico smoke helper.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.

@@ -21,6 +21,7 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
+- **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[582741 personalhub-obsidian-archive-foundation|582741]]
 - **Sblocca:** [[845312 personalhub-obsidian-archive-projections|845312]]
@@ -41,3 +42,7 @@ Fa aggiornare nell’archivio Obsidian solo ciò che cambia e rende il processo 
 ## Analisi ChatGPT
 
 - Non ancora analizzato.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.

@@ -21,6 +21,7 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
+- **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[724615 personalhub-salute-ui-hub-obsidian|724615]]
 - **Sblocca:** [[671904 personalhub-obsidian-archive-incremental|671904]]
@@ -41,3 +42,7 @@ Aggiunge una vista opzionale dei dati PersonalHub leggibile con Obsidian, senza 
 ## Analisi ChatGPT
 
 - Non ancora analizzato.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.

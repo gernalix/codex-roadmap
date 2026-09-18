@@ -21,6 +21,7 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
+- **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[461839 personalhub-epoch-timestamps-migration|461839]]
 - **Sblocca:** [[724615 personalhub-salute-ui-hub-obsidian|724615]]
@@ -41,3 +42,7 @@ Porta i dati Salute nell’archivio principale di PersonalHub mantenendo la modi
 ## Analisi ChatGPT
 
 - Non ancora analizzato.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.

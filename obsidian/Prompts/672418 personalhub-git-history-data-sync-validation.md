@@ -21,6 +21,7 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
+- **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[845312 personalhub-obsidian-archive-projections|845312]]
 - **Sblocca:** [[861305 personalhub-datasette-lite-offline-runtime|861305]]
@@ -41,3 +42,7 @@ Verifica con attenzione cronologia, backup e ripristino dei dati PersonalHub pri
 ## Analisi ChatGPT
 
 - Non ancora analizzato.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.

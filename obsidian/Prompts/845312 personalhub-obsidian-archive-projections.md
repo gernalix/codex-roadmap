@@ -21,6 +21,7 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
+- **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[671904 personalhub-obsidian-archive-incremental|671904]]
 - **Sblocca:** [[672418 personalhub-git-history-data-sync-validation|672418]]
@@ -41,3 +42,7 @@ Estende l’archivio Obsidian a tutti i moduli mantenuti con note leggibili, lin
 ## Analisi ChatGPT
 
 - Non ancora analizzato.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.

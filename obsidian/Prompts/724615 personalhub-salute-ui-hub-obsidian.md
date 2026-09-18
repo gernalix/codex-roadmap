@@ -21,6 +21,7 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
+- **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[418763 personalhub-salute-canonical-integration|418763]]
 - **Sblocca:** [[582741 personalhub-obsidian-archive-foundation|582741]]
@@ -41,3 +42,7 @@ Collega Salute alle schermate e alle funzioni generali di PersonalHub usando il 
 ## Analisi ChatGPT
 
 - Non ancora analizzato.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.
