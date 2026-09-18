@@ -1,6 +1,5 @@
 # Da controllare
 
-- [[obsidian/Prompts/231789 workflowy-automation-local-activation-v3|231789 · Attivare il runtime locale Workflowy]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked` · analizzato=sì · fix=817264
 - [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237 · Completa il fix del salvataggio Codex sul PC]] · `blocked` · analizzato=sì · fix=642815
 - [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation|749621 · Attiva single-writer completo e integrazione PH]] · `completed` · analizzato=no · fix=—
