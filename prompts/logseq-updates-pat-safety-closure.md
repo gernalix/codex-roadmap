@@ -1,46 +1,47 @@
 PROMPT_ID=518264 | project_id=23 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT
 
 # Goal
-Bonifica in modo fail-closed SOLO la vecchia history di `gernalix/logseq_updates` dal finding `github-pat`, verifica lo stato della credential senza esporla e aggiorna la decisione di pubblicabilità.
+Bonifica fail-closed SOLO la vecchia history di `gernalix/logseq_updates` dal finding `github-pat`, porta il repo allo standard di un solo branch `main`, verifica la credential senza esporla e aggiorna la decisione di pubblicabilità.
 
 # Starting point autoritativo
-- repo remoto attualmente PRIVATE, branch `master`;
-- HEAD remoto minimo noto: `229e999ca6073d70cac01eedf520d5062843b04f`; il precedente tentativo `518264` ha verificato che il remoto era ancora esattamente a questo commit;
+- repo remoto PRIVATE;
+- stato branch verificato: `main` e `master` puntano entrambi a `712741b38ca41d090c14084d1859f23d35e9c728`, `master` è ancora il default e non esistono altri branch;
+- il workflow one-shot tentato per rinominare il default branch è stato rimosso dal tree; non ricrearlo;
 - finding noto: `github-pat` nella history, path `logseq_updates.bat`, commit abbreviato `41ff0d119e3c`;
-- il tree corrente è già sanificato: il batch usa `GITHUB_TOKEN` dall'ambiente e non contiene più il PAT;
-- nello stesso fix remoto lo updater usa state/download atomici e aggiorna `last_run_number` solo dopo successo: NON toccare codice applicativo in questo task;
+- tree corrente già sanificato: usa `GITHUB_TOKEN` dall'ambiente; NON toccare codice applicativo;
 - checkout canonici: `/home/daniele/projects/logseq_updates`, `/home/daniele/projects/MegaVault`, `/home/daniele/projects/codex-roadmap`;
 - output MegaVault modificabili SOLO per `logseq_updates`: `ai/repository-publication-audit.json`, `ai/repository-ci-handoff.json`, `ai/repository-public-private-matrix.md`;
-- helper già testato: `/home/daniele/projects/codex-roadmap/tools/ensure_git_filter_repo.py`. Se `git-filter-repo` non è nel PATH, crea un venv effimero SOLO sotto `/tmp`, installa la versione pin `2.47.0`, verifica l'eseguibile e restituisce il path senza modificare il sistema globalmente. Non fare una seconda probe manuale equivalente.
+- helper già testato: `/home/daniele/projects/codex-roadmap/tools/ensure_git_filter_repo.py`; se necessario crea venv effimero in `/tmp` con `git-filter-repo==2.47.0`.
 
-Prompt autosufficiente: oltre al bootstrap MegaVault STRICT imposto dalle istruzioni globali, non rileggere README/roadmap/spiegazioni/MEMORY, audit globali o file capsule non necessari all'esecuzione. Usa solo i file/output esplicitamente necessari sotto.
+Prompt autosufficiente: oltre al bootstrap MegaVault STRICT imposto dalle istruzioni globali, non rileggere README/roadmap/spiegazioni/MEMORY, audit globali o capsule non necessarie.
 
 # Safety
-- Mai stampare secret, fingerprint, raw finding, header Authorization o replace-map.
-- Artefatti sensibili soltanto sotto `/tmp` mode 0700/0600 e rimossi prima dello stop.
+- Mai stampare secret, fingerprint, raw finding, Authorization header o replace-map.
+- Artefatti sensibili solo sotto `/tmp` mode 0700/0600 e rimossi prima dello stop.
 - Rewrite esclusivamente su mirror fresco; checkout canonico intatto fino alla verifica remota.
 - Repo PRIVATE finché history e credential non sono provate sicure.
-- Nessuna installazione globale. Il bootstrap di `git-filter-repo` è l'unica installazione ammessa e resta confinato nel venv `/tmp` del helper.
+- Nessuna installazione globale.
 
 # Esecuzione minima
-1. **Fotografia + tool preflight, una volta.** In un solo blocco read-only fotografa i tre checkout interessati e il remote `logseq_updates`. Il remote deve essere ancora `229e999...`; se è avanzato, `BLOCKED`, niente merge/rebase. Subito dopo esegui UNA volta `python3 /home/daniele/projects/codex-roadmap/tools/ensure_git_filter_repo.py`, parsea solo il JSON e conserva in memoria il campo `executable`. Se il helper fallisce => `BLOCKED`. Non rieseguire `which`, `command -v`, `--version` o altre probe equivalenti.
-2. **Scan iniziale.** Crea mirror fresco in `/tmp`; esegui UNA gitleaks full-history/all-refs con `--redact` e report raw protetto. Conferma programmaticamente il finding target senza stamparlo. Se il finding atteso non è dimostrato o emergono condizioni incompatibili col rewrite mirato => `BLOCKED`.
-3. **Credential.** Se il valore target può essere estratto in-memory senza output, fai al massimo UNA verifica read-only verso GitHub e registra solo `credential_state=active|inactive|unknown`. `unknown` non è safe. Non ripetere la verifica.
-4. **Rewrite.** Usa direttamente l'eseguibile restituito dal helper per riscrivere SOLO il secret target nel mirror fresco, con replace-map temporaneo protetto. Nessun secondo tool discovery e nessun altro history rewriter.
-5. **Verifica + push.** Nel mirror verifica UNA volta: gitleaks all-refs pulito + refs/branch/tag preservati. Poi force-push dei refs riscritti al remote ancora PRIVATE. Se la verifica pre-push fallisce, non pushare.
-6. **Verifica post-push.** Crea un mirror fresco post-push e fai UNA seconda/finale scansione gitleaks full-history; registra solo `scanned_head_sha` e stato pulito/non pulito.
-7. **Pubblicabilità.** Se `credential_state=inactive` e history/tree sono puliti, aggiorna SOLO le tre entry MegaVault di `logseq_updates` e applica la decisione di pubblicabilità coerente. Se `active|unknown`, repo resta PRIVATE e risultato `BLOCKED` con unica azione esterna `revoke/rotate credential`; non modificare la visibility.
-8. **Riconcilia + cleanup.** Riconcilia il checkout canonico solo dopo verifica remota. Parse JSON + `git diff --check`; un solo commit/push MegaVault. Esegui una sola volta `python3 /home/daniele/projects/codex-roadmap/tools/ensure_git_filter_repo.py --cleanup`; rimuovi anche mirror/report/replace-map temporanei. Nessun audit di altri repo.
+1. **Canonicalizza il branch prima del rewrite.** In un unico preflight verifica che `origin/main` e `origin/master` siano entrambi esattamente `712741b38ca41d090c14084d1859f23d35e9c728` e che non esistano altri branch. Usa direttamente l'auth GitHub già disponibile: `gh repo edit gernalix/logseq_updates --default-branch main`. Solo dopo successo verificato del default `main` esegui `git push origin --delete master`. Se cambio default o delete falliscono => `BLOCKED`, niente rewrite. Nel checkout locale rinomina/aggancia il branch a `main` senza stash/reset distruttivi.
+2. Esegui UNA volta `python3 /home/daniele/projects/codex-roadmap/tools/ensure_git_filter_repo.py`, parsea solo il JSON e conserva `executable`. Se fallisce => `BLOCKED`. Niente probe equivalenti.
+3. Crea mirror fresco in `/tmp`; esegui UNA gitleaks full-history/all-refs con `--redact` e report protetto. Conferma programmaticamente il finding target senza stamparlo. Se il finding atteso non è dimostrato o emerge un blocker incompatibile col rewrite mirato => `BLOCKED`.
+4. Se il valore target può essere estratto in-memory senza output, fai al massimo UNA verifica read-only verso GitHub e registra solo `credential_state=active|inactive|unknown`. `unknown` non è safe.
+5. Usa direttamente l'eseguibile restituito dall'helper per riscrivere SOLO il secret target nel mirror, con replace-map temporaneo protetto.
+6. Verifica UNA volta gitleaks all-refs pulito + `main`/tag preservati, quindi force-pusha il `main` riscritto e i tag necessari al remoto ancora PRIVATE. Nessun `master` deve essere ricreato.
+7. Crea un mirror fresco post-push e fai UNA seconda/finale scansione gitleaks full-history; registra solo `scanned_head_sha` e pulito/non pulito. Verifica anche che il remoto abbia default `main` e **solo** il branch `main`.
+8. Se `credential_state=inactive` e history/tree sono puliti, aggiorna SOLO le tre entry MegaVault di `logseq_updates` e applica la decisione di pubblicabilità coerente. Se `active|unknown`, repo resta PRIVATE e risultato `BLOCKED` con unica azione esterna revoke/rotate credential.
+9. Riconcilia il checkout canonico solo dopo verifica remota; parse JSON + `git diff --check`; un solo commit/push MegaVault. Esegui una sola volta l'helper con `--cleanup` e rimuovi mirror/report/replace-map temporanei.
 
 # Acceptance
-PASS solo se il PAT non appare mai nel transcript, la history remota finale è gitleaks-clean, `credential_state=inactive`, `scanned_head_sha` è registrato e report/matrix/handoff MegaVault sono coerenti. `active|unknown` => `BLOCKED`, repo PRIVATE.
+PASS solo se il PAT non appare mai nel transcript, il repo remoto usa default `main` e non ha altri branch, la history remota finale è gitleaks-clean, `credential_state=inactive`, `scanned_head_sha` è registrato e report/matrix/handoff MegaVault sono coerenti. `active|unknown` => `BLOCKED`, repo PRIVATE.
 
 # Non-goal
-Niente modifica del codice updater, CI generale, audit altri repo, secondo scanner, installazioni globali, dependency discovery ripetuta o cleanup non correlato.
+Niente modifica updater, CI generale, audit altri repo, secondo scanner, installazioni globali, dependency discovery ripetuta o cleanup non correlato.
 
 # Stop
 Dopo PASS esegui una sola volta:
 `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 518264 --confirm-executed`
 
-Non fare dry-run separati né controlli Git equivalenti dopo finalizzazione. Se il risultato è BLOCKED dopo il bootstrap, fai comunque il cleanup effimero una sola volta prima dell'output finale.
-Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 6 righe: `RESULT`, `HISTORY`, `CREDENTIAL_STATE`, `SCANNED_HEAD`, `MEGAVAULT`, `BLOCKER`.
+Non fare dry-run o controlli Git equivalenti dopo finalizzazione. Se BLOCKED dopo bootstrap, esegui comunque il cleanup effimero una sola volta.
+Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 7 righe: `RESULT`, `BRANCHES`, `HISTORY`, `CREDENTIAL_STATE`, `SCANNED_HEAD`, `MEGAVAULT`, `BLOCKER`.
