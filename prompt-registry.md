@@ -6,6 +6,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | pending | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | pending | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | BLOCKED | no | no | — | Fedora | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/219473 oracle-backup-notification-antiflap-runtime\|219473 · Ferma le notifiche backup Oracle transitorie]] | pending | — | — | — | no | no | — | Oracle VM | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572 · Ultima prova reale dell’importatore Workflowy]] | pending | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/527184 datasette5-personalhub-explorer-security-deploy\|527184 · Versione online dell’esploratore dati PersonalHub]] | pending | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
