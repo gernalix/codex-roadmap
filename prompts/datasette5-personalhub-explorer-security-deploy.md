@@ -10,16 +10,19 @@ Valida e distribuisci SOLO la proiezione Datasette PersonalHub già implementata
 - Datasette runtime canonico: 1.0a38;
 - `personalhub_read`: browse + `execute-sql` solo actor umano `root`; anonimo negato; ogni write/schema mutation negata;
 - FK logiche già codificate: finance transaction/recurrence → People/Places/finance, prescription → doctor/finance transaction, intake → prescription;
-- `hub_entity_relations` è derivata SOLO da Context esistenti e deduplicata per coppia non ordinata; `hub_entity_relation_contexts` conserva provenance/duplicati senza replicare backlink;\n- `hub_temporal_relations` contiene SOLO relazioni inferite non già spiegate da FK/Context; `hub_temporal_evidence` conserva anche i match soppressi; WordPulse usa burst <=5 min tra entry e non gli intervalli lunghi delle sessioni; People entra solo tramite eventi/initiative timestampati;\n- soglie temporali già codificate: interval overlap >=50%; high solo >=80% con ratio durate <=4x; point-in-interval max 12h (high <=3h); point-point <=5 min (high <=60s); intervalli >24h esclusi;
+- `hub_entity_relations` è derivata SOLO da Context esistenti e deduplicata per coppia non ordinata; `hub_entity_relation_contexts` conserva provenance/duplicati senza replicare backlink;
+- `hub_temporal_relations` contiene SOLO relazioni inferite non già spiegate da FK/Context; `hub_temporal_evidence` conserva anche i match soppressi; WordPulse usa burst <=5 min tra entry e non gli intervalli lunghi delle sessioni; People entra solo tramite eventi/initiative timestampati;
+- soglie temporali già codificate: interval overlap >=50%; high solo >=80% con ratio durate <=4x; point-in-interval max 12h (high <=3h); point-point <=5 min (high <=60s); intervalli >24h esclusi;
 - API mobile `personalhub-sync` resta separata e non può interrogare/modificare la proiezione.
 
 # Esecuzione minima
 1. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == 0cdcb712ecb6b8c4bd52baa85722f6922adda3de`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED, niente stash/rebase.
 2. Leggi SOLO i tre file sopra e gli helper deploy già nominati nel README se servono. Niente audit repo-wide.
-3. Esegui in un solo batch i tre test mirati:
+3. Esegui in un solo batch i quattro test mirati:
    - `test_cross_module_logical_relations_become_native_foreign_keys`
    - `test_context_memberships_materialize_deduplicated_symmetric_cross_module_foreign_keys`
-   - `test_datasette_native_clickable_fk_labels_and_read_only_permissions`\n   - `test_temporal_relations_are_inferred_separately_and_suppress_explicit_duplicates`
+   - `test_datasette_native_clickable_fk_labels_and_read_only_permissions`
+   - `test_temporal_relations_are_inferred_separately_and_suppress_explicit_duplicates`
    Failure => correggi solo quel failure domain e rilancia solo il test fallito.
 4. Dopo PASS mirato: una sola `python3 -m unittest tests.test_personalhub_projection -v` e una sola `python3 launch_datasette.py --check`.
 5. Se hai dovuto correggere codice, commit/push `main` una sola volta; altrimenti nessun commit cosmetico.
@@ -27,7 +30,9 @@ Valida e distribuisci SOLO la proiezione Datasette PersonalHub già implementata
 7. Readback runtime bounded e read-only:
    - `personalhub_read` accessibile a `root`, anonimo negato;
    - SELECT innocua via SQL UI/API autenticata;
-   - `PRAGMA foreign_key_list` conferma FK cross-modulo, FK di `hub_entity_relations` e FK endpoint di `hub_temporal_relations`;\n   - verifica che un pair già collegato via FK/Context NON compaia anche come backlink temporale visibile, ma lasci evidenza/sostegno aggregato;\n   - verifica che `wordpulse_activity_bursts` raggruppi entry ravvicinate e che una sessione WordPulse lunga senza burst utile non generi associazioni;
+   - `PRAGMA foreign_key_list` conferma FK cross-modulo, FK di `hub_entity_relations` e FK endpoint di `hub_temporal_relations`;
+   - verifica che un pair già collegato via FK/Context NON compaia anche come backlink temporale visibile, ma lasci evidenza/sostegno aggregato;
+   - verifica che `wordpulse_activity_bursts` raggruppi entry ravvicinate e che una sessione WordPulse lunga senza burst utile non generi associazioni;
    - se i dati reali contengono almeno un Context con membri di moduli diversi, verifica la navigazione in entrambe le direzioni partendo da almeno due moduli diversi; se non esiste alcun esempio reale, il test sintetico mirato è sufficiente e NON creare dati produzione;
    - write SQL/upsert/schema mutation sulla proiezione negati;
    - endpoint mobile sync ancora disponibile, senza inviare dati sintetici.
