@@ -4,12 +4,13 @@ PROMPT_ID=643817 | project_id=15 | model=GPT-5.6 Terra | reasoning=medium | Mega
 Distribuisci SOLO `gernalix/activity-watch-uploader` sul Fedora reale usando `gernalix/activity-watch-data` come repository privato ESCLUSIVO dei dati, crea/configura direttamente nel DB autorevole di Uptime Kuma un unico monitor push dedicato, collega il relativo secret al servizio senza esporlo e chiudi il flusso end-to-end ActivityWatch → JSONL → `activity-watch-data` → Kuma. Il codice, il formato dati e le unit template sono già su GitHub: niente redesign.
 
 # Starting point autoritativo
-- repo codice privato: `gernalix/activity-watch-uploader`, branch `main`; baseline minima da includere: `9b3321d0f9b8be1d839f9dad8fbe2bcd20379930`;
+- repo codice privato: `gernalix/activity-watch-uploader`, branch `main`; baseline minima da includere: `799fd7e55af4c992bc2459526f5e7223219b92c5`;
 - repo dati privato: `gernalix/activity-watch-data`, branch `main`; baseline documentale minima: `d5ccf9b3f397bb104ce10a3b36b6ca2ea7b277f4`;
 - checkout Fedora canonici: `/home/daniele/projects/activity-watch-uploader` (codice) e `/home/daniele/projects/activity-watch-data` (dati);
 - ActivityWatch API locale: `http://127.0.0.1:5600`;
 - il codice fa full reconcile iniziale/settimanale, refresh rolling degli ultimi 2 giorni UTC, write atomiche, lock anti-overlap, recovery Git, timeout HTTP/Git e push Kuma con `run_id`;
 - TUTTI i bucket/eventi canonici ActivityWatch devono finire SOLO nel repo dati in formato testuale ChatGPT-friendly: `metadata/buckets.json` + `buckets/<bucket-id>/YYYY/MM/YYYY-MM-DD.jsonl`; un evento completo per riga; nessun dato ActivityWatch va committato nel repo codice;
+- il runtime valida anche l'identità del remote Git e deve rifiutare qualsiasi destinazione diversa da `gernalix/activity-watch-data`;
 - unità: `activity-watch-uploader.service` + `activity-watch-uploader.timer`; il timer è ogni 15 minuti, `Persistent=true`, `OnBootSec=2min`; il service ha `Restart=on-failure`, restart bounded e `TimeoutStartSec=12min`;
 - il timer deve funzionare anche senza login interattivo dopo reboot: usa il normale systemd user manager con lingering dell'utente `daniele`;
 - repo VM: `/home/daniele/projects/vm_oracle`; accesso canonico SOLO tramite `scripts/oracle_ssh.sh`;
