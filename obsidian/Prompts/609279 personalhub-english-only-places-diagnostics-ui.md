@@ -1,35 +1,35 @@
 ---
-prompt_id: 223103
+prompt_id: 609279
 status: pending
 project_id: 49
-model: GPT-5.6 Terra
-reasoning: medium
+model: GPT-5.6 Luna
+reasoning: low
 tags:
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 223103 · Chiudere e integrare tag e alert di Places
+# 609279 · Solo inglese e diagnostica Places su richiesta
 
 - **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-shared-alerts-places-tags-integration-v3|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-english-only-places-diagnostics-ui|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[223679 personalhub-capsule-isolation-integration-closure-v4|223679]]
-- **Sblocca:** [[609279 personalhub-english-only-places-diagnostics-ui|609279]], [[830867 personalhub-epoch-timestamps-migration-v3|830867]]
-- **Padri/precedenti:** [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]]
+- **Dipende da:** [[223103 personalhub-shared-alerts-places-tags-integration-v3|223103]]
+- **Sblocca:** —
+- **Padri/precedenti:** —
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Sostituisce il vecchio prompt contraddittorio e integra runtime restore + shared alerts in un solo candidate.
+Sospende per ora la localizzazione italiana in PersonalHub e libera la Home di Places dal grande pannello diagnostico, lasciandolo accessibile solo tramite un controllo discreto. Richiede Codex per la verifica locale/emulatore dell’interfaccia Android.
 
 ## Esecuzioni
 
