@@ -30,6 +30,7 @@ jobs:
           for attempt in 1 2 3 4; do
             git fetch --quiet origin main
             git reset --hard origin/main
+            git clean -fd
 
             python3 tools/bootstrap_roadmap.py --repo .
             python3 tools/apply_mutations.py --repo .
