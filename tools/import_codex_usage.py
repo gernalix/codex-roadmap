@@ -2,8 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
-import html
 import json
 import re
 from pathlib import Path
@@ -22,10 +20,7 @@ from roadmap_db import (
 )
 
 def normalized_prompt_hash(text: str) -> str:
-    text = html.unescape(text or "")
-    text = text.replace("\\_", "_")
-    text = re.sub(r"\s+", " ", text).strip()
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+    return materialization_hash(text)
 
 def import_metrics(repo: Path, source: Path, *, render_after: bool = True) -> dict[str, int]:
     source = Path(source)
