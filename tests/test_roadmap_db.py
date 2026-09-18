@@ -26,11 +26,35 @@ class RoadmapDBTests(unittest.TestCase):
             (repo/"prompts").mkdir()
             (repo/"prompts/one.md").write_text("x",encoding="utf-8")
             (repo/"prompts/two.md").write_text("x",encoding="utf-8")
+            conn=db.connect(repo)
+            db.refresh_materialization_hashes(conn,repo)
+            conn.commit(); conn.close()
             db.render(repo)
             self.assertIn("prompts/two", (repo/"roadmap.md").read_text())
             self.assertIn("123456", (repo/"prompt-registry.md").read_text())
             self.assertTrue((repo/"obsidian/Prompts/123456 one.md").is_file())
             self.assertTrue(db.verify(repo)["ok"])
+
+    def test_terminal_status_waits_for_exact_usage_execution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            (repo/"prompts").mkdir()
+            (repo/"prompts/one.md").write_text("PROMPT_ID=123456",encoding="utf-8")
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md")
+            db.refresh_materialization_hashes(conn,repo)
+            db.record_terminal(conn,"123456","PASS",source="roadmap_result")
+            conn.commit()
+            self.assertEqual("completed",db.prompt_row(conn,"123456")["status"])
+            self.assertEqual(0,conn.execute("select count(*) from executions").fetchone()[0])
+            self.assertEqual(1,conn.execute("select count(*) from audit_events where event_type='terminal_result'").fetchone()[0])
+            db.record_execution(
+                conn,"123456",cycle_key="real-cycle",started_at="2026-09-18T10:00:00Z",
+                ended_at="2026-09-18T10:01:00Z",outcome="PASS",source="codex-usage"
+            )
+            conn.commit()
+            self.assertEqual(1,conn.execute("select count(*) from executions").fetchone()[0])
+            conn.close()
 
     def test_prompt_id_is_unique(self):
         with tempfile.TemporaryDirectory() as tmp:
