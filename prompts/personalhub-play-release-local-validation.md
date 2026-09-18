@@ -6,7 +6,7 @@ Esegui SOLO la validazione locale finale Google Play del `main` PersonalHub già
 # Starting point e precondizioni
 - repo: `/home/daniele/projects/PersonalHub`, project_id `49`, unico branch remoto `main`;
 - questo prompt va lanciato solo dopo `861305` PASS/finalizzato;
-- baseline minima che deve essere antenata del RUN_HEAD: `10a82e3f5324a6e3125793db6e813174f4684f0b`;
+- baseline minima che deve essere antenata del RUN_HEAD: `c457eee4880d0f58ed271d5069d78ecdd500059e`;
 - `version.txt` deve essere `49` e `app/src/main/assets/datasette-lite/` deve essere presente/non vuoto;
 - il RUN_HEAD esatto viene fissato una sola volta all'inizio perché `861305` crea necessariamente il commit finale; non interrogare/rilanciare GitHub Actions;
 - nessuna modifica al codice/repo è ammessa in questo task.
