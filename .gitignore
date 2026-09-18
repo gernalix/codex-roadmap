@@ -1,4 +1,5 @@
-.obsidian/
+roadmap.sqlite-wal
+roadmap.sqlite-shm
+roadmap.sqlite-journal
 __pycache__/
 *.pyc
-repository-retention-checklist.md
