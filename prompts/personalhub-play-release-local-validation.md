@@ -7,7 +7,7 @@ Esegui SOLO la validazione locale finale Google Play del `main` PersonalHub già
 - repo: `/home/daniele/projects/PersonalHub`, project_id `49`, unico branch remoto `main`;
 - questo prompt va lanciato solo dopo `861305` PASS/finalizzato;
 - baseline minima che deve essere antenata del RUN_HEAD: `c457eee4880d0f58ed271d5069d78ecdd500059e`;
-- `version.txt` deve essere `49` e `app/src/main/assets/datasette-lite/` deve essere presente/non vuoto;
+- `version.txt` deve essere `51` e `app/src/main/assets/datasette-lite/` deve essere presente/non vuoto;
 - il RUN_HEAD esatto viene fissato una sola volta all'inizio perché `861305` crea necessariamente il commit finale; non interrogare/rilanciare GitHub Actions;
 - nessuna modifica al codice/repo è ammessa in questo task.
 
@@ -19,7 +19,7 @@ Esegui SOLO la validazione locale finale Google Play del `main` PersonalHub già
 - usa solo l'AVD canonico `Pixel_8a`; mai Pixel/TCL fisici.
 
 # Esecuzione minima
-1. Acquisisci `python3 tools/personalhub_task_lock.py acquire --prompt-id 294731`. In un unico preflight: richiedi worktree pulito e branch `main`; fai un solo fetch + `git merge --ff-only origin/main`; fissa `RUN_HEAD=origin/main=HEAD`; verifica che la baseline sopra sia antenata, `version.txt=49` e gli asset Datasette Lite siano presenti. Se no => `BLOCKED`. Nessun altro discovery Git.
+1. Acquisisci `python3 tools/personalhub_task_lock.py acquire --prompt-id 294731`. In un unico preflight: richiedi worktree pulito e branch `main`; fai un solo fetch + `git merge --ff-only origin/main`; fissa `RUN_HEAD=origin/main=HEAD`; verifica che la baseline sopra sia antenata, `version.txt=51` e gli asset Datasette Lite siano presenti. Se no => `BLOCKED`. Nessun altro discovery Git.
 2. In un unico controllo bounded verifica, senza mostrare valori, file dei segreti leggibili, `ANDROID_SHARED_*` richiesti presenti/non vuoti, keystore leggibile mode `0600` e una chiave Maps/Routes valida per il build.
 3. Costruisci UNA sola volta l'AAB firmato. Nessun bump versione e nessuna seconda build Gradle.
 4. Sul solo AAB prodotto: esegui `python3 tools/check_play_bundle.py`; verifica integrità/firma e registra SHA-256 + fingerprint pubblico; estrai package/version/min/target SDK con `targetSdk >= 36`; dal manifest effettivo conferma assenza di `ACCESS_BACKGROUND_LOCATION`, `READ_CALL_LOG`, `READ_PHONE_STATE`, `SYSTEM_ALERT_WINDOW`, `USE_FULL_SCREEN_INTENT`, `com.supercontacts.app.CallStateReceiver`, `com.supercontacts.app.CallOverlayDebugReceiver`, `com.gernalix.luoghi.capsules.geofence.PlaceGeofenceReceiver`. Se manca soltanto bundletool, scarica una sola release ufficiale stabile in `/tmp`.
