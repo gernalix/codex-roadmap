@@ -49,7 +49,9 @@ Le strutture storiche `analyses` e `analysis_code_changes` restano nel DB per co
 
 ChatGPT, Codex e il sync `codex-usage` inviano richieste come **GitHub Issues** con titolo `[roadmap-mutation] <request_key>` e body JSON immutabile. Ogni run del workflow drena **tutte** le mutation Issue aperte in ordine, le applica serialmente, materializza eventuali nuovi prompt, rigenera le viste, aggiorna `main` e chiude le Issue processate. Se GitHub cancella un run pending per la concurrency, la Issue resta aperta e viene raccolta automaticamente dal run successivo. Una mutation invalida/collidente viene isolata, commentata e chiusa `not_planned` senza impedire l'applicazione delle Issue valide successive.
 
-I client non committano più file di inbox, prompt, DB o viste. Le directory `mutations/inbox/` e `mutations/applied/` restano solo come storico del trasporto precedente. Le CLI di mutazione diretta del DB sono solo manutenzione eccezionale.
+I client non committano più file di inbox, prompt, DB o viste. Le directory `mutations/inbox/` e `mutations/applied/` restano solo come storico del trasporto precedente. Gli entry point operativi di mutazione diretta sono bloccati: `roadmap_db.py` è read-only da CLI, `import_codex_usage.py` delega a `roadmap_sync.py`, l'inbox legacy è test-only e `bootstrap_roadmap.py` richiede il contesto writer esplicito.
+
+**Regola operativa automatica:** una richiesta umana come “aggiungi/aggiorna/sposta/chiudi questo task nella roadmap” significa sempre creare una mutation Issue tramite `tools/submit_mutation.py` (o API GitHub equivalente) e lasciare al workflow single-writer DB, prompt materializzati e viste. L'utente non deve ricordare o ripetere “usa il writer unico”. Una modifica diretta a `roadmap.sqlite`, `roadmap.md`, `spiegazioni.md`, `prompt-registry.md`, `obsidian/`, `prompts/`, `completed/` o `falliti/` per cambiare lo stato canonico è un bug di processo.
 
 Dettagli tecnici: [[SQLITE_ROADMAP|Roadmap SQLite]].
 
