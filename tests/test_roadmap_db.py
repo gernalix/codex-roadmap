@@ -80,6 +80,21 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertIn("gernalix/example",note)
             self.assertIn("abc123",note)
 
+    def test_reorder_prompt_updates_queue_without_changing_identity(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md",queue_position=2)
+            db.register_prompt(conn,prompt_id="654321",slug="two",title="Two",current_path="prompts/two.md",queue_position=1)
+            db.reorder_prompt(conn,"123456",1,actor="chatgpt",note="optimize queue")
+            db.reorder_prompt(conn,"654321",2,actor="chatgpt")
+            conn.commit()
+            self.assertEqual(1,db.prompt_row(conn,"123456")["queue_position"])
+            self.assertEqual("123456",db.next_runnable(conn)["prompt_id"])
+            self.assertEqual(2,conn.execute("select count(*) from audit_events where event_type='prompt_reordered'").fetchone()[0])
+            with self.assertRaises(db.RoadmapDBError):
+                db.reorder_prompt(conn,"123456",0)
+            conn.close()
     def test_prompt_id_is_unique(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
