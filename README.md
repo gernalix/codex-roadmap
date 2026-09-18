@@ -65,6 +65,23 @@ Quando due fasi consecutive della stessa campagna richiedono lo stesso device/em
 ## Contratto prompt
 Ogni prompt deve bastare da solo insieme alle regole globali già caricate. Deve dichiarare almeno metadata, goal, starting point verificato, scope/non-goal, verification, stop e comando di finalizzazione. Vietati inventory/audit generali quando file/boundary sono già noti.
 
+### Recovery autonomo obbligatorio
+Il **goal + acceptance criteria** sono il contratto terminale; i passi descritti nel prompt sono il percorso iniziale, non una procedura rigida da abbandonare al primo errore.
+
+Per ogni prompt nuovo o revisionato:
+- un comando, test, build, merge, deploy o probe fallito è normalmente **evidenza intermedia**, non `BLOCKED`/`FAIL`;
+- Codex deve leggere il minimo artefatto diagnostico utile, correggere la causa più locale supportata dall'evidenza, rilanciare il leaf gate fallito e poi **riprendere automaticamente il goal originale**;
+- può correggere file/config/test adiacenti non nominati nel prompt quando sono dimostrati essere necessari allo stesso failure domain, ma deve applicare il minimo cambiamento sufficiente;
+- retry identici o quasi equivalenti sono vietati senza nuova evidenza o stato cambiato;
+- recovery non autorizza audit generali, refactor, cleanup, modernizzazioni o fix collaterali: lo scope si espande solo quanto richiesto dal blocker concreto;
+- i budget di tool-call sono obiettivi di efficienza, non motivi per interrompere un task: superarli è ammesso solo per failure/dipendenze nuove realmente osservate;
+- `BLOCKED` è ammesso solo per un **hard blocker esterno**: credenziale/autorizzazione o decisione utente indispensabile, device/servizio richiesto indisponibile senza alternativa valida, lock/concorrenza che rende unsafe continuare, oppure azione distruttiva/ambigua che richiede consenso esplicito;
+- `FAIL` è ammesso solo quando gli acceptance criteria restano irraggiungibili dopo recovery in-scope ragionevole basato su evidenza, oppure quando l'unico fix rimasto sarebbe materialmente fuori scope o unsafe;
+- remote advance, dirty work non sovrapposto, compile/test failure o configurazione inattesa **non sono da soli blocker terminali**: prima va tentata la riconciliazione minima sicura prevista dal repository;
+- dopo PASS si termina immediatamente senza audit opzionali.
+
+I prompt di sola validazione o sicurezza possono mantenere stop immediati **solo** quando il failure indica davvero un'azione umana/esterna obbligatoria o quando mutare lo stato violerebbe esplicitamente il non-goal del task.
+
 ### Identità PROMPT_ID
 - `PROMPT_ID` è sempre un numero canonico reale di **6 cifre**.
 - Regola assoluta: **1 prompt materializzato = 1 ID unico e immutabile**.
@@ -100,7 +117,7 @@ Una migrazione, un audit o un task lungo **non giustificano da soli Sol**. Prima
 ## Esecuzione manuale
 Apri il primo file indicato da `roadmap.md`, imposta modello/reasoning dai metadata e incolla **solo quel file**. Non inviare meta-prompt, non far leggere roadmap/README/spiegazioni e non eseguire `select` nelle sessioni manuali.
 
-Default: un task per sessione. Raggruppa letture/comandi indipendenti; non ripetere test PASS; retry solo dopo nuova evidenza o stato cambiato; stop immediato a PASS/BLOCKED/FAIL. Per build/comandi lunghi già avviati, preferisci una sola attesa bloccante. Se il tool richiede polling, usa intervalli di almeno 30 secondi salvo un evento concreto che giustifichi un controllo anticipato: niente loop da 5 secondi, polling ravvicinato o messaggi che riportano solo stato invariato.
+Default: un task per sessione. Raggruppa letture/comandi indipendenti; non ripetere test PASS; retry solo dopo nuova evidenza o stato cambiato. Un failure intermedio attiva il recovery autonomo e non è uno stop; fermati solo a PASS oppure a un BLOCKED/FAIL terminale secondo il contratto sopra. Per build/comandi lunghi già avviati, preferisci una sola attesa bloccante. Se il tool richiede polling, usa intervalli di almeno 30 secondi salvo un evento concreto che giustifichi un controllo anticipato: niente loop da 5 secondi, polling ravvicinato o messaggi che riportano solo stato invariato.
 
 ## Diagnostica runtime a basso round-trip
 Per task locali/VM/servizi, il costo principale è spesso il numero di round-trip modello↔tool, non i token uncached. Quindi:
@@ -175,6 +192,7 @@ python3 tools/roadmap_db.py --repo . verify
 
 ## Manutenzione
 Quando aggiorni la roadmap:
+- ogni nuovo prompt/revisione deve incorporare la semantica di recovery autonomo: niente stop al primo failure; hard blocker e FAIL devono rispettare le definizioni sopra;
 - modifica il DB tramite API/helper/mutazioni strutturate; **non** editare manualmente le viste generate;
 - ogni nuova materializzazione mantiene la regola assoluta 1 prompt = 1 PROMPT_ID unico;
 - un prompt terminale resta storico; eventuali fix/follow-up usano un nuovo ID collegato al padre;
