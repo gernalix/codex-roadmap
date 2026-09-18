@@ -8,7 +8,8 @@ Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain
 - `roadmap.md`: lista numerata dei soli pendenti, una riga per task.
 - `spiegazioni.md`: stessa sequenza, spiegazioni semplici.
 - `prompts/*.md`: task autosufficienti da incollare direttamente in Codex.
-- `completed/*.md`: task conclusi con PASS.
+- `completed/*.md`: prompt eseguiti e conclusi con PASS.
+- `falliti/*.md`: prompt eseguiti ma conclusi con BLOCKED/FAIL/UNKNOWN; non tornano in `prompts/`.
 - `tools/roadmap_guard.py`: primitive fail-closed per selezione/completamento/reconcile.
 - `tools/roadmap_finish.py`: finalizzatore PASS race-safe da usare nei prompt normali.
 
@@ -62,7 +63,11 @@ Ogni prompt deve bastare da solo insieme alle regole globali già caricate. Deve
 - Un ID già assegnato non viene mai riciclato, ereditato o riutilizzato per un task diverso.
 - Per mantenere la genealogia si può usare `PARENT_PROMPT_ID=<vecchio_id>`; il vecchio ID resta storico e non torna attivo.
 - Se viene scoperta una collisione storica in un prompt ancora pendente, il task resta pendente ma deve ricevere un nuovo ID prima dell'esecuzione.
-- Prima di creare, mantenere o pubblicare un prompt pendente, verifica il suo ID contro l'archivio delle esecuzioni in `gernalix/codex-usage/prompts/`: se esiste già una directory con quell'ID, il prompt è già stato lanciato **a prescindere dall'esito** e deve ricevere un nuovo `PROMPT_ID`.
+- Prima di mantenere un prompt in `prompts/`, verifica il suo ID contro l'archivio delle esecuzioni in `gernalix/codex-usage/prompts/`.
+- Se l'ID esiste, confronta il **testo storico realmente eseguito** con il prompt pendente: non basta confrontare il numero.
+- Se è lo stesso prompt (o la stessa materializzazione), **non cambiare semplicemente ID per rilanciarlo**: rimuovilo dai pendenti e archivialo in `completed/` se l'esito è PASS, oppure in `falliti/` se l'esito è BLOCKED/FAIL/UNKNOWN.
+- Un retry è ammesso solo quando è un follow-up materialmente diverso che incorpora nuova evidenza o rimuove il blocker; in quel caso il prompt originale resta archiviato e il follow-up riceve un nuovo ID, con `PARENT_PROMPT_ID` riferito al prompt fallito.
+- Se invece l'ID esistente appartiene a un **prompt storico diverso**, è una collisione accidentale: il task corrente non è stato eseguito e riceve un ID libero; non usare `PARENT_PROMPT_ID` verso il prompt non correlato.
 - La verifica va fatta contro l'archivio delle esecuzioni, non dedotta da `completed/`, dal risultato PASS/BLOCKED/FAIL o dalla sola cronologia della roadmap.
 - `spiegazioni.md` deve mostrare esplicitamente il `PROMPT_ID` corrente di ogni task pendente.
 
