@@ -1,0 +1,37 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "register",
+      "prompt_id": "330522",
+      "slug": "workflowy-automation-local-activation",
+      "title": "Attivare le automazioni locali di Workflowy",
+      "current_path": "prompts/workflowy-automation-local-activation.md",
+      "project_id": "96",
+      "project_name": "Fedora / Workflowy",
+      "repo": "https://github.com/gernalix/workflowy-importer",
+      "chat_guidance": "Stessa chat di 693572",
+      "prompt_type": "Prompt",
+      "model": "GPT-5.5",
+      "reasoning": "low",
+      "megavault_mode": "FAST",
+      "explanation": "Installa sul PC il nuovo ponte locale di Workflowy e l’aggiornamento automatico della sua copia di lavoro. Controlla che funzionino davvero; prepara anche backup e riepilogo settimanale, ma li lascia spenti finché non decidi di attivarli.",
+      "status": "pending",
+      "queue_position": 5
+    },
+    {
+      "op": "dependency",
+      "prompt_id": "330522",
+      "depends_on_prompt_id": "693572",
+      "note": "Prima va conclusa la prova reale della chiave e dell’importatore Workflowy."
+    },
+    {
+      "op": "relation",
+      "from_prompt_id": "693572",
+      "to_prompt_id": "330522",
+      "relation_type": "followup",
+      "note": "Dopo il live smoke abilita il nuovo layer locale già implementato."
+    }
+  ]
+}
