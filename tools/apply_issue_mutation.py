@@ -106,10 +106,10 @@ def apply_issue(repo: Path, event_path: Path) -> dict[str, Any]:
             "SELECT * FROM mutation_receipts WHERE request_key=?", (request_key,)
         ).fetchone()
         if receipt:
-            if (
-                int(receipt["issue_number"]) != issue_number
-                or str(receipt["payload_sha256"]) != payload_sha256
-            ):
+            # Concurrent identical clients may create duplicate Issues with the same
+            # deterministic request key. The payload hash is authoritative; the first
+            # applied Issue owns the receipt and later identical Issues are no-ops.
+            if str(receipt["payload_sha256"]) != payload_sha256:
                 raise IssueMutationError(f"request_key_conflict:{request_key}")
             idempotent = True
         else:
