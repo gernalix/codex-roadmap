@@ -1,0 +1,88 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "register",
+      "prompt_id": "371237",
+      "slug": "codex-usage-publisher-attribution-fastpath-runtime-fix",
+      "title": "Completa il fix del salvataggio Codex sul PC",
+      "current_path": "prompts/codex-usage-publisher-attribution-fastpath-runtime-fix.md",
+      "project_id": "8",
+      "project_name": "Fedora",
+      "repo": "gernalix/codex-usage-monitor",
+      "chat_guidance": "Stessa chat di 538642",
+      "prompt_type": "Prompt",
+      "model": "GPT-5.6 Luna",
+      "reasoning": "low",
+      "megavault_mode": "FAST",
+      "explanation": "Installa sul PC la correzione che fa riconoscere correttamente gli ID dei prompt e completa le verifiche che il tentativo precedente non ha potuto eseguire. Serve Codex perché deve aggiornare e controllare il programma realmente installato sul Fedora.",
+      "status": "pending",
+      "queue_position": 2
+    },
+    {
+      "op": "status",
+      "prompt_id": "538642",
+      "status": "blocked",
+      "note": "Esecuzione reale BLOCKED: test mirato sul PROMPT_ID Markdown-escaped fallito prima del deploy."
+    },
+    {
+      "op": "analysis",
+      "prompt_id": "538642",
+      "bottlenecks_found": true,
+      "summary": "Run efficiente (17.788 s, 1 tool-call). Root cause: il parser costi cercava due backslash prima dell'underscore invece di uno; nessun collo di bottiglia operativo rilevante. Fix remoto applicato e follow-up limitato al deploy/verifica Fedora.",
+      "fix_prompt_id": "371237",
+      "source_ref": "gernalix/codex-usage/prompts/538642/metrics.json"
+    },
+    {
+      "op": "code_change",
+      "prompt_id": "538642",
+      "repository": "gernalix/codex-usage-monitor",
+      "change_type": "fix",
+      "commit_sha": "464fc49bced4499669758bcbb9ad78a6ebb057f7",
+      "summary": "Corretto il riconoscimento di PROMPT\\_ID nel parser dei costi sostituendo la normalizzazione del doppio backslash con quella del singolo backslash Markdown-escaped."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "219473",
+      "old_depends_on_prompt_id": "538642",
+      "new_depends_on_prompt_id": "371237",
+      "note": "538642 è BLOCKED; 371237 è il follow-up correttivo."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "693572",
+      "old_depends_on_prompt_id": "538642",
+      "new_depends_on_prompt_id": "371237",
+      "note": "538642 è BLOCKED; 371237 è il follow-up correttivo."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "527184",
+      "old_depends_on_prompt_id": "538642",
+      "new_depends_on_prompt_id": "371237",
+      "note": "538642 è BLOCKED; 371237 è il follow-up correttivo."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "617205",
+      "old_depends_on_prompt_id": "538642",
+      "new_depends_on_prompt_id": "371237",
+      "note": "538642 è BLOCKED; 371237 è il follow-up correttivo."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "690049",
+      "old_depends_on_prompt_id": "538642",
+      "new_depends_on_prompt_id": "371237",
+      "note": "538642 è BLOCKED; 371237 è il follow-up correttivo."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "445388",
+      "old_depends_on_prompt_id": "538642",
+      "new_depends_on_prompt_id": "371237",
+      "note": "538642 è BLOCKED; 371237 è il follow-up correttivo."
+    }
+  ]
+}
