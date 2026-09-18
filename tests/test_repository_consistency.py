@@ -38,10 +38,19 @@ class RepositoryConsistencyTests(unittest.TestCase):
                 rows.append((int(match.group(1)), match.group(2)))
         return rows
 
+    def _split_markdown_row(self, line):
+        sentinel = "\x1f"
+        masked = re.sub(
+            r"\[\[[^\]]+\]\]",
+            lambda match: match.group(0).replace("|", sentinel),
+            line,
+        )
+        return [cell.strip().replace(sentinel, "|") for cell in masked.strip("|").split("|")]
+
     def _explanations(self):
         lines = (ROOT / "spiegazioni.md").read_text(encoding="utf-8").splitlines()
         header = next(line for line in lines if line.startswith("| # |"))
-        names = [cell.strip() for cell in header.strip("|").split("|")]
+        names = self._split_markdown_row(header)
         indexes = {name: idx for idx, name in enumerate(names)}
         required = {"#", "Prompt", "PROMPT_ID", "Reasoning", "Tipo prompt"}
         self.assertTrue(required.issubset(indexes), indexes)
@@ -50,7 +59,7 @@ class RepositoryConsistencyTests(unittest.TestCase):
         for line in lines:
             if not line.startswith("|"):
                 continue
-            cells = [cell.strip() for cell in line.strip("|").split("|")]
+            cells = self._split_markdown_row(line)
             if len(cells) != len(names) or not cells[indexes["#"]].isdigit():
                 continue
             link = PROMPT_LINK_RE.match(cells[indexes["Prompt"]])
