@@ -1,0 +1,58 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "execution",
+      "prompt_id": "746193",
+      "cycle_key": "9d9cc8295ba0c62fa513699a",
+      "started_at": "2026-09-18T19:11:43Z",
+      "ended_at": "2026-09-18T19:13:12Z",
+      "outcome": "BLOCKED",
+      "duration_seconds": 88.682,
+      "model": "gpt-5.6-terra",
+      "reasoning": "medium",
+      "tool_call_count": 16,
+      "input_tokens": 40607,
+      "cached_input_tokens": 39680,
+      "uncached_input_tokens": 927,
+      "output_tokens": 83,
+      "reasoning_output_tokens": 0,
+      "total_tokens": 40690,
+      "source": "codex-usage:746193"
+    },
+    {
+      "op": "register",
+      "prompt_id": "693572",
+      "slug": "workflowy-importer-live-smoke-secret-file",
+      "title": "Ultima prova reale dell’importatore Workflowy",
+      "current_path": "prompts/workflowy-importer-live-smoke-secret-file.md",
+      "project_id": "96",
+      "project_name": "Fedora / Workflowy",
+      "repo": "https://github.com/gernalix/workflowy-importer",
+      "chat_guidance": "Nuova chat",
+      "prompt_type": "Prompt",
+      "model": "GPT-5.6 Luna",
+      "reasoning": "low",
+      "megavault_mode": "FAST",
+      "explanation": "Usa la chiave Workflowy salvata nel file protetto previsto sul PC, controlla che il file sia sicuro e poi esegue una sola prova con dati temporanei, cancellandoli alla fine.",
+      "status": "pending",
+      "queue_position": 3
+    },
+    {
+      "op": "relation",
+      "from_prompt_id": "746193",
+      "to_prompt_id": "693572",
+      "relation_type": "fix",
+      "note": "Rimuove il blocker della chiave Workflowy e riduce il lavoro residuo a un solo smoke test."
+    },
+    {
+      "op": "analysis",
+      "prompt_id": "746193",
+      "bottlenecks_found": true,
+      "summary": "Host gates e dry-run PASS. Il run è stato BLOCKED solo dalla chiave Workflowy assente; 16 tool-call includevano discovery segreti e cleanup evitabili. Il follow-up usa il file segreto canonico e un unico smoke helper.",
+      "fix_prompt_id": "693572",
+      "source_ref": "codex-usage:746193"
+    }
+  ]
+}
