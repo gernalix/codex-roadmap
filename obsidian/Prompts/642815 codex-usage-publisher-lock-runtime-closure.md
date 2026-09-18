@@ -16,9 +16,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../falliti/codex-usage-publisher-lock-runtime-closure|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-18T21:58:59Z
+- **Ultimo lancio:** 2026-09-18T21:58:59Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -36,7 +36,7 @@ Installa sul PC le correzioni già preparate per evitare che il salvataggio Code
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-18T21:58:59Z | 2026-09-18T21:59:32Z | BLOCKED | 33.091 | gpt-5.6-luna | low | 4 | 43962 |
 
 ## Analisi ChatGPT
 
