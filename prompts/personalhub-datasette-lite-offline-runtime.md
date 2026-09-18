@@ -5,7 +5,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`, branch canonico `main`;
-- `origin/main` atteso: `c457eee4880d0f58ed271d5069d78ecdd500059e`;
+- `origin/main` atteso: `a520e864aa2acd1a9a22d0d55f56bf90686b7d93`;
 - `version.txt=48`; bump 48→49 UNA sola volta solo dopo tutti i gate feature;
 - fix Luoghi già in `main`: check-in sovrapposti scelgono automaticamente il candidato nettamente più vicino solo quando gli intervalli di distanza rispetto all'accuracy GPS non si sovrappongono; journal conserva la causa originale e registra la soglia reale raggio+accuracy;
 - già presenti: snapshot detached+validato, DataExplorerActivity local/remote, WebViewAssetLoader, entry point Home + sei moduli, config `personalhub_read`, docs e CODE_MAP;
@@ -19,7 +19,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 3. Dal detached snapshot costruisci, se necessario, una presentazione locale effimera read-only con semantica equivalente a `personalhub_read`:
    - vere SQLite FK e label leggibili;
    - relazioni dirette cross-modulo;
-   - Context → grafo simmetrico equivalente a `hub_entity_relations`, con ogni entità risolvibile navigabile come sorgente e destinazione;
+   - Context → grafo simmetrico deduplicato equivalente a `hub_entity_relations`, con provenienza Context separata e ogni entità risolvibile navigabile da entrambi gli estremi;
    - nessuna inferenza per nome e nessuna scrittura sul DB canonico.
 4. Presentazione embedded: conserva motore Datasette per table/row/filter/facet/pagination/SQL/FK. Aggiungi solo template/CSS/assets compatibili con Lite per ottimizzare il mobile:
    - niente browser chrome;
