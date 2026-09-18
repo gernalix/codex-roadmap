@@ -10,7 +10,9 @@ from roadmap_db import apply_mutation, connect, reconcile_prompt_file_locations,
 
 SCHEMA = "codex-roadmap.mutation.v1"
 
-def apply_inbox(repo: Path) -> dict[str, int]:
+def apply_inbox(repo: Path, *, test_only: bool = False) -> dict[str, int]:
+    if not test_only:
+        raise RuntimeError("legacy_direct_inbox_writer_disabled")
     repo=Path(repo)
     inbox=repo/"mutations"/"inbox"
     applied=repo/"mutations"/"applied"
@@ -53,8 +55,12 @@ def main(argv: list[str] | None=None) -> int:
     p=argparse.ArgumentParser()
     p.add_argument("--repo",default=".")
     args=p.parse_args(argv)
-    print(json.dumps(apply_inbox(Path(args.repo).expanduser().resolve()),sort_keys=True))
-    return 0
+    print(json.dumps({
+        "status":"blocked",
+        "error":"legacy_direct_inbox_writer_disabled",
+        "use":"tools/submit_mutation.py -> [roadmap-mutation] Issue -> GitHub Actions single writer",
+    },sort_keys=True))
+    return 2
 
 if __name__=="__main__":
     raise SystemExit(main())
