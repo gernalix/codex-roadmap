@@ -5,6 +5,7 @@ tags:
 
 # Fedora
 
+- [[obsidian/Prompts/856234 workflowy-live-smoke-remote-fix-closure|856234 · Confermare il live smoke Workflowy dopo il fix remoto]] · `pending`
 - [[obsidian/Prompts/526713 fedora-runtime-validation-v2|526713 · Ultimo controllo del monitoraggio Fedora]] · `pending`
 - [[obsidian/Prompts/357862 logseq-updates-pat-safety-closure-v2|357862 · Chiusura sicurezza e attivazione updater Logseq]] · `pending`
 - [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill|813383 · Attivare il tracciamento SQLite della roadmap]] · `completed`
