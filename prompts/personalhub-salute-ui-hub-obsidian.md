@@ -7,7 +7,7 @@ Completa sul branch `feature/salute-canonical-domain` l'integrazione applicativa
 - repo: `/home/daniele/projects/PersonalHub`;
 - esegui SOLO dopo PROMPT_ID=418763 PASS/finalizzato;
 - branch obbligatorio: `feature/salute-canonical-domain`, già contenente schema/migration/DAO/view health validati;
-- usa come contratto `docs/HEALTH_MODULE.md`, `docs/health/HEALTH_DATA_MODEL.md`, `docs/health/android-minimal-ui.svg`, `docs/health/chatgpt-to-ph-workflow.svg`;
+- usa come contratto `docs/HEALTH_MODULE.md`, `docs/health/HEALTH_DATA_MODEL.md`, `docs/health/OBSIDIAN_PROJECTION.md`, `docs/health/android-minimal-ui.svg`, `docs/health/chatgpt-to-ph-workflow.svg`;
 - `version.txt` resta 50: fase intermedia della campagna;
 - l'Android UI Salute è read-only: niente Add/Edit/Delete/FAB, niente sync Salute separato;
 - Obsidian è il reader principale; Pixel è una superficie minima;
@@ -43,7 +43,7 @@ Completa sul branch `feature/salute-canonical-domain` l'integrazione applicativa
    - health events ordinati da epoch-ms;
    - stesso evento non va duplicato se già rappresentato via un Context/relazione esplicita secondo le regole globali;
    - People non viene inferito come “presente” solo perché un medico è citato in una nota.
-7. Obsidian:
+7. Obsidian: implementa `docs/health/OBSIDIAN_PROJECTION.md` senza reinterpretarne il modello.
    - individua con ricerca mirata il seam Vault/Markdown esistente nel RUN_HEAD;
    - implementa proiezione deterministica Salute in `PersonalHub/Salute/{Samples,Journal,Esami,Dashboard}`;
    - properties: module, kind, canonical_id, data_ms, sample_id/place_id/clinician_contact_id quando pertinenti;
