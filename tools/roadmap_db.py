@@ -229,6 +229,50 @@ def add_dependency(conn: sqlite3.Connection, prompt_id: str, depends_on: str, *,
         (prompt_id, depends_on, note),
     )
 
+def replace_dependency(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    old_depends_on: str,
+    new_depends_on: str,
+    *,
+    actor: str = "chatgpt",
+    note: str | None = None,
+) -> None:
+    prompt_row(conn, prompt_id)
+    prompt_row(conn, old_depends_on)
+    prompt_row(conn, new_depends_on)
+    if old_depends_on == new_depends_on:
+        return
+    existing = conn.execute(
+        "SELECT 1 FROM dependencies WHERE prompt_id=? AND depends_on_prompt_id=?",
+        (prompt_id, old_depends_on),
+    ).fetchone()
+    if not existing:
+        raise RoadmapDBError(f"dependency_not_found:{prompt_id}:{old_depends_on}")
+    conn.execute(
+        "INSERT OR IGNORE INTO dependencies(prompt_id,depends_on_prompt_id,note) VALUES(?,?,?)",
+        (prompt_id, new_depends_on, note),
+    )
+    conn.execute(
+        "DELETE FROM dependencies WHERE prompt_id=? AND depends_on_prompt_id=?",
+        (prompt_id, old_depends_on),
+    )
+    ts = now_utc()
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "dependency_replaced",
+            ts,
+            actor,
+            json.dumps(
+                {"old_depends_on": old_depends_on, "new_depends_on": new_depends_on, "note": note},
+                ensure_ascii=False,
+                sort_keys=True,
+            ),
+        ),
+    )
+
 def add_relation(
     conn: sqlite3.Connection,
     from_prompt_id: str,
@@ -494,6 +538,15 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
         add_relation(conn,str(mutation["from_prompt_id"]),str(mutation["to_prompt_id"]),str(mutation["relation_type"]),actor=actor,note=mutation.get("note"))
     elif op=="dependency":
         add_dependency(conn,str(mutation["prompt_id"]),str(mutation["depends_on_prompt_id"]),note=mutation.get("note"))
+    elif op=="dependency_replace":
+        replace_dependency(
+            conn,
+            str(mutation["prompt_id"]),
+            str(mutation["old_depends_on_prompt_id"]),
+            str(mutation["new_depends_on_prompt_id"]),
+            actor=actor,
+            note=mutation.get("note"),
+        )
     elif op=="reorder":
         reorder_prompt(
             conn,
