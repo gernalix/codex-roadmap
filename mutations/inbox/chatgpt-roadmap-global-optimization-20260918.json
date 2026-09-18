@@ -1,0 +1,150 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "reorder",
+      "prompt_id": "813383",
+      "queue_position": 1,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "538642",
+      "queue_position": 2,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "219473",
+      "queue_position": 3,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "693572",
+      "queue_position": 4,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "527184",
+      "queue_position": 5,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "617205",
+      "queue_position": 6,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "461839",
+      "queue_position": 7,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "418763",
+      "queue_position": 8,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "724615",
+      "queue_position": 9,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "582741",
+      "queue_position": 10,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "671904",
+      "queue_position": 11,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "845312",
+      "queue_position": 12,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "672418",
+      "queue_position": 13,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "861305",
+      "queue_position": 14,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "311947",
+      "queue_position": 15,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "690049",
+      "queue_position": 16,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "reorder",
+      "prompt_id": "445388",
+      "queue_position": 17,
+      "note": "Global roadmap optimization: infrastructure first, independent prerequisites before the serialized PersonalHub chain, human-gated tasks last."
+    },
+    {
+      "op": "dependency",
+      "prompt_id": "538642",
+      "depends_on_prompt_id": "813383",
+      "note": "Activate SQLite tracking before optimizing codex-usage attribution/runtime."
+    },
+    {
+      "op": "dependency",
+      "prompt_id": "219473",
+      "depends_on_prompt_id": "538642",
+      "note": "Run remaining work after roadmap tracking and codex-usage attribution are reliable."
+    },
+    {
+      "op": "dependency",
+      "prompt_id": "693572",
+      "depends_on_prompt_id": "538642",
+      "note": "Run remaining work after roadmap tracking and codex-usage attribution are reliable."
+    },
+    {
+      "op": "dependency",
+      "prompt_id": "527184",
+      "depends_on_prompt_id": "538642",
+      "note": "Run remaining work after roadmap tracking and codex-usage attribution are reliable."
+    },
+    {
+      "op": "dependency",
+      "prompt_id": "617205",
+      "depends_on_prompt_id": "538642",
+      "note": "Start the serialized PersonalHub chain only after tracking infrastructure is reliable."
+    },
+    {
+      "op": "dependency",
+      "prompt_id": "690049",
+      "depends_on_prompt_id": "538642",
+      "note": "Run human-gated Fedora validation after tracking infrastructure is reliable."
+    },
+    {
+      "op": "dependency",
+      "prompt_id": "445388",
+      "depends_on_prompt_id": "538642",
+      "note": "Run human-gated Logseq closure after tracking infrastructure is reliable."
+    }
+  ]
+}
