@@ -19,4 +19,4 @@
 15. [[prompts/personalhub-datasette-lite-offline-runtime-v2|personalhub-datasette-lite-offline-runtime-v2]]
 16. [[prompts/personalhub-play-release-local-validation-v2|personalhub-play-release-local-validation-v2]]
 17. [[prompts/fedora-runtime-validation|fedora-runtime-validation]]
-18. [[prompts/logseq-updates-pat-safety-closure|logseq-updates-pat-safety-closure]]
+18. [[prompts/logseq-updates-pat-safety-closure-v2|logseq-updates-pat-safety-closure-v2]]

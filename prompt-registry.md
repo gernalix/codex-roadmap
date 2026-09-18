@@ -21,7 +21,7 @@
 | [[obsidian/Prompts/918536 personalhub-datasette-lite-offline-runtime-v2\|918536 · Esploratore dati dentro PersonalHub anche offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/243871 personalhub-play-release-local-validation-v2\|243871 · Controllo finale prima di Google Play]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/690049 fedora-runtime-validation\|690049 · Ultimo controllo del monitoraggio Fedora]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/445388 logseq-updates-pat-safety-closure\|445388 · Chiusura sicurezza e attivazione updater Logseq]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/357862 logseq-updates-pat-safety-closure-v2\|357862 · Chiusura sicurezza e attivazione updater Logseq]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
@@ -44,6 +44,7 @@
 | [[obsidian/Prompts/672418 personalhub-git-history-data-sync-validation\|672418 · Cronologia, backup e ripristino dei dati PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/861305 personalhub-datasette-lite-offline-runtime\|861305 · Esploratore dati dentro PersonalHub anche offline]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/311947 personalhub-play-release-local-validation\|311947 · Controllo finale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/445388 logseq-updates-pat-safety-closure\|445388 · Chiusura sicurezza e attivazione updater Logseq]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/255325 prompt-255325\|255325 · Prompt 255325]] | blocked | 2026-09-18T17:42:04Z | 2026-09-18T17:42:04Z | BLOCKED | no | no | — | — | — | — |
 | [[obsidian/Prompts/294731 prompt-294731\|294731 · Prompt 294731]] | blocked | 2026-09-16T17:42:10Z | 2026-09-16T17:42:10Z | BLOCKED | no | no | — | — | — | — |
 | [[obsidian/Prompts/319311 prompt-319311\|319311 · Prompt 319311]] | blocked | 2026-09-18T17:40:55Z | 2026-09-18T17:40:55Z | BLOCKED | no | no | — | — | — | — |

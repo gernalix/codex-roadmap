@@ -1,37 +1,35 @@
 ---
-prompt_id: 445388
-status: superseded
+prompt_id: 357862
+status: pending
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
-  - project/fedora
-  - roadmap
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/fedora
 ---
 
-# 445388 · Chiusura sicurezza e attivazione updater Logseq
+# 357862 · Chiusura sicurezza e attivazione updater Logseq
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../falliti/logseq-updates-pat-safety-closure|Apri prompt]]
+- **Prompt:** [[../../prompts/logseq-updates-pat-safety-closure-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[642815 codex-usage-publisher-lock-runtime-closure|642815]]
+- **Dipende da:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
 - **Sblocca:** —
-- **Padri/precedenti:** [[255325 prompt-255325|255325]]
-- **Figli/follow-up:** [[357862 logseq-updates-pat-safety-closure-v2|357862]]
+- **Padri/precedenti:** [[445388 logseq-updates-pat-safety-closure|445388]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Stessa chat di 255325
 
 ## Spiegazione
 
-Dopo la revoca della vecchia chiave, ripulisce la cronologia e attiva sul PC l’aggiornamento automatico di Logseq.
+Completa la bonifica Logseq e attiva l’updater con autonomia sui problemi tecnici, mantenendo fail-closed soltanto per la revoca PAT, rischio dati e altre azioni davvero esterne.
 
 ## Esecuzioni
 
