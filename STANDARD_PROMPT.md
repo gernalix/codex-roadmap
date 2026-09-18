@@ -10,7 +10,7 @@ Per una sessione Codex Desktop:
 2. imposta progetto, modello e reasoning indicati;
 3. incolla **solo il file `prompts/<task>.md`**.
 
-Non usare launcher intermedi e non far leggere a Codex README, roadmap, spiegazioni, MegaVault o memoria quando il prompt contiene già lo starting point necessario.
+Non usare launcher intermedi e non far leggere a Codex README, roadmap, spiegazioni, MegaVault o memoria quando il prompt contiene già lo starting point necessario. In particolare, con `MegaVault=FAST`, `project_id`/workdir già risolti e nessun fatto canonico mancante, **non leggere né dumpare MegaVault protocol, MEMORY o rollout summary**: FAST significa usare solo l'eventuale fatto specifico che manca, non caricare contesto preventivo.
 
 Riusa la chat precedente solo quando il contesto non materializzato riduce davvero discovery o rischio. Dopo una sessione lunga di debugging/retry, se il follow-up ha già uno starting point completo, preferisci una **nuova chat**: evita di trascinare un contesto enorme soltanto perché esiste una relazione padre/figlio.
 
@@ -76,7 +76,7 @@ Regole di default:
 - eseguire gate economici host/statici prima di device/servizi costosi;
 - non ripetere gate PASS se il diff successivo non li invalida;
 - usare helper/runner canonici già noti senza probe equivalenti;
-- un comando lungo già avviato va atteso, non controllato con polling ravvicinato;
+- un comando lungo già avviato va atteso sullo stesso processo/sessione, non controllato con `pgrep`, journal o polling come proxy; se il tool consente timeout/wait esplicito, impostalo una volta in modo coerente con la durata attesa; se l'output può perdersi per il limite foreground, catturalo in un file temporaneo e leggilo una sola volta a fine processo;
 - niente comandi no-op o verifiche di rassicurazione dopo PASS.
 
 Per task localizzati l'obiettivo è ridurre soprattutto i round-trip modello↔tool. Un budget di tool-call è un obiettivo, **mai un limite di autonomia**: se emerge nuova evidenza concreta, Codex può superarlo per risolvere lo stesso goal invece di terminare prematuramente.
