@@ -21,7 +21,7 @@
 | [[obsidian/Prompts/311947 personalhub-play-release-local-validation\|311947 · Controllo finale prima di Google Play]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/690049 fedora-runtime-validation\|690049 · Ultimo controllo del monitoraggio Fedora]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/445388 logseq-updates-pat-safety-closure\|445388 · Chiusura sicurezza e attivazione updater Logseq]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | no | no | — | Fedora | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/746193 workflowy-importer-local-live-validation\|746193 · Provare davvero l’importatore Workflowy]] | blocked | 2026-09-18T19:11:43Z | 2026-09-18T19:11:43Z | BLOCKED | sì | no | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572]] | Fedora / Workflowy | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/255325 prompt-255325\|255325 · Prompt 255325]] | blocked | 2026-09-18T17:42:04Z | 2026-09-18T17:42:04Z | BLOCKED | no | no | — | — | — | — |
 | [[obsidian/Prompts/294731 prompt-294731\|294731 · Prompt 294731]] | blocked | 2026-09-16T17:42:10Z | 2026-09-16T17:42:10Z | BLOCKED | no | no | — | — | — | — |

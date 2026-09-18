@@ -1,6 +1,5 @@
 # Da controllare
 
-- [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill|813383 · Attivare il tracciamento SQLite della roadmap]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/151583 prompt-151583|151583 · Historical prompt 151583]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/157771 prompt-157771|157771 · Historical prompt 157771]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/184627 prompt-184627|184627 · Historical prompt 184627]] · `unknown` · analizzato=no · fix=—

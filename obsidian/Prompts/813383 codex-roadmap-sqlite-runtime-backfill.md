@@ -23,8 +23,8 @@ tags:
 - **Primo lancio:** 2026-09-18T20:17:55Z
 - **Ultimo lancio:** 2026-09-18T20:17:55Z
 - **Ultimo esito:** PASS
-- **Analizzato da ChatGPT:** no
-- **Codice modificato da ChatGPT:** no (0 interventi)
+- **Analizzato da ChatGPT:** sì
+- **Codice modificato da ChatGPT:** sì (1 interventi)
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** [[538642 codex-usage-publisher-attribution-fastpath-followup|538642]]
@@ -44,8 +44,8 @@ Completa il passaggio alla nuova roadmap: importa lo storico reale delle esecuzi
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-18T20:32:06Z · colli di bottiglia: sì · fix: — · PASS. 86895 token totali (86710 input, 83712 cached, 2998 uncached, 185 output), cache 96.54%, 70 tool-call, 462.086 s, quota osservata -1. Il costo evitabile è venuto soprattutto da recovery ripetuti su parsing Git dei path con spazi, scritture SQLite no-op e finalizzazione con lo stesso parser fragile; una diagnostica ha inoltre emesso un elenco enorme di path. I fix del run erano corretti ma hanno richiesto più cicli suite/service del necessario. ChatGPT ha poi centralizzato il rilevamento dei path, limitato l'output diagnostico e nascosto dalle dipendenze operative i prompt già conclusi. Nessun nuovo task Codex necessario.
 
 ## Modifiche di codice ChatGPT
 
-- Nessuna modifica di codice registrata.
+- 2026-09-18T20:32:06Z · `gernalix/codex-roadmap` · optimization · commit `9dbd85bf2a55260f3c44d9bfd0685771040898c0` · Riusa dirty_paths di safe_ff in sync/result, limita le liste diagnostiche di path, aggiunge regressioni per path con spazi e nasconde in spiegazioni.md le dipendenze già terminali.
