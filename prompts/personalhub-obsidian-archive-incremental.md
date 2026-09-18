@@ -1,12 +1,12 @@
 PROMPT_ID=671904 | project_id=49 | campaign_id=ph-obsidian-archive | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
 
 # Goal
-Sul branch `feature/obsidian-archive`, rendi l'export Obsidian incrementale, coalescente e crash-safe senza condividere acknowledgements con Datasette. Implementa create/update/delete convergence, WorkManager bounded e recovery; nessuna copertura renderer generale in questa fase.
+Su PersonalHub `main`, rendi l'export Obsidian incrementale, coalescente e crash-safe senza condividere acknowledgements con Datasette. Implementa create/update/delete convergence, WorkManager bounded e recovery; nessuna copertura renderer generale in questa fase.
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`;
 - esegui SOLO dopo PROMPT_ID=582741 PASS/finalizzato;
-- branch obbligatorio `feature/obsidian-archive` con full rebuild/manifest già PASS;
+- branch obbligatorio `main`, già contenente full rebuild/manifest PASS dal task precedente;
 - contratto: `docs/OBSIDIAN_ARCHIVE.md`;
 - non consumare né cancellare `hub_sync_pending` come acknowledgement Obsidian;
 - projection bookkeeping è stato tecnico ricostruibile: non deve diventare semantic Git History, dominio Datasette o archivio utente;
@@ -53,7 +53,7 @@ Sul branch `feature/obsidian-archive`, rendi l'export Obsidian incrementale, coa
    - bookkeeping Obsidian escluso da semantic history/sync;
    - full rebuild recovery riparte senza duplicati/orfani PH-owned.
 8. Consumer preflight prima di API/schema pubblici; poi migration/unit/compile leaf interessati e un solo `checkArchitectureBoundaries` finale. Nessun AVD.
-9. Push SOLO `feature/obsidian-archive`; non merge, non bump/release. Rilascia lock.
+9. Solo dopo i gate PASS, commit/push `main` una sola volta; non creare branch remoti temporanei e non bump/release. Rilascia lock.
 
 # Acceptance
 PASS solo se Datasette e Obsidian hanno acknowledgements indipendenti, le mutazioni convergono incrementalmente senza whole-vault scan ordinario, failure/reboot sono retry-safe, DB canonico non dipende dall'I/O Markdown e tutti i gate migration/host/architecture sono PASS.
