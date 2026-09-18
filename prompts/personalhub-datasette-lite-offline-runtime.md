@@ -5,10 +5,10 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`, branch canonico `main`;
-- esegui questo prompt SOLO dopo `PROMPT_ID=672418` PASS/finalizzato; baseline Git Data/History `3558ab39fb7f51f39a09c43e6d90b18ae3319b07` deve essere antenata del RUN_HEAD;
-- `version.txt=48`; bump 48→49 UNA sola volta solo dopo tutti i gate feature;
+- esegui questo prompt SOLO dopo `PROMPT_ID=672418` PASS/finalizzato; quindi anche 918274+461839 devono essere già conclusi; baseline Git Data/History `3558ab39fb7f51f39a09c43e6d90b18ae3319b07` deve essere antenata del RUN_HEAD;
+- `version.txt=50`; bump 50→51 UNA sola volta solo dopo tutti i gate feature;
 - fix Luoghi già in `main`: check-in sovrapposti scelgono automaticamente il candidato nettamente più vicino solo quando gli intervalli di distanza rispetto all'accuracy GPS non si sovrappongono; journal conserva la causa originale e registra la soglia reale raggio+accuracy;
-- già presenti: snapshot detached+validato, DataExplorerActivity local/remote, WebViewAssetLoader, entry point Home + sei moduli, config `personalhub_read`, docs e CODE_MAP;
+- già presenti: snapshot detached+validato, DataExplorerActivity local/remote, WebViewAssetLoader, entry point globale Home e route ancora supportate; NON reintrodurre un entry point Data Explorer nel Timer; config `personalhub_read`, docs e CODE_MAP;
 - contratto: live Room/WAL mai esposto; local mode blocca rete esterna; token mobile sync mai usato dall'explorer;
 - `docs/DATA_EXPLORER.md` è autoritativo per FK native, grafo cross-modulo peer-to-peer e mobile presentation;
 - server task `527184` rende `personalhub_read` read-only e materializza FK cross-modulo + grafo simmetrico `hub_entity_relations`.
@@ -38,7 +38,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
    - forward FK + reverse related rows con label;
    - scenario sintetico con almeno tre moduli diversi (es. Places, Timer e Soldi), verificando navigazione FK/backlink in entrambe le direzioni da ciascun record;
    - scenario temporale: overlap Place/Timer esplicito via Context viene soppresso come duplicate backlink ma incrementa supporto temporale; intake durante visita resta temporal link; transazione→Place già FK non duplica; WordPulse entry ravvicinate diventano un burst; People compare solo tramite event/initiative;
-   - i sei entry point aprono le tabelle canoniche;
+   - l'entry point globale Home e le route module-level ancora supportate aprono le tabelle canoniche; Timer non deve riacquistare un entry point Data Explorer;
    - tentativi write non modificano `personalhub.db`;
    - remote mode usa auth umana, mai token sync.
 6. Gate host: compile leaf interessato, test mirati, poi una sola `checkArchitectureBoundaries`. Dopo failure usa solo leaf correction; un solo rerun aggregato finale.
@@ -50,11 +50,11 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
    - rete ON solo per remote: stesso comportamento relazionale su `personalhub_read` se 527184 è PASS;
    - back navigation corretta, chiusura elimina snapshot cache, nessun crash.
 8. Misura una sola volta delta APK degli asset. Niente campagna di ottimizzazione salvo limite reale.
-9. Solo dopo PASS: bump 48→49 una volta, build debug canonica firmata una volta, push `main`, installa QUELLO stesso APK sul Pixel fisico con helper canonico e delivery PH. Nessuna ricompilazione post-gate.
+9. Solo dopo PASS: bump 50→51 una volta, build debug canonica firmata una volta, push `main`, installa QUELLO stesso APK sul Pixel fisico con helper canonico e delivery PH. Nessuna ricompilazione post-gate.
 10. Rilascia task lock in ogni esito. PASS => stop.
 
 # Acceptance
-PASS solo se il regression gate Luoghi Carlo Visda/Rema è PASS; Lite è realmente offline/self-contained; local e remote hanno FK/Context deduplicati e lo stesso temporal graph separato del server, senza duplicare backlink espliciti; UI embedded distingue Related vs Temporal e resta più leggibile del raw browser mobile; write bypass impossibile; architecture/tests/QA PASS; versione 49 costruita una sola volta e stesso APK installato/consegnato.
+PASS solo se il regression gate Luoghi Carlo Visda/Rema è PASS; Lite è realmente offline/self-contained; local e remote hanno FK/Context deduplicati e lo stesso temporal graph separato del server, senza duplicare backlink espliciti; UI embedded distingue Related vs Temporal e resta più leggibile del raw browser mobile; write bypass impossibile; architecture/tests/QA PASS; versione 51 costruita una sola volta e stesso APK installato/consegnato.
 
 # Non-goal
 Niente SQL write arbitrario, sync bidirezionale, nuovo DB canonico, riscrittura UI Datasette in Compose, redesign dei moduli, plugin opzionali non necessari, refactor generale o audit.
