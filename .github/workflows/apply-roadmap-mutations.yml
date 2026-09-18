@@ -50,7 +50,7 @@ jobs:
               exit 0
             fi
 
-            python3 tools/bootstrap_roadmap.py --repo .
+            python3 tools/bootstrap_roadmap.py --repo . --writer-context
 
             for encoded in "${ISSUE_ROWS[@]}"; do
               printf '%s' "$encoded" | base64 --decode > /tmp/issue.json
