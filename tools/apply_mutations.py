@@ -6,7 +6,7 @@ import json
 import shutil
 from pathlib import Path
 
-from roadmap_db import apply_mutation, connect, reconcile_prompt_file_locations, render
+from roadmap_db import apply_mutation, connect, reconcile_prompt_file_locations, refresh_materialization_hashes, render
 
 SCHEMA = "codex-roadmap.mutation.v1"
 
@@ -37,6 +37,7 @@ def apply_inbox(repo: Path) -> dict[str, int]:
             if target.exists():
                 raise ValueError(f"applied_mutation_exists:{target.name}")
             shutil.move(str(path),str(target))
+        refresh_materialization_hashes(conn, repo)
         conn.commit()
     except Exception:
         conn.rollback()

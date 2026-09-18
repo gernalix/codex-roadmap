@@ -1,0 +1,171 @@
+{
+  "dependencies": [
+    {"depends_on_prompt_id":"861305","note":null,"prompt_id":"311947"},
+    {"depends_on_prompt_id":"461839","note":null,"prompt_id":"418763"},
+    {"depends_on_prompt_id":"617205","note":null,"prompt_id":"461839"},
+    {"depends_on_prompt_id":"724615","note":null,"prompt_id":"582741"},
+    {"depends_on_prompt_id":"582741","note":null,"prompt_id":"671904"},
+    {"depends_on_prompt_id":"845312","note":null,"prompt_id":"672418"},
+    {"depends_on_prompt_id":"418763","note":null,"prompt_id":"724615"},
+    {"depends_on_prompt_id":"671904","note":null,"prompt_id":"845312"},
+    {"depends_on_prompt_id":"527184","note":null,"prompt_id":"861305"},
+    {"depends_on_prompt_id":"672418","note":null,"prompt_id":"861305"}
+  ],
+  "prompts": [
+    {
+      "campaign_id":null,"chat_guidance":"Nuova chat","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/codex-roadmap-sqlite-runtime-backfill.md",
+      "explanation":"Completa il passaggio alla nuova roadmap: importa lo storico reale delle esecuzioni Codex e attiva l’aggiornamento automatico periodico sul PC.",
+      "materialization_sha256":null,"megavault_mode":"FAST","model":"GPT-5.6 Terra","project_id":"23","project_name":"Fedora",
+      "prompt_id":"813383","prompt_type":"Prompt","queue_position":1,"reasoning":"medium","repo":"gernalix/codex-roadmap",
+      "slug":"codex-roadmap-sqlite-runtime-backfill","status":"pending","title":"Attivare il tracciamento SQLite della roadmap","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":null,"chat_guidance":"Nuova chat (non riusare 319311)","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/codex-usage-publisher-attribution-fastpath-followup.md",
+      "explanation":"Installa sul PC la correzione già pronta del salvataggio Codex e verifica che i nuovi aggiornamenti siano rapidi e attribuiti al prompt corretto.",
+      "materialization_sha256":null,"megavault_mode":"FAST","model":"GPT-5.6 Luna","project_id":"8","project_name":"Fedora",
+      "prompt_id":"538642","prompt_type":"Prompt","queue_position":2,"reasoning":"low","repo":"gernalix/codex-usage-monitor",
+      "slug":"codex-usage-publisher-attribution-fastpath-followup","status":"pending","title":"Velocizzare e correggere il salvataggio dei dati Codex","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":null,"chat_guidance":"Nuova chat","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/workflowy-importer-local-live-validation.md",
+      "explanation":"Prova l’importatore Workflowy sul PC con dati finti e controlla che non crei duplicati o lasci residui.",
+      "materialization_sha256":null,"megavault_mode":"FAST","model":"GPT-5.6 Terra","project_id":"23","project_name":"Fedora / Workflowy",
+      "prompt_id":"746193","prompt_type":"Prompt","queue_position":3,"reasoning":"medium","repo":"gernalix/workflowy-importer",
+      "slug":"workflowy-importer-local-live-validation","status":"pending","title":"Provare davvero l’importatore Workflowy","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":null,"chat_guidance":"Nuova chat","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/personalhub-shared-alerts-places-tags-validation.md",
+      "explanation":"Verifica e integra i tag di Places e gli alert condivisi, mantenendo separati i tag di Places da quelli del Timer.",
+      "materialization_sha256":null,"megavault_mode":"STRICT","model":"GPT-5.6 Terra","project_id":"49","project_name":"Personal Hub",
+      "prompt_id":"617205","prompt_type":"Prompt","queue_position":4,"reasoning":"medium","repo":"gernalix/PersonalHub",
+      "slug":"personalhub-shared-alerts-places-tags-validation","status":"pending","title":"Chiudere i nuovi tag e alert di Places","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":null,"chat_guidance":"Nuova chat","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/datasette5-personalhub-explorer-security-deploy.md",
+      "explanation":"Distribuisce sul computer remoto l’esploratore dati privato e di sola lettura di PersonalHub.",
+      "materialization_sha256":null,"megavault_mode":"STRICT","model":"GPT-5.6 Terra","project_id":"10","project_name":"datasette5 / Oracle",
+      "prompt_id":"527184","prompt_type":"Prompt","queue_position":5,"reasoning":"medium","repo":"gernalix/datasette5",
+      "slug":"datasette5-personalhub-explorer-security-deploy","status":"pending","title":"Versione online dell’esploratore dati PersonalHub","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":null,"chat_guidance":"Nuova chat","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/personalhub-epoch-timestamps-migration.md",
+      "explanation":"Controlla e uniforma date e ore di PersonalHub senza riscrivere inutilmente i dati già corretti.",
+      "materialization_sha256":null,"megavault_mode":"STRICT","model":"GPT-5.6 Sol","project_id":"49","project_name":"Personal Hub",
+      "prompt_id":"461839","prompt_type":"Prompt","queue_position":6,"reasoning":"medium","repo":"gernalix/PersonalHub",
+      "slug":"personalhub-epoch-timestamps-migration","status":"pending","title":"Date e ore coerenti ovunque","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":null,"chat_guidance":"Nuova chat","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/personalhub-salute-canonical-integration.md",
+      "explanation":"Porta i dati Salute nell’archivio principale di PersonalHub mantenendo la modifica sicura e verificabile.",
+      "materialization_sha256":null,"megavault_mode":"STRICT","model":"GPT-5.6 Terra","project_id":"49","project_name":"Personal Hub",
+      "prompt_id":"418763","prompt_type":"Prompt","queue_position":7,"reasoning":"medium","repo":"gernalix/PersonalHub",
+      "slug":"personalhub-salute-canonical-integration","status":"pending","title":"Portare Salute dentro PersonalHub","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":null,"chat_guidance":"Stessa chat di 418763","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/personalhub-salute-ui-hub-obsidian.md",
+      "explanation":"Collega Salute alle schermate e alle funzioni generali di PersonalHub usando il nuovo archivio principale.",
+      "materialization_sha256":null,"megavault_mode":"STANDARD","model":"GPT-5.6 Terra","project_id":"49","project_name":"Personal Hub",
+      "prompt_id":"724615","prompt_type":"Prompt","queue_position":8,"reasoning":"medium","repo":"gernalix/PersonalHub",
+      "slug":"personalhub-salute-ui-hub-obsidian","status":"pending","title":"Rendere Salute visibile e collegata al resto dell’app","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":"ph-obsidian-archive","chat_guidance":"Nuova chat","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/personalhub-obsidian-archive-foundation.md",
+      "explanation":"Aggiunge una vista opzionale dei dati PersonalHub leggibile con Obsidian, senza rendere Obsidian una fonte dei dati.",
+      "materialization_sha256":null,"megavault_mode":"STANDARD","model":"GPT-5.6 Terra","project_id":"49","project_name":"Personal Hub",
+      "prompt_id":"582741","prompt_type":"Prompt","queue_position":9,"reasoning":"medium","repo":"gernalix/PersonalHub",
+      "slug":"personalhub-obsidian-archive-foundation","status":"pending","title":"Prima versione dell’archivio Obsidian","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":"ph-obsidian-archive","chat_guidance":"Stessa chat di 582741","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/personalhub-obsidian-archive-incremental.md",
+      "explanation":"Fa aggiornare nell’archivio Obsidian solo ciò che cambia e rende il processo resistente alle interruzioni.",
+      "materialization_sha256":null,"megavault_mode":"STANDARD","model":"GPT-5.6 Terra","project_id":"49","project_name":"Personal Hub",
+      "prompt_id":"671904","prompt_type":"Prompt","queue_position":10,"reasoning":"medium","repo":"gernalix/PersonalHub",
+      "slug":"personalhub-obsidian-archive-incremental","status":"pending","title":"Aggiornare Obsidian automaticamente","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":"ph-obsidian-archive","chat_guidance":"Stessa chat di 671904","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/personalhub-obsidian-archive-projections.md",
+      "explanation":"Estende l’archivio Obsidian a tutti i moduli mantenuti con note leggibili, link e un numero di file controllato.",
+      "materialization_sha256":null,"megavault_mode":"STANDARD","model":"GPT-5.6 Terra","project_id":"49","project_name":"Personal Hub",
+      "prompt_id":"845312","prompt_type":"Prompt","queue_position":11,"reasoning":"medium","repo":"gernalix/PersonalHub",
+      "slug":"personalhub-obsidian-archive-projections","status":"pending","title":"Completare Obsidian per tutti i moduli","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":null,"chat_guidance":"Nuova chat","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/personalhub-git-history-data-sync-validation.md",
+      "explanation":"Verifica con attenzione cronologia, backup e ripristino dei dati PersonalHub prima delle fasi successive.",
+      "materialization_sha256":null,"megavault_mode":"STRICT","model":"GPT-5.6 Sol","project_id":"49","project_name":"Personal Hub",
+      "prompt_id":"672418","prompt_type":"Prompt","queue_position":12,"reasoning":"medium","repo":"gernalix/PersonalHub",
+      "slug":"personalhub-git-history-data-sync-validation","status":"pending","title":"Cronologia, backup e ripristino dei dati PersonalHub","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":null,"chat_guidance":"Nuova chat","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/personalhub-datasette-lite-offline-runtime.md",
+      "explanation":"Completa l’esploratore dati direttamente sul telefono, anche senza Internet, mantenendo collegamenti e lettura sicura.",
+      "materialization_sha256":null,"megavault_mode":"STANDARD","model":"GPT-5.6 Sol","project_id":"49","project_name":"Personal Hub",
+      "prompt_id":"861305","prompt_type":"Prompt","queue_position":13,"reasoning":"medium","repo":"gernalix/PersonalHub",
+      "slug":"personalhub-datasette-lite-offline-runtime","status":"pending","title":"Esploratore dati dentro PersonalHub anche offline","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":null,"chat_guidance":"Nuova chat (non riusare 294731)","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/personalhub-play-release-local-validation.md",
+      "explanation":"Crea e controlla il pacchetto finale Android senza pubblicarlo e lo prova su un telefono virtuale.",
+      "materialization_sha256":null,"megavault_mode":"FAST","model":"GPT-5.6 Luna","project_id":"49","project_name":"Personal Hub",
+      "prompt_id":"311947","prompt_type":"Prompt","queue_position":14,"reasoning":"low","repo":"gernalix/PersonalHub",
+      "slug":"personalhub-play-release-local-validation","status":"pending","title":"Controllo finale prima di Google Play","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":null,"chat_guidance":"Nuova chat","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/fedora-runtime-validation.md",
+      "explanation":"Controlla sul PC reale che i due monitor Fedora abbiano ancora le impostazioni corrette.",
+      "materialization_sha256":null,"megavault_mode":"FAST","model":"GPT-5.6 Luna","project_id":"15","project_name":"Fedora",
+      "prompt_id":"690049","prompt_type":"Prompt","queue_position":15,"reasoning":"low","repo":"gernalix/fedora-system-monitor",
+      "slug":"fedora-runtime-validation","status":"pending","title":"Ultimo controllo del monitoraggio Fedora","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {
+      "campaign_id":null,"chat_guidance":"Stessa chat di 255325","created_at":"2026-09-18T19:14:53Z",
+      "current_path":"prompts/logseq-updates-pat-safety-closure.md",
+      "explanation":"Dopo la revoca della vecchia chiave, ripulisce la cronologia e attiva sul PC l’aggiornamento automatico di Logseq.",
+      "materialization_sha256":null,"megavault_mode":"STRICT","model":"GPT-5.6 Terra","project_id":"23","project_name":"Fedora",
+      "prompt_id":"445388","prompt_type":"Prompt","queue_position":16,"reasoning":"medium","repo":"gernalix/logseq_updates",
+      "slug":"logseq-updates-pat-safety-closure","status":"pending","title":"Chiusura sicurezza e attivazione updater Logseq","updated_at":"2026-09-18T19:14:53Z"
+    },
+    {"campaign_id":null,"chat_guidance":null,"created_at":"2026-09-18T19:14:53Z","current_path":"","explanation":"","materialization_sha256":null,"megavault_mode":null,"model":null,"project_id":null,"project_name":null,"prompt_id":"255325","prompt_type":"Prompt","queue_position":null,"reasoning":null,"repo":null,"slug":"prompt-255325","status":"unknown","title":"Prompt 255325","updated_at":"2026-09-18T19:14:53Z"},
+    {"campaign_id":null,"chat_guidance":null,"created_at":"2026-09-18T19:14:53Z","current_path":"","explanation":"","materialization_sha256":null,"megavault_mode":null,"model":null,"project_id":null,"project_name":null,"prompt_id":"294731","prompt_type":"Prompt","queue_position":null,"reasoning":null,"repo":null,"slug":"prompt-294731","status":"unknown","title":"Prompt 294731","updated_at":"2026-09-18T19:14:53Z"},
+    {"campaign_id":null,"chat_guidance":null,"created_at":"2026-09-18T19:14:53Z","current_path":"","explanation":"","materialization_sha256":null,"megavault_mode":null,"model":null,"project_id":null,"project_name":null,"prompt_id":"319311","prompt_type":"Prompt","queue_position":null,"reasoning":null,"repo":null,"slug":"prompt-319311","status":"unknown","title":"Prompt 319311","updated_at":"2026-09-18T19:14:53Z"}
+  ],
+  "relations": [
+    {"actor":"migration","created_at":"2026-09-18T19:14:53Z","from_prompt_id":"255325","note":null,"relation_type":"parent","to_prompt_id":"445388"},
+    {"actor":"migration","created_at":"2026-09-18T19:14:53Z","from_prompt_id":"294731","note":null,"relation_type":"parent","to_prompt_id":"311947"},
+    {"actor":"migration","created_at":"2026-09-18T19:14:53Z","from_prompt_id":"319311","note":null,"relation_type":"parent","to_prompt_id":"538642"}
+  ],
+  "schema":"codex-roadmap.seed.v1",
+  "tags":[
+    {"prompt_id":"311947","tag":"project/personal-hub"},{"prompt_id":"311947","tag":"roadmap"},
+    {"prompt_id":"418763","tag":"project/personal-hub"},{"prompt_id":"418763","tag":"roadmap"},
+    {"prompt_id":"445388","tag":"project/fedora"},{"prompt_id":"445388","tag":"roadmap"},
+    {"prompt_id":"461839","tag":"project/personal-hub"},{"prompt_id":"461839","tag":"roadmap"},
+    {"prompt_id":"527184","tag":"project/datasette5-oracle"},{"prompt_id":"527184","tag":"roadmap"},
+    {"prompt_id":"538642","tag":"project/fedora"},{"prompt_id":"538642","tag":"roadmap"},
+    {"prompt_id":"582741","tag":"project/personal-hub"},{"prompt_id":"582741","tag":"roadmap"},
+    {"prompt_id":"617205","tag":"project/personal-hub"},{"prompt_id":"617205","tag":"roadmap"},
+    {"prompt_id":"671904","tag":"project/personal-hub"},{"prompt_id":"671904","tag":"roadmap"},
+    {"prompt_id":"672418","tag":"project/personal-hub"},{"prompt_id":"672418","tag":"roadmap"},
+    {"prompt_id":"690049","tag":"project/fedora"},{"prompt_id":"690049","tag":"roadmap"},
+    {"prompt_id":"724615","tag":"project/personal-hub"},{"prompt_id":"724615","tag":"roadmap"},
+    {"prompt_id":"746193","tag":"project/fedora-workflowy"},{"prompt_id":"746193","tag":"roadmap"},
+    {"prompt_id":"813383","tag":"project/fedora"},{"prompt_id":"813383","tag":"roadmap"},
+    {"prompt_id":"845312","tag":"project/personal-hub"},{"prompt_id":"845312","tag":"roadmap"},
+    {"prompt_id":"861305","tag":"project/personal-hub"},{"prompt_id":"861305","tag":"roadmap"}
+  ]
+}

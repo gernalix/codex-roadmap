@@ -1,19 +1,28 @@
 # codex-roadmap
 
-[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]] · [[STANDARD_PROMPT|Esecuzione Codex]]
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]] · [[prompt-registry|Registro prompt]] · [[obsidian/Dashboards/Roadmap|Dashboard Obsidian]] · [[STANDARD_PROMPT|Esecuzione Codex]] · [[SQLITE_ROADMAP|SQLite]]
 
 Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain locale, device/emulatore, VM, segreti/config runtime, servizi locali o altre risorse non disponibili nella normale chat. Se una modifica può essere completata direttamente sui repository remoti in chat, va fatta subito e **non** aggiunta alla roadmap.
 
-## Struttura
-- `roadmap.md`: lista numerata dei soli pendenti, una riga per task.
-- `spiegazioni.md`: stessa sequenza, spiegazioni semplici.
-- `prompts/*.md`: task autosufficienti da incollare direttamente in Codex.
-- `completed/*.md`: prompt eseguiti e conclusi con PASS.
-- `falliti/*.md`: prompt eseguiti ma conclusi con BLOCKED/FAIL/UNKNOWN; non tornano in `prompts/`.
-- `tools/roadmap_guard.py`: primitive fail-closed per selezione/completamento/reconcile.
-- `tools/roadmap_finish.py`: finalizzatore PASS race-safe da usare nei prompt normali.
+## Source of truth
 
-`spiegazioni.md` usa `# | Prompt | PROMPT_ID | Progetto | Chat Codex | Dipendenze | Spiegazioni | Livello ragionamento | Tipo prompt`; ordine, PROMPT_ID, reasoning e link devono coincidere con la roadmap e con i metadata del prompt.
+`roadmap.sqlite` è l'unica fonte autorevole dei metadati della roadmap. `roadmap.md`, `spiegazioni.md`, `prompt-registry.md` e `obsidian/` sono viste generate e **non vanno modificate manualmente** per cambiare stato, ordine, dipendenze, analisi o relazioni.
+
+Codex registra gli esiti immediati tramite `roadmap_result.py` / `roadmap_finish.py`; il sync locale importa timestamp e metriche reali da `codex-usage`. ChatGPT aggiorna stato logico, analisi, fix e relazioni tramite richieste strutturate in `mutations/inbox/`, applicate transazionalmente da GitHub Actions. Dettagli: [[SQLITE_ROADMAP|Roadmap SQLite]].
+
+## Struttura
+- `roadmap.sqlite`: source of truth.
+- `roadmap.md`: vista generata dei soli pendenti/running.
+- `spiegazioni.md`: vista generata semplice dei pendenti/running con stato, esecuzione, esito, analisi, fix, progetto, chat e dipendenze.
+- `prompt-registry.md`: registro generato di tutti i PROMPT_ID.
+- `obsidian/`: note generate per prompt/progetto e dashboard con wikilink, backlink e tag.
+- `prompts/*.md`: task pendenti/running autosufficienti.
+- `completed/*.md`: task conclusi con PASS.
+- `falliti/*.md`: task conclusi con BLOCKED/FAIL/CANCELLED/UNKNOWN.
+- `tools/roadmap_result.py`: scrittura terminale race-safe nel DB + archiviazione.
+- `tools/roadmap_finish.py`: wrapper compatibile per PASS.
+- `tools/import_codex_usage.py` + `tools/roadmap_sync.py`: import/backfill e riconciliazione automatica.
+- `mutations/inbox/`: canale strutturato per gli aggiornamenti ChatGPT.
 
 ## Regola vincolante per `spiegazioni.md`
 
@@ -129,39 +138,49 @@ Per PersonalHub:
 Non creare mega-task se le fasi hanno failure domains indipendenti; consolida build/install/delivery e gate comuni. Una verifica locale di fix già pushati va assorbita nella fase funzionale successiva dello stesso repo quando può condividere lo stesso host gate e la stessa QA.
 
 ## PASS
-Ogni prompt normale deve finalizzare con **una sola invocazione** race-safe:
+Ogni prompt normale finalizza con una sola invocazione race-safe:
+
 ```bash
 python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id PROMPT_ID --confirm-executed
 ```
 
-`roadmap_finish.py` usa `complete` nel caso normale e passa automaticamente al `reconcile` canonico solo se la roadmap è avanzata mentre il task era in esecuzione. Non anteporre un dry-run nel percorso normale: raddoppia processi/round-trip e apre una finestra di race senza aggiungere sicurezza al guard fail-closed.
+Il wrapper registra `PASS` in `roadmap.sqlite`, sposta il prompt in `completed/`, rigenera tutte le viste Markdown/Obsidian, committa e pusha in modo race-safe. Non anteporre un dry-run nel percorso normale e non eseguire audit aggiuntivi dopo il PASS.
 
-`status=completed|already_completed` con `finish_mode=complete|reconcile` e, quando c'è una mutazione, `push_verified=git_push_exit_0` è prova terminale. Dopo non eseguire `git status`, `rev-parse`, `ls-remote`, pull/fetch o verifiche equivalenti sulla roadmap e non aprire il task successivo.
-
-Se il PASS arriva dopo un failure significativo realmente osservato nello stesso run — per esempio ANR/crash, rollback, recovery o un gate fallito poi corretto — l'output finale deve citarlo in forma compatta insieme all'evidenza del rerun riuscito. Non trasformare un PASS finale in un report che nasconde gli incidenti intermedi rilevanti.
+Timestamp e metriche precise dell'esecuzione vengono poi riconciliati da `codex-usage`; la registrazione terminale immediata serve a chiudere correttamente la coda senza aspettare il sync.
 
 ## BLOCKED/FAIL
-Non invocare il finalizzatore, non archiviare né avanzare. Riporta solo blocker/evidenza minima e fermati.
+Un BLOCKED/FAIL è anch'esso terminale per quel PROMPT_ID: **non si rilancia lo stesso prompt**. Registra una sola volta:
+
+```bash
+python3 ~/projects/codex-roadmap/tools/roadmap_result.py --repo ~/projects/codex-roadmap --prompt-id PROMPT_ID --result BLOCKED --confirm-executed
+# oppure --result FAIL
+```
+
+Il prompt viene tolto dai pendenti e archiviato in `falliti/`. Se serve una correzione, ChatGPT crea un **nuovo PROMPT_ID** e lo collega al padre con relazione `fix` o `followup`. Il sync da `codex-usage` riconcilia comunque l'esito reale se la registrazione immediata non è riuscita.
 
 ## `roadmap_guard.py` / `roadmap_finish.py`
-`select` è solo fallback unattended. `complete` e `reconcile` lavorano fail-closed; il worktree principale può essere sporco e non va stashato/reset. I prompt normali non devono orchestrare manualmente `complete`→`reconcile`: lo fa `roadmap_finish.py` nello stesso processo.
+`roadmap_guard.py select` resta disponibile solo come fallback unattended/lettura. Con `roadmap.sqlite` presente, lo stato non deve essere avanzato modificando direttamente Markdown.
 
-Usa direttamente `roadmap_guard.py` solo per diagnostica/manutenzione del guard o per il fallback unattended documentato in `STANDARD_PROMPT.md`.
+Usa:
+- `roadmap_finish.py` per PASS;
+- `roadmap_result.py` per PASS/FAIL/BLOCKED/CANCELLED/UNKNOWN;
+- `roadmap_db.py` / mutazioni JSON per manutenzione strutturata;
+- `roadmap_sync.py` per riconciliare le esecuzioni reali da `codex-usage`.
 
-Prima di modificare guard/workflow:
+Prima di modificare il workflow:
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
+python3 tools/roadmap_db.py --repo . verify
 ```
 
 ## Manutenzione
 Quando aggiorni la roadmap:
-- mantieni roadmap/spiegazioni/prompt pendenti 1:1;
-- riscrivi o aggiorna sempre la relativa voce di `spiegazioni.md` rispettando integralmente la regola non tecnica sopra; non lasciare gergo ereditato dal prompt Codex;
-- per i repository target della roadmap, usa `main` come unico branch remoto persistente: branch temporanei già integrati o superseded vanno eliminati durante la manutenzione; se il cambio del default branch richiede auth/admin locale non disponibile in chat, assorbilo nel task Codex già esistente invece di creare un task separato;
-- elimina dal prompt facts ormai già implementati o verificabili automaticamente;
-- preferisci test automatici a QA manuale ripetitiva;
-- sposta build/device/delivery alla fase finale di una campagna quando sicuro;
-- non aggiungere task che ChatGPT può già completare direttamente sui repo remoti;
+- modifica il DB tramite API/helper/mutazioni strutturate; **non** editare manualmente le viste generate;
+- ogni nuova materializzazione mantiene la regola assoluta 1 prompt = 1 PROMPT_ID unico;
+- un prompt terminale resta storico; eventuali fix/follow-up usano un nuovo ID collegato al padre;
+- conserva spiegazioni in italiano semplice: il testo sorgente è il campo `explanation` nel DB, poi `spiegazioni.md` viene rigenerato;
+- mantieni dipendenze dirette, progetto, chat consigliata, modello e reasoning nel DB;
+- non aggiungere task che ChatGPT può completare direttamente sui repo remoti;
 - non assorbire task già in esecuzione;
 - non usare la roadmap come backlog generico: deve restare una coda Codex minima e operativa;
-- dopo un PASS, non cercare “il prossimo collo di bottiglia” salvo evidenza concreta di malfunzionamento o rischio.
+- dopo una mutazione esegui `roadmap_db.py verify`; dopo PASS non creare ulteriori audit senza nuova evidenza.
