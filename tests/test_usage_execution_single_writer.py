@@ -54,7 +54,7 @@ class UsageExecutionMutationTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            apply_mutations.apply_inbox(repo)
+            apply_mutations.apply_inbox(repo, test_only=True)
             conn = db.connect(repo, writable=False)
             self.assertEqual("completed", db.prompt_row(conn, "123456")["status"])
             self.assertEqual(1, conn.execute("SELECT COUNT(*) FROM executions").fetchone()[0])
@@ -98,7 +98,7 @@ class UsageExecutionMutationTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            apply_mutations.apply_inbox(repo)
+            apply_mutations.apply_inbox(repo, test_only=True)
             conn = db.connect(repo, writable=False)
             self.assertEqual("pending", db.prompt_row(conn, "123456")["status"])
             self.assertEqual(1, conn.execute("SELECT COUNT(*) FROM executions").fetchone()[0])
