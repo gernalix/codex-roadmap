@@ -5,7 +5,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`, branch canonico `main`;
-- `origin/main` atteso: `a520e864aa2acd1a9a22d0d55f56bf90686b7d93`;
+- `origin/main` atteso: `ca0055cfeaab113843a9419fdca259d34106f2ee`;
 - `version.txt=48`; bump 48→49 UNA sola volta solo dopo tutti i gate feature;
 - fix Luoghi già in `main`: check-in sovrapposti scelgono automaticamente il candidato nettamente più vicino solo quando gli intervalli di distanza rispetto all'accuracy GPS non si sovrappongono; journal conserva la causa originale e registra la soglia reale raggio+accuracy;
 - già presenti: snapshot detached+validato, DataExplorerActivity local/remote, WebViewAssetLoader, entry point Home + sei moduli, config `personalhub_read`, docs e CODE_MAP;
@@ -14,7 +14,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 - server task `527184` rende `personalhub_read` read-only e materializza FK cross-modulo + grafo simmetrico `hub_entity_relations`.
 
 # Esecuzione minima
-1. Acquisisci task lock PH con PROMPT_ID 861305. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == c457eee4880d0f58ed271d5069d78ecdd500059e`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED. Usa solo CODE_MAP row `database.data_explorer` più i file Luoghi già noti sotto `capsules/checkin` e i test indicati sotto; niente audit repo-wide.
+1. Acquisisci task lock PH con PROMPT_ID 861305. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == ca0055cfeaab113843a9419fdca259d34106f2ee`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED. Usa solo CODE_MAP row `database.data_explorer` più i file Luoghi già noti sotto `capsules/checkin` e i test indicati sotto; niente audit repo-wide.
 2. Vendorizza/pinna Datasette Lite + Pyodide + wheel/assets necessari sotto gli asset PH. Nessuna CDN/runtime fetch. NON allentare il network block locale.
 3. Dal detached snapshot costruisci, se necessario, una presentazione locale effimera read-only con semantica equivalente a `personalhub_read`:
    - vere SQLite FK e label leggibili;
@@ -25,7 +25,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
    - niente browser chrome;
    - card/list leggibile come default su schermi stretti, con accesso alla tabella densa quando utile;
    - FK come label/chip tappabili;
-   - row detail con sezione **Related across PersonalHub** raggruppata per modulo/entity kind, alimentata dalle vere FK/backlink e disponibile allo stesso modo qualunque sia il modulo di partenza;
+   - row detail con **Related across PersonalHub** per FK/Context e sezione separata **Temporal associations** per inferenze temporali; high prima, medium collassate di default; niente doppioni quando esiste già FK/Context;
    - filtri/facet/pagination/SQL restano funzionali;
    - light/dark, controlli touch-friendly, niente dipendenza da JS/plugin non supportati da Lite se non provata.
 5. Test mirati prima del device:
@@ -34,7 +34,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
    - snapshot coerente e isolato;
    - Lite avvia e SELECT funziona con networking disabilitato;
    - forward FK + reverse related rows con label;
-   - scenario sintetico con almeno tre moduli diversi (es. Places, Timer e Soldi), verificando navigazione FK/backlink in entrambe le direzioni da ciascun record;
+   - scenario sintetico con almeno tre moduli diversi (es. Places, Timer e Soldi), verificando navigazione FK/backlink in entrambe le direzioni da ciascun record;\n   - scenario temporale: overlap Place/Timer esplicito via Context viene soppresso come duplicate backlink ma incrementa supporto temporale; intake durante visita resta temporal link; transazione→Place già FK non duplica; WordPulse entry ravvicinate diventano un burst; People compare solo tramite event/initiative;
    - i sei entry point aprono le tabelle canoniche;
    - tentativi write non modificano `personalhub.db`;
    - remote mode usa auth umana, mai token sync.
@@ -51,7 +51,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 10. Rilascia task lock in ogni esito. PASS => stop.
 
 # Acceptance
-PASS solo se il regression gate Luoghi Carlo Visda/Rema è PASS; Lite è realmente offline/self-contained; local e remote offrono FK cliccabili/backlink e grafo cross-modulo peer-to-peer equivalente; UI embedded è più leggibile del raw browser mobile senza perdere funzioni Datasette; write bypass impossibile; architecture/tests/QA PASS; versione 49 costruita una sola volta e stesso APK installato/consegnato.
+PASS solo se il regression gate Luoghi Carlo Visda/Rema è PASS; Lite è realmente offline/self-contained; local e remote hanno FK/Context deduplicati e lo stesso temporal graph separato del server, senza duplicare backlink espliciti; UI embedded distingue Related vs Temporal e resta più leggibile del raw browser mobile; write bypass impossibile; architecture/tests/QA PASS; versione 49 costruita una sola volta e stesso APK installato/consegnato.
 
 # Non-goal
 Niente SQL write arbitrario, sync bidirezionale, nuovo DB canonico, riscrittura UI Datasette in Compose, redesign dei moduli, plugin opzionali non necessari, refactor generale o audit.
