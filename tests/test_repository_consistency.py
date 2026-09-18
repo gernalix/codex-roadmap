@@ -52,7 +52,7 @@ class RepositoryConsistencyTests(unittest.TestCase):
         header = next(line for line in lines if line.startswith("| # |"))
         names = self._split_markdown_row(header)
         indexes = {name: idx for idx, name in enumerate(names)}
-        required = {"#", "Prompt", "PROMPT_ID", "Reasoning", "Tipo"}
+        required = {"#", "Prompt", "PROMPT_ID", "Eseguibile ora?", "Reasoning", "Tipo"}
         self.assertTrue(required.issubset(indexes), indexes)
 
         rows = []
