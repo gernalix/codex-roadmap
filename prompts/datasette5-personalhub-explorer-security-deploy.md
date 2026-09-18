@@ -1,7 +1,7 @@
 PROMPT_ID=527184 | project_id=10 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STRICT
 
 # Goal
-Valida e distribuisci SOLO la proiezione Datasette PersonalHub già implementata su `main`: SQL read-only autenticato, FK cross-modulo native e grafo Context simmetrico peer-to-peer. Nessun redesign.
+Valida e distribuisci SOLO la proiezione Datasette PersonalHub già implementata su `main`: SQL read-only autenticato, FK cross-modulo native, grafo Context deduplicato e temporal graph inferito separato. Nessun redesign.
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/datasette5`, branch canonico `main`;
@@ -49,4 +49,4 @@ Niente modifiche PH Android, nuovi token, dati sintetici produzione, redesign Co
 Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 527184 --confirm-executed`
 
-Output massimo 6 righe: `RESULT`, `HEAD`, `TESTS`, `FK_GRAPH`, `DEPLOY`, `BLOCKER`.
+Output massimo 7 righe: `RESULT`, `HEAD`, `TESTS`, `FK_GRAPH`, `TEMPORAL`, `DEPLOY`, `BLOCKER`.
