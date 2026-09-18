@@ -1,8 +1,8 @@
 ---
-prompt_id: 693572
+prompt_id: 330522
 status: pending
 project_id: 96
-model: GPT-5.6 Luna
+model: GPT-5.5
 reasoning: low
 tags:
   - roadmap/prompt
@@ -10,26 +10,26 @@ tags:
   - roadmap/project/fedora-workflowy
 ---
 
-# 693572 · Ultima prova reale dell’importatore Workflowy
+# 330522 · Attivare le automazioni locali di Workflowy
 
 - **Stato:** pending
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
-- **Prompt:** [[../../prompts/workflowy-importer-live-smoke-secret-file|Apri prompt]]
+- **Prompt:** [[../../prompts/workflowy-automation-local-activation|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[538642 codex-usage-publisher-attribution-fastpath-followup|538642]]
-- **Sblocca:** [[330522 workflowy-automation-local-activation|330522]]
-- **Padri/precedenti:** [[746193 workflowy-importer-local-live-validation|746193]]
-- **Figli/follow-up:** [[330522 workflowy-automation-local-activation|330522]]
-- **Chat Codex:** Nuova chat
+- **Dipende da:** [[693572 workflowy-importer-live-smoke-secret-file|693572]]
+- **Sblocca:** —
+- **Padri/precedenti:** [[693572 workflowy-importer-live-smoke-secret-file|693572]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Stessa chat di 693572
 
 ## Spiegazione
 
-Usa la chiave Workflowy salvata nel file protetto previsto sul PC, controlla che il file sia sicuro e poi esegue una sola prova con dati temporanei, cancellandoli alla fine.
+Installa sul PC il nuovo ponte locale di Workflowy e l’aggiornamento automatico della sua copia di lavoro. Controlla che funzionino davvero; prepara anche backup e riepilogo settimanale, ma li lascia spenti finché non decidi di attivarli.
 
 ## Esecuzioni
 
