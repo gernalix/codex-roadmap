@@ -20,6 +20,18 @@ def _fmt(value: Any) -> str:
         return "—"
     return str(value).replace("|", "\\|").replace("\n", " ")
 
+_FINAL_STATUS_OUTCOME = {
+    "completed": "PASS",
+    "failed": "FAIL",
+    "blocked": "BLOCKED",
+    "cancelled": "CANCELLED",
+    "unknown": "UNKNOWN",
+}
+
+def _effective_outcome(row: sqlite3.Row | dict[str, Any]) -> Any:
+    """Prefer the authoritative terminal roadmap state over stale telemetry."""
+    return _FINAL_STATUS_OUTCOME.get(row["status"], row["last_outcome"])
+
 def _prompt_links(conn: sqlite3.Connection, prompt_id: str, relation_sql: str, params: tuple[Any,...]) -> str:
     rows = conn.execute(relation_sql, params).fetchall()
     if not rows:
@@ -110,7 +122,7 @@ def render(repo: Path) -> list[str]:
             "| " + " | ".join([
                 str(i),
                 _table_wikilink(r["current_path"][:-3], r["title"]) if r["current_path"].endswith(".md") else _table_wikilink(f"obsidian/Prompts/{r['prompt_id']} {r['slug']}", f"{r['prompt_id']} · {r['title']}"),
-                r["prompt_id"], r["status"], _fmt(r["last_launched_at"]), _fmt(r["last_outcome"]),
+                r["prompt_id"], r["status"], _fmt(r["last_launched_at"]), _fmt(_effective_outcome(r)),
                 "sì" if r["analyzed"] else "no", "sì" if r["chatgpt_code_changed"] else "no",
                 fix, _fmt(r["project_name"] or r["project_id"]),
                 _fmt(r["chat_guidance"]), dep_text, _fmt(r["explanation"]), _fmt(r["model"]), _fmt(r["reasoning"]), _fmt(r["prompt_type"])
@@ -136,7 +148,7 @@ def render(repo: Path) -> list[str]:
             fix=_table_wikilink(f"obsidian/Prompts/{fp['prompt_id']} {fp['slug']}", fp["prompt_id"])
         registry.append("| " + " | ".join([
             _table_wikilink(f"obsidian/Prompts/{r['prompt_id']} {r['slug']}", f"{r['prompt_id']} · {r['title']}"), r["status"], _fmt(r["first_launched_at"]), _fmt(r["last_launched_at"]),
-            _fmt(r["last_outcome"]), "sì" if r["analyzed"] else "no",
+            _fmt(_effective_outcome(r)), "sì" if r["analyzed"] else "no",
             "sì" if r["chatgpt_code_changed"] else "no", fix,
             _fmt(r["project_name"] or r["project_id"]), _fmt(r["model"]), _fmt(r["reasoning"])
         ]) + " |")
