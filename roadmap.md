@@ -2,7 +2,7 @@
 
 > Generato da `roadmap.sqlite`. Non modificare manualmente.
 
-1. [[prompts/workflowy-live-smoke-and-local-activation-v3|workflowy-live-smoke-and-local-activation-v3]]
+1. [[prompts/workflowy-automation-local-activation-v3|workflowy-automation-local-activation-v3]]
 2. [[prompts/personalhub-capsule-isolation-integration-closure-v4|personalhub-capsule-isolation-integration-closure-v4]]
 3. [[prompts/personalhub-shared-alerts-places-tags-integration-v3|personalhub-shared-alerts-places-tags-integration-v3]]
 4. [[prompts/personalhub-epoch-timestamps-migration-v3|personalhub-epoch-timestamps-migration-v3]]

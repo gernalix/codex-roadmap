@@ -22,9 +22,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** —
+- **Sblocca:** [[231789 workflowy-automation-local-activation-v3|231789]]
 - **Padri/precedenti:** [[418906 workflowy-importer-live-smoke-secret-file-v2|418906]]
-- **Figli/follow-up:** [[438271 workflowy-live-smoke-and-local-activation-v3|438271]]
+- **Figli/follow-up:** [[231789 workflowy-automation-local-activation-v3|231789]], [[438271 workflowy-live-smoke-and-local-activation-v3|438271]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

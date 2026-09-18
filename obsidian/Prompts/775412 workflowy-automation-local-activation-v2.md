@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[418906 workflowy-importer-live-smoke-secret-file-v2|418906]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[330522 workflowy-automation-local-activation|330522]]
-- **Figli/follow-up:** [[438271 workflowy-live-smoke-and-local-activation-v3|438271]]
+- **Figli/follow-up:** [[231789 workflowy-automation-local-activation-v3|231789]], [[438271 workflowy-live-smoke-and-local-activation-v3|438271]]
 - **Chat Codex:** Stessa chat di 693572
 
 ## Spiegazione

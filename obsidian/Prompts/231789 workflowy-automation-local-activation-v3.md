@@ -1,35 +1,35 @@
 ---
-prompt_id: 438271
-status: superseded
+prompt_id: 231789
+status: pending
 project_id: 96
-model: GPT-5.5
-reasoning: medium
+model: GPT-5.6 Luna
+reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/fedora-workflowy
 ---
 
-# 438271 · Chiudere Workflowy e attivare il runtime locale
+# 231789 · Attivare il runtime locale Workflowy
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
-- **Prompt:** [[../../falliti/workflowy-live-smoke-and-local-activation-v3|Apri prompt]]
+- **Prompt:** [[../../prompts/workflowy-automation-local-activation-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** —
+- **Dipende da:** [[856234 workflowy-live-smoke-remote-fix-closure|856234]]
 - **Sblocca:** —
-- **Padri/precedenti:** [[775412 workflowy-automation-local-activation-v2|775412]], [[856234 workflowy-live-smoke-remote-fix-closure|856234]]
-- **Figli/follow-up:** [[231789 workflowy-automation-local-activation-v3|231789]]
+- **Padri/precedenti:** [[438271 workflowy-live-smoke-and-local-activation-v3|438271]], [[775412 workflowy-automation-local-activation-v2|775412]], [[856234 workflowy-live-smoke-remote-fix-closure|856234]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Accorpa live-smoke post-fix e attivazione locale, eliminando un doppio ciclo di setup/test.
+Dopo il PASS di 856234 esegue solo l’attivazione locale, senza ripetere smoke o suite già chiusi.
 
 ## Esecuzioni
 
