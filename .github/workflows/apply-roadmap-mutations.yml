@@ -53,11 +53,7 @@ jobs:
             for encoded in "${ISSUE_ROWS[@]}"; do
               printf '%s' "$encoded" | base64 --decode > /tmp/issue.json
               ISSUE_NUMBER="$(python3 -c 'import json; print(json.load(open("/tmp/issue.json"))["number"])')"
-              python3 - <<'PY'
-          import json
-          issue = json.load(open("/tmp/issue.json", encoding="utf-8"))
-          json.dump({"issue": issue}, open("/tmp/issue-event.json", "w", encoding="utf-8"))
-          PY
+              python3 -c 'import json; issue=json.load(open("/tmp/issue.json", encoding="utf-8")); json.dump({"issue": issue}, open("/tmp/issue-event.json", "w", encoding="utf-8"))'
               echo "Applying roadmap mutation Issue #$ISSUE_NUMBER"
               python3 tools/apply_issue_mutation.py --repo . --event /tmp/issue-event.json
               python3 tools/roadmap_db.py --repo . verify
