@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tools.safe_ff import SafeFFBlocked, safe_fast_forward
+from tools.safe_ff import SafeFFBlocked, dirty_paths, safe_fast_forward, summarize_paths
 
 
 def git(path: Path, *args: str) -> str:
@@ -49,6 +49,20 @@ class SafeFastForwardTests(unittest.TestCase):
         git(self.seed, "commit", "-m", f"update {path}")
         git(self.seed, "push", "origin", "main")
         return git(self.seed, "rev-parse", "HEAD")
+
+    def test_dirty_paths_preserve_spaces_unquoted(self):
+        folder = self.local / "folder"
+        folder.mkdir()
+        target = folder / "name with spaces.md"
+        target.write_text("draft\n", encoding="utf-8")
+        self.assertIn("folder/name with spaces.md", dirty_paths(self.local))
+
+    def test_summarize_paths_caps_output(self):
+        paths = {f"path-{i:02d}" for i in range(12)}
+        self.assertEqual(
+            "path-00, path-01, path-02, ... (+9 more)",
+            summarize_paths(paths, limit=3),
+        )
 
     def test_all_disjoint_dirty_files_are_preserved_while_tracked_db_updates(self):
         modified = self.local / "notes.md"

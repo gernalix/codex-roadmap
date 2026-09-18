@@ -55,6 +55,13 @@ def dirty_paths(repo: Path) -> set[str]:
     return paths
 
 
+def summarize_paths(paths: set[str] | list[str] | tuple[str, ...], *, limit: int = 10) -> str:
+    ordered = sorted(set(paths))
+    shown = ", ".join(ordered[:limit])
+    remaining = len(ordered) - limit
+    return f"{shown}, ... (+{remaining} more)" if remaining > 0 else shown
+
+
 def _git_dir(repo: Path) -> Path:
     value = _git_ok(repo, "rev-parse", "--git-dir")
     path = Path(value)

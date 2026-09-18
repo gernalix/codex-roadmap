@@ -99,7 +99,7 @@ def render(repo: Path) -> list[str]:
     for i, r in enumerate(pending, 1):
         deps = conn.execute(
             "SELECT d.depends_on_prompt_id,p.title FROM dependencies d JOIN prompts p ON p.prompt_id=d.depends_on_prompt_id "
-            "WHERE d.prompt_id=? ORDER BY d.depends_on_prompt_id", (r["prompt_id"],)
+            "WHERE d.prompt_id=? AND p.status IN ('pending','running') ORDER BY d.depends_on_prompt_id", (r["prompt_id"],)
         ).fetchall()
         dep_text = ", ".join(_table_wikilink(f"obsidian/Prompts/{d[0]} {prompt_row(conn,d[0])['slug']}", d[0]) for d in deps) or "—"
         fix = "—"

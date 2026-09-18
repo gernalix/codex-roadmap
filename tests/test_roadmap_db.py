@@ -33,6 +33,8 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertIn("prompts/two", (repo/"roadmap.md").read_text())
             self.assertIn("123456", (repo/"prompt-registry.md").read_text())
             self.assertTrue((repo/"obsidian/Prompts/123456 one.md").is_file())
+            spieg=(repo/"spiegazioni.md").read_text(encoding="utf-8")
+            self.assertNotIn("[[obsidian/Prompts/123456 one\\|123456]]",spieg)
             self.assertTrue(db.verify(repo)["ok"])
 
     def test_terminal_status_waits_for_exact_usage_execution(self):

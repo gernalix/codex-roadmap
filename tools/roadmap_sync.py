@@ -8,6 +8,8 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from safe_ff import SafeFFBlocked, dirty_paths, summarize_paths
+
 MAX_RETRIES=3
 
 class SyncError(RuntimeError): pass
@@ -30,14 +32,16 @@ def sync(repo: Path, source: Path) -> dict[str,object]:
             p=subprocess.run(cmd,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             if p.returncode:
                 raise SyncError(f"import_failed:{p.stderr.strip()}")
-            status=[line for line in run(wt,"status","--porcelain=v1","-z","--untracked-files=all").stdout.split("\0") if line]
+            try:
+                changed=dirty_paths(wt)
+            except SafeFFBlocked as exc:
+                raise SyncError(f"git_status_failed:{exc}") from exc
             allowed_prefixes=("roadmap.sqlite","roadmap.md","spiegazioni.md","prompt-registry.md","obsidian/","prompts/","completed/","falliti/")
-            changed=[line[3:] for line in status if len(line)>=4]
             if not changed:
                 return {"status":"noop","attempt":attempt,"import":json.loads(p.stdout or "{}")}
             bad=[x for x in changed if not any(x==a or x.startswith(a) for a in allowed_prefixes)]
             if bad:
-                raise SyncError("unexpected_changes:"+",".join(sorted(bad)))
+                raise SyncError("unexpected_changes:"+summarize_paths(bad))
             run(wt,"add","-A","roadmap.sqlite","roadmap.md","spiegazioni.md","prompt-registry.md","obsidian","prompts","completed","falliti")
             run(wt,"commit","-m","Sync roadmap execution metadata")
             sha=run(wt,"rev-parse","HEAD").stdout.strip()

@@ -9,6 +9,8 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from safe_ff import SafeFFBlocked, dirty_paths, summarize_paths
+
 MAX_PUSH_RACE_RETRIES=3
 RESULT_STATUS={"PASS":"completed","FAIL":"failed","BLOCKED":"blocked","CANCELLED":"cancelled","UNKNOWN":"unknown"}
 
@@ -93,15 +95,17 @@ def finish_result(
             if dry_run:
                 return {"status":"ready","prompt_id":prompt_id,"result":result,"current_status":state["status"]}
             payload=_apply_in_worktree(wt,prompt_id,result)
-            status=[line for line in run(wt,"status","--porcelain=v1","-z","--untracked-files=all").stdout.split("\0") if line]
-            changed=[line[3:] for line in status if len(line)>=4]
+            try:
+                changed=dirty_paths(wt)
+            except SafeFFBlocked as exc:
+                raise RoadmapResultError(f"git_status_failed:{exc}") from exc
             allowed_prefixes=(
                 "roadmap.sqlite","roadmap.md","spiegazioni.md","prompt-registry.md","obsidian/",
                 "prompts/","completed/","falliti/",
             )
             bad=[p for p in changed if not any(p==a or p.startswith(a) for a in allowed_prefixes)]
             if bad:
-                raise RoadmapResultError("unexpected_changes:"+",".join(sorted(bad)))
+                raise RoadmapResultError("unexpected_changes:"+summarize_paths(bad))
             if not changed:
                 return {**payload,"push_race_retries":str(attempt),"push_verified":"no_change"}
             run(wt,"add","-A","roadmap.sqlite","roadmap.md","spiegazioni.md","prompt-registry.md","obsidian","prompts","completed","falliti")
