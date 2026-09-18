@@ -1,0 +1,58 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "status",
+      "prompt_id": "886414",
+      "status": "superseded",
+      "note": "Sostituito prima dell'esecuzione: main è avanzato con il nuovo coordinamento concorrente PH, quindi serve una nuova materializzazione che integri main nel branch prima dei gate."
+    },
+    {
+      "op": "register",
+      "prompt_id": "200725",
+      "slug": "personalhub-100-capsule-isolation-local-validation-v2",
+      "title": "PersonalHub 100% capsule isolation — integra main e valida",
+      "current_path": "prompts/personalhub-100-capsule-isolation-local-validation-v2.md",
+      "project_id": "49",
+      "project_name": "PersonalHub",
+      "repo": "gernalix/PersonalHub",
+      "chat_guidance": "Nuova chat",
+      "prompt_type": "Prompt",
+      "model": "GPT-5.6 Terra",
+      "reasoning": "medium",
+      "megavault_mode": "FAST",
+      "explanation": "Aggiorna il ramo separato della capsulizzazione con le ultime regole di lavoro concorrente già entrate in PersonalHub, poi controlla sul PC e sull'emulatore che ogni modulo possieda davvero le proprie parti Android e che la Home li apra solo tramite ingressi pubblici stabili. Serve Codex per integrare in sicurezza le modifiche locali, compilare l'app e provarla sull'emulatore. Il ramo resta separato e non viene ancora unito alla versione principale.",
+      "status": "pending",
+      "queue_position": 2
+    },
+    {
+      "op": "relation",
+      "from_prompt_id": "886414",
+      "to_prompt_id": "200725",
+      "relation_type": "replacement",
+      "note": "Nuova materializzazione richiesta dall'avanzamento concorrente di main."
+    },
+    {
+      "op": "dependency",
+      "prompt_id": "200725",
+      "depends_on_prompt_id": "749621",
+      "note": "Prima va attivato il coordinamento sicuro per i lavori PersonalHub su branch concorrenti."
+    },
+    {
+      "op": "tag",
+      "prompt_id": "200725",
+      "tag": "personalhub"
+    },
+    {
+      "op": "tag",
+      "prompt_id": "200725",
+      "tag": "architecture"
+    },
+    {
+      "op": "tag",
+      "prompt_id": "200725",
+      "tag": "capsules"
+    }
+  ]
+}
