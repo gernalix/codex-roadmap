@@ -1,0 +1,35 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "register",
+      "prompt_id": "809537",
+      "slug": "roadmap-sqlite-state-migration",
+      "title": "Vecchia migrazione SQLite della roadmap",
+      "current_path": "prompts/roadmap-sqlite-state-migration.md",
+      "project_id": "51",
+      "project_name": "codex-roadmap",
+      "repo": "gernalix/codex-roadmap",
+      "chat_guidance": "Sostituito dal cutover già implementato",
+      "prompt_type": "Prompt",
+      "model": "GPT-5.6 Terra",
+      "reasoning": "medium",
+      "megavault_mode": "STANDARD",
+      "explanation": "Task di migrazione creato prima del cutover SQLite. Non va lanciato: il lavoro è stato assorbito dall'implementazione corrente e dal task locale 813383.",
+      "status": "superseded"
+    },
+    {
+      "op": "relation",
+      "from_prompt_id": "809537",
+      "to_prompt_id": "813383",
+      "relation_type": "replacement",
+      "note": "Superseded by the implemented SQLite cutover and its local activation/backfill task."
+    },
+    {
+      "op": "tag",
+      "prompt_id": "809537",
+      "tag": "roadmap/superseded-migration"
+    }
+  ]
+}
