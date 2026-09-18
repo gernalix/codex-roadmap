@@ -5,8 +5,8 @@ Implementa la fondazione **opzionale e one-way** PersonalHub → Obsidian defini
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`;
-- esegui SOLO dopo PROMPT_ID=724615 PASS/finalizzato **e dopo che l'utente ha mergiato** `feature/salute-canonical-domain` in `main`;
-- crea `feature/obsidian-archive` dal current `origin/main` una sola volta e lavora solo lì;
+- esegui SOLO dopo PROMPT_ID=724615 PASS/finalizzato; Salute canonica deve essere già presente in `main`;
+- branch obbligatorio: `main`; non creare/pushare `feature/obsidian-archive` o altri branch remoti temporanei. La feature resta OFF-by-default durante le fasi intermedie;
 - contratto autoritativo: `docs/OBSIDIAN_ARCHIVE.md`;
 - `personalhub.db` è l'unica source of truth; PH non legge Markdown; nessun import Obsidian→PH;
 - Datasette resta indipendente e pienamente supportato;
@@ -14,7 +14,7 @@ Implementa la fondazione **opzionale e one-way** PersonalHub → Obsidian defini
 - usa i seam già esistenti `HubEntityAdapter`, `HubAdapterRegistry`, `DatabaseVault`/SAF e settings; non reinventare un secondo storage framework.
 
 # Esecuzione minima
-1. Acquisisci il task lock PH con PROMPT_ID 582741. Un solo fetch del main, crea/switcha il branch feature. Usa prima `.codex/CODE_MAP.tsv` per `hub.context`, `database.export`, settings e Salute; amplia solo se un seam necessario manca.
+1. Acquisisci il task lock PH con PROMPT_ID 582741. Un solo fetch `origin main` + fast-forward; resta su `main`. Usa prima `.codex/CODE_MAP.tsv` per `hub.context`, `database.export`, settings e Salute; amplia solo se un seam necessario manca.
 2. Definisci un contratto condiviso piccolo per la proiezione (nomi liberi ma semantica conforme al doc), separato da `HubEntitySummary`: stable ref, title, properties, body Markdown, explicit links, updatedAt e paginazione/bounded reads. Nessuna feature implementation dependency.
 3. Implementa l'engine Obsidian fuori dai feature module:
    - path stabile basato su canonical identity, non sul solo label;
@@ -55,7 +55,7 @@ Implementa la fondazione **opzionale e one-way** PersonalHub → Obsidian defini
    - `checkArchitectureBoundaries`.
 8. Prima del primo Gradle dopo API pubbliche nuove/modificate usa `android_consumer_preflight.py` come da AGENTS. Failure => leaf correction; niente AVD in questa fase.
 9. Aggiorna CODE_MAP solo per ownership/seam realmente nuovi e il doc solo se l'implementazione richiede una correzione del contratto, non per aggiungere narrativa.
-10. Push `feature/obsidian-archive`, lascia `version.txt=50`, non merge, non release. Rilascia lock.
+10. Solo dopo i gate PASS, commit/push `main` una sola volta; lascia `version.txt=50`, non release. Non creare branch remoti temporanei. Rilascia lock.
 
 # Acceptance
 PASS solo se un full rebuild manuale produce una vault deterministica e sicura da dati sintetici, Obsidian resta totalmente opzionale/read-only, Datasette/PH non dipendono dal vault, manifest e SAF non possono cancellare file non-PH, architecture/test host PASS.
