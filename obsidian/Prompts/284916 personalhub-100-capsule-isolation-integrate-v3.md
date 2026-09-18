@@ -1,22 +1,20 @@
 ---
-prompt_id: 617205
-status: superseded
+prompt_id: 284916
+status: pending
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
-  - project/personal-hub
-  - roadmap
   - roadmap/prompt
-  - roadmap/status/superseded
-  - roadmap/project/personal-hub
+  - roadmap/status/pending
+  - roadmap/project/personalhub
 ---
 
-# 617205 · Chiudere i nuovi tag e alert di Places
+# 284916 · PersonalHub 100% capsule isolation — valida e integra
 
-- **Stato:** superseded
-- **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-shared-alerts-places-tags-validation|Apri prompt]]
+- **Stato:** pending
+- **Progetto:** [[../Projects/personalhub|PersonalHub]]
+- **Prompt:** [[../../prompts/personalhub-100-capsule-isolation-integrate-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,14 +22,14 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237]]
-- **Sblocca:** [[461839 personalhub-epoch-timestamps-migration|461839]]
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]]
+- **Sblocca:** —
+- **Padri/precedenti:** [[200725 personalhub-100-capsule-isolation-local-validation-v2|200725]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Verifica e integra i tag di Places e gli alert condivisi, mantenendo separati i tag di Places da quelli del Timer.
+Aggiorna e valida il ramo della capsulizzazione, poi lo integra nella versione principale solo dopo controllo semantico Codex e test mirati. Il ramo viene eliminato dopo il merge.
 
 ## Esecuzioni
 

@@ -1,20 +1,20 @@
 ---
-prompt_id: 330522
-status: superseded
+prompt_id: 775412
+status: pending
 project_id: 96
-model: GPT-5.5
+model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/fedora-workflowy
 ---
 
-# 330522 · Attivare le automazioni locali di Workflowy
+# 775412 · Attivare le automazioni locali di Workflowy
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
-- **Prompt:** [[../../falliti/workflowy-automation-local-activation|Apri prompt]]
+- **Prompt:** [[../../prompts/workflowy-automation-local-activation-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -23,13 +23,13 @@ tags:
 - **Fix:** —
 - **Dipende da:** [[693572 workflowy-importer-live-smoke-secret-file|693572]]
 - **Sblocca:** —
-- **Padri/precedenti:** [[693572 workflowy-importer-live-smoke-secret-file|693572]]
-- **Figli/follow-up:** [[775412 workflowy-automation-local-activation-v2|775412]]
+- **Padri/precedenti:** [[330522 workflowy-automation-local-activation|330522]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Stessa chat di 693572
 
 ## Spiegazione
 
-Installa sul PC il nuovo ponte locale di Workflowy e l’aggiornamento automatico della sua copia di lavoro. Controlla che funzionino davvero; prepara anche backup e riepilogo settimanale, ma li lascia spenti finché non decidi di attivarli.
+Installa sul PC il ponte locale di Workflowy e l’aggiornamento automatico della copia locale, lasciando disattivati i timer opzionali di backup e riepilogo.
 
 ## Esecuzioni
 

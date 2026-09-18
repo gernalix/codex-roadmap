@@ -22,7 +22,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[219473 oracle-backup-notification-antiflap-runtime|219473]], [[445388 logseq-updates-pat-safety-closure|445388]], [[527184 datasette5-personalhub-explorer-security-deploy|527184]], [[617205 personalhub-shared-alerts-places-tags-validation|617205]], [[690049 fedora-runtime-validation|690049]], [[693572 workflowy-importer-live-smoke-secret-file|693572]]
+- **Sblocca:** [[219473 oracle-backup-notification-antiflap-runtime|219473]], [[284916 personalhub-100-capsule-isolation-integrate-v3|284916]], [[445388 logseq-updates-pat-safety-closure|445388]], [[527184 datasette5-personalhub-explorer-security-deploy|527184]], [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]], [[617205 personalhub-shared-alerts-places-tags-validation|617205]], [[690049 fedora-runtime-validation|690049]], [[693572 workflowy-importer-live-smoke-secret-file|693572]]
 - **Padri/precedenti:** [[538642 codex-usage-publisher-attribution-fastpath-followup|538642]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Stessa chat di 538642

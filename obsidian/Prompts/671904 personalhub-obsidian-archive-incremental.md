@@ -1,6 +1,6 @@
 ---
 prompt_id: 671904
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
@@ -8,15 +8,15 @@ tags:
   - project/personal-hub
   - roadmap
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 671904 · Aggiornare Obsidian automaticamente
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-obsidian-archive-incremental|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-obsidian-archive-incremental|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -26,7 +26,7 @@ tags:
 - **Dipende da:** [[582741 personalhub-obsidian-archive-foundation|582741]]
 - **Sblocca:** [[845312 personalhub-obsidian-archive-projections|845312]]
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[528163 personalhub-obsidian-archive-incremental-v2|528163]]
 - **Chat Codex:** Stessa chat di 582741
 
 ## Spiegazione

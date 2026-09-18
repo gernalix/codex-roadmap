@@ -1,37 +1,35 @@
 ---
-prompt_id: 724615
-status: superseded
+prompt_id: 315972
+status: pending
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
-  - project/personal-hub
-  - roadmap
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 724615 · Rendere Salute visibile e collegata al resto dell’app
+# 315972 · Rendere Salute visibile e collegata al resto dell’app
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-salute-ui-hub-obsidian|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-salute-ui-hub-obsidian-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[418763 personalhub-salute-canonical-integration|418763]]
-- **Sblocca:** [[582741 personalhub-obsidian-archive-foundation|582741]]
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[315972 personalhub-salute-ui-hub-obsidian-v2|315972]]
-- **Chat Codex:** Stessa chat di 418763
+- **Dipende da:** [[862541 personalhub-salute-canonical-integration-v2|862541]]
+- **Sblocca:** [[946238 personalhub-obsidian-archive-foundation-v2|946238]]
+- **Padri/precedenti:** [[724615 personalhub-salute-ui-hub-obsidian|724615]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Stessa chat di 862541
 
 ## Spiegazione
 
-Collega Salute alle schermate e alle funzioni generali di PersonalHub usando il nuovo archivio principale.
+Collega Salute alle schermate e alle funzioni generali di PersonalHub, verificando il ramo separato prima di integrarlo nella versione principale.
 
 ## Esecuzioni
 

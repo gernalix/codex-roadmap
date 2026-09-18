@@ -1,6 +1,6 @@
 ---
 prompt_id: 672418
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
@@ -8,15 +8,15 @@ tags:
   - project/personal-hub
   - roadmap
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 672418 · Cronologia, backup e ripristino dei dati PersonalHub
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-git-history-data-sync-validation|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-git-history-data-sync-validation|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -26,7 +26,7 @@ tags:
 - **Dipende da:** [[845312 personalhub-obsidian-archive-projections|845312]]
 - **Sblocca:** [[861305 personalhub-datasette-lite-offline-runtime|861305]]
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[357214 personalhub-git-history-data-sync-validation-v2|357214]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

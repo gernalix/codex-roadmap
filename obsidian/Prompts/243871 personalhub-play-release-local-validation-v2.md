@@ -1,37 +1,35 @@
 ---
-prompt_id: 311947
-status: superseded
+prompt_id: 243871
+status: pending
 project_id: 49
 model: GPT-5.6 Luna
 reasoning: low
 tags:
-  - project/personal-hub
-  - roadmap
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 311947 · Controllo finale prima di Google Play
+# 243871 · Controllo finale prima di Google Play
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-play-release-local-validation|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-play-release-local-validation-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[861305 personalhub-datasette-lite-offline-runtime|861305]]
+- **Dipende da:** [[918536 personalhub-datasette-lite-offline-runtime-v2|918536]]
 - **Sblocca:** —
-- **Padri/precedenti:** [[294731 prompt-294731|294731]]
-- **Figli/follow-up:** [[243871 personalhub-play-release-local-validation-v2|243871]]
+- **Padri/precedenti:** [[311947 personalhub-play-release-local-validation|311947]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat (non riusare 294731)
 
 ## Spiegazione
 
-Crea e controlla il pacchetto finale Android senza pubblicarlo e lo prova su un telefono virtuale.
+Crea e controlla il pacchetto finale Android già integrato in main e lo prova sull’emulatore senza pubblicarlo su Google Play.
 
 ## Esecuzioni
 

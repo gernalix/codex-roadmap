@@ -1,37 +1,35 @@
 ---
-prompt_id: 418763
-status: superseded
+prompt_id: 357214
+status: pending
 project_id: 49
-model: GPT-5.6 Terra
+model: GPT-5.6 Sol
 reasoning: medium
 tags:
-  - project/personal-hub
-  - roadmap
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 418763 · Portare Salute dentro PersonalHub
+# 357214 · Cronologia, backup e ripristino dei dati PersonalHub
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-salute-canonical-integration|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-git-history-data-sync-validation-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[461839 personalhub-epoch-timestamps-migration|461839]]
-- **Sblocca:** [[724615 personalhub-salute-ui-hub-obsidian|724615]]
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[862541 personalhub-salute-canonical-integration-v2|862541]]
+- **Dipende da:** [[684930 personalhub-obsidian-archive-projections-v2|684930]]
+- **Sblocca:** [[918536 personalhub-datasette-lite-offline-runtime-v2|918536]]
+- **Padri/precedenti:** [[672418 personalhub-git-history-data-sync-validation|672418]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Porta i dati Salute nell’archivio principale di PersonalHub mantenendo la modifica sicura e verificabile.
+Verifica cronologia, backup e ripristino dei dati su un ramo isolato; eventuali correzioni entrano in main solo dopo review semantica e test ad alto rischio.
 
 ## Esecuzioni
 

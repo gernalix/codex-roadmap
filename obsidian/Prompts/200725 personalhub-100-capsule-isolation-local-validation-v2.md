@@ -1,6 +1,6 @@
 ---
 prompt_id: 200725
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,15 +9,15 @@ tags:
   - capsules
   - personalhub
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personalhub
 ---
 
 # 200725 · PersonalHub 100% capsule isolation — integra main e valida
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../prompts/personalhub-100-capsule-isolation-local-validation-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-100-capsule-isolation-local-validation-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -27,7 +27,7 @@ tags:
 - **Dipende da:** [[749621 roadmap-ph-single-writer-full-local-activation|749621]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[886414 personalhub-100-capsule-isolation-local-validation|886414]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[284916 personalhub-100-capsule-isolation-integrate-v3|284916]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

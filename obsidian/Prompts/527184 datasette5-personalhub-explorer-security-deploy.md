@@ -24,7 +24,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237]]
-- **Sblocca:** [[861305 personalhub-datasette-lite-offline-runtime|861305]]
+- **Sblocca:** [[861305 personalhub-datasette-lite-offline-runtime|861305]], [[918536 personalhub-datasette-lite-offline-runtime-v2|918536]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat

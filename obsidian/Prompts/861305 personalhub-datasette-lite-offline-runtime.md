@@ -1,6 +1,6 @@
 ---
 prompt_id: 861305
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
@@ -8,15 +8,15 @@ tags:
   - project/personal-hub
   - roadmap
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 861305 · Esploratore dati dentro PersonalHub anche offline
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-datasette-lite-offline-runtime|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-datasette-lite-offline-runtime|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -26,7 +26,7 @@ tags:
 - **Dipende da:** [[527184 datasette5-personalhub-explorer-security-deploy|527184]], [[672418 personalhub-git-history-data-sync-validation|672418]]
 - **Sblocca:** [[311947 personalhub-play-release-local-validation|311947]]
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[918536 personalhub-datasette-lite-offline-runtime-v2|918536]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
