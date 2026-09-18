@@ -1,0 +1,70 @@
+[x] = CONSERVA. [ ] = ARCHIVIA E CANCELLA. Il task successivo non procedera finche questo file non sara stato modificato dall'utente.
+
+- [x] codex-usage
+- [x] codex-roadmap
+- [x] MegaVault
+- [x] codex-usage-monitor
+- [x] PersonalHub
+- [x] fedora-system-monitor
+- [ ] wordpulse
+- [x] vm_oracle
+- [x] workflowy-import
+- [x] github-autosync
+- [x] whatsapp-watcher
+- [x] amici_fb
+- [x] fedora-t7-backup
+- [x] salute
+- [x] datasette5
+- [ ] MultiTimeTracker
+- [ ] Soldi
+- [x] telegram_insert_bot
+- [ ] wayland-workspace-switcher
+- [ ] SuperContacts
+- [ ] luoghi-app
+- [ ] Sostanze
+- [x] oracle-backup-service
+- [ ] codex-session-logger
+- [ ] strano-anello
+- [x] livinggaul-x-downloader
+- [ ] facedownassup-downloader
+- [ ] android-app-template
+- [ ] Luoghi
+- [ ] git-change-ledger
+- [ ] mint-freeze-forensics
+- [ ] surface-recovery-hardening
+- [ ] WindowTabNotes
+- [ ] discord-exporter
+- [ ] app_lifecycle_monitor
+- [ ] codex_weekly_limit_monitor
+- [ ] yt_dlp_downloader
+- [ ] file-mtt-automate
+- [ ] chatgpt_tab_watcher_v1
+- [ ] android_build_telegram_watch_v1
+- [ ] owntracks
+- [ ] gestore_db
+- [ ] porno_downloader
+- [x] logseq_updates
+- [ ] datasette_sesso
+- [ ] patch_watcher_v1
+- [ ] scriptone
+- [ ] scriptone4
+- [ ] script_manager
+- [ ] typing_tracker
+- [ ] real_timer_plugin
+- [ ] script-edit-tabelle
+- [ ] L17
+- [ ] dash3
+- [ ] dash_python2
+- [ ] L16
+- [ ] meth-repo
+- [ ] logseq6
+- [ ] logseq5
+- [ ] logseq3
+- [ ] my-notes
+- [ ] my-notes2
+- [ ] HabitTracker2
+- [ ] gernalix.github.io
+- [ ] HabitTracker
+- [ ] logseq
+- [ ] logseq2
+- [ ] logseq4
