@@ -13,7 +13,7 @@ Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain
 - `tools/roadmap_guard.py`: primitive fail-closed per selezione/completamento/reconcile.
 - `tools/roadmap_finish.py`: finalizzatore PASS race-safe da usare nei prompt normali.
 
-`spiegazioni.md` usa `# | Prompt | PROMPT_ID | Spiegazioni | Livello ragionamento | Tipo prompt`; ordine, PROMPT_ID, reasoning e link devono coincidere con la roadmap e con i metadata del prompt.
+`spiegazioni.md` usa `# | Prompt | PROMPT_ID | Progetto | Chat Codex | Dipendenze | Spiegazioni | Livello ragionamento | Tipo prompt`; ordine, PROMPT_ID, reasoning e link devono coincidere con la roadmap e con i metadata del prompt.
 
 ## Regola vincolante per `spiegazioni.md`
 
@@ -70,6 +70,11 @@ Ogni prompt deve bastare da solo insieme alle regole globali già caricate. Deve
 - Se invece l'ID esistente appartiene a un **prompt storico diverso**, è una collisione accidentale: il task corrente non è stato eseguito e riceve un ID libero; non usare `PARENT_PROMPT_ID` verso il prompt non correlato.
 - La verifica va fatta contro l'archivio delle esecuzioni, non dedotta da `completed/`, dal risultato PASS/BLOCKED/FAIL o dalla sola cronologia della roadmap.
 - `spiegazioni.md` deve mostrare esplicitamente il `PROMPT_ID` corrente di ogni task pendente.
+- `spiegazioni.md` deve indicare anche **Progetto**, **Chat Codex** e **Dipendenze** per ogni task pendente.
+- **Progetto**: usa il progetto Codex osservabile/inferibile dai rollout (`repo_project`/`repo_projects`) quando disponibile; altrimenti usa il repository/runtime canonico senza inventare etichette UI.
+- **Chat Codex**: `Stessa chat di <ID>` solo quando è una continuazione diretta e il contesto precedente riduce davvero lavoro/tool-call; usa `Nuova chat` quando il task è autonomo, il contesto precedente è vecchio/pesante o il progetto cambia.
+- **Dipendenze**: elenca soltanto prompt ancora presenti nella roadmap che devono essere conclusi prima; usa dipendenze dirette, non tutta la catena transitiva.
+- Una dipendenza non implica automaticamente la stessa chat: ordine di esecuzione e riuso della sessione sono decisioni separate.
 
 Tipi:
 - **Prompt**: default. Usalo quando il lavoro è delimitato e può ragionevolmente concludersi in un singolo turno operativo, anche se tocca più componenti.
