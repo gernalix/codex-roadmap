@@ -112,6 +112,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ## Manutenzione
 Quando aggiorni la roadmap:
 - mantieni roadmap/spiegazioni/prompt pendenti 1:1;
+- per i repository target della roadmap, usa `main` come unico branch remoto persistente: branch temporanei già integrati o superseded vanno eliminati durante la manutenzione; se il cambio del default branch richiede auth/admin locale non disponibile in chat, assorbilo nel task Codex già esistente invece di creare un task separato;
 - elimina dal prompt facts ormai già implementati o verificabili automaticamente;
 - preferisci test automatici a QA manuale ripetitiva;
 - sposta build/device/delivery alla fase finale di una campagna quando sicuro;
