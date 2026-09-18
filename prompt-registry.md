@@ -6,7 +6,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/817264 codex-usage-publisher-autonomous-runtime-closure\|817264 · Chiudere autonomamente il publisher Codex sul PC]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/284916 personalhub-100-capsule-isolation-integrate-v3\|284916 · PersonalHub 100% capsule isolation — valida e integra]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/219473 oracle-backup-notification-antiflap-runtime\|219473 · Ferma le notifiche backup Oracle transitorie]] | pending | — | — | — | no | no | — | Oracle VM | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/781352 oracle-backup-notification-antiflap-runtime-v2\|781352 · Ferma le notifiche backup Oracle transitorie]] | pending | — | — | — | no | no | — | Oracle VM | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572 · Ultima prova reale dell’importatore Workflowy]] | pending | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/527184 datasette5-personalhub-explorer-security-deploy\|527184 · Versione online dell’esploratore dati PersonalHub]] | pending | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/775412 workflowy-automation-local-activation-v2\|775412 · Attivare le automazioni locali di Workflowy]] | pending | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
@@ -31,6 +31,7 @@
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2\|200725 · PersonalHub 100% capsule isolation — integra main e valida]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/746193 workflowy-importer-local-live-validation\|746193 · Provare davvero l’importatore Workflowy]] | blocked | 2026-09-18T19:11:43Z | 2026-09-18T19:11:43Z | BLOCKED | sì | no | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572]] | Fedora / Workflowy | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/219473 oracle-backup-notification-antiflap-runtime\|219473 · Ferma le notifiche backup Oracle transitorie]] | superseded | — | — | — | no | no | — | Oracle VM | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/330522 workflowy-automation-local-activation\|330522 · Attivare le automazioni locali di Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.5 | low |
 | [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation\|617205 · Chiudere i nuovi tag e alert di Places]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/461839 personalhub-epoch-timestamps-migration\|461839 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |

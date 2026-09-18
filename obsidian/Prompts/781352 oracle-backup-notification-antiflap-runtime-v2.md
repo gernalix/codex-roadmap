@@ -1,35 +1,35 @@
 ---
-prompt_id: 219473
-status: superseded
+prompt_id: 781352
+status: pending
 project_id: 43
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/oracle-vm
 ---
 
-# 219473 · Ferma le notifiche backup Oracle transitorie
+# 781352 · Ferma le notifiche backup Oracle transitorie
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/oracle-vm|Oracle VM]]
-- **Prompt:** [[../../falliti/oracle-backup-notification-antiflap-runtime|Apri prompt]]
+- **Prompt:** [[../../prompts/oracle-backup-notification-antiflap-runtime-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[642815 codex-usage-publisher-lock-runtime-closure|642815]]
+- **Dipende da:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
 - **Sblocca:** —
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[781352 oracle-backup-notification-antiflap-runtime-v2|781352]]
+- **Padri/precedenti:** [[219473 oracle-backup-notification-antiflap-runtime|219473]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Modifica il controllo dei backup della VM Oracle in modo che i piccoli ritardi che si risolvono da soli non mandino più allarmi e messaggi di ripristino inutili. I problemi reali continueranno invece a essere notificati subito.
+Applica e verifica sulla VM Oracle il fix anti-flapping; Codex può correggere autonomamente helper, test, deploy e problemi Git in-scope invece di fermarsi su imprevisti tecnici.
 
 ## Esecuzioni
 

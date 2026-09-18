@@ -4,7 +4,7 @@
 
 1. [[prompts/codex-usage-publisher-autonomous-runtime-closure|codex-usage-publisher-autonomous-runtime-closure]]
 2. [[prompts/personalhub-100-capsule-isolation-integrate-v3|personalhub-100-capsule-isolation-integrate-v3]]
-3. [[prompts/oracle-backup-notification-antiflap-runtime|oracle-backup-notification-antiflap-runtime]]
+3. [[prompts/oracle-backup-notification-antiflap-runtime-v2|oracle-backup-notification-antiflap-runtime-v2]]
 4. [[prompts/workflowy-importer-live-smoke-secret-file|workflowy-importer-live-smoke-secret-file]]
 5. [[prompts/datasette5-personalhub-explorer-security-deploy|datasette5-personalhub-explorer-security-deploy]]
 6. [[prompts/workflowy-automation-local-activation-v2|workflowy-automation-local-activation-v2]]
