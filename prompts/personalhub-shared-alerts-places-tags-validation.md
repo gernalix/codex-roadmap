@@ -1,4 +1,4 @@
-PROMPT_ID=684215 | project_id=49 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STRICT
+PROMPT_ID=617205 | PARENT_PROMPT_ID=684215 | project_id=49 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STRICT
 
 # Goal
 Prima valida e integra SOLO il follow-up già preparato di PROMPT_ID=918274 che rende sicuro il ripristino del runtime profilo dopo switch fallito/no-op; poi valida e chiudi l'implementazione già presente sul branch remoto PersonalHub `feature/shared-alerts-place-tags`: tag Places indipendenti dai tag Timer, Alert Engine condiviso Timer/Places, alert Places su check-in/check-out manuali per luogo o set di tag, tap diretto dei link-only e bridge Tasker opzionale. Dopo tutti i gate PASS, integra anche il branch alert in `main` e cancella entrambi i branch temporanei.
@@ -17,7 +17,7 @@ Prima valida e integra SOLO il follow-up già preparato di PROMPT_ID=918274 che 
 - gli alert Places devono dipendere SOLO da check-in/out espliciti/manuali. Il sottosistema Android Geofence esistente NON deve attivarli.
 
 # Esecuzione minima
-1. Acquisisci il lock PH con PROMPT_ID 684215. Fai UN solo fetch iniziale mirato di `main`, `feature/shared-alerts-place-tags` e `chatgpt/918274-runtime-restore`. Dirty non sovrapposto non blocca; niente stash/reset.
+1. Acquisisci il lock PH con PROMPT_ID 617205. Fai UN solo fetch iniziale mirato di `main`, `feature/shared-alerts-place-tags` e `chatgpt/918274-runtime-restore`. Dirty non sovrapposto non blocca; niente stash/reset.
    - Chiudi prima il follow-up runtime Profili. Verifica che `1d0d56a3f219700944d1fd4a91e913cc6fa64702` appartenga al branch runtime e che il diff del follow-up sia limitato ai tre file dichiarati.
    - Se il fix non è già in `main`, integralo preservando eventuali commit più recenti di `main`. Esegui UNA sola validazione sul risultato effettivo da pushare: `./gradlew :app:testDebugUnitTest --tests com.gernalix.personalhub.ProfileRuntimeCoordinatorTest :app:compileDebugKotlin --no-configuration-cache --console=plain`. Se fallisce, correggi SOLO quei tre file/test e rilancia il leaf fallito.
    - Dopo PASS, push `main` e elimina `chatgpt/918274-runtime-restore` remoto+locale. Non incrementare `version.txt`.
@@ -81,6 +81,6 @@ Migrazione delle regole Timer nelle tabelle Places/canoniche, background GPS, so
 
 # Stop
 Dopo PASS:
-`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 684215 --confirm-executed`
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 617205 --confirm-executed`
 
 Output massimo 8 righe: RESULT, MAIN_HEAD, PROFILE_RUNTIME, SCHEMA16, HOST_TESTS, MIGRATION, AVD_QA, BRANCH_CLEANUP. Se durante QA compare un ANR/crash/failure significativo ma il rerun passa, riportalo nella stessa riga AVD_QA invece di ometterlo.
