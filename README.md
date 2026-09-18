@@ -129,6 +129,8 @@ Default: un task per sessione; stesso thread solo per una continuazione diretta 
 
 Durante il task, un failure locale correggibile non deve trasformarsi in un nuovo prompt: Codex deve correggerlo e continuare. BLOCKED/FAIL sono terminali solo per blocker esterni/safety o recovery realmente esaurito.
 
+Un PASS deve dimostrare tutti gli acceptance criteria obbligatori. `NOT VERIFIED`, output perso/non recuperato o gate non eseguito non sono compatibili con PASS: Codex deve recuperare un'evidenza equivalente in modo bounded oppure usare un esito terminale coerente.
+
 Dopo PASS: finalizzazione e stop immediato.
 
 ## Verifica manutenzione
