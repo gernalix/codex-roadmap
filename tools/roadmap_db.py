@@ -199,6 +199,38 @@ def set_status(
         (prompt_id, old, new_status, ts, actor, note),
     )
 
+def set_model(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    model: str,
+    *,
+    actor: str = "chatgpt",
+    note: str | None = None,
+) -> None:
+    row = prompt_row(conn, prompt_id)
+    old_model = row["model"]
+    if old_model == model:
+        return
+    ts = now_utc()
+    conn.execute(
+        "UPDATE prompts SET model=?, updated_at=? WHERE prompt_id=?",
+        (model, ts, prompt_id),
+    )
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "prompt_model_updated",
+            ts,
+            actor,
+            json.dumps(
+                {"old_model": old_model, "new_model": model, "note": note},
+                ensure_ascii=False,
+                sort_keys=True,
+            ),
+        ),
+    )
+
 def reorder_prompt(
     conn: sqlite3.Connection,
     prompt_id: str,
@@ -541,6 +573,14 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
             bottlenecks_found=mutation.get("bottlenecks_found"),
             summary=mutation.get("summary"), fix_prompt_id=mutation.get("fix_prompt_id"),
             source_ref=mutation.get("source_ref"),
+        )
+    elif op=="model":
+        set_model(
+            conn,
+            str(mutation["prompt_id"]),
+            str(mutation["model"]),
+            actor=actor,
+            note=mutation.get("note"),
         )
     elif op=="status":
         set_status(conn,str(mutation["prompt_id"]),str(mutation["status"]),actor=actor,note=mutation.get("note"))
