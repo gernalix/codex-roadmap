@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import base64
 import json
 import os
 import re
@@ -11,7 +10,9 @@ from pathlib import Path
 from typing import Any
 
 SCHEMA = "codex-roadmap.mutation.v1"
+ISSUE_PREFIX = "[roadmap-mutation] "
 DEFAULT_REMOTE_REPO = os.environ.get("CODEX_ROADMAP_REMOTE_REPO", "gernalix/codex-roadmap")
+# Kept for CLI compatibility; Issues are repository-scoped and do not write a branch.
 DEFAULT_REMOTE_BRANCH = os.environ.get("CODEX_ROADMAP_REMOTE_BRANCH", "main")
 
 
@@ -20,7 +21,9 @@ class MutationSubmitError(RuntimeError):
 
 
 def _canonical_bytes(document: dict[str, Any]) -> bytes:
-    return (json.dumps(document, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
+    return (
+        json.dumps(document, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+    ).encode("utf-8")
 
 
 def _validate_request_key(request_key: str) -> str:
@@ -44,26 +47,28 @@ def _gh(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
     return proc
 
 
-def _read_remote_document(
-    *,
-    repository: str,
-    branch: str,
-    path: str,
-) -> dict[str, Any] | None:
-    proc = _gh("api", f"repos/{repository}/contents/{path}?ref={branch}", check=False)
-    if proc.returncode:
-        if "404" in proc.stderr or "Not Found" in proc.stderr:
-            return None
-        raise MutationSubmitError(f"gh_read_failed:{proc.stderr.strip()}")
+def _matching_issues(repository: str, title: str) -> list[dict[str, Any]]:
+    proc = _gh(
+        "issue",
+        "list",
+        "--repo",
+        repository,
+        "--state",
+        "all",
+        "--limit",
+        "100",
+        "--search",
+        title,
+        "--json",
+        "number,title,state,body,url",
+    )
     try:
-        payload = json.loads(proc.stdout)
-        raw = base64.b64decode(str(payload["content"]).replace("\n", ""))
-        doc = json.loads(raw.decode("utf-8"))
-    except (KeyError, ValueError, UnicodeDecodeError) as exc:
-        raise MutationSubmitError(f"invalid_remote_mutation:{path}") from exc
-    if not isinstance(doc, dict):
-        raise MutationSubmitError(f"invalid_remote_mutation:{path}")
-    return doc
+        rows = json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise MutationSubmitError("invalid_issue_list_response") from exc
+    if not isinstance(rows, list):
+        raise MutationSubmitError("invalid_issue_list_response")
+    return [row for row in rows if isinstance(row, dict) and row.get("title") == title]
 
 
 def submit_document(
@@ -73,57 +78,89 @@ def submit_document(
     repository: str = DEFAULT_REMOTE_REPO,
     branch: str = DEFAULT_REMOTE_BRANCH,
 ) -> dict[str, str]:
+    # branch is intentionally ignored: the queue is GitHub Issues, not Git refs.
+    _ = branch
     if document.get("schema") != SCHEMA:
         raise MutationSubmitError("invalid_mutation_schema")
     operations = document.get("operations")
     if not isinstance(operations, list) or not operations:
         raise MutationSubmitError("empty_mutation")
+
     request_key = _validate_request_key(request_key)
-    inbox_path = f"mutations/inbox/{request_key}.json"
-    applied_path = f"mutations/applied/{request_key}.json"
+    title = ISSUE_PREFIX + request_key
+    body = _canonical_bytes(document).decode("utf-8")
 
-    for path, state in ((applied_path, "applied"), (inbox_path, "pending")):
-        existing = _read_remote_document(repository=repository, branch=branch, path=path)
-        if existing is None:
-            continue
-        if _canonical_bytes(existing) != _canonical_bytes(document):
-            raise MutationSubmitError(f"request_key_conflict:{request_key}:{state}")
-        return {"submission": state, "path": path, "request_key": request_key}
+    existing = _matching_issues(repository, title)
+    if existing:
+        for issue in existing:
+            try:
+                existing_doc = json.loads(str(issue.get("body") or ""))
+            except json.JSONDecodeError as exc:
+                raise MutationSubmitError(f"request_key_conflict:{request_key}:invalid_body") from exc
+            if _canonical_bytes(existing_doc) != _canonical_bytes(document):
+                raise MutationSubmitError(f"request_key_conflict:{request_key}")
+        # Duplicate identical Issues are harmless: the DB receipt makes application
+        # idempotent. Return the oldest canonical issue for stable reporting.
+        issue = sorted(existing, key=lambda row: int(row["number"]))[0]
+        state = "applied" if str(issue.get("state")).upper() == "CLOSED" else "pending"
+        return {
+            "submission": state,
+            "request_key": request_key,
+            "issue_number": str(issue["number"]),
+            "issue_url": str(issue.get("url") or ""),
+        }
 
-    encoded = base64.b64encode(_canonical_bytes(document)).decode("ascii")
     proc = _gh(
         "api",
         "--method",
-        "PUT",
-        f"repos/{repository}/contents/{inbox_path}",
+        "POST",
+        f"repos/{repository}/issues",
         "-f",
-        f"message=Queue roadmap mutation {request_key}",
+        f"title={title}",
         "-f",
-        f"content={encoded}",
-        "-f",
-        f"branch={branch}",
+        f"body={body}",
         check=False,
     )
     if proc.returncode:
-        # A simultaneous identical submit can win the create race. Re-read once;
-        # never retry a blind write or touch the local git checkout.
-        for path, state in ((applied_path, "applied"), (inbox_path, "pending")):
-            existing = _read_remote_document(repository=repository, branch=branch, path=path)
-            if existing is not None and _canonical_bytes(existing) == _canonical_bytes(document):
-                return {"submission": state, "path": path, "request_key": request_key}
-        raise MutationSubmitError(f"gh_submit_failed:{proc.stderr.strip()}")
+        # A concurrent client may have created the same deterministic request.
+        raced = _matching_issues(repository, title)
+        for issue in raced:
+            try:
+                existing_doc = json.loads(str(issue.get("body") or ""))
+            except json.JSONDecodeError:
+                continue
+            if _canonical_bytes(existing_doc) == _canonical_bytes(document):
+                return {
+                    "submission": "pending",
+                    "request_key": request_key,
+                    "issue_number": str(issue["number"]),
+                    "issue_url": str(issue.get("url") or ""),
+                }
+        raise MutationSubmitError(f"gh_issue_create_failed:{proc.stderr.strip()}")
 
-    return {"submission": "queued", "path": inbox_path, "request_key": request_key}
+    try:
+        issue = json.loads(proc.stdout)
+        number = str(issue["number"])
+        url = str(issue.get("html_url") or "")
+    except (json.JSONDecodeError, KeyError) as exc:
+        raise MutationSubmitError("invalid_issue_create_response") from exc
+
+    return {
+        "submission": "queued",
+        "request_key": request_key,
+        "issue_number": number,
+        "issue_url": url,
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Submit one immutable roadmap mutation directly to the remote inbox without modifying the local git checkout."
+        description="Submit one immutable roadmap mutation as a GitHub Issue; never write the roadmap Git branch."
     )
     parser.add_argument("--file", type=Path, required=True)
     parser.add_argument("--request-key", required=True)
     parser.add_argument("--repository", default=DEFAULT_REMOTE_REPO)
-    parser.add_argument("--branch", default=DEFAULT_REMOTE_BRANCH)
+    parser.add_argument("--branch", default=DEFAULT_REMOTE_BRANCH, help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
 
     try:
