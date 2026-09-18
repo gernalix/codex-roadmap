@@ -2,30 +2,48 @@
 
 [[README|README]] · [[roadmap|Roadmap]]
 
-Qui trovi, in parole semplici, **perché ogni task richiede ancora Codex e se conviene lanciarlo come Prompt normale oppure Goal**. Tutto ciò che è eseguibile direttamente sui repository remoti resta fuori dalla coda Codex.
+Qui trovi **perché ogni task richiede ancora Codex, quale modello usare e quali dipendenze rispettare**. Tutto ciò che è eseguibile direttamente sui repository remoti resta fuori dalla coda Codex.
 
-L'ordine evita lavoro duplicato: prima chiude il deploy ActivityWatch, poi gli altri due task runtime indipendenti; quindi PersonalHub procede in serie (profili/cleanup Timer → timestamp → Salute schema/history → Salute UI/Hub). Dopo il merge manuale del branch Salute, la feature Obsidian globale procede in tre fasi sul branch `feature/obsidian-archive`: fondazione/full rebuild → incremental/recovery → copertura moduli/AVD. Dopo il merge manuale del branch Obsidian si eseguono Git History, Datasette Lite e infine Play. Obsidian e Datasette restano viewer complementari dello stesso SQLite canonico; nessuno sostituisce l'altro.
+PersonalHub usa ora `main` come unica base remota persistente: i vecchi branch feature sono già stati integrati/eliminati. Le fasi PH non devono ricrearli né dipendere da merge manuali tra prompt. Ogni fase parte dal `main` validato dalla precedente e, dopo PASS, pubblica il proprio risultato su `main`.
+
+## Dipendenze e parallelismo
+
+Catena PH obbligatoriamente seriale:
+
+`918274 → 461839 → 418763 → 724615 → 582741 → 671904 → 845312 → 672418 → 861305 → 294731`
+
+Inoltre `527184` è indipendente dalle prime fasi PH ma deve essere PASS **prima di 861305**, perché il QA Datasette Lite deve confrontarsi con il runtime server già distribuito.
+
+Regole pratiche:
+- `468205` è indipendente e non usa MegaVault: può correre in parallelo con qualsiasi altro task.
+- `518264` modifica il checkout canonico MegaVault e fa una riscrittura della history: non lanciarlo insieme a task che usano MegaVault. Può invece correre insieme a `468205`.
+- `643817` ActivityWatch è indipendente dalla catena PH e può correre insieme a un task PH, ma non insieme a `690049`; entrambi toccano Uptime Kuma. Per ridurre interferenze sulla VM Oracle, evita anche di sovrapporlo a `527184`.
+- `527184` può correre in parallelo con la catena PH e va chiuso prima di `861305`.
+- `690049` può correre in parallelo con la catena PH dopo il login umano a Kuma, purché `643817` non sia in esecuzione.
+- due task PH non vanno mai eseguiti contemporaneamente.
+
+`roadmap_finish.py` gestisce completion out-of-order e race di push della roadmap: un task laterale completato mentre il primo elemento è ancora pendente può essere archiviato senza riordinamenti manuali.
 
 |   # | Prompt | Spiegazioni | Livello ragionamento | Tipo prompt |
 | --: | ------ | ----------- | -------------------- | ----------- |
-| 1 | [[prompts/activity-watch-uploader-runtime-deploy]] | Il codice remoto implementa già export ActivityWatch→JSONL/Git, recovery/timeout/lock, push Kuma e template systemd resilienti. Resta Codex solo per il runtime reale: clone/deploy Fedora, lingering+systemd, upsert diretto e backup-safe del monitor push nel DB Kuma, handoff del secret e doppio readback end-to-end. **Prompt**, GPT-5.6 Terra/medium + STANDARD. | medium | Prompt |
-| 2 | [[prompts/codex-usage-verification-status-deploy]] | Il parser e il backfill sono già corretti su GitHub e la CI del nuovo main è PASS; restano soltanto fast-forward locale, due test mirati, deploy Fedora, un ciclo publisher e readback. **Prompt**, GPT-5.6 Luna/low. | low | Prompt |
-| 3 | [[prompts/datasette5-personalhub-explorer-security-deploy]] | Il codice remoto contiene già FK cross-modulo, Context graph deduplicato e temporal graph separato. Resta Codex esclusivamente per test nel runtime Datasette, deploy Oracle e readback reale. **Prompt**, GPT-5.6 Terra/medium + STRICT. | medium | Prompt |
-| 4 | [[prompts/personalhub-global-profiles-timer-demotion]] | Il branch PH contiene già l'implementazione remota dei profili globali e la rimozione delle superfici duplicate dal Timer. Resta Codex perché servono compile/consumer closure, fault injection sullo switch DB, riconciliazione widget/alarm/geofence e rimozione sicura del codice Timer interno ancora intrecciato. **Prompt**, GPT-5.6 Sol/medium + STRICT. | medium | Prompt |
-| 5 | [[prompts/personalhub-epoch-timestamps-migration]] | Il contratto HubTimestamp e lo scanner sono già nel branch; resta audit/migrazione mirata dei veri timestamp residui e QA timezone/profile. È rischio-dati e richiede toolchain locale + eventuale schema export + AVD. **Prompt**, GPT-5.6 Sol/medium + STRICT. | medium | Prompt |
-| 6 | [[prompts/personalhub-salute-canonical-integration]] | Il branch Salute contiene già modello dati e contratto patch. Questa fase fa solo schema Room/migration, sample/turnaround, AI persistence e history sintetica: separata dalla UI per non mischiare rischio-dati e feature ordinarie. **Prompt**, GPT-5.6 Terra/medium + STRICT. | medium | Prompt |
-| 7 | [[prompts/personalhub-salute-ui-hub-obsidian|personalhub-salute-ui-hub]] | Dopo lo schema PASS, sostituisce il consumer esterno e collega Salute a Hub/Temporal/Datasette con UI Android minima. Obsidian è stato rimosso da questo task per evitare una soluzione Salute-specifica da generalizzare subito dopo. **Prompt**, GPT-5.6 Terra/medium + STANDARD. | medium | Prompt |
-| 8 | [[prompts/personalhub-obsidian-archive-foundation]] | Dopo il merge Salute, crea la feature Obsidian globale: contratto provider, Markdown/YAML deterministico, manifest PH-owned, SAF, settings OFF-by-default e full rebuild con provider rappresentativi. Richiede compile/test Android locali ma nessun AVD. **Prompt**, GPT-5.6 Terra/medium + STANDARD. | medium | Prompt |
-| 9 | [[prompts/personalhub-obsidian-archive-incremental]] | Aggiunge tracking incrementale indipendente da Datasette, WorkManager, create/update/delete convergence e fault injection. Il failure domain è lifecycle/export, separato dai renderer di tutti i moduli. **Prompt**, GPT-5.6 Terra/medium + STANDARD. | medium | Prompt |
-| 10 | [[prompts/personalhub-obsidian-archive-projections]] | Completa i renderer di tutti i moduli, limita la file explosion, verifica long-form e wikilink canonici e chiude Settings/AVD. Lascia il branch pronto per review/merge manuale. **Prompt**, GPT-5.6 Terra/medium + STANDARD. | medium | Prompt |
-| 11 | [[prompts/personalhub-git-history-data-sync-validation]] | Dopo il merge manuale di Salute e Obsidian, Git Data/History va validato sul main con profili, timestamp epoch-ms, health_* e bookkeeping Obsidian correttamente escluso dal semantic history/state. Resta Codex per fault injection, fake GitHub, restore/revert e AVD. **Prompt**, GPT-5.6 Sol/medium + STRICT. | medium | Prompt |
-| 12 | [[prompts/personalhub-datasette-lite-offline-runtime]] | Dopo il gate Git History, completa Datasette Lite offline e la presentazione relazionale/temporale includendo Salute. Obsidian resta un viewer parallelo e non modifica il motore temporale Datasette. Richiede build e QA Android. **Prompt**, GPT-5.6 Sol/medium + STANDARD. | medium | Prompt |
-| 13 | [[prompts/personalhub-play-release-local-validation]] | Dopo Datasette Lite valida l'AAB finale versione 51: signing, manifest, 16 KiB e smoke dell'APK set derivato dall'AAB su Pixel_8a. **Prompt**, GPT-5.6 Luna/low + FAST. | low | Prompt |
-| 14 | [[prompts/logseq-updates-pat-safety-closure]] | Il PAT è già rimosso dal tree corrente ma resta nella history. Serve Codex per cambio default branch, rewrite fail-closed, verifica credential e aggiornamento MegaVault. È indipendente dalla scelta Obsidian per PH. **Prompt**, GPT-5.6 Sol/medium + STRICT. | medium | Prompt |
-| 15 | [[prompts/fedora-runtime-validation]] | Il deploy runtime è già completato; resta solo kuma-configure bounded e readback #39/#40 sul Fedora reale dopo login umano. **Prompt**, GPT-5.6 Luna/low + FAST. | low | Prompt |
+| 1 | [[prompts/codex-usage-verification-status-deploy]] | Il fix parser/backfill è già remoto e CI PASS; chiuderlo subito rende affidabile lo status dei prompt successivi. Restano due test, deploy Fedora, un publisher run e readback. **GPT-5.6 Luna/low**. | low | Prompt |
+| 2 | [[prompts/logseq-updates-pat-safety-closure]] | Bonifica la vecchia history di `logseq_updates`, normalizza il repo a solo `main` e aggiorna MegaVault. History rewrite + stato credenziale giustificano **GPT-5.6 Sol/medium + STRICT**. | medium | Prompt |
+| 3 | [[prompts/activity-watch-uploader-runtime-deploy]] | Codice e unit sono già remoti; resta deploy Fedora, lingering/systemd, monitor push Kuma con backup DB e due run end-to-end. Scope operativo esplicito: **GPT-5.6 Terra/medium + STANDARD**. | medium | Prompt |
+| 4 | [[prompts/personalhub-global-profiles-timer-demotion]] | `main` contiene già DatabaseProfiles e la prima de-promozione Timer; restano crash recovery, isolamento runtime dei profili, widget/alarm/geofence e rimozione sicura del codice Timer duplicato. **GPT-5.6 Sol/medium + STRICT**. | medium | Prompt |
+| 5 | [[prompts/personalhub-epoch-timestamps-migration]] | Dopo i profili, lascia invariati gli epoch-ms già corretti, migra solo vere violazioni TEXT/ISO e corregge il formatter globale a `EEE d/M/yy HH:mm`. **GPT-5.6 Sol/medium + STRICT**. | medium | Prompt |
+| 6 | [[prompts/personalhub-salute-canonical-integration]] | Lo schema PH è ancora v15 e Salute usa ancora il DB esterno: introduce modello Room/migration, sample/turnaround, patch e AI/history sintetica. **GPT-5.6 Terra/medium + STRICT**. | medium | Prompt |
+| 7 | [[prompts/personalhub-salute-ui-hub-obsidian|personalhub-salute-ui-hub]] | Dopo lo schema PASS elimina il consumer `salute.db` esterno e collega Salute a UI minima, Hub, Temporal e Datasette. **GPT-5.6 Terra/medium + STANDARD**. | medium | Prompt |
+| 8 | [[prompts/personalhub-obsidian-archive-foundation]] | Crea contratto/provider, Markdown/YAML deterministico, manifest, SAF, Settings OFF-by-default e full rebuild. **GPT-5.6 Terra/medium + STANDARD**. | medium | Prompt |
+| 9 | [[prompts/personalhub-obsidian-archive-incremental]] | Aggiunge queue/ack indipendenti da Datasette, WorkManager, create/update/delete convergence e recovery. **GPT-5.6 Terra/medium + STANDARD**. | medium | Prompt |
+| 10 | [[prompts/personalhub-obsidian-archive-projections]] | Completa provider/grain per tutti i moduli, bounded file count, long-form, wikilink e AVD, lasciando `main` pronto al gate History. **GPT-5.6 Terra/medium + STANDARD**. | medium | Prompt |
+| 11 | [[prompts/datasette5-personalhub-explorer-security-deploy]] | Il codice server è già implementato; restano test runtime, deploy Oracle e readback auth/FK/Context/temporal. Indipendente dalle prime fasi PH ma prerequisito di 861305. **GPT-5.6 Terra/medium + STRICT**. | medium | Prompt |
+| 12 | [[prompts/personalhub-git-history-data-sync-validation]] | Gate ad alto rischio dopo Salute/Obsidian: group transaction, revert/restore, patch, sharding, firme e bookkeeping tecnico escluso. **GPT-5.6 Sol/medium + STRICT**. | medium | Prompt |
+| 13 | [[prompts/personalhub-datasette-lite-offline-runtime]] | Richiede 672418 e 527184 PASS; vendorizza Lite/Pyodide offline, replica FK/Context/temporal server, chiude UI mobile e produce v51. **GPT-5.6 Sol/medium + STANDARD**. | medium | Prompt |
+| 14 | [[prompts/personalhub-play-release-local-validation]] | Valida soltanto l'AAB finale v51: signing, manifest, SDK/16 KiB e smoke dell'APK set derivato dall'AAB. **GPT-5.6 Luna/low + FAST**. | low | Prompt |
+| 15 | [[prompts/fedora-runtime-validation]] | Deploy già concluso; resta `kuma-configure` bounded e readback #39/#40 dopo login umano nel profilo Chrome canonico. **GPT-5.6 Luna/low + FAST**. | low | Prompt |
 
 ## Lavoro remoto escluso dalla roadmap
 
 La campagna CI consolidata identificata da 483921 non è un task Codex: l'handoff autorevole MegaVault/ai/repository-ci-handoff.json dichiara next_executor=chatgpt_github, e il README vieta di occupare la roadmap con modifiche che ChatGPT può fare direttamente via GitHub.
 
-Il contratto architetturale della nuova feature Obsidian è già stato scritto direttamente su PersonalHub main in `docs/OBSIDIAN_ARCHIVE.md`; in roadmap restano soltanto implementazione/toolchain/QA locali.
+Il contratto architetturale Obsidian è già su PersonalHub `main` in `docs/OBSIDIAN_ARCHIVE.md`; in roadmap restano implementazione/toolchain/QA locali.
