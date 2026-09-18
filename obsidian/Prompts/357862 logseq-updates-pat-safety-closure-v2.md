@@ -2,7 +2,7 @@
 prompt_id: 357862
 status: pending
 project_id: 23
-model: GPT-5.6 Terra
+model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt

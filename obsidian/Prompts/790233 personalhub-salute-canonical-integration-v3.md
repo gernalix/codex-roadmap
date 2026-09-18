@@ -2,7 +2,7 @@
 prompt_id: 790233
 status: pending
 project_id: 49
-model: GPT-5.6 Terra
+model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
@@ -22,7 +22,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[830867 personalhub-epoch-timestamps-migration-v3|830867]]
-- **Sblocca:** [[416826 personalhub-salute-ui-hub-v3|416826]]
+- **Sblocca:** [[416826 personalhub-salute-ui-hub-v3|416826]], [[904631 datasette5-personalhub-explorer-security-deploy-v2|904631]]
 - **Padri/precedenti:** [[862541 personalhub-salute-canonical-integration-v2|862541]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat

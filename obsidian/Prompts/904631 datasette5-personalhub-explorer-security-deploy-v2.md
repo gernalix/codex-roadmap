@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
+- **Dipende da:** [[790233 personalhub-salute-canonical-integration-v3|790233]], [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
 - **Sblocca:** [[811925 personalhub-datasette-lite-offline-runtime-v3|811925]], [[918536 personalhub-datasette-lite-offline-runtime-v2|918536]]
 - **Padri/precedenti:** [[527184 datasette5-personalhub-explorer-security-deploy|527184]]
 - **Figli/follow-up:** —

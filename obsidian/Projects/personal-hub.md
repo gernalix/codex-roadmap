@@ -7,6 +7,8 @@ tags:
 
 - [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]] · `pending`
 - [[obsidian/Prompts/223103 personalhub-shared-alerts-places-tags-integration-v3|223103 · Chiudere e integrare tag e alert di Places]] · `pending`
+- [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui|609279 · Solo inglese e diagnostica Places su richiesta]] · `pending`
+- [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] · `pending`
 - [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3|830867 · Date e ore coerenti ovunque]] · `pending`
 - [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3|790233 · Portare Salute nel database canonico]] · `pending`
 - [[obsidian/Prompts/416826 personalhub-salute-ui-hub-v3|416826 · Collegare Salute all’app e all’Hub]] · `pending`
@@ -14,8 +16,6 @@ tags:
 - [[obsidian/Prompts/825405 personalhub-git-history-data-sync-validation-v3|825405 · Validare cronologia, backup e ripristino dati]] · `pending`
 - [[obsidian/Prompts/811925 personalhub-datasette-lite-offline-runtime-v3|811925 · Completare l’esploratore dati offline]] · `pending`
 - [[obsidian/Prompts/334679 personalhub-play-release-local-validation-v3|334679 · Controllo finale locale prima di Google Play]] · `pending`
-- [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui|609279 · Solo inglese e diagnostica Places su richiesta]] · `pending`
-- [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] · `pending`
 - [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation|617205 · Chiudere i nuovi tag e alert di Places]] · `superseded`
 - [[obsidian/Prompts/461839 personalhub-epoch-timestamps-migration|461839 · Date e ore coerenti ovunque]] · `superseded`
 - [[obsidian/Prompts/593728 personalhub-shared-alerts-places-tags-integration-v2|593728 · Chiudere e integrare i nuovi tag e alert di Places]] · `superseded`
