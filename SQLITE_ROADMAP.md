@@ -14,6 +14,7 @@ Per ogni `PROMPT_ID`:
 - tag e artefatti;
 - ogni esecuzione Codex con start/end, outcome, durata, modello, reasoning, tool-call e token quando disponibili;
 - ogni analisi ChatGPT, inclusi presenza di colli di bottiglia e PROMPT_ID del fix;
+- le modifiche di codice fatte da ChatGPT dopo un’analisi, separate per repository/tipo/commit;
 - cronologia dei cambi di stato e audit degli aggiornamenti;
 - collisioni sospette di PROMPT_ID/materializzazione.
 
@@ -55,7 +56,7 @@ Formato:
 }
 ```
 
-Operazioni supportate: `analysis`, `status`, `relation`, `dependency`, `tag`, `execution`, `register`.
+Operazioni supportate: `analysis`, `code_change`, `status`, `relation`, `dependency`, `tag`, `execution`, `register`. `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
 
 ## Proiezioni generate
 
