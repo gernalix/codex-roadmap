@@ -1,4 +1,4 @@
-PROMPT_ID=617205 | PARENT_PROMPT_ID=684215 | project_id=49 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STRICT
+PROMPT_ID=617205 | project_id=49 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STRICT
 
 # Goal
 Prima valida e integra SOLO il follow-up già preparato di PROMPT_ID=918274 che rende sicuro il ripristino del runtime profilo dopo switch fallito/no-op; poi valida e chiudi l'implementazione già presente sul branch remoto PersonalHub `feature/shared-alerts-place-tags`: tag Places indipendenti dai tag Timer, Alert Engine condiviso Timer/Places, alert Places su check-in/check-out manuali per luogo o set di tag, tap diretto dei link-only e bridge Tasker opzionale. Dopo tutti i gate PASS, integra anche il branch alert in `main` e cancella entrambi i branch temporanei.
