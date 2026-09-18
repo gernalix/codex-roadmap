@@ -3,6 +3,7 @@ name: Apply roadmap mutation Issues
 on:
   issues:
     types: [opened, reopened]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -14,31 +15,54 @@ concurrency:
 
 jobs:
   apply:
-    if: startsWith(github.event.issue.title, '[roadmap-mutation] ')
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.issue.title, '[roadmap-mutation] ')
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
-      ISSUE_NUMBER: ${{ github.event.issue.number }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Apply Issue, verify, and push race-safely
+      - name: Drain open mutation Issues, verify, and push race-safely
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           pushed=0
+          : > /tmp/processed-issues
+
           for attempt in 1 2 3 4; do
             git fetch --quiet origin main
             git reset --hard origin/main
             git clean -fd
+            : > /tmp/processed-issues
+
+            mapfile -t ISSUE_ROWS < <(
+              gh issue list                 --repo "$GITHUB_REPOSITORY"                 --state open                 --limit 1000                 --json number,title,body                 --jq 'sort_by(.number)[] | select(.title | startswith("[roadmap-mutation] ")) | @base64'
+            )
+
+            if [ "${#ISSUE_ROWS[@]}" -eq 0 ]; then
+              echo "No open roadmap mutation Issues"
+              exit 0
+            fi
 
             python3 tools/bootstrap_roadmap.py --repo .
-            python3 tools/apply_issue_mutation.py --repo . --event "$GITHUB_EVENT_PATH"
-            python3 tools/roadmap_db.py --repo . verify
+
+            for encoded in "${ISSUE_ROWS[@]}"; do
+              printf '%s' "$encoded" | base64 --decode > /tmp/issue.json
+              ISSUE_NUMBER="$(python3 -c 'import json; print(json.load(open("/tmp/issue.json"))["number"])')"
+              python3 - <<'PY'
+          import json
+          issue = json.load(open("/tmp/issue.json", encoding="utf-8"))
+          json.dump({"issue": issue}, open("/tmp/issue-event.json", "w", encoding="utf-8"))
+          PY
+              echo "Applying roadmap mutation Issue #$ISSUE_NUMBER"
+              python3 tools/apply_issue_mutation.py --repo . --event /tmp/issue-event.json
+              python3 tools/roadmap_db.py --repo . verify
+              printf '%s\n' "$ISSUE_NUMBER" >> /tmp/processed-issues
+            done
 
             if [ -z "$(git status --porcelain)" ]; then
               pushed=1
@@ -46,7 +70,8 @@ jobs:
             fi
 
             git add -A roadmap.sqlite roadmap.md spiegazioni.md prompt-registry.md obsidian prompts completed falliti
-            git commit -m "Apply roadmap mutation Issue #$ISSUE_NUMBER"
+            ids="$(paste -sd, /tmp/processed-issues)"
+            git commit -m "Apply roadmap mutation Issues #$ids"
 
             if git push origin HEAD:main; then
               pushed=1
@@ -61,8 +86,17 @@ jobs:
 
           test "$pushed" -eq 1
 
-      - name: Close applied mutation Issue
+      - name: Close drained mutation Issues
+        if: success()
         run: |
           set -euo pipefail
-          gh api --method POST "repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUMBER/comments"             -f body="Applied by the roadmap single writer."
-          gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUMBER"             -f state=closed             -f state_reason=completed
+          if [ ! -s /tmp/processed-issues ]; then
+            exit 0
+          fi
+          while IFS= read -r issue_number; do
+            state="$(gh api "repos/$GITHUB_REPOSITORY/issues/$issue_number" --jq .state)"
+            if [ "$state" = "open" ]; then
+              gh api --method POST "repos/$GITHUB_REPOSITORY/issues/$issue_number/comments"                 -f body="Applied by the roadmap single writer."
+              gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/$issue_number"                 -f state=closed                 -f state_reason=completed
+            fi
+          done < /tmp/processed-issues
