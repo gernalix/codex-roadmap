@@ -19,6 +19,6 @@ class FinishWrapperTests(unittest.TestCase):
             roadmap_finish.finish_result=original
         self.assertEqual("PASS",calls[0][2])
         self.assertTrue(calls[0][3]["confirm_executed"])
-        self.assertEqual("sqlite",out["finish_mode"])
+        self.assertEqual("remote_single_writer",out["finish_mode"])
 
 if __name__=="__main__": unittest.main()
