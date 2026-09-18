@@ -91,6 +91,18 @@ CREATE TABLE IF NOT EXISTS analyses (
   source_ref TEXT
 );
 
+CREATE TABLE IF NOT EXISTS analysis_code_changes (
+  code_change_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  analysis_id INTEGER NOT NULL REFERENCES analyses(analysis_id) ON DELETE CASCADE,
+  prompt_id TEXT NOT NULL REFERENCES prompts(prompt_id) ON DELETE CASCADE,
+  repository TEXT NOT NULL,
+  change_type TEXT NOT NULL,
+  commit_sha TEXT,
+  summary TEXT,
+  created_at TEXT NOT NULL,
+  actor TEXT NOT NULL DEFAULT 'chatgpt'
+);
+
 CREATE TABLE IF NOT EXISTS artifacts (
   artifact_id INTEGER PRIMARY KEY AUTOINCREMENT,
   prompt_id TEXT NOT NULL REFERENCES prompts(prompt_id) ON DELETE CASCADE,
@@ -134,8 +146,13 @@ CREATE TABLE IF NOT EXISTS audit_events (
 CREATE INDEX IF NOT EXISTS idx_prompts_status_queue ON prompts(status, queue_position);
 CREATE INDEX IF NOT EXISTS idx_executions_prompt_time ON executions(prompt_id, started_at, ended_at);
 CREATE INDEX IF NOT EXISTS idx_analyses_prompt_time ON analyses(prompt_id, analyzed_at);
+CREATE INDEX IF NOT EXISTS idx_code_changes_prompt_time ON analysis_code_changes(prompt_id, created_at);
 
-CREATE VIEW IF NOT EXISTS v_prompt_summary AS
+DROP VIEW IF EXISTS v_attention;
+DROP VIEW IF EXISTS v_runnable_prompts;
+DROP VIEW IF EXISTS v_prompt_summary;
+
+CREATE VIEW v_prompt_summary AS
 SELECT
   p.*,
   (SELECT MIN(e.started_at) FROM executions e WHERE e.prompt_id=p.prompt_id) AS first_launched_at,
@@ -143,13 +160,15 @@ SELECT
   (SELECT e.outcome FROM executions e WHERE e.prompt_id=p.prompt_id
      ORDER BY COALESCE(e.ended_at,e.started_at,e.recorded_at) DESC, e.execution_id DESC LIMIT 1) AS last_outcome,
   EXISTS(SELECT 1 FROM analyses a WHERE a.prompt_id=p.prompt_id) AS analyzed,
+  EXISTS(SELECT 1 FROM analysis_code_changes c WHERE c.prompt_id=p.prompt_id) AS chatgpt_code_changed,
+  (SELECT COUNT(*) FROM analysis_code_changes c WHERE c.prompt_id=p.prompt_id) AS chatgpt_code_change_count,
   (SELECT a.bottlenecks_found FROM analyses a WHERE a.prompt_id=p.prompt_id
      ORDER BY a.analyzed_at DESC, a.analysis_id DESC LIMIT 1) AS bottlenecks_found,
   (SELECT a.fix_prompt_id FROM analyses a WHERE a.prompt_id=p.prompt_id AND a.fix_prompt_id IS NOT NULL
      ORDER BY a.analyzed_at DESC, a.analysis_id DESC LIMIT 1) AS fix_prompt_id
 FROM prompts p;
 
-CREATE VIEW IF NOT EXISTS v_runnable_prompts AS
+CREATE VIEW v_runnable_prompts AS
 SELECT p.*
 FROM prompts p
 WHERE p.status='pending'
@@ -161,7 +180,7 @@ WHERE p.status='pending'
   )
 ORDER BY COALESCE(p.queue_position, 2147483647), p.created_at, p.prompt_id;
 
-CREATE VIEW IF NOT EXISTS v_attention AS
+CREATE VIEW v_attention AS
 SELECT s.*
 FROM v_prompt_summary s
 WHERE s.status IN ('failed','blocked','unknown')
