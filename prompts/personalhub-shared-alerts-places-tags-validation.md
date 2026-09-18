@@ -6,18 +6,18 @@ Valida e chiudi SOLO l'implementazione già presente sul branch remoto PersonalH
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`, project_id=49;
 - branch obbligatorio: `feature/shared-alerts-place-tags`;
-- **eccezione esplicita alla regola PH sui branch temporanei:** questo branch DEVE restare remoto e separato da `main` a fine task perché Daniele lo mergerà manualmente più avanti. NON merge/rebase su `main`, NON eliminare il branch;
+- **eccezione esplicita alla regola PH sui branch temporanei:** questo branch DEVE restare remoto e separato da `main` a fine task perché Daniele lo mergerà manualmente più avanti. È consentito integrare `origin/main` **nel branch feature**; è vietato il verso opposto feature→main. NON eliminare il branch;
 - il branch remoto contiene già `:core:alerts`, `PlaceTagEntity`, `PlaceAlertEngine`, `PlaceAlertRepository`, UI Places Alerts, migration Room 15→16, `docs/ALERTS.md` e test mirati;
-- baseline minima: il commit `df76297e057cd5b8afd8cf2aaa46d231a33a9f41` deve essere antenato di RUN_HEAD;
+- baseline feature minima: `df76297e057cd5b8afd8cf2aaa46d231a33a9f41`; dopo la creazione del branch, PROMPT_ID=918274 ha completato il lavoro Profili su `main` con commit `73f0ed47f20fa06ba8302396153ba09cefd18e79`. Quel commit deve essere integrato nel branch feature prima dei gate;
 - schema atteso: `PersonalHubDatabase.SCHEMA_VERSION=16`; `version.txt` NON va incrementato;
 - usa prima `.codex/CODE_MAP.tsv` e `docs/ALERTS.md`; niente inventory/audit generale del repository;
 - Timer e Places condividono l'evaluator, NON i tag e NON necessariamente la persistenza: Timer conserva le regole nello snapshot esistente; Places usa `place_tags` + `place_tag_cross_ref` e `alert_rules` + `alert_place_tag_targets`;
 - gli alert Places devono dipendere SOLO da check-in/out espliciti/manuali. Il sottosistema Android Geofence esistente NON deve attivarli.
 
 # Esecuzione minima
-1. Acquisisci il lock PH con PROMPT_ID 842617. Fai un solo fetch mirato. Porta il checkout sul branch `feature/shared-alerts-place-tags` e fast-forward SOLO da `origin/feature/shared-alerts-place-tags`. Non integrare `main`. Dirty non sovrapposto non blocca; niente stash/reset.
+1. Acquisisci il lock PH con PROMPT_ID 842617. Fai un solo fetch mirato. Porta il checkout sul branch `feature/shared-alerts-place-tags` e fast-forward da `origin/feature/shared-alerts-place-tags`. Poi integra UNA volta `origin/main` **nel branch feature** (mai feature→main), includendo almeno `73f0ed47f20fa06ba8302396153ba09cefd18e79`. Il merge remoto è già risultato conflittuale: i soli file di overlap noti sono `.codex/CODE_MAP.tsv`, `core/database/.../PersonalHubDatabase.kt`, `feature/luoghi/build.gradle.kts`, `feature/multitimetracker/.../TimeFenceNotifier.kt`, `feature/multitimetracker/.../AlertsCapsuleViewModel.kt`. Risolvi SOLO questi conflitti preservando entrambe le intenzioni: hardening Profili/de-promozione Timer da `main` + shared alerts/tag Places dal branch. Non ripristinare file Timer eliminati da `main`; riapplica la minima integrazione alert ai consumer ancora esistenti. Dirty non sovrapposto non blocca; niente stash/reset.
 2. Preflight economico, in batch:
-   - conferma branch, baseline antenata, `SCHEMA_VERSION=16`, `:core:alerts` incluso in settings e dipendenze Timer/Places;
+   - conferma branch, entrambe le baseline (`df76297…` feature e `73f0ed47…` main) antenate di RUN_HEAD, `SCHEMA_VERSION=16`, `:core:alerts` incluso in settings e dipendenze Timer/Places;
    - esegui `python3 tools/check_architecture_boundaries.py`;
    - cerca SOLO nei file toccati riferimenti zombie a `alert_timer_tag_targets` / `AlertTimerTagTargetEntity` e sequenze `\\n` letterali introdotte accidentalmente nei file Gradle. Devono essere assenti.
 3. Genera lo schema Room corrente con il task KSP/compile più piccolo adeguato. Se manca o cambia `core/database/schemas/com.gernalix.personalhub.core.database.PersonalHubDatabase/16.json`, aggiungilo al branch. Non modificare schema/versione oltre 16.
@@ -56,14 +56,14 @@ Valida e chiudi SOLO l'implementazione già presente sul branch remoto PersonalH
    - mixed text+URL resta comportamento PH normale; unsafe scheme non auto-apre;
    - Workflowy: se l'app non è già installata sull'AVD, NON installarla solo per questo test; considera sufficiente il test host del routing esplicito + fallback.
 8. Non configurare Tasker sull'AVD e non renderlo prerequisito. Il bridge è PASS con i test host del package esplicito/extras; Tasker deve restare opzionale.
-9. Dopo tutti i PASS, aggiorna soltanto schema 16/test/fix strettamente necessari e CODE_MAP/docs solo se il codice reale li ha resi falsi. Commit/push **solo** `feature/shared-alerts-place-tags`. `version.txt` invariato. NON mergeare in `main`, NON eliminare il branch.
+9. Dopo tutti i PASS, aggiorna soltanto schema 16/test/fix strettamente necessari e CODE_MAP/docs solo se il codice reale li ha resi falsi. Commit/push **solo** `feature/shared-alerts-place-tags`. `version.txt` invariato. Verifica che il branch contenga il commit Profili di `main` e sia 0 commit behind rispetto a quel baseline. NON mergeare il branch in `main`, NON eliminare il branch.
 10. Rilascia lock. PASS => stop immediato; niente audit successivo.
 
 # Acceptance
 PASS solo se: schema Room 16 è esportato e migration v15→16 è lossless/FK-safe; host tests/compile/architecture gate PASS; Timer e Places condividono l'evaluator ma non i tag; alert Places per luogo/tags e check-in/out/both funzionano solo sugli eventi manuali; direct-tap link-only e Tasker bridge rispettano il contratto; QA AVD PASS; branch remoto resta `feature/shared-alerts-place-tags`; `main` e `version.txt` non sono modificati.
 
 # Non-goal
-Merge/rebase di `main`, migrazione delle regole Timer nelle tabelle Places/canoniche, background GPS, sostituzione del geofencing Android, redesign generale, refactor/cleanup fuori scope, release, installazione su device reali, Telegram/APK delivery.
+Merge del branch feature **verso** `main`, migrazione delle regole Timer nelle tabelle Places/canoniche, background GPS, sostituzione del geofencing Android, redesign generale, refactor/cleanup fuori scope, release, installazione su device reali, Telegram/APK delivery.
 
 # Stop
 Dopo PASS:
