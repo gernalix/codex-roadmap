@@ -55,6 +55,14 @@ Quando due fasi consecutive della stessa campagna richiedono lo stesso device/em
 ## Contratto prompt
 Ogni prompt deve bastare da solo insieme alle regole globali già caricate. Deve dichiarare almeno metadata, goal, starting point verificato, scope/non-goal, verification, stop e comando di finalizzazione. Vietati inventory/audit generali quando file/boundary sono già noti.
 
+### Identità PROMPT_ID
+- `PROMPT_ID` è sempre un numero canonico reale di **6 cifre**.
+- Regola assoluta: **1 prompt materializzato = 1 ID unico e immutabile**.
+- Qualunque nuova versione, retry o riscrittura di un prompt riceve un **nuovo** `PROMPT_ID`, anche se cambia pochissimo.
+- Un ID già assegnato non viene mai riciclato, ereditato o riutilizzato per un task diverso.
+- Per mantenere la genealogia si può usare `PARENT_PROMPT_ID=<vecchio_id>`; il vecchio ID resta storico e non torna attivo.
+- Se viene scoperta una collisione storica in un prompt ancora pendente, il task resta pendente ma deve ricevere un nuovo ID prima dell'esecuzione.
+
 Tipi:
 - **Prompt**: default. Usalo quando il lavoro è delimitato e può ragionevolmente concludersi in un singolo turno operativo, anche se tocca più componenti.
 - **Goal**: usalo solo quando la persistenza multi-turn è concretamente utile al risultato (per esempio campagne seriali lunghe multi-repo o verifiche che devono proseguire attraverso continuazioni). Complessità o rischio, da soli, non giustificano Goal.
