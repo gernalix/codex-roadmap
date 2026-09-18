@@ -4,7 +4,9 @@ import argparse, json
 from pathlib import Path
 from roadmap_db import connect, db_path, refresh_materialization_hashes, render
 
-def bootstrap(repo: Path) -> dict[str, object]:
+def bootstrap(repo: Path, *, writer_context: bool = False) -> dict[str, object]:
+    if not writer_context:
+        raise RuntimeError("bootstrap_single_writer_only")
     repo=Path(repo)
     created=not db_path(repo).exists()
     seed=None
@@ -50,8 +52,16 @@ def bootstrap(repo: Path) -> dict[str, object]:
     }
 
 def main(argv=None):
-    p=argparse.ArgumentParser(); p.add_argument("--repo",default="."); a=p.parse_args(argv)
-    print(json.dumps(bootstrap(Path(a.repo).expanduser().resolve()),sort_keys=True))
+    p=argparse.ArgumentParser()
+    p.add_argument("--repo",default=".")
+    p.add_argument("--writer-context",action="store_true")
+    a=p.parse_args(argv)
+    try:
+        out=bootstrap(Path(a.repo).expanduser().resolve(),writer_context=a.writer_context)
+    except RuntimeError as exc:
+        print(json.dumps({"status":"blocked","error":str(exc)},sort_keys=True))
+        return 2
+    print(json.dumps(out,sort_keys=True))
     return 0
 
 if __name__=="__main__": raise SystemExit(main())
