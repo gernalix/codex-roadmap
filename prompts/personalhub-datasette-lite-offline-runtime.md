@@ -5,7 +5,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`, branch canonico `main`;
-- `origin/main` atteso: `10a82e3f5324a6e3125793db6e813174f4684f0b`;
+- `origin/main` atteso: `c457eee4880d0f58ed271d5069d78ecdd500059e`;
 - `version.txt=48`; bump 48→49 UNA sola volta solo dopo tutti i gate feature;
 - fix Luoghi già in `main`: check-in sovrapposti scelgono automaticamente il candidato nettamente più vicino solo quando gli intervalli di distanza rispetto all'accuracy GPS non si sovrappongono; journal conserva la causa originale e registra la soglia reale raggio+accuracy;
 - già presenti: snapshot detached+validato, DataExplorerActivity local/remote, WebViewAssetLoader, entry point Home + sei moduli, config `personalhub_read`, docs e CODE_MAP;
@@ -14,7 +14,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 - server task `527184` rende `personalhub_read` read-only e materializza FK cross-modulo + grafo simmetrico `hub_entity_relations`.
 
 # Esecuzione minima
-1. Acquisisci task lock PH con PROMPT_ID 861305. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == 10a82e3f5324a6e3125793db6e813174f4684f0b`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED. Usa solo CODE_MAP row `database.data_explorer` più i file Luoghi già noti sotto `capsules/checkin` e i test indicati sotto; niente audit repo-wide.
+1. Acquisisci task lock PH con PROMPT_ID 861305. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == c457eee4880d0f58ed271d5069d78ecdd500059e`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED. Usa solo CODE_MAP row `database.data_explorer` più i file Luoghi già noti sotto `capsules/checkin` e i test indicati sotto; niente audit repo-wide.
 2. Vendorizza/pinna Datasette Lite + Pyodide + wheel/assets necessari sotto gli asset PH. Nessuna CDN/runtime fetch. NON allentare il network block locale.
 3. Dal detached snapshot costruisci, se necessario, una presentazione locale effimera read-only con semantica equivalente a `personalhub_read`:
    - vere SQLite FK e label leggibili;
