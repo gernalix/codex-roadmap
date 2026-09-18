@@ -1,7 +1,7 @@
 PROMPT_ID=845312 | project_id=49 | campaign_id=ph-obsidian-archive | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
 
 # Goal
-Completa su PersonalHub `main` la qualità/copertura v1 della vault Obsidian per **tutti i moduli mantenuti**, mantenendo la proiezione document-oriented e bounded. Chiudi Settings/AVD QA e lascia il branch pronto per review/merge manuale dell'utente.
+Completa su PersonalHub `main` la qualità/copertura v1 della vault Obsidian per **tutti i moduli mantenuti**, mantenendo la proiezione document-oriented e bounded. Chiudi Settings/AVD QA e lascia `main` pronto per il gate Git History successivo.
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`;
