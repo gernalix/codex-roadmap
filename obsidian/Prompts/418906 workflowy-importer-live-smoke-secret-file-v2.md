@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
 - **Prompt:** [[../../completed/workflowy-importer-live-smoke-secret-file-v2|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-18T22:54:53Z
+- **Ultimo lancio:** 2026-09-18T22:54:53Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Esegue il live smoke Workflowy con secret gate sicuro, ma consente a Codex di co
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-18T22:54:53Z | 2026-09-18T22:56:33Z | PASS | 100.868 | gpt-5.6-luna | low | 9 | 37452 |
 
 ## Analisi ChatGPT
 
