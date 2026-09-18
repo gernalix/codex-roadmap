@@ -5,6 +5,7 @@ project_id: 8
 model: GPT-5.6 Luna
 reasoning: low
 tags:
+  - single-writer-e2e
   - single-writer-enforced
   - roadmap/prompt
   - roadmap/status/completed
