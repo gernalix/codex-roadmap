@@ -143,6 +143,14 @@ CREATE TABLE IF NOT EXISTS audit_events (
   payload_json TEXT
 );
 
+CREATE TABLE IF NOT EXISTS mutation_receipts (
+  request_key TEXT PRIMARY KEY,
+  issue_number INTEGER NOT NULL UNIQUE,
+  payload_sha256 TEXT NOT NULL,
+  actor TEXT NOT NULL,
+  applied_at TEXT NOT NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_prompts_status_queue ON prompts(status, queue_position);
 CREATE INDEX IF NOT EXISTS idx_executions_prompt_time ON executions(prompt_id, started_at, ended_at);
 CREATE INDEX IF NOT EXISTS idx_analyses_prompt_time ON analyses(prompt_id, analyzed_at);
