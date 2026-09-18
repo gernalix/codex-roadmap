@@ -48,12 +48,22 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
         version = conn.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
     except sqlite3.OperationalError:
         version = None
-    if version and version[0] == "1":
-        return
-    conn.executescript(SCHEMA_PATH.read_text(encoding="utf-8"))
+    if not version or version[0] != "1":
+        conn.executescript(SCHEMA_PATH.read_text(encoding="utf-8"))
+        conn.execute(
+            "INSERT INTO meta(key,value) VALUES('schema_version','1') "
+            "ON CONFLICT(key) DO UPDATE SET value=excluded.value"
+        )
+    # Additive runtime table for the GitHub-Issue mutation inbox. Keep schema_version=1:
+    # this is backward-compatible and CREATE IF NOT EXISTS is idempotent.
     conn.execute(
-        "INSERT INTO meta(key,value) VALUES('schema_version','1') "
-        "ON CONFLICT(key) DO UPDATE SET value=excluded.value"
+        """CREATE TABLE IF NOT EXISTS mutation_receipts (
+             request_key TEXT PRIMARY KEY,
+             issue_number INTEGER NOT NULL UNIQUE,
+             payload_sha256 TEXT NOT NULL,
+             actor TEXT NOT NULL,
+             applied_at TEXT NOT NULL
+           )"""
     )
     conn.commit()
 
