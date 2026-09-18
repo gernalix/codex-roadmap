@@ -1,4 +1,4 @@
-PROMPT_ID=418763 | project_id=15 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
+PROMPT_ID=643817 | project_id=15 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
 
 # Goal
 Distribuisci SOLO `gernalix/activity-watch-uploader` sul Fedora reale, crea/configura direttamente nel DB autorevole di Uptime Kuma un unico monitor push dedicato, collega il relativo secret al servizio senza esporlo e chiudi il flusso end-to-end ActivityWatch → JSONL/Git → Kuma. Il codice applicativo e le unit template sono già su GitHub: niente redesign.
@@ -67,6 +67,6 @@ Niente refactor, cleanup, nuove feature, UI, nuovi branch persistenti, PAT/SSH k
 
 # Stop
 Al primo blocker concreto fermati senza retry equivalenti. Dopo PASS esegui UNA sola volta:
-`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 418763 --confirm-executed`
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 643817 --confirm-executed`
 
 Niente dry-run separato o audit post-PASS. Output finale massimo 7 righe: `RESULT`, `FEDORA`, `ACTIVITYWATCH`, `GIT`, `KUMA`, `RESILIENCE`, `BLOCKER`.
