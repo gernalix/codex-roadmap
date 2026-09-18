@@ -8,7 +8,7 @@ Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain
 
 `roadmap.sqlite` è l'unica fonte autorevole dei metadati della roadmap. `roadmap.md`, `spiegazioni.md`, `prompt-registry.md` e `obsidian/` sono viste generate e **non vanno modificate manualmente** per cambiare stato, ordine, dipendenze, analisi o relazioni.
 
-Codex registra gli esiti immediati tramite `roadmap_result.py` / `roadmap_finish.py`; il sync locale importa timestamp e metriche reali da `codex-usage`. ChatGPT aggiorna stato logico, analisi, modifiche di codice successive all’analisi, fix e relazioni tramite richieste strutturate in `mutations/inbox/`, applicate transazionalmente da GitHub Actions. Dettagli: [[SQLITE_ROADMAP|Roadmap SQLite]].
+**GitHub Actions è l'unico writer della roadmap canonica.** ChatGPT e Codex non modificano direttamente `roadmap.sqlite` né le viste generate. Entrambi consegnano richieste strutturate in `mutations/inbox/`; GitHub Actions le applica una alla volta, in transazione, rigenera le viste e pusha `main`. `roadmap_result.py` / `roadmap_finish.py` inviano la richiesta direttamente al remoto tramite GitHub CLI e non fanno fetch/merge/push del checkout locale. Il sync locale importa separatamente timestamp e metriche reali da `codex-usage`. Dettagli: [[SQLITE_ROADMAP|Roadmap SQLite]].
 
 ## Struttura
 - `roadmap.sqlite`: source of truth.
@@ -144,13 +144,15 @@ Non rilanciare `./gradlew check ...` dopo ogni singolo lint/compile fix. Obietti
 Usa `campaign_id` per più fasi dello stesso prodotto quando questo evita release ripetute.
 
 Per PersonalHub:
-- le fasi intermedie fanno implementazione, test mirati, eventuale QA isolata e push;
-- **non** incrementano `version.txt`, non installano il package reale Pixel e non inviano APK;
+- implementazioni indipendenti possono procedere in parallelo **solo** su branch dedicati separati; nessun worker usa `main` come area di lavoro;
+- un branch pronto viene pubblicato come PR verso il branch canonico e resta in attesa: il worker non lo mergea autonomamente;
+- integrazione, QA condivisa e release sono seriali. Una sola sessione Codex alla volta acquisisce il lock PersonalHub, prende un PR pronto, lo rivaluta contro l'ultimo `main`, verifica le interazioni semantiche e i test pertinenti, quindi lo mergea oppure lo corregge/blocca;
+- un merge Git senza conflitti **non è** prova di compatibilità: prima del merge Codex deve capire il diff nel contesto del `main` corrente;
+- dopo merge e push riusciti il branch va eliminato subito; il lock viene poi rilasciato e si passa al PR successivo;
+- le fasi intermedie fanno implementazione e test mirati ma **non** incrementano `version.txt`, non installano il package reale Pixel e non inviano APK;
 - l'ultima fase fa un solo bump, gate finali consolidati, un solo APK finale, una sola installazione Pixel e una sola Telegram delivery;
 - l'ultima fase non ripete automaticamente gate già PASS delle fasi precedenti: li riesegue solo se il diff finale tocca i file, dipendenze o boundary che quei gate coprivano;
-- una campagna PH deve essere seriale: niente task PH concorrenti;
-- le fasi PH non devono dipendere dall'esistenza di branch remoti temporanei. Se un task usa un branch locale/temporaneo per isolamento, deve integrarlo in `main` ed eliminarlo nello stesso task prima del PASS, salvo eccezione esplicita e motivata nel prompt;
-- task di repository diversi possono essere eseguiti in parallelo solo quando non condividono checkout o runtime mutabili. `roadmap_finish.py` supporta il completamento out-of-order/race-safe; un task che modifica il checkout canonico MegaVault non va eseguito in parallelo con task che devono usare quello stesso checkout.
+- task di repository diversi possono essere eseguiti in parallelo solo quando non condividono checkout o runtime mutabili. Il completamento roadmap è ora single-writer remoto; un task che modifica il checkout canonico MegaVault non va eseguito in parallelo con task che devono usare quello stesso checkout.
 
 Non creare mega-task se le fasi hanno failure domains indipendenti; consolida build/install/delivery e gate comuni. Una verifica locale di fix già pushati va assorbita nella fase funzionale successiva dello stesso repo quando può condividere lo stesso host gate e la stessa QA.
 
@@ -161,7 +163,7 @@ Ogni prompt normale finalizza con una sola invocazione race-safe:
 python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id PROMPT_ID --confirm-executed
 ```
 
-Il wrapper registra `PASS` in `roadmap.sqlite`, sposta il prompt in `completed/`, rigenera tutte le viste Markdown/Obsidian, committa e pusha in modo race-safe. Non anteporre un dry-run nel percorso normale e non eseguire audit aggiuntivi dopo il PASS.
+Il wrapper **non modifica il checkout locale**: crea una richiesta immutabile `terminal-<PROMPT_ID>` nella inbox remota. GitHub Actions, unico writer, registra `PASS` in `roadmap.sqlite`, sposta il prompt in `completed/`, rigenera le viste e aggiorna `main`. Richieste duplicate identiche sono idempotenti; una richiesta terminale diversa per lo stesso PROMPT_ID viene rifiutata. Non anteporre un dry-run nel percorso normale e non eseguire audit aggiuntivi dopo il PASS.
 
 Timestamp e metriche precise dell'esecuzione vengono poi riconciliati da `codex-usage`; la registrazione terminale immediata serve a chiudere correttamente la coda senza aspettare il sync.
 
@@ -173,7 +175,7 @@ python3 ~/projects/codex-roadmap/tools/roadmap_result.py --repo ~/projects/codex
 # oppure --result FAIL
 ```
 
-Il prompt viene tolto dai pendenti e archiviato in `falliti/`. Se serve una correzione, ChatGPT crea un **nuovo PROMPT_ID** e lo collega al padre con relazione `fix` o `followup`. Il sync da `codex-usage` riconcilia comunque l'esito reale se la registrazione immediata non è riuscita.
+Anche questi comandi inviano soltanto una richiesta alla inbox remota: il prompt viene tolto dai pendenti e archiviato in `falliti/` dal single writer GitHub Actions. Se serve una correzione, ChatGPT crea un **nuovo PROMPT_ID** e lo collega al padre con relazione `fix` o `followup`. Il sync da `codex-usage` riconcilia comunque l'esito reale se la registrazione immediata non è riuscita.
 
 ## `roadmap_guard.py` / `roadmap_finish.py`
 `roadmap_guard.py select` resta disponibile solo come fallback unattended/lettura. Con `roadmap.sqlite` presente, lo stato non deve essere avanzato modificando direttamente Markdown.
