@@ -5,7 +5,7 @@ Valida e distribuisci SOLO la proiezione Datasette PersonalHub già implementata
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/datasette5`, branch canonico `main`;
-- `origin/main` atteso: `ab88bc96762fd995c3f6ce902a3b491291713b1b`;
+- `origin/main` atteso: `99edec6f297d52dabbd3b831dc5734db9fa628fb`;
 - file pertinenti soltanto: `scripts/personalhub_projection.py`, `tests/test_personalhub_projection.py`, `README.md`;
 - Datasette runtime canonico: 1.0a38;
 - `personalhub_read`: browse + `execute-sql` solo actor umano `root`; anonimo negato; ogni write/schema mutation negata;
@@ -18,7 +18,7 @@ Valida e distribuisci SOLO la proiezione Datasette PersonalHub già implementata
 2. Leggi SOLO i tre file sopra e gli helper deploy già nominati nel README se servono. Niente audit repo-wide.
 3. Esegui in un solo batch i tre test mirati:
    - `test_cross_module_logical_relations_become_native_foreign_keys`
-   - `test_context_memberships_materialize_symmetric_cross_module_foreign_keys`
+   - `test_context_memberships_materialize_deduplicated_symmetric_cross_module_foreign_keys`
    - `test_datasette_native_clickable_fk_labels_and_read_only_permissions`
    Failure => correggi solo quel failure domain e rilancia solo il test fallito.
 4. Dopo PASS mirato: una sola `python3 -m unittest tests.test_personalhub_projection -v` e una sola `python3 launch_datasette.py --check`.
@@ -34,7 +34,7 @@ Valida e distribuisci SOLO la proiezione Datasette PersonalHub già implementata
 8. PASS => stop immediato. Nessun benchmark/plugin/tuning/audit successivo.
 
 # Acceptance
-PASS solo se test mirati + suite + launcher check PASS, runtime Oracle aggiornato, FK native integre, `hub_entity_relations` valida, simmetrica e read-only, SQL autenticato funziona, anonimo/write negati, API sync invariata.
+PASS solo se test mirati + suite + launcher check PASS, runtime Oracle aggiornato, FK native integre, `hub_entity_relations` deduplicata/simmetrica e `hub_entity_relation_contexts` conserva la provenienza senza duplicare backlink, SQL autenticato funziona, anonimo/write negati, API sync invariata.
 
 # Non-goal
 Niente modifiche PH Android, nuovi token, dati sintetici produzione, redesign Context, plugin opzionali, query salvate, benchmark o refactor.
