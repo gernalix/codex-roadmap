@@ -183,6 +183,38 @@ def set_status(
         (prompt_id, old, new_status, ts, actor, note),
     )
 
+def reorder_prompt(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    queue_position: int,
+    *,
+    actor: str = "chatgpt",
+    note: str | None = None,
+) -> None:
+    if queue_position < 1:
+        raise RoadmapDBError(f"invalid_queue_position:{queue_position}")
+    row = prompt_row(conn, prompt_id)
+    if row["status"] not in ACTIVE_STATUS:
+        raise RoadmapDBError(f"reorder_terminal_prompt:{prompt_id}:{row['status']}")
+    old_position = row["queue_position"]
+    if old_position == queue_position:
+        return
+    ts = now_utc()
+    conn.execute(
+        "UPDATE prompts SET queue_position=?, updated_at=? WHERE prompt_id=?",
+        (queue_position, ts, prompt_id),
+    )
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "prompt_reordered",
+            ts,
+            actor,
+            json.dumps({"old_queue_position": old_position, "new_queue_position": queue_position, "note": note}, ensure_ascii=False, sort_keys=True),
+        ),
+    )
+
 def add_dependency(conn: sqlite3.Connection, prompt_id: str, depends_on: str, *, note: str | None = None) -> None:
     prompt_row(conn, prompt_id)
     prompt_row(conn, depends_on)
@@ -456,6 +488,14 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
         add_relation(conn,str(mutation["from_prompt_id"]),str(mutation["to_prompt_id"]),str(mutation["relation_type"]),actor=actor,note=mutation.get("note"))
     elif op=="dependency":
         add_dependency(conn,str(mutation["prompt_id"]),str(mutation["depends_on_prompt_id"]),note=mutation.get("note"))
+    elif op=="reorder":
+        reorder_prompt(
+            conn,
+            str(mutation["prompt_id"]),
+            int(mutation["queue_position"]),
+            actor=actor,
+            note=mutation.get("note"),
+        )
     elif op=="tag":
         add_tag(conn,str(mutation["prompt_id"]),str(mutation["tag"]))
     elif op=="code_change":
