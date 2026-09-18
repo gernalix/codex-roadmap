@@ -1,6 +1,6 @@
 ---
 prompt_id: 813383
-status: pending
+status: completed
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
@@ -11,15 +11,15 @@ tags:
   - roadmap/projections-v1
   - roadmap/sqlite-v1
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/completed
   - roadmap/project/fedora
 ---
 
 # 813383 · Attivare il tracciamento SQLite della roadmap
 
-- **Stato:** pending
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/codex-roadmap-sqlite-runtime-backfill|Apri prompt]]
+- **Prompt:** [[../../completed/codex-roadmap-sqlite-runtime-backfill|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
