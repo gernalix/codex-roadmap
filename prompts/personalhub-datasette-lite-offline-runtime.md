@@ -20,6 +20,8 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
    - vere SQLite FK e label leggibili;
    - relazioni dirette cross-modulo;
    - Context → grafo simmetrico deduplicato equivalente a `hub_entity_relations`, con provenienza Context separata e ogni entità risolvibile navigabile da entrambi gli estremi;
+   - temporal graph equivalente al server: visite Places, sessioni Timer, transazioni Soldi, intake, eventi/initiative People e WordPulse activity bursts; stesse soglie e stessa suppression se FK/Context già spiega la coppia;
+   - WordPulse NON usa gli intervalli lunghi delle sessioni come evidenza temporale; People NON deduce la presenza della persona dal timestamp;
    - nessuna inferenza per nome e nessuna scrittura sul DB canonico.
 4. Presentazione embedded: conserva motore Datasette per table/row/filter/facet/pagination/SQL/FK. Aggiungi solo template/CSS/assets compatibili con Lite per ottimizzare il mobile:
    - niente browser chrome;
@@ -34,7 +36,8 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
    - snapshot coerente e isolato;
    - Lite avvia e SELECT funziona con networking disabilitato;
    - forward FK + reverse related rows con label;
-   - scenario sintetico con almeno tre moduli diversi (es. Places, Timer e Soldi), verificando navigazione FK/backlink in entrambe le direzioni da ciascun record;\n   - scenario temporale: overlap Place/Timer esplicito via Context viene soppresso come duplicate backlink ma incrementa supporto temporale; intake durante visita resta temporal link; transazione→Place già FK non duplica; WordPulse entry ravvicinate diventano un burst; People compare solo tramite event/initiative;
+   - scenario sintetico con almeno tre moduli diversi (es. Places, Timer e Soldi), verificando navigazione FK/backlink in entrambe le direzioni da ciascun record;
+   - scenario temporale: overlap Place/Timer esplicito via Context viene soppresso come duplicate backlink ma incrementa supporto temporale; intake durante visita resta temporal link; transazione→Place già FK non duplica; WordPulse entry ravvicinate diventano un burst; People compare solo tramite event/initiative;
    - i sei entry point aprono le tabelle canoniche;
    - tentativi write non modificano `personalhub.db`;
    - remote mode usa auth umana, mai token sync.
