@@ -105,8 +105,8 @@ def render(repo: Path) -> list[str]:
         "",
         "> Generato da `roadmap.sqlite`. Le spiegazioni sono volutamente non tecniche.",
         "",
-        "| # | Prompt | PROMPT_ID | Stato | Lanciato | Esito | Analizzato | Codice ChatGPT | Fix | Progetto | Chat Codex | Dipendenze | Spiegazione | Modello | Reasoning | Tipo prompt |",
-        "| --: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| # | Prompt | PROMPT_ID | Stato | Progetto | Chat Codex | Dipendenze | Spiegazione | Modello | Reasoning | Tipo |",
+        "| --: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for i, r in enumerate(pending, 1):
         deps = conn.execute(
@@ -114,22 +114,17 @@ def render(repo: Path) -> list[str]:
             "WHERE d.prompt_id=? AND p.status IN ('pending','running') ORDER BY d.depends_on_prompt_id", (r["prompt_id"],)
         ).fetchall()
         dep_text = ", ".join(_table_wikilink(f"obsidian/Prompts/{d[0]} {prompt_row(conn,d[0])['slug']}", d[0]) for d in deps) or "—"
-        fix = "—"
-        if r["fix_prompt_id"]:
-            fp=prompt_row(conn,r["fix_prompt_id"])
-            fix=_table_wikilink(f"obsidian/Prompts/{fp['prompt_id']} {fp['slug']}", fp["prompt_id"])
         spieg.append(
             "| " + " | ".join([
                 str(i),
                 _table_wikilink(r["current_path"][:-3], r["title"]) if r["current_path"].endswith(".md") else _table_wikilink(f"obsidian/Prompts/{r['prompt_id']} {r['slug']}", f"{r['prompt_id']} · {r['title']}"),
-                r["prompt_id"], r["status"], _fmt(r["last_launched_at"]), _fmt(_effective_outcome(r)),
-                "sì" if r["analyzed"] else "no", "sì" if r["chatgpt_code_changed"] else "no",
-                fix, _fmt(r["project_name"] or r["project_id"]),
-                _fmt(r["chat_guidance"]), dep_text, _fmt(r["explanation"]), _fmt(r["model"]), _fmt(r["reasoning"]), _fmt(r["prompt_type"])
+                r["prompt_id"], r["status"], _fmt(r["project_name"] or r["project_id"]),
+                _fmt(r["chat_guidance"]), dep_text, _fmt(r["explanation"]),
+                _fmt(r["model"]), _fmt(r["reasoning"]), _fmt(r["prompt_type"])
             ]) + " |"
         )
     if not pending:
-        spieg.append("| — | — | — | — | — | — | — | — | — | — | — | — | Nessun prompt pendente | — | — | — |")
+        spieg.append("| — | — | — | — | — | — | — | Nessun prompt pendente | — | — | — |")
     spieg.append("")
     (repo/"spiegazioni.md").write_text("\n".join(spieg), encoding="utf-8")
 
