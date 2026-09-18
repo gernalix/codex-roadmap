@@ -1,21 +1,21 @@
 ---
 prompt_id: 749621
-status: pending
+status: completed
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - single-writer-e2e
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/completed
   - roadmap/project/personalhub-codex-roadmap
 ---
 
 # 749621 · Attiva single-writer completo e integrazione PH
 
-- **Stato:** pending
+- **Stato:** completed
 - **Progetto:** [[../Projects/personalhub-codex-roadmap|PersonalHub + codex-roadmap]]
-- **Prompt:** [[../../prompts/roadmap-ph-single-writer-full-local-activation|Apri prompt]]
+- **Prompt:** [[../../completed/roadmap-ph-single-writer-full-local-activation|Apri prompt]]
 - **Primo lancio:** 2026-09-18T21:03:24Z
 - **Ultimo lancio:** 2026-09-18T21:03:24Z
 - **Ultimo esito:** BLOCKED
