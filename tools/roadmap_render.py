@@ -38,7 +38,7 @@ def reconcile_prompt_file_locations(repo: Path) -> int:
             src=repo/current
             if row["status"]=="completed":
                 target_dir="completed"
-            elif row["status"] in ("failed","blocked","cancelled","unknown"):
+            elif row["status"] in ("failed","blocked","cancelled","superseded","unknown"):
                 target_dir="falliti"
             else:
                 target_dir="prompts"
