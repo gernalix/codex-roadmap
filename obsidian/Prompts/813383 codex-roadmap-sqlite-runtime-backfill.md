@@ -7,6 +7,7 @@ reasoning: medium
 tags:
   - project/fedora
   - roadmap
+  - roadmap/identity-protected
   - roadmap/sqlite-v1
   - roadmap/prompt
   - roadmap/status/pending
