@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import html
 import json
 import re
 import sqlite3
@@ -51,10 +52,28 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
     conn.commit()
 
 def materialization_hash(text: str) -> str:
-    # Stable enough across Markdown escaping in usage exports; raw text is never stored.
+    # Normalize the same superficial escaping used by usage exports; raw text is never stored.
+    text = html.unescape(text or "")
     text = text.replace("\\_", "_")
     text = re.sub(r"\s+", " ", text).strip()
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+def refresh_materialization_hashes(conn: sqlite3.Connection, repo: Path) -> int:
+    updated = 0
+    for row in conn.execute(
+        "SELECT prompt_id,current_path FROM prompts "
+        "WHERE materialization_sha256 IS NULL AND current_path<>''"
+    ).fetchall():
+        path = Path(repo) / row["current_path"]
+        if not path.is_file():
+            continue
+        sha = materialization_hash(path.read_text(encoding="utf-8"))
+        conn.execute(
+            "UPDATE prompts SET materialization_sha256=?,updated_at=? WHERE prompt_id=?",
+            (sha, now_utc(), row["prompt_id"]),
+        )
+        updated += 1
+    return updated
 
 def prompt_row(conn: sqlite3.Connection, prompt_id: str) -> sqlite3.Row:
     row = conn.execute("SELECT * FROM prompts WHERE prompt_id=?", (prompt_id,)).fetchone()
