@@ -7,7 +7,7 @@ Su PersonalHub `main`, implementa SOLO il fondamento dati canonico di Salute den
 - repo: `/home/daniele/projects/PersonalHub`;
 - esegui SOLO dopo PROMPT_ID=461839 PASS/finalizzato; il relativo risultato deve essere già presente in `main`;
 - branch obbligatorio: `main`; i documenti di design Salute sono già presenti su `main`. NON ricreare il vecchio branch `feature/salute-canonical-domain` né pubblicare altri branch remoti;
-- contratti già presenti nel branch: `docs/HEALTH_MODULE.md`, `docs/health/HEALTH_DATA_MODEL.md`, `docs/health/CHATGPT_PATCH_CONTRACT.md`;
+- contratti già presenti su `main`: `docs/HEALTH_MODULE.md`, `docs/health/HEALTH_DATA_MODEL.md`, `docs/health/CHATGPT_PATCH_CONTRACT.md`;
 - `version.txt` resta 50: questa è una fase intermedia della campagna PH;
 - nessun dato sanitario reale, screenshot, nota clinica, dump DB o fixture riconducibile all'utente può essere committato nel repo pubblico;
 - `personalhub.db` resta l'unico DB runtime canonico/scrivibile;
