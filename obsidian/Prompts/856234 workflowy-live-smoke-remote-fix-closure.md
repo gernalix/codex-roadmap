@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../completed/workflowy-live-smoke-remote-fix-closure|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-18T23:16:51Z
+- **Ultimo lancio:** 2026-09-18T23:16:51Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Sincronizza il fix Workflowy già pubblicato con il checkout locale e conferma i
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-18T23:16:51Z | 2026-09-18T23:17:50Z | PASS | 58.993 | gpt-5.6-terra | medium | 7 | 35296 |
 
 ## Analisi ChatGPT
 
