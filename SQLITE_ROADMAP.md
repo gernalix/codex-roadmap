@@ -32,7 +32,7 @@ python3 tools/roadmap_result.py --repo . --prompt-id 123456 --result PASS --conf
 
 Prima dell'import ogni prompt attivo deve avere una fingerprint della propria materializzazione. Se un vecchio `PROMPT_ID` ricompare con testo diverso, il sistema registra una collisione e non sovrascrive automaticamente lo stato del prompt corrente.
 
-Sul Fedora reale, `codex-roadmap-sync.timer` riconcilia periodicamente `~/projects/codex-usage/prompts/*/metrics.json`. È la fonte per timestamp e metriche reali e permette il backfill storico. Importa solo metadati; non copia prompt completi, risposte finali o path raw delle sessioni nel repository pubblico.
+Sul Fedora reale, `codex-roadmap-sync.timer` legge periodicamente `~/projects/codex-usage/prompts/*/metrics.json`, scarica in sola lettura il DB remoto per sapere quali `cycle_key` sono già presenti e consegna soltanto le nuove esecuzioni come mutazioni `usage_execution`. Non modifica più il DB/Git locale. Il single writer remoto conserva anche il controllo della fingerprint: in caso di mismatch registra il conflitto di identità senza cambiare automaticamente lo stato del prompt. Il sync importa solo metadati; non copia prompt completi, risposte finali o path raw delle sessioni nel repository pubblico. `import_codex_usage.py` resta disponibile per backfill/manutenzione manuale, non come writer periodico.
 
 ### ChatGPT
 
