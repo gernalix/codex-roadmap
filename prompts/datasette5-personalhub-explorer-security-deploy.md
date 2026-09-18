@@ -5,19 +5,18 @@ Valida e distribuisci SOLO il nuovo accesso SQL read-only autenticato del Data E
 
 # Starting point autoritativo
 - repo locale: `/home/daniele/projects/datasette5`, project_id `10`;
-- branch da validare: `feature/personalhub-data-explorer-security`;
-- HEAD remoto atteso del branch: `be112dd9fee631fe64b28d1df6f1d7d080f36b2b`;
-- base `main`: `99df94a05bcf8230452766f6621b5d8c2f45f4c0`;
+- branch canonico: `main`;
+- origin/main minimo atteso: `b3fdddd3c7e6b8cbe35ba03aea982f17e7810a81`; il commit funzionale `be112dd9fee631fe64b28d1df6f1d7d080f36b2b` deve esserne antenato;
 - diff già delimitato a `scripts/personalhub_projection.py`, `tests/test_personalhub_projection.py`, `README.md`;
 - policy desiderata già codificata: `personalhub_read` è visibile e interrogabile con `execute-sql` solo dall'actor umano `root`; anonimo negato; `execute-write-sql`, schema changes e mutazioni righe negati; `personalhub-sync` resta limitato al solo envelope tecnico;
 - runtime canonico già documentato nel repo: Datasette 1.0a38, profilo Oracle privato esistente, `personalhub-projection.service` indipendente.
 
 # Esecuzione minima
-1. Preflight unico: worktree, fetch del solo branch + main, richiedi branch remoto esattamente all'HEAD sopra e main ancora antenato; dirty overlap/divergenza => BLOCKED, niente stash/reset.
+1. Preflight unico: worktree, un solo fetch main, fast-forward a origin/main e richiedi che `be112dd9...` sia antenato; dirty overlap/divergenza => BLOCKED, niente stash/reset/rebase.
 2. Leggi SOLO i tre file del diff e gli helper di deploy già nominati nel README se necessari. Niente audit repo-wide.
 3. Esegui prima il test mirato `tests.test_personalhub_projection.PersonalHubProjectionTest.test_datasette_native_clickable_fk_labels_and_read_only_permissions`. Se fallisce, correggi solo questo failure domain e rilancia solo quel test.
 4. Dopo PASS mirato esegui una sola suite pertinente `python3 -m unittest tests.test_personalhub_projection -v` e `python3 launch_datasette.py --check`. Nessun test duplicato.
-5. Se PASS, integra il branch in `main` solo fast-forward (o equivalente senza merge commit) se `origin/main` non è avanzato in modo incompatibile; push una volta. Divergenza => BLOCKED, non rebase.
+5. Nessuna integrazione branch è necessaria: il codice è già su main. Se un fix strettamente necessario emerge dai test, applicalo direttamente su main, test leaf, quindi un solo push.
 6. Usa il deploy Oracle canonico già documentato, con il profilo privato esistente e senza mostrare secret. Non cambiare autenticazione, nginx, token o servizi non pertinenti.
 7. Readback runtime bounded:
    - actor umano autenticato può aprire `personalhub_read` ed eseguire una SELECT innocua;
