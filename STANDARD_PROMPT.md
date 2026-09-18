@@ -1,5 +1,7 @@
 # Esecuzione Codex della roadmap
 
+> `roadmap.sqlite` è la source of truth. `roadmap.md` e `spiegazioni.md` sono viste generate: non modificarle manualmente per avanzare la coda.
+
 ## Default manuale — nessun prompt intermedio
 
 Per una normale sessione Codex Desktop **non incollare un launcher generico** e non chiedere a Codex di selezionare il task.
@@ -55,21 +57,24 @@ Se più prompt condividono `campaign_id`, ogni fase resta autosufficiente ma dev
 
 ## Finalizzazione roadmap
 
-`roadmap_guard.py` resta la primitive fail-closed per selezione, `complete` e `reconcile`. Per i prompt normali, però, la finalizzazione PASS deve usare il wrapper race-safe **in una sola invocazione**:
+PASS:
 
-`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID> --confirm-executed`
+```bash
+python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID> --confirm-executed
+```
 
-`roadmap_finish.py` prova prima la normale `complete`; se nel frattempo un altro task ha avanzato `roadmap.md`, usa automaticamente il `reconcile` canonico nello stesso processo. Il fallback mutante resta fail-closed: `--confirm-executed` è necessario per attestare che il lavoro del prompt è realmente già stato eseguito. Errori diversi dal solo `prompt_identity_mismatch` non vengono convertiti in reconcile.
+BLOCKED/FAIL:
 
-Non anteporre un dry-run nel percorso normale: il wrapper e il guard validano le precondizioni prima della mutazione, mentre un secondo processo raddoppierebbe round-trip e aprirebbe un'ulteriore finestra di race. `--dry-run` resta disponibile solo per diagnosi/manual review.
+```bash
+python3 ~/projects/codex-roadmap/tools/roadmap_result.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID> --result BLOCKED --confirm-executed
+# oppure --result FAIL
+```
 
-Per un prompt riattivato dopo `BLOCKED` o `FAIL`, conserva `last_result=BLOCKED` / `last_result=FAIL` nei metadata. Il wrapper dichiara internamente `result=PASS` al guard: deve quindi essere invocato **solo dopo** che tutti gli acceptance criteria del nuovo run sono PASS.
+Entrambi aggiornano `roadmap.sqlite`, archiviano il file nella directory terminale corretta, rigenerano Markdown/Obsidian e pushano con retry bounded in caso di race. Non fare prima un dry-run nel percorso normale.
 
-Una risposta del wrapper con `status=completed` oppure `status=already_completed`, `finish_mode=complete|reconcile` e, quando c'è una nuova mutazione, `push_verified=git_push_exit_0`, è prova canonica della finalizzazione. Non fare controlli Git equivalenti dopo il PASS e non aprire il task successivo nella stessa sessione.
+Un esito terminale non rende riutilizzabile il PROMPT_ID: un fix o follow-up è sempre una nuova materializzazione con nuovo ID e relazione al padre. Timestamp, durata, token e tool-call reali vengono riconciliati automaticamente dal sync di `codex-usage`.
 
-Su BLOCKED/FAIL non invocare il finalizzatore, non archiviare, non rinumerare e non avanzare la roadmap. Non spostare manualmente file tra `prompts/` e `completed/` per aggirare il guard.
-
-I prompt devono richiedere una prima riga finale non ambigua `RESULT=PASS|BLOCKED|FAIL`. Se codice/test sono PASS ma una finalizzazione obbligatoria (push, guard/finalizer, lease, delivery) fallisce, il risultato complessivo non è PASS: usare `RESULT=BLOCKED` o `RESULT=FAIL` secondo la causa e riportare il PASS tecnico in un campo separato.
+La prima riga finale resta `RESULT=PASS|BLOCKED|FAIL`. Se codice/test sono PASS ma una finalizzazione obbligatoria fallisce, il risultato complessivo è BLOCKED/FAIL e va registrato coerentemente quando possibile.
 
 ## Fallback unattended
 
