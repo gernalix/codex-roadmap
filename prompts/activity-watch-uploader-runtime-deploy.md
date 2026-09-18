@@ -1,78 +1,81 @@
 PROMPT_ID=643817 | project_id=15 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
 
 # Goal
-Distribuisci SOLO `gernalix/activity-watch-uploader` sul Fedora reale usando `gernalix/activity-watch-data` come repository privato ESCLUSIVO dei dati, crea/configura direttamente nel DB autorevole di Uptime Kuma un unico monitor push dedicato, collega il relativo secret al servizio senza esporlo e chiudi il flusso end-to-end ActivityWatch → JSONL → `activity-watch-data` → Kuma. Il codice, il formato dati e le unit template sono già su GitHub: niente redesign.
+Completa SOLO il deploy runtime già implementato di ActivityWatch uploader: Fedora → `gernalix/activity-watch-data` → Uptime Kuma. Nessun redesign.
 
 # Starting point autoritativo
-- repo codice privato: `gernalix/activity-watch-uploader`, branch `main`; baseline minima da includere: `41cff9ea29337fda5c847f4861feae7f8369128d`;
-- repo dati privato: `gernalix/activity-watch-data`, branch `main`; baseline documentale minima: `fb656dde8386465497f51218262b43f17bc9bf27`;
-- checkout Fedora canonici: `/home/daniele/projects/activity-watch-uploader` (codice) e `/home/daniele/projects/activity-watch-data` (dati);
-- ActivityWatch API locale: `http://127.0.0.1:5600`;
-- il codice fa full reconcile iniziale/settimanale, refresh rolling degli ultimi 2 giorni UTC, write atomiche, lock anti-overlap, recovery Git, timeout HTTP/Git e push Kuma con `run_id`;
-- TUTTI i bucket/eventi canonici ActivityWatch devono finire SOLO nel repo dati in formato testuale ChatGPT-friendly: `metadata/buckets.json` + `buckets/<bucket-id>/YYYY/MM/YYYY-MM-DD.jsonl`; un evento completo per riga; nessun dato ActivityWatch va committato nel repo codice;
-- il runtime valida anche l'identità del remote Git e deve rifiutare qualsiasi destinazione diversa da `gernalix/activity-watch-data`;
-- unità: `activity-watch-uploader.service` + `activity-watch-uploader.timer`; il timer è ogni 15 minuti, `Persistent=true`, `OnBootSec=2min`; il service ha `Restart=on-failure`, restart bounded e `TimeoutStartSec=30min`;
-- il timer deve funzionare anche senza login interattivo dopo reboot: usa il normale systemd user manager con lingering dell'utente `daniele`;
-- repo VM: `/home/daniele/projects/vm_oracle`; accesso canonico SOLO tramite `scripts/oracle_ssh.sh`;
-- Uptime Kuma: Docker Compose canonica `/opt/uptime-kuma/docker-compose.yml`, container `uptime-kuma`, dati persistenti sotto `/opt/uptime-kuma/data`, versione attesa 2.4.x;
-- nome monitor desiderato: `ActivityWatch Git Uploader (Fedora)`; tipo `push`; intervallo 1200 s, retry 300 s, max retries 2, non upside-down;
-- URL pubblico push: `https://kuma.danielegalati.com/api/push/<token>`;
-- non stampare, loggare, versionare o includere nel report token Kuma, credenziali Git/SSH o altri secret.
+- `project_id=15` è solo il routing host/runtime Fedora per questo task: i due repo target sono espliciti qui sotto. NON interrogare MegaVault per riscoprirli né fare inventory generale.
+- codice: `gernalix/activity-watch-uploader` main, baseline minima `883e7d657f9c58d8ddbefa9b20e1b7a5f78204e8`;
+- dati privati: `gernalix/activity-watch-data` main, baseline minima `fb656dde8386465497f51218262b43f17bc9bf27`;
+- path canonici: `~/projects/activity-watch-uploader` e `~/projects/activity-watch-data`;
+- precedente ciclo 643817: BLOCKED prima di test/deploy/Kuma. Stato osservato e NON da riscoprire: il path codice conteneva soltanto `activity-watch-uploader/activity-watch-uploader/.git`, origin corretto, branch main, HEAD non materializzato; il path dati mancava;
+- il nuovo `scripts/bootstrap_checkouts.py` ripara fail-closed ESCLUSIVAMENTE questo layout annidato, clona il repo dati, valida origin/branch/baseline e fast-forwarda checkout puliti. L'esatta riparazione è autorizzata da questo prompt se e solo se i suoi guard passano; per qualunque altra forma filesystem => BLOCKED;
+- output dati: `metadata/buckets.json` + `buckets/<bucket>/YYYY/MM/YYYY-MM-DD.jsonl`; un evento completo/riga; nessun raw ActivityWatch nel repo codice;
+- ActivityWatch: `http://127.0.0.1:5600`;
+- unità: `activity-watch-uploader.service/.timer`; timer 15 min + `Persistent=true` + `OnBootSec=2min`; service `Restart=on-failure`, `RestartSec=2min`, `TimeoutStartSec=30min`, `KillMode=control-group`;
+- Kuma Oracle: compose `/opt/uptime-kuma/docker-compose.yml`, container `uptime-kuma`, data `/opt/uptime-kuma/data`; monitor desiderato `ActivityWatch Git Uploader (Fedora)`, type=push, interval=1200, retry=300, maxRetries=2, upside_down=0;
+- VM accesso SOLO via `/home/daniele/projects/vm_oracle/scripts/oracle_ssh.sh`;
+- non stampare/versionare token o credenziali.
 
 # Esecuzione minima
-1. **Fedora preflight, un batch.** Sincronizza/clona ENTRAMBI i checkout canonici. Repo codice: `main`, baseline codice inclusa, nessuna modifica locale. Repo dati: `main`, baseline documentale inclusa; `README.md` e `FORMAT.md` devono restare intatti. Esegui una volta nel repo codice:
-   - `python3 -m unittest discover -s tests -v`;
-   - `python3 -m py_compile activity_watch_uploader.py`;
-   - `systemd-analyze --user verify` sulle due unità;
-   - probe bounded di `/api/0/buckets` verificando solo HTTP/numero bucket, senza dump di URL/titoli/eventi;
-   - verifica che Git verso `origin/main` del REPO DATI funzioni non-interattivamente in read+push con `GIT_TERMINAL_PROMPT=0`/SSH BatchMode, senza creare commit di prova: usa capability/read-only dove possibile e rimanda il primo push reale al run end-to-end. Non creare PAT, key o credential nuove. Se l'autenticazione unattended non è già sicura e funzionante: `BLOCKED` e stop prima di toccare Kuma.
 
-2. **Kuma preflight + backup, un batch Oracle.** Sincronizza `vm_oracle/main` con `--ff-only`, poi usa soltanto `scripts/oracle_ssh.sh`. Limita l'ispezione a `/opt/uptime-kuma`: identifica il DB SQLite effettivo, fai un backup consistente owner-only prima di ogni write e leggi UNA sola volta lo schema minimo di `monitor`, `monitor_notification` (se presente) e tabelle heartbeat necessarie. Non indovinare colonne e non fare scan filesystem generali.
+## 1. Ripara/bootstrap checkout: UNA shell call
+Non fare `ls`, tree, schema MegaVault o probe equivalenti prima. Usa questa logica bounded:
+- se `~/projects/activity-watch-uploader/scripts/bootstrap_checkouts.py` esiste, usalo direttamente;
+- altrimenti, solo se esiste l'esatto nested `~/projects/activity-watch-uploader/activity-watch-uploader/.git`: verifica origin=`gernalix/activity-watch-uploader`, poi `timeout 60s git fetch origin main` + `git checkout -B main origin/main` dentro il nested e usa da lì l'helper;
+- altrimenti, solo se il path codice non esiste, clona `gernalix/activity-watch-uploader` nel path canonico e usa l'helper;
+- qualunque altro stato => BLOCKED, senza cleanup manuale.
+Poi esegui UNA volta:
+`python3 <helper> --repair-known-nested --code-root ~/projects/activity-watch-uploader --data-root ~/projects/activity-watch-data --code-baseline 883e7d657f9c58d8ddbefa9b20e1b7a5f78204e8 --data-baseline fb656dde8386465497f51218262b43f17bc9bf27`
+Il JSON `status=ok` dell'helper è il gate checkout; non ripetere fetch/status/remote/head separati.
 
-3. **Upsert DB idempotente.**
-   - cerca per nome esatto + tipo `push`; 0 righe => crea; 1 => aggiorna solo i campi necessari; >1 => `BLOCKED`, niente delete/dedup automatico;
-   - genera un token crittograficamente casuale SOLO se il monitor non ne ha già uno;
-   - imposta active=1, interval=1200, retry=300, max retries=2, upside_down=0 usando i nomi reali dello schema;
-   - se il binding notifiche è supportato e non ambiguo, copia il set di notification binding dal monitor Fedora #39, senza leggere/esporre secret;
-   - la write deve avvenire in transazione con Kuma fermato solo per la finestra minima necessaria; poi riavvia esclusivamente lo stack/container Kuma e verifica DB integrity + readiness HTTP;
-   - se write/integrity/startup falliscono, ripristina subito il backup e riavvia Kuma; poi `BLOCKED`.
+## 2. Fedora host gate: UNA shell call
+Nel repo codice, fail-fast e senza dump raw:
+- `python3 -m unittest discover -s tests -v`;
+- `python3 -m py_compile activity_watch_uploader.py scripts/bootstrap_checkouts.py`;
+- `systemd-analyze --user verify systemd/activity-watch-uploader.service systemd/activity-watch-uploader.timer`;
+- probe bounded `/api/0/buckets` riportando solo HTTP + numero bucket;
+- verifica Git non-interattivo del repo dati con un solo `fetch origin main`; il primo push reale resta al run end-to-end.
+Failure => BLOCKED e stop prima di Kuma.
 
-4. **Handoff secret senza esposizione.** Il token deve transitare fra Fedora e Oracle tramite file/stdin owner-only, mai come testo stampato o argomento che finisca nel report. Scrivi `~/.config/activity-watch-uploader/env` mode 0600 con almeno `AW_BASE_URL`, `AW_DATA_REPO_PATH=${HOME}/projects/activity-watch-data` e `KUMA_PUSH_URL`. Non fare `cat`, `echo` o readback del token; verifica solo presenza/non-vuoto, path dati corretto e permessi.
+## 3. Kuma: un solo preflight/write/readiness transactionale
+Sincronizza `vm_oracle/main` con `--ff-only`, poi usa solo `scripts/oracle_ssh.sh`.
+In un unico passaggio remoto:
+- identifica DB SQLite effettivo sotto `/opt/uptime-kuma/data`, fai backup consistente owner-only;
+- leggi una sola volta lo schema minimo di `monitor`, eventuale `monitor_notification` e heartbeat; non indovinare colonne;
+- upsert per nome esatto + type=push: 0 crea, 1 aggiorna, >1 BLOCKED;
+- genera token casuale solo se assente; imposta 1200/300/2/upside_down=0; se non ambiguo copia binding notifiche dal monitor Fedora #39;
+- write in transazione con Kuma fermato solo nella finestra minima, poi restart del solo stack/container e `integrity_check` + readiness bounded;
+- su failure ripristina backup, riavvia Kuma, BLOCKED.
 
-5. **Deploy resiliente Fedora.**
-   - abilita `loginctl enable-linger daniele` se non già attivo e verifica `Linger=yes`;
-   - esegui `bash scripts/install-user-service.sh`;
-   - verifica che timer sia enabled+active e che i valori effettivi includano: `Persistent=true`, schedule 15 min + boot delay, `Restart=on-failure`, `RestartSec=2min`, `TimeoutStartSec=30min`, `KillMode=control-group`;
-   - non trasformare il servizio in daemon loop: timer+oneshot restano il design canonico.
+## 4. Secret + systemd Fedora: UNA shell call
+Trasferisci il token senza stamparlo tramite file/stdin owner-only. `~/.config/activity-watch-uploader/env` deve essere 0600 e contenere almeno:
+- `AW_BASE_URL=http://127.0.0.1:5600`
+- `AW_DATA_REPO_PATH=${HOME}/projects/activity-watch-data`
+- `KUMA_PUSH_URL=<secret>`
+Poi:
+- abilita/verifica `loginctl enable-linger daniele`;
+- `bash scripts/install-user-service.sh`;
+- verifica in un solo readback timer enabled+active e i boundary systemd autoritativi sopra. Niente daemon loop.
 
-6. **End-to-end reale, due run systemd.**
-   - avvia il service tramite `systemctl --user start activity-watch-uploader.service`, non direttamente Python;
-   - raccogli solo `run_id`, mode, changed_files ed exit status dal journal/output; non dumpare raw data;
-   - verifica NEL REPO DATI che `metadata/buckets.json` e i file `buckets/<bucket>/YYYY/MM/YYYY-MM-DD.jsonl` esistano per tutti i bucket restituiti da `/api/0/buckets`, che il primo full reconcile abbia backfillato anche i bucket storici/`unknown` presenti in ActivityWatch, e che il commit/push sia arrivato a `gernalix/activity-watch-data/main`;
-   - verifica che il repo codice NON contenga `buckets/`, `raw/` o `metadata/buckets.json` generati;
-   - valida in modo bounded il formato: UTF-8 JSONL, una riga JSON valida = un evento completo, metadata pretty JSON, nessun file monolitico di export;
-   - sul DB Kuma verifica che l'ultimo heartbeat del nuovo monitor sia `up`, recente e contenga ESATTAMENTE quel `run_id`;
-   - esegui una seconda volta lo stesso service dopo la chiusura della prima e verifica un `run_id` diverso, exit 0, Git ancora coerente e heartbeat Kuma aggiornato al secondo `run_id`. Questo copre idempotenza/recovery senza attendere inutilmente 15 minuti.
-
-7. **Resilienza.** Non riavviare la macchina. La chiusura richiede evidenza deterministica che reboot/freeze siano coperti da: lingering + timer persistente/OnBootSec, timeout hard del oneshot, restart bounded, lock anti-overlap, timeout/retry applicativi e crash recovery Git già testati. Se emerge un bug reale in questi boundary, applica SOLO il fix minimo nel repo, riesegui il leaf test pertinente, push su `main` e ripeti solo il gate fallito.
+## 5. Due run end-to-end
+Avvia due volte, serialmente, SOLO `systemctl --user start activity-watch-uploader.service`.
+Per ciascun run raccogli solo `run_id`, mode, changed_files, exit.
+Dopo il primo:
+- nel repo dati verifica metadata + almeno un file per ogni bucket corrente e che il full backfill includa anche i bucket storici/unknown presenti nell'export;
+- verifica bounded: JSONL UTF-8 valido, una riga=un evento, nessun export monolitico, nessun raw nel repo codice;
+- verifica push arrivato a `gernalix/activity-watch-data/main`;
+- nel DB Kuma ultimo heartbeat=up e contiene ESATTAMENTE lo stesso `run_id`.
+Dopo il secondo: nuovo `run_id`, exit 0, Git coerente, heartbeat aggiornato allo stesso nuovo `run_id`.
+Non attendere 15 minuti.
 
 # Acceptance
-PASS solo se:
-- test/compile/unit verify PASS e ActivityWatch risponde;
-- Git push unattended verso `gernalix/activity-watch-data` è funzionante senza nuove credential;
-- tutti i bucket/eventi ActivityWatch sono nel repo dati, non nel repo codice, nel layout ChatGPT-friendly documentato;
-- esiste esattamente un monitor Kuma push `ActivityWatch Git Uploader (Fedora)` con 1200/300/maxRetries=2 e backup pre-write verificato;
-- Kuma torna healthy dopo la write e DB integrity è OK;
-- secret locale è owner-only 0600 e non compare in output/report/Git;
-- user lingering è attivo; timer enabled+active; unit effettive conservano i boundary di resilienza;
-- due run systemd consecutivi finiscono exit 0, pushano/reconciano Git correttamente e producono due heartbeat Kuma correlati ai rispettivi `run_id`;
-- nessun raw ActivityWatch viene stampato nel report.
+PASS solo se checkout helper=ok, host gate PASS, Kuma backup/write/integrity/readiness PASS, secret 0600 non esposto, lingering+timer attivi, tutti i dati ActivityWatch nel repo dati, due run reali correlati Git+Kuma PASS.
 
 # Non-goal
-Niente refactor, cleanup, nuove feature, UI, nuovi branch persistenti, PAT/SSH key nuove, audit generale Fedora/Oracle, modifica di altri monitor Kuma, reboot reale, analisi dei dati ActivityWatch, modifica di ActivityWatch stesso o dei watcher.
+Niente refactor/cleanup, nuove feature, nuove credenziali, audit generale, altri monitor Kuma, reboot reale, analisi dei dati, modifiche ActivityWatch/watchers, inventory MegaVault.
 
 # Stop
-Al primo blocker concreto fermati senza retry equivalenti. Dopo PASS esegui UNA sola volta:
+Al primo blocker non coperto dai guard fermati; niente retry equivalente. Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 643817 --confirm-executed`
-
-Niente dry-run separato o audit post-PASS. Output finale massimo 7 righe: `RESULT`, `FEDORA`, `ACTIVITYWATCH`, `GIT`, `KUMA`, `RESILIENCE`, `BLOCKER`.
+Poi stop. Output massimo 7 righe: `RESULT`, `CHECKOUTS`, `FEDORA`, `ACTIVITYWATCH`, `GIT`, `KUMA`, `BLOCKER`.
