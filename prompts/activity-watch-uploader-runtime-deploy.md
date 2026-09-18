@@ -4,7 +4,7 @@ PROMPT_ID=643817 | project_id=15 | model=GPT-5.6 Terra | reasoning=medium | Mega
 Distribuisci SOLO `gernalix/activity-watch-uploader` sul Fedora reale usando `gernalix/activity-watch-data` come repository privato ESCLUSIVO dei dati, crea/configura direttamente nel DB autorevole di Uptime Kuma un unico monitor push dedicato, collega il relativo secret al servizio senza esporlo e chiudi il flusso end-to-end ActivityWatch → JSONL → `activity-watch-data` → Kuma. Il codice, il formato dati e le unit template sono già su GitHub: niente redesign.
 
 # Starting point autoritativo
-- repo codice privato: `gernalix/activity-watch-uploader`, branch `main`; baseline minima da includere: `8c0f5b90ad69d77df8b6a93025ea971c677818a9`;
+- repo codice privato: `gernalix/activity-watch-uploader`, branch `main`; baseline minima da includere: `41cff9ea29337fda5c847f4861feae7f8369128d`;
 - repo dati privato: `gernalix/activity-watch-data`, branch `main`; baseline documentale minima: `fb656dde8386465497f51218262b43f17bc9bf27`;
 - checkout Fedora canonici: `/home/daniele/projects/activity-watch-uploader` (codice) e `/home/daniele/projects/activity-watch-data` (dati);
 - ActivityWatch API locale: `http://127.0.0.1:5600`;
