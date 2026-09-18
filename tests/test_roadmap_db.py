@@ -112,6 +112,58 @@ class RoadmapDBTests(unittest.TestCase):
             )
             conn.close()
 
+    def test_explanation_mutation_updates_only_explanation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(
+                conn,
+                prompt_id="123456",
+                slug="one",
+                title="One",
+                current_path="prompts/one.md",
+                explanation="Old",
+                model="GPT-5.6 Luna",
+                reasoning="low",
+                queue_position=1,
+            )
+            db.apply_mutation(
+                conn,
+                {"op":"explanation","prompt_id":"123456","explanation":"New simple explanation","note":"clarify"},
+            )
+            conn.commit()
+            row=db.prompt_row(conn,"123456")
+            self.assertEqual("New simple explanation",row["explanation"])
+            self.assertEqual("GPT-5.6 Luna",row["model"])
+            self.assertEqual("low",row["reasoning"])
+            self.assertEqual(1,row["queue_position"])
+            self.assertEqual(
+                1,
+                conn.execute("select count(*) from audit_events where event_type='prompt_explanation_updated'").fetchone()[0],
+            )
+            conn.close()
+
+    def test_spiegazioni_marks_dependency_and_manual_prerequisite_readiness(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            (repo/"prompts").mkdir()
+            for prompt_id, slug in (("123456","one"),("654321","two"),("777777","three")):
+                (repo/f"prompts/{slug}.md").write_text(f"PROMPT_ID={prompt_id}",encoding="utf-8")
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md",queue_position=1)
+            db.register_prompt(conn,prompt_id="654321",slug="two",title="Two",current_path="prompts/two.md",queue_position=2)
+            db.register_prompt(conn,prompt_id="777777",slug="three",title="Three",current_path="prompts/three.md",queue_position=3)
+            db.add_dependency(conn,"654321","123456")
+            db.add_tag(conn,"777777","manual-prerequisite:kuma-login")
+            db.refresh_materialization_hashes(conn,repo)
+            conn.commit(); conn.close()
+            db.render(repo)
+            spieg=(repo/"spiegazioni.md").read_text(encoding="utf-8")
+            self.assertIn("| Eseguibile ora? |",spieg)
+            self.assertIn("✅ Sì",spieg)
+            self.assertIn("⏳ No — prima: 123456",spieg)
+            self.assertIn("⛔ No — prima: rifai il login a Kuma",spieg)
+
     def test_reorder_prompt_updates_queue_without_changing_identity(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
