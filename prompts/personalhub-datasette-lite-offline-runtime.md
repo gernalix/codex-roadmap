@@ -5,15 +5,16 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`, branch canonico `main`;
-- `origin/main` atteso: `d83df4162a88e2232d78de0889e8be14f3460b6a`;
-- `version.txt=47`; bump 47→48 UNA sola volta solo dopo tutti i gate feature;
+- `origin/main` atteso: `10a82e3f5324a6e3125793db6e813174f4684f0b`;
+- `version.txt=48`; bump 48→49 UNA sola volta solo dopo tutti i gate feature;
+- fix Luoghi già in `main`: check-in sovrapposti scelgono automaticamente il candidato nettamente più vicino solo quando gli intervalli di distanza rispetto all'accuracy GPS non si sovrappongono; journal conserva la causa originale e registra la soglia reale raggio+accuracy;
 - già presenti: snapshot detached+validato, DataExplorerActivity local/remote, WebViewAssetLoader, entry point Home + sei moduli, config `personalhub_read`, docs e CODE_MAP;
 - contratto: live Room/WAL mai esposto; local mode blocca rete esterna; token mobile sync mai usato dall'explorer;
 - `docs/DATA_EXPLORER.md` è autoritativo per FK native, grafo cross-modulo peer-to-peer e mobile presentation;
 - server task `527184` rende `personalhub_read` read-only e materializza FK cross-modulo + grafo simmetrico `hub_entity_relations`.
 
 # Esecuzione minima
-1. Acquisisci task lock PH con PROMPT_ID 861305. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == fa86916e9cef06007298cb7e634df4afc084be7a`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED. Usa solo CODE_MAP row `database.data_explorer`, niente audit repo-wide.
+1. Acquisisci task lock PH con PROMPT_ID 861305. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == 10a82e3f5324a6e3125793db6e813174f4684f0b`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED. Usa solo CODE_MAP row `database.data_explorer` più i file Luoghi già noti sotto `capsules/checkin` e i test indicati sotto; niente audit repo-wide.
 2. Vendorizza/pinna Datasette Lite + Pyodide + wheel/assets necessari sotto gli asset PH. Nessuna CDN/runtime fetch. NON allentare il network block locale.
 3. Dal detached snapshot costruisci, se necessario, una presentazione locale effimera read-only con semantica equivalente a `personalhub_read`:
    - vere SQLite FK e label leggibili;
@@ -28,6 +29,8 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
    - filtri/facet/pagination/SQL restano funzionali;
    - light/dark, controlli touch-friendly, niente dipendenza da JS/plugin non supportati da Lite se non provata.
 5. Test mirati prima del device:
+   - esegui il gate Luoghi già pre-localizzato: `CheckInAccuracyPolicyTest` (incluso scenario reale Carlo Visda/Rema), i casi check-in di `PlacesHistoryMapGeofencingTest` e compile leaf `:feature:luoghi`; niente discovery aggiuntiva se PASS;
+   - verifica che un overlap chiaramente separabile scelga Carlo, che candidati entro l'incertezza restino `AMBIGUOUS`, che `threshold_m` includa l'accuracy e che recovery/cancel non cancellino la causa diagnostica;
    - snapshot coerente e isolato;
    - Lite avvia e SELECT funziona con networking disabilitato;
    - forward FK + reverse related rows con label;
@@ -37,17 +40,18 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
    - remote mode usa auth umana, mai token sync.
 6. Gate host: compile leaf interessato, test mirati, poi una sola `checkArchitectureBoundaries`. Dopo failure usa solo leaf correction; un solo rerun aggregato finale.
 7. QA solo AVD `Pixel_8a` tramite `python3 tools/android_emulator_control.py start|wait|stop`:
+   - esegui una sola volta `CheckInAttemptJournalInstrumentedTest` sul target canonico; se fallisce, correggi solo il failure domain Luoghi e riesegui il leaf test;
    - Home→Dati;
    - rete OFF: local Lite, tabella, row detail, SQL, FK e scenario cross-modulo navigabili;
    - verifica leggibilità a larghezza telefono senza colonne schiacciate come unico layout;
    - rete ON solo per remote: stesso comportamento relazionale su `personalhub_read` se 527184 è PASS;
    - back navigation corretta, chiusura elimina snapshot cache, nessun crash.
 8. Misura una sola volta delta APK degli asset. Niente campagna di ottimizzazione salvo limite reale.
-9. Solo dopo PASS: bump 47→48 una volta, build debug canonica firmata una volta, push `main`, installa QUELLO stesso APK sul Pixel fisico con helper canonico e delivery PH. Nessuna ricompilazione post-gate.
+9. Solo dopo PASS: bump 48→49 una volta, build debug canonica firmata una volta, push `main`, installa QUELLO stesso APK sul Pixel fisico con helper canonico e delivery PH. Nessuna ricompilazione post-gate.
 10. Rilascia task lock in ogni esito. PASS => stop.
 
 # Acceptance
-PASS solo se Lite è realmente offline/self-contained; local e remote offrono FK cliccabili/backlink e grafo cross-modulo peer-to-peer equivalente; UI embedded è più leggibile del raw browser mobile senza perdere funzioni Datasette; write bypass impossibile; architecture/tests/QA PASS; versione 48 costruita una sola volta e stesso APK installato/consegnato.
+PASS solo se il regression gate Luoghi Carlo Visda/Rema è PASS; Lite è realmente offline/self-contained; local e remote offrono FK cliccabili/backlink e grafo cross-modulo peer-to-peer equivalente; UI embedded è più leggibile del raw browser mobile senza perdere funzioni Datasette; write bypass impossibile; architecture/tests/QA PASS; versione 49 costruita una sola volta e stesso APK installato/consegnato.
 
 # Non-goal
 Niente SQL write arbitrario, sync bidirezionale, nuovo DB canonico, riscrittura UI Datasette in Compose, redesign dei moduli, plugin opzionali non necessari, refactor generale o audit.
@@ -56,4 +60,4 @@ Niente SQL write arbitrario, sync bidirezionale, nuovo DB canonico, riscrittura 
 Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 861305 --confirm-executed`
 
-Output massimo 7 righe: `RESULT`, `HEAD`, `OFFLINE_LITE`, `FK_GRAPH`, `MOBILE_UI`, `APK_SIZE_DELTA`, `BLOCKER`.
+Output massimo 7 righe: `RESULT`, `HEAD`, `PLACES_CHECKIN`, `OFFLINE_LITE`, `FK_GRAPH`, `MOBILE_UI`, `BLOCKER`.
