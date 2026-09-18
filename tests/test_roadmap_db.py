@@ -95,6 +95,25 @@ class RoadmapDBTests(unittest.TestCase):
             with self.assertRaises(db.RoadmapDBError):
                 db.reorder_prompt(conn,"123456",0)
             conn.close()
+    def test_render_escapes_wikilink_alias_pipes_in_tables(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            (repo/"prompts").mkdir()
+            (repo/"prompts/one.md").write_text("PROMPT_ID=123456",encoding="utf-8")
+            (repo/"prompts/two.md").write_text("PROMPT_ID=654321",encoding="utf-8")
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md",queue_position=1)
+            db.register_prompt(conn,prompt_id="654321",slug="two",title="Two",current_path="prompts/two.md",queue_position=2)
+            db.add_dependency(conn,"654321","123456")
+            db.refresh_materialization_hashes(conn,repo)
+            conn.commit(); conn.close()
+            db.render(repo)
+            spieg=(repo/"spiegazioni.md").read_text(encoding="utf-8")
+            registry=(repo/"prompt-registry.md").read_text(encoding="utf-8")
+            self.assertIn("[[prompts/one\\|One]]",spieg)
+            self.assertIn("[[obsidian/Prompts/123456 one\\|123456]]",spieg)
+            self.assertIn("[[obsidian/Prompts/123456 one\\|123456 · One]]",registry)
+            self.assertNotIn("[[prompts/one|One]]",spieg)
     def test_prompt_id_is_unique(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)

@@ -11,6 +11,10 @@ from roadmap_db import RoadmapDBError, connect, now_utc, prompt_row, summary_row
 def _wikilink_for_prompt(row: sqlite3.Row) -> str:
     return f"[[obsidian/Prompts/{row['prompt_id']} {row['slug']}|{row['prompt_id']} · {row['title']}]]"
 
+def _table_wikilink(target: str, label: str) -> str:
+    # Markdown tables treat a bare pipe inside an Obsidian wikilink as a
+    # column separator. Escape only the pipe used for the link alias.
+    return f"[[{target}\\|{label}]]"
 def _fmt(value: Any) -> str:
     if value is None or value == "":
         return "—"
@@ -97,15 +101,15 @@ def render(repo: Path) -> list[str]:
             "SELECT d.depends_on_prompt_id,p.title FROM dependencies d JOIN prompts p ON p.prompt_id=d.depends_on_prompt_id "
             "WHERE d.prompt_id=? ORDER BY d.depends_on_prompt_id", (r["prompt_id"],)
         ).fetchall()
-        dep_text = ", ".join(f"[[obsidian/Prompts/{d[0]} {prompt_row(conn,d[0])['slug']}|{d[0]}]]" for d in deps) or "—"
+        dep_text = ", ".join(_table_wikilink(f"obsidian/Prompts/{d[0]} {prompt_row(conn,d[0])['slug']}", d[0]) for d in deps) or "—"
         fix = "—"
         if r["fix_prompt_id"]:
             fp=prompt_row(conn,r["fix_prompt_id"])
-            fix=f"[[obsidian/Prompts/{fp['prompt_id']} {fp['slug']}|{fp['prompt_id']}]]"
+            fix=_table_wikilink(f"obsidian/Prompts/{fp['prompt_id']} {fp['slug']}", fp["prompt_id"])
         spieg.append(
             "| " + " | ".join([
                 str(i),
-                f"[[{r['current_path'][:-3]}|{r['title']}]]" if r["current_path"].endswith(".md") else _wikilink_for_prompt(r),
+                _table_wikilink(r["current_path"][:-3], r["title"]) if r["current_path"].endswith(".md") else _table_wikilink(f"obsidian/Prompts/{r['prompt_id']} {r['slug']}", f"{r['prompt_id']} · {r['title']}"),
                 r["prompt_id"], r["status"], _fmt(r["last_launched_at"]), _fmt(r["last_outcome"]),
                 "sì" if r["analyzed"] else "no", "sì" if r["chatgpt_code_changed"] else "no",
                 fix, _fmt(r["project_name"] or r["project_id"]),
@@ -129,9 +133,9 @@ def render(repo: Path) -> list[str]:
         fix="—"
         if r["fix_prompt_id"]:
             fp=prompt_row(conn,r["fix_prompt_id"])
-            fix=f"[[obsidian/Prompts/{fp['prompt_id']} {fp['slug']}|{fp['prompt_id']}]]"
+            fix=_table_wikilink(f"obsidian/Prompts/{fp['prompt_id']} {fp['slug']}", fp["prompt_id"])
         registry.append("| " + " | ".join([
-            _wikilink_for_prompt(r), r["status"], _fmt(r["first_launched_at"]), _fmt(r["last_launched_at"]),
+            _table_wikilink(f"obsidian/Prompts/{r['prompt_id']} {r['slug']}", f"{r['prompt_id']} · {r['title']}"), r["status"], _fmt(r["first_launched_at"]), _fmt(r["last_launched_at"]),
             _fmt(r["last_outcome"]), "sì" if r["analyzed"] else "no",
             "sì" if r["chatgpt_code_changed"] else "no", fix,
             _fmt(r["project_name"] or r["project_id"]), _fmt(r["model"]), _fmt(r["reasoning"])

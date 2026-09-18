@@ -1,0 +1,12 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "reorder",
+      "prompt_id": "813383",
+      "queue_position": 1,
+      "note": "No-op metadata mutation used only to rerender generated Markdown/Obsidian after fixing table wikilink escaping."
+    }
+  ]
+}
