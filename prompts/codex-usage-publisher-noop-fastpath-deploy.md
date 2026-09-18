@@ -1,4 +1,4 @@
-PROMPT_ID=319311 | project_id=8 | model=GPT-5.6 Luna | reasoning=low | MegaVault=FAST
+PROMPT_ID=538642 | PARENT_PROMPT_ID=319311 | project_id=8 | model=GPT-5.6 Luna | reasoning=low | MegaVault=FAST
 Codex Desktop project: Fedora
 
 # Goal
@@ -32,7 +32,7 @@ Distribuisci SOLO le correzioni già presenti su `gernalix/codex-usage-monitor/m
    Per processi lunghi usa attese >=30 s; niente polling da 5 s.
 5. Verifica una sola volta che `codex-usage-publisher.timer` sia enabled e che l'ultimo risultato della relativa service non sia failed. Nessun journal dump ampio.
 6. Dopo PASS esegui una sola volta:
-   `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 319311 --confirm-executed`.
+   `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 538642 --confirm-executed`.
 
 # Acceptance
 PASS solo se:
