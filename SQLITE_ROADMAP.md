@@ -40,7 +40,7 @@ ChatGPT crea richieste JSON univoche in `mutations/inbox/` e non modifica dirett
 
 ### Single writer
 
-Il workflow `Apply roadmap mutations` usa un'unica coda di concorrenza GitHub Actions. È l'unico componente autorizzato a modificare il DB canonico e le sue proiezioni. ChatGPT e Codex possono produrre richieste contemporaneamente perché ogni richiesta ha un file/chiave indipendente; la serializzazione avviene soltanto al momento dell'applicazione.
+Il workflow `Apply roadmap mutations` usa un'unica coda di concorrenza GitHub Actions. È l'unico componente autorizzato nel flusso normale a modificare il DB canonico e le sue proiezioni. ChatGPT, Codex e il sync `codex-usage` producono richieste indipendenti; la serializzazione avviene soltanto al momento dell'applicazione. Le CLI che mutano direttamente il DB restano solo strumenti di manutenzione eccezionale e non vanno usate durante l'esecuzione ordinaria della roadmap.
 
 Formato:
 
