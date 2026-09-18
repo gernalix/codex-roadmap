@@ -4,7 +4,6 @@
 
 ## Lanciabili adesso
 
-- [[obsidian/Prompts/274656 codex-usage-status-backfill-runtime-deploy|274656 · Distribuire il fix del publisher e correggere 537184]]
 - [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]]
 - [[obsidian/Prompts/904631 datasette5-personalhub-explorer-security-deploy-v2|904631 · Versione online dell’esploratore dati PersonalHub]]
 - [[obsidian/Prompts/526713 fedora-runtime-validation-v2|526713 · Ultimo controllo del monitoraggio Fedora]]

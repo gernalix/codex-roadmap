@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/274656 codex-usage-status-backfill-runtime-deploy\|274656 · Distribuire il fix del publisher e correggere 537184]] | pending | — | — | — | no | no | — | Fedora / codex-usage-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4\|223679 · Integrare definitivamente l’isolamento capsule]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/223103 personalhub-shared-alerts-places-tags-integration-v3\|223103 · Chiudere e integrare tag e alert di Places]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3\|830867 · Date e ore coerenti ovunque]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
@@ -29,6 +28,7 @@
 | [[obsidian/Prompts/856234 workflowy-live-smoke-remote-fix-closure\|856234 · Confermare il live smoke Workflowy dopo il fix remoto]] | completed | 2026-09-18T23:16:51Z | 2026-09-18T23:16:51Z | PASS | sì | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/438271 workflowy-live-smoke-and-local-activation-v3\|438271 · Chiudere Workflowy e attivare il runtime locale]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.5 | medium |
 | [[obsidian/Prompts/231789 workflowy-automation-local-activation-v3\|231789 · Attivare il runtime locale Workflowy]] | completed | 2026-09-18T23:33:09Z | 2026-09-18T23:33:09Z | PASS | sì | sì | — | Fedora / Workflowy | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/274656 codex-usage-status-backfill-runtime-deploy\|274656 · Distribuire il fix del publisher e correggere 537184]] | cancelled | — | — | CANCELLED | no | no | — | Fedora / codex-usage-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | blocked | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | BLOCKED | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2\|200725 · PersonalHub 100% capsule isolation — integra main e valida]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |

@@ -1,20 +1,20 @@
 ---
 prompt_id: 274656
-status: pending
+status: cancelled
 project_id: 8
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/cancelled
   - roadmap/project/fedora-codex-usage-monitor
 ---
 
 # 274656 · Distribuire il fix del publisher e correggere 537184
 
-- **Stato:** pending
+- **Stato:** cancelled
 - **Progetto:** [[../Projects/fedora-codex-usage-monitor|Fedora / codex-usage-monitor]]
-- **Prompt:** [[../../prompts/codex-usage-status-backfill-runtime-deploy|Apri prompt]]
+- **Prompt:** [[../../falliti/codex-usage-status-backfill-runtime-deploy|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
