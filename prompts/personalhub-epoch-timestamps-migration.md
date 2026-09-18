@@ -58,7 +58,7 @@ Nota formato: usa il pattern Java/Kotlin corretto `EEE d/M/yy HH:mm` (`M`=mese, 
    - rebase/merge sicuro del branch su current `origin/main` senza perdere commit concorrenti;
    - esegui un ultimo compile/migration smoke SOLO se il merge ha prodotto modifiche/conflict resolution; se merge pulito non ripetere gate già PASS;
    - push main e elimina il branch remoto `feature/global-profiles-timestamp-normalization`;
-   - deve restare solo main per PersonalHub.
+   - NON eliminare `feature/salute-canonical-domain`: è il branch dedicato del task Salute successivo e verrà rebased su questo nuovo main.
    Nessuna release/install Pixel/delivery in questo task.
 11. Rilascia lock. PASS => stop.
 
