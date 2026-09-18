@@ -32,12 +32,14 @@ jobs:
 
           pushed=0
           : > /tmp/processed-issues
+          : > /tmp/rejected-issues
 
           for attempt in 1 2 3 4; do
             git fetch --quiet origin main
             git reset --hard origin/main
             git clean -fd
             : > /tmp/processed-issues
+            : > /tmp/rejected-issues
 
             mapfile -t ISSUE_ROWS < <(
               gh issue list                 --repo "$GITHUB_REPOSITORY"                 --state open                 --limit 1000                 --json number,title,body                 --jq 'sort_by(.number)[] | select(.title | startswith("[roadmap-mutation] ")) | @base64'
@@ -55,9 +57,15 @@ jobs:
               ISSUE_NUMBER="$(python3 -c 'import json; print(json.load(open("/tmp/issue.json"))["number"])')"
               python3 -c 'import json; issue=json.load(open("/tmp/issue.json", encoding="utf-8")); json.dump({"issue": issue}, open("/tmp/issue-event.json", "w", encoding="utf-8"))'
               echo "Applying roadmap mutation Issue #$ISSUE_NUMBER"
-              python3 tools/apply_issue_mutation.py --repo . --event /tmp/issue-event.json
-              python3 tools/roadmap_db.py --repo . verify
-              printf '%s\n' "$ISSUE_NUMBER" >> /tmp/processed-issues
+              if python3 tools/apply_issue_mutation.py --repo . --event /tmp/issue-event.json > /tmp/apply-output 2>&1; then
+                cat /tmp/apply-output
+                python3 tools/roadmap_db.py --repo . verify
+                printf '%s\n' "$ISSUE_NUMBER" >> /tmp/processed-issues
+              else
+                cat /tmp/apply-output >&2
+                printf '%s\n' "$ISSUE_NUMBER" >> /tmp/rejected-issues
+                echo "Rejected roadmap mutation Issue #$ISSUE_NUMBER; continuing drain" >&2
+              fi
             done
 
             if [ -z "$(git status --porcelain)" ]; then
@@ -86,13 +94,28 @@ jobs:
         if: success()
         run: |
           set -euo pipefail
-          if [ ! -s /tmp/processed-issues ]; then
-            exit 0
+          if [ -s /tmp/processed-issues ]; then
+            while IFS= read -r issue_number; do
+              state="$(gh api "repos/$GITHUB_REPOSITORY/issues/$issue_number" --jq .state)"
+              if [ "$state" = "open" ]; then
+                gh api --method POST "repos/$GITHUB_REPOSITORY/issues/$issue_number/comments" \
+                  -f body="Applied by the roadmap single writer."
+                gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/$issue_number" \
+                  -f state=closed \
+                  -f state_reason=completed
+              fi
+            done < /tmp/processed-issues
           fi
-          while IFS= read -r issue_number; do
-            state="$(gh api "repos/$GITHUB_REPOSITORY/issues/$issue_number" --jq .state)"
-            if [ "$state" = "open" ]; then
-              gh api --method POST "repos/$GITHUB_REPOSITORY/issues/$issue_number/comments"                 -f body="Applied by the roadmap single writer."
-              gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/$issue_number"                 -f state=closed                 -f state_reason=completed
-            fi
-          done < /tmp/processed-issues
+
+          if [ -s /tmp/rejected-issues ]; then
+            while IFS= read -r issue_number; do
+              state="$(gh api "repos/$GITHUB_REPOSITORY/issues/$issue_number" --jq .state)"
+              if [ "$state" = "open" ]; then
+                gh api --method POST "repos/$GITHUB_REPOSITORY/issues/$issue_number/comments" \
+                  -f body="Rejected by the roadmap single writer; no mutation was applied. See Actions run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+                gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/$issue_number" \
+                  -f state=closed \
+                  -f state_reason=not_planned
+              fi
+            done < /tmp/rejected-issues
+          fi
