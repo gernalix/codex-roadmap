@@ -1,20 +1,20 @@
 ---
 prompt_id: 231789
-status: pending
+status: completed
 project_id: 96
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/completed
   - roadmap/project/fedora-workflowy
 ---
 
 # 231789 · Attivare il runtime locale Workflowy
 
-- **Stato:** pending
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
-- **Prompt:** [[../../prompts/workflowy-automation-local-activation-v3|Apri prompt]]
+- **Prompt:** [[../../completed/workflowy-automation-local-activation-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
