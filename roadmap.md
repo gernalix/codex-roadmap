@@ -15,5 +15,5 @@
 11. [[prompts/personalhub-play-release-local-validation-v3|personalhub-play-release-local-validation-v3]]
 12. [[prompts/fedora-runtime-validation-v2|fedora-runtime-validation-v2]]
 13. [[prompts/logseq-updates-pat-safety-closure-v2|logseq-updates-pat-safety-closure-v2]]
-14. [[prompts/personalhub-github-ci-closure|personalhub-github-ci-closure]]
-15. [[prompts/personalhub-english-only-places-diagnostics-ui|personalhub-english-only-places-diagnostics-ui]]
+14. [[prompts/personalhub-english-only-places-diagnostics-ui|personalhub-english-only-places-diagnostics-ui]]
+15. [[prompts/personalhub-github-ci-closure-v2|personalhub-github-ci-closure-v2]]

@@ -1,35 +1,35 @@
 ---
-prompt_id: 609279
+prompt_id: 404846
 status: pending
 project_id: 49
-model: GPT-5.6 Luna
-reasoning: low
+model: GPT-5.6 Terra
+reasoning: medium
 tags:
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 609279 · Solo inglese e diagnostica Places su richiesta
+# 404846 · Chiudere la CI GitHub dopo il passaggio a English-only
 
 - **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-english-only-places-diagnostics-ui|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-github-ci-closure-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[223103 personalhub-shared-alerts-places-tags-integration-v3|223103]]
-- **Sblocca:** [[404846 personalhub-github-ci-closure-v2|404846]]
-- **Padri/precedenti:** —
+- **Dipende da:** [[609279 personalhub-english-only-places-diagnostics-ui|609279]]
+- **Sblocca:** —
+- **Padri/precedenti:** [[962109 personalhub-github-ci-closure|962109]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Sospende per ora la localizzazione italiana in PersonalHub e libera la Home di Places dal grande pannello diagnostico, lasciandolo accessibile solo tramite un controllo discreto. Richiede Codex per la verifica locale/emulatore dell’interfaccia Android.
+Sostituisce il vecchio task CI che chiedeva di completare le traduzioni italiane, ora incompatibile con la decisione di mantenere temporaneamente PersonalHub solo in inglese. Chiude i workflow rimasti rossi dopo il nuovo task UI/localizzazione.
 
 ## Esecuzioni
 

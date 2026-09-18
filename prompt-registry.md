@@ -17,8 +17,8 @@
 | [[obsidian/Prompts/334679 personalhub-play-release-local-validation-v3\|334679 · Controllo finale locale prima di Google Play]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/526713 fedora-runtime-validation-v2\|526713 · Ultimo controllo del monitoraggio Fedora]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/357862 logseq-updates-pat-safety-closure-v2\|357862 · Chiusura sicurezza e attivazione updater Logseq]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/962109 personalhub-github-ci-closure\|962109 · Chiudere definitivamente la CI GitHub di PersonalHub]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui\|609279 · Solo inglese e diagnostica Places su richiesta]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2\|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
@@ -237,3 +237,4 @@
 | [[obsidian/Prompts/947261 prompt-947261\|947261 · Historical prompt 947261]] | completed | 2026-09-07T20:19:15Z | 2026-09-07T20:19:15Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/953204 prompt-953204\|953204 · Historical prompt 953204]] | unknown | 2026-08-05T01:29:48Z | 2026-08-05T01:29:48Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/978216 prompt-978216\|978216 · Historical prompt 978216]] | blocked | 2026-09-16T09:17:02Z | 2026-09-16T09:17:02Z | BLOCKED | no | no | — | — | — | — |
+| [[obsidian/Prompts/962109 personalhub-github-ci-closure\|962109 · Chiudere definitivamente la CI GitHub di PersonalHub]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
