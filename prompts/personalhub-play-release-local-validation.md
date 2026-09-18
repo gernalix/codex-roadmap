@@ -1,4 +1,4 @@
-PROMPT_ID=294731 | project_id=49 | model=GPT-5.6 Luna | reasoning=low | MegaVault=FAST
+PROMPT_ID=311947 | PARENT_PROMPT_ID=294731 | project_id=49 | model=GPT-5.6 Luna | reasoning=low | MegaVault=FAST
 
 # Goal
 Esegui SOLO la validazione locale finale Google Play del `main` PersonalHub già completato dal task `861305`: crea una sola volta l'AAB firmato, ispezionalo e fai uno smoke bounded dell'APK set derivato dall'AAB su `Pixel_8a`. Nessun upload su Play Console.
@@ -19,7 +19,7 @@ Esegui SOLO la validazione locale finale Google Play del `main` PersonalHub già
 - usa solo l'AVD canonico `Pixel_8a`; mai Pixel/TCL fisici.
 
 # Esecuzione minima
-1. Acquisisci `python3 tools/personalhub_task_lock.py acquire --prompt-id 294731`. In un unico preflight: richiedi worktree pulito e branch `main`; fai un solo fetch + `git merge --ff-only origin/main`; fissa `RUN_HEAD=origin/main=HEAD`; verifica che la baseline sopra sia antenata, `version.txt=51` e gli asset Datasette Lite siano presenti. Se no => `BLOCKED`. Nessun altro discovery Git.
+1. Acquisisci `python3 tools/personalhub_task_lock.py acquire --prompt-id 311947`. In un unico preflight: richiedi worktree pulito e branch `main`; fai un solo fetch + `git merge --ff-only origin/main`; fissa `RUN_HEAD=origin/main=HEAD`; verifica che la baseline sopra sia antenata, `version.txt=51` e gli asset Datasette Lite siano presenti. Se no => `BLOCKED`. Nessun altro discovery Git.
 2. In un unico controllo bounded verifica, senza mostrare valori, file dei segreti leggibili, `ANDROID_SHARED_*` richiesti presenti/non vuoti, keystore leggibile mode `0600` e una chiave Maps/Routes valida per il build.
 3. Costruisci UNA sola volta l'AAB firmato. Nessun bump versione e nessuna seconda build Gradle.
 4. Sul solo AAB prodotto: esegui `python3 tools/check_play_bundle.py`; verifica integrità/firma e registra SHA-256 + fingerprint pubblico; estrai package/version/min/target SDK con `targetSdk >= 36`; dal manifest effettivo conferma assenza di `ACCESS_BACKGROUND_LOCATION`, `READ_CALL_LOG`, `READ_PHONE_STATE`, `SYSTEM_ALERT_WINDOW`, `USE_FULL_SCREEN_INTENT`, `com.supercontacts.app.CallStateReceiver`, `com.supercontacts.app.CallOverlayDebugReceiver`, `com.gernalix.luoghi.capsules.geofence.PlaceGeofenceReceiver`. Se manca soltanto bundletool, scarica una sola release ufficiale stabile in `/tmp`.
@@ -32,6 +32,6 @@ PASS solo se AAB firmato/verificato, policy/SDK corretti, native/16 KiB PASS, AP
 
 # Finish/output
 Dopo PASS esegui una sola volta:
-`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 294731 --confirm-executed`
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 311947 --confirm-executed`
 
 Prima riga finale `RESULT=PASS|BLOCKED|FAIL`; massimo 7 righe: `HEAD`, `AAB`, `SHA256`, `SIGNING_CERT`, `MANIFEST`, `EMULATOR_SMOKE`, `BLOCKER`.
