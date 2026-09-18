@@ -1,14 +1,14 @@
 PROMPT_ID=461839 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT
 
 # Goal
-Sul branch `feature/global-profiles-timestamp-normalization`, fai un audit fail-closed dei timestamp dell'intera PersonalHub: conferma che i timestamp già persistiti come epoch milliseconds INTEGER restino invariati, migra SOLO gli eventuali veri istanti ancora salvati come TEXT/ISO a INTEGER epoch-ms, e uniforma tutte le visualizzazioni human-facing al contratto `HubTimestamp`: `EEE d/M/yy HH:mm`.
+Su PersonalHub `main`, fai un audit fail-closed dei timestamp dell'intera PersonalHub: conferma che i timestamp già persistiti come epoch milliseconds INTEGER restino invariati, migra SOLO gli eventuali veri istanti ancora salvati come TEXT/ISO a INTEGER epoch-ms, e uniforma tutte le visualizzazioni human-facing al contratto `HubTimestamp`: `EEE d/M/yy HH:mm`.
 
 Nota formato: usa il pattern Java/Kotlin corretto `EEE d/M/yy HH:mm` (`M`=mese, `yy`=anno a 2 cifre, `HH`=24h). Non usare `m` per il mese né `hh` senza AM/PM.
 
 # Starting point autoritativo
 - esegui SOLO dopo PROMPT_ID=918274 PASS/finalizzato;
 - repo: `/home/daniele/projects/PersonalHub`;
-- branch iniziale obbligatorio: `feature/global-profiles-timestamp-normalization`;
+- branch obbligatorio: `main`; il precedente branch profili/timestamp è già stato integrato/eliminato e non va ricreato;
 - `version.txt=50`; non incrementarlo;
 - già presenti/attesi: `contracts/database/.../HubTimestamp.kt`, aggiornamento di alcune superfici globali e `tools/check_timestamp_contract.py`;
 - assunzione operativa da verificare, non da reinventare: People, Places, Timer e gran parte di PH dovrebbero già salvare i timestamp come `Long`/INTEGER epoch-ms. NON convertire o toccare campi già corretti solo perché hanno nomi temporali;
@@ -18,7 +18,7 @@ Nota formato: usa il pattern Java/Kotlin corretto `EEE d/M/yy HH:mm` (`M`=mese, 
 - se invece esistono residui TEXT/ISO, la migrazione DB è high-risk: preserva ogni valore e FK; nessun destructive migration/fallback.
 
 # Esecuzione minima
-1. Acquisisci task lock PH con PROMPT_ID 461839. Un solo fetch e fast-forward del branch se sicuro. Verifica che 918274 sia finalizzato. Niente repo-wide discovery: usa `tools/check_timestamp_contract.py` come scanner iniziale e apri solo i file consumer delle colonne segnalate.
+1. Acquisisci task lock PH con PROMPT_ID 461839. Un solo fetch `origin main` e fast-forward se sicuro. Verifica che 918274 sia finalizzato e che il relativo risultato sia già in `main`. Niente repo-wide discovery: usa `tools/check_timestamp_contract.py` come scanner iniziale e apri solo i file consumer delle colonne segnalate.
 2. Prima modifica/verifica: esegui lo scanner e produci una classificazione compatta:
    - `already_epoch`: timestamp già `Long`/INTEGER da lasciare invariati;
    - `date_only`: campi data/calendario/ricorrenza da NON convertire;
@@ -55,15 +55,13 @@ Nota formato: usa il pattern Java/Kotlin corretto `EEE d/M/yy HH:mm` (`M`=mese, 
    - switch tra due profili e verifica migrazione/visualizzazione indipendente.
 10. Solo dopo tutti i PASS:
    - aggiorna docs/CODE_MAP solo se ownership/contract è cambiato;
-   - rebase/merge sicuro del branch su current `origin/main` senza perdere commit concorrenti;
-   - esegui un ultimo compile/migration smoke SOLO se il merge ha prodotto modifiche/conflict resolution; se merge pulito non ripetere gate già PASS;
-   - push main e elimina il branch remoto `feature/global-profiles-timestamp-normalization`;
-   - NON eliminare `feature/salute-canonical-domain`: è il branch dedicato del task Salute successivo e verrà rebased su questo nuovo main.
+   - commit/push `main` una sola volta; se `origin/main` è avanzato durante il task e tocca file sovrapposti, BLOCKED invece di fare merge/rebase esplorativi;
+   - non creare/pushare branch remoti temporanei.
    Nessuna release/install Pixel/delivery in questo task.
 11. Rilascia lock. PASS => stop.
 
 # Acceptance
-PASS solo se tutti i veri timestamp persistiti risultano INTEGER epoch ms oppure sono stati migrati senza perdita; i campi già epoch non sono stati riscritti inutilmente; gli eventuali date-only/protocol fields sono classificati e motivati; scanner=0 violazioni non classificate; tutte le UI timestamp usano `EEE d/M/yy HH:mm`; profili migrano/visualizzano correttamente; host+AVD PASS; main contiene il lavoro e il branch remoto è eliminato. `version.txt` resta 50.
+PASS solo se tutti i veri timestamp persistiti risultano INTEGER epoch ms oppure sono stati migrati senza perdita; i campi già epoch non sono stati riscritti inutilmente; gli eventuali date-only/protocol fields sono classificati e motivati; scanner=0 violazioni non classificate; tutte le UI timestamp usano `EEE d/M/yy HH:mm`; profili migrano/visualizzano correttamente; host+AVD PASS; `main` contiene il lavoro verificato. `version.txt` resta 50.
 
 # Non-goal
 Conversione indiscriminata di timestamp già epoch, cambiare campi date-only senza ora, nuove feature, Data Explorer Lite, release APK/AAB, redesign, audit generale.
