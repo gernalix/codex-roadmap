@@ -5,7 +5,7 @@ Valida e distribuisci SOLO la proiezione Datasette PersonalHub già implementata
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/datasette5`, branch canonico `main`;
-- `origin/main` atteso: `0cdcb712ecb6b8c4bd52baa85722f6922adda3de`;
+- `origin/main` atteso: `270eee41b54dba470b69cb0b65db4b6245564115`;
 - file pertinenti soltanto: `scripts/personalhub_projection.py`, `tests/test_personalhub_projection.py`, `README.md`;
 - Datasette runtime canonico: 1.0a38;
 - `personalhub_read`: browse + `execute-sql` solo actor umano `root`; anonimo negato; ogni write/schema mutation negata;
@@ -16,13 +16,14 @@ Valida e distribuisci SOLO la proiezione Datasette PersonalHub già implementata
 - API mobile `personalhub-sync` resta separata e non può interrogare/modificare la proiezione.
 
 # Esecuzione minima
-1. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == 0cdcb712ecb6b8c4bd52baa85722f6922adda3de`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED, niente stash/rebase.
+1. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == 270eee41b54dba470b69cb0b65db4b6245564115`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED, niente stash/rebase.
 2. Leggi SOLO i tre file sopra e gli helper deploy già nominati nel README se servono. Niente audit repo-wide.
-3. Esegui in un solo batch i quattro test mirati:
+3. Esegui in un solo batch i cinque test mirati:
    - `test_cross_module_logical_relations_become_native_foreign_keys`
    - `test_context_memberships_materialize_deduplicated_symmetric_cross_module_foreign_keys`
    - `test_datasette_native_clickable_fk_labels_and_read_only_permissions`
    - `test_temporal_relations_are_inferred_separately_and_suppress_explicit_duplicates`
+   - `test_temporal_confidence_downranks_long_or_imbalanced_windows`
    Failure => correggi solo quel failure domain e rilancia solo il test fallito.
 4. Dopo PASS mirato: una sola `python3 -m unittest tests.test_personalhub_projection -v` e una sola `python3 launch_datasette.py --check`.
 5. Se hai dovuto correggere codice, commit/push `main` una sola volta; altrimenti nessun commit cosmetico.
