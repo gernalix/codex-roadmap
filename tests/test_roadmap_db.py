@@ -56,6 +56,30 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertEqual(1,conn.execute("select count(*) from executions").fetchone()[0])
             conn.close()
 
+    def test_analysis_code_changes_attach_to_latest_analysis(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            (repo/"prompts").mkdir()
+            (repo/"prompts/one.md").write_text("PROMPT_ID=123456",encoding="utf-8")
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md")
+            db.refresh_materialization_hashes(conn,repo)
+            db.record_analysis(conn,"123456",bottlenecks_found=True,summary="Found one")
+            change_id=db.record_code_change(
+                conn,"123456",repository="gernalix/example",change_type="fix",
+                commit_sha="abc123",summary="Fixed the bottleneck"
+            )
+            conn.commit()
+            self.assertGreater(change_id,0)
+            row=conn.execute("select * from v_prompt_summary where prompt_id='123456'").fetchone()
+            self.assertEqual(1,row["chatgpt_code_changed"])
+            self.assertEqual(1,row["chatgpt_code_change_count"])
+            conn.close()
+            db.render(repo)
+            note=(repo/"obsidian/Prompts/123456 one.md").read_text(encoding="utf-8")
+            self.assertIn("gernalix/example",note)
+            self.assertIn("abc123",note)
+
     def test_prompt_id_is_unique(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
