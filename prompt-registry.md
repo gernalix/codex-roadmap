@@ -65,7 +65,7 @@
 | [[obsidian/Prompts/314719 prompt-314719\|314719 · Historical prompt 314719]] | blocked | 2026-09-16T05:49:05Z | 2026-09-16T05:49:05Z | BLOCKED | no | no | — | — | — | — |
 | [[obsidian/Prompts/314857 prompt-314857\|314857 · Historical prompt 314857]] | unknown | 2026-09-07T09:51:18Z | 2026-09-07T09:51:18Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/315804 prompt-315804\|315804 · Historical prompt 315804]] | unknown | 2026-08-05T03:14:20Z | 2026-08-05T03:14:20Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/347921 prompt-347921\|347921 · Historical prompt 347921]] | unknown | 2026-08-05T10:49:04Z | 2026-08-05T10:49:04Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/347921 prompt-347921\|347921 · Historical prompt 347921]] | unknown | 2026-08-05T09:02:52Z | 2026-08-05T10:49:04Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/348271 prompt-348271\|348271 · Historical prompt 348271]] | completed | 2026-09-05T12:03:07Z | 2026-09-05T12:03:07Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/348615 prompt-348615\|348615 · Historical prompt 348615]] | completed | 2026-09-05T13:06:09Z | 2026-09-05T13:06:09Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/362714 prompt-362714\|362714 · Historical prompt 362714]] | blocked | 2026-09-16T14:34:54Z | 2026-09-16T14:34:54Z | BLOCKED | no | no | — | — | — | — |
@@ -104,7 +104,7 @@
 | [[obsidian/Prompts/517308 prompt-517308\|517308 · Historical prompt 517308]] | completed | 2026-09-16T16:29:13Z | 2026-09-16T16:29:13Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/517842 prompt-517842\|517842 · Historical prompt 517842]] | unknown | 2026-08-02T07:25:32Z | 2026-08-02T07:25:32Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/518264 prompt-518264\|518264 · Historical prompt 518264]] | blocked | 2026-09-16T14:32:52Z | 2026-09-16T14:32:52Z | BLOCKED | no | no | — | — | — | — |
-| [[obsidian/Prompts/518304 prompt-518304\|518304 · Historical prompt 518304]] | unknown | 2026-08-30T04:35:00Z | 2026-08-30T04:35:00Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/518304 prompt-518304\|518304 · Historical prompt 518304]] | unknown | 2026-08-30T02:35:49Z | 2026-08-30T04:35:00Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/519684 prompt-519684\|519684 · Historical prompt 519684]] | unknown | 2026-09-03T18:01:01Z | 2026-09-03T18:01:01Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/526841 prompt-526841\|526841 · Historical prompt 526841]] | completed | 2026-09-11T22:38:57Z | 2026-09-11T22:38:57Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/527418 prompt-527418\|527418 · Historical prompt 527418]] | unknown | 2026-09-11T16:46:12Z | 2026-09-11T16:46:12Z | UNKNOWN | no | no | — | — | — | — |
@@ -148,7 +148,7 @@
 | [[obsidian/Prompts/672541 prompt-672541\|672541 · Historical prompt 672541]] | unknown | 2026-09-11T20:47:04Z | 2026-09-11T20:47:04Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/673914 prompt-673914\|673914 · Historical prompt 673914]] | blocked | 2026-09-16T06:00:06Z | 2026-09-16T06:00:06Z | BLOCKED | no | no | — | — | — | — |
 | [[obsidian/Prompts/681247 prompt-681247\|681247 · Historical prompt 681247]] | completed | 2026-09-16T14:21:02Z | 2026-09-16T14:21:02Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/681395 prompt-681395\|681395 · Historical prompt 681395]] | unknown | 2026-09-07T10:37:15Z | 2026-09-07T10:37:15Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/681395 prompt-681395\|681395 · Historical prompt 681395]] | unknown | 2026-09-07T10:36:31Z | 2026-09-07T10:37:15Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/681427 prompt-681427\|681427 · Historical prompt 681427]] | completed | 2026-09-12T07:08:04Z | 2026-09-12T07:08:04Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/682417 prompt-682417\|682417 · Historical prompt 682417]] | unknown | 2026-08-05T07:08:56Z | 2026-08-05T07:08:56Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/683214 prompt-683214\|683214 · Historical prompt 683214]] | unknown | 2026-08-11T16:45:56Z | 2026-08-11T16:45:56Z | UNKNOWN | no | no | — | — | — | — |
