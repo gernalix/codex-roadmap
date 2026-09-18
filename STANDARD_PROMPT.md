@@ -94,6 +94,8 @@ Dirty work non sovrapposto o remote advance non sono blocker automatici. Non usa
 
 Evitare commit intermedi se il task richiede un solo commit finale e il checkout è soggetto ad autosync.
 
+Se il recovery modifica file tracciati del repository target, `PASS` richiede che la modifica necessaria sia **committata e pushata** sul branch previsto, salvo task esplicitamente local-only. Solo in quel caso, prima della finalizzazione, verificare in modo mirato che non restino diff tracciati in-scope e che il push sia riuscito. Un fix necessario rimasto soltanto nel checkout locale non è PASS.
+
 ## Test e runtime
 
 Usare prima il test più economico che può falsificare la modifica.
