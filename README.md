@@ -125,7 +125,7 @@ Prima di aumentare il modello/reasoning, ridurre scope, discovery, output e roun
 
 ## Esecuzione manuale
 
-Apri il primo task lanciabile, imposta modello/reasoning e incolla **solo il file prompt**. Non inviare meta-prompt e non far rileggere roadmap/README/MegaVault se il prompt contiene già lo starting point necessario.
+Apri il primo task lanciabile, imposta modello/reasoning e incolla **solo il file prompt**. Non inviare meta-prompt e non far rileggere roadmap/README/MegaVault se il prompt contiene già lo starting point necessario. `MegaVault=FAST` con progetto/workdir già risolti non autorizza un dump preventivo di MegaVault, memoria o storico: si consulta solo un fatto specifico se emerge davvero come mancante.
 
 Default: un task per sessione; stesso thread solo per una continuazione diretta che riusa davvero contesto utile.
 
