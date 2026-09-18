@@ -4,6 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [[obsidian/Prompts/274656 codex-usage-status-backfill-runtime-deploy\|274656 · Distribuire il fix del publisher e correggere 537184]] | pending | — | — | — | no | no | — | Fedora / codex-usage-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4\|223679 · Integrare definitivamente l’isolamento capsule]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/223103 personalhub-shared-alerts-places-tags-integration-v3\|223103 · Chiudere e integrare tag e alert di Places]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3\|830867 · Date e ore coerenti ovunque]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
