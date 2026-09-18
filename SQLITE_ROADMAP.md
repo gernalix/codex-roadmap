@@ -44,11 +44,11 @@ Sul Fedora reale, `codex-roadmap-sync.timer` legge periodicamente `~/projects/co
 
 ### ChatGPT
 
-ChatGPT crea richieste JSON univoche in `mutations/inbox/` e non modifica direttamente `roadmap.sqlite` o le viste generate. GitHub Actions applica le operazioni in transazione, rigenera le viste e archivia la richiesta in `mutations/applied/`.
+ChatGPT crea una GitHub Issue per ogni richiesta, con titolo `[roadmap-mutation] <request_key>` e body contenente direttamente il documento JSON `codex-roadmap.mutation.v1`. Non committa file di inbox, DB, prompt o viste. Per una `register`, `prompt_text` e `current_path` viaggiano nella stessa Issue e il writer materializza il file `prompts/...`.
 
 ### Single writer
 
-Il workflow `Apply roadmap mutations` usa un'unica coda di concorrenza GitHub Actions. È l'unico componente autorizzato nel flusso normale a modificare il DB canonico e le sue proiezioni. ChatGPT, Codex e il sync `codex-usage` producono richieste indipendenti; la serializzazione avviene soltanto al momento dell'applicazione. Le CLI che mutano direttamente il DB restano solo strumenti di manutenzione eccezionale e non vanno usate durante l'esecuzione ordinaria della roadmap.
+Il workflow `Apply roadmap mutation Issues` usa un'unica coda di concorrenza GitHub Actions. È l'unico componente autorizzato nel flusso normale a modificare il DB canonico, i prompt materializzati e le proiezioni. ChatGPT, Codex e il sync `codex-usage` producono Issue indipendenti; la serializzazione avviene soltanto al momento dell'applicazione. Il DB registra una receipt per `request_key`, quindi retry e Issue duplicate identiche sono idempotenti. Dopo push riuscito il workflow commenta e chiude la Issue. Le CLI che mutano direttamente il DB restano solo strumenti di manutenzione eccezionale e non vanno usate durante l'esecuzione ordinaria della roadmap.
 
 Formato:
 
@@ -98,5 +98,5 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 
 ## Inserimento remoto di un nuovo prompt
 
-Quando ChatGPT aggiunge sia il file `prompts/<slug>.md` sia la relativa mutazione `register`, i due artefatti vanno preferibilmente pubblicati nello stesso commit. In questo modo la CI non osserva per pochi secondi un file prompt ancora assente dal database. Se una mutazione viene applicata da GitHub Actions subito dopo un commit separato, la vista generata finale resta autorevole; il controllo successivo va eseguito sul nuovo HEAD prodotto dall'azione.
+ChatGPT non crea più il file prompt con un commit separato. La Issue `register` contiene `current_path` e `prompt_text`; il single writer crea `prompts/<slug>.md`, registra la fingerprint nel DB e rigenera tutte le viste nello stesso commit autorevole.
 
