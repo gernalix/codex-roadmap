@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../completed/personalhub-100-capsule-isolation-integrate-v3|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-18T22:49:13Z
+- **Ultimo lancio:** 2026-09-18T22:49:13Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Aggiorna e valida il ramo della capsulizzazione, poi lo integra nella versione p
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-18T22:49:13Z | 2026-09-18T23:00:36Z | PASS | 683.056 | gpt-5.6-terra | medium | 47 | 121179 |
 
 ## Analisi ChatGPT
 
