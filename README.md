@@ -8,7 +8,7 @@ Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain
 
 `roadmap.sqlite` è l'unica fonte autorevole dei metadati della roadmap. `roadmap.md`, `spiegazioni.md`, `prompt-registry.md` e `obsidian/` sono viste generate e **non vanno modificate manualmente** per cambiare stato, ordine, dipendenze, analisi o relazioni.
 
-**GitHub Actions è l'unico writer della roadmap canonica.** ChatGPT e Codex non modificano direttamente `roadmap.sqlite` né le viste generate. Entrambi consegnano richieste strutturate in `mutations/inbox/`; GitHub Actions le applica una alla volta, in transazione, rigenera le viste e pusha `main`. `roadmap_result.py` / `roadmap_finish.py` inviano la richiesta direttamente al remoto tramite GitHub CLI e non fanno fetch/merge/push del checkout locale. Il sync locale importa separatamente timestamp e metriche reali da `codex-usage`. Dettagli: [[SQLITE_ROADMAP|Roadmap SQLite]].
+**GitHub Actions è l'unico writer della roadmap canonica.** ChatGPT, Codex e il sync locale di `codex-usage` non modificano direttamente `roadmap.sqlite` né le viste generate. Tutti consegnano richieste strutturate in `mutations/inbox/`; GitHub Actions le applica una alla volta, in transazione, rigenera le viste e pusha `main`. `roadmap_result.py` / `roadmap_finish.py` e `roadmap_sync.py` inviano richieste direttamente al remoto tramite GitHub CLI e non fanno fetch/merge/push del checkout locale. Dettagli: [[SQLITE_ROADMAP|Roadmap SQLite]].
 
 ## Struttura
 - `roadmap.sqlite`: source of truth.
@@ -21,7 +21,7 @@ Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain
 - `falliti/*.md`: task conclusi con BLOCKED/FAIL/CANCELLED/UNKNOWN.
 - `tools/roadmap_result.py`: scrittura terminale race-safe nel DB + archiviazione.
 - `tools/roadmap_finish.py`: wrapper compatibile per PASS.
-- `tools/import_codex_usage.py` + `tools/roadmap_sync.py`: import/backfill e riconciliazione automatica.
+- `tools/import_codex_usage.py`: import/backfill manuale legacy; `tools/roadmap_sync.py`: riconciliazione automatica tramite mutazioni remote, senza scritture Git/SQLite locali.
 - `mutations/inbox/`: canale strutturato per gli aggiornamenti ChatGPT.
 
 ## Regola vincolante per `spiegazioni.md`
