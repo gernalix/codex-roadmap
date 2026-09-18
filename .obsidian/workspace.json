@@ -190,6 +190,14 @@
   },
   "active": "e82c697076a11c9c",
   "lastOpenFiles": [
+    "mutations/applied/chatgpt-roadmap-global-optimization-20260918.json",
+    "prompts/oracle-backup-notification-antiflap-runtime.md",
+    "obsidian/Prompts/219473 oracle-backup-notification-antiflap-runtime.md",
+    "obsidian/Projects/oracle-vm.md",
+    "mutations/applied/chatgpt-oracle-backup-antiflap-219473.json",
+    "prompts/workflowy-importer-live-smoke-after-api-key.md",
+    "prompts/roadmap-sqlite-state-migration.md",
+    "falliti/workflowy-importer-local-live-validation-746193.md",
     "obsidian/Prompts/809537 roadmap-sqlite-state-migration.md",
     "obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file.md",
     "obsidian/Projects/codex-roadmap.md",
@@ -217,14 +225,6 @@
     "obsidian/Prompts/671904 personalhub-obsidian-archive-incremental.md",
     "obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation.md",
     "obsidian/Prompts/582741 personalhub-obsidian-archive-foundation.md",
-    "obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup.md",
-    "obsidian/Prompts/527184 datasette5-personalhub-explorer-security-deploy.md",
-    "obsidian/Prompts/461839 personalhub-epoch-timestamps-migration.md",
-    "obsidian/Prompts/445388 logseq-updates-pat-safety-closure.md",
-    "obsidian/Prompts/418763 personalhub-salute-canonical-integration.md",
-    "obsidian/Prompts/319311 prompt-319311.md",
-    "obsidian/Prompts/311947 personalhub-play-release-local-validation.md",
-    "obsidian/Prompts/294731 prompt-294731.md",
-    "obsidian/Prompts"
+    "obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup.md"
   ]
 }
