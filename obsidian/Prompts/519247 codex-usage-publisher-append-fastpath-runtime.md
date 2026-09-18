@@ -23,7 +23,7 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
-- **Padri/precedenti:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]], [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
+- **Padri/precedenti:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 

@@ -20,12 +20,12 @@ tags:
 - **Ultimo lancio:** 2026-09-18T22:18:56Z
 - **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** sì
-- **Codice modificato da ChatGPT:** sì (6 interventi)
+- **Codice modificato da ChatGPT:** sì (7 interventi)
 - **Fix:** 519247
 - **Dipende da:** —
 - **Sblocca:** [[284916 personalhub-100-capsule-isolation-integrate-v3|284916]], [[357862 logseq-updates-pat-safety-closure-v2|357862]], [[418906 workflowy-importer-live-smoke-secret-file-v2|418906]], [[526713 fedora-runtime-validation-v2|526713]], [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]], [[781352 oracle-backup-notification-antiflap-runtime-v2|781352]], [[904631 datasette5-personalhub-explorer-security-deploy-v2|904631]]
 - **Padri/precedenti:** [[642815 codex-usage-publisher-lock-runtime-closure|642815]]
-- **Figli/follow-up:** [[519247 codex-usage-publisher-append-fastpath-runtime|519247]], [[519247 codex-usage-publisher-append-fastpath-runtime|519247]]
+- **Figli/follow-up:** [[519247 codex-usage-publisher-append-fastpath-runtime|519247]]
 - **Chat Codex:** Stessa chat di 642815
 
 ## Spiegazione
@@ -50,3 +50,4 @@ Completa sul PC il fix del salvataggio Codex con maggiore autonomia: Codex può 
 - 2026-09-18T22:41:59Z · `gernalix/codex-usage-monitor` · verification · commit `82a98e5f93c019564551a87c13af4830812c2e45` · verify_repo può fallire deterministicamente su ResourceWarning/unclosed SQLite anche quando unittest esce 0.
 - 2026-09-18T22:41:59Z · `gernalix/codex-roadmap` · prompt-policy · commit `790f67b395982adc973e83a5f80e78f8aa7c3ad2` · I PASS futuri richiedono evidenza esplicita per ogni acceptance criterion; output non recuperato/non verificato non può coesistere con PASS.
 - 2026-09-18T22:41:59Z · `gernalix/codex-roadmap` · prompt-efficiency · commit `7d8941dd94c32d32c8dd8330b010eebe72f1e448` · Follow-up autosufficienti dopo chat di debugging lunghe usano una nuova chat invece di trascinare contesto enorme senza beneficio.
+- 2026-09-18T22:42:58Z · `gernalix/codex-roadmap` · view-fix · commit `d07f8d400391e5564675241955106962b35612ae` · Deduplicati i link padre/figlio quando più relazioni puntano allo stesso PROMPT_ID.
