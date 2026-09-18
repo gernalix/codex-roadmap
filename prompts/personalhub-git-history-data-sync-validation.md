@@ -5,9 +5,9 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
 
 # Starting point autoritativo
 - repo: /home/daniele/projects/PersonalHub, branch canonico main;
-- esegui SOLO dopo PROMPT_ID=461839 PASS/finalizzato: main deve già contenere profili globali + schema timestamp epoch-ms e il branch feature deve essere stato eliminato;
+- esegui SOLO dopo PROMPT_ID=418763 PASS/finalizzato E dopo che l'utente ha mergiato `feature/salute-canonical-domain` in main: main deve già contenere profili globali + schema timestamp epoch-ms + Salute canonica in personalhub.db;
 - baseline Git History/Data già implementata: 0efd93ed547ac8dad9d8de69083e572367800aec deve essere antenata di RUN_HEAD; commit successivi non correlati (es. Salute CI) vanno preservati;
-- version.txt resta 50: NON fare bump, NON installare il package reale sul Pixel, NON inviare APK; la release resta nel task PH successivo;
+- version.txt resta 51: NON fare bump, NON installare il package reale sul Pixel, NON inviare APK; la release resta nel task PH successivo;
 - file/boundary già noti: core/database/.../capsules/gitdata/*, DeclarativeMigrations.kt, DatabaseVault.kt, DatabaseGate.kt, PersonalHubDatabase.kt, HubActivityCapture.kt, feature/multitimetracker/.../SnapshotSqlite.kt, app/.../capsules/settings/{HubSettings,GitHistorySettings}.kt, MainActivity.kt, docs/GIT_DATA_HISTORY.md;
 - SQLite resta source of truth runtime; Git è solo history/transport; Git OFF è il default; la configurazione Git deve accettare solo repository GitHub PRIVATI e scrivibili;
 - manifest state v2 usa JSONL sharded; BLOB in objects/sha256; history JSONL immutabile firmato; local hub_git_history_index è ricostruibile;
@@ -23,6 +23,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
    - Git OFF: nessuna richiesta/push automatico; il Registro/Activity globale locale continua a funzionare; Timer resta privo di Time Machine/Audit separati.
    - Git ON: tracking installato, legacy HubActivityCapture rimosso; OFF lo reinstalla.
    - una transazione domain INSERT/UPDATE/DELETE genera event atomico con before/after, author, source, reason/group; rollback non genera history.
+   - Salute canonica: una patch health sintetica con sample + più measurement + AI snapshot usa un unico group_id/import_batch, compare nella History, supporta preview/revert del singolo record e dell'intero gruppo e non genera un secondo motore history.
    - tutte le write della stessa outer SQLite transaction ricevono automaticamente lo stesso group_id; write fuori transazione restano eventi singoli; context espliciti remote_patch/history_revert prevalgono senza contaminare la transazione successiva.
    - fault injection sul cleanup del context storico: la outer transaction deve sempre chiudersi/sbloccare; nessun context autore/source può contaminare la transazione seguente e l’esito commit/rollback deve restare non ambiguo.
    - snapshot/snapshot_history/snapshot_payloads e altri technical churn restano sincronizzabili nello state ma NON generano semantic history payload enormi.
@@ -39,7 +40,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
    - full restore v1 e v2 sharded: staging, object hash, schema compatibility, declarative/remote migration consentita solo entro schema supportato dall'APK, quick_check/FK, atomic replacement e rollback su failure; restore deve poter risolvere anche un ref arbitrario più vecchio delle revisioni recenti mostrate.
    - Time Machine globale: oltre alla lista recente, ref arbitrario e jump per data `YYYY-MM-DD` devono risolvere la revisione più recente entro fine giornata senza alterare il DB finché l’utente non conferma restore.
    - Timer: le sue normali write sono rappresentate nella History/Time Machine globale PH; nessuna route/capsule Timer reintroduce Time Machine o Audit Log locale.
-   - Temporal Search PH: con Git ON include una sezione non selezionabile degli edit Git nello stesso intervallo di Places/Timer/Soldi/Substances/WordPulse/People; con Git OFF non aggiunge tale sezione.
+   - Temporal Search PH: con Git ON include una sezione non selezionabile degli edit Git nello stesso intervallo di Places/Timer/Soldi/Substances/WordPulse/People/Salute; con Git OFF non aggiunge tale sezione.
 4. Verifica UI Compose mirata: checkbox Git OFF di default; se attivata senza config apre richiesta repo HTTPS + token; repo pubblico viene rifiutato e repo privato scrivibile accettato; Settings/Home espongono History/Time Machine globali e Timer non le duplica; Home Registro usa Git History solo quando enabled; attention mostra force push; restore globale richiede conferma; deep restore per commit/tag/branch funziona; semantic diff, revert preview, patch pending verificata è visibile ma non auto-applicata; patch sandbox/cherry-pick e discard proposta sono accessibili; nessun token appare in state/log/db.
 5. Verifica storage/performance con test sintetico bounded: almeno una tabella >500 righe e una >5k per shard policy, un BLOB ripetuto, almeno 1.000 history event. Richiedi che le normali letture Home/moduli non invochino Git e che nessun full DB binary venga committato. Aggiungi un fixture schema N→N+1 senza migration packaged e verifica che, con Git configurato, la chain remota migri SOLO staging e che con Git OFF fallisca chiuso senza rete/dati persi.
 6. Gate host finale UNA volta dopo i leaf PASS: test core/database + app/Timer pertinenti, compile debug e checkArchitectureBoundaries. Non eseguire audit/refactor/cleanup estranei.
@@ -58,7 +59,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
 9. Push main solo per fix/test necessari emersi dai gate. Niente branch persistenti. Rilascia task lock in ogni esito. PASS => stop.
 
 # Acceptance
-PASS solo se compile + test mirati + architecture gate + AVD QA sono PASS; Git resta interamente opzionale; repository pubblico è rifiutato; history non duplica technical churn; provenance/undo+preview/restore profondo/diff semantico/timeline unificata/stats incrementali/sharding/BLOB/signature/pull-review-only+patch sandbox+cherry-pick+discard/migration packaged+remote fallback/anomaly e integrazione Timer nella History globale sono verificati; nessun dato reale o credential finisce in Git/log; version.txt resta 50.
+PASS solo se compile + test mirati + architecture gate + AVD QA sono PASS; Git resta interamente opzionale; repository pubblico è rifiutato; history non duplica technical churn; provenance/undo+preview/restore profondo/diff semantico/timeline unificata/stats incrementali/sharding/BLOB/signature/pull-review-only+patch sandbox+cherry-pick+discard/migration packaged+remote fallback/anomaly e integrazione Timer nella History globale sono verificati; nessun dato reale o credential finisce in Git/log; version.txt resta 51.
 
 # Non-goal
 Niente Data Explorer/Datasette Lite, redesign moduli, nuovo backend, repository dati reale, migrazione distruttiva dello storico Timer pre-Git, cancellazione automatica di history legacy, bump/release/install Pixel/delivery, refactor generale o audit.
