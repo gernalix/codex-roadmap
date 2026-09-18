@@ -44,6 +44,12 @@ def connect(repo: Path, *, writable: bool = True) -> sqlite3.Connection:
     return conn
 
 def ensure_schema(conn: sqlite3.Connection) -> None:
+    try:
+        version = conn.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
+    except sqlite3.OperationalError:
+        version = None
+    if version and version[0] == "1":
+        return
     conn.executescript(SCHEMA_PATH.read_text(encoding="utf-8"))
     conn.execute(
         "INSERT INTO meta(key,value) VALUES('schema_version','1') "

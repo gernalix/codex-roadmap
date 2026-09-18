@@ -191,6 +191,13 @@
   },
   "active": "e82c697076a11c9c",
   "lastOpenFiles": [
+    "tools/__pycache__/roadmap_result.cpython-314.pyc.139725188769968",
+    "prompts/codex-roadmap-sqlite-runtime-backfill.md",
+    "spiegazioni.md",
+    "tools/__pycache__/roadmap_result.cpython-314.pyc",
+    "roadmap.sqlite-journal",
+    "tools/__pycache__/roadmap_db.cpython-314.pyc",
+    "tools/__pycache__/roadmap_render.cpython-314.pyc",
     "mutations/applied/chatgpt-rerender-wikilink-table-fix-20260918.json",
     "mutations/applied/chatgpt-roadmap-global-optimization-20260918.json",
     "prompts/oracle-backup-notification-antiflap-runtime.md",
@@ -208,13 +215,7 @@
     "mutations/applied/chatgpt-workflowy-746193-to-693572.json",
     "falliti/workflowy-importer-local-live-validation.md",
     "falliti/roadmap-sqlite-state-migration.md",
-    "tests/test_roadmap_db.py",
-    "tests/test_import_codex_usage.py",
-    "tests/test_apply_mutations.py",
-    "seed/initial-roadmap.json",
-    "seed",
     "prompts/workflowy-importer-live-smoke-secret-file.md",
-    "prompts/codex-roadmap-sqlite-runtime-backfill.md",
     "prompt-registry.md",
     "obsidian/Prompts/861305 personalhub-datasette-lite-offline-runtime.md",
     "obsidian/Prompts/845312 personalhub-obsidian-archive-projections.md",
@@ -225,7 +226,6 @@
     "obsidian/Prompts/672418 personalhub-git-history-data-sync-validation.md",
     "obsidian/Prompts/671904 personalhub-obsidian-archive-incremental.md",
     "obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation.md",
-    "obsidian/Prompts/582741 personalhub-obsidian-archive-foundation.md",
-    "obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup.md"
+    "obsidian/Prompts/582741 personalhub-obsidian-archive-foundation.md"
   ]
 }
