@@ -12,7 +12,7 @@ Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain
 - `tools/roadmap_guard.py`: primitive fail-closed per selezione/completamento/reconcile.
 - `tools/roadmap_finish.py`: finalizzatore PASS race-safe da usare nei prompt normali.
 
-`spiegazioni.md` usa `# | Prompt | Spiegazioni | Livello ragionamento | Tipo prompt`; ordine, reasoning e link devono coincidere con la roadmap.
+`spiegazioni.md` usa `# | Prompt | PROMPT_ID | Spiegazioni | Livello ragionamento | Tipo prompt`; ordine, PROMPT_ID, reasoning e link devono coincidere con la roadmap e con i metadata del prompt.
 
 ## Regola vincolante per `spiegazioni.md`
 
@@ -62,6 +62,9 @@ Ogni prompt deve bastare da solo insieme alle regole globali già caricate. Deve
 - Un ID già assegnato non viene mai riciclato, ereditato o riutilizzato per un task diverso.
 - Per mantenere la genealogia si può usare `PARENT_PROMPT_ID=<vecchio_id>`; il vecchio ID resta storico e non torna attivo.
 - Se viene scoperta una collisione storica in un prompt ancora pendente, il task resta pendente ma deve ricevere un nuovo ID prima dell'esecuzione.
+- Prima di creare, mantenere o pubblicare un prompt pendente, verifica il suo ID contro l'archivio delle esecuzioni in `gernalix/codex-usage/prompts/`: se esiste già una directory con quell'ID, il prompt è già stato lanciato **a prescindere dall'esito** e deve ricevere un nuovo `PROMPT_ID`.
+- La verifica va fatta contro l'archivio delle esecuzioni, non dedotta da `completed/`, dal risultato PASS/BLOCKED/FAIL o dalla sola cronologia della roadmap.
+- `spiegazioni.md` deve mostrare esplicitamente il `PROMPT_ID` corrente di ogni task pendente.
 
 Tipi:
 - **Prompt**: default. Usalo quando il lavoro è delimitato e può ragionevolmente concludersi in un singolo turno operativo, anche se tocca più componenti.
