@@ -16,9 +16,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../completed/codex-usage-publisher-autonomous-runtime-closure|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-18T22:18:56Z
+- **Ultimo lancio:** 2026-09-18T22:18:56Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -36,7 +36,7 @@ Completa sul PC il fix del salvataggio Codex con maggiore autonomia: Codex può 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-18T22:18:56Z | 2026-09-18T22:31:30Z | PASS | 753.253 | gpt-5.6-terra | medium | 57 | 138633 |
 
 ## Analisi ChatGPT
 
