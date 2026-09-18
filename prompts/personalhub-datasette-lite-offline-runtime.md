@@ -5,12 +5,12 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`, branch canonico `main`;
-- `origin/main` atteso: `fa86916e9cef06007298cb7e634df4afc084be7a`;
+- `origin/main` atteso: `d83df4162a88e2232d78de0889e8be14f3460b6a`;
 - `version.txt=47`; bump 47→48 UNA sola volta solo dopo tutti i gate feature;
 - già presenti: snapshot detached+validato, DataExplorerActivity local/remote, WebViewAssetLoader, entry point Home + sei moduli, config `personalhub_read`, docs e CODE_MAP;
 - contratto: live Room/WAL mai esposto; local mode blocca rete esterna; token mobile sync mai usato dall'explorer;
-- `docs/DATA_EXPLORER.md` è autoritativo per FK native, cross-module entity hubs e mobile presentation;
-- server task `527184` rende `personalhub_read` read-only e materializza FK cross-modulo + `hub_person_relations`.
+- `docs/DATA_EXPLORER.md` è autoritativo per FK native, grafo cross-modulo peer-to-peer e mobile presentation;
+- server task `527184` rende `personalhub_read` read-only e materializza FK cross-modulo + grafo simmetrico `hub_entity_relations`.
 
 # Esecuzione minima
 1. Acquisisci task lock PH con PROMPT_ID 861305. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == fa86916e9cef06007298cb7e634df4afc084be7a`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED. Usa solo CODE_MAP row `database.data_explorer`, niente audit repo-wide.
@@ -18,20 +18,20 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 3. Dal detached snapshot costruisci, se necessario, una presentazione locale effimera read-only con semantica equivalente a `personalhub_read`:
    - vere SQLite FK e label leggibili;
    - relazioni dirette cross-modulo;
-   - Context → bridge persona-centrico equivalente a `hub_person_relations`;
+   - Context → grafo simmetrico equivalente a `hub_entity_relations`, con ogni entità risolvibile navigabile come sorgente e destinazione;
    - nessuna inferenza per nome e nessuna scrittura sul DB canonico.
 4. Presentazione embedded: conserva motore Datasette per table/row/filter/facet/pagination/SQL/FK. Aggiungi solo template/CSS/assets compatibili con Lite per ottimizzare il mobile:
    - niente browser chrome;
    - card/list leggibile come default su schermi stretti, con accesso alla tabella densa quando utile;
    - FK come label/chip tappabili;
-   - row detail con sezione **Related across PersonalHub** raggruppata per modulo, alimentata dalle vere FK/backlink;
+   - row detail con sezione **Related across PersonalHub** raggruppata per modulo/entity kind, alimentata dalle vere FK/backlink e disponibile allo stesso modo qualunque sia il modulo di partenza;
    - filtri/facet/pagination/SQL restano funzionali;
    - light/dark, controlli touch-friendly, niente dipendenza da JS/plugin non supportati da Lite se non provata.
 5. Test mirati prima del device:
    - snapshot coerente e isolato;
    - Lite avvia e SELECT funziona con networking disabilitato;
    - forward FK + reverse related rows con label;
-   - scenario sintetico Carlo: persona collegata a transazione + Context con Place/Substance, tutti navigabili tramite FK reali;
+   - scenario sintetico con almeno tre moduli diversi (es. Places, Timer e Soldi), verificando navigazione FK/backlink in entrambe le direzioni da ciascun record;
    - i sei entry point aprono le tabelle canoniche;
    - tentativi write non modificano `personalhub.db`;
    - remote mode usa auth umana, mai token sync.
@@ -47,7 +47,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 10. Rilascia task lock in ogni esito. PASS => stop.
 
 # Acceptance
-PASS solo se Lite è realmente offline/self-contained; local e remote offrono FK cliccabili/backlink e cross-module person hub equivalenti; UI embedded è più leggibile del raw browser mobile senza perdere funzioni Datasette; write bypass impossibile; architecture/tests/QA PASS; versione 48 costruita una sola volta e stesso APK installato/consegnato.
+PASS solo se Lite è realmente offline/self-contained; local e remote offrono FK cliccabili/backlink e grafo cross-modulo peer-to-peer equivalente; UI embedded è più leggibile del raw browser mobile senza perdere funzioni Datasette; write bypass impossibile; architecture/tests/QA PASS; versione 48 costruita una sola volta e stesso APK installato/consegnato.
 
 # Non-goal
 Niente SQL write arbitrario, sync bidirezionale, nuovo DB canonico, riscrittura UI Datasette in Compose, redesign dei moduli, plugin opzionali non necessari, refactor generale o audit.
