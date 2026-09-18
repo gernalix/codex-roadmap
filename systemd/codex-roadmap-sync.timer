@@ -1,0 +1,11 @@
+[Unit]
+Description=Periodically reconcile Codex roadmap metadata
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+Persistent=true
+Unit=codex-roadmap-sync.service
+
+[Install]
+WantedBy=timers.target
