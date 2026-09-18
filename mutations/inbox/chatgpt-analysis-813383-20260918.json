@@ -1,0 +1,21 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "analysis",
+      "prompt_id": "813383",
+      "bottlenecks_found": true,
+      "summary": "PASS. 86895 token totali (86710 input, 83712 cached, 2998 uncached, 185 output), cache 96.54%, 70 tool-call, 462.086 s, quota osservata -1. Il costo evitabile è venuto soprattutto da recovery ripetuti su parsing Git dei path con spazi, scritture SQLite no-op e finalizzazione con lo stesso parser fragile; una diagnostica ha inoltre emesso un elenco enorme di path. I fix del run erano corretti ma hanno richiesto più cicli suite/service del necessario. ChatGPT ha poi centralizzato il rilevamento dei path, limitato l'output diagnostico e nascosto dalle dipendenze operative i prompt già conclusi. Nessun nuovo task Codex necessario.",
+      "source_ref": "gernalix/codex-usage/prompts/813383/metrics.json"
+    },
+    {
+      "op": "code_change",
+      "prompt_id": "813383",
+      "repository": "gernalix/codex-roadmap",
+      "change_type": "optimization",
+      "commit_sha": "9dbd85bf2a55260f3c44d9bfd0685771040898c0",
+      "summary": "Riusa dirty_paths di safe_ff in sync/result, limita le liste diagnostiche di path, aggiunge regressioni per path con spazi e nasconde in spiegazioni.md le dipendenze già terminali."
+    }
+  ]
+}
