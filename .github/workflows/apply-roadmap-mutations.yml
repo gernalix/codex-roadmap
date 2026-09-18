@@ -1,13 +1,12 @@
-name: Apply roadmap mutations
+name: Apply roadmap mutation Issues
 
 on:
-  push:
-    paths:
-      - "mutations/inbox/*.json"
-  workflow_dispatch:
+  issues:
+    types: [opened, reopened]
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: codex-roadmap-sqlite
@@ -15,37 +14,43 @@ concurrency:
 
 jobs:
   apply:
-    if: github.actor != 'github-actions[bot]'
+    if: startsWith(github.event.issue.title, '[roadmap-mutation] ')
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Apply, verify, and push race-safely
+
+      - name: Apply Issue, verify, and push race-safely
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+          pushed=0
           for attempt in 1 2 3 4; do
             git fetch --quiet origin main
             git reset --hard origin/main
             git clean -fd
 
             python3 tools/bootstrap_roadmap.py --repo .
-            python3 tools/apply_mutations.py --repo .
+            python3 tools/apply_issue_mutation.py --repo . --event "$GITHUB_EVENT_PATH"
             python3 tools/roadmap_db.py --repo . verify
 
             if [ -z "$(git status --porcelain)" ]; then
-              echo "No changes"
-              exit 0
+              pushed=1
+              break
             fi
 
-            git add -A roadmap.sqlite roadmap.md spiegazioni.md prompt-registry.md obsidian mutations prompts completed falliti
-            git commit -m "Apply roadmap metadata mutation"
+            git add -A roadmap.sqlite roadmap.md spiegazioni.md prompt-registry.md obsidian prompts completed falliti
+            git commit -m "Apply roadmap mutation Issue #$ISSUE_NUMBER"
 
             if git push origin HEAD:main; then
-              exit 0
+              pushed=1
+              break
             fi
 
             if [ "$attempt" -eq 4 ]; then
@@ -53,3 +58,11 @@ jobs:
               exit 1
             fi
           done
+
+          test "$pushed" -eq 1
+
+      - name: Close applied mutation Issue
+        run: |
+          set -euo pipefail
+          gh api --method POST "repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUMBER/comments"             -f body="Applied by the roadmap single writer."
+          gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUMBER"             -f state=closed             -f state_reason=completed
