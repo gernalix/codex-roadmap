@@ -56,6 +56,10 @@ Recovery:
 
 `FAIL` è ammesso solo dopo recovery ragionevole realmente tentato e documentato. `BLOCKED` è riservato ai blocker esterni/safety sopra.
 
+### Evidenza terminale
+
+`PASS` richiede evidenza esplicita per **ogni acceptance criterion obbligatorio**. Un report che contiene `NOT VERIFIED`, `non recuperato`, `unknown`, `not run` o equivalente per un criterio richiesto non può dichiarare PASS. Se l'output di un gate si perde ma il gate è riproducibile, rieseguilo una sola volta in modo più robusto; se non è riproducibile, riporta l'esito coerente con ciò che è realmente dimostrato. Non inferire PASS da processi terminati, stato vicino o assenza di errori.
+
 Dopo PASS: stop immediato.
 
 ## Efficienza
