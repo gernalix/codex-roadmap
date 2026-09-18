@@ -1,0 +1,24 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "register",
+      "prompt_id": "219473",
+      "slug": "oracle-backup-notification-antiflap-runtime",
+      "title": "Ferma le notifiche backup Oracle transitorie",
+      "current_path": "prompts/oracle-backup-notification-antiflap-runtime.md",
+      "project_id": "43",
+      "project_name": "Oracle VM",
+      "repo": "https://github.com/gernalix/vm_oracle",
+      "chat_guidance": "Nuova chat",
+      "prompt_type": "Prompt",
+      "model": "GPT-5.6 Terra",
+      "reasoning": "medium",
+      "megavault_mode": "FAST",
+      "explanation": "Modifica il controllo dei backup della VM Oracle in modo che i piccoli ritardi che si risolvono da soli non mandino più allarmi e messaggi di ripristino inutili. I problemi reali continueranno invece a essere notificati subito.",
+      "status": "pending",
+      "queue_position": 1
+    }
+  ]
+}
