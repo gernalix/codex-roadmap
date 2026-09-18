@@ -12,6 +12,8 @@ Per una sessione Codex Desktop:
 
 Non usare launcher intermedi e non far leggere a Codex README, roadmap, spiegazioni, MegaVault o memoria quando il prompt contiene già lo starting point necessario.
 
+Riusa la chat precedente solo quando il contesto non materializzato riduce davvero discovery o rischio. Dopo una sessione lunga di debugging/retry, se il follow-up ha già uno starting point completo, preferisci una **nuova chat**: evita di trascinare un contesto enorme soltanto perché esiste una relazione padre/figlio.
+
 ## Contratto minimo del prompt
 
 Un prompt deve essere autosufficiente ma piccolo. Deve contenere soltanto:
