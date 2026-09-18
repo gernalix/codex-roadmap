@@ -2,205 +2,137 @@
 
 [[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]] · [[prompt-registry|Registro prompt]] · [[obsidian/Dashboards/Roadmap|Dashboard Obsidian]] · [[STANDARD_PROMPT|Esecuzione Codex]] · [[SQLITE_ROADMAP|SQLite]]
 
-Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain locale, device/emulatore, VM, segreti/config runtime, servizi locali o altre risorse non disponibili nella normale chat. Se una modifica può essere completata direttamente sui repository remoti in chat, va fatta subito e **non** aggiunta alla roadmap.
+Coda minima di lavoro **solo per attività che richiedono davvero Codex**: filesystem/toolchain locale, device/emulatore, VM, segreti/config runtime, servizi locali o altre risorse non disponibili nella normale chat. Se ChatGPT può completare il lavoro direttamente sui repository remoti, va fatto subito e non inserito in roadmap.
 
-## Source of truth
+## Architettura minima
 
-`roadmap.sqlite` è l'unica fonte autorevole dei metadati della roadmap. `roadmap.md`, `spiegazioni.md`, `prompt-registry.md` e `obsidian/` sono viste generate e **non vanno modificate manualmente** per cambiare stato, ordine, dipendenze, analisi o relazioni.
+1. **MegaVault**: registry/routing dei progetti e delle invarianti globali.
+2. **`roadmap.sqlite`**: unica source of truth di task, dipendenze, stato ed esecuzioni.
+3. **GitHub Actions single writer**: unico writer ordinario del DB canonico e delle viste derivate.
+4. **Markdown/Obsidian**: sole viste generate; non sono fonti autoritative.
+5. **codex-usage-monitor**: telemetria automatica di esiti/costi; non deve creare lavoro meta salvo eccezioni reali.
 
-**GitHub Actions è l'unico writer della roadmap canonica.** ChatGPT, Codex e il sync locale di `codex-usage` non modificano direttamente `roadmap.sqlite` né le viste generate. Tutti consegnano richieste strutturate in `mutations/inbox/`; GitHub Actions le applica una alla volta, in transazione, rigenera le viste e pusha `main`. `roadmap_result.py` / `roadmap_finish.py` e `roadmap_sync.py` inviano richieste direttamente al remoto tramite GitHub CLI e non fanno fetch/merge/push del checkout locale. Dettagli: [[SQLITE_ROADMAP|Roadmap SQLite]].
+Non aggiungere altri strati senza un beneficio operativo misurabile.
 
-## Struttura
-- `roadmap.sqlite`: source of truth.
-- `roadmap.md`: vista generata dei soli pendenti/running.
-- `spiegazioni.md`: vista generata semplice dei pendenti/running con stato, esecuzione, esito, analisi, fix, progetto, chat e dipendenze.
-- `prompt-registry.md`: registro generato di tutti i PROMPT_ID.
-- `obsidian/`: note generate per prompt/progetto e dashboard con wikilink, backlink e tag.
-- `prompts/*.md`: task pendenti/running autosufficienti.
-- `completed/*.md`: task conclusi con PASS.
-- `falliti/*.md`: task conclusi con BLOCKED/FAIL/CANCELLED/UNKNOWN.
-- `tools/roadmap_result.py`: invio remoto idempotente dell’esito terminale; non modifica il checkout locale.
-- `tools/roadmap_finish.py`: wrapper compatibile per PASS, anch’esso remote-only.
-- `tools/import_codex_usage.py`: backfill manuale legacy da usare solo in manutenzione esplicita; `tools/roadmap_sync.py`: riconciliazione automatica tramite mutazioni remote, senza scritture Git/SQLite locali.
-- `mutations/inbox/`: canale strutturato per gli aggiornamenti ChatGPT.
+## Regola anti-overengineering
 
-## Regola vincolante per `spiegazioni.md`
+L'infrastruttura è considerata **stabile**. Il default è non modificarla.
 
-`spiegazioni.md` è scritto **per Daniele, non per uno sviluppatore**. Deve essere comprensibile anche a una persona che non sa nulla di programmazione Android, Linux, database o Git.
+Una nuova feature, tabella, vista, monitor, notifica, protocollo o automazione è ammessa solo se soddisfa almeno una di queste condizioni:
 
-Questa regola è obbligatoria per ogni futura modifica del file:
+- elimina lavoro manuale ricorrente già osservato;
+- elimina una classe di errori/conflitti già osservata;
+- è necessaria per correttezza, sicurezza o rischio dati;
+- sblocca direttamente un progetto applicativo.
 
-- usa italiano quotidiano, frasi brevi e parole comuni;
-- spiega **cosa cambierà concretamente per l'utente**, **perché serve** e **perché quel lavoro richiede Codex**;
-- descrivi le dipendenze con nomi umani delle attività, non con sole catene di PROMPT_ID;
-- non copiare nel file il linguaggio tecnico dei prompt;
-- non inserire dettagli di implementazione come nomi di classi, funzioni, tabelle, file interni, comandi, percorsi, commit, formati interni o nomi di test;
-- evita termini come schema, migration, runtime, branch, worktree, DAO, Room, FK, WAL, WorkManager, AVD, Gradle, systemd, API e simili;
-- i nomi propri di prodotti o servizi, per esempio PersonalHub, Obsidian, Datasette, ActivityWatch, Fedora, GitHub, Uptime Kuma e MegaVault, possono restare;
-- se un termine tecnico è davvero inevitabile, spiegalo immediatamente nella stessa frase con parole comuni;
-- modello, livello di ragionamento e tipo di prompt possono restare nelle rispettive colonne perché sono dati operativi, non parte della spiegazione;
-- prima di salvare una modifica, rileggi ogni riga chiedendoti: **“la capirebbe una persona che usa l'app ma non sa come è programmata?”** Se la risposta non è chiaramente sì, semplifica ancora.
+Non implementare miglioramenti per eleganza, completezza teorica, telemetria aggiuntiva o casi ipotetici. Un problema collaterale non bloccante si segnala e si lascia fuori scope.
 
-I dettagli tecnici completi appartengono ai file in `prompts/`, non a `spiegazioni.md`. La semplicità di `spiegazioni.md` ha priorità sulla precisione implementativa: deve descrivere fedelmente il risultato, non il modo in cui il codice lo ottiene.
+**PASS chiude il sottosistema.** Dopo un PASS non creare audit, follow-up o “ulteriori ottimizzazioni” salvo nuova evidenza concreta.
 
-## Regola di ammissione — niente spirali
-Un nuovo task entra in roadmap solo se soddisfa **entrambi**:
-1. richiede davvero una risorsa locale non disponibile in chat;
-2. risolve un bug/blocco, rischio dati, requisito funzionale o verifica indispensabile prima di una release.
+## Analisi prompt: solo per eccezioni
 
-Non creare task Codex per:
-- micro-ottimizzare un helper/monitor/gate che ha già PASS;
-- misurare il costo del prompt precedente;
-- validare una micro-ottimizzazione appena introdotta da ChatGPT quando test statici/remoti sono sufficienti;
-- investigare colli di bottiglia solo potenziali o senza impatto pratico osservato;
-- ripetere un PASS con un helper “ancora più efficiente”;
-- modificare soltanto repository/workflow/Actions GitHub quando ChatGPT può farlo direttamente tramite GitHub. Se serve prima un audit locale, Codex deve produrre un handoff strutturato e fermarsi lì.
+Non analizzare sistematicamente ogni prompt Codex riuscito. La telemetria viene raccolta automaticamente; un'analisi ChatGPT approfondita si apre solo quando c'è almeno un segnale utile:
 
-**PASS chiude il sottosistema.** Un follow-up dopo PASS è ammesso solo con nuova evidenza concreta emersa nell'uso reale. Le ottimizzazioni marginali si riportano in chat e si fermano lì.
+- `FAIL`, `BLOCKED`, `UNKNOWN` o retry multipli;
+- costo/durata/tool-call chiaramente anomali rispetto a task simili;
+- conflitto Git, output enorme, discovery ripetuta o loop osservato;
+- bug dell'infrastruttura emerso durante l'esecuzione;
+- richiesta esplicita dell'utente.
 
-Quando due task dello stesso repo/campagna richiedono lo stesso checkout/build/emulatore e hanno failure domain compatibili, accorpa i gate nel task funzionale invece di creare un prompt di sola verifica separato. Non accorpare invece migrazioni/rischio dati con feature ordinarie se questo rende il failure domain ambiguo.
+Un PASS ordinario senza anomalie non genera file `audits/`, task di follow-up o modifiche al sistema.
 
-Quando due fasi consecutive della stessa campagna richiedono lo stesso device/emulatore, concentra la QA device non indispensabile alla prima fase nella prima fase successiva che deve già avviare quel target. La fase precedente resta host-only quando compile/test host forniscono sicurezza sufficiente.
+Le strutture storiche `analyses` e `analysis_code_changes` restano nel DB per compatibilità e casi eccezionali; non sono un obbligo per ogni PROMPT_ID.
+
+## Source of truth e writer unico
+
+`roadmap.sqlite` è l'unica fonte autorevole dei metadati. `roadmap.md`, `spiegazioni.md`, `prompt-registry.md` e `obsidian/` sono generate.
+
+ChatGPT, Codex e il sync `codex-usage` inviano richieste strutturate in `mutations/inbox/`. Il workflow GitHub Actions le applica serialmente, in transazione, rigenera le viste e aggiorna `main`.
+
+Le CLI di mutazione diretta del DB sono solo manutenzione eccezionale.
+
+Dettagli tecnici: [[SQLITE_ROADMAP|Roadmap SQLite]].
+
+## Viste
+
+- `roadmap.md`: sola sequenza dei task pendenti/running.
+- `spiegazioni.md`: vista operativa **minima**: task, ID, stato, progetto, chat, dipendenze, spiegazione, modello/reasoning e tipo.
+- `prompt-registry.md`: storico completo, inclusi esiti e metadati di analisi quando esistono.
+- `obsidian/`: navigazione storica per prompt/progetto e dashboard.
+
+La vista operativa non deve duplicare dati storici che non servono a scegliere o lanciare il prossimo task.
+
+### `spiegazioni.md`
+
+È scritto per Daniele, non per uno sviluppatore. Le spiegazioni devono dire in italiano quotidiano **cosa cambia**, **perché serve** e **perché richiede Codex**, evitando dettagli di implementazione non necessari.
+
+I dettagli tecnici completi appartengono al file in `prompts/`.
+
+## Regola di ammissione
+
+Un nuovo task entra in roadmap solo se:
+
+1. richiede davvero una risorsa locale/non disponibile in chat; e
+2. risolve un bug/blocco, rischio dati, requisito funzionale o verifica necessaria.
+
+Non usare la roadmap come backlog generico e non inserirvi:
+
+- micro-ottimizzazioni di helper/monitor già funzionanti;
+- analisi del costo del prompt precedente;
+- audit o verifiche “per sicurezza” dopo PASS;
+- modifiche puramente remote che ChatGPT può fare direttamente;
+- refactor/cleanup/modernizzazioni fuori dal goal applicativo.
+
+Quando due task condividono lo stesso checkout/build/device e lo stesso failure domain, consolidare i gate comuni. Non creare mega-task per obiettivi indipendenti.
 
 ## Contratto prompt
-Ogni prompt deve bastare da solo insieme alle regole globali già caricate. Deve dichiarare almeno metadata, goal, starting point verificato, scope/non-goal, verification, stop e comandi di finalizzazione. Deve includere direttamente la sintassi esatta sia per PASS (`roadmap_finish.py`) sia per BLOCKED/FAIL (`roadmap_result.py --result ...`), così Codex non spende una tool-call per ispezionare la CLI. Vietati inventory/audit generali quando file/boundary sono già noti.
 
-### Recovery autonomo obbligatorio
-Il **goal + acceptance criteria** sono il contratto terminale; i passi descritti nel prompt sono il percorso iniziale, non una procedura rigida da abbandonare al primo errore.
+Ogni file in `prompts/` deve essere autosufficiente e contenere solo ciò che serve al task:
 
-Per ogni prompt nuovo o revisionato:
-- un comando, test, build, merge, deploy o probe fallito è normalmente **evidenza intermedia**, non `BLOCKED`/`FAIL`;
-- Codex deve leggere il minimo artefatto diagnostico utile, correggere la causa più locale supportata dall'evidenza, rilanciare il leaf gate fallito e poi **riprendere automaticamente il goal originale**;
-- può correggere file/config/test adiacenti non nominati nel prompt quando sono dimostrati essere necessari allo stesso failure domain, ma deve applicare il minimo cambiamento sufficiente;
-- retry identici o quasi equivalenti sono vietati senza nuova evidenza o stato cambiato;
-- recovery non autorizza audit generali, refactor, cleanup, modernizzazioni o fix collaterali: lo scope si espande solo quanto richiesto dal blocker concreto;
-- i budget di tool-call sono obiettivi di efficienza, non motivi per interrompere un task: superarli è ammesso solo per failure/dipendenze nuove realmente osservate;
-- `BLOCKED` è ammesso solo per un **hard blocker esterno**: credenziale/autorizzazione o decisione utente indispensabile, device/servizio richiesto indisponibile senza alternativa valida, lock/concorrenza che rende unsafe continuare, oppure azione distruttiva/ambigua che richiede consenso esplicito;
-- `FAIL` è ammesso solo quando gli acceptance criteria restano irraggiungibili dopo recovery in-scope ragionevole basato su evidenza, oppure quando l'unico fix rimasto sarebbe materialmente fuori scope o unsafe;
-- remote advance, dirty work non sovrapposto, compile/test failure o configurazione inattesa **non sono da soli blocker terminali**: prima va tentata la riconciliazione minima sicura prevista dal repository;
-- dopo PASS si termina immediatamente senza audit opzionali.
+- `PROMPT_ID`, progetto, modello/reasoning;
+- goal e acceptance criteria;
+- starting point autoritativo e workdir;
+- scope/non-goal;
+- test/verifiche proporzionati al rischio;
+- recovery minimo dai failure;
+- comandi terminali PASS/BLOCKED/FAIL.
 
-I prompt di sola validazione o sicurezza possono mantenere stop immediati **solo** quando il failure indica davvero un'azione umana/esterna obbligatoria o quando mutare lo stato violerebbe esplicitamente il non-goal del task.
+Non copiare interi protocolli globali dentro ogni prompt. Includere solo le regole realmente applicabili al task. Se starting point/path/helper/test sono già noti, vietare rediscovery generale.
 
-### Identità PROMPT_ID
-- `PROMPT_ID` è sempre un numero canonico reale di **6 cifre**.
-- Regola assoluta: **1 prompt materializzato = 1 ID unico e immutabile**.
-- Qualunque nuova versione, retry o riscrittura di un prompt riceve un **nuovo** `PROMPT_ID`, anche se cambia pochissimo.
-- Un ID già assegnato non viene mai riciclato, ereditato o riutilizzato per un task diverso.
-- Per mantenere la genealogia si può usare `PARENT_PROMPT_ID=<vecchio_id>`; il vecchio ID resta storico e non torna attivo.
-- Se viene scoperta una collisione storica in un prompt ancora pendente, il task resta pendente ma deve ricevere un nuovo ID prima dell'esecuzione.
-- Prima di mantenere un prompt in `prompts/`, verifica il suo ID contro l'archivio delle esecuzioni in `gernalix/codex-usage/prompts/`.
-- Se l'ID esiste, confronta il **testo storico realmente eseguito** con il prompt pendente: non basta confrontare il numero.
-- Se è lo stesso prompt (o la stessa materializzazione), **non cambiare semplicemente ID per rilanciarlo**: rimuovilo dai pendenti e archivialo in `completed/` se l'esito è PASS, oppure in `falliti/` se l'esito è BLOCKED/FAIL/UNKNOWN.
-- Un retry è ammesso solo quando è un follow-up materialmente diverso che incorpora nuova evidenza o rimuove il blocker; in quel caso il prompt originale resta archiviato e il follow-up riceve un nuovo ID, con `PARENT_PROMPT_ID` riferito al prompt fallito.
-- Se invece l'ID esistente appartiene a un **prompt storico diverso**, è una collisione accidentale: il task corrente non è stato eseguito e riceve un ID libero; non usare `PARENT_PROMPT_ID` verso il prompt non correlato.
-- La verifica va fatta contro l'archivio delle esecuzioni, non dedotta da `completed/`, dal risultato PASS/BLOCKED/FAIL o dalla sola cronologia della roadmap.
-- `spiegazioni.md` deve mostrare esplicitamente il `PROMPT_ID` corrente di ogni task pendente.
-- `spiegazioni.md` deve indicare anche **Progetto**, **Chat Codex** e **Dipendenze** per ogni task pendente.
-- **Progetto**: usa il progetto Codex osservabile/inferibile dai rollout (`repo_project`/`repo_projects`) quando disponibile; altrimenti usa il repository/runtime canonico senza inventare etichette UI.
-- **Chat Codex**: `Stessa chat di <ID>` solo quando è una continuazione diretta e il contesto precedente riduce davvero lavoro/tool-call; usa `Nuova chat` quando il task è autonomo, il contesto precedente è vecchio/pesante o il progetto cambia.
-- **Dipendenze**: elenca soltanto prompt ancora presenti nella roadmap che devono essere conclusi prima; usa dipendenze dirette, non tutta la catena transitiva.
-- Una dipendenza non implica automaticamente la stessa chat: ordine di esecuzione e riuso della sessione sono decisioni separate.
+Contratto esecutivo completo: [[STANDARD_PROMPT|Esecuzione Codex]].
 
-Tipi:
-- **Prompt**: default. Usalo quando il lavoro è delimitato e può ragionevolmente concludersi in un singolo turno operativo, anche se tocca più componenti.
-- **Goal**: usalo solo quando la persistenza multi-turn è concretamente utile al risultato (per esempio campagne seriali lunghe multi-repo o verifiche che devono proseguire attraverso continuazioni). Complessità o rischio, da soli, non giustificano Goal.
+## PROMPT_ID
 
-### Modello/reasoning
-- GPT-5.6 Luna `low`: task semplici, localizzati o meccanici, gate deterministici, test/build/ADB mirati e implementazioni con soluzione evidente.
-- GPT-5.6 Terra `medium`: **default** per il lavoro Codex non banale, inclusi debugging runtime già pre-localizzato, lifecycle, migrazioni/schema delimitati e audit guidati da scanner/test deterministici.
-- GPT-5.6 Sol `medium`: solo quando la capacità aggiuntiva è concretamente utile, per esempio debugging ambiguo/difficile, decisioni architetturali, modifiche trasversali complesse o task ad alto rischio che Terra non gestirebbe con sufficiente affidabilità.
-- `high`: solo con difficoltà concreta non gestibile bene a medium.
+Regola assoluta: **1 prompt materializzato = 1 PROMPT_ID unico e immutabile di 6 cifre**.
 
-Una migrazione, un audit o un task lungo **non giustificano da soli Sol**. Prima riduci scope, discovery, round-trip e output tool; passa da Terra a Sol solo se resta complessità o rischio di ragionamento reale.
+Una revisione/retry materializzata riceve un nuovo ID. La genealogia usa `PARENT_PROMPT_ID`; gli ID conclusi non vengono riciclati.
+
+L'allocatore canonico MegaVault è l'autorità; non inventare ID manualmente.
+
+## Modello/reasoning
+
+- GPT-5.6 Luna `low`: task semplici/localizzati/meccanici.
+- GPT-5.6 Terra `medium`: default per lavoro Codex non banale.
+- GPT-5.6 Sol `medium`: solo per debugging ambiguo/difficile, decisioni architetturali, modifiche trasversali complesse o rischio elevato.
+- `high`: solo con necessità concreta.
+
+Prima di aumentare il modello/reasoning, ridurre scope, discovery, output e round-trip.
 
 ## Esecuzione manuale
-Apri il primo file indicato da `roadmap.md`, imposta modello/reasoning dai metadata e incolla **solo quel file**. Non inviare meta-prompt, non far leggere roadmap/README/spiegazioni e non eseguire `select` nelle sessioni manuali.
 
-Default: un task per sessione. Raggruppa letture/comandi indipendenti; non ripetere test PASS; retry solo dopo nuova evidenza o stato cambiato. Un failure intermedio attiva il recovery autonomo e non è uno stop; fermati solo a PASS oppure a un BLOCKED/FAIL terminale secondo il contratto sopra. Per build/comandi lunghi già avviati, preferisci una sola attesa bloccante. Se il tool richiede polling, usa intervalli di almeno 30 secondi salvo un evento concreto che giustifichi un controllo anticipato: niente loop da 5 secondi, polling ravvicinato o messaggi che riportano solo stato invariato.
+Apri il primo task lanciabile, imposta modello/reasoning e incolla **solo il file prompt**. Non inviare meta-prompt e non far rileggere roadmap/README/MegaVault se il prompt contiene già lo starting point necessario.
 
-## Diagnostica runtime a basso round-trip
-Per task locali/VM/servizi, il costo principale è spesso il numero di round-trip modello↔tool, non i token uncached. Quindi:
-- se prompt/starting point forniscono path, helper, unit, DB, monitor ID o schema già verificati, trattali come autoritativi e non rifare discovery generale;
-- raggruppa nello stesso batch i controlli indipendenti; evita sequenze di micro-comandi quando una sola query/lettura mirata può rispondere;
-- **worktree dirty non significa automaticamente `BLOCKED`**: fotografa una volta i dirty path e i file che il task o il fast-forward remoto toccherebbero. Se gli insiemi sono disgiunti e l'operazione resta deterministicamente sicura, procedi senza modificare il lavoro utente; blocca solo su overlap, divergenza o ambiguità concreta. Non usare stash/reset/checkout distruttivi per ottenere artificiosamente un worktree pulito;
-- SQLite: non indovinare colonne. Se lo schema non è già noto, fai **una sola** `PRAGMA table_info`/schema query e poi la query corretta. Per WAL read-only usa helper del progetto o URI `mode=ro&immutable=1`, non tentativi `sqlite3 -readonly` destinati a creare `-shm`;
-- se è già noto un helper privilegiato/canonico (SSH wrapper, installer Android, emulator facade, ecc.), usalo direttamente: niente probe preliminari con permessi insufficienti o reimplementazioni manuali;
-- limita `rg`, `journalctl`, tree/XML/log e query a file/unit/finestra pertinenti; evita output da migliaia di token e output troncati. Un dump ampio è ammesso solo dopo failure concreta di una query stretta;
-- usa subito l'invocazione test canonica già dichiarata (`PYTHONPATH`, cwd, serial, runner). Non eseguire prima una variante nota destinata a fallire per “provare”; dopo un failure cambia approccio usando la nuova evidenza, niente retry quasi equivalenti;
-- dopo PASS dei criteri richiesti non fare audit, status o readback aggiuntivi “per sicurezza”.
+Default: un task per sessione; stesso thread solo per una continuazione diretta che riusa davvero contesto utile.
 
-**Ordine dei gate:** esegui sempre prima i controlli più economici e indipendenti dal device (static check/unit test/build), poi avvia emulatore/device/servizi solo se quei gate sono PASS. Se l'APK è già stato costruito nello stesso task, installa esattamente quell'artefatto senza una seconda invocazione Gradle. Fanno eccezione solo i test il cui prerequisito tecnico richiede esplicitamente il runtime prima del gate host.
+Dopo PASS: finalizzazione e stop immediato.
 
-**Disciplina dei retry Gradle:** un gate aggregato serve per scoprire problemi e per la conferma finale, non come inner loop. Se un gate aggregato fallisce:
-1. leggi in una volta l'intero report disponibile del task/modulo fallito e raccogli tutti i blocker dello stesso failure domain;
-2. applica i fix in batch quando indipendenti;
-3. rilancia solo il leaf task fallito (`compile`, test mirato, `lint<Variant>` o modulo specifico), non l'intero `check`/`assemble`;
-4. quando tutti i leaf failure sono PASS, esegui **un solo gate aggregato finale**.
+## Verifica manutenzione
 
-Non rilanciare `./gradlew check ...` dopo ogni singolo lint/compile fix. Obiettivo normale: al massimo un gate aggregato di discovery + uno finale; un terzo è ammesso solo se il finale espone un failure domain realmente nuovo che non era presente nei report precedenti. Se il prompt è una fase intermedia e non richiede lint globale, preferisci test mirati + build dell'artefatto necessario e lascia il gate globale alla fase finale/release.
+Quando si modifica il motore della roadmap:
 
-## Campagne
-Usa `campaign_id` per più fasi dello stesso prodotto quando questo evita release ripetute.
-
-Per PersonalHub:
-- implementazioni indipendenti possono procedere in parallelo **solo** su branch dedicati separati; nessun worker usa `main` come area di lavoro;
-- un branch pronto viene pubblicato come PR verso il branch canonico e resta in attesa: il worker non lo mergea autonomamente;
-- integrazione, QA condivisa e release sono seriali. Una sola sessione Codex alla volta acquisisce il lock PersonalHub, prende un PR pronto, lo rivaluta contro l'ultimo `main`, verifica le interazioni semantiche e i test pertinenti, quindi lo mergea oppure lo corregge/blocca;
-- un merge Git senza conflitti **non è** prova di compatibilità: prima del merge Codex deve capire il diff nel contesto del `main` corrente;
-- dopo merge e push riusciti il branch va eliminato subito; il lock viene poi rilasciato e si passa al PR successivo;
-- le fasi intermedie fanno implementazione e test mirati ma **non** incrementano `version.txt`, non installano il package reale Pixel e non inviano APK;
-- l'ultima fase fa un solo bump, gate finali consolidati, un solo APK finale, una sola installazione Pixel e una sola Telegram delivery;
-- l'ultima fase non ripete automaticamente gate già PASS delle fasi precedenti: li riesegue solo se il diff finale tocca i file, dipendenze o boundary che quei gate coprivano;
-- task di repository diversi possono essere eseguiti in parallelo solo quando non condividono checkout o runtime mutabili. Il completamento roadmap è ora single-writer remoto; un task che modifica il checkout canonico MegaVault non va eseguito in parallelo con task che devono usare quello stesso checkout.
-
-Non creare mega-task se le fasi hanno failure domains indipendenti; consolida build/install/delivery e gate comuni. Una verifica locale di fix già pushati va assorbita nella fase funzionale successiva dello stesso repo quando può condividere lo stesso host gate e la stessa QA.
-
-## PASS
-Ogni prompt normale finalizza con una sola invocazione race-safe:
-
-```bash
-python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id PROMPT_ID --confirm-executed
-```
-
-Il wrapper **non modifica il checkout locale**: crea una richiesta immutabile `terminal-<PROMPT_ID>` nella inbox remota. GitHub Actions, unico writer, registra `PASS` in `roadmap.sqlite`, sposta il prompt in `completed/`, rigenera le viste e aggiorna `main`. Richieste duplicate identiche sono idempotenti; una richiesta terminale diversa per lo stesso PROMPT_ID viene rifiutata. Non anteporre un dry-run nel percorso normale e non eseguire audit aggiuntivi dopo il PASS.
-
-Timestamp e metriche precise dell'esecuzione vengono poi riconciliati da `codex-usage`; la registrazione terminale immediata serve a chiudere correttamente la coda senza aspettare il sync.
-
-## BLOCKED/FAIL
-Un BLOCKED/FAIL è anch'esso terminale per quel PROMPT_ID: **non si rilancia lo stesso prompt**. Registra una sola volta:
-
-```bash
-python3 ~/projects/codex-roadmap/tools/roadmap_result.py --repo ~/projects/codex-roadmap --prompt-id PROMPT_ID --result BLOCKED --confirm-executed
-# oppure --result FAIL
-```
-
-Anche questi comandi inviano soltanto una richiesta alla inbox remota: il prompt viene tolto dai pendenti e archiviato in `falliti/` dal single writer GitHub Actions. Se serve una correzione, ChatGPT crea un **nuovo PROMPT_ID** e lo collega al padre con relazione `fix` o `followup`. Il sync da `codex-usage` riconcilia comunque l'esito reale se la registrazione immediata non è riuscita.
-
-## `roadmap_guard.py` / `roadmap_finish.py`
-`roadmap_guard.py select` resta disponibile solo come fallback unattended/lettura. Con `roadmap.sqlite` presente, lo stato non deve essere avanzato modificando direttamente Markdown.
-
-Usa:
-- `roadmap_finish.py` per PASS;
-- `roadmap_result.py` per PASS/FAIL/BLOCKED/CANCELLED/UNKNOWN;
-- `roadmap_db.py` / mutazioni JSON per manutenzione strutturata;
-- `roadmap_sync.py` per riconciliare le esecuzioni reali da `codex-usage`.
-
-Prima di modificare il workflow:
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 python3 tools/roadmap_db.py --repo . verify
 ```
 
-## Manutenzione
-Quando aggiorni la roadmap:
-- ogni nuovo prompt/revisione deve incorporare la semantica di recovery autonomo: niente stop al primo failure; hard blocker e FAIL devono rispettare le definizioni sopra;
-- modifica il DB tramite API/helper/mutazioni strutturate; **non** editare manualmente le viste generate;
-- ogni nuova materializzazione mantiene la regola assoluta 1 prompt = 1 PROMPT_ID unico;
-- un prompt terminale resta storico; eventuali fix/follow-up usano un nuovo ID collegato al padre;
-- conserva spiegazioni in italiano semplice: il testo sorgente è il campo `explanation` nel DB, poi `spiegazioni.md` viene rigenerato;
-- mantieni dipendenze dirette, progetto, chat consigliata, modello e reasoning nel DB;
-- non aggiungere task che ChatGPT può completare direttamente sui repo remoti;
-- non assorbire task già in esecuzione;
-- non usare la roadmap come backlog generico: deve restare una coda Codex minima e operativa;
-- dopo una mutazione esegui `roadmap_db.py verify`; dopo PASS non creare ulteriori audit senza nuova evidenza.
+Non creare un task Codex soltanto per verificare una modifica remota se test/CI remoti sono sufficienti.
