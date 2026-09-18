@@ -245,6 +245,10 @@ def _finalize_prompt(repo: Path, target: dict[str, str], *, commit_message: str)
             shutil.rmtree(parent, ignore_errors=True)
 
 
+def _reject_legacy_mutation_if_sqlite(repo: Path) -> None:
+    if (repo / "roadmap.sqlite").is_file():
+        raise RoadmapError("sqlite_source_of_truth:use_roadmap_finish_or_roadmap_result")
+
 def complete(
     repo: Path,
     prompt_id: str,
@@ -252,6 +256,7 @@ def complete(
     dry_run: bool = False,
     result: str | None = None,
 ) -> dict[str, str]:
+    _reject_legacy_mutation_if_sqlite(repo)
     selected = first_prompt(repo)
     if selected["prompt_id"] != prompt_id:
         raise RoadmapError(
@@ -272,6 +277,7 @@ def reconcile(
     confirm_executed: bool = False,
     result: str | None = None,
 ) -> dict[str, str]:
+    _reject_legacy_mutation_if_sqlite(repo)
     target, location = _prompt_by_id(repo, prompt_id)
     if location == "completed":
         return {**target, "status": "already_completed", "mode": "reconcile"}
