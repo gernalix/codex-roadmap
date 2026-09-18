@@ -19,8 +19,8 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
-- **Codice modificato da ChatGPT:** no (0 interventi)
+- **Analizzato da ChatGPT:** sì
+- **Codice modificato da ChatGPT:** sì (2 interventi)
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
@@ -40,8 +40,9 @@ Installa sul PC l’ottimizzazione che evita di rileggere tutte le vecchie sessi
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-18T22:50:32Z · colli di bottiglia: sì · fix: — · PASS con 38.579 token totali, 98,38% cached: 618 input non-cached, 329 output e 242 reasoning. Luna low era appropriato. Rispetto a 817264: input totale -72,4%, tool-call 57→12 (-78,9%), durata 753,3→100,9 s (-86,6%). Il fast-path è riuscito: run1 one-shot reconcile 52,857 s, run2 noop_unchanged_sources/nonterminal_append 0,42 s (~126x più rapido). Sprechi residui: una lettura preventiva molto ampia di MegaVault/MEMORY non necessaria e tool-call extra per un comando lungo >30 s il cui output è stato perso dal wrapper; nessun nuovo bug funzionale richiede follow-up Codex.
 
 ## Modifiche di codice ChatGPT
 
-- Nessuna modifica di codice registrata.
+- 2026-09-18T22:50:32Z · `gernalix/codex-roadmap` · prompt-efficiency · commit `6e29a75cfc8caa1c7ed93c28d310b0510157fdb1` · MegaVault=FAST con starting point completo non deve caricare preventivamente MegaVault/MEMORY; i comandi lunghi vanno attesi sullo stesso processo/sessione invece di polling/proxy.
+- 2026-09-18T22:50:32Z · `gernalix/codex-roadmap` · prompt-efficiency · commit `9a0325ee8ae322b05841f90ff5752dd6d44ba9d2` · README allineato: FAST consulta solo fatti specifici mancanti e non dumpa contesto preventivo.
