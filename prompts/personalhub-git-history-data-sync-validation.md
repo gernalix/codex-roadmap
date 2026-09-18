@@ -7,7 +7,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
 - repo: /home/daniele/projects/PersonalHub, branch canonico main;
 - esegui SOLO dopo PROMPT_ID=418763 PASS/finalizzato E dopo che l'utente ha mergiato `feature/salute-canonical-domain` in main: main deve già contenere profili globali + schema timestamp epoch-ms + Salute canonica in personalhub.db;
 - baseline Git History/Data già implementata: 0efd93ed547ac8dad9d8de69083e572367800aec deve essere antenata di RUN_HEAD; commit successivi non correlati (es. Salute CI) vanno preservati;
-- version.txt resta 51: NON fare bump, NON installare il package reale sul Pixel, NON inviare APK; la release resta nel task PH successivo;
+- version.txt resta 50: NON fare bump, NON installare il package reale sul Pixel, NON inviare APK; la release resta nel task PH successivo;
 - file/boundary già noti: core/database/.../capsules/gitdata/*, DeclarativeMigrations.kt, DatabaseVault.kt, DatabaseGate.kt, PersonalHubDatabase.kt, HubActivityCapture.kt, feature/multitimetracker/.../SnapshotSqlite.kt, app/.../capsules/settings/{HubSettings,GitHistorySettings}.kt, MainActivity.kt, docs/GIT_DATA_HISTORY.md;
 - SQLite resta source of truth runtime; Git è solo history/transport; Git OFF è il default; la configurazione Git deve accettare solo repository GitHub PRIVATI e scrivibili;
 - manifest state v2 usa JSONL sharded; BLOB in objects/sha256; history JSONL immutabile firmato; local hub_git_history_index è ricostruibile;
@@ -59,7 +59,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
 9. Push main solo per fix/test necessari emersi dai gate. Niente branch persistenti. Rilascia task lock in ogni esito. PASS => stop.
 
 # Acceptance
-PASS solo se compile + test mirati + architecture gate + AVD QA sono PASS; Git resta interamente opzionale; repository pubblico è rifiutato; history non duplica technical churn; provenance/undo+preview/restore profondo/diff semantico/timeline unificata/stats incrementali/sharding/BLOB/signature/pull-review-only+patch sandbox+cherry-pick+discard/migration packaged+remote fallback/anomaly e integrazione Timer nella History globale sono verificati; nessun dato reale o credential finisce in Git/log; version.txt resta 51.
+PASS solo se compile + test mirati + architecture gate + AVD QA sono PASS; Git resta interamente opzionale; repository pubblico è rifiutato; history non duplica technical churn; provenance/undo+preview/restore profondo/diff semantico/timeline unificata/stats incrementali/sharding/BLOB/signature/pull-review-only+patch sandbox+cherry-pick+discard/migration packaged+remote fallback/anomaly e integrazione Timer nella History globale sono verificati; nessun dato reale o credential finisce in Git/log; version.txt resta 50.
 
 # Non-goal
 Niente Data Explorer/Datasette Lite, redesign moduli, nuovo backend, repository dati reale, migrazione distruttiva dello storico Timer pre-Git, cancellazione automatica di history legacy, bump/release/install Pixel/delivery, refactor generale o audit.
