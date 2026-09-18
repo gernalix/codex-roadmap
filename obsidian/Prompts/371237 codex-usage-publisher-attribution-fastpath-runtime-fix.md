@@ -1,20 +1,20 @@
 ---
 prompt_id: 371237
-status: pending
+status: blocked
 project_id: 8
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/blocked
   - roadmap/project/fedora
 ---
 
 # 371237 · Completa il fix del salvataggio Codex sul PC
 
-- **Stato:** pending
+- **Stato:** blocked
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/codex-usage-publisher-attribution-fastpath-runtime-fix|Apri prompt]]
+- **Prompt:** [[../../falliti/codex-usage-publisher-attribution-fastpath-runtime-fix|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

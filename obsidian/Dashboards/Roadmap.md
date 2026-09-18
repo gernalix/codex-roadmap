@@ -4,7 +4,7 @@
 
 ## Lanciabili adesso
 
-- [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237 · Completa il fix del salvataggio Codex sul PC]]
+- Nessuno.
 
 ## In esecuzione
 
