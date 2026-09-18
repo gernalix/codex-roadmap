@@ -89,8 +89,8 @@ def render(repo: Path) -> list[str]:
         "",
         "> Generato da `roadmap.sqlite`. Le spiegazioni sono volutamente non tecniche.",
         "",
-        "| # | Prompt | PROMPT_ID | Stato | Lanciato | Esito | Analizzato | Fix | Progetto | Chat Codex | Dipendenze | Spiegazione | Modello | Reasoning | Tipo prompt |",
-        "| --: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| # | Prompt | PROMPT_ID | Stato | Lanciato | Esito | Analizzato | Codice ChatGPT | Fix | Progetto | Chat Codex | Dipendenze | Spiegazione | Modello | Reasoning | Tipo prompt |",
+        "| --: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for i, r in enumerate(pending, 1):
         deps = conn.execute(
@@ -107,12 +107,13 @@ def render(repo: Path) -> list[str]:
                 str(i),
                 f"[[{r['current_path'][:-3]}|{r['title']}]]" if r["current_path"].endswith(".md") else _wikilink_for_prompt(r),
                 r["prompt_id"], r["status"], _fmt(r["last_launched_at"]), _fmt(r["last_outcome"]),
-                "sì" if r["analyzed"] else "no", fix, _fmt(r["project_name"] or r["project_id"]),
+                "sì" if r["analyzed"] else "no", "sì" if r["chatgpt_code_changed"] else "no",
+                fix, _fmt(r["project_name"] or r["project_id"]),
                 _fmt(r["chat_guidance"]), dep_text, _fmt(r["explanation"]), _fmt(r["model"]), _fmt(r["reasoning"]), _fmt(r["prompt_type"])
             ]) + " |"
         )
     if not pending:
-        spieg.append("| — | — | — | — | — | — | — | — | — | — | — | Nessun prompt pendente | — | — | — |")
+        spieg.append("| — | — | — | — | — | — | — | — | — | — | — | — | Nessun prompt pendente | — | — | — |")
     spieg.append("")
     (repo/"spiegazioni.md").write_text("\n".join(spieg), encoding="utf-8")
 
@@ -121,7 +122,7 @@ def render(repo: Path) -> list[str]:
         "",
         "> Vista completa generata da `roadmap.sqlite`.",
         "",
-        "| Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Fix | Progetto | Modello | Reasoning |",
+        "| Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |",
         "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for r in rows:
@@ -131,7 +132,8 @@ def render(repo: Path) -> list[str]:
             fix=f"[[obsidian/Prompts/{fp['prompt_id']} {fp['slug']}|{fp['prompt_id']}]]"
         registry.append("| " + " | ".join([
             _wikilink_for_prompt(r), r["status"], _fmt(r["first_launched_at"]), _fmt(r["last_launched_at"]),
-            _fmt(r["last_outcome"]), "sì" if r["analyzed"] else "no", fix,
+            _fmt(r["last_outcome"]), "sì" if r["analyzed"] else "no",
+            "sì" if r["chatgpt_code_changed"] else "no", fix,
             _fmt(r["project_name"] or r["project_id"]), _fmt(r["model"]), _fmt(r["reasoning"])
         ]) + " |")
     registry.append("")
@@ -189,6 +191,7 @@ def render(repo: Path) -> list[str]:
             f"- **Ultimo lancio:** {_fmt(r['last_launched_at'])}",
             f"- **Ultimo esito:** {_fmt(r['last_outcome'])}",
             f"- **Analizzato da ChatGPT:** {'sì' if r['analyzed'] else 'no'}",
+            f"- **Codice modificato da ChatGPT:** {'sì' if r['chatgpt_code_changed'] else 'no'} ({r['chatgpt_code_change_count']} interventi)",
             f"- **Fix:** {_fmt(r['fix_prompt_id'])}",
             f"- **Dipende da:** {deps}",
             f"- **Sblocca:** {blocked}",
@@ -225,6 +228,18 @@ def render(repo: Path) -> list[str]:
             note.append(f"- {a['analyzed_at']} · colli di bottiglia: {state} · fix: {_fmt(a['fix_prompt_id'])} · {_fmt(a['summary'])}")
         if not analyses:
             note.append("- Non ancora analizzato.")
+        note += ["", "## Modifiche di codice ChatGPT", ""]
+        changes=conn.execute(
+            "SELECT * FROM analysis_code_changes WHERE prompt_id=? ORDER BY created_at,code_change_id",
+            (r["prompt_id"],)
+        ).fetchall()
+        for c in changes:
+            commit=f" · commit `{c['commit_sha']}`" if c["commit_sha"] else ""
+            note.append(
+                f"- {c['created_at']} · `{c['repository']}` · {c['change_type']}{commit} · {_fmt(c['summary'])}"
+            )
+        if not changes:
+            note.append("- Nessuna modifica di codice registrata.")
         note.append("")
         path.write_text("\n".join(note), encoding="utf-8")
 
