@@ -4,14 +4,14 @@ PROMPT_ID=643817 | project_id=15 | model=GPT-5.6 Terra | reasoning=medium | Mega
 Distribuisci SOLO `gernalix/activity-watch-uploader` sul Fedora reale usando `gernalix/activity-watch-data` come repository privato ESCLUSIVO dei dati, crea/configura direttamente nel DB autorevole di Uptime Kuma un unico monitor push dedicato, collega il relativo secret al servizio senza esporlo e chiudi il flusso end-to-end ActivityWatch → JSONL → `activity-watch-data` → Kuma. Il codice, il formato dati e le unit template sono già su GitHub: niente redesign.
 
 # Starting point autoritativo
-- repo codice privato: `gernalix/activity-watch-uploader`, branch `main`; baseline minima da includere: `799fd7e55af4c992bc2459526f5e7223219b92c5`;
+- repo codice privato: `gernalix/activity-watch-uploader`, branch `main`; baseline minima da includere: `8e761b00ff16b79101d23811137d7a60a58e0f9c`;
 - repo dati privato: `gernalix/activity-watch-data`, branch `main`; baseline documentale minima: `d5ccf9b3f397bb104ce10a3b36b6ca2ea7b277f4`;
 - checkout Fedora canonici: `/home/daniele/projects/activity-watch-uploader` (codice) e `/home/daniele/projects/activity-watch-data` (dati);
 - ActivityWatch API locale: `http://127.0.0.1:5600`;
 - il codice fa full reconcile iniziale/settimanale, refresh rolling degli ultimi 2 giorni UTC, write atomiche, lock anti-overlap, recovery Git, timeout HTTP/Git e push Kuma con `run_id`;
 - TUTTI i bucket/eventi canonici ActivityWatch devono finire SOLO nel repo dati in formato testuale ChatGPT-friendly: `metadata/buckets.json` + `buckets/<bucket-id>/YYYY/MM/YYYY-MM-DD.jsonl`; un evento completo per riga; nessun dato ActivityWatch va committato nel repo codice;
 - il runtime valida anche l'identità del remote Git e deve rifiutare qualsiasi destinazione diversa da `gernalix/activity-watch-data`;
-- unità: `activity-watch-uploader.service` + `activity-watch-uploader.timer`; il timer è ogni 15 minuti, `Persistent=true`, `OnBootSec=2min`; il service ha `Restart=on-failure`, restart bounded e `TimeoutStartSec=12min`;
+- unità: `activity-watch-uploader.service` + `activity-watch-uploader.timer`; il timer è ogni 15 minuti, `Persistent=true`, `OnBootSec=2min`; il service ha `Restart=on-failure`, restart bounded e `TimeoutStartSec=30min`;
 - il timer deve funzionare anche senza login interattivo dopo reboot: usa il normale systemd user manager con lingering dell'utente `daniele`;
 - repo VM: `/home/daniele/projects/vm_oracle`; accesso canonico SOLO tramite `scripts/oracle_ssh.sh`;
 - Uptime Kuma: Docker Compose canonica `/opt/uptime-kuma/docker-compose.yml`, container `uptime-kuma`, dati persistenti sotto `/opt/uptime-kuma/data`, versione attesa 2.4.x;
@@ -42,7 +42,7 @@ Distribuisci SOLO `gernalix/activity-watch-uploader` sul Fedora reale usando `ge
 5. **Deploy resiliente Fedora.**
    - abilita `loginctl enable-linger daniele` se non già attivo e verifica `Linger=yes`;
    - esegui `bash scripts/install-user-service.sh`;
-   - verifica che timer sia enabled+active e che i valori effettivi includano: `Persistent=true`, schedule 15 min + boot delay, `Restart=on-failure`, `RestartSec=2min`, `TimeoutStartSec=12min`, `KillMode=control-group`;
+   - verifica che timer sia enabled+active e che i valori effettivi includano: `Persistent=true`, schedule 15 min + boot delay, `Restart=on-failure`, `RestartSec=2min`, `TimeoutStartSec=30min`, `KillMode=control-group`;
    - non trasformare il servizio in daemon loop: timer+oneshot restano il design canonico.
 
 6. **End-to-end reale, due run systemd.**
