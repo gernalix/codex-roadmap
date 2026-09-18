@@ -6,7 +6,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`, branch canonico `main`;
 - esegui questo prompt SOLO dopo `PROMPT_ID=672418` PASS/finalizzato; quindi anche 918274+461839+418763 devono essere già conclusi e Salute canonica deve essere presente in main; baseline Git Data/History `3558ab39fb7f51f39a09c43e6d90b18ae3319b07` deve essere antenata del RUN_HEAD;
-- `version.txt=51`; bump 51→52 UNA sola volta solo dopo tutti i gate feature;
+- `version.txt=50`; bump 50→51 UNA sola volta solo dopo tutti i gate feature;
 - fix Luoghi già in `main`: check-in sovrapposti scelgono automaticamente il candidato nettamente più vicino solo quando gli intervalli di distanza rispetto all'accuracy GPS non si sovrappongono; journal conserva la causa originale e registra la soglia reale raggio+accuracy;
 - già presenti: snapshot detached+validato, DataExplorerActivity local/remote, WebViewAssetLoader, entry point globale Home e route ancora supportate; NON reintrodurre un entry point Data Explorer nel Timer; config `personalhub_read`, docs e CODE_MAP;
 - contratto: live Room/WAL mai esposto; local mode blocca rete esterna; token mobile sync mai usato dall'explorer;
@@ -14,7 +14,7 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
 - server task `527184` rende `personalhub_read` read-only e materializza FK cross-modulo + grafo simmetrico `hub_entity_relations`.
 
 # Esecuzione minima
-1. Acquisisci task lock PH con PROMPT_ID 861305. Preflight unico: worktree + un solo fetch `origin main`; fast-forward locale e fissa RUN_HEAD. Richiedi `version.txt=51`, che la baseline Git Data/History indicata sopra sia antenata e che il task 672418 risulti già finalizzato nella roadmap; divergenza/dirty overlap => BLOCKED. Non ripetere i gate Git History già PASS salvo che questo task tocchi direttamente quel boundary. Usa solo CODE_MAP row `database.data_explorer` più i file Luoghi già noti sotto `capsules/checkin` e i test indicati sotto; niente audit repo-wide.
+1. Acquisisci task lock PH con PROMPT_ID 861305. Preflight unico: worktree + un solo fetch `origin main`; fast-forward locale e fissa RUN_HEAD. Richiedi `version.txt=50`, che la baseline Git Data/History indicata sopra sia antenata e che il task 672418 risulti già finalizzato nella roadmap; divergenza/dirty overlap => BLOCKED. Non ripetere i gate Git History già PASS salvo che questo task tocchi direttamente quel boundary. Usa solo CODE_MAP row `database.data_explorer` più i file Luoghi già noti sotto `capsules/checkin` e i test indicati sotto; niente audit repo-wide.
 2. Vendorizza/pinna Datasette Lite + Pyodide + wheel/assets necessari sotto gli asset PH. Nessuna CDN/runtime fetch. NON allentare il network block locale.
 3. Dal detached snapshot costruisci, se necessario, una presentazione locale effimera read-only con semantica equivalente a `personalhub_read`:
    - vere SQLite FK e label leggibili;
@@ -50,11 +50,11 @@ Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: r
    - rete ON solo per remote: stesso comportamento relazionale su `personalhub_read` se 527184 è PASS;
    - back navigation corretta, chiusura elimina snapshot cache, nessun crash.
 8. Misura una sola volta delta APK degli asset. Niente campagna di ottimizzazione salvo limite reale.
-9. Solo dopo PASS: bump 51→52 una volta, build debug canonica firmata una volta, push `main`, installa QUELLO stesso APK sul Pixel fisico con helper canonico e delivery PH. Nessuna ricompilazione post-gate.
+9. Solo dopo PASS: bump 50→51 una volta, build debug canonica firmata una volta, push `main`, installa QUELLO stesso APK sul Pixel fisico con helper canonico e delivery PH. Nessuna ricompilazione post-gate.
 10. Rilascia task lock in ogni esito. PASS => stop.
 
 # Acceptance
-PASS solo se il regression gate Luoghi Carlo Visda/Rema è PASS; Lite è realmente offline/self-contained; local e remote hanno FK/Context deduplicati e lo stesso temporal graph separato del server, senza duplicare backlink espliciti; UI embedded distingue Related vs Temporal e resta più leggibile del raw browser mobile; write bypass impossibile; architecture/tests/QA PASS; versione 52 costruita una sola volta e stesso APK installato/consegnato.
+PASS solo se il regression gate Luoghi Carlo Visda/Rema è PASS; Lite è realmente offline/self-contained; local e remote hanno FK/Context deduplicati e lo stesso temporal graph separato del server, senza duplicare backlink espliciti; UI embedded distingue Related vs Temporal e resta più leggibile del raw browser mobile; write bypass impossibile; architecture/tests/QA PASS; versione 51 costruita una sola volta e stesso APK installato/consegnato.
 
 # Non-goal
 Niente SQL write arbitrario, sync bidirezionale, nuovo DB canonico, riscrittura UI Datasette in Compose, redesign dei moduli, plugin opzionali non necessari, refactor generale o audit.
