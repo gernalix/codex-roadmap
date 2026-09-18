@@ -30,11 +30,11 @@ def sync(repo: Path, source: Path) -> dict[str,object]:
             p=subprocess.run(cmd,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             if p.returncode:
                 raise SyncError(f"import_failed:{p.stderr.strip()}")
-            status=run(wt,"status","--porcelain=v1","-z","--untracked-files=all").stdout.split("\0")
-            if not status:
-                return {"status":"noop","attempt":attempt,"import":json.loads(p.stdout or "{}")}
+            status=[line for line in run(wt,"status","--porcelain=v1","-z","--untracked-files=all").stdout.split("\0") if line]
             allowed_prefixes=("roadmap.sqlite","roadmap.md","spiegazioni.md","prompt-registry.md","obsidian/","prompts/","completed/","falliti/")
             changed=[line[3:] for line in status if len(line)>=4]
+            if not changed:
+                return {"status":"noop","attempt":attempt,"import":json.loads(p.stdout or "{}")}
             bad=[x for x in changed if not any(x==a or x.startswith(a) for a in allowed_prefixes)]
             if bad:
                 raise SyncError("unexpected_changes:"+",".join(sorted(bad)))
