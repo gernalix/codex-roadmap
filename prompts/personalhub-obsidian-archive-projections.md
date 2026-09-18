@@ -1,12 +1,12 @@
 PROMPT_ID=845312 | project_id=49 | campaign_id=ph-obsidian-archive | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
 
 # Goal
-Completa sul branch `feature/obsidian-archive` la qualità/copertura v1 della vault Obsidian per **tutti i moduli mantenuti**, mantenendo la proiezione document-oriented e bounded. Chiudi Settings/AVD QA e lascia il branch pronto per review/merge manuale dell'utente.
+Completa su PersonalHub `main` la qualità/copertura v1 della vault Obsidian per **tutti i moduli mantenuti**, mantenendo la proiezione document-oriented e bounded. Chiudi Settings/AVD QA e lascia il branch pronto per review/merge manuale dell'utente.
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`;
 - esegui SOLO dopo PROMPT_ID=671904 PASS/finalizzato;
-- branch obbligatorio `feature/obsidian-archive`;
+- branch obbligatorio `main`, già contenente foundation + incremental engine PASS;
 - `docs/OBSIDIAN_ARCHIVE.md` è autoritativo;
 - full rebuild + incremental engine sono già PASS: non ridisegnarli;
 - Obsidian non calcola relazioni temporali cross-module; timestamp esatti possono essere Properties, ma le associazioni temporali dinamiche restano Hub/SQLite/Datasette;
@@ -59,7 +59,7 @@ Completa sul branch `feature/obsidian-archive` la qualità/copertura v1 della va
    - revoca/riassegna directory senza crash/data loss;
    - nessun raw epoch/id/backend encoding user-facing nelle UI PH.
    Non serve installare Obsidian nell'AVD: valida i file generati tramite test/helper SAF bounded, non con ispezione manuale massiva.
-10. Aggiorna docs/CODE_MAP solo per comportamento finale. Push `feature/obsidian-archive`, NON merge e NON eliminare il branch: l'utente farà review/merge manuale. Rilascia lock.
+10. Aggiorna docs/CODE_MAP solo per comportamento finale. Solo dopo i gate PASS, commit/push `main` una sola volta; non creare branch remoti temporanei. Rilascia lock.
 
 # Acceptance
 PASS solo se tutti i moduli mantenuti hanno una projection policy testata, long-form/link/frontmatter sono leggibili e deterministici, file count high-volume è bounded, Obsidian resta opzionale/one-way, Datasette continua in parallelo, host+AVD+architecture PASS e `version.txt=50`.
