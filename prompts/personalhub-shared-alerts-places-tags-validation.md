@@ -1,4 +1,4 @@
-PROMPT_ID=842617 | project_id=49 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STRICT
+PROMPT_ID=776569 | project_id=49 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STRICT
 
 # Goal
 Valida e chiudi SOLO l'implementazione già presente sul branch remoto PersonalHub `feature/shared-alerts-place-tags`: tag Places indipendenti dai tag Timer, Alert Engine condiviso Timer/Places, alert Places su check-in/check-out manuali per luogo o set di tag, tap diretto dei link-only e bridge Tasker opzionale. Correggi soltanto failure direttamente causati da questa feature.
@@ -15,7 +15,7 @@ Valida e chiudi SOLO l'implementazione già presente sul branch remoto PersonalH
 - gli alert Places devono dipendere SOLO da check-in/out espliciti/manuali. Il sottosistema Android Geofence esistente NON deve attivarli.
 
 # Esecuzione minima
-1. Acquisisci il lock PH con PROMPT_ID 842617. Fai un solo fetch mirato. Porta il checkout sul branch `feature/shared-alerts-place-tags` e fast-forward da `origin/feature/shared-alerts-place-tags`. Poi integra UNA volta `origin/main` **nel branch feature** (mai feature→main), includendo almeno `73f0ed47f20fa06ba8302396153ba09cefd18e79`. Il merge remoto è già risultato conflittuale: i soli file di overlap noti sono `.codex/CODE_MAP.tsv`, `core/database/.../PersonalHubDatabase.kt`, `feature/luoghi/build.gradle.kts`, `feature/multitimetracker/.../TimeFenceNotifier.kt`, `feature/multitimetracker/.../AlertsCapsuleViewModel.kt`. Risolvi SOLO questi conflitti preservando entrambe le intenzioni: hardening Profili/de-promozione Timer da `main` + shared alerts/tag Places dal branch. Non ripristinare file Timer eliminati da `main`; riapplica la minima integrazione alert ai consumer ancora esistenti. Dirty non sovrapposto non blocca; niente stash/reset.
+1. Acquisisci il lock PH con PROMPT_ID 776569. Fai un solo fetch mirato. Porta il checkout sul branch `feature/shared-alerts-place-tags` e fast-forward da `origin/feature/shared-alerts-place-tags`. Poi integra UNA volta `origin/main` **nel branch feature** (mai feature→main), includendo almeno `73f0ed47f20fa06ba8302396153ba09cefd18e79`. Il merge remoto è già risultato conflittuale: i soli file di overlap noti sono `.codex/CODE_MAP.tsv`, `core/database/.../PersonalHubDatabase.kt`, `feature/luoghi/build.gradle.kts`, `feature/multitimetracker/.../TimeFenceNotifier.kt`, `feature/multitimetracker/.../AlertsCapsuleViewModel.kt`. Risolvi SOLO questi conflitti preservando entrambe le intenzioni: hardening Profili/de-promozione Timer da `main` + shared alerts/tag Places dal branch. Non ripristinare file Timer eliminati da `main`; riapplica la minima integrazione alert ai consumer ancora esistenti. Dirty non sovrapposto non blocca; niente stash/reset.
 2. Preflight economico, in batch:
    - conferma branch, entrambe le baseline (`df76297…` feature e `73f0ed47…` main) antenate di RUN_HEAD, `SCHEMA_VERSION=16`, `:core:alerts` incluso in settings e dipendenze Timer/Places;
    - esegui `python3 tools/check_architecture_boundaries.py`;
@@ -67,6 +67,6 @@ Merge del branch feature **verso** `main`, migrazione delle regole Timer nelle t
 
 # Stop
 Dopo PASS:
-`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 842617 --confirm-executed`
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 776569 --confirm-executed`
 
 Output massimo 8 righe: RESULT, HEAD, SCHEMA16, HOST_TESTS, MIGRATION, ALERT_CONTRACT, AVD_QA, BRANCH_STATUS.
