@@ -1,12 +1,12 @@
 PROMPT_ID=418763 | project_id=49 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STRICT
 
 # Goal
-Sul branch `feature/salute-canonical-domain`, implementa SOLO il fondamento dati canonico di Salute dentro `personalhub.db`: schema Room, migration, view, contratto patch ChatGPT, sample grouping/turnaround e AI snapshot persistenti/history. Non toccare ancora UI Android, Hub/Temporal o Obsidian salvo ciò che serve per compilare.
+Su PersonalHub `main`, implementa SOLO il fondamento dati canonico di Salute dentro `personalhub.db`: schema Room, migration, view, contratto patch ChatGPT, sample grouping/turnaround e AI snapshot persistenti/history. Non toccare ancora UI Android, Hub/Temporal o Obsidian salvo ciò che serve per compilare.
 
 # Precondizioni autoritative
 - repo: `/home/daniele/projects/PersonalHub`;
-- esegui SOLO dopo PROMPT_ID=461839 PASS/finalizzato e dopo che il suo branch timestamp è stato integrato in `main`;
-- branch obbligatorio: `feature/salute-canonical-domain`; rebase bounded sul nuovo `origin/main` preservando i commit di design già presenti;
+- esegui SOLO dopo PROMPT_ID=461839 PASS/finalizzato; il relativo risultato deve essere già presente in `main`;
+- branch obbligatorio: `main`; i documenti di design Salute sono già presenti su `main`. NON ricreare il vecchio branch `feature/salute-canonical-domain` né pubblicare altri branch remoti;
 - contratti già presenti nel branch: `docs/HEALTH_MODULE.md`, `docs/health/HEALTH_DATA_MODEL.md`, `docs/health/CHATGPT_PATCH_CONTRACT.md`;
 - `version.txt` resta 50: questa è una fase intermedia della campagna PH;
 - nessun dato sanitario reale, screenshot, nota clinica, dump DB o fixture riconducibile all'utente può essere committato nel repo pubblico;
@@ -15,7 +15,7 @@ Sul branch `feature/salute-canonical-domain`, implementa SOLO il fondamento dati
 - UI/HUB/Obsidian sono il task successivo.
 
 # Esecuzione
-1. Acquisisci task lock PH con PROMPT_ID 418763. Un solo fetch/rebase bounded. Usa CODE_MAP rows `health.data`, `health.workflow`, `database.schema`; niente audit repo-wide.
+1. Acquisisci task lock PH con PROMPT_ID 418763. Un solo fetch `origin main` + fast-forward bounded. Usa CODE_MAP rows `health.data`, `health.workflow`, `database.schema`; niente audit repo-wide.
 2. Prima della prima modifica a Room/API pubbliche esegui `python3 tools/android_consumer_preflight.py scan --symbol ...` per ogni simbolo pubblico toccato; per rimozioni usa il gate forbid prima di Gradle.
 3. Alloca il prossimo schema Room libero post-461839 e implementa in `:contracts:database` + `:core:database`:
    - `health_import_batches`;
@@ -70,13 +70,13 @@ Sul branch `feature/salute-canonical-domain`, implementa SOLO il fondamento dati
    - se il repo privato `gernalix/salute` e la copia personale DB sono disponibili localmente, prepara/applica una migration/import fuori repo e verifica conteggi/valori/provenienza;
    - se non disponibili, lascia questa sola fase PENDING con tool/procedura bounded, senza bloccare schema/test sintetici.
 11. Gate host: test migration + DAO/view + turnaround + sample grouping + AI/no-hindsight invariants + synthetic patch/history, poi compile highest affected consumer e `checkArchitectureBoundaries`. Failure => leaf correction, un solo aggregato finale.
-12. Push SOLO `feature/salute-canonical-domain`. Non merge, non eliminare branch, nessun AVD, nessuna release/delivery. Rilascia lock.
+12. Solo dopo i gate PASS, commit/push `main` una sola volta. Nessun branch remoto temporaneo, nessun AVD, nessuna release/delivery. Rilascia lock.
 
 # Acceptance
 PASS solo se il nuovo schema Room è valido e migrabile, Salute vive in `personalhub.db`, sample/turnaround/AI/history sintetica sono testati, schema export + compile + architecture gate PASS, nessun dato reale è nel repo e `version.txt` resta 50.
 
 # Non-goal
-UI Android Salute, Hub adapters, Temporal Search UI, Obsidian exporter, Datasette Lite mobile, Logseq, release/install.
+UI Android Salute, Hub adapters, Temporal Search UI, Obsidian exporter, Datasette Lite mobile, Logseq, release/install, branch remoti temporanei.
 
 # Stop
 Dopo PASS:
