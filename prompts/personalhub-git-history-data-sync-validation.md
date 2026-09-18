@@ -5,7 +5,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
 
 # Starting point autoritativo
 - repo: /home/daniele/projects/PersonalHub, branch canonico main;
-- esegui SOLO dopo PROMPT_ID=845312 PASS/finalizzato E dopo che l'utente ha mergiato sia `feature/salute-canonical-domain` sia `feature/obsidian-archive` in main: main deve già contenere profili globali + schema timestamp epoch-ms + Salute canonica completa + proiezione Obsidian opzionale;
+- esegui SOLO dopo PROMPT_ID=845312 PASS/finalizzato: `main` deve già contenere profili globali + schema timestamp epoch-ms + Salute canonica completa + proiezione Obsidian opzionale; non dipendere da branch feature remoti;
 - baseline Git History/Data già implementata: 0efd93ed547ac8dad9d8de69083e572367800aec deve essere antenata di RUN_HEAD; commit successivi non correlati (es. Salute CI) vanno preservati;
 - version.txt resta 50: NON fare bump, NON installare il package reale sul Pixel, NON inviare APK; la release resta nel task PH successivo;
 - file/boundary già noti: core/database/.../capsules/gitdata/*, DeclarativeMigrations.kt, DatabaseVault.kt, DatabaseGate.kt, PersonalHubDatabase.kt, HubActivityCapture.kt, feature/multitimetracker/.../SnapshotSqlite.kt, app/.../capsules/settings/{HubSettings,GitHistorySettings}.kt, MainActivity.kt, docs/GIT_DATA_HISTORY.md;
