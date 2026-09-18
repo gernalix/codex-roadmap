@@ -231,6 +231,38 @@ def set_model(
         ),
     )
 
+def set_explanation(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    explanation: str,
+    *,
+    actor: str = "chatgpt",
+    note: str | None = None,
+) -> None:
+    row = prompt_row(conn, prompt_id)
+    old_explanation = row["explanation"] or ""
+    if old_explanation == explanation:
+        return
+    ts = now_utc()
+    conn.execute(
+        "UPDATE prompts SET explanation=?, updated_at=? WHERE prompt_id=?",
+        (explanation, ts, prompt_id),
+    )
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "prompt_explanation_updated",
+            ts,
+            actor,
+            json.dumps(
+                {"old_explanation": old_explanation, "new_explanation": explanation, "note": note},
+                ensure_ascii=False,
+                sort_keys=True,
+            ),
+        ),
+    )
+
 def reorder_prompt(
     conn: sqlite3.Connection,
     prompt_id: str,
@@ -579,6 +611,14 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
             conn,
             str(mutation["prompt_id"]),
             str(mutation["model"]),
+            actor=actor,
+            note=mutation.get("note"),
+        )
+    elif op=="explanation":
+        set_explanation(
+            conn,
+            str(mutation["prompt_id"]),
+            str(mutation["explanation"]),
             actor=actor,
             note=mutation.get("note"),
         )
