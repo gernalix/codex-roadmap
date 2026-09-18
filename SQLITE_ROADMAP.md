@@ -68,7 +68,7 @@ Formato:
 }
 ```
 
-Operazioni supportate: `analysis`, `code_change`, `status`, `relation`, `dependency`, `dependency_replace`, `tag`, `execution`, `register`. `analysis` e `code_change` sono usate solo per eccezioni reali; `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
+Operazioni supportate: `analysis`, `code_change`, `model`, `status`, `relation`, `dependency`, `dependency_replace`, `tag`, `execution`, `register`. `model` aggiorna esclusivamente il modello assegnato al prompt esistente e registra l'audit dell'operazione. `analysis` e `code_change` sono usate solo per eccezioni reali; `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
 
 ## Proiezioni generate
 
