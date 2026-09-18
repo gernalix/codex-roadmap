@@ -11,7 +11,7 @@ Distribuisci SOLO il fast-path già presente su `gernalix/codex-usage-monitor/ma
 - il fix remoto salva uno snapshot fail-safe di path/size/mtime/ctime dei rollout e lo invalida se cambia la semantica del publisher o resta stato non pubblicato;
 - i test remoti coprono: no reparse/no repo-sync sui sorgenti invariati e invalidazione su cambio generation;
 - runtime canonico: `/home/daniele/.local/lib/codex-usage-monitor/current`;
-- prima del fix, PROMPT_ID=468205 ha mostrato ~30 s di lavoro publisher durante un run che ha pubblicato 0 prompt cycles;
+- prima del fix, PROMPT_ID=468205 ha impiegato >50 s nella fase `codex-usage-publisher.service`; quella service include publisher + chat-dump + GitHub-Actions watch, mentre il publisher ha prodotto un commit `publish 0 prompt cycles`: per questo il benchmark deve isolare il solo publisher;
 - nessuna modifica source è richiesta in questo task.
 
 # Esecuzione minima
