@@ -56,6 +56,8 @@ Recovery:
 - niente retry identici senza nuova evidenza/stato cambiato;
 - niente audit, cleanup o modernizzazione non necessari al goal.
 
+I `non-goal` non devono contraddire il recovery: se il prompt autorizza esplicitamente un fix in-scope e il rilancio del leaf gate dopo stato cambiato, non può contemporaneamente vietare modifiche codice o un secondo run necessario a dimostrare il recovery.
+
 `FAIL` è ammesso solo dopo recovery ragionevole realmente tentato e documentato. `BLOCKED` è riservato ai blocker esterni/safety sopra.
 
 ### Evidenza terminale
@@ -71,7 +73,7 @@ Regole di default:
 - partire dal workdir e dai file direttamente pertinenti;
 - riusare evidenza già verificata nella stessa sessione;
 - raggruppare letture e controlli indipendenti compatibili;
-- evitare dump ampi di repository, log, XML, tree o database;
+- evitare dump ampi di repository, log, XML, tree, database o sorgenti runtime; quando serve acquisire un file remoto grande, copiarlo/reindirizzarlo su file e ispezionare solo diff o regioni pertinenti invece di stamparlo nel contesto;
 - dopo un failure leggere il minimo failure artifact e rilanciare solo il test/leaf gate interessato;
 - eseguire gate economici host/statici prima di device/servizi costosi;
 - non ripetere gate PASS se il diff successivo non li invalida;
