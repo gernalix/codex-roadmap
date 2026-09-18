@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237 · Completa il fix del salvataggio Codex sul PC]] · `blocked` · analizzato=sì · fix=642815
 - [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation|749621 · Attiva single-writer completo e integrazione PH]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] · `blocked` · analizzato=sì · fix=371237

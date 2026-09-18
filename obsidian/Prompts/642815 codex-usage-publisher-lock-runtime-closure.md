@@ -1,21 +1,21 @@
 ---
 prompt_id: 642815
-status: pending
+status: blocked
 project_id: 8
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - issue-writer-e2e
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/blocked
   - roadmap/project/fedora
 ---
 
 # 642815 · Chiudere il fix del publisher Codex sul PC
 
-- **Stato:** pending
+- **Stato:** blocked
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/codex-usage-publisher-lock-runtime-closure|Apri prompt]]
+- **Prompt:** [[../../falliti/codex-usage-publisher-lock-runtime-closure|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
