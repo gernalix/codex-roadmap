@@ -1,37 +1,35 @@
 ---
-prompt_id: 690049
-status: superseded
+prompt_id: 526713
+status: pending
 project_id: 15
-model: GPT-5.6 Luna
-reasoning: low
+model: GPT-5.6 Terra
+reasoning: medium
 tags:
-  - project/fedora
-  - roadmap
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/fedora
 ---
 
-# 690049 · Ultimo controllo del monitoraggio Fedora
+# 526713 · Ultimo controllo del monitoraggio Fedora
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../falliti/fedora-runtime-validation|Apri prompt]]
+- **Prompt:** [[../../prompts/fedora-runtime-validation-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[642815 codex-usage-publisher-lock-runtime-closure|642815]]
+- **Dipende da:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
 - **Sblocca:** —
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[526713 fedora-runtime-validation-v2|526713]]
+- **Padri/precedenti:** [[690049 fedora-runtime-validation|690049]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Controlla sul PC reale che i due monitor Fedora abbiano ancora le impostazioni corrette.
+Chiude il monitoraggio Fedora/Kuma dando a Codex autonomia per correggere unit, helper e configurazione; si ferma solo se serve davvero un login o altro intervento esterno.
 
 ## Esecuzioni
 

@@ -1,20 +1,20 @@
 ---
 prompt_id: 693572
-status: pending
+status: superseded
 project_id: 96
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/fedora-workflowy
 ---
 
 # 693572 · Ultima prova reale dell’importatore Workflowy
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
-- **Prompt:** [[../../prompts/workflowy-importer-live-smoke-secret-file|Apri prompt]]
+- **Prompt:** [[../../falliti/workflowy-importer-live-smoke-secret-file|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -22,9 +22,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[642815 codex-usage-publisher-lock-runtime-closure|642815]]
-- **Sblocca:** [[330522 workflowy-automation-local-activation|330522]], [[775412 workflowy-automation-local-activation-v2|775412]]
+- **Sblocca:** [[330522 workflowy-automation-local-activation|330522]]
 - **Padri/precedenti:** [[746193 workflowy-importer-local-live-validation|746193]]
-- **Figli/follow-up:** [[330522 workflowy-automation-local-activation|330522]]
+- **Figli/follow-up:** [[330522 workflowy-automation-local-activation|330522]], [[418906 workflowy-importer-live-smoke-secret-file-v2|418906]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

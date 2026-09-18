@@ -1,5 +1,5 @@
 ---
-prompt_id: 775412
+prompt_id: 418906
 status: pending
 project_id: 96
 model: GPT-5.6 Luna
@@ -10,26 +10,26 @@ tags:
   - roadmap/project/fedora-workflowy
 ---
 
-# 775412 · Attivare le automazioni locali di Workflowy
+# 418906 · Ultima prova reale dell’importatore Workflowy
 
 - **Stato:** pending
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
-- **Prompt:** [[../../prompts/workflowy-automation-local-activation-v2|Apri prompt]]
+- **Prompt:** [[../../prompts/workflowy-importer-live-smoke-secret-file-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[418906 workflowy-importer-live-smoke-secret-file-v2|418906]]
-- **Sblocca:** —
-- **Padri/precedenti:** [[330522 workflowy-automation-local-activation|330522]]
+- **Dipende da:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
+- **Sblocca:** [[775412 workflowy-automation-local-activation-v2|775412]]
+- **Padri/precedenti:** [[693572 workflowy-importer-live-smoke-secret-file|693572]]
 - **Figli/follow-up:** —
-- **Chat Codex:** Stessa chat di 693572
+- **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Installa sul PC il ponte locale di Workflowy e l’aggiornamento automatico della copia locale, lasciando disattivati i timer opzionali di backup e riepilogo.
+Esegue il live smoke Workflowy con secret gate sicuro, ma consente a Codex di correggere autonomamente bug tecnici in-scope invece di fermarsi al primo test fallito.
 
 ## Esecuzioni
 

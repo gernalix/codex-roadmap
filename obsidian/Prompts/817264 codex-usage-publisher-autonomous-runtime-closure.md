@@ -5,6 +5,7 @@ project_id: 8
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
+  - issue-queue-drain-v2
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/fedora
@@ -22,7 +23,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[284916 personalhub-100-capsule-isolation-integrate-v3|284916]], [[357862 logseq-updates-pat-safety-closure-v2|357862]], [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]], [[781352 oracle-backup-notification-antiflap-runtime-v2|781352]], [[904631 datasette5-personalhub-explorer-security-deploy-v2|904631]]
+- **Sblocca:** [[284916 personalhub-100-capsule-isolation-integrate-v3|284916]], [[357862 logseq-updates-pat-safety-closure-v2|357862]], [[418906 workflowy-importer-live-smoke-secret-file-v2|418906]], [[526713 fedora-runtime-validation-v2|526713]], [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]], [[781352 oracle-backup-notification-antiflap-runtime-v2|781352]], [[904631 datasette5-personalhub-explorer-security-deploy-v2|904631]]
 - **Padri/precedenti:** [[642815 codex-usage-publisher-lock-runtime-closure|642815]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Stessa chat di 642815
