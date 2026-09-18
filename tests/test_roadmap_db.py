@@ -1,0 +1,44 @@
+from __future__ import annotations
+import sys, tempfile, unittest
+from pathlib import Path
+
+TOOLS=Path(__file__).resolve().parents[1]/"tools"
+sys.path.insert(0,str(TOOLS))
+import roadmap_db as db
+
+class RoadmapDBTests(unittest.TestCase):
+    def test_register_dependencies_execution_analysis_and_render(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            (repo/"schema").mkdir()
+            (repo/"tools").mkdir()
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md",explanation="Uno",queue_position=1)
+            db.register_prompt(conn,prompt_id="654321",slug="two",title="Two",current_path="prompts/two.md",explanation="Due",queue_position=2)
+            db.add_dependency(conn,"654321","123456")
+            conn.commit()
+            self.assertEqual("123456",db.next_runnable(conn)["prompt_id"])
+            db.record_execution(conn,"123456",cycle_key="c1",started_at="2026-09-18T10:00:00Z",ended_at="2026-09-18T10:01:00Z",outcome="PASS",source="test")
+            db.record_analysis(conn,"123456",bottlenecks_found=True,summary="x",fix_prompt_id=None)
+            conn.commit()
+            self.assertEqual("654321",db.next_runnable(conn)["prompt_id"])
+            conn.close()
+            (repo/"prompts").mkdir()
+            (repo/"prompts/one.md").write_text("x",encoding="utf-8")
+            (repo/"prompts/two.md").write_text("x",encoding="utf-8")
+            db.render(repo)
+            self.assertIn("prompts/two", (repo/"roadmap.md").read_text())
+            self.assertIn("123456", (repo/"prompt-registry.md").read_text())
+            self.assertTrue((repo/"obsidian/Prompts/123456 one.md").is_file())
+            self.assertTrue(db.verify(repo)["ok"])
+
+    def test_prompt_id_is_unique(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md")
+            with self.assertRaises(db.RoadmapDBError):
+                db.register_prompt(conn,prompt_id="123456",slug="two",title="Two",current_path="prompts/two.md")
+            conn.close()
+
+if __name__=="__main__": unittest.main()
