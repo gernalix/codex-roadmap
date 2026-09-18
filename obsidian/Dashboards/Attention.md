@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/284916 personalhub-100-capsule-isolation-integrate-v3|284916 · PersonalHub 100% capsule isolation — valida e integra]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/418906 workflowy-importer-live-smoke-secret-file-v2|418906 · Ultima prova reale dell’importatore Workflowy]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/781352 oracle-backup-notification-antiflap-runtime-v2|781352 · Ferma le notifiche backup Oracle transitorie]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked` · analizzato=sì · fix=817264

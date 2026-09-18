@@ -1,20 +1,20 @@
 ---
 prompt_id: 284916
-status: pending
+status: completed
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/completed
   - roadmap/project/personalhub
 ---
 
 # 284916 · PersonalHub 100% capsule isolation — valida e integra
 
-- **Stato:** pending
+- **Stato:** completed
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../prompts/personalhub-100-capsule-isolation-integrate-v3|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-100-capsule-isolation-integrate-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
