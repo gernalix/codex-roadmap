@@ -5,7 +5,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
 
 # Starting point autoritativo
 - repo: /home/daniele/projects/PersonalHub, branch canonico main;
-- baseline Git History/Data già implementata: 4f6b19ea790adfb22378f30940d26d78bee4da0e deve essere antenata di RUN_HEAD; commit successivi non correlati (es. Salute CI) vanno preservati;
+- baseline Git History/Data già implementata: ed18f0c28404fc6bbf0855f51d38a4c4937bd265 deve essere antenata di RUN_HEAD; commit successivi non correlati (es. Salute CI) vanno preservati;
 - version.txt resta 48: NON fare bump, NON installare il package reale sul Pixel, NON inviare APK; la release resta nel task PH successivo;
 - file/boundary già noti: core/database/.../capsules/gitdata/*, DeclarativeMigrations.kt, DatabaseVault.kt, DatabaseGate.kt, PersonalHubDatabase.kt, HubActivityCapture.kt, feature/multitimetracker/.../SnapshotSqlite.kt, app/.../capsules/settings/{HubSettings,GitHistorySettings}.kt, MainActivity.kt, docs/GIT_DATA_HISTORY.md;
 - SQLite resta source of truth runtime; Git è solo history/transport; Git OFF è il default; la configurazione Git deve accettare solo repository GitHub PRIVATI e scrivibili;
@@ -22,6 +22,7 @@ Valida e, SOLO dove i test locali mostrano un difetto concreto, completa la piat
    - Git OFF: nessuna richiesta/push automatico, legacy Activity/Timer Time Machine continuano a funzionare.
    - Git ON: tracking installato, legacy HubActivityCapture rimosso; OFF lo reinstalla.
    - una transazione domain INSERT/UPDATE/DELETE genera event atomico con before/after, author, source, reason/group; rollback non genera history.
+   - tutte le write della stessa outer SQLite transaction ricevono automaticamente lo stesso group_id; write fuori transazione restano eventi singoli; context espliciti remote_patch/history_revert prevalgono senza contaminare la transazione successiva.
    - snapshot/snapshot_history/snapshot_payloads e altri technical churn restano sincronizzabili nello state ma NON generano semantic history payload enormi.
    - push debounce 60 s, recovery persistente/offline e ack revision-safe: un edit committato non può sparire prima del push confermato.
    - JSONL deterministico + sharding 1/8/32/128; una modifica limitata non richiede upload di shard invariati.
