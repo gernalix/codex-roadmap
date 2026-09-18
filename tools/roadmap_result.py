@@ -93,7 +93,7 @@ def finish_result(
             if dry_run:
                 return {"status":"ready","prompt_id":prompt_id,"result":result,"current_status":state["status"]}
             payload=_apply_in_worktree(wt,prompt_id,result)
-            status=run(wt,"status","--porcelain","--untracked-files=all").stdout.splitlines()
+            status=[line for line in run(wt,"status","--porcelain=v1","-z","--untracked-files=all").stdout.split("\0") if line]
             changed=[line[3:] for line in status if len(line)>=4]
             allowed_prefixes=(
                 "roadmap.sqlite","roadmap.md","spiegazioni.md","prompt-registry.md","obsidian/",
