@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[357214 personalhub-git-history-data-sync-validation-v2|357214]], [[527184 datasette5-personalhub-explorer-security-deploy|527184]]
+- **Dipende da:** [[357214 personalhub-git-history-data-sync-validation-v2|357214]], [[904631 datasette5-personalhub-explorer-security-deploy-v2|904631]]
 - **Sblocca:** [[243871 personalhub-play-release-local-validation-v2|243871]]
 - **Padri/precedenti:** [[861305 personalhub-datasette-lite-offline-runtime|861305]]
 - **Figli/follow-up:** —

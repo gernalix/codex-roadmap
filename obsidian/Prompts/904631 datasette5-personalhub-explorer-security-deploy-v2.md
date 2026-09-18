@@ -1,37 +1,35 @@
 ---
-prompt_id: 527184
-status: superseded
+prompt_id: 904631
+status: pending
 project_id: 10
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
-  - project/datasette5-oracle
-  - roadmap
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/datasette5-oracle
 ---
 
-# 527184 · Versione online dell’esploratore dati PersonalHub
+# 904631 · Versione online dell’esploratore dati PersonalHub
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/datasette5-oracle|datasette5 / Oracle]]
-- **Prompt:** [[../../falliti/datasette5-personalhub-explorer-security-deploy|Apri prompt]]
+- **Prompt:** [[../../prompts/datasette5-personalhub-explorer-security-deploy-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[642815 codex-usage-publisher-lock-runtime-closure|642815]]
-- **Sblocca:** [[861305 personalhub-datasette-lite-offline-runtime|861305]]
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[904631 datasette5-personalhub-explorer-security-deploy-v2|904631]]
+- **Dipende da:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
+- **Sblocca:** [[918536 personalhub-datasette-lite-offline-runtime-v2|918536]]
+- **Padri/precedenti:** [[527184 datasette5-personalhub-explorer-security-deploy|527184]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Distribuisce sul computer remoto l’esploratore dati privato e di sola lettura di PersonalHub.
+Distribuisce l’esploratore dati privato PersonalHub accettando main successivi alla baseline e dando a Codex autonomia per correggere test, deploy e compatibilità in-scope.
 
 ## Esecuzioni
 

@@ -6,7 +6,7 @@
 2. [[prompts/personalhub-100-capsule-isolation-integrate-v3|personalhub-100-capsule-isolation-integrate-v3]]
 3. [[prompts/oracle-backup-notification-antiflap-runtime-v2|oracle-backup-notification-antiflap-runtime-v2]]
 4. [[prompts/workflowy-importer-live-smoke-secret-file|workflowy-importer-live-smoke-secret-file]]
-5. [[prompts/datasette5-personalhub-explorer-security-deploy|datasette5-personalhub-explorer-security-deploy]]
+5. [[prompts/datasette5-personalhub-explorer-security-deploy-v2|datasette5-personalhub-explorer-security-deploy-v2]]
 6. [[prompts/workflowy-automation-local-activation-v2|workflowy-automation-local-activation-v2]]
 7. [[prompts/personalhub-shared-alerts-places-tags-integration-v2|personalhub-shared-alerts-places-tags-integration-v2]]
 8. [[prompts/personalhub-epoch-timestamps-migration-v2|personalhub-epoch-timestamps-migration-v2]]

@@ -22,7 +22,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[284916 personalhub-100-capsule-isolation-integrate-v3|284916]], [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]], [[781352 oracle-backup-notification-antiflap-runtime-v2|781352]]
+- **Sblocca:** [[284916 personalhub-100-capsule-isolation-integrate-v3|284916]], [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]], [[781352 oracle-backup-notification-antiflap-runtime-v2|781352]], [[904631 datasette5-personalhub-explorer-security-deploy-v2|904631]]
 - **Padri/precedenti:** [[642815 codex-usage-publisher-lock-runtime-closure|642815]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Stessa chat di 642815
