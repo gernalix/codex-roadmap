@@ -47,7 +47,7 @@ Le strutture storiche `analyses` e `analysis_code_changes` restano nel DB per co
 
 `roadmap.sqlite` è l'unica fonte autorevole dei metadati. `roadmap.md`, `spiegazioni.md`, `prompt-registry.md` e `obsidian/` sono generate.
 
-ChatGPT, Codex e il sync `codex-usage` inviano richieste come **GitHub Issues** con titolo `[roadmap-mutation] <request_key>` e body JSON immutabile. Ogni run del workflow drena **tutte** le mutation Issue aperte in ordine, le applica serialmente, materializza eventuali nuovi prompt, rigenera le viste, aggiorna `main` e chiude le Issue processate. Se GitHub cancella un run pending per la concurrency, la Issue resta aperta e viene raccolta automaticamente dal run successivo.
+ChatGPT, Codex e il sync `codex-usage` inviano richieste come **GitHub Issues** con titolo `[roadmap-mutation] <request_key>` e body JSON immutabile. Ogni run del workflow drena **tutte** le mutation Issue aperte in ordine, le applica serialmente, materializza eventuali nuovi prompt, rigenera le viste, aggiorna `main` e chiude le Issue processate. Se GitHub cancella un run pending per la concurrency, la Issue resta aperta e viene raccolta automaticamente dal run successivo. Una mutation invalida/collidente viene isolata, commentata e chiusa `not_planned` senza impedire l'applicazione delle Issue valide successive.
 
 I client non committano più file di inbox, prompt, DB o viste. Le directory `mutations/inbox/` e `mutations/applied/` restano solo come storico del trasporto precedente. Le CLI di mutazione diretta del DB sono solo manutenzione eccezionale.
 
