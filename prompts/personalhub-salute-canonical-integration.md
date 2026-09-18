@@ -7,7 +7,7 @@ Sul branch `feature/salute-canonical-domain`, sostituisci l'attuale Salute basat
 - repo: `/home/daniele/projects/PersonalHub`;
 - esegui SOLO dopo PROMPT_ID=461839 PASS/finalizzato e dopo che il suo branch timestamp è stato integrato in `main`;
 - branch di lavoro obbligatorio: `feature/salute-canonical-domain`; rebase/fast-forward sicuro sul nuovo `origin/main` preservando i commit di design già presenti;
-- il branch contiene già `docs/HEALTH_MODULE.md`, `docs/health/HEALTH_DATA_MODEL.md`, `docs/health/chatgpt-to-ph-workflow.svg`, `docs/health/android-minimal-ui.svg`; questi sono il contratto di prodotto;
+- il branch contiene già `docs/HEALTH_MODULE.md`, `docs/health/HEALTH_DATA_MODEL.md`, `docs/health/CHATGPT_PATCH_CONTRACT.md`, `docs/health/chatgpt-to-ph-workflow.svg`, `docs/health/android-minimal-ui.svg`; questi sono il contratto di prodotto;
 - `version.txt` sul branch è già 50: dopo il rebase, risolvi la versione senza retrocedere e fai esattamente UN bump per questo prompt, al valore successivo al main post-rebase (atteso 51 se main resta 50);
 - NON committare dati sanitari reali, screenshot, note cliniche, dump DB o fixture riconducibili all'utente nel repo pubblico PH;
 - `personalhub.db` resta l'unico DB runtime canonico/scrivibile;
@@ -52,7 +52,7 @@ Sul branch `feature/salute-canonical-domain`, sostituisci l'attuale Salute basat
    - no hindsight: evidenze cliniche <= as_of_ms;
    - `health_ai_evidence` rende auditabili le evidenze;
    - update di snapshot incrementa assessment_version; Git conserva la storia precedente.
-8. ChatGPT→PH patch contract:
+8. ChatGPT→PH patch contract: usa `docs/health/CHATGPT_PATCH_CONTRACT.md` e il formato già implementato da `GitPatchEngine`; non inventare un secondo patch protocol.
    - aggiungi test/fixture SINTETICA di una patch unica con import_batch, sample, più measurement, commenti measurement+sample, journal+meta-comment e riferimenti cross-domain;
    - tutta la patch deve avere un unico group_id/import_batch e applicarsi atomicamente;
    - verifica dedup/preconditions/idempotenza e che GitDataTracking generi history semantica granulare ma raggruppabile;
