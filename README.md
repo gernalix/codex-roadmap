@@ -99,6 +99,8 @@ Ogni file in `prompts/` deve essere autosufficiente e contenere solo ciò che se
 
 Non copiare interi protocolli globali dentro ogni prompt. Includere solo le regole realmente applicabili al task. Se starting point/path/helper/test sono già noti, vietare rediscovery generale.
 
+Non usare **overlay di precedenza** del tipo “questa sezione prevale sulle istruzioni successive” per rattoppare un prompt già materializzato: aumenta token e ambiguità. Se una policy cambia in modo da rendere incoerente un prompt pendente, creare una nuova materializzazione completa e coerente con nuovo PROMPT_ID, collegarla al padre e supersedere/cancellare la vecchia. Non correggere in-place il testo di un PROMPT_ID già materializzato.
+
 Contratto esecutivo completo: [[STANDARD_PROMPT|Esecuzione Codex]].
 
 ## PROMPT_ID
