@@ -48,7 +48,7 @@ ChatGPT crea una GitHub Issue per ogni richiesta, con titolo `[roadmap-mutation]
 
 ### Single writer
 
-Il workflow `Apply roadmap mutation Issues` usa un'unica coda di concorrenza GitHub Actions. È l'unico componente autorizzato nel flusso normale a modificare il DB canonico, i prompt materializzati e le proiezioni. ChatGPT, Codex e il sync `codex-usage` producono Issue indipendenti; la serializzazione avviene soltanto al momento dell'applicazione. Il DB registra una receipt per `request_key`, quindi retry e Issue duplicate identiche sono idempotenti. Dopo push riuscito il workflow commenta e chiude la Issue. Le CLI che mutano direttamente il DB restano solo strumenti di manutenzione eccezionale e non vanno usate durante l'esecuzione ordinaria della roadmap.
+Il workflow `Apply roadmap mutation Issues` usa un'unica coda di concorrenza GitHub Actions. È l'unico componente autorizzato nel flusso normale a modificare il DB canonico, i prompt materializzati e le proiezioni. Ogni run elenca e drena tutte le mutation Issue ancora aperte, quindi una run pending cancellata dalla semantica di concurrency di GitHub non perde la richiesta: la Issue resta open e il run successivo la applica. Il DB registra una receipt per `request_key`, quindi retry e Issue duplicate identiche sono idempotenti. Dopo push riuscito il workflow commenta e chiude tutte le Issue drenate. Le CLI che mutano direttamente il DB restano solo strumenti di manutenzione eccezionale e non vanno usate durante l'esecuzione ordinaria della roadmap.
 
 Formato:
 
