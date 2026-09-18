@@ -289,21 +289,23 @@ def record_terminal(
     if result not in FINAL_STATUS:
         raise RoadmapDBError(f"invalid_outcome:{result}")
     ts = now_utc()
-    record_execution(
+    set_status(
         conn,
         prompt_id,
-        started_at=None,
-        ended_at=ts,
-        outcome=result,
-        source=source,
+        FINAL_STATUS[result],
         actor=actor,
-        update_status=True,
+        note=f"terminal:{source}",
     )
-    if note:
-        conn.execute(
-            "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
-            (prompt_id, "terminal_note", ts, actor, json.dumps({"note":note}, ensure_ascii=False)),
-        )
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "terminal_result",
+            ts,
+            actor,
+            json.dumps({"result": result, "source": source, "note": note}, ensure_ascii=False, sort_keys=True),
+        ),
+    )
 
 def record_analysis(
     conn: sqlite3.Connection,
@@ -364,6 +366,12 @@ def verify(repo: Path) -> dict[str, Any]:
     ).fetchall()
     if bad:
         problems.append("pending_path_invalid:" + ",".join(r[0] for r in bad))
+    unhashed=conn.execute(
+        "SELECT p.prompt_id FROM prompts p "
+        "WHERE p.current_path LIKE 'prompts/%' AND p.materialization_sha256 IS NULL"
+    ).fetchall()
+    if unhashed:
+        problems.append("active_prompt_fingerprint_missing:" + ",".join(r[0] for r in unhashed))
     result={
         "ok": not problems,
         "problems": problems,
