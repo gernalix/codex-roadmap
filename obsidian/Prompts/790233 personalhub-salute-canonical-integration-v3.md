@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Implementa il fondamento dati Salute con migration e patch contract, senza UI prematura.
+Porta il modello dati completo di Salute dentro il database principale di PersonalHub, compresi esami, note e snapshot AI. Serve per avere una sola base dati affidabile prima di costruire il resto del modulo. Richiede Codex perché deve modificare schema Room, migrazioni e controlli di integrità.
 
 ## Esecuzioni
 

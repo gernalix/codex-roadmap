@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Sospende per ora la localizzazione italiana in PersonalHub e libera la Home di Places dal grande pannello diagnostico, lasciandolo accessibile solo tramite un controllo discreto. Richiede Codex per la verifica locale/emulatore dell’interfaccia Android.
+Fa usare a PersonalHub solo l'inglese per ora e sposta la grande diagnostica dei check-in di Places dietro un pulsante discreto. Serve a semplificare sia la manutenzione delle stringhe sia la schermata Places. Richiede Codex perché deve verificare lingua e interfaccia su un emulatore Android.
 
 ## Esecuzioni
 

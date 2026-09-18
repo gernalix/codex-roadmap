@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Accorpa foundation, incremental engine e projection di tutti i moduli, evitando tre setup/merge/version bump separati.
+Aggiunge l'archivio Obsidian opzionale di tutti i moduli di PersonalHub, aggiornabile senza rigenerare tutto ogni volta e recuperabile dopo interruzioni. Serve per consultare comodamente i dati come note senza sostituire SQLite. Richiede Codex per accesso ai file locali, test di recovery e prova su Android.
 
 ## Esecuzioni
 

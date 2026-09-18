@@ -5,6 +5,7 @@ project_id: 15
 model: GPT-5.6 Luna
 reasoning: medium
 tags:
+  - manual-prerequisite:kuma-login
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/fedora
@@ -29,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-Chiude il monitoraggio Fedora/Kuma dando a Codex autonomia per correggere unit, helper e configurazione; si ferma solo se serve davvero un login o altro intervento esterno.
+Dopo che hai rifatto login a Kuma in Chrome, verifica e chiude la configurazione dei monitor Fedora rimasta sospesa. Serve per assicurarsi che intervalli e monitor Storage siano configurati correttamente. Richiede Codex perché deve usare la sessione Chrome e i servizi locali di Fedora.
 
 ## Esecuzioni
 

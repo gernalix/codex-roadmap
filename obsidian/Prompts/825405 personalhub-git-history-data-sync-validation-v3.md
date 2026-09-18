@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Gate rischio-dati exception-driven: corregge solo difetti dimostrati dai test.
+Verifica a fondo backup Git, cronologia, Time Machine e ripristino dei dati di PersonalHub, correggendo solo problemi realmente trovati. Serve come controllo di sicurezza prima di affidarsi a queste funzioni con dati reali. Richiede Codex per test locali, Git e prove Android.
 
 ## Esecuzioni
 

@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Sostituisce il vecchio task CI che chiedeva di completare le traduzioni italiane, ora incompatibile con la decisione di mantenere temporaneamente PersonalHub solo in inglese. Chiude i workflow rimasti rossi dopo il nuovo task UI/localizzazione.
+Rimette tutta la CI GitHub di PersonalHub in verde dopo il passaggio a English-only. Serve per assicurarsi che test, lint e test su emulatore siano affidabili prima delle modifiche più profonde. Richiede Codex per riprodurre e correggere eventuali failure Android.
 
 ## Esecuzioni
 

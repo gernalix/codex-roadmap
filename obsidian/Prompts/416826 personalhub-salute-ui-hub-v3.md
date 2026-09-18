@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Completa UI e integrazioni Salute riusando il contesto del task dati precedente.
+Collega i dati Salute all'interfaccia di PersonalHub, all'Hub, alla ricerca e all'export Obsidian. Serve per rendere realmente consultabili e utilizzabili i dati Salute già salvati nel database canonico. Richiede Codex perché deve integrare e provare più schermate Android.
 
 ## Esecuzioni
 

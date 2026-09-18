@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Completa Datasette Lite offline e consegna un solo artifact già testato, senza versioni future hardcoded.
+Completa l'esploratore dati offline dentro PersonalHub, con relazioni simili al Datasette online e senza bisogno di rete. Serve per consultare il database anche dal telefono quando sei offline. Richiede Codex per integrare il runtime, testarlo su Android e produrre l'APK finale.
 
 ## Esecuzioni
 

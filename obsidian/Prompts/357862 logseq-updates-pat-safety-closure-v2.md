@@ -5,6 +5,7 @@ project_id: 23
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
+  - manual-prerequisite:revoke-pat
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/fedora
@@ -29,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-Completa la bonifica Logseq e attiva l’updater con autonomia sui problemi tecnici, mantenendo fail-closed soltanto per la revoca PAT, rischio dati e altre azioni davvero esterne.
+Dopo che hai revocato il vecchio PAT GitHub, rimuove quel segreto dalla cronologia di logseq_updates e attiva l'updater automatico su Fedora. Serve per chiudere un problema di sicurezza e rendere operativo l'aggiornamento. Richiede Codex per riscrivere la history Git, fare la scansione dei segreti e configurare systemd.
 
 ## Esecuzioni
 

@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Validazione meccanica finale dell’AAB corrente senza modifiche, bump o upload Play.
+Fa l'ultimo controllo locale della build destinata a Google Play: firma, policy, compatibilità e smoke test. Serve per trovare problemi prima di un eventuale upload sul Play Store. Richiede Codex perché usa chiavi di firma locali, bundletool ed emulatore.
 
 ## Esecuzioni
 

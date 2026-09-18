@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Audit/fix timestamp fail-closed: migra solo vere violazioni e non crea lavoro se il contratto è già rispettato.
+Controlla che i veri timestamp di PersonalHub siano salvati tutti nello stesso formato epoch in millisecondi e corregge solo le eccezioni reali. Serve per avere date coerenti tra moduli e relazioni temporali affidabili. Richiede Codex perché può dover fare migrazioni del database e test sui dati.
 
 ## Esecuzioni
 

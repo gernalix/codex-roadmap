@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Distribuisce l’esploratore dati privato PersonalHub accettando main successivi alla baseline e dando a Codex autonomia per correggere test, deploy e compatibilità in-scope.
+Pubblica sulla VM Oracle l'esploratore Datasette di PersonalHub già implementato e verifica che relazioni, link tra tabelle e accesso read-only funzionino davvero. Serve per consultare online il database in modo navigabile e sicuro. Richiede Codex perché deve distribuire e verificare il servizio reale sulla VM.
 
 ## Esecuzioni
 

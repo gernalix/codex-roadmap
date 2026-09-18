@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Sostituisce il vecchio prompt contraddittorio e integra runtime restore + shared alerts in un solo candidate.
+Unisce in main i tag di Places, gli alert condivisi tra Timer e Places e il fix dei profili, poi elimina i branch temporanei. Serve per rendere operative funzioni già sviluppate ma ancora separate da main. Richiede Codex perché deve gestire migrazioni Room, test e prova su emulatore.
 
 ## Esecuzioni
 

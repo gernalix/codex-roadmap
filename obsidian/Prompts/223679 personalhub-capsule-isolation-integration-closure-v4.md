@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Integra il branch capsule rimasto fuori da main nonostante 284916 PASS, con review semantica e gate mirati.
+Porta dentro main il branch già pronto che separa meglio i moduli di PersonalHub, poi elimina quel branch. Serve per non lasciare lavoro già verificato fuori dall'app principale. Richiede Codex perché deve gestire eventuali conflitti e rieseguire i test Android.
 
 ## Esecuzioni
 

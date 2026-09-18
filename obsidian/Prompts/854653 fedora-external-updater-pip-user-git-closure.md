@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Chiude soltanto il gap Git lasciato dalla catena pip_user/537184: verifica i cinque file già testati, preserva hunk estranei, commit/push dove applicabile. Richiede Codex perché il repo e il worktree dirty sono locali al Fedora.
+Salva definitivamente su GitHub il fix di pip_user che è già stato testato. Serve perché il fix funziona sul PC ma alcune modifiche non sono ancora state pubblicate. Richiede Codex perché deve lavorare sul checkout locale senza perdere altre modifiche.
 
 ## Esecuzioni
 
