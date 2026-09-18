@@ -13,10 +13,18 @@ Per ogni `PROMPT_ID`:
 - dipendenze e relazioni (`parent`, `fix`, `followup`, `replacement`, `split`, `merge`, `related`);
 - tag e artefatti;
 - ogni esecuzione Codex con start/end, outcome, durata, modello, reasoning, tool-call e token quando disponibili;
-- ogni analisi ChatGPT, inclusi presenza di colli di bottiglia e PROMPT_ID del fix;
-- le modifiche di codice fatte da ChatGPT dopo un’analisi, separate per repository/tipo/commit;
+- le analisi ChatGPT **solo quando esiste un'eccezione reale** (failure, anomalia, retry, bug infrastrutturale o richiesta esplicita), inclusi eventuali colli di bottiglia e PROMPT_ID del fix;
+- le eventuali modifiche di codice fatte da ChatGPT dopo un'analisi eccezionale, separate per repository/tipo/commit;
 - cronologia dei cambi di stato e audit degli aggiornamenti;
 - collisioni sospette di PROMPT_ID/materializzazione.
+
+## Politica exception-driven
+
+Le tabelle `analyses` e `analysis_code_changes` sono storiche/opzionali: non rappresentano una checklist da completare per ogni prompt.
+
+Un PASS ordinario viene chiuso usando la telemetria automatica di `executions`. Non si crea un'analisi dedicata, un file audit o un follow-up salvo failure, retry, costo/tool-call anomali, conflitto/loop osservato, bug infrastrutturale o richiesta esplicita.
+
+Questo evita che il sistema di misurazione generi più lavoro del task misurato.
 
 ## Scrittori
 
@@ -60,7 +68,7 @@ Formato:
 }
 ```
 
-Operazioni supportate: `analysis`, `code_change`, `status`, `relation`, `dependency`, `dependency_replace`, `tag`, `execution`, `register`. `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
+Operazioni supportate: `analysis`, `code_change`, `status`, `relation`, `dependency`, `dependency_replace`, `tag`, `execution`, `register`. `analysis` e `code_change` sono usate solo per eccezioni reali; `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
 
 ## Proiezioni generate
 
