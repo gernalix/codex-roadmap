@@ -1,3 +1,5 @@
 1. [[prompts/personalhub-play-release-local-validation|personalhub-play-release-local-validation]]
-2. [[prompts/logseq-updates-pat-safety-closure|logseq-updates-pat-safety-closure]]
-3. [[prompts/fedora-runtime-validation|fedora-runtime-validation]]
+2. [[prompts/datasette5-personalhub-explorer-security-deploy|datasette5-personalhub-explorer-security-deploy]]
+3. [[prompts/personalhub-datasette-lite-offline-runtime|personalhub-datasette-lite-offline-runtime]]
+4. [[prompts/logseq-updates-pat-safety-closure|logseq-updates-pat-safety-closure]]
+5. [[prompts/fedora-runtime-validation|fedora-runtime-validation]]
