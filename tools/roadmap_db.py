@@ -640,30 +640,25 @@ def main(argv: list[str] | None=None) -> int:
     repo=Path(args.repo).expanduser().resolve()
     if args.cmd=="verify":
         print(json.dumps(verify(repo),sort_keys=True)); return 0
-    if args.cmd=="render":
-        print(json.dumps({"rendered":render(repo)},sort_keys=True)); return 0
-    conn=connect(repo)
-    try:
-        if args.cmd=="select":
+    if args.cmd=="select":
+        conn=connect(repo,writable=False)
+        try:
             row=next_runnable(conn)
-            print(json.dumps(dict(row) if row else {"status":"empty"},sort_keys=True)); return 0
-        if args.cmd=="status":
-            set_status(conn,args.prompt_id,args.status,actor=args.actor,note=args.note)
-        elif args.cmd=="analyze":
-            bf=None if args.bottlenecks_found=="unknown" else args.bottlenecks_found=="yes"
-            record_analysis(conn,args.prompt_id,actor=args.actor,bottlenecks_found=bf,summary=args.summary,fix_prompt_id=args.fix_prompt_id,source_ref=args.source_ref)
-        elif args.cmd=="relate":
-            add_relation(conn,args.from_prompt_id,args.to_prompt_id,args.relation_type,actor=args.actor,note=args.note)
-        elif args.cmd=="terminal":
-            record_terminal(conn,args.prompt_id,args.result,actor=args.actor,note=args.note)
-        conn.commit()
-    except Exception:
-        conn.rollback(); raise
-    finally:
-        conn.close()
-    render(repo)
-    print(json.dumps({"status":"ok","command":args.cmd},sort_keys=True))
-    return 0
+            print(json.dumps(dict(row) if row else {"status":"empty"},sort_keys=True))
+        finally:
+            conn.close()
+        return 0
+
+    # Canonical roadmap writes and generated-view refreshes are single-writer only.
+    # Operational clients must submit a codex-roadmap.mutation.v1 GitHub Issue via
+    # tools/submit_mutation.py (terminal results use roadmap_result/roadmap_finish).
+    print(json.dumps({
+        "status":"blocked",
+        "error":"direct_roadmap_write_forbidden",
+        "command":args.cmd,
+        "use":"tools/submit_mutation.py -> [roadmap-mutation] Issue -> GitHub Actions single writer",
+    },sort_keys=True))
+    return 2
 
 if __name__=="__main__":
     raise SystemExit(main())
