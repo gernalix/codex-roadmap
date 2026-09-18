@@ -83,3 +83,8 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ```
 
 `PRAGMA foreign_key_check` deve restare vuoto.
+
+## Inserimento remoto di un nuovo prompt
+
+Quando ChatGPT aggiunge sia il file `prompts/<slug>.md` sia la relativa mutazione `register`, i due artefatti vanno preferibilmente pubblicati nello stesso commit. In questo modo la CI non osserva per pochi secondi un file prompt ancora assente dal database. Se una mutazione viene applicata da GitHub Actions subito dopo un commit separato, la vista generata finale resta autorevole; il controllo successivo va eseguito sul nuovo HEAD prodotto dall'azione.
+
