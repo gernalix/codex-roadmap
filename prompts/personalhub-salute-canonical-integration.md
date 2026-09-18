@@ -8,7 +8,7 @@ Sul branch `feature/salute-canonical-domain`, sostituisci l'attuale Salute basat
 - esegui SOLO dopo PROMPT_ID=461839 PASS/finalizzato e dopo che il suo branch timestamp è stato integrato in `main`;
 - branch di lavoro obbligatorio: `feature/salute-canonical-domain`; rebase/fast-forward sicuro sul nuovo `origin/main` preservando i commit di design già presenti;
 - il branch contiene già `docs/HEALTH_MODULE.md`, `docs/health/HEALTH_DATA_MODEL.md`, `docs/health/CHATGPT_PATCH_CONTRACT.md`, `docs/health/chatgpt-to-ph-workflow.svg`, `docs/health/android-minimal-ui.svg`; questi sono il contratto di prodotto;
-- `version.txt` sul branch è già 50: dopo il rebase, risolvi la versione senza retrocedere e fai esattamente UN bump per questo prompt, al valore successivo al main post-rebase (atteso 51 se main resta 50);
+- `version.txt` deve restare 50 in questa fase intermedia della campagna PH: dopo il rebase risolvi eventuali conflitti senza bump; release/version bump resta al task Datasette Lite finale della campagna;
 - NON committare dati sanitari reali, screenshot, note cliniche, dump DB o fixture riconducibili all'utente nel repo pubblico PH;
 - `personalhub.db` resta l'unico DB runtime canonico/scrivibile;
 - l'UI Salute resta senza Add/Edit/Delete/FAB; le write reali arrivano da patch Git PH trusted con provenance `author=chatgpt`, `source=remote_patch`;
@@ -19,6 +19,7 @@ Sul branch `feature/salute-canonical-domain`, sostituisci l'attuale Salute basat
 2. Prima di cambiare Room/API pubbliche esegui `tools/android_consumer_preflight.py` sui simboli coinvolti. Per rimozioni usa il gate forbid prima del primo Gradle.
 3. Implementa il modello di `docs/health/HEALTH_DATA_MODEL.md` nel prossimo schema Room libero:
    - `health_import_batches`;
+   - `health_source_metadata`;
    - `health_events`;
    - `health_samples`;
    - `health_examinations`;
@@ -106,7 +107,7 @@ Sul branch `feature/salute-canonical-domain`, sostituisci l'attuale Salute basat
 16. Push SOLO `feature/salute-canonical-domain`. NON mergiare in main e NON eliminare il branch: l'utente lo mergerà manualmente dopo review. Rilascia lock. PASS => stop.
 
 # Acceptance
-PASS solo se Salute usa esclusivamente `personalhub.db`, schema/migration/compile/architecture/AVD sono PASS, UI è read-only e minimale, sample grouping+turnaround+AI multilivello sono implementati, History/Hub/Temporal/Datasette/Obsidian sono integrati senza un secondo motore e nessun dato sanitario reale è committato nel repo pubblico.
+PASS solo se Salute usa esclusivamente `personalhub.db`, schema/migration/compile/architecture/AVD sono PASS, UI è read-only e minimale, sample grouping+turnaround+AI multilivello sono implementati, History/Hub/Temporal/Datasette/Obsidian sono integrati senza un secondo motore, nessun dato sanitario reale è committato nel repo pubblico e `version.txt` resta 50.
 
 # Non-goal
 Niente redesign generale PH, Logseq DB, secondo database, secondo Git sync, nuovo backend, diagnosi cliniche automatiche definitive, Play release/install Pixel/delivery.
