@@ -3,12 +3,12 @@
 `HANDOFF_ID=483921` · executor: **ChatGPT + GitHub** · not a Codex roadmap task
 
 ## Goal
-Per tutti i repository esistenti e non `RETIRE` già elencati nell'handoff MegaVault, più `adb-device-keeper` se non ancora presente, rendere GitHub Actions la sede canonica di tutto il testing deterministico/sandboxabile ragionevolmente disponibile, senza duplicare CI già adeguata.
+Per tutti e soli i repository marcati `[x]` nella checklist di retention MegaVault, rendere GitHub Actions la sede canonica di tutto il testing deterministico/sandboxabile ragionevolmente disponibile, senza duplicare CI già adeguata.
 
 Sorgente autoritativa:
-`/home/daniele/projects/MegaVault/ai/repository-ci-handoff.json`
+`/home/daniele/projects/MegaVault/ai/repository-retention-checklist.md`
 
-Usa sempre la versione corrente del file. Lo scope è esattamente `repositories` + `adb-device-keeper` se assente, deduplicato per `name`. Non rifare inventory globale, audit segreti/pubblicabilità o decisioni PUBLIC/PRIVATE: la visibility dell'handoff è autoritativa per questa campagna.
+Usa sempre la versione corrente del file. Lo scope è esattamente l'insieme dei repository con `[x]`; ogni voce `[ ]` e ogni repository assente dalla checklist sono fuori scope. Non aggiungere automaticamente altri repository. Non rifare inventory globale, audit segreti/pubblicabilità o decisioni PUBLIC/PRIVATE.
 
 ## Principio
 Un check appartiene a GitHub Actions se può girare senza dati personali, hardware fisico, account/sessioni reali, secret di produzione o infrastruttura live, eventualmente tramite fixture/mock/temp dir.
