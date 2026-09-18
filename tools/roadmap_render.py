@@ -32,6 +32,39 @@ def _effective_outcome(row: sqlite3.Row | dict[str, Any]) -> Any:
     """Prefer the authoritative terminal roadmap state over stale telemetry."""
     return _FINAL_STATUS_OUTCOME.get(row["status"], row["last_outcome"])
 
+_MANUAL_PREREQ_LABELS = {
+    "revoke-pat": "revoca il vecchio PAT GitHub",
+    "kuma-login": "rifai il login a Kuma",
+}
+
+def _manual_prerequisite_text(conn: sqlite3.Connection, prompt_id: str) -> str | None:
+    rows = conn.execute(
+        "SELECT tag FROM prompt_tags WHERE prompt_id=? AND tag LIKE 'manual-prerequisite:%' ORDER BY tag",
+        (prompt_id,),
+    ).fetchall()
+    if not rows:
+        return None
+    labels = []
+    for row in rows:
+        code = str(row[0]).split(":", 1)[1]
+        labels.append(_MANUAL_PREREQ_LABELS.get(code, code.replace("-", " ")))
+    return ", ".join(labels)
+
+def _runnable_now_text(
+    conn: sqlite3.Connection,
+    row: sqlite3.Row,
+    unresolved_dependencies: list[sqlite3.Row],
+) -> str:
+    if row["status"] == "running":
+        return "▶ In corso"
+    if unresolved_dependencies:
+        ids = ", ".join(str(dep[0]) for dep in unresolved_dependencies)
+        return f"⏳ No — prima: {ids}"
+    manual = _manual_prerequisite_text(conn, str(row["prompt_id"]))
+    if manual:
+        return f"⛔ No — prima: {manual}"
+    return "✅ Sì"
+
 def _prompt_links(conn: sqlite3.Connection, prompt_id: str, relation_sql: str, params: tuple[Any,...]) -> str:
     rows = conn.execute(relation_sql, params).fetchall()
     if not rows:
@@ -108,15 +141,16 @@ def render(repo: Path) -> list[str]:
     spieg = [
         "# Spiegazioni della roadmap",
         "",
-        "> Generato da `roadmap.sqlite`. Le spiegazioni sono volutamente non tecniche.",
+        "> Generato da `roadmap.sqlite`. Le spiegazioni sono volutamente semplici e non tecniche.",
+        "> **Eseguibile ora?** considera sia le dipendenze non ancora completate sia gli eventuali prerequisiti manuali registrati.",
         "",
-        "| # | Prompt | PROMPT_ID | Stato | Progetto | Chat Codex | Dipendenze | Spiegazione | Modello | Reasoning | Tipo |",
-        "| --: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| # | Prompt | PROMPT_ID | Stato | Progetto | Chat Codex | Dipendenze | Eseguibile ora? | Spiegazione | Modello | Reasoning | Tipo |",
+        "| --: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for i, r in enumerate(pending, 1):
         deps = conn.execute(
-            "SELECT d.depends_on_prompt_id,p.title FROM dependencies d JOIN prompts p ON p.prompt_id=d.depends_on_prompt_id "
-            "WHERE d.prompt_id=? AND p.status IN ('pending','running') ORDER BY d.depends_on_prompt_id", (r["prompt_id"],)
+            "SELECT d.depends_on_prompt_id,p.title,p.status FROM dependencies d JOIN prompts p ON p.prompt_id=d.depends_on_prompt_id "
+            "WHERE d.prompt_id=? AND p.status<>'completed' ORDER BY d.depends_on_prompt_id", (r["prompt_id"],)
         ).fetchall()
         dep_text = ", ".join(_table_wikilink(f"obsidian/Prompts/{d[0]} {prompt_row(conn,d[0])['slug']}", d[0]) for d in deps) or "—"
         spieg.append(
@@ -124,12 +158,12 @@ def render(repo: Path) -> list[str]:
                 str(i),
                 _table_wikilink(r["current_path"][:-3], r["title"]) if r["current_path"].endswith(".md") else _table_wikilink(f"obsidian/Prompts/{r['prompt_id']} {r['slug']}", f"{r['prompt_id']} · {r['title']}"),
                 r["prompt_id"], r["status"], _fmt(r["project_name"] or r["project_id"]),
-                _fmt(r["chat_guidance"]), dep_text, _fmt(r["explanation"]),
+                _fmt(r["chat_guidance"]), dep_text, _runnable_now_text(conn, r, deps), _fmt(r["explanation"]),
                 _fmt(r["model"]), _fmt(r["reasoning"]), _fmt(r["prompt_type"])
             ]) + " |"
         )
     if not pending:
-        spieg.append("| — | — | — | — | — | — | — | Nessun prompt pendente | — | — | — |")
+        spieg.append("| — | — | — | — | — | — | — | — | Nessun prompt pendente | — | — | — |")
     spieg.append("")
     (repo/"spiegazioni.md").write_text("\n".join(spieg), encoding="utf-8")
 
