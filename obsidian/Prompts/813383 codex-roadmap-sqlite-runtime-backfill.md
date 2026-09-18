@@ -27,7 +27,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** —
+- **Sblocca:** [[538642 codex-usage-publisher-attribution-fastpath-followup|538642]]
 - **Padri/precedenti:** [[809537 roadmap-sqlite-state-migration|809537]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat

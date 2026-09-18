@@ -3,11 +3,11 @@
 > Generato da `roadmap.sqlite`. Non modificare manualmente.
 
 1. [[prompts/codex-roadmap-sqlite-runtime-backfill|codex-roadmap-sqlite-runtime-backfill]]
-2. [[prompts/oracle-backup-notification-antiflap-runtime|oracle-backup-notification-antiflap-runtime]]
-3. [[prompts/codex-usage-publisher-attribution-fastpath-followup|codex-usage-publisher-attribution-fastpath-followup]]
+2. [[prompts/codex-usage-publisher-attribution-fastpath-followup|codex-usage-publisher-attribution-fastpath-followup]]
+3. [[prompts/oracle-backup-notification-antiflap-runtime|oracle-backup-notification-antiflap-runtime]]
 4. [[prompts/workflowy-importer-live-smoke-secret-file|workflowy-importer-live-smoke-secret-file]]
-5. [[prompts/personalhub-shared-alerts-places-tags-validation|personalhub-shared-alerts-places-tags-validation]]
-6. [[prompts/datasette5-personalhub-explorer-security-deploy|datasette5-personalhub-explorer-security-deploy]]
+5. [[prompts/datasette5-personalhub-explorer-security-deploy|datasette5-personalhub-explorer-security-deploy]]
+6. [[prompts/personalhub-shared-alerts-places-tags-validation|personalhub-shared-alerts-places-tags-validation]]
 7. [[prompts/personalhub-epoch-timestamps-migration|personalhub-epoch-timestamps-migration]]
 8. [[prompts/personalhub-salute-canonical-integration|personalhub-salute-canonical-integration]]
 9. [[prompts/personalhub-salute-ui-hub-obsidian|personalhub-salute-ui-hub-obsidian]]

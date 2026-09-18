@@ -23,7 +23,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** —
+- **Dipende da:** [[538642 codex-usage-publisher-attribution-fastpath-followup|538642]]
 - **Sblocca:** [[461839 personalhub-epoch-timestamps-migration|461839]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
