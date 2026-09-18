@@ -4,10 +4,9 @@
 
 ## Lanciabili adesso
 
-- [[obsidian/Prompts/856234 workflowy-live-smoke-remote-fix-closure|856234 · Confermare il live smoke Workflowy dopo il fix remoto]]
+- [[obsidian/Prompts/438271 workflowy-live-smoke-and-local-activation-v3|438271 · Chiudere Workflowy e attivare il runtime locale]]
+- [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]]
 - [[obsidian/Prompts/904631 datasette5-personalhub-explorer-security-deploy-v2|904631 · Versione online dell’esploratore dati PersonalHub]]
-- [[obsidian/Prompts/775412 workflowy-automation-local-activation-v2|775412 · Attivare le automazioni locali di Workflowy]]
-- [[obsidian/Prompts/593728 personalhub-shared-alerts-places-tags-integration-v2|593728 · Chiudere e integrare i nuovi tag e alert di Places]]
 - [[obsidian/Prompts/526713 fedora-runtime-validation-v2|526713 · Ultimo controllo del monitoraggio Fedora]]
 - [[obsidian/Prompts/357862 logseq-updates-pat-safety-closure-v2|357862 · Chiusura sicurezza e attivazione updater Logseq]]
 

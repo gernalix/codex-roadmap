@@ -1,20 +1,20 @@
 ---
 prompt_id: 684930
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 684930 · Completare Obsidian per tutti i moduli
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-obsidian-archive-projections-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-obsidian-archive-projections-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[528163 personalhub-obsidian-archive-incremental-v2|528163]]
 - **Sblocca:** [[357214 personalhub-git-history-data-sync-validation-v2|357214]]
 - **Padri/precedenti:** [[845312 personalhub-obsidian-archive-projections|845312]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[355842 personalhub-obsidian-archive-complete-v3|355842]]
 - **Chat Codex:** Stessa chat di 528163
 
 ## Spiegazione

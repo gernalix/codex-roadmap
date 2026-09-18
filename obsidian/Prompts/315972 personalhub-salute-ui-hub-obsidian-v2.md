@@ -1,20 +1,20 @@
 ---
 prompt_id: 315972
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 315972 · Rendere Salute visibile e collegata al resto dell’app
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-salute-ui-hub-obsidian-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-salute-ui-hub-obsidian-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[862541 personalhub-salute-canonical-integration-v2|862541]]
 - **Sblocca:** [[946238 personalhub-obsidian-archive-foundation-v2|946238]]
 - **Padri/precedenti:** [[724615 personalhub-salute-ui-hub-obsidian|724615]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[416826 personalhub-salute-ui-hub-v3|416826]]
 - **Chat Codex:** Stessa chat di 862541
 
 ## Spiegazione

@@ -20,11 +20,11 @@ tags:
 - **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** sì (6 interventi)
-- **Fix:** —
+- **Fix:** 223679
 - **Dipende da:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[200725 personalhub-100-capsule-isolation-local-validation-v2|200725]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[223679 personalhub-capsule-isolation-integration-closure-v4|223679]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
@@ -40,6 +40,7 @@ Aggiorna e valida il ramo della capsulizzazione, poi lo integra nella versione p
 ## Analisi ChatGPT
 
 - 2026-09-18T23:08:29Z · colli di bottiglia: sì · fix: — · PASS funzionale ma con inefficienze e una violazione del contratto di integrazione: 121.179 token totali, 119.552 cached (98,89%), 1.339 input non-cached, 288 output, 149 reasoning, 47 tool-call, 683,056 s, quota osservata invariata. Terra medium era adeguato; il costo evitabile era operativo. Colli osservati: prompt internamente contraddittorio su merge/branch tramite overlay di precedenza; raccolta ripetuta di un Gradle lungo; smoke AVD fragile con stdin consumato dal loop, package installato ambiguo e dialoghi permission; branch lasciato separato nonostante il contratto iniziale imponesse integrazione finale. ChatGPT ha corretto da remoto il gate alias, aggiunto uno smoke AVD deterministico, validato gli helper in CI e irrigidito le regole per comandi lunghi/QA. Nessun nuovo task Codex viene creato: non resta lavoro locale indispensabile non eseguibile da ChatGPT.
+- 2026-09-18T23:17:52Z · colli di bottiglia: sì · fix: 223679 · Execution reported PASS but feature/100-capsule-isolation still exists remotely and is 24 commits ahead / 2 behind current main; add a bounded semantic integration closure rather than redoing implementation.
 
 ## Modifiche di codice ChatGPT
 

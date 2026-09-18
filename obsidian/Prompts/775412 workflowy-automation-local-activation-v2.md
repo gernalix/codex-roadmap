@@ -1,20 +1,20 @@
 ---
 prompt_id: 775412
-status: pending
+status: superseded
 project_id: 96
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/fedora-workflowy
 ---
 
 # 775412 · Attivare le automazioni locali di Workflowy
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
-- **Prompt:** [[../../prompts/workflowy-automation-local-activation-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/workflowy-automation-local-activation-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[418906 workflowy-importer-live-smoke-secret-file-v2|418906]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[330522 workflowy-automation-local-activation|330522]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[438271 workflowy-live-smoke-and-local-activation-v3|438271]]
 - **Chat Codex:** Stessa chat di 693572
 
 ## Spiegazione

@@ -1,20 +1,20 @@
 ---
 prompt_id: 946238
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 946238 · Prima versione dell’archivio Obsidian
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-obsidian-archive-foundation-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-obsidian-archive-foundation-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[315972 personalhub-salute-ui-hub-obsidian-v2|315972]]
 - **Sblocca:** [[528163 personalhub-obsidian-archive-incremental-v2|528163]]
 - **Padri/precedenti:** [[582741 personalhub-obsidian-archive-foundation|582741]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[355842 personalhub-obsidian-archive-complete-v3|355842]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

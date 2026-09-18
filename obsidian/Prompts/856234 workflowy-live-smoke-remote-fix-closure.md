@@ -1,20 +1,20 @@
 ---
 prompt_id: 856234
-status: pending
+status: completed
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/completed
   - roadmap/project/fedora
 ---
 
 # 856234 · Confermare il live smoke Workflowy dopo il fix remoto
 
-- **Stato:** pending
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/workflowy-live-smoke-remote-fix-closure|Apri prompt]]
+- **Prompt:** [[../../completed/workflowy-live-smoke-remote-fix-closure|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[418906 workflowy-importer-live-smoke-secret-file-v2|418906]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[438271 workflowy-live-smoke-and-local-activation-v3|438271]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

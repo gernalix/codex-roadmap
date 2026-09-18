@@ -1,35 +1,35 @@
 ---
-prompt_id: 862541
-status: superseded
+prompt_id: 223103
+status: pending
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 862541 · Portare Salute dentro PersonalHub
+# 223103 · Chiudere e integrare tag e alert di Places
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-salute-canonical-integration-v2|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-shared-alerts-places-tags-integration-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[734205 personalhub-epoch-timestamps-migration-v2|734205]]
-- **Sblocca:** [[315972 personalhub-salute-ui-hub-obsidian-v2|315972]]
-- **Padri/precedenti:** [[418763 personalhub-salute-canonical-integration|418763]]
-- **Figli/follow-up:** [[790233 personalhub-salute-canonical-integration-v3|790233]]
+- **Dipende da:** [[223679 personalhub-capsule-isolation-integration-closure-v4|223679]]
+- **Sblocca:** [[830867 personalhub-epoch-timestamps-migration-v3|830867]]
+- **Padri/precedenti:** [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Porta i dati Salute nell’archivio principale di PersonalHub lavorando su un ramo isolato e integrandolo solo dopo controlli di sicurezza sui dati.
+Sostituisce il vecchio prompt contraddittorio e integra runtime restore + shared alerts in un solo candidate.
 
 ## Esecuzioni
 

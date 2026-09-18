@@ -1,35 +1,35 @@
 ---
-prompt_id: 734205
-status: superseded
+prompt_id: 811925
+status: pending
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 734205 · Date e ore coerenti ovunque
+# 811925 · Completare l’esploratore dati offline
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-epoch-timestamps-migration-v2|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-datasette-lite-offline-runtime-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]]
-- **Sblocca:** [[862541 personalhub-salute-canonical-integration-v2|862541]]
-- **Padri/precedenti:** [[461839 personalhub-epoch-timestamps-migration|461839]]
-- **Figli/follow-up:** [[830867 personalhub-epoch-timestamps-migration-v3|830867]]
+- **Dipende da:** [[825405 personalhub-git-history-data-sync-validation-v3|825405]], [[904631 datasette5-personalhub-explorer-security-deploy-v2|904631]]
+- **Sblocca:** [[334679 personalhub-play-release-local-validation-v3|334679]]
+- **Padri/precedenti:** [[918536 personalhub-datasette-lite-offline-runtime-v2|918536]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Controlla e uniforma date e ore di PersonalHub su un ramo isolato, migrando solo i dati davvero necessari; integra in main soltanto dopo review e test.
+Completa Datasette Lite offline e consegna un solo artifact già testato, senza versioni future hardcoded.
 
 ## Esecuzioni
 

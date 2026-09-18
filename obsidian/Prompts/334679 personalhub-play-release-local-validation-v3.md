@@ -1,35 +1,35 @@
 ---
-prompt_id: 243871
-status: superseded
+prompt_id: 334679
+status: pending
 project_id: 49
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 243871 · Controllo finale prima di Google Play
+# 334679 · Controllo finale locale prima di Google Play
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-play-release-local-validation-v2|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-play-release-local-validation-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[918536 personalhub-datasette-lite-offline-runtime-v2|918536]]
+- **Dipende da:** [[811925 personalhub-datasette-lite-offline-runtime-v3|811925]]
 - **Sblocca:** —
-- **Padri/precedenti:** [[311947 personalhub-play-release-local-validation|311947]]
-- **Figli/follow-up:** [[334679 personalhub-play-release-local-validation-v3|334679]]
-- **Chat Codex:** Nuova chat (non riusare 294731)
+- **Padri/precedenti:** [[243871 personalhub-play-release-local-validation-v2|243871]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Crea e controlla il pacchetto finale Android già integrato in main e lo prova sull’emulatore senza pubblicarlo su Google Play.
+Validazione meccanica finale dell’AAB corrente senza modifiche, bump o upload Play.
 
 ## Esecuzioni
 

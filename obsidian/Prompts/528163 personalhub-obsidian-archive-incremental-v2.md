@@ -1,20 +1,20 @@
 ---
 prompt_id: 528163
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 528163 · Aggiornare Obsidian automaticamente
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-obsidian-archive-incremental-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-obsidian-archive-incremental-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[946238 personalhub-obsidian-archive-foundation-v2|946238]]
 - **Sblocca:** [[684930 personalhub-obsidian-archive-projections-v2|684930]]
 - **Padri/precedenti:** [[671904 personalhub-obsidian-archive-incremental|671904]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[355842 personalhub-obsidian-archive-complete-v3|355842]]
 - **Chat Codex:** Stessa chat di 946238
 
 ## Spiegazione

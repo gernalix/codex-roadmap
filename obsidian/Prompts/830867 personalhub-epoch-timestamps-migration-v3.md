@@ -1,35 +1,35 @@
 ---
-prompt_id: 734205
-status: superseded
+prompt_id: 830867
+status: pending
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 734205 · Date e ore coerenti ovunque
+# 830867 · Date e ore coerenti ovunque
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-epoch-timestamps-migration-v2|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-epoch-timestamps-migration-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]]
-- **Sblocca:** [[862541 personalhub-salute-canonical-integration-v2|862541]]
-- **Padri/precedenti:** [[461839 personalhub-epoch-timestamps-migration|461839]]
-- **Figli/follow-up:** [[830867 personalhub-epoch-timestamps-migration-v3|830867]]
+- **Dipende da:** [[223103 personalhub-shared-alerts-places-tags-integration-v3|223103]]
+- **Sblocca:** [[790233 personalhub-salute-canonical-integration-v3|790233]]
+- **Padri/precedenti:** [[734205 personalhub-epoch-timestamps-migration-v2|734205]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Controlla e uniforma date e ore di PersonalHub su un ramo isolato, migrando solo i dati davvero necessari; integra in main soltanto dopo review e test.
+Audit/fix timestamp fail-closed: migra solo vere violazioni e non crea lavoro se il contratto è già rispettato.
 
 ## Esecuzioni
 

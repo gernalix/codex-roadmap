@@ -1,35 +1,35 @@
 ---
-prompt_id: 862541
-status: superseded
+prompt_id: 223679
+status: pending
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 862541 · Portare Salute dentro PersonalHub
+# 223679 · Integrare definitivamente l’isolamento capsule
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-salute-canonical-integration-v2|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-capsule-isolation-integration-closure-v4|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[734205 personalhub-epoch-timestamps-migration-v2|734205]]
-- **Sblocca:** [[315972 personalhub-salute-ui-hub-obsidian-v2|315972]]
-- **Padri/precedenti:** [[418763 personalhub-salute-canonical-integration|418763]]
-- **Figli/follow-up:** [[790233 personalhub-salute-canonical-integration-v3|790233]]
+- **Dipende da:** —
+- **Sblocca:** [[223103 personalhub-shared-alerts-places-tags-integration-v3|223103]]
+- **Padri/precedenti:** [[284916 personalhub-100-capsule-isolation-integrate-v3|284916]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Porta i dati Salute nell’archivio principale di PersonalHub lavorando su un ramo isolato e integrandolo solo dopo controlli di sicurezza sui dati.
+Integra il branch capsule rimasto fuori da main nonostante 284916 PASS, con review semantica e gate mirati.
 
 ## Esecuzioni
 
