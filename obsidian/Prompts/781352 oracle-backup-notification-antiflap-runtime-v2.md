@@ -1,20 +1,20 @@
 ---
 prompt_id: 781352
-status: pending
+status: completed
 project_id: 43
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/completed
   - roadmap/project/oracle-vm
 ---
 
 # 781352 · Ferma le notifiche backup Oracle transitorie
 
-- **Stato:** pending
+- **Stato:** completed
 - **Progetto:** [[../Projects/oracle-vm|Oracle VM]]
-- **Prompt:** [[../../prompts/oracle-backup-notification-antiflap-runtime-v2|Apri prompt]]
+- **Prompt:** [[../../completed/oracle-backup-notification-antiflap-runtime-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
