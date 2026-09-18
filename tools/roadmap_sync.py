@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import re
@@ -28,8 +29,6 @@ def _download_remote_db(repository: str, branch: str) -> tuple[set[str], set[str
             [
                 "gh",
                 "api",
-                "-H",
-                "Accept: application/vnd.github.raw+json",
                 f"repos/{repository}/contents/roadmap.sqlite?ref={branch}",
             ],
             stdout=subprocess.PIPE,
@@ -39,9 +38,14 @@ def _download_remote_db(repository: str, branch: str) -> tuple[set[str], set[str
         raise SyncError("gh_cli_missing") from exc
     if proc.returncode:
         raise SyncError(f"remote_db_download_failed:{proc.stderr.decode(errors='replace').strip()}")
+    try:
+        payload = json.loads(proc.stdout.decode("utf-8"))
+        raw_db = base64.b64decode(str(payload["content"]).replace("\n", ""), validate=True)
+    except (KeyError, TypeError, ValueError, UnicodeDecodeError) as exc:
+        raise SyncError("remote_db_invalid") from exc
 
     with tempfile.NamedTemporaryFile(suffix=".sqlite") as handle:
-        handle.write(proc.stdout)
+        handle.write(raw_db)
         handle.flush()
         try:
             conn = sqlite3.connect(f"file:{handle.name}?mode=ro", uri=True)
