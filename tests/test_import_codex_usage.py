@@ -1,47 +1,45 @@
 from __future__ import annotations
-import json, sys, tempfile, unittest
+
+import sys
+import tempfile
+import unittest
 from pathlib import Path
-TOOLS=Path(__file__).resolve().parents[1]/"tools"
-sys.path.insert(0,str(TOOLS))
-import roadmap_db as db
+from unittest.mock import patch
+
+TOOLS = Path(__file__).resolve().parents[1] / "tools"
+sys.path.insert(0, str(TOOLS))
+
 import import_codex_usage as importer
 
+
 class ImportTests(unittest.TestCase):
-    def test_import_is_idempotent_and_updates_status(self):
+    def test_legacy_importer_delegates_to_remote_single_writer(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            base=Path(tmp); repo=base/"repo"; src=base/"usage"; repo.mkdir()
-            conn=db.connect(repo)
-            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md")
-            conn.commit(); conn.close()
-            p=src/"prompts/123456"; p.mkdir(parents=True)
-            (p/"metrics.json").write_text(json.dumps({
-                "prompt_id":"123456","cycle_key":"abc","status":"PASS",
-                "timestamp_start_utc":"2026-09-18T10:00:00Z","timestamp_end_utc":"2026-09-18T10:01:00Z",
-                "duration_seconds":60,"total_tokens":100,"tool_call_count":2
-            }),encoding="utf-8")
-            s1=importer.import_metrics(repo,src,render_after=False)
-            db_bytes=(repo/"roadmap.sqlite").read_bytes()
-            s2=importer.import_metrics(repo,src,render_after=False)
-            self.assertEqual(1,s1["inserted"]); self.assertEqual(1,s2["existing"])
-            self.assertEqual(db_bytes,(repo/"roadmap.sqlite").read_bytes())
-            conn=db.connect(repo,writable=False)
-            self.assertEqual("completed",db.prompt_row(conn,"123456")["status"])
-            self.assertEqual(1,conn.execute("select count(*) from executions").fetchone()[0])
-            conn.close()
+            base = Path(tmp)
+            repo = base / "repo"
+            source = base / "usage"
+            repo.mkdir()
+            source.mkdir()
+            sentinel = repo / "sentinel.txt"
+            sentinel.write_text("unchanged", encoding="utf-8")
 
-    def test_conflict_reimport_does_not_write(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            base=Path(tmp); repo=base/"repo"; src=base/"usage"; repo.mkdir()
-            conn=db.connect(repo)
-            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md",prompt_text="expected")
-            conn.commit(); conn.close()
-            p=src/"prompts/123456"; p.mkdir(parents=True)
-            (p/"metrics.json").write_text(json.dumps({
-                "prompt_id":"123456","cycle_key":"abc","status":"PASS","prompt_text_redacted":"observed"
-            }),encoding="utf-8")
-            self.assertEqual(1,importer.import_metrics(repo,src,render_after=False)["conflicts"])
-            db_bytes=(repo/"roadmap.sqlite").read_bytes()
-            self.assertEqual(1,importer.import_metrics(repo,src,render_after=False)["conflicts"])
-            self.assertEqual(db_bytes,(repo/"roadmap.sqlite").read_bytes())
+            with patch.object(
+                importer,
+                "sync",
+                return_value={"status": "ok", "queued": 1},
+            ) as sync:
+                out = importer.import_metrics(repo, source, render_after=False)
 
-if __name__=="__main__": unittest.main()
+            self.assertEqual({"status": "ok", "queued": 1}, out)
+            sync.assert_called_once_with(
+                repo,
+                source,
+                repository=importer.DEFAULT_REMOTE_REPO,
+                branch=importer.DEFAULT_REMOTE_BRANCH,
+            )
+            self.assertEqual("unchanged", sentinel.read_text(encoding="utf-8"))
+            self.assertFalse((repo / "roadmap.sqlite").exists())
+
+
+if __name__ == "__main__":
+    unittest.main()
