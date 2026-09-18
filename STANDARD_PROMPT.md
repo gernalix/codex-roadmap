@@ -67,7 +67,7 @@ Per task già pre-localizzati il costo principale è spesso il numero di round-t
 
 ## Campagne
 
-Se più prompt condividono `campaign_id`, ogni fase resta autosufficiente ma deve rispettare il contratto della campagna. Per PersonalHub le fasi intermedie non fanno bump versione, final APK, installazione del package reale Pixel o Telegram delivery; queste operazioni comuni si eseguono una sola volta nella fase finale. Non eseguire task PersonalHub concorrenti della stessa o di altre campagne.
+Se più prompt condividono `campaign_id`, ogni fase resta autosufficiente ma deve rispettare il contratto della campagna. Per PersonalHub le fasi intermedie non fanno bump versione, final APK, installazione del package reale Pixel o Telegram delivery; queste operazioni comuni si eseguono una sola volta nella fase finale. Implementazioni PH indipendenti possono procedere in parallelo solo su branch dedicati; integrazione in `main`, QA condivisa e release restano serializzate sotto il lock PH e richiedono review semantica prima del merge.
 
 ## Finalizzazione roadmap
 
@@ -84,7 +84,7 @@ python3 ~/projects/codex-roadmap/tools/roadmap_result.py --repo ~/projects/codex
 # oppure --result FAIL
 ```
 
-Entrambi aggiornano `roadmap.sqlite`, archiviano il file nella directory terminale corretta, rigenerano Markdown/Obsidian e pushano con retry bounded in caso di race. Non fare prima un dry-run nel percorso normale.
+Entrambi inviano una mutazione idempotente alla inbox remota; il workflow GitHub Actions single-writer aggiorna `roadmap.sqlite`, archivia il file e rigenera Markdown/Obsidian. Il checkout locale della roadmap non viene modificato. Non fare prima un dry-run nel percorso normale.
 
 Un esito terminale non rende riutilizzabile il PROMPT_ID: un fix o follow-up è sempre una nuova materializzazione con nuovo ID e relazione al padre. Timestamp, durata, token e tool-call reali vengono riconciliati automaticamente dal sync di `codex-usage`.
 
@@ -113,7 +113,7 @@ Ogni nuovo prompt o modifica sostanziale di un prompt pendente deve preservare l
 - richiedere solo test proporzionati al rischio;
 - per branch condivisi, specificare la policy di sync iniziale e di remote-advance prima del push;
 - consolidare build/device/delivery nella fase finale quando appartiene a una campagna compatibile;
-- contenere su PASS la singola invocazione `roadmap_finish.py` con il proprio `PROMPT_ID` e `--confirm-executed`;
+- contenere direttamente sia la singola invocazione PASS con `roadmap_finish.py` sia le invocazioni terminali `roadmap_result.py --result BLOCKED|FAIL` con il proprio `PROMPT_ID` e `--confirm-executed`, così Codex non deve ispezionare la CLI per ricostruire la sintassi;
 - includere esplicitamente il contratto di recovery autonomo o una forma compatta equivalente, così il prompt resta autosufficiente anche senza rileggere README/STANDARD_PROMPT;
 - richiedere `RESULT=PASS|BLOCKED|FAIL` come prima riga finale;
 - non dipendere dal launcher generico o dall'output di `select` per informazioni necessarie all'esecuzione.
