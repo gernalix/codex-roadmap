@@ -8,7 +8,7 @@ Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain
 
 `roadmap.sqlite` è l'unica fonte autorevole dei metadati della roadmap. `roadmap.md`, `spiegazioni.md`, `prompt-registry.md` e `obsidian/` sono viste generate e **non vanno modificate manualmente** per cambiare stato, ordine, dipendenze, analisi o relazioni.
 
-Codex registra gli esiti immediati tramite `roadmap_result.py` / `roadmap_finish.py`; il sync locale importa timestamp e metriche reali da `codex-usage`. ChatGPT aggiorna stato logico, analisi, fix e relazioni tramite richieste strutturate in `mutations/inbox/`, applicate transazionalmente da GitHub Actions. Dettagli: [[SQLITE_ROADMAP|Roadmap SQLite]].
+Codex registra gli esiti immediati tramite `roadmap_result.py` / `roadmap_finish.py`; il sync locale importa timestamp e metriche reali da `codex-usage`. ChatGPT aggiorna stato logico, analisi, modifiche di codice successive all’analisi, fix e relazioni tramite richieste strutturate in `mutations/inbox/`, applicate transazionalmente da GitHub Actions. Dettagli: [[SQLITE_ROADMAP|Roadmap SQLite]].
 
 ## Struttura
 - `roadmap.sqlite`: source of truth.
