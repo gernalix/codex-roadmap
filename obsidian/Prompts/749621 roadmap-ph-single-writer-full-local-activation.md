@@ -22,7 +22,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[886414 personalhub-100-capsule-isolation-local-validation|886414]]
+- **Sblocca:** [[200725 personalhub-100-capsule-isolation-local-validation-v2|200725]], [[886414 personalhub-100-capsule-isolation-local-validation|886414]]
 - **Padri/precedenti:** [[416024 roadmap-ph-single-writer-local-activation|416024]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
