@@ -58,7 +58,7 @@ Dettagli tecnici: [[SQLITE_ROADMAP|Roadmap SQLite]].
 ## Viste
 
 - `roadmap.md`: sola sequenza dei task pendenti/running.
-- `spiegazioni.md`: vista operativa **minima**: task, ID, stato, progetto, chat, dipendenze, spiegazione, modello/reasoning e tipo.
+- `spiegazioni.md`: vista operativa **minima**: task, ID, stato, progetto, chat, dipendenze, **eseguibilità corrente**, spiegazione, modello/reasoning e tipo.
 - `prompt-registry.md`: storico completo, inclusi esiti e metadati di analisi quando esistono.
 - `obsidian/`: navigazione storica per prompt/progetto e dashboard.
 
@@ -66,7 +66,9 @@ La vista operativa non deve duplicare dati storici che non servono a scegliere o
 
 ### `spiegazioni.md`
 
-È scritto per Daniele, non per uno sviluppatore. Le spiegazioni devono dire in italiano quotidiano **cosa cambia**, **perché serve** e **perché richiede Codex**, evitando dettagli di implementazione non necessari.
+È scritto per Daniele, non per uno sviluppatore. Ogni spiegazione deve essere comprensibile senza aprire il prompt: massimo tre frasi brevi in italiano quotidiano, nello schema **“Fa X. Serve perché Y. Richiede Codex perché Z.”**. Evitare nomi di classi/file, gergo architetturale e dettagli di implementazione salvo quando sono indispensabili per capire il risultato.
+
+La colonna **Eseguibile ora?** deve permettere di vedere a colpo d'occhio cosa si può lanciare: **Sì** solo se tutte le dipendenze sono completate e non esiste un prerequisito manuale registrato; altrimenti mostra cosa manca.
 
 I dettagli tecnici completi appartengono al file in `prompts/`.
 
