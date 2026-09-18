@@ -1,7 +1,7 @@
 PROMPT_ID=861305 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STANDARD
 
 # Goal
-Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: runtime Lite realmente offline, stessa semantica FK/Context del server e presentazione mobile PH-specifica. Non riscrivere Datasette in Compose.
+Completa SOLO il Data Explorer Datasette già integrato in PersonalHub `main`: runtime Lite realmente offline, stessa semantica FK/Context/temporal del server e presentazione mobile PH-specifica. Non riscrivere Datasette in Compose.
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`, branch canonico `main`;
@@ -63,4 +63,4 @@ Niente SQL write arbitrario, sync bidirezionale, nuovo DB canonico, riscrittura 
 Dopo PASS:
 `python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 861305 --confirm-executed`
 
-Output massimo 7 righe: `RESULT`, `HEAD`, `PLACES_CHECKIN`, `OFFLINE_LITE`, `FK_GRAPH`, `MOBILE_UI`, `BLOCKER`.
+Output massimo 8 righe: `RESULT`, `HEAD`, `PLACES_CHECKIN`, `OFFLINE_LITE`, `FK_GRAPH`, `TEMPORAL`, `MOBILE_UI`, `BLOCKER`.
