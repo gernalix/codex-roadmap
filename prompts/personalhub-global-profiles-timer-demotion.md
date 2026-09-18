@@ -1,20 +1,20 @@
 PROMPT_ID=918274 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT
 
 # Goal
-Completa SOLO il branch PersonalHub `feature/global-profiles-timestamp-normalization`: rendi robusti i profili database globali già implementati e rimuovi definitivamente dal modulo Timer le feature già promosse a livello PersonalHub. NON fare la migrazione timestamp v16: è il task successivo.
+Completa SOLO PersonalHub `main`, che contiene già l'implementazione remota dei profili globali: rendi robusti i profili database e rimuovi definitivamente dal modulo Timer le feature già promosse a livello PersonalHub. NON fare la migrazione timestamp v16: è il task successivo.
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`;
-- branch obbligatorio: `feature/global-profiles-timestamp-normalization`; NON lavorare su main e NON mergiare il branch;
+- branch obbligatorio: `main`; i vecchi branch feature sono già stati integrati/eliminati. NON ricrearli e non pubblicare nuovi branch remoti;
 - baseline remota minima: `5f06b1bde2115bcb51156cf9c17edaaff669e7a0` deve essere antenata di RUN_HEAD;
 - `version.txt=50`; non incrementarlo;
 - usa prima `.codex/CODE_MAP.tsv`; niente audit repo-wide salvo failure concreto;
-- già presenti nel branch: `DatabaseProfiles`, create empty/clone/rename/delete/switch, journal crash-consistent, UI Profili, active profile in Home, export separato per profilo con SAF root condivisa, Git/Datasette separati per profile_id, rimozione UI Timer di Time Machine/audit/import/export/Data Explorer/backup folder e cancellazione dello stub `MultiDbVaults`;
+- già presenti su `main`: `DatabaseProfiles`, create empty/clone/rename/delete/switch, journal crash-consistent, UI Profili, active profile in Home, export separato per profilo con SAF root condivisa, Git/Datasette separati per profile_id, rimozione UI Timer di Time Machine/audit/import/export/Data Explorer/backup folder e cancellazione dello stub `MultiDbVaults`;
 - il DB canonico resta UNO alla volta: `personalhub.db`; i profili inattivi sono snapshot completi e isolati. Non reintrodurre DB separati per modulo;
 - la Timeline Timer RESTA: è cronologia specifica delle sessioni, non la Activity/Temporal Search globale PH.
 
 # Esecuzione minima
-1. Acquisisci task lock PH con PROMPT_ID 918274. Un solo fetch; passa al branch sopra e fast-forward solo se sicuro. Dirty non sovrapposto non blocca; niente stash/reset.
+1. Acquisisci task lock PH con PROMPT_ID 918274. Un solo fetch `origin main`; richiedi branch `main` e fast-forward solo se sicuro. Dirty non sovrapposto non blocca; niente stash/reset né branch remoto temporaneo.
 2. Esegui subito leaf compile/test pertinenti a `:core:database`, `:app`, `:feature:multitimetracker`, `:feature:luoghi`. Usa i failure per correggere in batch errori introdotti dal branch; niente audit generale.
 3. Chiudi il contratto Profili:
    - default `Personal` usa senza copia/perdita il DB oggi attivo;
@@ -53,13 +53,13 @@ Completa SOLO il branch PersonalHub `feature/global-profiles-timestamp-normaliza
    - kill-process durante switch controllato e recovery coerente.
    Solo fixture sintetiche, nessun dato personale.
 9. Aggiorna CODE_MAP solo per ownership realmente cambiata. NON fare timestamp migration, release, APK delivery, refactor fuori scope.
-10. Push SOLO il branch `feature/global-profiles-timestamp-normalization`. NON merge su main. Rilascia lock. PASS => stop.
+10. Solo dopo tutti i gate PASS, commit/push `main` una sola volta con le modifiche del task. Non creare/pushare branch remoti temporanei. Rilascia lock. PASS => stop.
 
 # Acceptance
-PASS solo se host gate + AVD QA sono PASS; profili atomici/isolati; nessun sync/export/widget/alarm/geofence crossa profili; Timer non espone né possiede più Time Machine, multi-db, Audit Log, Import/Export o Data Explorer; Timeline Timer resta; nessun dato perso; version.txt resta 50; branch non mergiato.
+PASS solo se host gate + AVD QA sono PASS; profili atomici/isolati; nessun sync/export/widget/alarm/geofence crossa profili; Timer non espone né possiede più Time Machine, multi-db, Audit Log, Import/Export o Data Explorer; Timeline Timer resta; nessun dato perso; version.txt resta 50; `main` contiene il risultato verificato.
 
 # Non-goal
-Migrazione timestamp v16, redesign UI, DB per modulo, merge main, release/install Pixel/delivery, audit generale.
+Migrazione timestamp v16, redesign UI, DB per modulo, release/install Pixel/delivery, audit generale.
 
 # Stop
 Dopo PASS:
