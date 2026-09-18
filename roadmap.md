@@ -1,6 +1,10 @@
-1. [[prompts/roadmap-sqlite-state-migration|roadmap-sqlite-state-migration]]
+# Roadmap
+
+> Generato da `roadmap.sqlite`. Non modificare manualmente.
+
+1. [[prompts/codex-roadmap-sqlite-runtime-backfill|codex-roadmap-sqlite-runtime-backfill]]
 2. [[prompts/codex-usage-publisher-attribution-fastpath-followup|codex-usage-publisher-attribution-fastpath-followup]]
-3. [[prompts/workflowy-importer-live-smoke-after-api-key|workflowy-importer-live-smoke-after-api-key]]
+3. [[prompts/workflowy-importer-local-live-validation|workflowy-importer-local-live-validation]]
 4. [[prompts/personalhub-shared-alerts-places-tags-validation|personalhub-shared-alerts-places-tags-validation]]
 5. [[prompts/datasette5-personalhub-explorer-security-deploy|datasette5-personalhub-explorer-security-deploy]]
 6. [[prompts/personalhub-epoch-timestamps-migration|personalhub-epoch-timestamps-migration]]
