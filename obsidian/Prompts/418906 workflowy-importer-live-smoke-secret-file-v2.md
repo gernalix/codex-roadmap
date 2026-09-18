@@ -1,20 +1,20 @@
 ---
 prompt_id: 418906
-status: pending
+status: completed
 project_id: 96
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/completed
   - roadmap/project/fedora-workflowy
 ---
 
 # 418906 · Ultima prova reale dell’importatore Workflowy
 
-- **Stato:** pending
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
-- **Prompt:** [[../../prompts/workflowy-importer-live-smoke-secret-file-v2|Apri prompt]]
+- **Prompt:** [[../../completed/workflowy-importer-live-smoke-secret-file-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
