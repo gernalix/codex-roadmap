@@ -1,4 +1,4 @@
-PROMPT_ID=294731 | project_id=49 | model=GPT-5.5 | reasoning=low | MegaVault=FAST
+PROMPT_ID=294731 | project_id=49 | model=GPT-5.6 Luna | reasoning=low | MegaVault=FAST
 
 # Goal
 Esegui SOLO la validazione locale finale della release Google Play di PersonalHub già verificata da remoto: crea una sola volta l'AAB firmato con i segreti canonici locali, ispezionalo e fai uno smoke bounded sull'AVD `Pixel_8a`. Nessun upload su Play Console.
