@@ -36,6 +36,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A roadmap.sqlite roadmap.md spiegazioni.md prompt-registry.md obsidian mutations
+          git add -A roadmap.sqlite roadmap.md spiegazioni.md prompt-registry.md obsidian mutations prompts completed falliti
           git commit -m "Apply roadmap metadata mutation"
           git push
