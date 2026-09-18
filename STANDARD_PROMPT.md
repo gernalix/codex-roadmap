@@ -89,7 +89,8 @@ Usare il checkout canonico indicato nel prompt.
 
 Quando serve sincronizzare:
 - una sola fotografia iniziale dello stato;
-- fast-forward/sync minimo sicuro;
+- usare il pattern canonico `git fetch -q origin <branch>` e, solo se serve integrare il remoto, `git merge --ff-only origin/<branch>`;
+- `--ff-only` appartiene a `git merge`/`git pull`, non a `git fetch`: non usare mai `git fetch --ff-only`;
 - una sola verifica remota finale prima del commit/push.
 
 Dirty work non sovrapposto o remote advance non sono blocker automatici. Non usare stash/reset distruttivi per ottenere artificialmente un worktree pulito.
