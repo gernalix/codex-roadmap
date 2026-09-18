@@ -19,9 +19,9 @@ Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain
 - `prompts/*.md`: task pendenti/running autosufficienti.
 - `completed/*.md`: task conclusi con PASS.
 - `falliti/*.md`: task conclusi con BLOCKED/FAIL/CANCELLED/UNKNOWN.
-- `tools/roadmap_result.py`: scrittura terminale race-safe nel DB + archiviazione.
-- `tools/roadmap_finish.py`: wrapper compatibile per PASS.
-- `tools/import_codex_usage.py`: import/backfill manuale legacy; `tools/roadmap_sync.py`: riconciliazione automatica tramite mutazioni remote, senza scritture Git/SQLite locali.
+- `tools/roadmap_result.py`: invio remoto idempotente dell’esito terminale; non modifica il checkout locale.
+- `tools/roadmap_finish.py`: wrapper compatibile per PASS, anch’esso remote-only.
+- `tools/import_codex_usage.py`: backfill manuale legacy da usare solo in manutenzione esplicita; `tools/roadmap_sync.py`: riconciliazione automatica tramite mutazioni remote, senza scritture Git/SQLite locali.
 - `mutations/inbox/`: canale strutturato per gli aggiornamenti ChatGPT.
 
 ## Regola vincolante per `spiegazioni.md`
