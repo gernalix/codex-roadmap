@@ -1,0 +1,40 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "register",
+      "prompt_id": "749621",
+      "slug": "roadmap-ph-single-writer-full-local-activation",
+      "title": "Attiva single-writer completo e integrazione PH",
+      "current_path": "prompts/roadmap-ph-single-writer-full-local-activation.md",
+      "project_id": "49",
+      "project_name": "PersonalHub + codex-roadmap",
+      "repo": "gernalix/PersonalHub + gernalix/codex-roadmap",
+      "chat_guidance": "Nuova chat",
+      "prompt_type": "Prompt",
+      "model": "GPT-5.6 Terra",
+      "reasoning": "medium",
+      "megavault_mode": "FAST",
+      "explanation": "Verifica sul PC che solo il servizio remoto aggiorni davvero la roadmap, compreso l'import automatico delle metriche Codex, e che PersonalHub permetta lavori separati in parallelo facendo entrare in main un solo lavoro alla volta dopo controllo Codex.",
+      "status": "pending",
+      "queue_position": 1,
+      "prompt_text": "PROMPT_ID=749621 | project_id=49 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=FAST\nPARENT_PROMPT_ID=416024\n\n# Goal\nAttiva e valida SOLO sul Fedora reale il coordinamento single-writer già implementato da ChatGPT per codex-roadmap e il nuovo flusso concorrente di PersonalHub. Questo prompt sostituisce 416024 perché include anche il writer residuo `codex-roadmap-sync.timer`.\n\nRisultato richiesto:\n1. ChatGPT, finalizzatori Codex e sync `codex-usage` consegnano richieste remote; solo GitHub Actions modifica `roadmap.sqlite` e viste generate.\n2. PersonalHub può avere implementazioni concorrenti su branch isolati, ma integrazione/QA condivisa/release restano una alla volta e ogni merge richiede review semantica Codex.\n\nNon progettare un sistema alternativo e non fare audit generali.\n\n# Starting point autoritativo\n- repo: `/home/daniele/projects/codex-roadmap` e `/home/daniele/projects/PersonalHub`;\n- baseline remota minima codex-roadmap: `5a09a5a31cb8713cabb16d8bc747be0a4938440f`;\n- baseline remota minima PersonalHub: `ae498ba6c73015d86dedff90fc359326f9db3717`;\n- codex-roadmap contiene già `tools/submit_mutation.py`, finalizzatori remote-only, `roadmap_sync.py` remote-only, mutazione `usage_execution`, documentazione e test mirati;\n- PersonalHub contiene già regole concorrenti in `AGENTS.md`, lock limitato a integrazione/QA/release, `tools/personalhub_integration_context.py` e `docs/CONCURRENT_WORK.md`;\n- branch remoti PH osservati: `chatgpt/918274-runtime-restore`, `feature/shared-alerts-place-tags`, `feature/100-capsule-isolation`, oltre al canonico. NON presumere che siano pronti e NON mergiarli;\n- `gh` deve essere autenticato senza mostrare token/segreti.\n\n# Esecuzione minima\n1. Un solo fetch + fast-forward per ciascun repo sul branch canonico, solo se sicuro. Dirty non sovrapposto non autorizza stash/reset/cleanup; overlap con il fast-forward => BLOCKED.\n2. Verifica in modo bounded che `gh` esista, sia autenticato e abbia accesso a `gernalix/codex-roadmap`. Non stampare credential.\n3. codex-roadmap, gate mirati soltanto:\n   - `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_apply_mutations tests.test_remote_single_writer tests.test_usage_execution_single_writer -v`;\n   - `python3 -m py_compile tools/submit_mutation.py tools/roadmap_result.py tools/roadmap_finish.py tools/roadmap_sync.py tools/roadmap_db.py`.\n   Se fallisce, correggi solo il failure domain single-writer e rilancia il leaf fallito.\n4. Smoke inbox non distruttivo: crea in `/tmp` una mutazione v1 che aggiunga a PROMPT_ID 749621 il tag `single-writer-e2e`; inviala con `tools/submit_mutation.py --request-key activation-749621`. Verifica bounded che finisca in `mutations/applied/activation-749621.json` e che il workflow relativo sia PASS. Nessuna modifica diretta a DB/Markdown/Git locale.\n5. Verifica il sync metriche:\n   - salva una sola snapshot di HEAD + `git status --porcelain` del repo roadmap;\n   - esegui UNA volta `python3 tools/roadmap_sync.py --repo . --source ~/projects/codex-usage`;\n   - è ammesso che accodi nuove `usage-*.json`; verifica bounded che le richieste nuove vengano applicate o restino chiaramente pending senza failure;\n   - conferma che HEAD locale e dirty set siano identici alla snapshot: il sync non deve più fetchare, committare o pushare il checkout locale.\n   - controlla SOLO l'unit/timer `codex-roadmap-sync` esistente e verifica che punti allo script aggiornato; non riscrivere systemd se il path è già canonico. Se serve daemon-reload/restart per recepire file già corretto, fallo.\n6. PersonalHub, gate mirati soltanto:\n   - `PYTHONDONTWRITEBYTECODE=1 python3 tools/test_personalhub_task_lock.py`;\n   - `python3 -m py_compile tools/personalhub_task_lock.py tools/personalhub_integration_context.py`;\n   - `python3 tools/personalhub_task_lock.py status`;\n   - prova read-only di `python3 tools/personalhub_integration_context.py --branch <uno dei branch remoti non-main esistenti>`. Deve produrre contesto bounded e `automatic_merge_decision=false`; non integrare nulla.\n7. Controlla una sola volta i worktree PH locali. Implementazioni correnti su branch dedicati restano intatte. Se una sessione attiva sta lavorando direttamente sul canonico, riportala come rischio ma NON spostare/stashare/resetare il suo lavoro.\n8. Non creare/mergiare PR PH, non eliminare branch, non avviare build Android/emulatore/device.\n9. Finalizza con il nuovo finalizzatore e conferma che esso accodi la richiesta remota senza creare commit/modifiche locali nel repo roadmap.\n\n# Acceptance\nPASS solo se:\n- entrambi i checkout includono le baseline minime senza perdita di lavoro;\n- `gh` autenticato;\n- test e py_compile roadmap PASS;\n- `activation-749621` applicata dal writer remoto;\n- `roadmap_sync.py` importa/accoda metadata senza cambiare HEAD o dirty set locale;\n- unit/timer locale usa lo script aggiornato;\n- test e py_compile PH PASS;\n- helper PH produce contesto bounded su un branch reale senza decisione automatica di merge;\n- nessun branch PH è mergiato/eliminato;\n- finalizzatore remote-only confermato.\n\n# Non-goal\nNiente refactor/cleanup, branch merge, PR creation, Android build/QA, release, feature PH, branch protection, audit generali, riscrittura di servizi già corretti.\n\n# Stop\nDopo PASS esegui una sola volta:\n`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 749621 --confirm-executed`\n\nDopo il finalizzatore controlla soltanto che HEAD/dirty set locale roadmap non siano cambiati. Output massimo 8 righe: RESULT, ROADMAP_SYNC, GH_AUTH, SINGLE_WRITER_E2E, USAGE_SYNC, PH_HELPERS, PH_WORKTREES, FINALIZER.\n"
+    },
+    {
+      "op": "status",
+      "prompt_id": "416024",
+      "status": "superseded",
+      "actor": "chatgpt",
+      "note": "Replaced by 749621 to include codex-usage sync single-writer validation."
+    },
+    {
+      "op": "relation",
+      "from_prompt_id": "416024",
+      "to_prompt_id": "749621",
+      "relation_type": "replacement",
+      "actor": "chatgpt",
+      "note": "749621 supersedes 416024 with complete single-writer coverage."
+    }
+  ]
+}

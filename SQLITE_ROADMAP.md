@@ -22,21 +22,25 @@ Per ogni `PROMPT_ID`:
 
 ### Codex
 
-Il risultato immediato viene registrato da:
+Il risultato immediato viene consegnato da:
 
 ```bash
 python3 tools/roadmap_result.py --repo . --prompt-id 123456 --result PASS --confirm-executed
 ```
 
-`roadmap_finish.py` resta compatibile ed equivale a `PASS`. Questo aggiornamento immediato modifica stato/audit ma **non** inventa una seconda esecuzione: le righe di `executions` vengono alimentate dai dati reali di `codex-usage`, evitando doppi conteggi.
+`roadmap_finish.py` resta compatibile ed equivale a `PASS`. Il comando non modifica più il DB o Git locale: usa `gh api` per creare una richiesta immutabile nella inbox remota. Per ogni PROMPT_ID esiste una sola chiave terminale; un retry identico è idempotente, mentre un esito terminale diverso con la stessa chiave viene rifiutato. GitHub Actions applica la richiesta al DB canonico e rigenera le viste. Le righe di `executions` continuano a provenire dai dati reali di `codex-usage`, evitando doppi conteggi.
 
 Prima dell'import ogni prompt attivo deve avere una fingerprint della propria materializzazione. Se un vecchio `PROMPT_ID` ricompare con testo diverso, il sistema registra una collisione e non sovrascrive automaticamente lo stato del prompt corrente.
 
-Sul Fedora reale, `codex-roadmap-sync.timer` riconcilia periodicamente `~/projects/codex-usage/prompts/*/metrics.json`. È la fonte per timestamp e metriche reali e permette il backfill storico. Importa solo metadati; non copia prompt completi, risposte finali o path raw delle sessioni nel repository pubblico.
+Sul Fedora reale, `codex-roadmap-sync.timer` legge periodicamente `~/projects/codex-usage/prompts/*/metrics.json`, scarica in sola lettura il DB remoto per sapere quali `cycle_key` sono già presenti e consegna soltanto le nuove esecuzioni come mutazioni `usage_execution`. Non modifica più il DB/Git locale. Il single writer remoto conserva anche il controllo della fingerprint: in caso di mismatch registra il conflitto di identità senza cambiare automaticamente lo stato del prompt. Il sync importa solo metadati; non copia prompt completi, risposte finali o path raw delle sessioni nel repository pubblico. `import_codex_usage.py` resta disponibile per backfill/manutenzione manuale, non come writer periodico.
 
 ### ChatGPT
 
-ChatGPT può creare un file JSON in `mutations/inbox/`. GitHub Actions applica le operazioni in transazione, rigenera le viste e archivia la richiesta in `mutations/applied/`.
+ChatGPT crea richieste JSON univoche in `mutations/inbox/` e non modifica direttamente `roadmap.sqlite` o le viste generate. GitHub Actions applica le operazioni in transazione, rigenera le viste e archivia la richiesta in `mutations/applied/`.
+
+### Single writer
+
+Il workflow `Apply roadmap mutations` usa un'unica coda di concorrenza GitHub Actions. È l'unico componente autorizzato a modificare il DB canonico e le sue proiezioni. ChatGPT e Codex possono produrre richieste contemporaneamente perché ogni richiesta ha un file/chiave indipendente; la serializzazione avviene soltanto al momento dell'applicazione.
 
 Formato:
 

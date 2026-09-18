@@ -515,14 +515,36 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
             analysis_id=mutation.get("analysis_id"),
             actor=actor,
         )
-    elif op=="execution":
+    elif op in {"execution","usage_execution"}:
+        prompt_id=str(mutation["prompt_id"])
         kwargs={k:mutation.get(k) for k in (
             "cycle_key","materialization_sha256","started_at","ended_at","outcome","duration_seconds",
             "model","reasoning","codex_project","chat_title","branch","commit_before","commit_after",
             "tool_call_count","input_tokens","cached_input_tokens","uncached_input_tokens","output_tokens",
             "reasoning_output_tokens","total_tokens","source"
         ) if k in mutation}
-        record_execution(conn,str(mutation["prompt_id"]),actor=actor,**kwargs)
+        update_status=True
+        if op=="usage_execution":
+            row=prompt_row(conn,prompt_id)
+            observed=mutation.get("materialization_sha256")
+            expected=row["materialization_sha256"]
+            cycle_key=mutation.get("cycle_key")
+            conflict=bool(expected and observed and expected != observed)
+            if conflict:
+                existing=conn.execute(
+                    """SELECT 1 FROM identity_conflicts
+                       WHERE prompt_id=? AND observed_cycle_key IS ? AND observed_sha256=?""",
+                    (prompt_id,cycle_key,observed),
+                ).fetchone()
+                if not existing:
+                    conn.execute(
+                        """INSERT INTO identity_conflicts(
+                             prompt_id,observed_cycle_key,expected_sha256,observed_sha256,detected_at,source
+                           ) VALUES(?,?,?,?,?,?)""",
+                        (prompt_id,cycle_key,expected,observed,now_utc(),"codex-usage"),
+                    )
+                update_status=False
+        record_execution(conn,prompt_id,actor=actor,update_status=update_status,**kwargs)
     elif op=="register":
         data={k:v for k,v in mutation.items() if k not in {"op","actor"}}
         register_prompt(conn,actor=actor,**data)
