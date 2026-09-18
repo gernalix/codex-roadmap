@@ -14,6 +14,25 @@ Coda di lavoro **solo per attività che richiedono Codex**: filesystem/toolchain
 
 `spiegazioni.md` usa `# | Prompt | Spiegazioni | Livello ragionamento | Tipo prompt`; ordine, reasoning e link devono coincidere con la roadmap.
 
+## Regola vincolante per `spiegazioni.md`
+
+`spiegazioni.md` è scritto **per Daniele, non per uno sviluppatore**. Deve essere comprensibile anche a una persona che non sa nulla di programmazione Android, Linux, database o Git.
+
+Questa regola è obbligatoria per ogni futura modifica del file:
+
+- usa italiano quotidiano, frasi brevi e parole comuni;
+- spiega **cosa cambierà concretamente per l'utente**, **perché serve** e **perché quel lavoro richiede Codex**;
+- descrivi le dipendenze con nomi umani delle attività, non con sole catene di PROMPT_ID;
+- non copiare nel file il linguaggio tecnico dei prompt;
+- non inserire dettagli di implementazione come nomi di classi, funzioni, tabelle, file interni, comandi, percorsi, commit, formati interni o nomi di test;
+- evita termini come schema, migration, runtime, branch, worktree, DAO, Room, FK, WAL, WorkManager, AVD, Gradle, systemd, API e simili;
+- i nomi propri di prodotti o servizi, per esempio PersonalHub, Obsidian, Datasette, ActivityWatch, Fedora, GitHub, Uptime Kuma e MegaVault, possono restare;
+- se un termine tecnico è davvero inevitabile, spiegalo immediatamente nella stessa frase con parole comuni;
+- modello, livello di ragionamento e tipo di prompt possono restare nelle rispettive colonne perché sono dati operativi, non parte della spiegazione;
+- prima di salvare una modifica, rileggi ogni riga chiedendoti: **“la capirebbe una persona che usa l'app ma non sa come è programmata?”** Se la risposta non è chiaramente sì, semplifica ancora.
+
+I dettagli tecnici completi appartengono ai file in `prompts/`, non a `spiegazioni.md`. La semplicità di `spiegazioni.md` ha priorità sulla precisione implementativa: deve descrivere fedelmente il risultato, non il modo in cui il codice lo ottiene.
+
 ## Regola di ammissione — niente spirali
 Un nuovo task entra in roadmap solo se soddisfa **entrambi**:
 1. richiede davvero una risorsa locale non disponibile in chat;
@@ -114,6 +133,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ## Manutenzione
 Quando aggiorni la roadmap:
 - mantieni roadmap/spiegazioni/prompt pendenti 1:1;
+- riscrivi o aggiorna sempre la relativa voce di `spiegazioni.md` rispettando integralmente la regola non tecnica sopra; non lasciare gergo ereditato dal prompt Codex;
 - per i repository target della roadmap, usa `main` come unico branch remoto persistente: branch temporanei già integrati o superseded vanno eliminati durante la manutenzione; se il cambio del default branch richiede auth/admin locale non disponibile in chat, assorbilo nel task Codex già esistente invece di creare un task separato;
 - elimina dal prompt facts ormai già implementati o verificabili automaticamente;
 - preferisci test automatici a QA manuale ripetitiva;
