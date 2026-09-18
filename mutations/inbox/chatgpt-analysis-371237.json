@@ -1,0 +1,113 @@
+{
+  "schema": "codex-roadmap.mutation.v1",
+  "actor": "chatgpt",
+  "operations": [
+    {
+      "op": "register",
+      "prompt_id": "642815",
+      "slug": "codex-usage-publisher-lock-runtime-closure",
+      "title": "Chiudere il fix del publisher Codex sul PC",
+      "current_path": "prompts/codex-usage-publisher-lock-runtime-closure.md",
+      "project_id": "8",
+      "project_name": "Fedora",
+      "repo": "gernalix/codex-usage-monitor",
+      "chat_guidance": "Stessa chat di 371237",
+      "prompt_type": "Prompt",
+      "model": "GPT-5.6 Luna",
+      "reasoning": "low",
+      "megavault_mode": "FAST",
+      "explanation": "Installa sul PC le correzioni già preparate per evitare che il salvataggio Codex si blocchi quando parte nello stesso momento del timer, elimina gli avvisi inutili dei test e completa la verifica del prompt 918274.",
+      "status": "pending",
+      "queue_position": 1,
+      "prompt_text": "PROMPT_ID=642815 | PARENT_PROMPT_ID=371237 | project_id=8 | model=GPT-5.6 Luna | reasoning=low | MegaVault=FAST\nCodex Desktop project: Fedora\nlast_result=BLOCKED\n\n# Goal\nDistribuisci sul Fedora reale SOLO i fix già preparati dopo l'analisi di 371237 e chiudi il gate runtime rimasto: il publisher non deve più fallire per una breve sovrapposizione col timer, i test mirati non devono inondare l'output di ResourceWarning SQLite, PROMPT_ID=918274 deve essere pubblicato correttamente e il secondo publisher consecutivo deve chiudersi col fast-path `noop_unchanged_sources`.\n\n# Starting point autoritativo\n- repo locale: `/home/daniele/projects/codex-usage-monitor`, branch `main`;\n- remoto: `gernalix/codex-usage-monitor`;\n- baseline remota minima: `7e25635c1afd1571aa800c1d13e18b383c1eed87`;\n- 371237 ha già verificato: 42 test PASS e deploy runtime PASS sulla baseline precedente; si è fermato SOLO perché il primo publisher manuale ha restituito `status=locked`;\n- il remoto ora contiene già: attesa bounded del publisher lock, chiusura esplicita delle connessioni SQLite usate nei context manager, test mirati e documentazione;\n- target storico ancora da pubblicare: sessione `01a0b571-34c1-77a0-873b-79aab0d23acf`, cycle `00a0f021a74b7246cbec3109`, PROMPT_ID=918274;\n- runtime canonico: `/home/daniele/.local/lib/codex-usage-monitor/current`;\n- repo dati locale: `/home/daniele/projects/codex-usage`;\n- non rileggere README/roadmap/spiegazioni/MEMORY/MegaVault: questo prompt è autosufficiente.\n\n# Esecuzione minima\n1. In UNA shell call fail-fast:\n   - richiedi branch `main`;\n   - `timeout 20s git fetch origin main && git merge --ff-only origin/main`;\n   - richiedi `HEAD=origin/main` e baseline minima antenata;\n   - esegui SOLO:\n     `PYTHONDONTWRITEBYTECODE=1 PYTHONWARNINGS=default::ResourceWarning python3 scripts/verify_repo.py tests.test_usage_publisher tests.test_session_archive tests.test_task_costs tests.test_publication_semantic_backfill tests.test_usage_publisher_regressions 2>&1 | tee /tmp/codex-usage-642815-tests.log`\n   - test exit 0 e nessuna riga contenente `ResourceWarning`.\n   Se emerge un failure direttamente causato dai fix lock/SQLite già circoscritti, correggi SOLO quel failure domain e rilancia il leaf necessario; niente audit/refactor.\n2. Dopo PASS dei test, esegui una sola volta:\n   `PYTHONDONTWRITEBYTECODE=1 python3 deploy_runtime.py --skip-fetch`.\n3. In UNA sola shell call runtime:\n   - esegui il publisher installato con attesa esplicita bounded: `codex_usage_publisher.py run --wait-lock-seconds 90`; misura il wall time;\n   - `status=locked` dopo 90 s è un vero blocker runtime; non fare retry identico;\n   - verifica direttamente nel checkout dati che il cycle `00a0f021a74b7246cbec3109` sia sotto `prompts/918274/` e che metrics riporti la sessione/cycle esatti;\n   - esegui subito un secondo publisher con `--wait-lock-seconds 90`, misura il wall time e richiedi `status=noop_unchanged_sources`;\n   - verifica nello stesso batch che `codex-usage-publisher.timer` sia enabled e che l'ultima service non sia failed.\n4. Se hai dovuto correggere source in-scope al punto 1, commit/push `main` solo dopo i gate PASS; altrimenti nessun commit locale.\n5. Termina subito dopo il risultato terminale. Nessuna suite completa, benchmark extra, scansione di altri rollout, cleanup dello storico o audit post-PASS.\n\n# Acceptance\nPASS solo se:\n- test mirati PASS senza ResourceWarning;\n- runtime deploy PASS;\n- publisher run1 non viene abortito da una sovrapposizione transitoria del lock;\n- sessione/cycle target risultano pubblicati come PROMPT_ID 918274;\n- run2 = `noop_unchanged_sources`;\n- timer enabled e service non failed;\n- wall time run1/run2 riportati.\n\n# Finalizzazione esatta\nPASS:\n`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 642815 --confirm-executed`\n\nBLOCKED:\n`python3 ~/projects/codex-roadmap/tools/roadmap_result.py --repo ~/projects/codex-roadmap --prompt-id 642815 --result BLOCKED --confirm-executed`\n\nFAIL:\n`python3 ~/projects/codex-roadmap/tools/roadmap_result.py --repo ~/projects/codex-roadmap --prompt-id 642815 --result FAIL --confirm-executed`\n\nOutput massimo 7 righe: RESULT, TESTS, DEPLOY, BACKFILL_918274, RUN1, RUN2, TIMER.\n"
+    },
+    {
+      "op": "analysis",
+      "prompt_id": "371237",
+      "bottlenecks_found": true,
+      "summary": "38.539 token totali ma 98,0% cached: solo 767 input non-cached, 140 output e 30 reasoning; Luna low era adeguato. Il costo evitabile era operativo: test+deploy PASS ma publisher manuale bloccato da lock transitorio del timer; numerosi ResourceWarning SQLite hanno gonfiato l'output; una tool-call extra è servita solo a riscoprire la sintassi di roadmap_result.py.",
+      "fix_prompt_id": "642815",
+      "source_ref": "chatgpt-analysis-2026-09-18"
+    },
+    {
+      "op": "code_change",
+      "prompt_id": "371237",
+      "repository": "gernalix/codex-usage-monitor",
+      "change_type": "fix",
+      "commit_sha": "203618d5161f51a6171c9a54bace36efbf15bb37",
+      "summary": "Il publisher aspetta in modo bounded un lock transitorio invece di restituire subito locked; la connessione SQLite publisher viene chiusa davvero al termine del context."
+    },
+    {
+      "op": "code_change",
+      "prompt_id": "371237",
+      "repository": "gernalix/codex-usage-monitor",
+      "change_type": "fix",
+      "commit_sha": "7e25635c1afd1571aa800c1d13e18b383c1eed87",
+      "summary": "Chiuse esplicitamente le connessioni SQLite di archive/task-costs e aggiunti test per lock wait e connection closure, riducendo ResourceWarning e rumore nei tool output."
+    },
+    {
+      "op": "code_change",
+      "prompt_id": "371237",
+      "repository": "gernalix/codex-roadmap",
+      "change_type": "prompt-efficiency",
+      "commit_sha": "ed5287b8ba88998766f7563f192bd4cc5cccddfc",
+      "summary": "I prompt futuri devono includere la sintassi esatta anche per BLOCKED/FAIL, evitando tool-call di discovery della CLI di finalizzazione."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "219473",
+      "old_depends_on_prompt_id": "371237",
+      "new_depends_on_prompt_id": "642815",
+      "actor": "chatgpt",
+      "note": "371237 blocked; 642815 is the materialized runtime closure."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "284916",
+      "old_depends_on_prompt_id": "371237",
+      "new_depends_on_prompt_id": "642815",
+      "actor": "chatgpt",
+      "note": "371237 blocked; 642815 is the materialized runtime closure."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "445388",
+      "old_depends_on_prompt_id": "371237",
+      "new_depends_on_prompt_id": "642815",
+      "actor": "chatgpt",
+      "note": "371237 blocked; 642815 is the materialized runtime closure."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "527184",
+      "old_depends_on_prompt_id": "371237",
+      "new_depends_on_prompt_id": "642815",
+      "actor": "chatgpt",
+      "note": "371237 blocked; 642815 is the materialized runtime closure."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "593728",
+      "old_depends_on_prompt_id": "371237",
+      "new_depends_on_prompt_id": "642815",
+      "actor": "chatgpt",
+      "note": "371237 blocked; 642815 is the materialized runtime closure."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "690049",
+      "old_depends_on_prompt_id": "371237",
+      "new_depends_on_prompt_id": "642815",
+      "actor": "chatgpt",
+      "note": "371237 blocked; 642815 is the materialized runtime closure."
+    },
+    {
+      "op": "dependency_replace",
+      "prompt_id": "693572",
+      "old_depends_on_prompt_id": "371237",
+      "new_depends_on_prompt_id": "642815",
+      "actor": "chatgpt",
+      "note": "371237 blocked; 642815 is the materialized runtime closure."
+    }
+  ]
+}
