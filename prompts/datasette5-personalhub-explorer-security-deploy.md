@@ -5,7 +5,7 @@ Valida e distribuisci SOLO la proiezione Datasette PersonalHub già implementata
 
 # Starting point autoritativo
 - repo: `/home/daniele/projects/datasette5`, branch canonico `main`;
-- `origin/main` atteso: `270eee41b54dba470b69cb0b65db4b6245564115`;
+- `origin/main` atteso: `51462485da43849c8551da53b2fbc7abb4c678f7`;
 - file pertinenti soltanto: `scripts/personalhub_projection.py`, `tests/test_personalhub_projection.py`, `README.md`;
 - Datasette runtime canonico: 1.0a38;
 - `personalhub_read`: browse + `execute-sql` solo actor umano `root`; anonimo negato; ogni write/schema mutation negata;
@@ -16,7 +16,7 @@ Valida e distribuisci SOLO la proiezione Datasette PersonalHub già implementata
 - API mobile `personalhub-sync` resta separata e non può interrogare/modificare la proiezione.
 
 # Esecuzione minima
-1. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == 270eee41b54dba470b69cb0b65db4b6245564115`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED, niente stash/rebase.
+1. Preflight unico: worktree + un solo fetch `origin main`; richiedi `origin/main == 51462485da43849c8551da53b2fbc7abb4c678f7`; fast-forward locale. Mismatch/divergenza/dirty overlap => BLOCKED, niente stash/rebase.
 2. Leggi SOLO i tre file sopra e gli helper deploy già nominati nel README se servono. Niente audit repo-wide.
 3. Esegui in un solo batch i cinque test mirati:
    - `test_cross_module_logical_relations_become_native_foreign_keys`
