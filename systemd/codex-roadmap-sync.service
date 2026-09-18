@@ -1,0 +1,8 @@
+[Unit]
+Description=Reconcile Codex roadmap SQLite metadata from codex-usage
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /home/daniele/projects/codex-roadmap/tools/roadmap_sync.py --repo /home/daniele/projects/codex-roadmap --source /home/daniele/projects/codex-usage
+Nice=10
