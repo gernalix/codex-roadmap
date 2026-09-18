@@ -5,6 +5,7 @@ project_id: 8
 model: GPT-5.6 Luna
 reasoning: low
 tags:
+  - issue-writer-e2e
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/fedora
