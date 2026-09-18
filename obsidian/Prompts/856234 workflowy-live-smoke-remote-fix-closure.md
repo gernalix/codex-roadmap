@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** 2026-09-18T23:16:51Z
 - **Ultimo lancio:** 2026-09-18T23:16:51Z
 - **Ultimo esito:** PASS
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -39,7 +39,7 @@ Sincronizza il fix Workflowy già pubblicato con il checkout locale e conferma i
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-18T23:33:37Z · colli di bottiglia: sì · fix: — · PASS pulito: 35.296 token totali, 34.560 cached (98,05%), 688 input non-cached, 48 output, 0 reasoning output, 7 tool-call, 58,993 s e quota osservata invariata. Nessun retry, loop, output perso o modifica applicativa residua. Unico spreco evitabile: GPT-5.6 Terra/medium era sovradimensionato per un sync + leaf unit + singolo smoke già deterministico; per task equivalenti usare GPT-5.6 Luna/low. Nessun follow-up Codex necessario.
 
 ## Modifiche di codice ChatGPT
 
