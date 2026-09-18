@@ -36,7 +36,7 @@ Il risultato immediato viene consegnato da:
 python3 tools/roadmap_result.py --repo . --prompt-id 123456 --result PASS --confirm-executed
 ```
 
-`roadmap_finish.py` resta compatibile ed equivale a `PASS`. Il comando non modifica più il DB o Git locale: usa `gh api` per creare una richiesta immutabile nella inbox remota. Per ogni PROMPT_ID esiste una sola chiave terminale; un retry identico è idempotente, mentre un esito terminale diverso con la stessa chiave viene rifiutato. GitHub Actions applica la richiesta al DB canonico e rigenera le viste. Le righe di `executions` continuano a provenire dai dati reali di `codex-usage`, evitando doppi conteggi.
+`roadmap_finish.py` resta compatibile ed equivale a `PASS`. Il comando non modifica più il DB o Git locale: crea una GitHub Issue immutabile `[roadmap-mutation] terminal-<PROMPT_ID>`. Per ogni PROMPT_ID esiste una sola chiave terminale; un retry identico è idempotente, mentre un esito terminale diverso con la stessa chiave viene rifiutato. GitHub Actions applica la richiesta al DB canonico, rigenera le viste e chiude la Issue. Le righe di `executions` continuano a provenire dai dati reali di `codex-usage`, evitando doppi conteggi.
 
 Prima dell'import ogni prompt attivo deve avere una fingerprint della propria materializzazione. Se un vecchio `PROMPT_ID` ricompare con testo diverso, il sistema registra una collisione e non sovrascrive automaticamente lo stato del prompt corrente.
 
