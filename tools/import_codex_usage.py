@@ -56,12 +56,18 @@ def import_metrics(repo: Path, source: Path, *, render_after: bool = True) -> di
             # A strict mismatch is recorded but does not overwrite the prompt's state.
             conflict = bool(expected_hash and data.get("prompt_text_redacted") and expected_hash != observed_hash)
             if conflict:
-                conn.execute(
-                    """INSERT OR IGNORE INTO identity_conflicts(
+                conflict_exists = conn.execute(
+                    """SELECT 1 FROM identity_conflicts
+                       WHERE prompt_id=? AND observed_cycle_key IS ? AND observed_sha256=?""",
+                    (prompt_id, cycle_key, observed_hash),
+                ).fetchone()
+                if not conflict_exists:
+                    conn.execute(
+                    """INSERT INTO identity_conflicts(
                          prompt_id,observed_cycle_key,expected_sha256,observed_sha256,detected_at,source
                        ) VALUES(?,?,?,?,?,?)""",
                     (prompt_id, cycle_key, expected_hash, observed_hash, now_utc(), str(path)),
-                )
+                    )
                 stats["conflicts"] += 1
 
             if cycle_key and conn.execute("SELECT 1 FROM executions WHERE cycle_key=?", (cycle_key,)).fetchone():
