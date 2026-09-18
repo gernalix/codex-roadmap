@@ -6,7 +6,7 @@ Completa SOLO il Data Explorer ibrido di PersonalHub già preparato: rendi Datas
 # Starting point autoritativo
 - repo: `/home/daniele/projects/PersonalHub`, project_id `49`;
 - branch: `feature/hybrid-datasette-explorer`;
-- HEAD remoto atteso del branch: `88fa81aa7974b21535629586a91e714fcff016a6`;
+- HEAD remoto atteso del branch: `cbc35a522052fc16be5fe4f681c01bb1cf96ed70`;
 - base iniziale main: `7cf69218b5956c13e70194fe1801804c4143e4fc`;
 - il branch contiene già: snapshot DB detached+validato, DataExplorerActivity local/remote, home entry, WebViewAssetLoader, config `personalhub_read`, strings, docs e CODE_MAP;
 - local mode è intenzionalmente fail-closed e blocca ogni richiesta fuori da `appassets.androidplatform.net`;
@@ -23,6 +23,7 @@ Completa SOLO il Data Explorer ibrido di PersonalHub già preparato: rendi Datas
    - snapshot/cache non accessibile fuori dal path dedicato;
    - local mode avvia Datasette Lite e una SELECT con rete disabilitata;
    - navigazione tabella/SQL read-only funziona;
+   - i sei entry point aprono le tabelle canoniche: People=`contacts`, Timer=`sessions`, Places=`places`, Substances=`substances`, WordPulse=`word_entries`, Soldi=`finance_transactions`;
    - tentativi write non modificano `personalhub.db`;
    - remote mode usa `personalhub_read` e autenticazione interattiva, senza header/token mobile.
 5. Gate host economici: compile leaf interessato, test mirati, poi una sola `checkArchitectureBoundaries`. Se un gate aggregato fallisce, usa solo il leaf failure e un unico rerun finale.
