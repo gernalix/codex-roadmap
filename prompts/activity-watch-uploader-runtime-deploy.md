@@ -1,4 +1,4 @@
-PROMPT_ID=643817 | project_id=15 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
+PROMPT_ID=751306 | project_id=15 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
 
 # Goal
 Completa SOLO il deploy runtime già implementato di ActivityWatch uploader: Fedora → `gernalix/activity-watch-data` → Uptime Kuma. Nessun redesign.
@@ -77,5 +77,5 @@ Niente refactor/cleanup, nuove feature, nuove credenziali, audit generale, altri
 
 # Stop
 Al primo blocker non coperto dai guard fermati; niente retry equivalente. Dopo PASS:
-`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 643817 --confirm-executed`
+`python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id 751306 --confirm-executed`
 Poi stop. Output massimo 7 righe: `RESULT`, `CHECKOUTS`, `FEDORA`, `ACTIVITYWATCH`, `GIT`, `KUMA`, `BLOCKER`.
