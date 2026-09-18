@@ -4,7 +4,7 @@
 
 Qui trovi, in parole semplici, **perché ogni task richiede ancora Codex e se conviene lanciarlo come Prompt normale oppure Goal**. Tutto ciò che è eseguibile direttamente sui repository remoti resta fuori dalla coda Codex.
 
-L'ordine evita lavoro duplicato: dopo i due task runtime indipendenti, PersonalHub procede in serie sul branch dedicato (profili/cleanup Timer → audit timestamp mirato), poi torna su main per il gate Git History, Datasette Lite e infine Play. Le attività indipendenti restano dopo la catena PH.
+L'ordine evita lavoro duplicato: dopo i due task runtime indipendenti, PersonalHub procede in serie (profili/cleanup Timer → audit/migrazione timestamp mirata → Salute canonica), poi torna su main per il gate Git History, Datasette Lite e infine Play. Salute viene dopo i timestamp per non contendere lo stesso schema Room e prima del gate Git History perché deve essere incluso nei test di revert/Time Machine/Datasette. Le attività indipendenti restano dopo la catena PH.
 
 |   # | Prompt | Spiegazioni | Livello ragionamento | Tipo prompt |
 | --: | ------ | ----------- | -------------------- | ----------- |
@@ -15,7 +15,7 @@ L'ordine evita lavoro duplicato: dopo i due task runtime indipendenti, PersonalH
 | 5 | [[prompts/personalhub-salute-canonical-integration]] | Il branch `feature/salute-canonical-domain` contiene già il modello dati, il workflow ChatGPT→PH e due SVG di prodotto. Resta Codex perché bisogna trasformare l'attuale Salute esterno in schema Room canonico, eseguire migration/schema export, consumer closure, Hub/Temporal, patch/history, Obsidian deterministico e QA AVD senza committare dati sanitari reali. Il branch resta separato per review/merge manuale dell'utente. **Prompt**, GPT-5.6 Sol/medium + STRICT. | medium | Prompt |
 | 6 | [[prompts/personalhub-git-history-data-sync-validation]] | Git Data/History è già implementato; dopo Salute va validato sul nuovo main con profili globali, timestamp epoch-ms e tabelle health incluse. Resta Codex per compile, fault injection, fake GitHub, restore/revert e AVD. **Prompt**, GPT-5.6 Sol/medium + STRICT. | medium | Prompt |
 | 7 | [[prompts/personalhub-datasette-lite-offline-runtime]] | Dopo il gate Git History, completa il runtime Datasette Lite offline e la presentazione relazionale/temporale includendo anche il nuovo dominio Salute. Richiede build e QA Android. **Prompt**, GPT-5.6 Sol/medium + STANDARD. | medium | Prompt |
-| 8 | [[prompts/personalhub-play-release-local-validation]] | Dopo Datasette Lite valida l'AAB finale versione 52: signing, manifest, 16 KiB e smoke dell'APK set derivato dall'AAB su Pixel_8a. **Prompt**, GPT-5.6 Luna/low + FAST. | low | Prompt |
+| 8 | [[prompts/personalhub-play-release-local-validation]] | Dopo Datasette Lite valida l'AAB finale versione 51: signing, manifest, 16 KiB e smoke dell'APK set derivato dall'AAB su Pixel_8a. **Prompt**, GPT-5.6 Luna/low + FAST. | low | Prompt |
 | 9 | [[prompts/logseq-updates-pat-safety-closure]] | Il PAT è già rimosso dal tree corrente ma resta nella history. Serve Codex per cambio default branch, rewrite fail-closed, verifica credential e aggiornamento MegaVault. È indipendente dalla scelta Obsidian per Salute. **Prompt**, GPT-5.6 Sol/medium + STRICT. | medium | Prompt |
 | 10 | [[prompts/fedora-runtime-validation]] | Il deploy runtime è già completato; resta solo kuma-configure bounded e readback #39/#40 sul Fedora reale dopo login umano. **Prompt**, GPT-5.6 Luna/low + FAST. | low | Prompt |
 
