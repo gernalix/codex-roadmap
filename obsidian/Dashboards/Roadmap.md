@@ -4,6 +4,7 @@
 
 ## Lanciabili adesso
 
+- [[obsidian/Prompts/856234 workflowy-live-smoke-remote-fix-closure|856234 · Confermare il live smoke Workflowy dopo il fix remoto]]
 - [[obsidian/Prompts/904631 datasette5-personalhub-explorer-security-deploy-v2|904631 · Versione online dell’esploratore dati PersonalHub]]
 - [[obsidian/Prompts/775412 workflowy-automation-local-activation-v2|775412 · Attivare le automazioni locali di Workflowy]]
 - [[obsidian/Prompts/593728 personalhub-shared-alerts-places-tags-integration-v2|593728 · Chiudere e integrare i nuovi tag e alert di Places]]
