@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/livinggaul-x-downloader|livinggaul-x-downloader]]
 - **Prompt:** [[../../completed/livinggaul-source-availability-local-activation|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T09:58:41Z
+- **Ultimo lancio:** 2026-09-19T09:58:41Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Installa la v0.4.0, aggiorna il DB locale e controlla senza scaricare quali link
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T09:58:41Z | 2026-09-19T10:01:11Z | PASS | 150.75 | gpt-5.6-terra | medium | 15 | 44632 |
 
 ## Analisi ChatGPT
 
