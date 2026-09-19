@@ -37,6 +37,8 @@ Un prompt deve essere autosufficiente ma piccolo. Deve contenere soltanto:
 
 Se path, file, helper, test, servizio o device sono già noti, trattarli come autoritativi e non rifare discovery generale.
 
+**Le dipendenze sono dati della roadmap, non del testo del prompt.** Se `roadmap_start.py` accetta il claim, tutte le dipendenze canoniche del task corrente sono soddisfatte. Non ricontrollare né attendere vecchi PROMPT_ID citati nello storico o in una materializzazione precedente; un riferimento testuale “dopo X” è informativo e non può contraddire il claim remoto.
+
 ## Autonomia e recovery
 
 **Goal + acceptance criteria definiscono lo scope; i passi del prompt sono il piano iniziale, non una whitelist di file, comandi o strategie.** Codex deve portare autonomamente il goal a termine quando può farlo in sicurezza. Se il piano prescritto diventa falso, inefficiente o bloccante, Codex deve sostituirlo con un percorso migliore invece di terminare solo perché non può seguire alla lettera i passi originari.
