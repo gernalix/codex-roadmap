@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/github-autosync|GitHub Autosync]]
 - **Prompt:** [[../../completed/global-repository-single-writer-rollout|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T10:59:16Z
+- **Ultimo lancio:** 2026-09-19T10:59:16Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Rollout locale finale del generic per-repository single writer, worktree isolati
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T10:59:16Z | 2026-09-19T11:07:38Z | PASS | 501.641 | gpt-5.6-terra | medium | 62 | 108820 |
 
 ## Analisi ChatGPT
 
