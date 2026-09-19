@@ -215,9 +215,9 @@
 | [[obsidian/Prompts/731604 prompt-731604\|731604 · Historical prompt 731604]] | unknown | 2026-08-04T17:47:31Z | 2026-08-04T17:47:31Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/731608 prompt-731608\|731608 · Historical prompt 731608]] | completed | 2026-09-13T13:44:36Z | 2026-09-13T13:44:36Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/731842 prompt-731842\|731842 · Historical prompt 731842]] | unknown | 2026-08-04T16:50:57Z | 2026-08-04T16:50:57Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/731845 prompt-731845\|731845 · Historical prompt 731845]] | blocked | 2026-09-16T08:02:39Z | 2026-09-16T08:02:39Z | BLOCKED | no | no | — | — | — | — |
+| [[obsidian/Prompts/731845 prompt-731845\|731845 · Historical prompt 731845]] | blocked | 2026-09-16T08:02:39Z | 2026-09-16T08:02:39Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/731846 prompt-731846\|731846 · Historical prompt 731846]] | unknown | 2026-08-30T16:27:53Z | 2026-09-19T06:53:19Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/731904 prompt-731904\|731904 · Historical prompt 731904]] | blocked | 2026-09-12T05:45:51Z | 2026-09-12T05:45:51Z | BLOCKED | no | no | — | — | — | — |
+| [[obsidian/Prompts/731904 prompt-731904\|731904 · Historical prompt 731904]] | blocked | 2026-09-12T05:45:51Z | 2026-09-12T05:45:51Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/734581 prompt-734581\|734581 · Historical prompt 734581]] | completed | 2026-09-16T00:16:27Z | 2026-09-16T00:16:27Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/736205 prompt-736205\|736205 · Historical prompt 736205]] | unknown | 2026-09-03T18:40:14Z | 2026-09-03T18:40:14Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/738415 prompt-738415\|738415 · Historical prompt 738415]] | unknown | 2026-08-05T00:00:29Z | 2026-08-05T00:00:29Z | UNKNOWN | no | no | — | — | — | — |
@@ -226,7 +226,7 @@
 | [[obsidian/Prompts/741926 prompt-741926\|741926 · Historical prompt 741926]] | unknown | 2026-09-16T06:16:59Z | 2026-09-16T06:16:59Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/742591 prompt-742591\|742591 · Historical prompt 742591]] | completed | 2026-09-18T11:03:33Z | 2026-09-18T11:03:33Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/742615 prompt-742615\|742615 · Historical prompt 742615]] | unknown | 2026-09-16T10:15:22Z | 2026-09-16T10:15:22Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/742618 prompt-742618\|742618 · Historical prompt 742618]] | blocked | 2026-09-12T04:06:13Z | 2026-09-12T04:06:13Z | BLOCKED | no | no | — | — | — | — |
+| [[obsidian/Prompts/742618 prompt-742618\|742618 · Historical prompt 742618]] | blocked | 2026-09-12T04:06:13Z | 2026-09-12T04:06:13Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/742913 prompt-742913\|742913 · Historical prompt 742913]] | unknown | 2026-09-13T15:48:35Z | 2026-09-13T15:48:35Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/746323 prompt-746323\|746323 · Historical prompt 746323]] | completed | 2026-09-16T17:37:00Z | 2026-09-16T17:37:00Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/748219 prompt-748219\|748219 · Historical prompt 748219]] | unknown | 2026-08-06T15:19:27Z | 2026-08-06T15:19:27Z | UNKNOWN | no | no | — | — | — | — |

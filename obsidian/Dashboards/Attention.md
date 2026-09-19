@@ -169,8 +169,8 @@
 - [[obsidian/Prompts/731604 prompt-731604|731604 · Historical prompt 731604]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/731608 prompt-731608|731608 · Historical prompt 731608]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/731842 prompt-731842|731842 · Historical prompt 731842]] · `unknown` · analizzato=no · fix=—
-- [[obsidian/Prompts/731845 prompt-731845|731845 · Historical prompt 731845]] · `blocked` · analizzato=no · fix=—
-- [[obsidian/Prompts/731904 prompt-731904|731904 · Historical prompt 731904]] · `blocked` · analizzato=no · fix=—
+- [[obsidian/Prompts/731845 prompt-731845|731845 · Historical prompt 731845]] · `blocked` · analizzato=sì · fix=—
+- [[obsidian/Prompts/731904 prompt-731904|731904 · Historical prompt 731904]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/734581 prompt-734581|734581 · Historical prompt 734581]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/736205 prompt-736205|736205 · Historical prompt 736205]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/738415 prompt-738415|738415 · Historical prompt 738415]] · `unknown` · analizzato=no · fix=—
@@ -179,7 +179,7 @@
 - [[obsidian/Prompts/741926 prompt-741926|741926 · Historical prompt 741926]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/742591 prompt-742591|742591 · Historical prompt 742591]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/742615 prompt-742615|742615 · Historical prompt 742615]] · `unknown` · analizzato=no · fix=—
-- [[obsidian/Prompts/742618 prompt-742618|742618 · Historical prompt 742618]] · `blocked` · analizzato=no · fix=—
+- [[obsidian/Prompts/742618 prompt-742618|742618 · Historical prompt 742618]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/742913 prompt-742913|742913 · Historical prompt 742913]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/746323 prompt-746323|746323 · Historical prompt 746323]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/748219 prompt-748219|748219 · Historical prompt 748219]] · `unknown` · analizzato=no · fix=—
