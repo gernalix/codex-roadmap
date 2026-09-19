@@ -20,6 +20,8 @@ Instead, submit one immutable `codex-roadmap.mutation.v1` request as a GitHub Is
 
 Terminal Codex results must use `tools/roadmap_result.py` or `tools/roadmap_finish.py`; they already submit through the same writer.
 
+Every Codex report tied to a roadmap task must begin on line 1 with exactly `PROMPT_ID=<six-digit id>` for that task. This applies both to the final Codex response and to any Markdown/text report artifact Codex produces. When a terminal result is reported, `RESULT=PASS|BLOCKED|FAIL` belongs on line 2, not line 1.
+
 `tools/import_codex_usage.py` and `tools/roadmap_sync.py` are writer clients, not local DB writers.
 
 Do not invoke legacy direct-writer internals outside tests. Do not pass test-only/unsafe flags merely to bypass this boundary.
