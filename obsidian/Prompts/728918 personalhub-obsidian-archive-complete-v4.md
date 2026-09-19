@@ -1,23 +1,23 @@
 ---
 prompt_id: 728918
-status: pending
+status: unknown
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/unknown
   - roadmap/project/personal-hub
 ---
 
 # 728918 · Implementare l’archivio Obsidian opzionale completo
 
-- **Stato:** pending
+- **Stato:** unknown
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-obsidian-archive-complete-v4|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Prompt:** [[../../falliti/personalhub-obsidian-archive-complete-v4|Apri prompt]]
+- **Primo lancio:** 2026-09-19T16:56:36Z
+- **Ultimo lancio:** 2026-09-19T16:56:36Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Fa diventare Obsidian una specie di archivio super leggibile dei tuoi dati Perso
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T16:56:36Z | 2026-09-19T17:06:00Z | UNKNOWN | 563.858 | gpt-5.6-terra | medium | 27 | 121234 |
 
 ## Analisi ChatGPT
 

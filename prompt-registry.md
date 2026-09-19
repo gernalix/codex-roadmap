@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release\|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] | running | 2026-09-19T15:13:54Z | 2026-09-19T15:29:32Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure\|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] | running | 2026-09-19T15:41:21Z | 2026-09-19T15:41:21Z | BLOCKED | no | no | — | chrome-codex-switcher | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
@@ -59,10 +58,11 @@
 | [[obsidian/Prompts/527184 datasette5-personalhub-explorer-security-deploy\|527184 · Versione online dell’esploratore dati PersonalHub]] | superseded | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/330522 workflowy-automation-local-activation\|330522 · Attivare le automazioni locali di Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.5 | low |
 | [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3\|790233 · Portare Salute nel database canonico]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | unknown | 2026-09-19T16:56:36Z | 2026-09-19T16:56:36Z | UNKNOWN | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation\|617205 · Chiudere i nuovi tag e alert di Places]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/775412 workflowy-automation-local-activation-v2\|775412 · Attivare le automazioni locali di Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/416826 personalhub-salute-ui-hub-v3\|416826 · Collegare Salute all’app e all’Hub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/489818 datasette5-personalhub-final-schema-deploy-v3\|489818 · Aggiornare e distribuire Datasette sullo schema PH finale]] | completed | — | — | PASS | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/489818 datasette5-personalhub-final-schema-deploy-v3\|489818 · Aggiornare e distribuire Datasette sullo schema PH finale]] | completed | 2026-09-19T16:56:54Z | 2026-09-19T16:56:54Z | PASS | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/461839 personalhub-epoch-timestamps-migration\|461839 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/593728 personalhub-shared-alerts-places-tags-integration-v2\|593728 · Chiudere e integrare i nuovi tag e alert di Places]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/355842 personalhub-obsidian-archive-complete-v3\|355842 · Completare l’archivio Obsidian in un solo task]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
@@ -247,7 +247,7 @@
 | [[obsidian/Prompts/835917 prompt-835917\|835917 · Historical prompt 835917]] | completed | 2026-09-13T13:30:37Z | 2026-09-13T13:30:37Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/838979 prompt-838979\|838979 · Historical prompt 838979]] | unknown | 2026-09-16T05:04:48Z | 2026-09-16T05:04:48Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/842617 prompt-842617\|842617 · Historical prompt 842617]] | unknown | 2026-08-04T18:39:12Z | 2026-08-04T18:39:12Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/842731 prompt-842731\|842731 · Historical prompt 842731]] | blocked | 2026-09-09T09:08:03Z | 2026-09-09T09:08:03Z | BLOCKED | no | no | — | — | — | — |
+| [[obsidian/Prompts/842731 prompt-842731\|842731 · Historical prompt 842731]] | completed | 2026-09-09T09:08:03Z | 2026-09-19T17:07:11Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/845217 prompt-845217\|845217 · Historical prompt 845217]] | unknown | 2026-09-03T17:28:38Z | 2026-09-03T17:28:38Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/846215 prompt-846215\|846215 · Historical prompt 846215]] | unknown | 2026-09-03T05:16:32Z | 2026-09-03T05:16:32Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/847392 prompt-847392\|847392 · Historical prompt 847392]] | blocked | 2026-09-16T09:54:41Z | 2026-09-16T09:54:41Z | BLOCKED | no | no | — | — | — | — |

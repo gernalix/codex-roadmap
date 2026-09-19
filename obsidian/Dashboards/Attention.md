@@ -1,5 +1,7 @@
 # Da controllare
 
+- [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `unknown` · analizzato=no · fix=—
+- [[obsidian/Prompts/842731 prompt-842731|842731 · Historical prompt 842731]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/489818 datasette5-personalhub-final-schema-deploy-v3|489818 · Aggiornare e distribuire Datasette sullo schema PH finale]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] · `unknown` · analizzato=no · fix=—
@@ -187,7 +189,6 @@
 - [[obsidian/Prompts/835917 prompt-835917|835917 · Historical prompt 835917]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/838979 prompt-838979|838979 · Historical prompt 838979]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/842617 prompt-842617|842617 · Historical prompt 842617]] · `unknown` · analizzato=no · fix=—
-- [[obsidian/Prompts/842731 prompt-842731|842731 · Historical prompt 842731]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/845217 prompt-845217|845217 · Historical prompt 845217]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/846215 prompt-846215|846215 · Historical prompt 846215]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/847392 prompt-847392|847392 · Historical prompt 847392]] · `blocked` · analizzato=no · fix=—

@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/datasette5-oracle|datasette5 / Oracle]]
 - **Prompt:** [[../../completed/datasette5-personalhub-final-schema-deploy-v3|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T16:56:54Z
+- **Ultimo lancio:** 2026-09-19T16:56:54Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Aggiorna Datasette perché possa mostrare bene tutto il database PersonalHub fin
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T16:56:54Z | 2026-09-19T17:09:01Z | UNKNOWN | 727.115 | gpt-5.6-terra | medium | 62 | 150121 |
 
 ## Analisi ChatGPT
 
