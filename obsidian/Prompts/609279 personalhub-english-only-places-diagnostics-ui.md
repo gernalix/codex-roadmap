@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[663657 personalhub-shared-alerts-places-tags-integration-v4|663657]]
+- **Dipende da:** [[380812 personalhub-shared-alerts-places-tags-integration-v5|380812]]
 - **Sblocca:** [[404846 personalhub-github-ci-closure-v2|404846]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —

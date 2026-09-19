@@ -18,13 +18,13 @@ tags:
 - **Primo lancio:** 2026-09-19T00:30:43Z
 - **Ultimo lancio:** 2026-09-19T00:30:43Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
-- **Fix:** —
+- **Fix:** 380812
 - **Dipende da:** [[418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844]]
-- **Sblocca:** [[609279 personalhub-english-only-places-diagnostics-ui|609279]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[223103 personalhub-shared-alerts-places-tags-integration-v3|223103]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[380812 personalhub-shared-alerts-places-tags-integration-v5|380812]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
@@ -39,7 +39,7 @@ Unisce in main i tag di Places, gli alert condivisi tra Timer e Places e il fix 
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-19T00:42:33Z · colli di bottiglia: sì · fix: 380812 · 663657 was launched while dependency 418844 was still recorded as running even though its execution had already ended PASS. 418844 then remained running because codex-usage reported a materialization fingerprint different from the canonical prompt, so status reconciliation was intentionally suppressed. 663657 itself had matching identity and blocked before meaningful product integration. The roadmap start path also accepted pending→running without enforcing dependency completion; that bug has been fixed in main.
 
 ## Modifiche di codice ChatGPT
 

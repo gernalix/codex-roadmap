@@ -4,6 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5\|380812 · Chiudere e integrare tag e alert di Places]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui\|609279 · Solo inglese e diagnostica Places su richiesta]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2\|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3\|830867 · Date e ore coerenti ovunque]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
@@ -34,7 +35,7 @@
 | [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2\|200725 · PersonalHub 100% capsule isolation — integra main e valida]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/284916 personalhub-100-capsule-isolation-integrate-v3\|284916 · PersonalHub 100% capsule isolation — valida e integra]] | completed | 2026-09-18T22:49:13Z | 2026-09-18T22:49:13Z | PASS | sì | sì | [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4\|223679]] | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4\|223679 · Integrare definitivamente l’isolamento capsule]] | blocked | 2026-09-19T00:13:49Z | 2026-09-19T00:13:49Z | BLOCKED | sì | no | [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1\|418844]] | Personal Hub | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4\|663657 · Chiudere e integrare tag e alert di Places]] | blocked | 2026-09-19T00:30:43Z | 2026-09-19T00:30:43Z | BLOCKED | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4\|663657 · Chiudere e integrare tag e alert di Places]] | blocked | 2026-09-19T00:30:43Z | 2026-09-19T00:30:43Z | BLOCKED | sì | no | [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5\|380812]] | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/746193 workflowy-importer-local-live-validation\|746193 · Provare davvero l’importatore Workflowy]] | blocked | 2026-09-18T19:11:43Z | 2026-09-18T19:11:43Z | BLOCKED | sì | no | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572]] | Fedora / Workflowy | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/219473 oracle-backup-notification-antiflap-runtime\|219473 · Ferma le notifiche backup Oracle transitorie]] | superseded | — | — | — | no | no | — | Oracle VM | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/781352 oracle-backup-notification-antiflap-runtime-v2\|781352 · Ferma le notifiche backup Oracle transitorie]] | completed | 2026-09-18T22:53:04Z | 2026-09-18T22:53:04Z | PASS | sì | sì | — | Oracle VM | GPT-5.6 Terra | medium |
