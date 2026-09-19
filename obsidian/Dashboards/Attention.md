@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/864205 github-reconcile-production-hardening|864205 · Rendere github-reconcile production-grade su Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/391746 recover-github-autosync-codex-usage-roadmap|391746 · Recupera gli alert Git autosync di codex-usage e codex-roadmap]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/684217 prompt-684217|684217 · Historical prompt 684217]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] · `completed` · analizzato=no · fix=—

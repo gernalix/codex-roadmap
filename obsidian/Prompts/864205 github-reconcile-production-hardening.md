@@ -1,20 +1,20 @@
 ---
 prompt_id: 864205
-status: running
+status: completed
 project_id: —
 model: gpt-6-astra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/github-autosync
 ---
 
 # 864205 · Rendere github-reconcile production-grade su Fedora
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/github-autosync|github-autosync]]
-- **Prompt:** [[../../prompts/864205-github-reconcile-production-hardening|Apri prompt]]
+- **Prompt:** [[../../completed/864205-github-reconcile-production-hardening|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
