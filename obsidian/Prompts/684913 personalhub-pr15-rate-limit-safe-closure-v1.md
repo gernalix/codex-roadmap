@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** 2026-09-19T02:13:34Z
 - **Ultimo lancio:** 2026-09-19T03:23:36Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -41,7 +41,7 @@ Recovery risolutivo di 576041: evita il polling REST che ha prodotto tre BLOCKED
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-19T21:45:34Z · colli di bottiglia: sì · fix: — · {"blocker":"il test richiede un file runtime privato e la repository non ha secret GitHub Actions configurati. Servono credenziali di test oppure una decisione esplicita su come eseguire questa suite in CI senza ridurne la copertura.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"684913","report_ref":"codex-usage:6a55440cd70f90def19c1b49:9c8a651255b78f8c","schema":"codex-roadmap.fix-packet.v1","work_state":{"pr":"#15"}}
 
 ## Modifiche di codice ChatGPT
 

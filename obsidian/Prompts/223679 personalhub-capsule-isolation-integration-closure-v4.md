@@ -40,6 +40,7 @@ Porta dentro main il branch già pronto che separa meglio i moduli di PersonalHu
 ## Analisi ChatGPT
 
 - 2026-09-19T00:24:38Z · colli di bottiglia: sì · fix: 418844 · 223679 became stale relative to repository state: PersonalHub PR #14 was already merged before this execution completed, and current main vs feature/100-capsule-isolation is identical. Re-running semantic integration/build work would be redundant; only safe local/remote branch cleanup remains.
+- 2026-09-19T21:45:34Z · colli di bottiglia: sì · fix: — · {"blocker":"Codex reported BLOCKED; inspect the linked execution report.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"223679","report_ref":"codex-usage:2e7437d44e6d9a686e1e4e92:b4894039228ea5db","schema":"codex-roadmap.fix-packet.v1","work_state":{"commit":"4f41fbf"}}
 
 ## Modifiche di codice ChatGPT
 

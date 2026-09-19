@@ -42,6 +42,7 @@ Installa sul PC la correzione già pronta del salvataggio Codex e verifica che i
 ## Analisi ChatGPT
 
 - 2026-09-18T21:02:10Z · colli di bottiglia: sì · fix: 371237 · Run efficiente (17.788 s, 1 tool-call). Root cause: il parser costi cercava due backslash prima dell'underscore invece di uno; nessun collo di bottiglia operativo rilevante. Fix remoto applicato e follow-up limitato al deploy/verifica Fedora.
+- 2026-09-19T21:45:34Z · colli di bottiglia: sì · fix: — · {"blocker":"TESTS: FAIL — `test_native_user_message_accepts_markdown_escaped_prompt_id`: `'' != '918274'`.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"538642","report_ref":"codex-usage:ef6b04d5b745ba1745570134:b1e7ae6835a3fc28","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 

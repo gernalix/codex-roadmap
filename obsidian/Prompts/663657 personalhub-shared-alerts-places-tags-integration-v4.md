@@ -40,6 +40,7 @@ Unisce in main i tag di Places, gli alert condivisi tra Timer e Places e il fix 
 ## Analisi ChatGPT
 
 - 2026-09-19T00:42:33Z · colli di bottiglia: sì · fix: 380812 · 663657 was launched while dependency 418844 was still recorded as running even though its execution had already ended PASS. 418844 then remained running because codex-usage reported a materialization fingerprint different from the canonical prompt, so status reconciliation was intentionally suppressed. 663657 itself had matching identity and blocked before meaningful product integration. The roadmap start path also accepted pending→running without enforcing dependency completion; that bug has been fixed in main.
+- 2026-09-19T21:45:34Z · colli di bottiglia: sì · fix: — · {"blocker":"Codex reported BLOCKED; inspect the linked execution report.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"663657","report_ref":"codex-usage:01773501ed1890905641c82e:4d0b102334c55e38","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 

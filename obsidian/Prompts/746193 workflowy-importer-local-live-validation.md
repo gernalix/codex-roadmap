@@ -42,6 +42,7 @@ Prova l’importatore Workflowy sul PC con dati finti e controlla che non crei d
 ## Analisi ChatGPT
 
 - 2026-09-18T19:34:30Z · colli di bottiglia: sì · fix: 693572 · Host gates e dry-run PASS. Il run è stato BLOCKED solo dalla chiave Workflowy assente; 16 tool-call includevano discovery segreti e cleanup evitabili. Il follow-up usa il file segreto canonico e un unico smoke helper.
+- 2026-09-19T21:45:35Z · colli di bottiglia: sì · fix: — · {"blocker":"No canonical MegaVault secret-ref for `WORKFLOWY_API_KEY`; no API call made.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"746193","report_ref":"codex-usage:9d9cc8295ba0c62fa513699a:42ca5bfdcfe97014","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
