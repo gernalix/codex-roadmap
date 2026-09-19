@@ -5,7 +5,7 @@ tags:
 
 # PersonalHub
 
-- [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] · `pending`
+- [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] · `running`
 - [[obsidian/Prompts/637985 personalhub-single-canonical-db-export|637985 · Mantenere un solo DB auto-esportato PersonalHub]] · `pending`
 - [[obsidian/Prompts/491628 personalhub-android17-restricted-overlay-finalize|491628 · Finalizzare permesso overlay Android 17 di PersonalHub]] · `pending`
 - [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] · `completed`
