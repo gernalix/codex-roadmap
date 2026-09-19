@@ -411,6 +411,12 @@ def replace_dependency(
         (prompt_id, old_depends_on),
     ).fetchone()
     if not existing:
+        already_forwarded = conn.execute(
+            "SELECT 1 FROM dependencies WHERE prompt_id=? AND depends_on_prompt_id=?",
+            (prompt_id, new_depends_on),
+        ).fetchone()
+        if already_forwarded:
+            return
         raise RoadmapDBError(f"dependency_not_found:{prompt_id}:{old_depends_on}")
     conn.execute(
         "INSERT OR IGNORE INTO dependencies(prompt_id,depends_on_prompt_id,note) VALUES(?,?,?)",
@@ -456,6 +462,52 @@ def add_relation(
            ) VALUES(?,?,?,?,?,?)""",
         (from_prompt_id, to_prompt_id, relation_type, ts, actor, note),
     )
+
+    # Fix/replacement/merge relations are dependency successors. Pending children
+    # should follow the new prompt automatically so a terminal parent never
+    # strands the rest of the queue. Running children remain immutable.
+    if relation_type in {"fix", "replacement", "merge"}:
+        children = conn.execute(
+            """SELECT d.prompt_id,d.note
+               FROM dependencies d
+               JOIN prompts p ON p.prompt_id=d.prompt_id
+               WHERE d.depends_on_prompt_id=? AND p.status='pending'
+               ORDER BY d.prompt_id""",
+            (from_prompt_id,),
+        ).fetchall()
+        for child in children:
+            child_id = str(child["prompt_id"])
+            if child_id == to_prompt_id:
+                continue
+            conn.execute(
+                "INSERT OR IGNORE INTO dependencies(prompt_id,depends_on_prompt_id,note) VALUES(?,?,?)",
+                (
+                    child_id,
+                    to_prompt_id,
+                    child["note"] or f"auto-forwarded from {from_prompt_id}",
+                ),
+            )
+            conn.execute(
+                "DELETE FROM dependencies WHERE prompt_id=? AND depends_on_prompt_id=?",
+                (child_id, from_prompt_id),
+            )
+            conn.execute(
+                "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+                (
+                    child_id,
+                    "dependency_auto_forwarded",
+                    ts,
+                    actor,
+                    json.dumps(
+                        {
+                            "from_prompt_id": from_prompt_id,
+                            "to_prompt_id": to_prompt_id,
+                            "relation_type": relation_type,
+                        },
+                        sort_keys=True,
+                    ),
+                ),
+            )
 
 def add_tag(conn: sqlite3.Connection, prompt_id: str, tag: str) -> None:
     assert_prompt_not_running(conn, prompt_id, "tag")
