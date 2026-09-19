@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[572280 recover-641582-missing-roadmap-registration-v1|572280]]
 - **Chat Codex:** —
 
 ## Spiegazione
