@@ -34,7 +34,6 @@
 - [[obsidian/Prompts/637985 personalhub-single-canonical-db-export|637985 · Mantenere un solo DB auto-esportato PersonalHub]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked` · analizzato=sì · fix=817264
-- [[obsidian/Prompts/642913 global-repository-single-writer-rollout|642913 · Attivare il single writer globale per tutti i repository]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install|652361 · LivingGaul hourly systemd local install]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4|663657 · Chiudere e integrare tag e alert di Places]] · `blocked` · analizzato=sì · fix=380812
 - [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] · `unknown` · analizzato=no · fix=—
@@ -172,7 +171,6 @@
 - [[obsidian/Prompts/734581 prompt-734581|734581 · Historical prompt 734581]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/736205 prompt-736205|736205 · Historical prompt 736205]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/738415 prompt-738415|738415 · Historical prompt 738415]] · `unknown` · analizzato=no · fix=—
-- [[obsidian/Prompts/739214 prompt-739214|739214 · Historical prompt 739214]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/741906 prompt-741906|741906 · Historical prompt 741906]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/741926 prompt-741926|741926 · Historical prompt 741926]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/742591 prompt-742591|742591 · Historical prompt 742591]] · `completed` · analizzato=no · fix=—

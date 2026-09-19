@@ -18,8 +18,8 @@ tags:
 - **Primo lancio:** 2026-09-19T10:59:16Z
 - **Ultimo lancio:** 2026-09-19T10:59:16Z
 - **Ultimo esito:** PASS
-- **Analizzato da ChatGPT:** no
-- **Codice modificato da ChatGPT:** no (0 interventi)
+- **Analizzato da ChatGPT:** sì
+- **Codice modificato da ChatGPT:** sì (1 interventi)
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
@@ -39,8 +39,8 @@ Rollout locale finale del generic per-repository single writer, worktree isolati
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-19T22:15:05Z · colli di bottiglia: sì · fix: — · Post-PASS regression observed on Uptime Kuma monitor Fedora GitHub Reconcile #46: heartbeat aged out at 2026-09-19 23:41. Remote diagnosis found the periodic systemd unit was invoking forced reconcile-all every minute, while Kuma was pushed only after a completed full reconcile; fatal AutosyncError paths emitted no heartbeat and a missing Push URL was silently treated as success. github-autosync PR #16 fixes the contract by running the lightweight periodic run path, emitting Kuma status on every non-dry periodic run, emitting explicit DOWN on fatal errors, and failing closed on missing/unusable Push configuration. Remote CI is PASS and the single-writer integrator merged it as 914ae93ad95dc47222b86ecd6c1c3e7ad38db4be. Remaining work is local Fedora deployment/reinstall of units and live #46 verification only.
 
 ## Modifiche di codice ChatGPT
 
-- Nessuna modifica di codice registrata.
+- 2026-09-19T22:15:05Z · `gernalix/github-autosync` · runtime-reliability · commit `914ae93ad95dc47222b86ecd6c1c3e7ad38db4be` · Harden periodic Fedora GitHub Reconcile/Kuma heartbeat: lightweight timer path, heartbeat on periodic runs, explicit DOWN on fatal failures, missing Push config surfaced; CI PASS.

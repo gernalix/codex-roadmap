@@ -34,7 +34,7 @@
 | [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1\|684913 · Chiudere PR #15 senza polling GitHub]] | blocked | 2026-09-19T02:13:34Z | 2026-09-19T03:23:36Z | BLOCKED | sì | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1\|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] | completed | 2026-09-19T03:59:35Z | 2026-09-19T03:59:35Z | PASS | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa\|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] | completed | 2026-09-19T06:57:57Z | 2026-09-19T06:57:57Z | PASS | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/642913 global-repository-single-writer-rollout\|642913 · Attivare il single writer globale per tutti i repository]] | completed | 2026-09-19T10:59:16Z | 2026-09-19T10:59:16Z | PASS | no | no | — | GitHub Autosync | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/642913 global-repository-single-writer-rollout\|642913 · Attivare il single writer globale per tutti i repository]] | completed | 2026-09-19T10:59:16Z | 2026-09-19T10:59:16Z | PASS | sì | sì | — | GitHub Autosync | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/593872 fedora-graphics-black-screen-forensics\|593872 · Diagnosi forense del blackout grafico Fedora]] | completed | — | — | PASS | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | blocked | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | BLOCKED | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
@@ -223,7 +223,7 @@
 | [[obsidian/Prompts/734581 prompt-734581\|734581 · Historical prompt 734581]] | completed | 2026-09-16T00:16:27Z | 2026-09-16T00:16:27Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/736205 prompt-736205\|736205 · Historical prompt 736205]] | unknown | 2026-09-03T18:40:14Z | 2026-09-03T18:40:14Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/738415 prompt-738415\|738415 · Historical prompt 738415]] | unknown | 2026-08-05T00:00:29Z | 2026-08-05T00:00:29Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/739214 prompt-739214\|739214 · Historical prompt 739214]] | completed | 2026-09-11T21:40:58Z | 2026-09-11T21:40:58Z | PASS | no | no | — | — | — | — |
+| [[obsidian/Prompts/739214 prompt-739214\|739214 · Historical prompt 739214]] | cancelled | 2026-09-11T21:40:58Z | 2026-09-11T21:40:58Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/741906 prompt-741906\|741906 · Historical prompt 741906]] | unknown | 2026-08-04T23:25:41Z | 2026-08-04T23:25:41Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/741926 prompt-741926\|741926 · Historical prompt 741926]] | unknown | 2026-09-16T06:16:59Z | 2026-09-16T06:16:59Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/742591 prompt-742591\|742591 · Historical prompt 742591]] | completed | 2026-09-18T11:03:33Z | 2026-09-18T11:03:33Z | PASS | no | no | — | — | — | — |
