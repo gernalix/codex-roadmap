@@ -44,7 +44,7 @@ def finish_result(
         "actor": "codex",
         "operations": [
             {
-                "op": "status",
+                "op": "terminal_request",
                 "prompt_id": prompt_id,
                 "status": RESULT_STATUS[result],
                 "actor": "codex",
