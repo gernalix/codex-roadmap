@@ -16,8 +16,8 @@ tags:
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../falliti/personalhub-obsidian-archive-complete-v4|Apri prompt]]
 - **Primo lancio:** 2026-09-19T16:56:36Z
-- **Ultimo lancio:** 2026-09-19T16:56:36Z
-- **Ultimo esito:** UNKNOWN
+- **Ultimo lancio:** 2026-09-19T17:08:40Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -36,6 +36,7 @@ Fa diventare Obsidian una specie di archivio super leggibile dei tuoi dati Perso
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-19T16:56:36Z | 2026-09-19T17:06:00Z | UNKNOWN | 563.858 | gpt-5.6-terra | medium | 27 | 121234 |
+| 2026-09-19T17:08:40Z | 2026-09-19T17:13:08Z | BLOCKED | 268.247 | gpt-5.6-terra | medium | 17 | 150125 |
 
 ## Analisi ChatGPT
 
