@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/593872 fedora-graphics-black-screen-forensics|593872 · Diagnosi forense del blackout grafico Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/731805 workflowy-open-launches-chrome-and-codex|731805 · Fare aprire Chrome e Codex con 🚀 Apri]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/684327 ccs-autonomous-runtime-verifier-v2|684327 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/658142 ccs-autonomous-runtime-verifier|658142 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `blocked` · analizzato=no · fix=—
