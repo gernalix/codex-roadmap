@@ -37,7 +37,7 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertNotIn("[[obsidian/Prompts/123456 one\\|123456]]",spieg)
             self.assertTrue(db.verify(repo)["ok"])
 
-    def test_terminal_status_waits_for_exact_usage_execution(self):
+    def test_terminal_request_keeps_running_until_usage_confirms(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
             (repo/"prompts").mkdir()
@@ -45,16 +45,26 @@ class RoadmapDBTests(unittest.TestCase):
             conn=db.connect(repo)
             db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md")
             db.refresh_materialization_hashes(conn,repo)
+            db.set_status(conn,"123456","running",actor="codex",note="launch")
             db.record_terminal(conn,"123456","PASS",source="roadmap_result")
             conn.commit()
-            self.assertEqual("completed",db.prompt_row(conn,"123456")["status"])
-            self.assertEqual(0,conn.execute("select count(*) from executions").fetchone()[0])
-            self.assertEqual(1,conn.execute("select count(*) from audit_events where event_type='terminal_result'").fetchone()[0])
+            self.assertEqual("running",db.prompt_row(conn,"123456")["status"])
+            self.assertEqual(1,conn.execute("select count(*) from terminal_requests").fetchone()[0])
+            conn.close()
+
+            db.render(repo)
+            spieg=(repo/"spiegazioni.md").read_text(encoding="utf-8")
+            self.assertIn("| 123456 | running |",spieg)
+            self.assertTrue((repo/"prompts/one.md").is_file())
+
+            conn=db.connect(repo)
             db.record_execution(
                 conn,"123456",cycle_key="real-cycle",started_at="2026-09-18T10:00:00Z",
                 ended_at="2026-09-18T10:01:00Z",outcome="PASS",source="codex-usage"
             )
             conn.commit()
+            self.assertEqual("completed",db.prompt_row(conn,"123456")["status"])
+            self.assertEqual(0,conn.execute("select count(*) from terminal_requests").fetchone()[0])
             self.assertEqual(1,conn.execute("select count(*) from executions").fetchone()[0])
             conn.close()
 
@@ -164,18 +174,34 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertIn("⏳ No — prima: 123456",spieg)
             self.assertIn("⛔ No — prima: rifai il login a Kuma",spieg)
 
-    def test_running_prompt_cannot_be_superseded_or_replaced(self):
+    def test_running_prompt_is_immutable_to_roadmap_edits(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
             conn=db.connect(repo)
-            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md")
+            db.register_prompt(
+                conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md",
+                explanation="original",model="GPT-5.6 Terra",queue_position=1
+            )
             db.register_prompt(conn,prompt_id="654321",slug="two",title="Two",current_path="prompts/two.md")
             db.set_status(conn,"123456","running",actor="codex",note="launch")
-            with self.assertRaisesRegex(db.RoadmapDBError,"active_prompt_cannot_be_superseded"):
-                db.set_status(conn,"123456","superseded",actor="chatgpt",note="policy changed")
-            with self.assertRaisesRegex(db.RoadmapDBError,"active_prompt_cannot_be_replaced"):
-                db.add_relation(conn,"123456","654321","replacement",actor="chatgpt")
-            self.assertEqual("running",db.prompt_row(conn,"123456")["status"])
+            actions=[
+                lambda: db.set_status(conn,"123456","superseded",actor="chatgpt"),
+                lambda: db.set_model(conn,"123456","GPT-5.6 Sol"),
+                lambda: db.set_explanation(conn,"123456","changed"),
+                lambda: db.reorder_prompt(conn,"123456",9),
+                lambda: db.add_dependency(conn,"123456","654321"),
+                lambda: db.add_relation(conn,"123456","654321","replacement",actor="chatgpt"),
+                lambda: db.add_tag(conn,"123456","x"),
+                lambda: db.record_analysis(conn,"123456",summary="x"),
+            ]
+            for action in actions:
+                with self.assertRaisesRegex(db.RoadmapDBError,"running_prompt_locked"):
+                    action()
+            row=db.prompt_row(conn,"123456")
+            self.assertEqual("running",row["status"])
+            self.assertEqual("original",row["explanation"])
+            self.assertEqual("GPT-5.6 Terra",row["model"])
+            self.assertEqual(1,row["queue_position"])
             conn.close()
 
     def test_superseded_prompt_cannot_be_reactivated(self):
