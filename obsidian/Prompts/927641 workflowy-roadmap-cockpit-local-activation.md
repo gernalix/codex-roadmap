@@ -1,6 +1,6 @@
 ---
 prompt_id: 927641
-status: pending
+status: running
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
@@ -8,13 +8,13 @@ tags:
   - local-activation
   - workflowy-cockpit
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/workflowy-roadmap-cockpit
 ---
 
 # 927641 · Attiva il cockpit Workflowy della roadmap
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/workflowy-roadmap-cockpit|Workflowy roadmap cockpit]]
 - **Prompt:** [[../../prompts/workflowy-roadmap-cockpit-local-activation|Apri prompt]]
 - **Primo lancio:** —
