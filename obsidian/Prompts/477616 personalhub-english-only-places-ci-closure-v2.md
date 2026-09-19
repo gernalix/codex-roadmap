@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../completed/personalhub-english-only-places-ci-closure-v2|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T04:58:06Z
+- **Ultimo lancio:** 2026-09-19T04:58:06Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Stesso obiettivo del task precedente, ma senza dipendenze hardcodate nel testo: 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T04:58:06Z | 2026-09-19T05:22:05Z | PASS | 1439.942 | gpt-5.6-terra | medium | 93 | 126969 |
 
 ## Analisi ChatGPT
 
