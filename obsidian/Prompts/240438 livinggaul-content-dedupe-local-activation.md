@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/livinggaul-x-downloader|livinggaul-x-downloader]]
 - **Prompt:** [[../../completed/livinggaul-content-dedupe-local-activation|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T03:56:36Z
+- **Ultimo lancio:** 2026-09-19T03:56:36Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Aggiorna il downloader locale alla v0.2.0, indicizza i video già scaricati e ve
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T03:56:36Z | 2026-09-19T03:58:33Z | PASS | 116.789 | gpt-5.6-luna | low | 14 | 47437 |
 
 ## Analisi ChatGPT
 
