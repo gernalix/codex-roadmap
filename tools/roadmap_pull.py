@@ -121,6 +121,18 @@ def _ensure_installed_hook(repo: Path) -> None:
         raise RoadmapPullBlocked("pull_guard_stale_or_missing:run tools/install_roadmap_pull_guard.py")
 
 
+def _install_hook_from_ref(repo: Path, ref: str) -> None:
+    target = (_git_dir(repo) / "roadmap-hooks" / "reference-transaction").resolve()
+    target.parent.mkdir(parents=True, exist_ok=True)
+    raw = _git_bytes(repo, "show", f"{ref}:.githooks/reference-transaction")
+    tmp = target.with_suffix(".tmp")
+    tmp.write_bytes(raw)
+    os.chmod(tmp, 0o700)
+    tmp.replace(target)
+    _git_ok(repo, "config", "--local", "core.hooksPath", str(target.parent))
+    _git_ok(repo, "config", "--local", "pull.ff", "only")
+
+
 def _refresh_installed_hook(repo: Path) -> None:
     source, target = _hook_paths(repo)
     if not source.is_file():
@@ -264,15 +276,21 @@ def guarded_pull(
     *,
     remote: str = "origin",
     branch: str = "main",
+    bootstrap_guard: bool = False,
 ) -> dict[str, Any]:
     repo = repo.expanduser().resolve()
     before = _require_clean_main(repo, branch)
-    _ensure_installed_hook(repo)
 
+    # Fetch is safe: it does not update the local main/worktree. Bootstrap mode
+    # may install the guard from this exact fetched commit before any merge.
     refspec = f"refs/heads/{branch}:refs/remotes/{remote}/{branch}"
     _git_ok(repo, "fetch", remote, refspec)
     remote_ref = f"{remote}/{branch}"
     remote_head = _git_ok(repo, "rev-parse", remote_ref)
+    if bootstrap_guard:
+        _install_hook_from_ref(repo, remote_head)
+    else:
+        _ensure_installed_hook(repo)
 
     ancestor = _git(repo, "merge-base", "--is-ancestor", before, remote_head)
     if ancestor.returncode:
@@ -369,9 +387,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--repo", type=Path, default=Path("~/projects/codex-roadmap"))
     parser.add_argument("--remote", default="origin")
     parser.add_argument("--branch", default="main")
+    parser.add_argument(
+        "--bootstrap-guard",
+        action="store_true",
+        help="One-time bootstrap: install the guard from the fetched remote commit before merging.",
+    )
     args = parser.parse_args(argv)
     try:
-        result = guarded_pull(args.repo, remote=args.remote, branch=args.branch)
+        result = guarded_pull(
+            args.repo,
+            remote=args.remote,
+            branch=args.branch,
+            bootstrap_guard=args.bootstrap_guard,
+        )
     except RoadmapPullBlocked as exc:
         print(json.dumps({"status": "BLOCKED", "reason": str(exc)}, sort_keys=True))
         return 2
