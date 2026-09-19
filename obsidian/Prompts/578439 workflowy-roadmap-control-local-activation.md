@@ -1,20 +1,20 @@
 ---
 prompt_id: 578439
-status: pending
+status: superseded
 project_id: —
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/fedora-workflowy
 ---
 
 # 578439 · Attivare il controllo roadmap da Workflowy
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
-- **Prompt:** [[../../prompts/workflowy-roadmap-control-local-activation|Apri prompt]]
+- **Prompt:** [[../../falliti/workflowy-roadmap-control-local-activation|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[231789 workflowy-automation-local-activation-v3|231789]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[231789 workflowy-automation-local-activation-v3|231789]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[572280 recover-641582-missing-roadmap-registration-v1|572280]]
 - **Chat Codex:** Nuova chat Codex
 
 ## Spiegazione
