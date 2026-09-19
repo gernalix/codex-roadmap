@@ -104,7 +104,7 @@ Ogni file in `prompts/` deve essere autosufficiente e contenere solo ciò che se
 
 Non copiare interi protocolli globali dentro ogni prompt. Includere solo le regole realmente applicabili al task. Se starting point/path/helper/test sono già noti, evitare rediscovery generale **finché l'evidenza non smentisce lo starting point**. In quel caso Codex ha autonomia per fare discovery mirata e correggere codice/test/config adiacenti necessari allo stesso goal. I passi del prompt sono un piano iniziale, non una whitelist.
 
-Non usare **overlay di precedenza** del tipo “questa sezione prevale sulle istruzioni successive” per rattoppare un prompt già materializzato: aumenta token e ambiguità. Se una policy cambia in modo da rendere incoerente un prompt pendente, creare una nuova materializzazione completa e coerente con nuovo PROMPT_ID, collegarla al padre e supersedere/cancellare la vecchia. Non correggere in-place il testo di un PROMPT_ID già materializzato.
+Non usare **overlay di precedenza** del tipo “questa sezione prevale sulle istruzioni successive” per rattoppare un prompt già materializzato: aumenta token e ambiguità. Se una policy cambia in modo da rendere incoerente un prompt **ancora pending e non avviato**, si può creare una nuova materializzazione con nuovo PROMPT_ID e supersedere la vecchia. Se invece il prompt è `running`, è protetto: non può essere superseded né replaced da un aggiornamento della roadmap. Lasciarlo terminare e creare dopo un follow-up correttivo; oppure, se l'utente vuole interromperlo, fermare prima Codex e chiuderlo esplicitamente con un esito terminale. Non correggere in-place il testo di un PROMPT_ID già materializzato.
 
 Contratto esecutivo completo: [[STANDARD_PROMPT|Esecuzione Codex]].
 
@@ -127,7 +127,7 @@ Prima di aumentare il modello/reasoning, ridurre scope, discovery, output e roun
 
 ## Esecuzione manuale
 
-Apri il primo task lanciabile, imposta modello/reasoning e incolla **solo il file prompt**. Non inviare meta-prompt e non far rileggere roadmap/README/MegaVault se il prompt contiene già lo starting point necessario. `MegaVault=FAST` con progetto/workdir già risolti non autorizza un dump preventivo di MegaVault, memoria o storico: si consulta solo un fatto specifico se emerge davvero come mancante.
+Apri il primo task lanciabile, imposta modello/reasoning e incolla **solo il file prompt**. Prima di qualunque lavoro sul progetto, Codex deve eseguire `python3 ~/projects/codex-roadmap/tools/roadmap_start.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID>` e procedere solo se il writer conferma `running`. Non inviare meta-prompt e non far rileggere roadmap/README/MegaVault se il prompt contiene già lo starting point necessario. `MegaVault=FAST` con progetto/workdir già risolti non autorizza un dump preventivo di MegaVault, memoria o storico: si consulta solo un fatto specifico se emerge davvero come mancante.
 
 Default: un task per sessione; stesso thread solo per una continuazione diretta che riusa davvero contesto utile.
 
