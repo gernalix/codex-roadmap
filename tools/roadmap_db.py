@@ -428,8 +428,6 @@ def request_terminal(
     if requested_status not in (TERMINAL_STATUS - {"superseded"}):
         raise RoadmapDBError(f"invalid_terminal_request:{requested_status}")
     row = prompt_row(conn, prompt_id)
-    if row["status"] != "running":
-        raise RoadmapDBError(f"terminal_request_requires_running:{prompt_id}:{row['status']}")
     existing = conn.execute(
         "SELECT requested_status FROM terminal_requests WHERE prompt_id=?",
         (prompt_id,),
@@ -439,26 +437,50 @@ def request_terminal(
             raise RoadmapDBError(
                 f"terminal_request_conflict:{prompt_id}:{existing['requested_status']}->{requested_status}"
             )
-        return
-    ts = now_utc()
-    conn.execute(
-        """INSERT INTO terminal_requests(prompt_id,requested_status,actor,note,requested_at)
-           VALUES(?,?,?,?,?)""",
-        (prompt_id, requested_status, actor, note, ts),
-    )
-    conn.execute(
-        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
-        (
-            prompt_id,
-            "terminal_requested",
-            ts,
-            actor,
-            json.dumps(
-                {"requested_status": requested_status, "note": note},
-                ensure_ascii=False,
-                sort_keys=True,
+        if row["status"] == requested_status:
+            return
+        if row["status"] != "running":
+            raise RoadmapDBError(
+                f"terminal_request_state_conflict:{prompt_id}:{row['status']}->{requested_status}"
+            )
+    else:
+        if row["status"] == requested_status:
+            return
+        if row["status"] != "running":
+            raise RoadmapDBError(f"terminal_request_requires_running:{prompt_id}:{row['status']}")
+        ts = now_utc()
+        conn.execute(
+            """INSERT INTO terminal_requests(prompt_id,requested_status,actor,note,requested_at)
+               VALUES(?,?,?,?,?)""",
+            (prompt_id, requested_status, actor, note, ts),
+        )
+        conn.execute(
+            "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+            (
+                prompt_id,
+                "terminal_requested",
+                ts,
+                actor,
+                json.dumps(
+                    {"requested_status": requested_status, "note": note},
+                    ensure_ascii=False,
+                    sort_keys=True,
+                ),
             ),
-        ),
+        )
+
+    # The explicit terminal request is authoritative for scheduling. Finalize now
+    # so children of PASS prompts become runnable immediately and stale locks can
+    # be reclaimed without waiting for telemetry. codex-usage remains an
+    # independent audit/metrics source and can later record identity conflicts or
+    # an outcome mismatch without keeping the roadmap stuck in running.
+    set_status(
+        conn,
+        prompt_id,
+        requested_status,
+        actor=actor,
+        note=note or f"terminal_request:{requested_status}",
+        allow_running_terminal=True,
     )
 
 def record_execution(
