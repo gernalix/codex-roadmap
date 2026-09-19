@@ -4,11 +4,10 @@
 
 ## Lanciabili adesso
 
-- [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]]
 - [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3|588376 · Bonificare history Logseq e attivare updater]]
 - [[obsidian/Prompts/542078 fedora-runtime-kuma-closure-v3|542078 · Chiudere solo il gate Kuma Fedora]]
 - [[obsidian/Prompts/578439 workflowy-roadmap-control-local-activation|578439 · Attivare il controllo roadmap da Workflowy]]
 
 ## In esecuzione
 
-- Nessuno.
+- [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]]

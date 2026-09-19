@@ -1,18 +1,18 @@
 ---
 prompt_id: 576041
-status: pending
+status: running
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 576041 · Chiudere autonomamente la PR alert/Places
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-pr15-autonomous-closure-v2|Apri prompt]]
 - **Primo lancio:** —
