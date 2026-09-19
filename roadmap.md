@@ -12,3 +12,4 @@
 8. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 9. [[prompts/fedora-runtime-kuma-closure-v3|fedora-runtime-kuma-closure-v3]]
 10. [[prompts/livinggaul-source-availability-local-activation|livinggaul-source-availability-local-activation]]
+11. [[prompts/864205-github-reconcile-production-hardening|github-reconcile-production-hardening]]
