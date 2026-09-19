@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[417592 fedora-external-updater-megavault-git-closure-v2|417592]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

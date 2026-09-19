@@ -10,3 +10,4 @@
 6. [[prompts/fedora-context-index-runtime-activation|fedora-context-index-runtime-activation]]
 7. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 8. [[prompts/workflowy-roadmap-sync-rate-limit-hardening|workflowy-roadmap-sync-rate-limit-hardening]]
+9. [[prompts/fedora-external-updater-megavault-git-closure-v2|fedora-external-updater-megavault-git-closure-v2]]
