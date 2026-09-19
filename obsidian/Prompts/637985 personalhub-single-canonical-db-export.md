@@ -1,6 +1,6 @@
 ---
 prompt_id: 637985
-status: pending
+status: running
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
@@ -8,13 +8,13 @@ tags:
   - pr-21
   - single-canonical-db
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personalhub
 ---
 
 # 637985 · Mantenere un solo DB auto-esportato PersonalHub
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../prompts/personalhub-single-canonical-db-export|Apri prompt]]
 - **Primo lancio:** —
