@@ -60,6 +60,43 @@ class RemoteSingleWriterTests(unittest.TestCase):
             captured,
         )
 
+    def test_matching_issues_uses_rest_search(self) -> None:
+        wanted_title = "[roadmap-mutation] start-123456"
+        response = Mock(
+            returncode=0,
+            stdout=json.dumps(
+                {
+                    "items": [
+                        {
+                            "number": 11,
+                            "title": wanted_title,
+                            "state": "open",
+                            "body": "{}",
+                            "html_url": "https://github.example/issues/11",
+                        },
+                        {
+                            "number": 12,
+                            "title": "[roadmap-mutation] other",
+                            "state": "open",
+                            "body": "{}",
+                            "html_url": "https://github.example/issues/12",
+                        },
+                    ]
+                }
+            ),
+            stderr="",
+        )
+        with patch.object(submit_mutation, "_gh", return_value=response) as gh:
+            rows = submit_mutation._matching_issues("gernalix/codex-roadmap", wanted_title)
+
+        self.assertEqual(1, len(rows))
+        self.assertEqual(11, rows[0]["number"])
+        self.assertEqual("https://github.example/issues/11", rows[0]["url"])
+        args = gh.call_args.args
+        self.assertEqual("api", args[0])
+        self.assertIn("search/issues", args)
+        self.assertNotIn("issue", args[:2])
+
     def test_existing_same_open_issue_is_idempotent(self) -> None:
         document = {
             "schema": submit_mutation.SCHEMA,
