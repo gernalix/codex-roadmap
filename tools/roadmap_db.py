@@ -509,6 +509,15 @@ def add_relation(
                 ),
             )
 
+    if relation_type in {"replacement", "merge"} and source["status"] == "pending":
+        set_status(
+            conn,
+            from_prompt_id,
+            "superseded",
+            actor=actor,
+            note=note or f"auto-superseded by {relation_type}:{to_prompt_id}",
+        )
+
 def add_tag(conn: sqlite3.Connection, prompt_id: str, tag: str) -> None:
     assert_prompt_not_running(conn, prompt_id, "tag")
     conn.execute("INSERT OR IGNORE INTO prompt_tags(prompt_id,tag) VALUES(?,?)", (prompt_id, tag))
