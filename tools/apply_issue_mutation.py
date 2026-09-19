@@ -13,6 +13,7 @@ from roadmap_db import (
     connect,
     now_utc,
     reconcile_prompt_file_locations,
+    reconcile_terminal_requests,
     refresh_materialization_hashes,
     render,
 )
@@ -101,7 +102,12 @@ def apply_issue(repo: Path, event_path: Path) -> dict[str, Any]:
     conn = connect(repo)
     operations_applied = 0
     idempotent = False
+    reconciled_terminals = 0
     try:
+        # Self-heal terminal requests left by older writer versions or interrupted
+        # telemetry. This runs even for idempotent Issues so a harmless replay can
+        # repair stale running prompts and unblock their children.
+        reconciled_terminals = reconcile_terminal_requests(conn, actor="single-writer")
         receipt = conn.execute(
             "SELECT * FROM mutation_receipts WHERE request_key=?", (request_key,)
         ).fetchone()
@@ -133,7 +139,7 @@ def apply_issue(repo: Path, event_path: Path) -> dict[str, Any]:
                    ) VALUES(?,?,?,?,?)""",
                 (request_key, issue_number, payload_sha256, actor, now_utc()),
             )
-            conn.commit()
+        conn.commit()
     except Exception:
         conn.rollback()
         raise
@@ -152,6 +158,7 @@ def apply_issue(repo: Path, event_path: Path) -> dict[str, Any]:
         "operations": operations_applied,
         "materialized_prompts": materialized,
         "idempotent": idempotent,
+        "reconciled_terminals": reconciled_terminals,
     }
 
 
