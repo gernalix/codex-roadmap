@@ -18,13 +18,13 @@ tags:
 - **Primo lancio:** 2026-09-19T00:13:49Z
 - **Ultimo lancio:** 2026-09-19T00:13:49Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
-- **Fix:** —
+- **Fix:** 418844
 - **Dipende da:** —
 - **Sblocca:** [[223103 personalhub-shared-alerts-places-tags-integration-v3|223103]]
 - **Padri/precedenti:** [[284916 personalhub-100-capsule-isolation-integrate-v3|284916]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
@@ -39,7 +39,7 @@ Porta dentro main il branch già pronto che separa meglio i moduli di PersonalHu
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-19T00:24:38Z · colli di bottiglia: sì · fix: 418844 · 223679 became stale relative to repository state: PersonalHub PR #14 was already merged before this execution completed, and current main vs feature/100-capsule-isolation is identical. Re-running semantic integration/build work would be redundant; only safe local/remote branch cleanup remains.
 
 ## Modifiche di codice ChatGPT
 

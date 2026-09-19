@@ -1,5 +1,5 @@
 ---
-prompt_id: 609279
+prompt_id: 418844
 status: pending
 project_id: 49
 model: GPT-5.6 Luna
@@ -10,26 +10,26 @@ tags:
   - roadmap/project/personal-hub
 ---
 
-# 609279 · Solo inglese e diagnostica Places su richiesta
+# 418844 · Chiudere il residuo del merge capsule
 
 - **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-english-only-places-diagnostics-ui|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-capsule-isolation-postmerge-cleanup-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[663657 personalhub-shared-alerts-places-tags-integration-v4|663657]]
-- **Sblocca:** [[404846 personalhub-github-ci-closure-v2|404846]]
-- **Padri/precedenti:** —
+- **Dipende da:** —
+- **Sblocca:** [[663657 personalhub-shared-alerts-places-tags-integration-v4|663657]]
+- **Padri/precedenti:** [[223679 personalhub-capsule-isolation-integration-closure-v4|223679]]
 - **Figli/follow-up:** —
-- **Chat Codex:** Nuova chat
+- **Chat Codex:** Stessa chat di 223679
 
 ## Spiegazione
 
-Fa usare a PersonalHub solo l'inglese per ora e sposta la grande diagnostica dei check-in di Places dietro un pulsante discreto. Serve a semplificare sia la manutenzione delle stringhe sia la schermata Places. Richiede Codex perché deve verificare lingua e interfaccia su un emulatore Android.
+Verifica che l’isolamento capsule sia già davvero dentro main e rimuove soltanto il branch rimasto aperto. Serve a chiudere il BLOCKED 223679 senza rifare build o integrazioni già completate. Richiede Codex perché deve ripulire anche il checkout Git locale.
 
 ## Esecuzioni
 
