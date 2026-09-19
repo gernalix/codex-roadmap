@@ -41,6 +41,7 @@ Installa sul PC le correzioni già preparate per evitare che il salvataggio Code
 ## Analisi ChatGPT
 
 - 2026-09-18T22:05:45Z · colli di bottiglia: sì · fix: 817264 · 642815 ha usato 43.962 token, 97,4% cached e 4 tool-call. Il problema non era il costo ma una policy troppo rigida: il leaf test ha trovato un adapter che non esportava init_db e ResourceWarning, ma il prompt ha trattato una modifica Python in-scope come fuori perimetro e si è fermato BLOCKED invece di correggerla. Root cause remota corretta e policy generale resa autonomy-first.
+- 2026-09-19T21:45:13Z · colli di bottiglia: sì · fix: — · {"blocker":"TESTS: FAIL — `test_archive_db_context_closes_connection`; `ResourceWarning` presenti.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"642815","report_ref":"codex-usage:6fbfad92f883c1c552598b19:820014582728d1a9","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 

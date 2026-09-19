@@ -46,12 +46,12 @@
 - [[obsidian/Prompts/746193 workflowy-importer-local-live-validation|746193 · Provare davvero l’importatore Workflowy]] · `blocked` · analizzato=sì · fix=693572
 - [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation|749621 · Attiva single-writer completo e integrazione PH]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/854653 fedora-external-updater-pip-user-git-closure|854653 · Persistenza Git del fix pip_user]] · `blocked` · analizzato=no · fix=—
+- [[obsidian/Prompts/854653 fedora-external-updater-pip-user-git-closure|854653 · Persistenza Git del fix pip_user]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/864205 github-reconcile-production-hardening|864205 · Rendere github-reconcile production-grade su Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/842731 prompt-842731|842731 · Historical prompt 842731]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/684217 prompt-684217|684217 · Historical prompt 684217]] · `blocked` · analizzato=no · fix=—
-- [[obsidian/Prompts/482731 prompt-482731|482731 · Historical prompt 482731]] · `failed` · analizzato=no · fix=—
+- [[obsidian/Prompts/482731 prompt-482731|482731 · Historical prompt 482731]] · `failed` · analizzato=sì · fix=—
 - [[obsidian/Prompts/731846 prompt-731846|731846 · Historical prompt 731846]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/151583 prompt-151583|151583 · Historical prompt 151583]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/157771 prompt-157771|157771 · Historical prompt 157771]] · `completed` · analizzato=no · fix=—
@@ -196,7 +196,7 @@
 - [[obsidian/Prompts/816428 prompt-816428|816428 · Historical prompt 816428]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/819427 prompt-819427|819427 · Historical prompt 819427]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/824613 prompt-824613|824613 · Historical prompt 824613]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/826451 prompt-826451|826451 · Historical prompt 826451]] · `failed` · analizzato=no · fix=—
+- [[obsidian/Prompts/826451 prompt-826451|826451 · Historical prompt 826451]] · `failed` · analizzato=sì · fix=—
 - [[obsidian/Prompts/827614 prompt-827614|827614 · Historical prompt 827614]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/835204 prompt-835204|835204 · Historical prompt 835204]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/835917 prompt-835917|835917 · Historical prompt 835917]] · `completed` · analizzato=no · fix=—

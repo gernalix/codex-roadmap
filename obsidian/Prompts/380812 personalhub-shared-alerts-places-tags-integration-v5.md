@@ -40,6 +40,7 @@ Retry mirato di 663657: il precedente BLOCKED era causato dall’orchestrazione 
 ## Analisi ChatGPT
 
 - 2026-09-19T01:08:37Z · colli di bottiglia: sì · fix: 521404 · 380812 consumed about 119k tokens / 50 tool calls and completed the substantive implementation: PR #15 is open, mergeable, 89 commits ahead and 0 behind main, with migration/FK/alerts/Places/Timer/app compile reported validated. The canonical terminal record does not preserve the exact blocker text. The remaining work is bounded CI/AVD/integration closure, so repeating implementation or host gates would waste tokens.
+- 2026-09-19T21:45:13Z · colli di bottiglia: sì · fix: — · {"blocker":"Codex reported BLOCKED; inspect the linked execution report.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"380812","report_ref":"codex-usage:df24d2710feb61f8c377c039:a8a20052b0901a17","schema":"codex-roadmap.fix-packet.v1","work_state":{"pr":"#15"}}
 
 ## Modifiche di codice ChatGPT
 
