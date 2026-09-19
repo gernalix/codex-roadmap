@@ -1,6 +1,6 @@
 ---
 prompt_id: 731805
-status: pending
+status: running
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - facilitatori
   - workflowy-launch
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 731805 · Fare aprire Chrome e Codex con 🚀 Apri
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../prompts/workflowy-open-launches-chrome-and-codex|Apri prompt]]
 - **Primo lancio:** —
