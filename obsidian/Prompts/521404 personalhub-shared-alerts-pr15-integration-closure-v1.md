@@ -1,18 +1,18 @@
 ---
 prompt_id: 521404
-status: pending
+status: running
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 521404 · Chiudere e mergiare la PR alert/Places già pronta
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-shared-alerts-pr15-integration-closure-v1|Apri prompt]]
 - **Primo lancio:** —
