@@ -1,18 +1,18 @@
 ---
 prompt_id: 489818
-status: pending
+status: running
 project_id: 10
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/datasette5-oracle
 ---
 
 # 489818 · Aggiornare e distribuire Datasette sullo schema PH finale
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/datasette5-oracle|datasette5 / Oracle]]
 - **Prompt:** [[../../prompts/datasette5-personalhub-final-schema-deploy-v3|Apri prompt]]
 - **Primo lancio:** —
