@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import base64
 import json
+import os
 import re
 import sqlite3
 import subprocess
@@ -15,6 +16,7 @@ from typing import Any
 from submit_mutation import MutationSubmitError, SCHEMA, submit_document
 
 DEFAULT_REMOTE_REPO = "gernalix/codex-roadmap"
+DEFAULT_REMOTE_HOST = os.environ.get("CODEX_ROADMAP_REMOTE_HOST", "github.com")
 DEFAULT_REMOTE_BRANCH = "main"
 DEFAULT_REPO_TASK = Path.home() / "projects" / "github-autosync" / "repo_single_writer.py"
 
@@ -30,6 +32,7 @@ def _gh_json(*args: str) -> dict[str, Any]:
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
+            env={**os.environ, "GH_HOST": DEFAULT_REMOTE_HOST},
         )
     except FileNotFoundError as exc:
         raise RoadmapStartError("gh_cli_missing") from exc

@@ -12,6 +12,7 @@ from typing import Any
 SCHEMA = "codex-roadmap.mutation.v1"
 ISSUE_PREFIX = "[roadmap-mutation] "
 DEFAULT_REMOTE_REPO = os.environ.get("CODEX_ROADMAP_REMOTE_REPO", "gernalix/codex-roadmap")
+DEFAULT_REMOTE_HOST = os.environ.get("CODEX_ROADMAP_REMOTE_HOST", "github.com")
 # Kept for CLI compatibility; Issues are repository-scoped and do not write a branch.
 DEFAULT_REMOTE_BRANCH = os.environ.get("CODEX_ROADMAP_REMOTE_BRANCH", "main")
 
@@ -39,6 +40,7 @@ def _gh(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
+            env={**os.environ, "GH_HOST": DEFAULT_REMOTE_HOST},
         )
     except FileNotFoundError as exc:
         raise MutationSubmitError("gh_cli_missing") from exc
@@ -48,27 +50,36 @@ def _gh(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
 
 
 def _matching_issues(repository: str, title: str) -> list[dict[str, Any]]:
+    # Use the REST search endpoint rather than `gh issue list`. The latter can
+    # fail through a separate CLI/search path even when `gh api` can read and
+    # write the repository, which must not prevent a roadmap claim.
+    query = f'repo:{repository} is:issue in:title "{title}"'
     proc = _gh(
-        "issue",
-        "list",
-        "--repo",
-        repository,
-        "--state",
-        "all",
-        "--limit",
-        "100",
-        "--search",
-        title,
-        "--json",
-        "number,title,state,body,url",
+        "api",
+        "--method",
+        "GET",
+        "search/issues",
+        "-f",
+        f"q={query}",
+        "-f",
+        "per_page=100",
     )
     try:
-        rows = json.loads(proc.stdout)
-    except json.JSONDecodeError as exc:
+        payload = json.loads(proc.stdout)
+        rows = payload["items"]
+    except (json.JSONDecodeError, KeyError, TypeError) as exc:
         raise MutationSubmitError("invalid_issue_list_response") from exc
     if not isinstance(rows, list):
         raise MutationSubmitError("invalid_issue_list_response")
-    return [row for row in rows if isinstance(row, dict) and row.get("title") == title]
+
+    matches: list[dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict) or row.get("title") != title:
+            continue
+        normalized = dict(row)
+        normalized["url"] = str(row.get("html_url") or row.get("url") or "")
+        matches.append(normalized)
+    return matches
 
 
 def submit_document(

@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 TOOLS=Path(__file__).resolve().parents[1]/"tools"
 sys.path.insert(0,str(TOOLS))
@@ -12,6 +12,12 @@ import roadmap_start as start
 
 
 class RoadmapStartTests(unittest.TestCase):
+    def test_gh_json_forces_canonical_github_host(self) -> None:
+        response = Mock(returncode=0, stdout="{}", stderr="")
+        with patch.object(start.subprocess, "run", return_value=response) as run:
+            self.assertEqual({}, start._gh_json("api", "user"))
+        self.assertEqual("github.com", run.call_args.kwargs["env"]["GH_HOST"])
+
     @patch("roadmap_start._repo_task_worktree", return_value=None)
     @patch("roadmap_start._remote_prompt_status", return_value="running")
     @patch("roadmap_start._remote_prompt_record", return_value={"status":"pending","repo":"","project_id":""})
