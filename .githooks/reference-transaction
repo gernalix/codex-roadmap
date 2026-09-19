@@ -48,5 +48,5 @@ if state == "prepared" and updates:
         print("BLOCKED: roadmap pull authorization does not match ref update", file=sys.stderr)
         raise SystemExit(1)
 
-if state in {"committed", "aborted"}:
+if state in {"committed", "aborted"} and updates:
     auth_path.unlink(missing_ok=True)
