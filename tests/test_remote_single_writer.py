@@ -185,6 +185,33 @@ class RemoteSingleWriterTests(unittest.TestCase):
         self.assertEqual("15", out["issue_number"])
         lookup.assert_not_called()
 
+    def test_direct_submission_falls_back_to_issue_create(self) -> None:
+        document = {
+            "schema": submit_mutation.SCHEMA,
+            "actor": "codex",
+            "operations": [{"op": "status", "prompt_id": "123456", "status": "running"}],
+        }
+        rest = Mock(returncode=1, stdout="", stderr="gh: Not Found (HTTP 404)")
+        cli = Mock(
+            returncode=0,
+            stdout="https://github.com/gernalix/codex-roadmap/issues/16\n",
+            stderr="",
+        )
+        with patch.object(
+            submit_mutation,
+            "_gh",
+            side_effect=[rest, cli],
+        ) as gh:
+            out = submit_mutation.submit_document(
+                document,
+                request_key="start-123456",
+                lookup_existing=False,
+            )
+        self.assertEqual("16", out["issue_number"])
+        self.assertEqual(2, gh.call_count)
+        self.assertEqual("issue", gh.call_args_list[1].args[0])
+        self.assertEqual("create", gh.call_args_list[1].args[1])
+
     def test_new_submission_creates_issue_not_git_file(self) -> None:
         document = {
             "schema": submit_mutation.SCHEMA,
