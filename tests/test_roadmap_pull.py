@@ -194,6 +194,25 @@ class RoadmapPullTests(unittest.TestCase):
         auth.unlink()
 
 
+    def test_authoritative_terminal_request_allows_running_prompt_to_finish(self) -> None:
+        conn = db.connect(self.seed)
+        db.request_terminal(conn, "123456", "completed", actor="codex", note="explicit PASS")
+        conn.commit()
+        conn.close()
+        db.reconcile_prompt_file_locations(self.seed)
+        db.render(self.seed)
+        self.push_seed("terminal request confirms finish")
+
+        result = roadmap_pull.guarded_pull(self.local)
+
+        self.assertEqual(["123456"], result["terminal_confirmed"])
+        conn = sqlite3.connect(self.local / "roadmap.sqlite")
+        self.assertEqual("completed", conn.execute("SELECT status FROM prompts WHERE prompt_id='123456'").fetchone()[0])
+        conn.close()
+        self.assertFalse((self.local / "prompts" / "one.md").exists())
+        self.assertTrue((self.local / "completed" / "one.md").exists())
+
+
     def test_terminal_codex_usage_allows_running_prompt_to_finish(self) -> None:
         conn = db.connect(self.seed)
         db.record_execution(
