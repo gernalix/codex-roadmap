@@ -2,8 +2,8 @@
 """Guarded fast-forward pull for codex-roadmap.
 
 Fetches first, compares the local and fetched remote roadmap, and refuses to
-advance local main unless every running prompt is preserved or has a terminal
-Codex-usage execution that proves it really finished.
+advance local main unless every running prompt is preserved or has an authoritative
+terminal request / matching terminal Codex-usage execution proving it finished.
 """
 
 from __future__ import annotations
@@ -260,6 +260,20 @@ def _terminal_confirmed(conn: sqlite3.Connection, prompt_id: str, remote_status:
     expected = TERMINAL_OUTCOME.get(remote_status)
     if expected is None:
         return False
+
+    # roadmap_result/roadmap_finish are authoritative for scheduling. A matching
+    # terminal request is enough to let a protected local running prompt advance
+    # to the terminal remote state; telemetry may arrive later.
+    try:
+        request = conn.execute(
+            "SELECT requested_status FROM terminal_requests WHERE prompt_id=?",
+            (prompt_id,),
+        ).fetchone()
+    except sqlite3.OperationalError:
+        request = None
+    if request is not None and str(request["requested_status"]) == remote_status:
+        return True
+
     row = conn.execute(
         "SELECT outcome,ended_at,source,materialization_sha256 "
         "FROM executions WHERE prompt_id=? AND outcome IS NOT NULL "
