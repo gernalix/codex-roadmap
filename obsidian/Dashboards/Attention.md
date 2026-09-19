@@ -1,5 +1,7 @@
 # Da controllare
 
+- [[obsidian/Prompts/485236 ccs-late-prompt-binding|485236 · Consentire l'aggancio tardivo Chrome ↔ Codex ai prompt]] · `completed` · analizzato=no · fix=—
+- [[obsidian/Prompts/930174 workflowy-show-and-recover-prompt-links|930174 · Mostrare e recuperare i link Chrome e Codex nella dashboard]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/593872 fedora-graphics-black-screen-forensics|593872 · Diagnosi forense del blackout grafico Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/731805 workflowy-open-launches-chrome-and-codex|731805 · Fare aprire Chrome e Codex con 🚀 Apri]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/684327 ccs-autonomous-runtime-verifier-v2|684327 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `completed` · analizzato=no · fix=—

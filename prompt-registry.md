@@ -7,8 +7,6 @@
 | [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release\|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] | running | 2026-09-19T15:13:54Z | 2026-09-19T15:29:32Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure\|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] | running | 2026-09-19T15:41:21Z | 2026-09-19T15:41:21Z | BLOCKED | no | no | — | chrome-codex-switcher | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/319572 ccs-runtime-verification-followup\|319572 · Completare la verifica runtime Chrome Codex]] | running | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/485236 ccs-late-prompt-binding\|485236 · Consentire l'aggancio tardivo Chrome ↔ Codex ai prompt]] | running | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/930174 workflowy-show-and-recover-prompt-links\|930174 · Mostrare e recuperare i link Chrome e Codex nella dashboard]] | running | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
@@ -292,3 +290,5 @@
 | [[obsidian/Prompts/658142 ccs-autonomous-runtime-verifier\|658142 · Rendere autonomo il collaudo Chrome ↔ Codex]] | blocked | — | — | BLOCKED | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/684327 ccs-autonomous-runtime-verifier-v2\|684327 · Rendere autonomo il collaudo Chrome ↔ Codex]] | completed | 2026-09-19T20:46:56Z | 2026-09-19T20:46:56Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/731805 workflowy-open-launches-chrome-and-codex\|731805 · Fare aprire Chrome e Codex con 🚀 Apri]] | completed | — | — | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/485236 ccs-late-prompt-binding\|485236 · Consentire l'aggancio tardivo Chrome ↔ Codex ai prompt]] | completed | — | — | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/930174 workflowy-show-and-recover-prompt-links\|930174 · Mostrare e recuperare i link Chrome e Codex nella dashboard]] | completed | — | — | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |

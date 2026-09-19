@@ -1,6 +1,6 @@
 ---
 prompt_id: 485236
-status: running
+status: completed
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
@@ -8,15 +8,15 @@ tags:
   - facilitatori
   - late-binding
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 485236 · Consentire l'aggancio tardivo Chrome ↔ Codex ai prompt
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/ccs-late-prompt-binding|Apri prompt]]
+- **Prompt:** [[../../completed/ccs-late-prompt-binding|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
