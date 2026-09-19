@@ -164,6 +164,31 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertIn("⏳ No — prima: 123456",spieg)
             self.assertIn("⛔ No — prima: rifai il login a Kuma",spieg)
 
+    def test_running_prompt_cannot_be_superseded_or_replaced(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md")
+            db.register_prompt(conn,prompt_id="654321",slug="two",title="Two",current_path="prompts/two.md")
+            db.set_status(conn,"123456","running",actor="codex",note="launch")
+            with self.assertRaisesRegex(db.RoadmapDBError,"active_prompt_cannot_be_superseded"):
+                db.set_status(conn,"123456","superseded",actor="chatgpt",note="policy changed")
+            with self.assertRaisesRegex(db.RoadmapDBError,"active_prompt_cannot_be_replaced"):
+                db.add_relation(conn,"123456","654321","replacement",actor="chatgpt")
+            self.assertEqual("running",db.prompt_row(conn,"123456")["status"])
+            conn.close()
+
+    def test_superseded_prompt_cannot_be_reactivated(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md")
+            db.set_status(conn,"123456","superseded",actor="chatgpt")
+            with self.assertRaisesRegex(db.RoadmapDBError,"terminal_prompt_cannot_reactivate"):
+                db.set_status(conn,"123456","running",actor="codex",note="late launch")
+            self.assertEqual("superseded",db.prompt_row(conn,"123456")["status"])
+            conn.close()
+
     def test_reorder_prompt_updates_queue_without_changing_identity(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
