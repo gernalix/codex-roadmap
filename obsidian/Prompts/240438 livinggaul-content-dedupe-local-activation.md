@@ -1,18 +1,18 @@
 ---
 prompt_id: 240438
-status: pending
+status: running
 project_id: —
 model: GPT-5.5
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/livinggaul-x-downloader
 ---
 
 # 240438 · LivingGaul content dedupe local activation
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/livinggaul-x-downloader|livinggaul-x-downloader]]
 - **Prompt:** [[../../prompts/livinggaul-content-dedupe-local-activation|Apri prompt]]
 - **Primo lancio:** —
