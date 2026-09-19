@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3|588376 · Bonificare history Logseq e attivare updater]]
+- [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening|381904 · Rendere stabile il sync Workflowy senza errori 429]]
 
 ## In esecuzione
 
