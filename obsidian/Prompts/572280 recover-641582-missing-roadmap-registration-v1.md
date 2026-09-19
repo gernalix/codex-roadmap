@@ -1,18 +1,18 @@
 ---
 prompt_id: 572280
-status: pending
+status: running
 project_id: 51
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/codex-roadmap
 ---
 
 # 572280 · Recuperare 641582 e correggere il bootstrap roadmap
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
 - **Prompt:** [[../../prompts/recover-641582-missing-roadmap-registration-v1|Apri prompt]]
 - **Primo lancio:** —
