@@ -1,18 +1,18 @@
 ---
 prompt_id: 418844
-status: pending
+status: running
 project_id: 49
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 418844 · Chiudere il residuo del merge capsule
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-capsule-isolation-postmerge-cleanup-v1|Apri prompt]]
 - **Primo lancio:** —
