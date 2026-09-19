@@ -1,18 +1,18 @@
 ---
 prompt_id: 374820
-status: pending
+status: running
 project_id: 15
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/fedora-fedora-system-monitor
 ---
 
 # 374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/fedora-fedora-system-monitor|Fedora / fedora-system-monitor]]
 - **Prompt:** [[../../prompts/fedora-runtime-kuma-closure-v4|Apri prompt]]
 - **Primo lancio:** —
