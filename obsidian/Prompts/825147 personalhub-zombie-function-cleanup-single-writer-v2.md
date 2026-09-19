@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** 2026-09-19T14:04:21Z
 - **Ultimo lancio:** 2026-09-19T14:25:53Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[914263 personalhub-schema-persistence-all-tables-p0|914263]]
@@ -40,7 +40,7 @@ Ripulisce PersonalHub da pezzi vecchi rimasti da quando i moduli erano app separ
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-19T22:07:05Z · colli di bottiglia: sì · fix: — · {"blocker":"writer timeout: instrumentation/unit/play-preflight CI ancora IN_PROGRESS; compilazione QA corretta e pushata.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"825147","report_ref":"codex-usage:b54da76647d1908d2437af6c:6e375c8085b42f79","schema":"codex-roadmap.fix-packet.v1","work_state":{"pr":"#24"}}
 
 ## Modifiche di codice ChatGPT
 

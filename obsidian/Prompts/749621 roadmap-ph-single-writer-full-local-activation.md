@@ -19,7 +19,7 @@ tags:
 - **Primo lancio:** 2026-09-18T21:03:24Z
 - **Ultimo lancio:** 2026-09-18T21:03:24Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -40,7 +40,7 @@ Verifica sul PC che solo il servizio remoto aggiorni davvero la roadmap, compres
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-19T22:07:05Z · colli di bottiglia: sì · fix: — · {"blocker":"Codex reported BLOCKED; inspect the linked execution report.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"749621","report_ref":"codex-usage:4784e9f0b187a7afccb33841:86136c92833cedbe","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 

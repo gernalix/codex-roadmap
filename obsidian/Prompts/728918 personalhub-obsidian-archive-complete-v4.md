@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** 2026-09-19T16:56:36Z
 - **Ultimo lancio:** 2026-09-19T17:08:40Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[462279 personalhub-health-canonical-e2e-v4|462279]]
@@ -40,7 +40,7 @@ Fa diventare Obsidian una specie di archivio super leggibile dei tuoi dati Perso
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-19T22:07:05Z · colli di bottiglia: sì · fix: — · {"blocker":"TESTS=core compile PASS; UI compile PASS; migration gate FAIL","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"728918","report_ref":"codex-usage:233c28d87796d84cb0f3621f:3c181756865309f1","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 

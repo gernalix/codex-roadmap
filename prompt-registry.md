@@ -14,7 +14,7 @@
 | [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening\|381904 · Rendere stabile il sync Workflowy senza errori 429]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | sì | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237 · Completa il fix del salvataggio Codex sul PC]] | blocked | 2026-09-18T21:32:25Z | 2026-09-18T21:32:25Z | BLOCKED | sì | sì | [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure\|642815]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure\|642815 · Chiudere il fix del publisher Codex sul PC]] | blocked | 2026-09-18T21:58:59Z | 2026-09-18T21:58:59Z | BLOCKED | sì | sì | [[obsidian/Prompts/817264 codex-usage-publisher-autonomous-runtime-closure\|817264]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/817264 codex-usage-publisher-autonomous-runtime-closure\|817264 · Chiudere autonomamente il publisher Codex sul PC]] | completed | 2026-09-18T22:18:56Z | 2026-09-18T22:18:56Z | PASS | sì | sì | [[obsidian/Prompts/519247 codex-usage-publisher-append-fastpath-runtime\|519247]] | Fedora | GPT-5.6 Terra | medium |
@@ -45,7 +45,7 @@
 | [[obsidian/Prompts/255970 personalhub-english-only-places-ci-closure-v1\|255970 · English-only, diagnostica Places e CI in un solo passaggio]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/477616 personalhub-english-only-places-ci-closure-v2\|477616 · English-only, diagnostica Places e CI in un solo passaggio]] | completed | 2026-09-19T04:58:06Z | 2026-09-19T04:58:06Z | PASS | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/793678 personalhub-zombie-function-cleanup-closure\|793678 · Chiudi residui zombie dei moduli PersonalHub]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2\|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] | completed | 2026-09-19T14:04:21Z | 2026-09-19T14:25:53Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2\|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] | completed | 2026-09-19T14:04:21Z | 2026-09-19T14:25:53Z | PASS | sì | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/746193 workflowy-importer-local-live-validation\|746193 · Provare davvero l’importatore Workflowy]] | blocked | 2026-09-18T19:11:43Z | 2026-09-18T19:11:43Z | BLOCKED | sì | no | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572]] | Fedora / Workflowy | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/219473 oracle-backup-notification-antiflap-runtime\|219473 · Ferma le notifiche backup Oracle transitorie]] | superseded | — | — | — | no | no | — | Oracle VM | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/781352 oracle-backup-notification-antiflap-runtime-v2\|781352 · Ferma le notifiche backup Oracle transitorie]] | completed | 2026-09-18T22:53:04Z | 2026-09-18T22:53:04Z | PASS | sì | sì | — | Oracle VM | GPT-5.6 Terra | medium |
@@ -61,7 +61,7 @@
 | [[obsidian/Prompts/527184 datasette5-personalhub-explorer-security-deploy\|527184 · Versione online dell’esploratore dati PersonalHub]] | superseded | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/330522 workflowy-automation-local-activation\|330522 · Attivare le automazioni locali di Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.5 | low |
 | [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3\|790233 · Portare Salute nel database canonico]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | unknown | 2026-09-19T16:56:36Z | 2026-09-19T17:08:40Z | UNKNOWN | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | unknown | 2026-09-19T16:56:36Z | 2026-09-19T17:08:40Z | UNKNOWN | sì | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation\|617205 · Chiudere i nuovi tag e alert di Places]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/775412 workflowy-automation-local-activation-v2\|775412 · Attivare le automazioni locali di Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/416826 personalhub-salute-ui-hub-v3\|416826 · Collegare Salute all’app e all’Hub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
@@ -231,8 +231,8 @@
 | [[obsidian/Prompts/742913 prompt-742913\|742913 · Historical prompt 742913]] | unknown | 2026-09-13T15:48:35Z | 2026-09-13T15:48:35Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/746323 prompt-746323\|746323 · Historical prompt 746323]] | completed | 2026-09-16T17:37:00Z | 2026-09-16T17:37:00Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/748219 prompt-748219\|748219 · Historical prompt 748219]] | unknown | 2026-08-06T15:19:27Z | 2026-08-06T15:19:27Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/751306 prompt-751306\|751306 · Historical prompt 751306]] | blocked | 2026-09-18T17:12:02Z | 2026-09-18T17:12:02Z | BLOCKED | no | no | — | — | — | — |
-| [[obsidian/Prompts/754406 prompt-754406\|754406 · Historical prompt 754406]] | blocked | 2026-09-18T17:08:39Z | 2026-09-18T17:08:39Z | BLOCKED | no | no | — | — | — | — |
+| [[obsidian/Prompts/751306 prompt-751306\|751306 · Historical prompt 751306]] | blocked | 2026-09-18T17:12:02Z | 2026-09-18T17:12:02Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/754406 prompt-754406\|754406 · Historical prompt 754406]] | blocked | 2026-09-18T17:08:39Z | 2026-09-18T17:08:39Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/761284 prompt-761284\|761284 · Historical prompt 761284]] | completed | 2026-09-05T12:24:28Z | 2026-09-05T12:24:28Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/762451 prompt-762451\|762451 · Historical prompt 762451]] | blocked | 2026-09-11T17:36:07Z | 2026-09-11T17:36:07Z | BLOCKED | no | no | — | — | — | — |
 | [[obsidian/Prompts/781264 prompt-781264\|781264 · Historical prompt 781264]] | completed | 2026-09-07T19:35:13Z | 2026-09-07T19:35:13Z | PASS | no | no | — | — | — | — |
@@ -253,7 +253,7 @@
 | [[obsidian/Prompts/842731 prompt-842731\|842731 · Historical prompt 842731]] | completed | 2026-09-09T09:08:03Z | 2026-09-19T17:07:11Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/845217 prompt-845217\|845217 · Historical prompt 845217]] | unknown | 2026-09-03T17:28:38Z | 2026-09-03T17:28:38Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/846215 prompt-846215\|846215 · Historical prompt 846215]] | unknown | 2026-09-03T05:16:32Z | 2026-09-03T05:16:32Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/847392 prompt-847392\|847392 · Historical prompt 847392]] | blocked | 2026-09-16T09:54:41Z | 2026-09-16T09:54:41Z | BLOCKED | no | no | — | — | — | — |
+| [[obsidian/Prompts/847392 prompt-847392\|847392 · Historical prompt 847392]] | blocked | 2026-09-16T09:54:41Z | 2026-09-16T09:54:41Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/861927 prompt-861927\|861927 · Historical prompt 861927]] | unknown | 2026-08-05T01:02:46Z | 2026-08-05T01:02:46Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/863241 prompt-863241\|863241 · Historical prompt 863241]] | unknown | 2026-08-05T05:36:35Z | 2026-08-05T05:36:35Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/864219 prompt-864219\|864219 · Historical prompt 864219]] | completed | 2026-09-12T17:00:33Z | 2026-09-12T17:00:33Z | PASS | no | no | — | — | — | — |
@@ -266,17 +266,17 @@
 | [[obsidian/Prompts/917364 prompt-917364\|917364 · Historical prompt 917364]] | completed | 2026-09-13T12:14:19Z | 2026-09-13T12:14:19Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/917462 prompt-917462\|917462 · Historical prompt 917462]] | unknown | 2026-08-04T19:14:28Z | 2026-08-04T19:14:28Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/934572 prompt-934572\|934572 · Historical prompt 934572]] | unknown | 2026-08-05T02:53:45Z | 2026-08-05T02:53:45Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/936251 prompt-936251\|936251 · Historical prompt 936251]] | blocked | 2026-09-16T07:35:32Z | 2026-09-16T07:35:32Z | BLOCKED | no | no | — | — | — | — |
+| [[obsidian/Prompts/936251 prompt-936251\|936251 · Historical prompt 936251]] | blocked | 2026-09-16T07:35:32Z | 2026-09-16T07:35:32Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/940316 prompt-940316\|940316 · Historical prompt 940316]] | unknown | 2026-09-16T07:38:54Z | 2026-09-16T07:38:54Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/947261 prompt-947261\|947261 · Historical prompt 947261]] | completed | 2026-09-07T20:19:15Z | 2026-09-07T20:19:15Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/953204 prompt-953204\|953204 · Historical prompt 953204]] | unknown | 2026-08-05T01:29:48Z | 2026-08-05T01:29:48Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/978216 prompt-978216\|978216 · Historical prompt 978216]] | blocked | 2026-09-16T09:17:02Z | 2026-09-16T09:17:02Z | BLOCKED | no | no | — | — | — | — |
+| [[obsidian/Prompts/978216 prompt-978216\|978216 · Historical prompt 978216]] | blocked | 2026-09-16T09:17:02Z | 2026-09-16T09:17:02Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/962109 personalhub-github-ci-closure\|962109 · Chiudere definitivamente la CI GitHub di PersonalHub]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/578439 workflowy-roadmap-control-local-activation\|578439 · Attivare il controllo roadmap da Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical\|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] | blocked | — | — | BLOCKED | no | no | — | Workflowy importer | — | — |
 | [[obsidian/Prompts/240438 livinggaul-content-dedupe-local-activation\|240438 · LivingGaul content dedupe local activation]] | completed | 2026-09-19T03:56:36Z | 2026-09-19T03:56:36Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.5 | low |
 | [[obsidian/Prompts/996524 livinggaul-metadata-v3-local-activation\|996524 · LivingGaul metadata v3 local activation]] | superseded | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery\|583742 · PersonalHub v53 freeze e dati mancanti]] | blocked | 2026-09-19T05:42:17Z | 2026-09-19T05:54:52Z | BLOCKED | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery\|583742 · PersonalHub v53 freeze e dati mancanti]] | blocked | 2026-09-19T05:42:17Z | 2026-09-19T05:54:52Z | BLOCKED | sì | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2\|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] | completed | 2026-09-19T05:59:34Z | 2026-09-19T05:59:34Z | PASS | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/316628 livinggaul-video-catalog-view-local-activation\|316628 · LivingGaul video catalog view local activation]] | superseded | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/560584 livinggaul-source-availability-local-activation\|560584 · LivingGaul source availability local activation]] | completed | 2026-09-19T09:58:41Z | 2026-09-19T09:58:41Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
@@ -289,7 +289,7 @@
 | [[obsidian/Prompts/947306 workflowy-bf-autofix-publisher-v1\|947306 · Arricchire automaticamente i B/F Workflowy con il report Codex]] | completed | 2026-09-19T20:19:20Z | 2026-09-19T20:19:20Z | PASS | no | no | — | Fedora / Workflowy | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/927641 workflowy-roadmap-cockpit-local-activation\|927641 · Attiva il cockpit Workflowy della roadmap]] | completed | 2026-09-19T19:41:20Z | 2026-09-19T19:41:20Z | PASS | no | no | — | Workflowy roadmap cockpit | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/658142 ccs-autonomous-runtime-verifier\|658142 · Rendere autonomo il collaudo Chrome ↔ Codex]] | blocked | — | — | BLOCKED | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/684327 ccs-autonomous-runtime-verifier-v2\|684327 · Rendere autonomo il collaudo Chrome ↔ Codex]] | completed | 2026-09-19T20:46:56Z | 2026-09-19T20:46:56Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/684327 ccs-autonomous-runtime-verifier-v2\|684327 · Rendere autonomo il collaudo Chrome ↔ Codex]] | completed | 2026-09-19T20:46:56Z | 2026-09-19T20:46:56Z | PASS | sì | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/731805 workflowy-open-launches-chrome-and-codex\|731805 · Fare aprire Chrome e Codex con 🚀 Apri]] | completed | — | — | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/319572 ccs-runtime-verification-followup\|319572 · Completare la verifica runtime Chrome Codex]] | completed | — | — | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/485236 ccs-late-prompt-binding\|485236 · Consentire l'aggancio tardivo Chrome ↔ Codex ai prompt]] | completed | — | — | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |

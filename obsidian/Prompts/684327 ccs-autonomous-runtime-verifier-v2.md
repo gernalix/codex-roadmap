@@ -21,7 +21,7 @@ tags:
 - **Primo lancio:** 2026-09-19T20:46:56Z
 - **Ultimo lancio:** 2026-09-19T20:46:56Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -42,7 +42,7 @@ Aggiunge a Chrome-Codex Switcher un control plane verificabile via CLI/API per c
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-19T22:07:05Z · colli di bottiglia: sì · fix: — · {"blocker":"Il claim canonico di `684327` è stato rifiutato con `start_claim_rejected:247:not_planned`. Mi fermo qui. Il codice è stato distribuito, ma la prova CLI/API end-to-end resta BLOCKED da quel claim e dagli heartbeat runtime; non considero soddisfatta l’acceptance. Serve risolvere il claim prima di proseguire.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"684327","report_ref":"codex-usage:3319aed2d90ab34c87e5cf44:0bf673e38a796e93","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
