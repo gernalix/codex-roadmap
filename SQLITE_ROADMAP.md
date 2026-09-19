@@ -36,7 +36,9 @@ Prima di iniziare qualunque lavoro sostanziale per un task della roadmap, Codex 
 python3 tools/roadmap_start.py --repo . --prompt-id 123456
 ```
 
-Il client crea una mutation `pending -> running`, aspetta che il single writer l'abbia applicata e verifica il DB remoto. Se il prompt è già terminale o il claim non arriva a `running`, fallisce chiuso e Codex non deve iniziare il task. Una volta `running`, il DB rifiuta `running -> superseded` e rifiuta anche una relazione `replacement` con quel prompt come sorgente.
+Il client crea una mutation `pending -> running`, aspetta che il single writer l'abbia applicata e verifica il DB remoto. Se il prompt è già terminale o il claim non arriva a `running`, fallisce chiuso e Codex non deve iniziare il task.
+
+Una volta `running`, il prompt è **writer-locked**: le mutation ordinarie che tentano di cambiarne stato, modello, spiegazione, ordine, dipendenze, tag, relazioni o metadati vengono rifiutate. Il file resta in `prompts/` e le viste generate continuano a mostrarlo come `running`.
 
 Il risultato immediato viene consegnato da:
 
@@ -44,7 +46,7 @@ Il risultato immediato viene consegnato da:
 python3 tools/roadmap_result.py --repo . --prompt-id 123456 --result PASS --confirm-executed
 ```
 
-`roadmap_finish.py` resta compatibile ed equivale a `PASS`. Il comando non modifica più il DB o Git locale: crea una GitHub Issue immutabile `[roadmap-mutation] terminal-<PROMPT_ID>`. Per ogni PROMPT_ID esiste una sola chiave terminale; un retry identico è idempotente, mentre un esito terminale diverso con la stessa chiave viene rifiutato. GitHub Actions applica la richiesta al DB canonico, rigenera le viste e chiude la Issue. Le righe di `executions` continuano a provenire dai dati reali di `codex-usage`, evitando doppi conteggi.
+`roadmap_finish.py` resta compatibile ed equivale a `PASS`. Il comando non modifica più il DB o Git locale: crea una GitHub Issue immutabile `[roadmap-mutation] terminal-<PROMPT_ID>`. **Questa Issue non cambia subito lo stato del prompt**: registra una `terminal_request`, mentre il prompt resta `running` in roadmap e in `spiegazioni.md`. Solo una successiva `usage_execution` terminale di `codex-usage` può effettuare la transizione reale a `completed`, `failed`, `blocked`, `cancelled` o `unknown`. Per ogni PROMPT_ID esiste una sola chiave terminale; un retry identico è idempotente, mentre un esito terminale diverso viene rifiutato.
 
 Prima dell'import ogni prompt attivo deve avere una fingerprint della propria materializzazione. Se un vecchio `PROMPT_ID` ricompare con testo diverso, il sistema registra una collisione e non sovrascrive automaticamente lo stato del prompt corrente.
 
@@ -76,7 +78,7 @@ Formato:
 }
 ```
 
-Operazioni supportate: `analysis`, `code_change`, `model`, `explanation`, `status`, `relation`, `dependency`, `dependency_replace`, `tag`, `execution`, `register`. Le transizioni di stato sono fail-closed: un prompt terminale non torna attivo e un prompt `running` non può essere portato a `superseded` da una mutation successiva. `model` aggiorna esclusivamente il modello assegnato al prompt esistente; `explanation` aggiorna esclusivamente la spiegazione user-facing mostrata nelle viste generate. Entrambe registrano l'audit dell'operazione. `analysis` e `code_change` sono usate solo per eccezioni reali; `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
+Operazioni supportate: `analysis`, `code_change`, `model`, `explanation`, `status`, `terminal_request`, `relation`, `dependency`, `dependency_replace`, `tag`, `execution`, `register`. Le transizioni di stato sono fail-closed: un prompt terminale non torna attivo e un prompt `running` non può essere portato a `superseded` da una mutation successiva. `model` aggiorna esclusivamente il modello assegnato al prompt esistente; `explanation` aggiorna esclusivamente la spiegazione user-facing mostrata nelle viste generate. Entrambe registrano l'audit dell'operazione. `analysis` e `code_change` sono usate solo per eccezioni reali; `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
 
 ## Proiezioni generate
 
