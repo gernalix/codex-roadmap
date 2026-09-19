@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[477616 personalhub-english-only-places-ci-closure-v2|477616]]
+- **Dipende da:** [[477616 personalhub-english-only-places-ci-closure-v2|477616]], [[518420 personalhub-v55-full-stabilization-data-runtime-qa|518420]]
 - **Sblocca:** [[462279 personalhub-health-canonical-e2e-v4|462279]]
 - **Padri/precedenti:** [[830867 personalhub-epoch-timestamps-migration-v3|830867]]
 - **Figli/follow-up:** —
