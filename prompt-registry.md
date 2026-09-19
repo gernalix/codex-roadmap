@@ -5,7 +5,6 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release\|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] | running | 2026-09-19T15:13:54Z | 2026-09-19T15:29:32Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure\|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] | running | 2026-09-19T15:41:21Z | 2026-09-19T15:41:21Z | BLOCKED | no | no | — | chrome-codex-switcher | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/489818 datasette5-personalhub-final-schema-deploy-v3\|489818 · Aggiornare e distribuire Datasette sullo schema PH finale]] | pending | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
@@ -56,6 +55,7 @@
 | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572 · Ultima prova reale dell’importatore Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/418906 workflowy-importer-live-smoke-secret-file-v2\|418906 · Ultima prova reale dell’importatore Workflowy]] | completed | 2026-09-18T22:54:53Z | 2026-09-18T22:54:53Z | PASS | sì | sì | [[obsidian/Prompts/856234 workflowy-live-smoke-remote-fix-closure\|856234]] | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3\|830867 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | completed | — | — | PASS | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure\|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] | unknown | 2026-09-19T15:53:48Z | 2026-09-19T16:48:21Z | UNKNOWN | no | no | — | chrome-codex-switcher | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/527184 datasette5-personalhub-explorer-security-deploy\|527184 · Versione online dell’esploratore dati PersonalHub]] | superseded | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/330522 workflowy-automation-local-activation\|330522 · Attivare le automazioni locali di Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.5 | low |

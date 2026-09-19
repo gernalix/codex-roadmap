@@ -5,7 +5,6 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `running`
 - [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `pending`
 - [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `pending`
 - [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
@@ -26,6 +25,7 @@ tags:
 - [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] · `superseded`
 - [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `completed`
 - [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3|830867 · Date e ore coerenti ovunque]] · `superseded`
+- [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `completed`
 - [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3|790233 · Portare Salute nel database canonico]] · `superseded`
 - [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation|617205 · Chiudere i nuovi tag e alert di Places]] · `superseded`
 - [[obsidian/Prompts/416826 personalhub-salute-ui-hub-v3|416826 · Collegare Salute all’app e all’Hub]] · `superseded`
