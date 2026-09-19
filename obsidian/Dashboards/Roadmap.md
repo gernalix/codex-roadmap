@@ -4,11 +4,10 @@
 
 ## Lanciabili adesso
 
-- [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]]
 - [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3|588376 · Bonificare history Logseq e attivare updater]]
 - [[obsidian/Prompts/542078 fedora-runtime-kuma-closure-v3|542078 · Chiudere solo il gate Kuma Fedora]]
 - [[obsidian/Prompts/578439 workflowy-roadmap-control-local-activation|578439 · Attivare il controllo roadmap da Workflowy]]
 
 ## In esecuzione
 
-- Nessuno.
+- [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]]

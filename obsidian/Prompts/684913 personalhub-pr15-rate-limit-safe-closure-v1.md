@@ -1,18 +1,18 @@
 ---
 prompt_id: 684913
-status: pending
+status: running
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 684913 · Chiudere PR #15 senza polling GitHub
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-pr15-rate-limit-safe-closure-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-19T02:13:34Z
