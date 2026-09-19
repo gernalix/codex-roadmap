@@ -63,11 +63,24 @@ Sul checkout locale di `codex-roadmap`, **`git pull`, `git merge`, `git reset` o
 python3 ~/projects/codex-roadmap/tools/roadmap_pull.py --repo ~/projects/codex-roadmap
 ```
 
-Dopo aver ricevuto per la prima volta questa feature, installare una sola volta il guard locale:
+Per un checkout nuovo o già aggiornato che contiene questi tool, installare una sola volta il guard locale:
 
 ```bash
 python3 ~/projects/codex-roadmap/tools/install_roadmap_pull_guard.py --repo ~/projects/codex-roadmap
 ```
+
+Se invece il checkout locale **non contiene ancora** `roadmap_pull.py`, fare il bootstrap senza applicare prima il remoto:
+
+```bash
+cd ~/projects/codex-roadmap
+git fetch origin main
+tmp="$(mktemp)"
+git show origin/main:tools/roadmap_pull.py > "$tmp"
+python3 "$tmp" --repo ~/projects/codex-roadmap --bootstrap-guard
+rm -f "$tmp"
+```
+
+Il bootstrap installa l'hook dal commit remoto appena fetchato, esegue lo stesso confronto locale/remoto e solo dopo PASS applica il fast-forward. Non richiede un `git pull` preliminare.
 
 L'installer configura un hook Git locale `reference-transaction` che blocca ogni aggiornamento non autorizzato di `refs/heads/main`; quindi un normale `git pull` può fare fetch ma **non può applicare il fast-forward**. Solo `roadmap_pull.py` può autorizzare l'esatto passaggio `OLD_SHA -> NEW_SHA` dopo il pre-pull.
 
