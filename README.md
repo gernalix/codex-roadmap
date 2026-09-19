@@ -55,6 +55,40 @@ I client non committano più file di inbox, prompt, DB o viste. Le directory `mu
 
 Dettagli tecnici: [[SQLITE_ROADMAP|Roadmap SQLite]].
 
+## Pull locale obbligatoriamente protetto
+
+Sul checkout locale di `codex-roadmap`, **`git pull`, `git merge`, `git reset` o altri aggiornamenti diretti di `main` sono vietati**. Il pull canonico è:
+
+```bash
+python3 ~/projects/codex-roadmap/tools/roadmap_pull.py --repo ~/projects/codex-roadmap
+```
+
+Dopo aver ricevuto per la prima volta questa feature, installare una sola volta il guard locale:
+
+```bash
+python3 ~/projects/codex-roadmap/tools/install_roadmap_pull_guard.py --repo ~/projects/codex-roadmap
+```
+
+L'installer configura un hook Git locale `reference-transaction` che blocca ogni aggiornamento non autorizzato di `refs/heads/main`; quindi un normale `git pull` può fare fetch ma **non può applicare il fast-forward**. Solo `roadmap_pull.py` può autorizzare l'esatto passaggio `OLD_SHA -> NEW_SHA` dopo il pre-pull.
+
+Il pre-pull è fail-closed e segue sempre questa sequenza:
+
+1. richiede checkout `main` pulito e guard installato/aggiornato;
+2. fa solo `fetch`, senza modificare il worktree;
+3. apre il `roadmap.sqlite` locale e quello del commit remoto appena fetchato;
+4. raccoglie tutti i PROMPT_ID `running` locali e remoti;
+5. per ogni prompt `running` remoto verifica che:
+   - resti `running` nel DB;
+   - il file resti sotto `prompts/`;
+   - compaia ancora in `roadmap.md`;
+   - compaia in `spiegazioni.md` con stato esatto `running`;
+6. per ogni prompt già `running` localmente richiede che il remoto lo conservi **identico** in contenuto e metadati protetti. Qualunque modifica, rimozione, supersede, reorder, cambio dipendenza/tag/relazione o spostamento blocca il pull;
+7. unica eccezione: un `running` locale può diventare terminale solo se il DB remoto contiene una vera esecuzione terminale `source=codex-usage`, con `ended_at` ed esito coerente;
+8. solo dopo PASS autorizza e applica un singolo `merge --ff-only` verso lo SHA remoto già verificato;
+9. dopo il merge ricontrolla che tutti i prompt ancora running siano presenti e `running`, quindi aggiorna la copia locale dell'hook.
+
+Se una verifica fallisce, **HEAD e worktree locali non avanzano**. Non fare fallback con `git pull`, `git reset --hard origin/main` o merge manuale: va prima corretta la causa remota o lo stato canonico.
+
 ## Viste
 
 - `roadmap.md`: sola sequenza dei task pendenti/running.
