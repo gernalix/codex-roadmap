@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/482731 prompt-482731|482731 · Historical prompt 482731]] · `failed` · analizzato=no · fix=—
 - [[obsidian/Prompts/731846 prompt-731846|731846 · Historical prompt 731846]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] · `completed` · analizzato=no · fix=—

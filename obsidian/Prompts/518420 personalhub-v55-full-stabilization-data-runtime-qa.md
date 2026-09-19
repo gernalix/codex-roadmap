@@ -1,20 +1,20 @@
 ---
 prompt_id: 518420
-status: running
+status: completed
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/personalhub
 ---
 
 # 518420 · Stabilizzare v55: runtime, dati, Settings e QA reale
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../prompts/personalhub-v55-full-stabilization-data-runtime-qa|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-v55-full-stabilization-data-runtime-qa|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
