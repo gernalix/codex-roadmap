@@ -67,8 +67,10 @@ def _download_remote_db(repository: str, branch: str) -> tuple[set[str], set[str
 
 
 def _execution_operation(data: dict[str, Any], prompt_id: str, cycle_key: str) -> dict[str, Any]:
-    status = str(data.get("status") or "UNKNOWN").upper()
-    outcome = status if status in FINAL_STATUS else "UNKNOWN"
+    status = str(data.get("status") or "").upper()
+    if status not in FINAL_STATUS:
+        raise SyncError(f"execution_not_terminal:{prompt_id}:{status or 'missing'}")
+    outcome = status
     prompt_text = str(data.get("prompt_text_redacted") or "")
     observed_hash = materialization_hash(prompt_text) if prompt_text else None
 
@@ -125,6 +127,7 @@ def sync(
         "skipped_invalid": 0,
         "skipped_unregistered": 0,
         "skipped_no_cycle_key": 0,
+        "skipped_nonterminal": 0,
     }
 
     for path in sorted(source.glob("prompts/*/metrics.json")):
@@ -154,7 +157,13 @@ def sync(
             stats["skipped_unregistered"] = int(stats["skipped_unregistered"]) + 1
             continue
 
-        operation = _execution_operation(data, prompt_id, cycle_key)
+        try:
+            operation = _execution_operation(data, prompt_id, cycle_key)
+        except SyncError as exc:
+            if str(exc).startswith("execution_not_terminal:"):
+                stats["skipped_nonterminal"] = int(stats["skipped_nonterminal"]) + 1
+                continue
+            raise
         document = {"schema": SCHEMA, "actor": "codex-usage", "operations": [operation]}
         key_hash = hashlib.sha256(cycle_key.encode("utf-8")).hexdigest()[:20]
         request_key = f"usage-{prompt_id}-{key_hash}"
