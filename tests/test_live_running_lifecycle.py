@@ -104,6 +104,31 @@ class LiveRunningLifecycleTests(unittest.TestCase):
             self.assertEqual("completed", db.prompt_row(conn, "123456")["status"])
             conn.close()
 
+    def test_legacy_running_terminal_request_is_self_healed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            conn = db.connect(repo)
+            db.register_prompt(
+                conn,
+                prompt_id="123456",
+                slug="legacy",
+                title="Legacy",
+                current_path="prompts/legacy.md",
+            )
+            db.set_status(conn, "123456", "running", actor="codex", note="launch")
+            conn.execute(
+                """INSERT INTO terminal_requests(
+                     prompt_id,requested_status,actor,note,requested_at
+                   ) VALUES(?,?,?,?,?)""",
+                ("123456", "blocked", "codex", "legacy terminal", db.now_utc()),
+            )
+            conn.commit()
+
+            self.assertEqual(1, db.reconcile_terminal_requests(conn))
+            self.assertEqual("blocked", db.prompt_row(conn, "123456")["status"])
+            self.assertEqual(0, db.reconcile_terminal_requests(conn))
+            conn.close()
+
 
 if __name__ == "__main__":
     unittest.main()
