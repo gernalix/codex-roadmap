@@ -60,6 +60,12 @@ class RemoteSingleWriterTests(unittest.TestCase):
             captured,
         )
 
+    def test_gh_forces_canonical_github_host(self) -> None:
+        response = Mock(returncode=0, stdout="{}", stderr="")
+        with patch.object(submit_mutation.subprocess, "run", return_value=response) as run:
+            submit_mutation._gh("api", "user")
+        self.assertEqual("github.com", run.call_args.kwargs["env"]["GH_HOST"])
+
     def test_matching_issues_uses_rest_search(self) -> None:
         wanted_title = "[roadmap-mutation] start-123456"
         response = Mock(
