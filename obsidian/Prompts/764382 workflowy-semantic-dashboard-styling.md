@@ -1,6 +1,6 @@
 ---
 prompt_id: 764382
-status: running
+status: completed
 project_id: 96
 model: GPT-5.6 Luna
 reasoning: low
@@ -8,15 +8,15 @@ tags:
   - visual-semantics
   - workflowy-dashboard
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 764382 · Evidenziare visivamente problemi e azioni nella dashboard
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/workflowy-semantic-dashboard-styling|Apri prompt]]
+- **Prompt:** [[../../completed/workflowy-semantic-dashboard-styling|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

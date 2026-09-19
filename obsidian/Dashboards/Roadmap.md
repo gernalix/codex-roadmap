@@ -11,5 +11,3 @@
 - [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]]
 - [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]]
 - [[obsidian/Prompts/319572 ccs-runtime-verification-followup|319572 · Completare la verifica runtime Chrome Codex]]
-- [[obsidian/Prompts/764381 workflowy-conversational-roadmap-dashboard|764381 · Far parlare la dashboard Workflowy]]
-- [[obsidian/Prompts/764382 workflowy-semantic-dashboard-styling|764382 · Evidenziare visivamente problemi e azioni nella dashboard]]

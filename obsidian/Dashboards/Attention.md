@@ -1,5 +1,7 @@
 # Da controllare
 
+- [[obsidian/Prompts/764381 workflowy-conversational-roadmap-dashboard|764381 · Far parlare la dashboard Workflowy]] · `completed` · analizzato=no · fix=—
+- [[obsidian/Prompts/764382 workflowy-semantic-dashboard-styling|764382 · Evidenziare visivamente problemi e azioni nella dashboard]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/438216 ccs-frictionless-late-binding|438216 · Aggiungere late binding frictionless Chrome ↔ Codex]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/438217 workflowy-late-binding-controls|438217 · Esporre pairing tardivo Chrome/Codex nella dashboard]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/485236 ccs-late-prompt-binding|485236 · Consentire l'aggancio tardivo Chrome ↔ Codex ai prompt]] · `completed` · analizzato=no · fix=—
