@@ -150,7 +150,7 @@ def submit_document(
         )
         if fallback.returncode == 0:
             url = fallback.stdout.strip()
-            match = re.search(r"/issues/(\\d+)(?:\\s*)$", url)
+            match = re.search(r"/issues/(\d+)\s*$", url)
             if not match:
                 raise MutationSubmitError("invalid_issue_create_fallback_response")
             return {
