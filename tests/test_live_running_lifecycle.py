@@ -73,13 +73,13 @@ class LiveRunningLifecycleTests(unittest.TestCase):
             db.request_terminal(conn, "123456", "completed", actor="codex")
             conn.commit()
 
-            blocked = {
+            runnable_after_request = {
                 row["prompt_id"]
                 for row in conn.execute("SELECT prompt_id FROM v_runnable_prompts")
             }
-            self.assertNotIn("234567", blocked)
-            self.assertNotIn("345678", blocked)
-            self.assertEqual("running", db.prompt_row(conn, "123456")["status"])
+            self.assertIn("234567", runnable_after_request)
+            self.assertIn("345678", runnable_after_request)
+            self.assertEqual("completed", db.prompt_row(conn, "123456")["status"])
 
             db.record_execution(
                 conn,
