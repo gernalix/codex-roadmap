@@ -15,9 +15,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-capsule-isolation-postmerge-cleanup-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T00:28:37Z
+- **Ultimo lancio:** 2026-09-19T00:28:37Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Verifica che l’isolamento capsule sia già davvero dentro main e rimuove solta
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T00:28:37Z | 2026-09-19T00:29:27Z | PASS | 49.947 | gpt-5.6-luna | low | 5 | 69076 |
 
 ## Analisi ChatGPT
 

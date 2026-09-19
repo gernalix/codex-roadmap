@@ -1,23 +1,23 @@
 ---
 prompt_id: 663657
-status: running
+status: blocked
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/personal-hub
 ---
 
 # 663657 · Chiudere e integrare tag e alert di Places
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-shared-alerts-places-tags-integration-v4|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Prompt:** [[../../falliti/personalhub-shared-alerts-places-tags-integration-v4|Apri prompt]]
+- **Primo lancio:** 2026-09-19T00:30:43Z
+- **Ultimo lancio:** 2026-09-19T00:30:43Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Unisce in main i tag di Places, gli alert condivisi tra Timer e Places e il fix 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T00:30:43Z | 2026-09-19T00:32:16Z | BLOCKED | 92.538 | gpt-5.6-terra | medium | 12 | 46971 |
 
 ## Analisi ChatGPT
 
