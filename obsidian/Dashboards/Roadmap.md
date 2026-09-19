@@ -10,4 +10,3 @@
 ## In esecuzione
 
 - [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]]
-- [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install|652361 · LivingGaul hourly systemd local install]]

@@ -1,20 +1,20 @@
 ---
 prompt_id: 652361
-status: running
+status: completed
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/livinggaul-x-downloader
 ---
 
 # 652361 · LivingGaul hourly systemd local install
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/livinggaul-x-downloader|livinggaul-x-downloader]]
-- **Prompt:** [[../../prompts/livinggaul-hourly-systemd-local-install|Apri prompt]]
+- **Prompt:** [[../../completed/livinggaul-hourly-systemd-local-install|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
