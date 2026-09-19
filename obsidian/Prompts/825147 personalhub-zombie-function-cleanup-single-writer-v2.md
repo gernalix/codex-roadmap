@@ -16,7 +16,7 @@ tags:
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../prompts/personalhub-zombie-function-cleanup-single-writer-v2|Apri prompt]]
 - **Primo lancio:** 2026-09-19T14:04:21Z
-- **Ultimo lancio:** 2026-09-19T14:04:21Z
+- **Ultimo lancio:** 2026-09-19T14:25:53Z
 - **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
@@ -36,6 +36,7 @@ Ripulisce PersonalHub da pezzi vecchi rimasti da quando i moduli erano app separ
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-19T14:04:21Z | 2026-09-19T14:19:48Z | BLOCKED | 926.928 | gpt-5.6-terra | medium | 46 | 112909 |
+| 2026-09-19T14:25:53Z | 2026-09-19T14:33:21Z | BLOCKED | 448.527 | gpt-5.6-terra | medium | 21 | 143202 |
 
 ## Analisi ChatGPT
 
