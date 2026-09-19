@@ -1,6 +1,6 @@
 # Da controllare
 
-- [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5|380812 · Chiudere e integrare tag e alert di Places]] · `blocked` · analizzato=no · fix=—
+- [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5|380812 · Chiudere e integrare tag e alert di Places]] · `blocked` · analizzato=sì · fix=521404
 - [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4|663657 · Chiudere e integrare tag e alert di Places]] · `blocked` · analizzato=sì · fix=380812
 - [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]] · `blocked` · analizzato=sì · fix=418844
 - [[obsidian/Prompts/854653 fedora-external-updater-pip-user-git-closure|854653 · Persistenza Git del fix pip_user]] · `blocked` · analizzato=no · fix=—

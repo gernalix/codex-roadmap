@@ -4,6 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1\|521404 · Chiudere e mergiare la PR alert/Places già pronta]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui\|609279 · Solo inglese e diagnostica Places su richiesta]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2\|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3\|830867 · Date e ore coerenti ovunque]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
@@ -29,7 +30,7 @@
 | [[obsidian/Prompts/231789 workflowy-automation-local-activation-v3\|231789 · Attivare il runtime locale Workflowy]] | completed | 2026-09-18T23:33:09Z | 2026-09-18T23:33:09Z | PASS | sì | sì | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/274656 codex-usage-status-backfill-runtime-deploy\|274656 · Distribuire il fix del publisher e correggere 537184]] | cancelled | — | — | CANCELLED | no | no | — | Fedora / codex-usage-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/854653 fedora-external-updater-pip-user-git-closure\|854653 · Persistenza Git del fix pip_user]] | blocked | 2026-09-19T00:13:14Z | 2026-09-19T00:13:14Z | BLOCKED | no | no | — | Fedora / fedora-external-updater | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5\|380812 · Chiudere e integrare tag e alert di Places]] | blocked | 2026-09-19T00:49:16Z | 2026-09-19T00:49:16Z | BLOCKED | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5\|380812 · Chiudere e integrare tag e alert di Places]] | blocked | 2026-09-19T00:49:16Z | 2026-09-19T00:49:16Z | BLOCKED | sì | no | [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1\|521404]] | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | blocked | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | BLOCKED | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2\|200725 · PersonalHub 100% capsule isolation — integra main e valida]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |

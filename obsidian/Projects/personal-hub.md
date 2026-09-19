@@ -5,6 +5,7 @@ tags:
 
 # Personal Hub
 
+- [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404 · Chiudere e mergiare la PR alert/Places già pronta]] · `pending`
 - [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui|609279 · Solo inglese e diagnostica Places su richiesta]] · `pending`
 - [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] · `pending`
 - [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3|830867 · Date e ore coerenti ovunque]] · `pending`

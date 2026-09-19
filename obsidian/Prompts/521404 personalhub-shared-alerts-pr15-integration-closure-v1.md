@@ -1,35 +1,35 @@
 ---
-prompt_id: 609279
+prompt_id: 521404
 status: pending
 project_id: 49
-model: GPT-5.6 Luna
-reasoning: low
+model: GPT-5.6 Terra
+reasoning: medium
 tags:
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 609279 · Solo inglese e diagnostica Places su richiesta
+# 521404 · Chiudere e mergiare la PR alert/Places già pronta
 
 - **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-english-only-places-diagnostics-ui|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-shared-alerts-pr15-integration-closure-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404]]
-- **Sblocca:** [[404846 personalhub-github-ci-closure-v2|404846]]
-- **Padri/precedenti:** —
+- **Dipende da:** —
+- **Sblocca:** [[609279 personalhub-english-only-places-diagnostics-ui|609279]]
+- **Padri/precedenti:** [[380812 personalhub-shared-alerts-places-tags-integration-v5|380812]]
 - **Figli/follow-up:** —
-- **Chat Codex:** Nuova chat
+- **Chat Codex:** Stessa chat di 380812
 
 ## Spiegazione
 
-Fa usare a PersonalHub solo l'inglese per ora e sposta la grande diagnostica dei check-in di Places dietro un pulsante discreto. Serve a semplificare sia la manutenzione delle stringhe sia la schermata Places. Richiede Codex perché deve verificare lingua e interfaccia su un emulatore Android.
+Riparte dalla PR #15 già pronta e completa solo CI, prova su emulatore, merge e pulizia branch. Serve perché 380812 ha già prodotto quasi tutto il lavoro ma si è fermato prima della chiusura. Richiede Codex per lease locale, emulatore Android e cleanup del checkout.
 
 ## Esecuzioni
 
