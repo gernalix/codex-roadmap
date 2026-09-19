@@ -146,10 +146,11 @@ Ogni file in `prompts/` deve essere autosufficiente e contenere solo ciò che se
 - scope/non-goal;
 - test/verifiche proporzionati al rischio;
 - recovery autonomo dai failure;
-- libertà esplicita di modificare qualunque codice/test/config in-scope necessario al goal;
+- libertà esplicita di modificare qualunque codice/test/config/helper/documentazione tecnica in-scope necessario al goal;
+- libertà di cambiare piano o metodo quando lo starting point diventa falso, purché restino invariati goal, acceptance criteria e vincoli di sicurezza/dati;
 - comandi terminali PASS/BLOCKED/FAIL.
 
-Non copiare interi protocolli globali dentro ogni prompt. Includere solo le regole realmente applicabili al task. Se starting point/path/helper/test sono già noti, evitare rediscovery generale **finché l'evidenza non smentisce lo starting point**. In quel caso Codex ha autonomia per fare discovery mirata e correggere codice/test/config adiacenti necessari allo stesso goal. I passi del prompt sono un piano iniziale, non una whitelist.
+Non copiare interi protocolli globali dentro ogni prompt. Includere solo le regole realmente applicabili al task. Se starting point/path/helper/test sono già noti, evitare rediscovery generale **finché l'evidenza non smentisce lo starting point**. In quel caso Codex ha autonomia per fare discovery mirata e correggere codice/test/config/helper adiacenti necessari allo stesso goal. **Goal e acceptance criteria sono il contratto; i passi del prompt sono solo un piano iniziale e Codex può sostituirli con un percorso migliore.** Un prompt non deve trasformare un mezzo operativo (branch, helper, lease, test specifico, ordine dei passi) in un blocker terminale quando esiste un'alternativa sicura che porta allo stesso risultato.
 
 Non usare **overlay di precedenza** del tipo “questa sezione prevale sulle istruzioni successive” per rattoppare un prompt già materializzato: aumenta token e ambiguità. Se una policy cambia in modo da rendere incoerente un prompt **ancora pending e non avviato**, si può creare una nuova materializzazione con nuovo PROMPT_ID e supersedere la vecchia. Se invece il prompt è `running`, è **immutabile per il writer**: nessun aggiornamento della roadmap può cambiarne stato, modello, spiegazione, posizione, dipendenze, tag o relazioni, né archiviarlo/spostarlo fuori da `prompts/`. `spiegazioni.md` deve continuare a mostrarlo con stato `running`. Anche `roadmap_result.py` non lo rimuove immediatamente: registra soltanto una richiesta terminale; il passaggio a completed/failed/blocked avviene solo quando la telemetria Codex conferma che l'esecuzione è realmente terminata. Se l'utente vuole interromperlo manualmente, fermare prima Codex; la chiusura effettiva arriverà dalla telemetria terminale. Non correggere in-place il testo di un PROMPT_ID già materializzato.
 
@@ -178,7 +179,7 @@ Apri il primo task lanciabile, imposta modello/reasoning e incolla **solo il fil
 
 Default: un task per sessione; stesso thread solo per una continuazione diretta che riusa davvero contesto utile.
 
-Durante il task, un failure locale correggibile non deve trasformarsi in un nuovo prompt: Codex deve correggerlo e continuare. BLOCKED/FAIL sono terminali solo per blocker esterni/safety o recovery realmente esaurito.
+Durante il task, un failure locale correggibile non deve trasformarsi in un nuovo prompt: Codex deve correggerlo e continuare. Se il failure è causato da tooling/protocollo/helper del progetto ed è sicuro correggerlo in-scope, Codex può correggere anche quello e riprendere il goal. BLOCKED/FAIL sono terminali solo per blocker esterni/safety o recovery realmente esaurito; un piano diventato obsoleto, una lease orfana recuperabile, un helper difettoso, una CI correggibile o una divergenza Git riconciliabile non bastano.
 
 Un PASS deve dimostrare tutti gli acceptance criteria obbligatori. `NOT VERIFIED`, output perso/non recuperato o gate non eseguito non sono compatibili con PASS: Codex deve recuperare un'evidenza equivalente in modo bounded oppure usare un esito terminale coerente.
 
