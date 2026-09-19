@@ -22,9 +22,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[477616 personalhub-english-only-places-ci-closure-v2|477616]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[111265 personalhub-shared-alerts-pr15-final-closure-v2|111265]], [[521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[684913 personalhub-pr15-rate-limit-safe-closure-v1|684913]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

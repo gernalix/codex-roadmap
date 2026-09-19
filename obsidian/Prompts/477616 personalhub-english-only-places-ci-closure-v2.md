@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[576041 personalhub-pr15-autonomous-closure-v2|576041]]
+- **Dipende da:** [[684913 personalhub-pr15-rate-limit-safe-closure-v1|684913]]
 - **Sblocca:** [[697834 personalhub-epoch-timestamps-migration-v4|697834]]
 - **Padri/precedenti:** [[255970 personalhub-english-only-places-ci-closure-v1|255970]]
 - **Figli/follow-up:** —
