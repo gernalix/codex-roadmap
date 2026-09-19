@@ -10,3 +10,5 @@
 6. [[prompts/personalhub-datasette-lite-offline-runtime-v4|personalhub-datasette-lite-offline-runtime-v4]]
 7. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 8. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
+9. [[prompts/ccs-late-prompt-binding|ccs-late-prompt-binding]]
+10. [[prompts/workflowy-show-and-recover-prompt-links|workflowy-show-and-recover-prompt-links]]
