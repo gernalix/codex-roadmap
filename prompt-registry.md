@@ -265,4 +265,4 @@
 | [[obsidian/Prompts/240438 livinggaul-content-dedupe-local-activation\|240438 · LivingGaul content dedupe local activation]] | completed | 2026-09-19T03:56:36Z | 2026-09-19T03:56:36Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.5 | low |
 | [[obsidian/Prompts/996524 livinggaul-metadata-v3-local-activation\|996524 · LivingGaul metadata v3 local activation]] | superseded | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery\|583742 · PersonalHub v53 freeze e dati mancanti]] | blocked | 2026-09-19T05:42:17Z | 2026-09-19T05:54:52Z | BLOCKED | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2\|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] | completed | — | — | PASS | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2\|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] | completed | 2026-09-19T05:59:34Z | 2026-09-19T05:59:34Z | PASS | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
