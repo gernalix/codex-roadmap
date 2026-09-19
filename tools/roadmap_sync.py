@@ -25,23 +25,38 @@ class SyncError(RuntimeError):
 
 def _download_remote_db(repository: str, branch: str) -> tuple[set[str], set[str]]:
     try:
-        proc = subprocess.run(
+        tree_proc = subprocess.run(
             [
                 "gh",
                 "api",
-                f"repos/{repository}/contents/roadmap.sqlite?ref={branch}",
+                f"repos/{repository}/git/trees/{branch}?recursive=1",
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
     except FileNotFoundError as exc:
         raise SyncError("gh_cli_missing") from exc
-    if proc.returncode:
-        raise SyncError(f"remote_db_download_failed:{proc.stderr.decode(errors='replace').strip()}")
+    if tree_proc.returncode:
+        raise SyncError(f"remote_db_download_failed:{tree_proc.stderr.decode(errors='replace').strip()}")
     try:
-        payload = json.loads(proc.stdout.decode("utf-8"))
+        tree = json.loads(tree_proc.stdout.decode("utf-8"))
+        blob_sha = next(
+            str(entry["sha"])
+            for entry in tree["tree"]
+            if entry.get("path") == "roadmap.sqlite" and entry.get("type") == "blob"
+        )
+        blob_proc = subprocess.run(
+            ["gh", "api", f"repos/{repository}/git/blobs/{blob_sha}"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        if blob_proc.returncode:
+            raise SyncError(
+                f"remote_db_download_failed:{blob_proc.stderr.decode(errors='replace').strip()}"
+            )
+        payload = json.loads(blob_proc.stdout.decode("utf-8"))
         raw_db = base64.b64decode(str(payload["content"]).replace("\n", ""), validate=True)
-    except (KeyError, TypeError, ValueError, UnicodeDecodeError) as exc:
+    except (KeyError, StopIteration, TypeError, ValueError, UnicodeDecodeError) as exc:
         raise SyncError("remote_db_invalid") from exc
 
     with tempfile.NamedTemporaryFile(suffix=".sqlite") as handle:
