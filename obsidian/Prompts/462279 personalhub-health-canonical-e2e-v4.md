@@ -1,18 +1,18 @@
 ---
 prompt_id: 462279
-status: pending
+status: running
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 462279 · Portare Salute nel canonico e collegare la UI esistente
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-health-canonical-e2e-v4|Apri prompt]]
 - **Primo lancio:** —
