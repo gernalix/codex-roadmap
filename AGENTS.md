@@ -26,8 +26,8 @@ For roadmap tasks targeting any Git repository other than `gernalix/codex-roadma
 
 - Treat the returned `worktree_path` as authoritative even if the materialized prompt names the canonical checkout.
 - Never edit/commit directly on the canonical branch of a target repository.
-- Multiple tasks may run concurrently only because they have separate worktrees/branches.
-- `roadmap_finish.py` waits for the task branch to be pushed, its `[single-writer]` PR to pass checks, and the per-repository writer to merge it before the roadmap task can become completed.
+- Multiple tasks may run concurrently because they have separate worktrees/branches; repository-wide worker leases are forbidden. Only genuinely shared runtime resources such as a physical device, emulator session or release/signing operation may be serialized separately by the target project.
+- `roadmap_finish.py` checkpoints/pushes the task branch, queues its PR, and returns immediately with `RESULT=QUEUED`; the asynchronous repository integrator later merges it and queues terminal PASS automatically. Codex must not wait for CI or canonical merge.
 - Do not bypass a target repository's `single-writer protected` reference-transaction hook.
 - BLOCKED/FAIL leaves the task worktree/branch preserved for diagnosis or a follow-up; no destructive cleanup is allowed.
 
