@@ -1,18 +1,18 @@
 ---
 prompt_id: 663657
-status: pending
+status: running
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 663657 · Chiudere e integrare tag e alert di Places
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-shared-alerts-places-tags-integration-v4|Apri prompt]]
 - **Primo lancio:** —
