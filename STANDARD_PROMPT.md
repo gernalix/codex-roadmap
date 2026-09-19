@@ -95,19 +95,25 @@ Per task localizzati l'obiettivo è ridurre soprattutto i round-trip modello↔t
 
 ## Git
 
-Usare il checkout canonico indicato nel prompt.
+Per ogni task Git diverso da `codex-roadmap`, `roadmap_start.py` alloca automaticamente un worktree isolato e restituisce `worktree_path` + `task_branch`. **Quel worktree sostituisce il checkout canonico indicato nel testo storico del prompt**: dopo il claim lavorare esclusivamente nel path restituito.
 
-Quando serve sincronizzare:
+Regola globale:
+- 1 task = 1 worktree + 1 `task/<PROMPT_ID>`;
+- il checkout canonico resta sul branch canonico e non è uno workspace per agenti;
+- nessun Codex/ChatGPT deve commit/pushare direttamente il branch canonico;
+- `repo-task` + `github-reconcile` sono il single writer per l'integrazione;
+- `codex-roadmap` mantiene invece il proprio writer dedicato.
+
+Nel task worktree:
 - una sola fotografia iniziale dello stato;
-- usare il pattern canonico `git fetch -q origin <branch>` e, solo se serve integrare il remoto, `git merge --ff-only origin/<branch>`;
-- `--ff-only` appartiene a `git merge`/`git pull`, non a `git fetch`: non usare mai `git fetch --ff-only`;
-- una sola verifica remota finale prima del commit/push.
+- dirty work appartiene solo al task corrente;
+- niente stash/reset/clean distruttivi;
+- commit intermedi solo quando tecnicamente necessari;
+- test e fix restano sul task branch.
 
-Dirty work non sovrapposto o remote advance non sono blocker automatici. Non usare stash/reset distruttivi per ottenere artificialmente un worktree pulito.
+Su PASS, `roadmap_finish.py` checkpointa/pusha il task branch tramite il generic writer, crea/riusa la PR `[single-writer]`, attende CI e merge serializzato nel branch canonico e **solo dopo** marca il PROMPT_ID completed. Un vero conflitto o CI fallita impediscono PASS senza perdere il branch/worktree.
 
-Evitare commit intermedi se il task richiede un solo commit finale e il checkout è soggetto ad autosync.
-
-Se il recovery modifica file tracciati del repository target, `PASS` richiede che la modifica necessaria sia **committata e pushata** sul branch previsto, salvo task esplicitamente local-only. Solo in quel caso, prima della finalizzazione, verificare in modo mirato che non restino diff tracciati in-scope e che il push sia riuscito. Un fix necessario rimasto soltanto nel checkout locale non è PASS.
+Il writer protegge il branch canonico con hook locale. Un errore “single-writer protected” indica che si sta lavorando nel checkout sbagliato: usare il `worktree_path` restituito da `roadmap_start.py`, non tentare di bypassare il guard.
 
 ## Test e runtime
 
