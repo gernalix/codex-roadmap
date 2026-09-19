@@ -46,6 +46,13 @@ PROTECTED_COLUMNS = (
 )
 
 
+GENERATED_VIEW_ROOTS = (
+    "roadmap.md",
+    "spiegazioni.md",
+    "prompt-registry.md",
+)
+
+
 class RoadmapPullBlocked(RuntimeError):
     pass
 
@@ -82,14 +89,53 @@ def _git_dir(repo: Path) -> Path:
     return path if path.is_absolute() else (repo / path).resolve()
 
 
-def _require_clean_main(repo: Path, branch: str) -> str:
+def _nul_paths(raw: str) -> set[str]:
+    return {part for part in raw.split("\0") if part}
+
+
+def _tracked_dirty_paths(repo: Path) -> set[str]:
+    paths: set[str] = set()
+    for args in (
+        ("diff", "--name-only", "-z"),
+        ("diff", "--cached", "--name-only", "-z"),
+    ):
+        paths.update(_nul_paths(_git_ok(repo, *args)))
+    return paths
+
+
+def _untracked_paths(repo: Path) -> set[str]:
+    return _nul_paths(_git_ok(repo, "ls-files", "--others", "--exclude-standard", "-z"))
+
+
+def _is_generated_view(path: str) -> bool:
+    return path in GENERATED_VIEW_ROOTS or path.startswith("obsidian/")
+
+
+def _restore_generated_view_dirt(repo: Path) -> list[str]:
+    tracked = _tracked_dirty_paths(repo)
+    untracked = _untracked_paths(repo)
+    non_generated = sorted(path for path in tracked if not _is_generated_view(path))
+    if non_generated or untracked:
+        details = non_generated + sorted(untracked)
+        raise RoadmapPullBlocked(
+            "local_worktree_dirty_non_generated:" + ",".join(details[:20])
+        )
+
+    generated = sorted(path for path in tracked if _is_generated_view(path))
+    if generated:
+        _git_ok(repo, "restore", "--staged", "--worktree", "--", *generated)
+    return generated
+
+
+def _require_clean_main(repo: Path, branch: str) -> tuple[str, list[str]]:
     current = _git_ok(repo, "branch", "--show-current")
     if current != branch:
         raise RoadmapPullBlocked(f"branch_mismatch:expected={branch}:actual={current or 'DETACHED'}")
+    restored = _restore_generated_view_dirt(repo)
     dirty = _git_ok(repo, "status", "--porcelain")
     if dirty:
-        raise RoadmapPullBlocked("local_worktree_dirty:resolve_or_preserve_before_pull")
-    return _git_ok(repo, "rev-parse", "HEAD")
+        raise RoadmapPullBlocked("local_worktree_dirty_after_generated_restore")
+    return _git_ok(repo, "rev-parse", "HEAD"), restored
 
 
 def _sha256(path: Path) -> str:
@@ -279,7 +325,7 @@ def guarded_pull(
     bootstrap_guard: bool = False,
 ) -> dict[str, Any]:
     repo = repo.expanduser().resolve()
-    before = _require_clean_main(repo, branch)
+    before, restored_generated_views = _require_clean_main(repo, branch)
 
     # Fetch is safe: it does not update the local main/worktree. Bootstrap mode
     # may install the guard from this exact fetched commit before any merge.
@@ -375,6 +421,7 @@ def guarded_pull(
             "preserved_running": preserved,
             "remote_running": sorted(remote_running),
             "terminal_confirmed": terminal_confirmed,
+            "restored_generated_views": restored_generated_views,
         }
     finally:
         local_conn.close()
