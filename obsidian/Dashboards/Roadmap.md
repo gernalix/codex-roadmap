@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3|588376 · Bonificare history Logseq e attivare updater]]
+- [[obsidian/Prompts/731805 workflowy-open-launches-chrome-and-codex|731805 · Fare aprire Chrome e Codex con 🚀 Apri]]
 
 ## In esecuzione
 

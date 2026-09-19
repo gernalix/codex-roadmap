@@ -9,3 +9,4 @@
 5. [[prompts/personalhub-datasette-lite-offline-runtime-v4|personalhub-datasette-lite-offline-runtime-v4]]
 6. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 7. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
+8. [[prompts/workflowy-open-launches-chrome-and-codex|workflowy-open-launches-chrome-and-codex]]
