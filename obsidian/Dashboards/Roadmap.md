@@ -8,8 +8,7 @@
 - [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3|588376 · Bonificare history Logseq e attivare updater]]
 - [[obsidian/Prompts/542078 fedora-runtime-kuma-closure-v3|542078 · Chiudere solo il gate Kuma Fedora]]
 - [[obsidian/Prompts/996524 livinggaul-metadata-v3-local-activation|996524 · LivingGaul metadata v3 local activation]]
-- [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2|155893 · Riparare freeze v53 e verificare i dati sul Pixel]]
 
 ## In esecuzione
 
-- Nessuno.
+- [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2|155893 · Riparare freeze v53 e verificare i dati sul Pixel]]
