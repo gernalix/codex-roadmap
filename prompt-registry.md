@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0\|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]] | running | — | — | — | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2\|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
@@ -55,6 +54,7 @@
 | [[obsidian/Prompts/223103 personalhub-shared-alerts-places-tags-integration-v3\|223103 · Chiudere e integrare tag e alert di Places]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2\|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4\|697834 · Migrare solo i veri timestamp a epoch ms]] | completed | 2026-09-19T09:55:42Z | 2026-09-19T09:55:42Z | PASS | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0\|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]] | completed | — | — | PASS | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572 · Ultima prova reale dell’importatore Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/418906 workflowy-importer-live-smoke-secret-file-v2\|418906 · Ultima prova reale dell’importatore Workflowy]] | completed | 2026-09-18T22:54:53Z | 2026-09-18T22:54:53Z | PASS | sì | sì | [[obsidian/Prompts/856234 workflowy-live-smoke-remote-fix-closure\|856234]] | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3\|830867 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |

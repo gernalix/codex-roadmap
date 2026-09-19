@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install|652361 · LivingGaul hourly systemd local install]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/642913 global-repository-single-writer-rollout|642913 · Attivare il single writer globale per tutti i repository]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `completed` · analizzato=no · fix=—

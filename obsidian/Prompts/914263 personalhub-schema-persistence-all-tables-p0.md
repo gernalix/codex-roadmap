@@ -1,20 +1,20 @@
 ---
 prompt_id: 914263
-status: running
+status: completed
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/personalhub
 ---
 
 # 914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../prompts/personalhub-schema-persistence-all-tables-p0|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-schema-persistence-all-tables-p0|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
