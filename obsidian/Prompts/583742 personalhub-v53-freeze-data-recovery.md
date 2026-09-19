@@ -16,7 +16,7 @@ tags:
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../falliti/personalhub-v53-freeze-data-recovery|Apri prompt]]
 - **Primo lancio:** 2026-09-19T05:42:17Z
-- **Ultimo lancio:** 2026-09-19T05:42:17Z
+- **Ultimo lancio:** 2026-09-19T05:54:52Z
 - **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
@@ -36,6 +36,7 @@ Indaga via ADB il freeze della v53 e verifica se i dati storici sono ancora pres
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-19T05:42:17Z | 2026-09-19T05:42:38Z | BLOCKED | 20.645 | gpt-5.6-sol | medium | 2 | 44510 |
+| 2026-09-19T05:54:52Z | 2026-09-19T05:55:30Z | BLOCKED | 38.318 | gpt-5.6-sol | medium | 7 | 47101 |
 
 ## Analisi ChatGPT
 
