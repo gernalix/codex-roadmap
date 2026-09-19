@@ -18,9 +18,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../completed/ccs-autonomous-runtime-verifier-v2|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T20:46:56Z
+- **Ultimo lancio:** 2026-09-19T20:46:56Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ Aggiunge a Chrome-Codex Switcher un control plane verificabile via CLI/API per c
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T20:46:56Z | 2026-09-19T20:53:37Z | BLOCKED | 401.45 | gpt-5.6-sol | medium | 51 | 88108 |
 
 ## Analisi ChatGPT
 
