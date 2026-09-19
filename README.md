@@ -86,7 +86,7 @@ L'installer configura un hook Git locale `reference-transaction` che blocca ogni
 
 Il pre-pull è fail-closed e segue sempre questa sequenza:
 
-1. richiede checkout `main` pulito e guard installato/aggiornato;
+1. richiede checkout `main`; se le **sole** modifiche locali tracked sono nelle viste generate (`roadmap.md`, `spiegazioni.md`, `prompt-registry.md`, `obsidian/`), le ripristina automaticamente da HEAD perché non sono fonti canoniche. Qualunque altra modifica o file untracked blocca il pull;
 2. fa solo `fetch`, senza modificare il worktree;
 3. apre il `roadmap.sqlite` locale e quello del commit remoto appena fetchato;
 4. raccoglie tutti i PROMPT_ID `running` locali e remoti;
