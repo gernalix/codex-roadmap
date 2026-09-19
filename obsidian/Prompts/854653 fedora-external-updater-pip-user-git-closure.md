@@ -1,18 +1,18 @@
 ---
 prompt_id: 854653
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/fedora-fedora-external-updater
 ---
 
 # 854653 · Persistenza Git del fix pip_user
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/fedora-fedora-external-updater|Fedora / fedora-external-updater]]
 - **Prompt:** [[../../prompts/fedora-external-updater-pip-user-git-closure|Apri prompt]]
 - **Primo lancio:** —
