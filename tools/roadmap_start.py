@@ -9,6 +9,7 @@ import re
 import sqlite3
 import subprocess
 import tempfile
+from urllib.request import Request, urlopen
 import time
 from pathlib import Path
 from typing import Any
@@ -24,6 +25,23 @@ DEFAULT_REPO_TASK = Path.home() / "projects" / "github-autosync" / "repo_single_
 
 class RoadmapStartError(RuntimeError):
     pass
+
+
+def _notify_ccs_prompt(prompt_id: str) -> None:
+    """Best-effort explicit PROMPT_ID handoff to the local Chrome/Codex switcher."""
+    raw = json.dumps({"prompt_id": prompt_id}).encode("utf-8")
+    request = Request(
+        "http://127.0.0.1:43817/api/prompt/arm",
+        data=raw,
+        method="POST",
+        headers={"Content-Type": "application/json"},
+    )
+    try:
+        with urlopen(request, timeout=0.8) as response:
+            response.read()
+    except Exception:
+        # Navigation integration is optional; it must never block roadmap launch.
+        pass
 
 
 def _gh_json(*args: str) -> dict[str, Any]:
@@ -247,6 +265,7 @@ def claim_start(
                 "repo_single_writer": "enabled",
             }
         )
+    _notify_ccs_prompt(prompt_id)
     return result
 
 

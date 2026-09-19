@@ -7,10 +7,11 @@ Coda minima di lavoro **solo per attività che richiedono davvero Codex**: files
 ## Architettura minima
 
 1. **MegaVault**: registry/routing dei progetti e delle invarianti globali.
-2. **`roadmap.sqlite`**: unica source of truth di task, dipendenze, stato ed esecuzioni.
-3. **GitHub Actions single writer**: unico writer ordinario del DB canonico e delle viste derivate.
-4. **Markdown/Obsidian**: sole viste generate; non sono fonti autoritative.
-5. **codex-usage-monitor**: telemetria automatica di esiti/costi; non deve creare lavoro meta salvo eccezioni reali.
+2. **`roadmap.sqlite`**: unica source of truth di task, dipendenze, stato, testo canonico dei prompt ed esecuzioni.
+3. **GitHub Actions single writer**: unico writer ordinario del DB canonico.
+4. **Workflowy**: unica centralina operativa visibile; proietta roadmap + pipeline reale di `github-autosync` + link Chrome/Codex.
+5. **Markdown/Obsidian**: output di compatibilità/audit, non interfaccia operativa e non fonte di stato.
+6. **codex-usage-monitor**: telemetria automatica di esiti/costi; non deve creare lavoro meta salvo eccezioni reali.
 
 Non aggiungere altri strati senza un beneficio operativo misurabile.
 
@@ -45,7 +46,7 @@ Le strutture storiche `analyses` e `analysis_code_changes` restano nel DB per co
 
 ## Source of truth e writer unico
 
-`roadmap.sqlite` è l'unica fonte autorevole dei metadati. `roadmap.md`, `spiegazioni.md`, `prompt-registry.md` e `obsidian/` sono generate.
+`roadmap.sqlite` è l'unica fonte autorevole di metadati **e testo canonico dei prompt**. Workflowy è la dashboard operativa. `roadmap.md`, `spiegazioni.md`, `prompt-registry.md`, `obsidian/` e i file prompt restano materializzazioni di compatibilità/audit e non devono essere usati per dedurre lo stato operativo.
 
 ChatGPT, Codex e il sync `codex-usage` inviano richieste come **GitHub Issues** con titolo `[roadmap-mutation] <request_key>` e body JSON immutabile. Ogni run del workflow drena **tutte** le mutation Issue aperte in ordine, le applica serialmente, materializza eventuali nuovi prompt, rigenera le viste, aggiorna `main` e chiude le Issue processate. Se GitHub cancella un run pending per la concurrency, la Issue resta aperta e viene raccolta automaticamente dal run successivo. Una mutation invalida/collidente viene isolata, commentata e chiusa `not_planned` senza impedire l'applicazione delle Issue valide successive.
 
@@ -90,34 +91,29 @@ Il pre-pull è fail-closed e segue sempre questa sequenza:
 2. fa solo `fetch`, senza modificare il worktree;
 3. apre il `roadmap.sqlite` locale e quello del commit remoto appena fetchato;
 4. raccoglie tutti i PROMPT_ID `running` locali e remoti;
-5. per ogni prompt `running` remoto verifica che:
-   - resti `running` nel DB;
-   - il file resti sotto `prompts/`;
-   - compaia ancora in `roadmap.md`;
-   - compaia in `spiegazioni.md` con stato esatto `running`;
-6. per ogni prompt già `running` localmente richiede che il remoto lo conservi **identico** in contenuto e metadati protetti. Qualunque modifica, rimozione, supersede, reorder, cambio dipendenza/tag/relazione o spostamento blocca il pull;
+5. per ogni prompt `running` remoto verifica la riga canonica e la materializzazione del corpo nel DB; durante il cutover accetta come fallback il vecchio file prompt, ma non consulta le dashboard Markdown;
+6. per ogni prompt già `running` localmente richiede che il remoto lo conservi **identico** nel corpo canonico SQLite e nei metadati protetti. Qualunque modifica, rimozione, supersede, reorder, cambio dipendenza/tag/relazione o spostamento blocca il pull;
 7. unica eccezione: un `running` locale può diventare terminale se il DB remoto contiene una richiesta terminale autorevole coerente (`roadmap_finish.py` / `roadmap_result.py`) oppure, per compatibilità storica, una vera esecuzione terminale `source=codex-usage`; la telemetria non è più un prerequisito per avanzare il pull;
 8. solo dopo PASS autorizza e applica un singolo `merge --ff-only` verso lo SHA remoto già verificato;
 9. dopo il merge ricontrolla che tutti i prompt ancora running siano presenti e `running`, quindi aggiorna la copia locale dell'hook.
 
 Se una verifica fallisce, **HEAD e worktree locali non avanzano**. Non fare fallback con `git pull`, `git reset --hard origin/main` o merge manuale: va prima corretta la causa remota o lo stato canonico.
 
-## Viste
+## Centralina Workflowy
 
-- `roadmap.md`: sola sequenza dei task pendenti/running.
-- `spiegazioni.md`: vista operativa **minima**: task, ID, stato, progetto, chat, dipendenze, **eseguibilità corrente**, spiegazione, modello/reasoning e tipo.
-- `prompt-registry.md`: storico completo, inclusi esiti e metadati di analisi quando esistono.
-- `obsidian/`: navigazione storica per prompt/progetto e dashboard.
+La dashboard operativa è sincronizzata da `workflowy-importer` e mostra stati derivati da fonti reali:
 
-La vista operativa non deve duplicare dati storici che non servono a scegliere o lanciare il prossimo task.
+- **Ready / Waiting** dal DB e dalle dipendenze;
+- **Running** dal claim di `roadmap_start.py`;
+- **Integration** dallo stato task/PR/CI/rebase di `github-autosync`;
+- **Needs fix** solo per stato terminale negativo o hard blocker reale dell'integratore;
+- **Done** dal PASS canonico.
 
-### `spiegazioni.md`
+Ogni nodo può esporre `🚀 Apri`, `📋 Copia`, switch alla tab ChatGPT e deep link Codex tramite `chrome-codex-switcher`. La chiave di correlazione è sempre il PROMPT_ID esplicito.
 
-È scritto per Daniele, non per uno sviluppatore. Ogni spiegazione deve essere comprensibile senza aprire il prompt: massimo tre frasi brevi in italiano quotidiano, nello schema **“Fa X. Serve perché Y. Richiede Codex perché Z.”**. Evitare nomi di classi/file, gergo architetturale e dettagli di implementazione salvo quando sono indispensabili per capire il risultato.
+## Viste Markdown di compatibilità
 
-La colonna **Eseguibile ora?** deve permettere di vedere a colpo d'occhio cosa si può lanciare: **Sì** solo se tutte le dipendenze sono completate e non esiste un prerequisito manuale registrato; altrimenti mostra cosa manca.
-
-I dettagli tecnici completi appartengono al file in `prompts/`.
+`roadmap.md`, `spiegazioni.md`, `prompt-registry.md` e `obsidian/` possono continuare a essere rigenerati per storico/debug durante il cutover, ma nessun componente deve usarli per stabilire lo stato di un prompt.
 
 ## Regola di ammissione
 
@@ -175,7 +171,7 @@ Prima di aumentare il modello/reasoning, ridurre scope, discovery, output e roun
 
 ## Esecuzione manuale
 
-Apri il primo task lanciabile, imposta modello/reasoning e incolla **solo il file prompt**. Prima di qualunque lavoro sul progetto, Codex deve eseguire `python3 ~/projects/codex-roadmap/tools/roadmap_start.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID>` e procedere solo se il writer conferma `running`. Non inviare meta-prompt e non far rileggere roadmap/README/MegaVault se il prompt contiene già lo starting point necessario. `MegaVault=FAST` con progetto/workdir già risolti non autorizza un dump preventivo di MegaVault, memoria o storico: si consulta solo un fatto specifico se emerge davvero come mancante.
+Apri Workflowy → **Ready** e usa `🚀 Apri` (copia + crea/focalizza la tab ChatGPT nella stessa finestra) oppure `📋 Copia`. Imposta il modello/reasoning indicato e incolla il prompt canonico. Prima di qualunque lavoro sul progetto, Codex deve eseguire `python3 ~/projects/codex-roadmap/tools/roadmap_start.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID>` e procedere solo se il writer conferma `running`. Non inviare meta-prompt e non far rileggere roadmap/README/MegaVault se il prompt contiene già lo starting point necessario. `MegaVault=FAST` con progetto/workdir già risolti non autorizza un dump preventivo di MegaVault, memoria o storico: si consulta solo un fatto specifico se emerge davvero come mancante.
 
 Default: un task per sessione; stesso thread solo per una continuazione diretta che riusa davvero contesto utile.
 

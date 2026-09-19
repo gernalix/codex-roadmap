@@ -25,6 +25,28 @@ class RoadmapDBTests(unittest.TestCase):
                 database.chmod(0o600)
             self.assertEqual(before, hashlib.sha256(database.read_bytes()).hexdigest())
 
+    def test_prompt_body_is_canonical_sqlite_materialization(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            body="PROMPT_ID=123456\nGoal: test\n"
+            db.register_prompt(
+                conn,
+                prompt_id="123456",
+                slug="one",
+                title="One",
+                current_path="prompts/one.md",
+                prompt_text=body,
+            )
+            conn.commit()
+            self.assertEqual(body, db.canonical_prompt_text(conn, "123456"))
+            row=conn.execute(
+                "SELECT sha256 FROM prompt_materializations WHERE prompt_id='123456'"
+            ).fetchone()
+            self.assertEqual(db.materialization_hash(body), row["sha256"])
+            self.assertEqual(row["sha256"], db.prompt_row(conn, "123456")["materialization_sha256"])
+            conn.close()
+
     def test_register_dependencies_execution_analysis_and_render(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)

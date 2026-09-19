@@ -71,6 +71,18 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
            )"""
     )
     conn.execute(
+        """CREATE TABLE IF NOT EXISTS prompt_materializations (
+             prompt_id TEXT PRIMARY KEY
+                 REFERENCES prompts(prompt_id)
+                 ON UPDATE CASCADE
+                 ON DELETE CASCADE,
+             body TEXT NOT NULL,
+             sha256 TEXT NOT NULL,
+             created_at TEXT NOT NULL,
+             actor TEXT NOT NULL
+           )"""
+    )
+    conn.execute(
         """CREATE TABLE IF NOT EXISTS terminal_requests (
              prompt_id TEXT PRIMARY KEY
                  REFERENCES prompts(prompt_id)
@@ -93,21 +105,48 @@ def materialization_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 def refresh_materialization_hashes(conn: sqlite3.Connection, repo: Path) -> int:
+    """Backfill canonical prompt bodies from legacy prompt files when necessary."""
     updated = 0
     for row in conn.execute(
-        "SELECT prompt_id,current_path FROM prompts "
-        "WHERE materialization_sha256 IS NULL AND current_path<>''"
+        "SELECT prompt_id,current_path,materialization_sha256 FROM prompts "
+        "WHERE current_path<>''"
     ).fetchall():
+        existing = conn.execute(
+            "SELECT sha256 FROM prompt_materializations WHERE prompt_id=?",
+            (row["prompt_id"],),
+        ).fetchone()
+        if existing:
+            if row["materialization_sha256"] != existing["sha256"]:
+                conn.execute(
+                    "UPDATE prompts SET materialization_sha256=?,updated_at=? WHERE prompt_id=?",
+                    (existing["sha256"], now_utc(), row["prompt_id"]),
+                )
+                updated += 1
+            continue
         path = Path(repo) / row["current_path"]
         if not path.is_file():
             continue
-        sha = materialization_hash(path.read_text(encoding="utf-8"))
+        body = path.read_text(encoding="utf-8")
+        sha = materialization_hash(body)
+        conn.execute(
+            """INSERT INTO prompt_materializations(prompt_id,body,sha256,created_at,actor)
+               VALUES(?,?,?,?,?)""",
+            (row["prompt_id"], body, sha, now_utc(), "legacy-backfill"),
+        )
         conn.execute(
             "UPDATE prompts SET materialization_sha256=?,updated_at=? WHERE prompt_id=?",
             (sha, now_utc(), row["prompt_id"]),
         )
         updated += 1
     return updated
+
+
+def canonical_prompt_text(conn: sqlite3.Connection, prompt_id: str) -> str | None:
+    row = conn.execute(
+        "SELECT body FROM prompt_materializations WHERE prompt_id=?",
+        (prompt_id,),
+    ).fetchone()
+    return str(row["body"]) if row else None
 
 def prompt_row(conn: sqlite3.Connection, prompt_id: str) -> sqlite3.Row:
     row = conn.execute("SELECT * FROM prompts WHERE prompt_id=?", (prompt_id,)).fetchone()
@@ -182,6 +221,12 @@ def register_prompt(
             status, queue_position, current_path, sha, ts, ts,
         ),
     )
+    if prompt_text is not None:
+        conn.execute(
+            """INSERT INTO prompt_materializations(prompt_id,body,sha256,created_at,actor)
+               VALUES(?,?,?,?,?)""",
+            (prompt_id, prompt_text, sha, ts, actor),
+        )
     conn.execute(
         "INSERT INTO status_history(prompt_id,old_status,new_status,changed_at,actor,note) "
         "VALUES(?,?,?,?,?,?)",
@@ -825,10 +870,21 @@ def verify(repo: Path) -> dict[str, Any]:
         problems.append("pending_path_invalid:" + ",".join(r[0] for r in bad))
     unhashed=conn.execute(
         "SELECT p.prompt_id FROM prompts p "
-        "WHERE p.current_path LIKE 'prompts/%' AND p.materialization_sha256 IS NULL"
+        "WHERE p.status IN ('pending','running') AND p.materialization_sha256 IS NULL"
     ).fetchall()
     if unhashed:
         problems.append("active_prompt_fingerprint_missing:" + ",".join(r[0] for r in unhashed))
+    has_materializations = conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='prompt_materializations'"
+    ).fetchone()
+    if has_materializations:
+        missing_body=conn.execute(
+            """SELECT p.prompt_id FROM prompts p
+               LEFT JOIN prompt_materializations m ON m.prompt_id=p.prompt_id
+               WHERE p.status IN ('pending','running') AND m.prompt_id IS NULL"""
+        ).fetchall()
+        if missing_body:
+            problems.append("active_prompt_body_missing:" + ",".join(r[0] for r in missing_body))
     result={
         "ok": not problems,
         "problems": problems,

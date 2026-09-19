@@ -28,6 +28,14 @@ CREATE TABLE IF NOT EXISTS prompts (
   updated_at TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS prompt_materializations (
+  prompt_id TEXT PRIMARY KEY REFERENCES prompts(prompt_id) ON DELETE CASCADE,
+  body TEXT NOT NULL,
+  sha256 TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  actor TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS dependencies (
   prompt_id TEXT NOT NULL REFERENCES prompts(prompt_id) ON DELETE CASCADE,
   depends_on_prompt_id TEXT NOT NULL REFERENCES prompts(prompt_id) ON DELETE RESTRICT,

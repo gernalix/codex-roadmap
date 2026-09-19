@@ -128,7 +128,7 @@ def render(repo: Path) -> list[str]:
     roadmap_lines = [
         "# Roadmap",
         "",
-        "> Generato da `roadmap.sqlite`. Non modificare manualmente.",
+        "> Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.",
         "",
     ]
     for i, r in enumerate(pending, 1):
@@ -141,7 +141,7 @@ def render(repo: Path) -> list[str]:
     spieg = [
         "# Spiegazioni della roadmap",
         "",
-        "> Generato da `roadmap.sqlite`. Le spiegazioni sono volutamente semplici e non tecniche.",
+        "> Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.",
         "> **Eseguibile ora?** considera sia le dipendenze non ancora completate sia gli eventuali prerequisiti manuali registrati.",
         "",
         "| # | Prompt | PROMPT_ID | Stato | Progetto | Chat Codex | Dipendenze | Eseguibile ora? | Spiegazione | Modello | Reasoning | Tipo |",
@@ -170,7 +170,7 @@ def render(repo: Path) -> list[str]:
     registry = [
         "# Prompt registry",
         "",
-        "> Vista completa generata da `roadmap.sqlite`.",
+        "> Vista storica di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy.",
         "",
         "| Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |",
         "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",

@@ -114,6 +114,21 @@ class RoadmapPullTests(unittest.TestCase):
         conn.close()
         self.assertIn("| 123456 | running |", (self.local / "spiegazioni.md").read_text(encoding="utf-8"))
 
+    def test_guarded_pull_does_not_depend_on_markdown_dashboard_state(self) -> None:
+        (self.seed / "spiegazioni.md").write_text(
+            "# intentionally stale compatibility view\n",
+            encoding="utf-8",
+        )
+        (self.seed / "roadmap.md").write_text(
+            "# intentionally stale compatibility view\n",
+            encoding="utf-8",
+        )
+        remote_head = self.push_seed("stale generated views only")
+        result = roadmap_pull.guarded_pull(self.local)
+        self.assertEqual("PASS", result["status"])
+        self.assertEqual(remote_head, result["head"])
+        self.assertEqual(["123456"], result["preserved_running"])
+
     def test_guarded_pull_blocks_remote_modification_of_running_prompt(self) -> None:
         before = git(self.local, "rev-parse", "HEAD").stdout.strip()
         conn = sqlite3.connect(self.seed / "roadmap.sqlite")
