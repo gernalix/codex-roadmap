@@ -22,7 +22,7 @@ Per ogni `PROMPT_ID`:
 
 Le tabelle `analyses` e `analysis_code_changes` sono storiche/opzionali: non rappresentano una checklist da completare per ogni prompt.
 
-Un PASS ordinario viene chiuso usando la telemetria automatica di `executions`. Non si crea un'analisi dedicata, un file audit o un follow-up salvo failure, retry, costo/tool-call anomali, conflitto/loop osservato, bug infrastrutturale o richiesta esplicita.
+Un PASS ordinario viene chiuso autorevolmente da `roadmap_finish.py`; `executions` aggiunge poi telemetria automatica senza trattenere lo scheduling. Non si crea un'analisi dedicata, un file audit o un follow-up salvo failure, retry, costo/tool-call anomali, conflitto/loop osservato, bug infrastrutturale o richiesta esplicita.
 
 Questo evita che il sistema di misurazione generi più lavoro del task misurato.
 
@@ -46,7 +46,7 @@ Il risultato immediato viene consegnato da:
 python3 tools/roadmap_result.py --repo . --prompt-id 123456 --result PASS --confirm-executed
 ```
 
-`roadmap_finish.py` resta compatibile ed equivale a `PASS`. Il comando non modifica più il DB o Git locale: crea una GitHub Issue immutabile `[roadmap-mutation] terminal-<PROMPT_ID>`. **Questa Issue non cambia subito lo stato del prompt**: registra una `terminal_request`, mentre il prompt resta `running` in roadmap e in `spiegazioni.md`. Solo una successiva `usage_execution` terminale di `codex-usage` può effettuare la transizione reale a `completed`, `failed`, `blocked`, `cancelled` o `unknown`. Per ogni PROMPT_ID esiste una sola chiave terminale; un retry identico è idempotente, mentre un esito terminale diverso viene rifiutato.
+`roadmap_finish.py` resta compatibile ed equivale a `PASS`. Il comando non modifica il DB o Git locale: crea una GitHub Issue immutabile `[roadmap-mutation] terminal-<PROMPT_ID>`. Il single writer registra la `terminal_request` e applica **subito** lo stato terminale richiesto; su PASS i figli diventano immediatamente lanciabili quando le altre dipendenze sono soddisfatte. `usage_execution` arriva in seguito per costi/audit e non è più un prerequisito di scheduling. Se telemetria e richiesta terminale divergono, viene registrata l'anomalia senza riaprire automaticamente il prompt. Per ogni PROMPT_ID esiste una sola chiave terminale; un retry identico è idempotente, mentre un esito terminale diverso viene rifiutato.
 
 Prima dell'import ogni prompt attivo deve avere una fingerprint della propria materializzazione. Se un vecchio `PROMPT_ID` ricompare con testo diverso, il sistema registra una collisione e non sovrascrive automaticamente lo stato del prompt corrente.
 
@@ -78,7 +78,7 @@ Formato:
 }
 ```
 
-Operazioni supportate: `analysis`, `code_change`, `model`, `explanation`, `status`, `terminal_request`, `relation`, `dependency`, `dependency_replace`, `tag`, `execution`, `register`. Le transizioni di stato sono fail-closed: un prompt terminale non torna attivo e un prompt `running` non può essere portato a `superseded` da una mutation successiva. `model` aggiorna esclusivamente il modello assegnato al prompt esistente; `explanation` aggiorna esclusivamente la spiegazione user-facing mostrata nelle viste generate. Entrambe registrano l'audit dell'operazione. `analysis` e `code_change` sono usate solo per eccezioni reali; `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
+Operazioni supportate: `analysis`, `code_change`, `model`, `explanation`, `status`, `terminal_request`, `reconcile_terminals`, `relation`, `dependency`, `dependency_replace`, `tag`, `execution`, `register`. Il writer esegue inoltre una riconciliazione terminale automatica a ogni Issue, così richieste terminali lasciate da versioni precedenti non restano zombie `running`. Relazioni `fix`/`replacement`/`merge` inoltrano automaticamente le dipendenze dei figli pending; `replacement`/`merge` supersedono automaticamente la sorgente pending. Le transizioni di stato sono fail-closed: un prompt terminale non torna attivo e un prompt `running` non può essere portato a `superseded` da una mutation successiva. `model` aggiorna esclusivamente il modello assegnato al prompt esistente; `explanation` aggiorna esclusivamente la spiegazione user-facing mostrata nelle viste generate. Entrambe registrano l'audit dell'operazione. `analysis` e `code_change` sono usate solo per eccezioni reali; `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
 
 ## Proiezioni generate
 
