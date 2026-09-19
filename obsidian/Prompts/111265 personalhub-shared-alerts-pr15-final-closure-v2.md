@@ -23,13 +23,13 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** [[255970 personalhub-english-only-places-ci-closure-v1|255970]]
-- **Padri/precedenti:** —
+- **Padri/precedenti:** [[521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Stessa chat di 521404
 
 ## Spiegazione
 
-Riprende dalla PR #15 già implementata e dall'ultimo fix JVM-safe. Fa soltanto check remoti, QA AVD mancante, merge e cleanup, evitando di ripetere migrazioni/build già validate.
+Riprende dalla PR #15 già pronta e arriva autonomamente a QA, merge e cleanup. Il lease helper ora recupera da solo i lock di prompt non più running e Codex può cambiare strategia o correggere tooling/CI in-scope pur di soddisfare gli acceptance criteria in sicurezza.
 
 ## Esecuzioni
 

@@ -10,5 +10,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844 · Chiudere il residuo del merge capsule]]
-- [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404 · Chiudere e mergiare la PR alert/Places già pronta]]
+- Nessuno.

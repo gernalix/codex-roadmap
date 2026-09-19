@@ -13,5 +13,3 @@
 9. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 10. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 11. [[prompts/fedora-runtime-kuma-closure-v3|fedora-runtime-kuma-closure-v3]]
-12. [[prompts/personalhub-capsule-isolation-postmerge-cleanup-v1|personalhub-capsule-isolation-postmerge-cleanup-v1]]
-13. [[prompts/personalhub-shared-alerts-pr15-integration-closure-v1|personalhub-shared-alerts-pr15-integration-closure-v1]]
