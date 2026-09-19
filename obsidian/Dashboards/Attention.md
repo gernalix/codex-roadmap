@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/947306 workflowy-bf-autofix-publisher-v1|947306 · Arricchire automaticamente i B/F Workflowy con il report Codex]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/927641 workflowy-roadmap-cockpit-local-activation|927641 · Attiva il cockpit Workflowy della roadmap]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]] · `blocked` · analizzato=sì · fix=418844

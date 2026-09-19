@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release\|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] | running | 2026-09-19T15:13:54Z | 2026-09-19T15:29:32Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure\|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] | running | 2026-09-19T15:41:21Z | 2026-09-19T15:41:21Z | BLOCKED | no | no | — | chrome-codex-switcher | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/947306 workflowy-bf-autofix-publisher-v1\|947306 · Arricchire automaticamente i B/F Workflowy con il report Codex]] | running | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
@@ -284,4 +283,5 @@
 | [[obsidian/Prompts/637985 personalhub-single-canonical-db-export\|637985 · Mantenere un solo DB auto-esportato PersonalHub]] | completed | 2026-09-19T14:04:52Z | 2026-09-19T14:04:52Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/734140 livinggaul-duplicate-count-local-activation\|734140 · LivingGaul duplicate count local activation]] | completed | 2026-09-19T12:57:31Z | 2026-09-19T14:28:44Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/491628 personalhub-android17-restricted-overlay-finalize\|491628 · Finalizzare permesso overlay Android 17 di PersonalHub]] | completed | 2026-09-19T15:46:00Z | 2026-09-19T16:51:48Z | PASS | no | no | — | PersonalHub | GPT-5.5 | medium |
+| [[obsidian/Prompts/947306 workflowy-bf-autofix-publisher-v1\|947306 · Arricchire automaticamente i B/F Workflowy con il report Codex]] | completed | 2026-09-19T20:19:20Z | 2026-09-19T20:19:20Z | PASS | no | no | — | Fedora / Workflowy | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/927641 workflowy-roadmap-cockpit-local-activation\|927641 · Attiva il cockpit Workflowy della roadmap]] | completed | 2026-09-19T19:41:20Z | 2026-09-19T19:41:20Z | PASS | no | no | — | Workflowy roadmap cockpit | GPT-5.6 Terra | medium |
