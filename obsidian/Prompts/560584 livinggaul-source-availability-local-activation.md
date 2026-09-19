@@ -1,18 +1,18 @@
 ---
 prompt_id: 560584
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/livinggaul-x-downloader
 ---
 
 # 560584 · LivingGaul source availability local activation
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/livinggaul-x-downloader|livinggaul-x-downloader]]
 - **Prompt:** [[../../prompts/livinggaul-source-availability-local-activation|Apri prompt]]
 - **Primo lancio:** —
