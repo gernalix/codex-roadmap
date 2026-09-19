@@ -22,9 +22,9 @@ tags:
 - **Codice modificato da ChatGPT:** sì (1 interventi)
 - **Fix:** —
 - **Dipende da:** [[856234 workflowy-live-smoke-remote-fix-closure|856234]]
-- **Sblocca:** —
+- **Sblocca:** [[578439 workflowy-roadmap-control-local-activation|578439]]
 - **Padri/precedenti:** [[438271 workflowy-live-smoke-and-local-activation-v3|438271]], [[775412 workflowy-automation-local-activation-v2|775412]], [[856234 workflowy-live-smoke-remote-fix-closure|856234]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[578439 workflowy-roadmap-control-local-activation|578439]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
