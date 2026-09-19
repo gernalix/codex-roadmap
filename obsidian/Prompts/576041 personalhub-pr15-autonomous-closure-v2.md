@@ -23,7 +23,7 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** [[477616 personalhub-english-only-places-ci-closure-v2|477616]]
-- **Padri/precedenti:** [[521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404]]
+- **Padri/precedenti:** [[111265 personalhub-shared-alerts-pr15-final-closure-v2|111265]], [[521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 

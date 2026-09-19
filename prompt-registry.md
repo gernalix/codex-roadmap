@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/111265 personalhub-shared-alerts-pr15-final-closure-v2\|111265 · Chiudere PR #15 senza rifare il lavoro]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2\|576041 · Chiudere autonomamente la PR alert/Places]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/477616 personalhub-english-only-places-ci-closure-v2\|477616 · English-only, diagnostica Places e CI in un solo passaggio]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4\|697834 · Migrare solo i veri timestamp a epoch ms]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
@@ -31,6 +30,7 @@
 | [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1\|418844 · Chiudere il residuo del merge capsule]] | completed | 2026-09-19T00:28:37Z | 2026-09-19T00:28:37Z | PASS | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5\|380812 · Chiudere e integrare tag e alert di Places]] | blocked | 2026-09-19T00:49:16Z | 2026-09-19T00:49:16Z | BLOCKED | sì | no | [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1\|521404]] | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1\|521404 · Chiudere e mergiare la PR alert/Places già pronta]] | blocked | 2026-09-19T01:11:22Z | 2026-09-19T01:11:22Z | BLOCKED | sì | sì | [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2\|576041]] | Personal Hub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/111265 personalhub-shared-alerts-pr15-final-closure-v2\|111265 · Chiudere PR #15 senza rifare il lavoro]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | blocked | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | BLOCKED | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2\|200725 · PersonalHub 100% capsule isolation — integra main e valida]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |

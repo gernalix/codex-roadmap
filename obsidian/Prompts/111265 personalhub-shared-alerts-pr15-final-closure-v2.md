@@ -1,20 +1,20 @@
 ---
 prompt_id: 111265
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 111265 · Chiudere PR #15 senza rifare il lavoro
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-shared-alerts-pr15-final-closure-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-shared-alerts-pr15-final-closure-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** [[255970 personalhub-english-only-places-ci-closure-v1|255970]]
 - **Padri/precedenti:** [[521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[576041 personalhub-pr15-autonomous-closure-v2|576041]]
 - **Chat Codex:** Stessa chat di 521404
 
 ## Spiegazione
