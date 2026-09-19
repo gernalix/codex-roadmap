@@ -37,6 +37,18 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertNotIn("[[obsidian/Prompts/123456 one\\|123456]]",spieg)
             self.assertTrue(db.verify(repo)["ok"])
 
+    def test_summary_rows_prioritizes_running_over_pending_queue(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="pending",title="Pending",current_path="prompts/pending.md",queue_position=1)
+            db.register_prompt(conn,prompt_id="654321",slug="running",title="Running",current_path="prompts/running.md",queue_position=99)
+            db.set_status(conn,"654321","running",actor="codex",note="launch")
+            conn.commit()
+            rows=db.summary_rows(conn)
+            self.assertEqual(["654321","123456"], [row["prompt_id"] for row in rows[:2]])
+            conn.close()
+
     def test_terminal_request_finalizes_immediately_and_usage_confirms(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
