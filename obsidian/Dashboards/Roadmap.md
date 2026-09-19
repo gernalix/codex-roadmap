@@ -11,4 +11,3 @@
 ## In esecuzione
 
 - [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]]
-- [[obsidian/Prompts/572280 recover-641582-missing-roadmap-registration-v1|572280 · Recuperare 641582 e correggere il bootstrap roadmap]]
