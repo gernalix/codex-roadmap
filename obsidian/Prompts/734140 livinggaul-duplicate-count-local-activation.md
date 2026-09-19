@@ -1,18 +1,18 @@
 ---
 prompt_id: 734140
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/livinggaul-x-downloader
 ---
 
 # 734140 · LivingGaul duplicate count local activation
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/livinggaul-x-downloader|livinggaul-x-downloader]]
 - **Prompt:** [[../../prompts/livinggaul-duplicate-count-local-activation|Apri prompt]]
 - **Primo lancio:** 2026-09-19T12:57:31Z
