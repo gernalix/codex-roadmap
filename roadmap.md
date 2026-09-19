@@ -2,8 +2,8 @@
 
 > Generato da `roadmap.sqlite`. Non modificare manualmente.
 
-1. [[prompts/personalhub-zombie-function-cleanup-closure|personalhub-zombie-function-cleanup-closure]]
-2. [[prompts/global-repository-single-writer-rollout|global-repository-single-writer-rollout]]
+1. [[prompts/global-repository-single-writer-rollout|global-repository-single-writer-rollout]]
+2. [[prompts/personalhub-zombie-function-cleanup-closure|personalhub-zombie-function-cleanup-closure]]
 3. [[prompts/personalhub-health-canonical-e2e-v4|personalhub-health-canonical-e2e-v4]]
 4. [[prompts/personalhub-obsidian-archive-complete-v4|personalhub-obsidian-archive-complete-v4]]
 5. [[prompts/datasette5-personalhub-final-schema-deploy-v3|datasette5-personalhub-final-schema-deploy-v3]]
