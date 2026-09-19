@@ -9,4 +9,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]]
+- Nessuno.

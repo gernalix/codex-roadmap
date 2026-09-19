@@ -15,7 +15,7 @@ tags:
 - [[obsidian/Prompts/825405 personalhub-git-history-data-sync-validation-v3|825405 · Validare cronologia, backup e ripristino dati]] · `pending`
 - [[obsidian/Prompts/811925 personalhub-datasette-lite-offline-runtime-v3|811925 · Completare l’esploratore dati offline]] · `pending`
 - [[obsidian/Prompts/334679 personalhub-play-release-local-validation-v3|334679 · Controllo finale locale prima di Google Play]] · `pending`
-- [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]] · `running`
+- [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]] · `blocked`
 - [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation|617205 · Chiudere i nuovi tag e alert di Places]] · `superseded`
 - [[obsidian/Prompts/461839 personalhub-epoch-timestamps-migration|461839 · Date e ore coerenti ovunque]] · `superseded`
 - [[obsidian/Prompts/593728 personalhub-shared-alerts-places-tags-integration-v2|593728 · Chiudere e integrare i nuovi tag e alert di Places]] · `superseded`

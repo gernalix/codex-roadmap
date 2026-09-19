@@ -1,20 +1,20 @@
 ---
 prompt_id: 223679
-status: running
+status: blocked
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/personal-hub
 ---
 
 # 223679 · Integrare definitivamente l’isolamento capsule
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-capsule-isolation-integration-closure-v4|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-capsule-isolation-integration-closure-v4|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
