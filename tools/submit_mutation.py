@@ -12,6 +12,7 @@ from typing import Any
 SCHEMA = "codex-roadmap.mutation.v1"
 ISSUE_PREFIX = "[roadmap-mutation] "
 DEFAULT_REMOTE_REPO = os.environ.get("CODEX_ROADMAP_REMOTE_REPO", "gernalix/codex-roadmap")
+DEFAULT_REMOTE_HOST = os.environ.get("CODEX_ROADMAP_REMOTE_HOST", "github.com")
 # Kept for CLI compatibility; Issues are repository-scoped and do not write a branch.
 DEFAULT_REMOTE_BRANCH = os.environ.get("CODEX_ROADMAP_REMOTE_BRANCH", "main")
 
@@ -39,6 +40,7 @@ def _gh(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
+            env={**os.environ, "GH_HOST": DEFAULT_REMOTE_HOST},
         )
     except FileNotFoundError as exc:
         raise MutationSubmitError("gh_cli_missing") from exc
