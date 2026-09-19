@@ -15,9 +15,9 @@ tags:
 - **Stato:** pending
 - **Progetto:** [[../Projects/livinggaul-x-downloader|livinggaul-x-downloader]]
 - **Prompt:** [[../../prompts/livinggaul-duplicate-count-local-activation|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T12:57:31Z
+- **Ultimo lancio:** 2026-09-19T12:57:31Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Aggiorna la CLI locale alla v0.4.2 e verifica che la view video_catalog esponga 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T12:57:31Z | 2026-09-19T12:57:59Z | BLOCKED | 28.286 | gpt-5.6-luna | low | 6 | 30999 |
 
 ## Analisi ChatGPT
 
