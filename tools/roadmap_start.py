@@ -55,7 +55,7 @@ def _wait_issue_applied(repository: str, issue_number: str, timeout: float) -> N
             raise RoadmapStartError(f"start_claim_rejected:{issue_number}:{reason or 'closed'}")
         if time.monotonic() >= deadline:
             raise RoadmapStartError(f"start_claim_timeout:{issue_number}")
-        time.sleep(2.0)
+        time.sleep(1.0)
 
 
 def _remote_prompt_status(repository: str, branch: str, prompt_id: str) -> str:
