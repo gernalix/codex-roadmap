@@ -1,20 +1,20 @@
 ---
 prompt_id: 404846
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 404846 · Chiudere la CI GitHub dopo il passaggio a English-only
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-github-ci-closure-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-github-ci-closure-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[609279 personalhub-english-only-places-diagnostics-ui|609279]]
 - **Sblocca:** [[830867 personalhub-epoch-timestamps-migration-v3|830867]]
 - **Padri/precedenti:** [[962109 personalhub-github-ci-closure|962109]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[255970 personalhub-english-only-places-ci-closure-v1|255970]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

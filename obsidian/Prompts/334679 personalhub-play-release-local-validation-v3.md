@@ -1,20 +1,20 @@
 ---
 prompt_id: 334679
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 334679 · Controllo finale locale prima di Google Play
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-play-release-local-validation-v3|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-play-release-local-validation-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[811925 personalhub-datasette-lite-offline-runtime-v3|811925]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[243871 personalhub-play-release-local-validation-v2|243871]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[788606 personalhub-play-release-local-validation-v4|788606]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

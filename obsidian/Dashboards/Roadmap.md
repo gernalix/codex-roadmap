@@ -4,8 +4,8 @@
 
 ## Lanciabili adesso
 
-- [[obsidian/Prompts/357862 logseq-updates-pat-safety-closure-v2|357862 · Chiusura sicurezza e attivazione updater Logseq]]
-- [[obsidian/Prompts/526713 fedora-runtime-validation-v2|526713 · Ultimo controllo del monitoraggio Fedora]]
+- [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3|588376 · Bonificare history Logseq e attivare updater]]
+- [[obsidian/Prompts/542078 fedora-runtime-kuma-closure-v3|542078 · Chiudere solo il gate Kuma Fedora]]
 
 ## In esecuzione
 

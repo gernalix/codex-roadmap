@@ -1,20 +1,20 @@
 ---
 prompt_id: 830867
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 830867 · Date e ore coerenti ovunque
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-epoch-timestamps-migration-v3|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-epoch-timestamps-migration-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[404846 personalhub-github-ci-closure-v2|404846]]
 - **Sblocca:** [[790233 personalhub-salute-canonical-integration-v3|790233]]
 - **Padri/precedenti:** [[734205 personalhub-epoch-timestamps-migration-v2|734205]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[697834 personalhub-epoch-timestamps-migration-v4|697834]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

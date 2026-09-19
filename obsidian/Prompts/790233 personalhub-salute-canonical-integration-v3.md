@@ -1,20 +1,20 @@
 ---
 prompt_id: 790233
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 790233 · Portare Salute nel database canonico
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-salute-canonical-integration-v3|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-salute-canonical-integration-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[830867 personalhub-epoch-timestamps-migration-v3|830867]]
 - **Sblocca:** [[416826 personalhub-salute-ui-hub-v3|416826]], [[904631 datasette5-personalhub-explorer-security-deploy-v2|904631]]
 - **Padri/precedenti:** [[862541 personalhub-salute-canonical-integration-v2|862541]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[462279 personalhub-health-canonical-e2e-v4|462279]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

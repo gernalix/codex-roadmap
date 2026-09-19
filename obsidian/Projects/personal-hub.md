@@ -5,32 +5,39 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui|609279 · Solo inglese e diagnostica Places su richiesta]] · `pending`
-- [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] · `pending`
-- [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3|830867 · Date e ore coerenti ovunque]] · `pending`
-- [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3|790233 · Portare Salute nel database canonico]] · `pending`
-- [[obsidian/Prompts/416826 personalhub-salute-ui-hub-v3|416826 · Collegare Salute all’app e all’Hub]] · `pending`
-- [[obsidian/Prompts/355842 personalhub-obsidian-archive-complete-v3|355842 · Completare l’archivio Obsidian in un solo task]] · `pending`
-- [[obsidian/Prompts/825405 personalhub-git-history-data-sync-validation-v3|825405 · Validare cronologia, backup e ripristino dati]] · `pending`
-- [[obsidian/Prompts/811925 personalhub-datasette-lite-offline-runtime-v3|811925 · Completare l’esploratore dati offline]] · `pending`
-- [[obsidian/Prompts/334679 personalhub-play-release-local-validation-v3|334679 · Controllo finale locale prima di Google Play]] · `pending`
+- [[obsidian/Prompts/255970 personalhub-english-only-places-ci-closure-v1|255970 · English-only, diagnostica Places e CI in un solo passaggio]] · `pending`
+- [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `pending`
+- [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `pending`
+- [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `pending`
+- [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `pending`
+- [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
+- [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `pending`
 - [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844 · Chiudere il residuo del merge capsule]] · `running`
 - [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404 · Chiudere e mergiare la PR alert/Places già pronta]] · `running`
 - [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5|380812 · Chiudere e integrare tag e alert di Places]] · `blocked`
 - [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]] · `blocked`
+- [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui|609279 · Solo inglese e diagnostica Places su richiesta]] · `superseded`
 - [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4|663657 · Chiudere e integrare tag e alert di Places]] · `blocked`
 - [[obsidian/Prompts/223103 personalhub-shared-alerts-places-tags-integration-v3|223103 · Chiudere e integrare tag e alert di Places]] · `superseded`
+- [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] · `superseded`
+- [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3|830867 · Date e ore coerenti ovunque]] · `superseded`
+- [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3|790233 · Portare Salute nel database canonico]] · `superseded`
 - [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation|617205 · Chiudere i nuovi tag e alert di Places]] · `superseded`
+- [[obsidian/Prompts/416826 personalhub-salute-ui-hub-v3|416826 · Collegare Salute all’app e all’Hub]] · `superseded`
 - [[obsidian/Prompts/461839 personalhub-epoch-timestamps-migration|461839 · Date e ore coerenti ovunque]] · `superseded`
 - [[obsidian/Prompts/593728 personalhub-shared-alerts-places-tags-integration-v2|593728 · Chiudere e integrare i nuovi tag e alert di Places]] · `superseded`
+- [[obsidian/Prompts/355842 personalhub-obsidian-archive-complete-v3|355842 · Completare l’archivio Obsidian in un solo task]] · `superseded`
 - [[obsidian/Prompts/418763 personalhub-salute-canonical-integration|418763 · Portare Salute dentro PersonalHub]] · `superseded`
 - [[obsidian/Prompts/734205 personalhub-epoch-timestamps-migration-v2|734205 · Date e ore coerenti ovunque]] · `superseded`
+- [[obsidian/Prompts/825405 personalhub-git-history-data-sync-validation-v3|825405 · Validare cronologia, backup e ripristino dati]] · `superseded`
 - [[obsidian/Prompts/724615 personalhub-salute-ui-hub-obsidian|724615 · Rendere Salute visibile e collegata al resto dell’app]] · `superseded`
 - [[obsidian/Prompts/862541 personalhub-salute-canonical-integration-v2|862541 · Portare Salute dentro PersonalHub]] · `superseded`
 - [[obsidian/Prompts/582741 personalhub-obsidian-archive-foundation|582741 · Prima versione dell’archivio Obsidian]] · `superseded`
 - [[obsidian/Prompts/315972 personalhub-salute-ui-hub-obsidian-v2|315972 · Rendere Salute visibile e collegata al resto dell’app]] · `superseded`
+- [[obsidian/Prompts/811925 personalhub-datasette-lite-offline-runtime-v3|811925 · Completare l’esploratore dati offline]] · `superseded`
 - [[obsidian/Prompts/671904 personalhub-obsidian-archive-incremental|671904 · Aggiornare Obsidian automaticamente]] · `superseded`
 - [[obsidian/Prompts/946238 personalhub-obsidian-archive-foundation-v2|946238 · Prima versione dell’archivio Obsidian]] · `superseded`
+- [[obsidian/Prompts/334679 personalhub-play-release-local-validation-v3|334679 · Controllo finale locale prima di Google Play]] · `superseded`
 - [[obsidian/Prompts/845312 personalhub-obsidian-archive-projections|845312 · Completare Obsidian per tutti i moduli]] · `superseded`
 - [[obsidian/Prompts/528163 personalhub-obsidian-archive-incremental-v2|528163 · Aggiornare Obsidian automaticamente]] · `superseded`
 - [[obsidian/Prompts/672418 personalhub-git-history-data-sync-validation|672418 · Cronologia, backup e ripristino dei dati PersonalHub]] · `superseded`

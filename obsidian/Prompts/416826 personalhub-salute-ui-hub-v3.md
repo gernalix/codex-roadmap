@@ -1,20 +1,20 @@
 ---
 prompt_id: 416826
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 416826 · Collegare Salute all’app e all’Hub
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-salute-ui-hub-v3|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-salute-ui-hub-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[790233 personalhub-salute-canonical-integration-v3|790233]]
 - **Sblocca:** [[355842 personalhub-obsidian-archive-complete-v3|355842]]
 - **Padri/precedenti:** [[315972 personalhub-salute-ui-hub-obsidian-v2|315972]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[462279 personalhub-health-canonical-e2e-v4|462279]]
 - **Chat Codex:** Stessa chat di 790233
 
 ## Spiegazione

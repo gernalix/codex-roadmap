@@ -1,21 +1,21 @@
 ---
 prompt_id: 357862
-status: pending
+status: superseded
 project_id: 23
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - manual-prerequisite:revoke-pat
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/fedora
 ---
 
 # 357862 · Chiusura sicurezza e attivazione updater Logseq
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/logseq-updates-pat-safety-closure-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/logseq-updates-pat-safety-closure-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -25,7 +25,7 @@ tags:
 - **Dipende da:** [[817264 codex-usage-publisher-autonomous-runtime-closure|817264]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[445388 logseq-updates-pat-safety-closure|445388]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[588376 logseq-updates-pat-safety-closure-v3|588376]]
 - **Chat Codex:** Stessa chat di 255325
 
 ## Spiegazione

@@ -1,20 +1,20 @@
 ---
 prompt_id: 825405
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 825405 · Validare cronologia, backup e ripristino dati
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-git-history-data-sync-validation-v3|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-git-history-data-sync-validation-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** [[355842 personalhub-obsidian-archive-complete-v3|355842]]
 - **Sblocca:** [[811925 personalhub-datasette-lite-offline-runtime-v3|811925]]
 - **Padri/precedenti:** [[357214 personalhub-git-history-data-sync-validation-v2|357214]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[707603 personalhub-git-history-final-validation-v4|707603]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
