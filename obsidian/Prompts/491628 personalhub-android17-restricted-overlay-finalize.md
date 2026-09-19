@@ -19,7 +19,7 @@ tags:
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../completed/personalhub-android17-restricted-overlay-finalize|Apri prompt]]
 - **Primo lancio:** 2026-09-19T15:46:00Z
-- **Ultimo lancio:** 2026-09-19T16:20:45Z
+- **Ultimo lancio:** 2026-09-19T16:51:48Z
 - **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
@@ -40,6 +40,7 @@ Finalizza la correzione già preparata in PR #23 per il permesso “Display over
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-19T15:46:00Z | 2026-09-19T16:01:22Z | UNKNOWN | 921.336 | gpt-5.5 | medium | 68 | 100354 |
 | 2026-09-19T16:20:45Z | 2026-09-19T16:21:24Z | UNKNOWN | 38.388 | gpt-5.5 | medium | 6 | 102476 |
+| 2026-09-19T16:51:48Z | 2026-09-19T16:52:08Z | UNKNOWN | 19.376 | gpt-5.5 | medium | 4 | 125018 |
 
 ## Analisi ChatGPT
 
