@@ -102,6 +102,16 @@ def claim_start(
     if not re.fullmatch(r"\d{6}", prompt_id):
         raise RoadmapStartError(f"invalid_prompt_id:{prompt_id}")
 
+    # Reject an unregistered ID before creating an immutable Issue that the
+    # single writer can only reject later.  The post-write readback below is
+    # retained: a registered prompt can still become non-runnable meanwhile.
+    try:
+        _remote_prompt_status(repository, branch, prompt_id)
+    except RoadmapStartError as exc:
+        if str(exc) == f"prompt_not_found:{prompt_id}":
+            raise RoadmapStartError(f"prompt_not_registered:{prompt_id}") from exc
+        raise
+
     document = {
         "schema": SCHEMA,
         "actor": "codex",
