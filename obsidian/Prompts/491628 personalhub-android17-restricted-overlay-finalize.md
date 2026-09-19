@@ -1,0 +1,49 @@
+---
+prompt_id: 491628
+status: pending
+project_id: 49
+model: GPT-5.5
+reasoning: medium
+tags:
+  - android17
+  - pr-23
+  - restricted-settings
+  - roadmap/prompt
+  - roadmap/status/pending
+  - roadmap/project/personalhub
+---
+
+# 491628 · Finalizzare permesso overlay Android 17 di PersonalHub
+
+- **Stato:** pending
+- **Progetto:** [[../Projects/personalhub|PersonalHub]]
+- **Prompt:** [[../../prompts/personalhub-android17-restricted-overlay-finalize|Apri prompt]]
+- **Primo lancio:** —
+- **Ultimo lancio:** —
+- **Ultimo esito:** —
+- **Analizzato da ChatGPT:** no
+- **Codice modificato da ChatGPT:** no (0 interventi)
+- **Fix:** —
+- **Dipende da:** [[914263 personalhub-schema-persistence-all-tables-p0|914263]]
+- **Sblocca:** —
+- **Padri/precedenti:** —
+- **Figli/follow-up:** —
+- **Chat Codex:** Nuova chat
+
+## Spiegazione
+
+Finalizza la correzione già preparata in PR #23 per il permesso “Display over other apps” su Android 16/17: gli APK installati fuori dallo store devono prima passare da App info → ⋮ → Allow restricted settings. Codex serve solo per integrare sul main corrente, eseguire i test mirati e verificare il flusso sul Pixel senza perdere dati.
+
+## Esecuzioni
+
+| Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
+| --- | --- | --- | ---: | --- | --- | ---: | ---: |
+| — | — | — | — | — | — | — | — |
+
+## Analisi ChatGPT
+
+- Non ancora analizzato.
+
+## Modifiche di codice ChatGPT
+
+- Nessuna modifica di codice registrata.
