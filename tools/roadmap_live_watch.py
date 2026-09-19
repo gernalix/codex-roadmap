@@ -17,7 +17,7 @@ from roadmap_start import RoadmapStartError, claim_start
 SCHEMA = 1
 DEFAULT_SOURCE_ROOT = Path.home() / ".codex" / "sessions"
 DEFAULT_STATE = Path.home() / ".local" / "state" / "codex-roadmap" / "live-status.json"
-DEFAULT_USAGE_PUBLISHER = Path.home() / "projects" / "codex-usage-monitor" / "codex_usage_publisher.py"
+DEFAULT_USAGE_PUBLISHER = Path.home() / ".local" / "lib" / "codex-usage-monitor" / "current" / "codex_usage_publisher.py"
 DEFAULT_USAGE_SOURCE = Path.home() / "projects" / "codex-usage"
 DEFAULT_REPO = Path.home() / "projects" / "codex-roadmap"
 PROMPT_ID_RE = re.compile(r"\bPROMPT_ID\s*[:=]\s*[`*_~]*([0-9]{6})\b", re.I)
