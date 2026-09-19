@@ -1,20 +1,20 @@
 ---
 prompt_id: 697834
-status: running
+status: completed
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/personal-hub
 ---
 
 # 697834 · Migrare solo i veri timestamp a epoch ms
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-epoch-timestamps-migration-v4|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-epoch-timestamps-migration-v4|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
