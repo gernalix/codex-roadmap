@@ -188,6 +188,12 @@ def set_status(
     old = row["status"]
     if old == new_status:
         return
+    if old in TERMINAL_STATUS and new_status in ACTIVE_STATUS:
+        raise RoadmapDBError(f"terminal_prompt_cannot_reactivate:{prompt_id}:{old}->{new_status}")
+    if old == "running" and new_status == "superseded":
+        raise RoadmapDBError(f"active_prompt_cannot_be_superseded:{prompt_id}")
+    if old == "running" and new_status == "pending":
+        raise RoadmapDBError(f"active_prompt_cannot_return_to_pending:{prompt_id}")
     ts = now_utc()
     conn.execute(
         "UPDATE prompts SET status=?, updated_at=? WHERE prompt_id=?",
@@ -356,8 +362,10 @@ def add_relation(
     actor: str,
     note: str | None = None,
 ) -> None:
-    prompt_row(conn, from_prompt_id)
+    source = prompt_row(conn, from_prompt_id)
     prompt_row(conn, to_prompt_id)
+    if relation_type == "replacement" and source["status"] == "running":
+        raise RoadmapDBError(f"active_prompt_cannot_be_replaced:{from_prompt_id}")
     ts = now_utc()
     conn.execute(
         """INSERT OR IGNORE INTO prompt_relations(
