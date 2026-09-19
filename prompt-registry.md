@@ -4,16 +4,16 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release\|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] | running | 2026-09-19T15:13:54Z | 2026-09-19T15:13:54Z | UNKNOWN | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release\|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] | running | 2026-09-19T15:13:54Z | 2026-09-19T15:29:32Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure\|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] | running | — | — | — | no | no | — | chrome-codex-switcher | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/491628 personalhub-android17-restricted-overlay-finalize\|491628 · Finalizzare permesso overlay Android 17 di PersonalHub]] | running | — | — | — | no | no | — | PersonalHub | GPT-5.5 | medium |
+| [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure\|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] | running | 2026-09-19T15:41:21Z | 2026-09-19T15:41:21Z | BLOCKED | no | no | — | chrome-codex-switcher | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/489818 datasette5-personalhub-final-schema-deploy-v3\|489818 · Aggiornare e distribuire Datasette sullo schema PH finale]] | pending | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/491628 personalhub-android17-restricted-overlay-finalize\|491628 · Finalizzare permesso overlay Android 17 di PersonalHub]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.5 | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
@@ -72,7 +72,7 @@
 | [[obsidian/Prompts/724615 personalhub-salute-ui-hub-obsidian\|724615 · Rendere Salute visibile e collegata al resto dell’app]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/862541 personalhub-salute-canonical-integration-v2\|862541 · Portare Salute dentro PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/904631 datasette5-personalhub-explorer-security-deploy-v2\|904631 · Versione online dell’esploratore dati PersonalHub]] | superseded | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/374820 fedora-runtime-kuma-closure-v4\|374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile]] | completed | — | — | PASS | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/374820 fedora-runtime-kuma-closure-v4\|374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile]] | completed | 2026-09-19T15:43:26Z | 2026-09-19T15:43:26Z | PASS | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/582741 personalhub-obsidian-archive-foundation\|582741 · Prima versione dell’archivio Obsidian]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/315972 personalhub-salute-ui-hub-obsidian-v2\|315972 · Rendere Salute visibile e collegata al resto dell’app]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/811925 personalhub-datasette-lite-offline-runtime-v3\|811925 · Completare l’esploratore dati offline]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |

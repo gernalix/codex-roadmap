@@ -19,9 +19,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/chrome-codex-switcher|chrome-codex-switcher]]
 - **Prompt:** [[../../prompts/chrome-codex-switcher-runtime-closure|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T15:41:21Z
+- **Ultimo lancio:** 2026-09-19T15:41:21Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -39,7 +39,7 @@ Fa funzionare davvero sul tuo Fedora il collegamento tra una tab Chrome e la sua
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T15:41:21Z | 2026-09-19T15:43:16Z | BLOCKED | 114.529 | gpt-5.6-terra | medium | 11 | 62819 |
 
 ## Analisi ChatGPT
 

@@ -16,8 +16,8 @@ tags:
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../prompts/personalhub-pr24-pr23-final-release|Apri prompt]]
 - **Primo lancio:** 2026-09-19T15:13:54Z
-- **Ultimo lancio:** 2026-09-19T15:13:54Z
-- **Ultimo esito:** UNKNOWN
+- **Ultimo lancio:** 2026-09-19T15:29:32Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -36,6 +36,7 @@ Integra nel ramo principale solo i cambiamenti utili delle due richieste aperte 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-19T15:13:54Z | 2026-09-19T15:18:08Z | UNKNOWN | 253.87 | gpt-5.6-terra | medium | 22 | 116279 |
+| 2026-09-19T15:29:32Z | 2026-09-19T15:40:40Z | PASS | 668.209 | gpt-5.6-sol | medium | 38 | 141956 |
 
 ## Analisi ChatGPT
 

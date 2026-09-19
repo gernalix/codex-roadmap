@@ -1,6 +1,6 @@
 ---
 prompt_id: 491628
-status: pending
+status: running
 project_id: 49
 model: GPT-5.5
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - pr-23
   - restricted-settings
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personalhub
 ---
 
 # 491628 · Finalizzare permesso overlay Android 17 di PersonalHub
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../prompts/personalhub-android17-restricted-overlay-finalize|Apri prompt]]
 - **Primo lancio:** —
