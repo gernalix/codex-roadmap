@@ -135,9 +135,34 @@ def submit_document(
         check=False,
     )
     if proc.returncode:
+        # A REST-specific failure must not strand the queue. The high-level CLI
+        # uses a separate GitHub path and returns the created Issue URL.
+        fallback = _gh(
+            "issue",
+            "create",
+            "--repo",
+            repository,
+            "--title",
+            title,
+            "--body",
+            body,
+            check=False,
+        )
+        if fallback.returncode == 0:
+            url = fallback.stdout.strip()
+            match = re.search(r"/issues/(\\d+)(?:\\s*)$", url)
+            if not match:
+                raise MutationSubmitError("invalid_issue_create_fallback_response")
+            return {
+                "submission": "queued",
+                "request_key": request_key,
+                "issue_number": match.group(1),
+                "issue_url": url,
+            }
+
         # A concurrent client may have created the same deterministic request.
-        # This fallback is best-effort: preserve the original create error if
-        # the lookup path itself is unavailable.
+        # This fallback is best-effort: preserve both create diagnostics if the
+        # lookup path itself is unavailable.
         if lookup_existing:
             try:
                 raced = _matching_issues(repository, title)
@@ -155,7 +180,10 @@ def submit_document(
                         "issue_number": str(issue["number"]),
                         "issue_url": str(issue.get("url") or ""),
                     }
-        raise MutationSubmitError(f"gh_issue_create_failed:{proc.stderr.strip()}")
+        raise MutationSubmitError(
+            "gh_issue_create_failed:"
+            f"rest={proc.stderr.strip()};cli={fallback.stderr.strip()}"
+        )
 
     try:
         issue = json.loads(proc.stdout)
