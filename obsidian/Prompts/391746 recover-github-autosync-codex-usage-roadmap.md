@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/codex-usage|codex-usage]]
 - **Prompt:** [[../../completed/391746-recover-github-autosync-codex-usage-roadmap|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T08:39:43Z
+- **Ultimo lancio:** 2026-09-19T08:39:43Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Ripara il push rimasto in sospeso e il checkout della roadmap. Serve a far ripre
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T08:39:43Z | 2026-09-19T08:44:07Z | PASS | 263.643 | gpt-5.6-terra | medium | 34 | 82217 |
 
 ## Analisi ChatGPT
 
