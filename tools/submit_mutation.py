@@ -88,6 +88,7 @@ def submit_document(
     request_key: str,
     repository: str = DEFAULT_REMOTE_REPO,
     branch: str = DEFAULT_REMOTE_BRANCH,
+    lookup_existing: bool = True,
 ) -> dict[str, str]:
     # branch is intentionally ignored: the queue is GitHub Issues, not Git refs.
     _ = branch
@@ -101,25 +102,26 @@ def submit_document(
     title = ISSUE_PREFIX + request_key
     body = _canonical_bytes(document).decode("utf-8")
 
-    existing = _matching_issues(repository, title)
-    if existing:
-        for issue in existing:
-            try:
-                existing_doc = json.loads(str(issue.get("body") or ""))
-            except json.JSONDecodeError as exc:
-                raise MutationSubmitError(f"request_key_conflict:{request_key}:invalid_body") from exc
-            if _canonical_bytes(existing_doc) != _canonical_bytes(document):
-                raise MutationSubmitError(f"request_key_conflict:{request_key}")
-        # Duplicate identical Issues are harmless: the DB receipt makes application
-        # idempotent. Return the oldest canonical issue for stable reporting.
-        issue = sorted(existing, key=lambda row: int(row["number"]))[0]
-        state = "applied" if str(issue.get("state")).upper() == "CLOSED" else "pending"
-        return {
-            "submission": state,
-            "request_key": request_key,
-            "issue_number": str(issue["number"]),
-            "issue_url": str(issue.get("url") or ""),
-        }
+    if lookup_existing:
+        existing = _matching_issues(repository, title)
+        if existing:
+            for issue in existing:
+                try:
+                    existing_doc = json.loads(str(issue.get("body") or ""))
+                except json.JSONDecodeError as exc:
+                    raise MutationSubmitError(f"request_key_conflict:{request_key}:invalid_body") from exc
+                if _canonical_bytes(existing_doc) != _canonical_bytes(document):
+                    raise MutationSubmitError(f"request_key_conflict:{request_key}")
+            # Duplicate identical Issues are harmless: the DB receipt makes application
+            # idempotent. Return the oldest canonical issue for stable reporting.
+            issue = sorted(existing, key=lambda row: int(row["number"]))[0]
+            state = "applied" if str(issue.get("state")).upper() == "CLOSED" else "pending"
+            return {
+                "submission": state,
+                "request_key": request_key,
+                "issue_number": str(issue["number"]),
+                "issue_url": str(issue.get("url") or ""),
+            }
 
     proc = _gh(
         "api",
@@ -134,19 +136,25 @@ def submit_document(
     )
     if proc.returncode:
         # A concurrent client may have created the same deterministic request.
-        raced = _matching_issues(repository, title)
-        for issue in raced:
+        # This fallback is best-effort: preserve the original create error if
+        # the lookup path itself is unavailable.
+        if lookup_existing:
             try:
-                existing_doc = json.loads(str(issue.get("body") or ""))
-            except json.JSONDecodeError:
-                continue
-            if _canonical_bytes(existing_doc) == _canonical_bytes(document):
-                return {
-                    "submission": "pending",
-                    "request_key": request_key,
-                    "issue_number": str(issue["number"]),
-                    "issue_url": str(issue.get("url") or ""),
-                }
+                raced = _matching_issues(repository, title)
+            except MutationSubmitError:
+                raced = []
+            for issue in raced:
+                try:
+                    existing_doc = json.loads(str(issue.get("body") or ""))
+                except json.JSONDecodeError:
+                    continue
+                if _canonical_bytes(existing_doc) == _canonical_bytes(document):
+                    return {
+                        "submission": "pending",
+                        "request_key": request_key,
+                        "issue_number": str(issue["number"]),
+                        "issue_url": str(issue.get("url") or ""),
+                    }
         raise MutationSubmitError(f"gh_issue_create_failed:{proc.stderr.strip()}")
 
     try:
