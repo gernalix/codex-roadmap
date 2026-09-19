@@ -1,0 +1,12 @@
+[Unit]
+Description=Detect live Codex roadmap prompts quickly
+
+[Timer]
+OnBootSec=15s
+OnUnitActiveSec=15s
+AccuracySec=1s
+Persistent=false
+Unit=codex-roadmap-live-status.service
+
+[Install]
+WantedBy=timers.target
