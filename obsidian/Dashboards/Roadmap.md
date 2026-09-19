@@ -6,7 +6,7 @@
 
 - [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3|588376 · Bonificare history Logseq e attivare updater]]
 - [[obsidian/Prompts/542078 fedora-runtime-kuma-closure-v3|542078 · Chiudere solo il gate Kuma Fedora]]
-- [[obsidian/Prompts/316628 livinggaul-video-catalog-view-local-activation|316628 · LivingGaul video catalog view local activation]]
+- [[obsidian/Prompts/560584 livinggaul-source-availability-local-activation|560584 · LivingGaul source availability local activation]]
 
 ## In esecuzione
 

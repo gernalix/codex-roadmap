@@ -14,7 +14,7 @@
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/542078 fedora-runtime-kuma-closure-v3\|542078 · Chiudere solo il gate Kuma Fedora]] | pending | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/316628 livinggaul-video-catalog-view-local-activation\|316628 · LivingGaul video catalog view local activation]] | pending | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/560584 livinggaul-source-availability-local-activation\|560584 · LivingGaul source availability local activation]] | pending | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
@@ -267,3 +267,4 @@
 | [[obsidian/Prompts/996524 livinggaul-metadata-v3-local-activation\|996524 · LivingGaul metadata v3 local activation]] | superseded | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery\|583742 · PersonalHub v53 freeze e dati mancanti]] | blocked | 2026-09-19T05:42:17Z | 2026-09-19T05:54:52Z | BLOCKED | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2\|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] | completed | 2026-09-19T05:59:34Z | 2026-09-19T05:59:34Z | PASS | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/316628 livinggaul-video-catalog-view-local-activation\|316628 · LivingGaul video catalog view local activation]] | superseded | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |

@@ -1,20 +1,20 @@
 ---
-prompt_id: 316628
-status: superseded
+prompt_id: 560584
+status: pending
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/livinggaul-x-downloader
 ---
 
-# 316628 · LivingGaul video catalog view local activation
+# 560584 · LivingGaul source availability local activation
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/livinggaul-x-downloader|livinggaul-x-downloader]]
-- **Prompt:** [[../../falliti/livinggaul-video-catalog-view-local-activation|Apri prompt]]
+- **Prompt:** [[../../prompts/livinggaul-source-availability-local-activation|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Installa la v0.3.1 sul Fedora reale, aggiorna in sicurezza il DB e verifica la nuova view leggibile con MB aggregabili per giorno. Serve perché la view deve esistere nel database locale reale, non solo nel codice remoto. Richiede Codex perché usa filesystem, installazione CLI e SQLite locali.
+Installa la v0.4.0, aggiorna il DB locale e controlla senza scaricare quali link X dei video già salvati sono ancora disponibili. Serve perché la percentuale deve riflettere controlli reali e correnti, non solo il codice remoto. Richiede Codex perché usa SQLite, filesystem, cookie/browser e rete del Fedora reale.
 
 ## Esecuzioni
 
