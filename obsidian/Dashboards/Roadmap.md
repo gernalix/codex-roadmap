@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3|588376 · Bonificare history Logseq e attivare updater]]
+- [[obsidian/Prompts/319572 ccs-runtime-verification-followup|319572 · Completare la verifica runtime Chrome Codex]]
 
 ## In esecuzione
 
