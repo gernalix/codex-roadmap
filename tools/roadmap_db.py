@@ -244,6 +244,50 @@ def set_status(
         (prompt_id, old, new_status, ts, actor, note),
     )
 
+def reconcile_terminal_requests(
+    conn: sqlite3.Connection,
+    *,
+    actor: str = "single-writer",
+) -> int:
+    reconciled = 0
+    rows = conn.execute(
+        """SELECT tr.prompt_id,tr.requested_status,tr.note,p.status
+           FROM terminal_requests tr
+           JOIN prompts p ON p.prompt_id=tr.prompt_id
+           ORDER BY tr.requested_at,tr.prompt_id"""
+    ).fetchall()
+    for row in rows:
+        current = str(row["status"])
+        requested = str(row["requested_status"])
+        if current == requested:
+            continue
+        if current != "running":
+            conn.execute(
+                "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+                (
+                    row["prompt_id"],
+                    "terminal_reconcile_skipped",
+                    now_utc(),
+                    actor,
+                    json.dumps(
+                        {"current_status": current, "requested_status": requested},
+                        sort_keys=True,
+                    ),
+                ),
+            )
+            continue
+        set_status(
+            conn,
+            str(row["prompt_id"]),
+            requested,
+            actor=actor,
+            note=row["note"] or f"terminal_reconcile:{requested}",
+            allow_running_terminal=True,
+        )
+        reconciled += 1
+    return reconciled
+
+
 def set_model(
     conn: sqlite3.Connection,
     prompt_id: str,
@@ -734,7 +778,9 @@ def verify(repo: Path) -> dict[str, Any]:
 def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, default_actor: str = "chatgpt") -> None:
     op=mutation.get("op")
     actor=mutation.get("actor") or default_actor
-    if op=="analysis":
+    if op=="reconcile_terminals":
+        reconcile_terminal_requests(conn, actor=actor)
+    elif op=="analysis":
         record_analysis(
             conn, str(mutation["prompt_id"]), actor=actor,
             bottlenecks_found=mutation.get("bottlenecks_found"),
