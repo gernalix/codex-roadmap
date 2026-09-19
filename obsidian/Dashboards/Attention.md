@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844 · Chiudere il residuo del merge capsule]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404 · Chiudere e mergiare la PR alert/Places già pronta]] · `blocked` · analizzato=sì · fix=576041
 - [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5|380812 · Chiudere e integrare tag e alert di Places]] · `blocked` · analizzato=sì · fix=521404

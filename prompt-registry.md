@@ -258,3 +258,4 @@
 | [[obsidian/Prompts/953204 prompt-953204\|953204 · Historical prompt 953204]] | unknown | 2026-08-05T01:29:48Z | 2026-08-05T01:29:48Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/978216 prompt-978216\|978216 · Historical prompt 978216]] | blocked | 2026-09-16T09:17:02Z | 2026-09-16T09:17:02Z | BLOCKED | no | no | — | — | — | — |
 | [[obsidian/Prompts/962109 personalhub-github-ci-closure\|962109 · Chiudere definitivamente la CI GitHub di PersonalHub]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical\|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] | blocked | — | — | BLOCKED | no | no | — | Workflowy importer | — | — |
