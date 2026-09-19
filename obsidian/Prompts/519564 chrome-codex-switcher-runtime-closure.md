@@ -1,6 +1,6 @@
 ---
 prompt_id: 519564
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - fedora
   - wayland
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/chrome-codex-switcher
 ---
 
 # 519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/chrome-codex-switcher|chrome-codex-switcher]]
 - **Prompt:** [[../../prompts/chrome-codex-switcher-runtime-closure|Apri prompt]]
 - **Primo lancio:** —
