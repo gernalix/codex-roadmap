@@ -1,6 +1,6 @@
 ---
 prompt_id: 684327
-status: running
+status: completed
 project_id: 96
 model: GPT-5.6 Sol
 reasoning: medium
@@ -9,15 +9,15 @@ tags:
   - facilitatori
   - replacement
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 684327 · Rendere autonomo il collaudo Chrome ↔ Codex
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/ccs-autonomous-runtime-verifier-v2|Apri prompt]]
+- **Prompt:** [[../../completed/ccs-autonomous-runtime-verifier-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

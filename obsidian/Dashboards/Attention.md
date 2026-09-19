@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/684327 ccs-autonomous-runtime-verifier-v2|684327 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/658142 ccs-autonomous-runtime-verifier|658142 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/947306 workflowy-bf-autofix-publisher-v1|947306 · Arricchire automaticamente i B/F Workflowy con il report Codex]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/927641 workflowy-roadmap-cockpit-local-activation|927641 · Attiva il cockpit Workflowy della roadmap]] · `completed` · analizzato=no · fix=—
