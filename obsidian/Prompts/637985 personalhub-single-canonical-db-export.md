@@ -5,6 +5,8 @@ project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
+  - pr-21
+  - single-canonical-db
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/personalhub
@@ -29,7 +31,7 @@ tags:
 
 ## Spiegazione
 
-Fa sì che PersonalHub tenga un solo database esportato invece di accumulare decine di copie. Serve perché 38 backup locali occupavano circa 609 MB mentre il DB vero era solo ~15 MB. Richiede Codex per provarlo sul Pixel e integrare in sicurezza la PR già preparata.
+Fa sì che a regime esista un solo `personalhub.db` auto-esportato: durante la sostituzione può usare solo file temporanei che vengono recuperati o eliminati automaticamente dopo un crash. Elimina i 38 vecchi backup locali e i rollback di startup ormai conclusi, ma conserva le copie necessarie mentre un import o una migrazione è ancora in corso. Richiede Codex per verificare tutto sul Pixel e integrare in sicurezza la PR #21.
 
 ## Esecuzioni
 
