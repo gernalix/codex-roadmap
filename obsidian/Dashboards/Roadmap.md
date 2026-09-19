@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3|588376 · Bonificare history Logseq e attivare updater]]
+- [[obsidian/Prompts/947306 workflowy-bf-autofix-publisher-v1|947306 · Arricchire automaticamente i B/F Workflowy con il report Codex]]
 
 ## In esecuzione
 

@@ -5,6 +5,7 @@ tags:
 
 # Fedora / Workflowy
 
+- [[obsidian/Prompts/947306 workflowy-bf-autofix-publisher-v1|947306 · Arricchire automaticamente i B/F Workflowy con il report Codex]] · `pending`
 - [[obsidian/Prompts/438271 workflowy-live-smoke-and-local-activation-v3|438271 · Chiudere Workflowy e attivare il runtime locale]] · `superseded`
 - [[obsidian/Prompts/231789 workflowy-automation-local-activation-v3|231789 · Attivare il runtime locale Workflowy]] · `completed`
 - [[obsidian/Prompts/746193 workflowy-importer-local-live-validation|746193 · Provare davvero l’importatore Workflowy]] · `blocked`
