@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../completed/personalhub-v55-full-stabilization-data-runtime-qa|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T06:57:57Z
+- **Ultimo lancio:** 2026-09-19T06:57:57Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Stabilizza le regressioni v55 di Timer, Places e Substances e chiarisce definiti
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T06:57:57Z | 2026-09-19T08:27:57Z | PASS | 5399.641 | gpt-5.6-sol | medium | 761 | 222636 |
 
 ## Analisi ChatGPT
 
