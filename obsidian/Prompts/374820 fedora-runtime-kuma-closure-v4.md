@@ -1,21 +1,20 @@
 ---
-prompt_id: 542078
-status: superseded
+prompt_id: 374820
+status: pending
 project_id: 15
 model: GPT-5.6 Luna
 reasoning: low
 tags:
-  - manual-prerequisite:kuma-login
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/fedora-fedora-system-monitor
 ---
 
-# 542078 · Chiudere solo il gate Kuma Fedora
+# 374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/fedora-fedora-system-monitor|Fedora / fedora-system-monitor]]
-- **Prompt:** [[../../falliti/fedora-runtime-kuma-closure-v3|Apri prompt]]
+- **Prompt:** [[../../prompts/fedora-runtime-kuma-closure-v4|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,13 +23,13 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
-- **Padri/precedenti:** [[526713 fedora-runtime-validation-v2|526713]]
-- **Figli/follow-up:** [[374820 fedora-runtime-kuma-closure-v4|374820]]
-- **Chat Codex:** Nuova chat
+- **Padri/precedenti:** [[542078 fedora-runtime-kuma-closure-v3|542078]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Nuova chat Codex
 
 ## Spiegazione
 
-Riduce il task al solo readback/config Kuma già rimasto aperto. Non ripete deploy, test o CI già conclusi e resta bloccato finché non viene rifatto il login.
+Chiude solo il controllo/configurazione Kuma rimasto aperto, senza pretendere un nuovo login se la sessione attuale funziona già. Prima verifica se #39/#40 sono già corretti; configura solo se necessario e blocca soltanto davanti a un errore di autenticazione realmente riprodotto. Richiede Codex perché deve usare il profilo/sessione e il runtime Fedora locali.
 
 ## Esecuzioni
 

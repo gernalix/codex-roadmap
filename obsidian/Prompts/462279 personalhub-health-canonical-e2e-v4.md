@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[697834 personalhub-epoch-timestamps-migration-v4|697834]]
+- **Dipende da:** [[697834 personalhub-epoch-timestamps-migration-v4|697834]], [[825147 personalhub-zombie-function-cleanup-single-writer-v2|825147]]
 - **Sblocca:** [[489818 datasette5-personalhub-final-schema-deploy-v3|489818]], [[728918 personalhub-obsidian-archive-complete-v4|728918]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Unisce schema Health e UI/Hub perché il codice mostra che la UI Salute esiste già ma legge ancora salute.db esterno. Migra l'autorità nel DB canonico e riusa l'interfaccia esistente; Obsidian resta al task successivo.
+Porta Salute nel database canonico e collega la UI già esistente. Parte solo dopo il P0 e la bonifica zombie, così la migrazione Health lavora su uno schema/main stabile senza creare branch PersonalHub concorrenti. Richiede Codex per migrazione Room, test e smoke AVD.
 
 ## Esecuzioni
 

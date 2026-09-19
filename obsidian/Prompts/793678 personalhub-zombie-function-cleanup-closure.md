@@ -1,20 +1,20 @@
 ---
 prompt_id: 793678
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personalhub
 ---
 
 # 793678 · Chiudi residui zombie dei moduli PersonalHub
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../prompts/personalhub-zombie-function-cleanup-closure|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-zombie-function-cleanup-closure|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[825147 personalhub-zombie-function-cleanup-single-writer-v2|825147]]
 - **Chat Codex:** Nuova chat Codex; continuazione diretta della PR #20
 
 ## Spiegazione
