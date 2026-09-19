@@ -5,7 +5,6 @@ tags:
 
 # Fedora / Workflowy
 
-- [[obsidian/Prompts/578439 workflowy-roadmap-control-local-activation|578439 · Attivare il controllo roadmap da Workflowy]] · `pending`
 - [[obsidian/Prompts/438271 workflowy-live-smoke-and-local-activation-v3|438271 · Chiudere Workflowy e attivare il runtime locale]] · `superseded`
 - [[obsidian/Prompts/231789 workflowy-automation-local-activation-v3|231789 · Attivare il runtime locale Workflowy]] · `completed`
 - [[obsidian/Prompts/746193 workflowy-importer-local-live-validation|746193 · Provare davvero l’importatore Workflowy]] · `blocked`
@@ -13,3 +12,4 @@ tags:
 - [[obsidian/Prompts/418906 workflowy-importer-live-smoke-secret-file-v2|418906 · Ultima prova reale dell’importatore Workflowy]] · `completed`
 - [[obsidian/Prompts/330522 workflowy-automation-local-activation|330522 · Attivare le automazioni locali di Workflowy]] · `superseded`
 - [[obsidian/Prompts/775412 workflowy-automation-local-activation-v2|775412 · Attivare le automazioni locali di Workflowy]] · `superseded`
+- [[obsidian/Prompts/578439 workflowy-roadmap-control-local-activation|578439 · Attivare il controllo roadmap da Workflowy]] · `superseded`

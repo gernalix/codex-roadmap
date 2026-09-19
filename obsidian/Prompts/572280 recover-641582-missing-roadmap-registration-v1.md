@@ -23,7 +23,7 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
-- **Padri/precedenti:** [[641582 workflowy-roadmap-control-surface-historical|641582]]
+- **Padri/precedenti:** [[578439 workflowy-roadmap-control-local-activation|578439]], [[641582 workflowy-roadmap-control-surface-historical|641582]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Stessa chat Codex di 641582
 

@@ -14,7 +14,6 @@
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/542078 fedora-runtime-kuma-closure-v3\|542078 · Chiudere solo il gate Kuma Fedora]] | pending | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/578439 workflowy-roadmap-control-local-activation\|578439 · Attivare il controllo roadmap da Workflowy]] | pending | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1\|684913 · Chiudere PR #15 senza polling GitHub]] | running | 2026-09-19T02:13:34Z | 2026-09-19T02:13:34Z | BLOCKED | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
@@ -259,4 +258,5 @@
 | [[obsidian/Prompts/953204 prompt-953204\|953204 · Historical prompt 953204]] | unknown | 2026-08-05T01:29:48Z | 2026-08-05T01:29:48Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/978216 prompt-978216\|978216 · Historical prompt 978216]] | blocked | 2026-09-16T09:17:02Z | 2026-09-16T09:17:02Z | BLOCKED | no | no | — | — | — | — |
 | [[obsidian/Prompts/962109 personalhub-github-ci-closure\|962109 · Chiudere definitivamente la CI GitHub di PersonalHub]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/578439 workflowy-roadmap-control-local-activation\|578439 · Attivare il controllo roadmap da Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical\|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] | blocked | — | — | BLOCKED | no | no | — | Workflowy importer | — | — |

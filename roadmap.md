@@ -12,5 +12,4 @@
 8. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 9. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 10. [[prompts/fedora-runtime-kuma-closure-v3|fedora-runtime-kuma-closure-v3]]
-11. [[prompts/workflowy-roadmap-control-local-activation|workflowy-roadmap-control-local-activation]]
-12. [[prompts/personalhub-pr15-rate-limit-safe-closure-v1|personalhub-pr15-rate-limit-safe-closure-v1]]
+11. [[prompts/personalhub-pr15-rate-limit-safe-closure-v1|personalhub-pr15-rate-limit-safe-closure-v1]]
