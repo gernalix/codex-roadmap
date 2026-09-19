@@ -17,9 +17,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/workflowy-roadmap-cockpit|Workflowy roadmap cockpit]]
 - **Prompt:** [[../../completed/workflowy-roadmap-cockpit-local-activation|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T19:41:20Z
+- **Ultimo lancio:** 2026-09-19T19:41:20Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -37,7 +37,7 @@ Attiva sul PC la nuova dashboard Workflowy. Collega stati reali, copia prompt e 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T19:41:20Z | 2026-09-19T19:51:47Z | PASS | 627.252 | gpt-5.6-terra | medium | 54 | 84191 |
 
 ## Analisi ChatGPT
 
