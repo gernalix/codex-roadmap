@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Aggiorna la projection datasette5 già esistente allo schema canonico finale, incluso Health, e la distribuisce sulla VM con accesso read-only verificato.
+Aggiorna Datasette perché possa mostrare bene tutto il database PersonalHub finale, compresa Salute, direttamente dal server. In pratica ti dà una versione web potente e navigabile dei tuoi dati, con relazioni e collegamenti tra tabelle senza rischiare modifiche accidentali. È come avere un pannello da esploratore per il tuo intero archivio personale.
 
 ## Esecuzioni
 

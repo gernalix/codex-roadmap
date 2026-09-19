@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Porta Salute nel database canonico e collega la UI già esistente. Parte solo dopo il P0 e la bonifica zombie, così la migrazione Health lavora su uno schema/main stabile senza creare branch PersonalHub concorrenti. Richiede Codex per migrazione Room, test e smoke AVD.
+Porta tutta la parte Salute dentro il vero database centrale di PersonalHub. Così dati, schermate, ricerca e cronologia iniziano finalmente a lavorare come un unico sistema invece di vivere in mondi separati. È il passo che trasforma Salute da modulo collegato “di lato” a parte vera e potente di PersonalHub.
 
 ## Esecuzioni
 

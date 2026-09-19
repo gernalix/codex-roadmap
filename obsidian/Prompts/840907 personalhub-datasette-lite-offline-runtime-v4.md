@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Completa il runtime offline mancante sopra DataExplorerActivity/Snapshot già esistenti, mantenendo relazioni equivalenti al server e nessun accesso al DB live.
+Fa funzionare il Data Explorer di PersonalHub anche completamente offline. Potrai esplorare tabelle, collegamenti e relazioni dal telefono senza dipendere da Internet o dal server. È come portarti dietro una mini versione di Datasette dentro l’app, ma usando snapshot sicuri invece del database vivo.
 
 ## Esecuzioni
 

@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Chiude solo il controllo/configurazione Kuma rimasto aperto, senza pretendere un nuovo login se la sessione attuale funziona già. Prima verifica se #39/#40 sono già corretti; configura solo se necessario e blocca soltanto davanti a un errore di autenticazione realmente riprodotto. Richiede Codex perché deve usare il profilo/sessione e il runtime Fedora locali.
+Chiude il problema Kuma senza farti rifare login a caso. Prima controlla se i monitor Fedora sono già configurati bene e interviene solo se trova davvero qualcosa di sbagliato. È un task piccolo ma utile: alla fine il monitoraggio dovrebbe funzionare senza falsi blocchi o passaggi manuali inutili.
 
 ## Esecuzioni
 

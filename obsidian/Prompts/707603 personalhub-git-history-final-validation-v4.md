@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-La feature Git History è già ampiamente implementata: questo task diventa una gap-closure sullo schema finale, con prove di restore/revert/safety e senza riscriverla.
+Mette davvero alla prova la macchina del tempo di PersonalHub: cronologia Git, restore, revert e recupero di versioni precedenti. L’obiettivo è poter sperimentare senza il terrore di perdere dati, sapendo che puoi tornare indietro in sicurezza. Se passa, PersonalHub diventa molto più resistente agli errori e alle modifiche sbagliate.
 
 ## Esecuzioni
 

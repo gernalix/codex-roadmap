@@ -30,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-Sostituisce il gate stale sull'exact HEAD: il vecchio baseline deve solo essere antenato del main corrente, che è già avanzato con CI verde. Resta bloccato finché il PAT non è revocato manualmente.
+Ripulisce in modo definitivo un vecchio segreto GitHub dalla cronologia del repo Logseq e poi attiva l’updater automatico su Fedora. Così elimini una falla storica e, nello stesso tempo, ottieni aggiornamenti gestiti in automatico. È il classico task che rende il sistema sia più sicuro sia più comodo.
 
 ## Esecuzioni
 

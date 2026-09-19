@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Implementa i contratti Obsidian che oggi esistono solo come documentazione, includendo Salute e tutti i moduli mantenuti. Resta una proiezione opzionale, incrementale e separata da SQLite/Datasette.
+Fa diventare Obsidian una specie di archivio super leggibile dei tuoi dati PersonalHub, con note, link e collegamenti automatici tra informazioni. Il bello è che resta opzionale: PersonalHub continua a funzionare da solo, ma quando vuoi puoi esplorare i tuoi dati quasi come una wiki personale. È soprattutto utile per vedere connessioni che in un normale database sarebbero molto meno intuitive.
 
 ## Esecuzioni
 

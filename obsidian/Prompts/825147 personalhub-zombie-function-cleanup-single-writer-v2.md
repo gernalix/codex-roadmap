@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Chiude la pulizia delle vecchie funzioni standalone già raccolte nella PR #20, ma la riconcilia sul main risultante dal P0 senza sovrascriverne i fix. Serve a evitare che il vecchio branch e le istruzioni di merge diretto confliggano con il nuovo single writer per-repository. Richiede Codex per compilazione, CI e integrazione locale controllata.
+Ripulisce PersonalHub da pezzi vecchi rimasti da quando i moduli erano app separate. Il risultato è un’app più ordinata, con meno funzioni duplicate e meno possibilità che due sistemi facciano la stessa cosa in modi diversi. In pratica: meno caos sotto il cofano e una base molto più facile da migliorare.
 
 ## Esecuzioni
 

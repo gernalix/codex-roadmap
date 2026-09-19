@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Installa e attiva il controllo disponibilità come timer systemd orario, persistente anche senza login e dopo reboot. Serve perché il servizio deve vivere sul Fedora reale e usare il suo user manager, journal e rete. Richiede Codex perché deve configurare e verificare systemd e linger locali.
+Trasforma il controllo dei link LivingGaul in qualcosa che lavora da solo ogni ora. Il PC controllerà automaticamente se i video originali su X esistono ancora, anche dopo logout o riavvio, senza che tu debba ricordarti nulla. In pratica il progetto passa da strumento manuale a servizio automatico sempre attivo.
 
 ## Esecuzioni
 
