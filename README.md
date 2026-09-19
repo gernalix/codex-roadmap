@@ -151,7 +151,7 @@ Ogni file in `prompts/` deve essere autosufficiente e contenere solo ciò che se
 
 Non copiare interi protocolli globali dentro ogni prompt. Includere solo le regole realmente applicabili al task. Se starting point/path/helper/test sono già noti, evitare rediscovery generale **finché l'evidenza non smentisce lo starting point**. In quel caso Codex ha autonomia per fare discovery mirata e correggere codice/test/config adiacenti necessari allo stesso goal. I passi del prompt sono un piano iniziale, non una whitelist.
 
-Non usare **overlay di precedenza** del tipo “questa sezione prevale sulle istruzioni successive” per rattoppare un prompt già materializzato: aumenta token e ambiguità. Se una policy cambia in modo da rendere incoerente un prompt **ancora pending e non avviato**, si può creare una nuova materializzazione con nuovo PROMPT_ID e supersedere la vecchia. Se invece il prompt è `running`, è **immutabile per il writer**: nessun aggiornamento della roadmap può cambiarne stato, modello, spiegazione, posizione, dipendenze, tag o relazioni, né archiviarlo/spostarlo fuori da `prompts/`. `spiegazioni.md` deve continuare a mostrarlo con stato `running`. Anche `roadmap_result.py` non lo rimuove immediatamente: registra soltanto una richiesta terminale; il passaggio a completed/failed/blocked avviene solo quando la telemetria Codex conferma che l'esecuzione è realmente terminata. Se l'utente vuole interromperlo manualmente, fermare prima Codex; la chiusura effettiva arriverà dalla telemetria terminale. Non correggere in-place il testo di un PROMPT_ID già materializzato.
+Non usare **overlay di precedenza** del tipo “questa sezione prevale sulle istruzioni successive” per rattoppare un prompt già materializzato: aumenta token e ambiguità. Se una policy cambia in modo da rendere incoerente un prompt **ancora pending e non avviato**, si può creare una nuova materializzazione con nuovo PROMPT_ID e supersedere la vecchia. Se invece il prompt è `running`, è **immutabile per il writer**: nessun aggiornamento della roadmap può cambiarne stato, modello, spiegazione, posizione, dipendenze, tag o relazioni, né archiviarlo/spostarlo fuori da `prompts/`. `spiegazioni.md` deve continuare a mostrarlo con stato `running`. Anche `roadmap_result.py` non lo rimuove immediatamente: registra soltanto una richiesta terminale; normalmente il passaggio a completed/failed/blocked avviene quando la telemetria Codex conferma che l'esecuzione è realmente terminata. Eccezione esplicita: un esito `PASS`/`FAIL` inserito dall'utente nel control surface Workflowy può chiudere il prompt tramite una mutation `human_execution`, perché è una conferma umana diretta e auditabile. Se l'utente vuole interromperlo manualmente, fermare prima Codex; la chiusura effettiva arriverà dalla telemetria terminale. Non correggere in-place il testo di un PROMPT_ID già materializzato.
 
 Contratto esecutivo completo: [[STANDARD_PROMPT|Esecuzione Codex]].
 
@@ -171,6 +171,17 @@ L'allocatore canonico MegaVault è l'autorità; non inventare ID manualmente.
 - `high`: solo con necessità concreta.
 
 Prima di aumentare il modello/reasoning, ridurre scope, discovery, output e round-trip.
+
+## Workflowy come control surface umano
+
+La roadmap può essere proiettata integralmente in Workflowy dal repository `workflowy-importer`. Workflowy non diventa una source of truth: i tag, i link reciproci, le dipendenze e gli stati sono derivati da `roadmap.sqlite`.
+
+Sotto il nodo Workflowy di un PROMPT_ID l'utente può scrivere un solo figlio esatto `running`, `PASS` o `FAIL`. Il bridge converte quel comando in una Issue `[roadmap-mutation]` e il single writer resta l'unico processo che modifica DB, viste e posizione dei prompt.
+
+- `running` usa la normale transizione `pending -> running` e quindi mantiene tutti i controlli sulle dipendenze.
+- `PASS`/`FAIL` usa `human_execution`: è l'unica eccezione umana esplicita al lock di un prompt running, registra un'esecuzione con source `workflowy-human`, chiude lo stato, archivia il prompt nella cartella terminale corretta e lascia che la normale logica delle dipendenze determini quali figli diventano eseguibili.
+- Un risultato umano prevale su una `terminal_request` automatica ancora pendente; tutto resta registrato nell'audit.
+- Stati ambigui o incompatibili falliscono chiusi.
 
 ## Esecuzione manuale
 
