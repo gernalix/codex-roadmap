@@ -1,6 +1,6 @@
 ---
 prompt_id: 438217
-status: running
+status: completed
 project_id: 96
 model: GPT-5.6 Luna
 reasoning: low
@@ -8,15 +8,15 @@ tags:
   - late-binding
   - workflowy
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 438217 · Esporre pairing tardivo Chrome/Codex nella dashboard
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/workflowy-late-binding-controls|Apri prompt]]
+- **Prompt:** [[../../completed/workflowy-late-binding-controls|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

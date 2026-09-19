@@ -1,6 +1,6 @@
 ---
 prompt_id: 438216
-status: running
+status: completed
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
@@ -8,15 +8,15 @@ tags:
   - chrome-codex-switcher
   - late-binding
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 438216 · Aggiungere late binding frictionless Chrome ↔ Codex
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/ccs-frictionless-late-binding|Apri prompt]]
+- **Prompt:** [[../../completed/ccs-frictionless-late-binding|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

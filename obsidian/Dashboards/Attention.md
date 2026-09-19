@@ -1,5 +1,7 @@
 # Da controllare
 
+- [[obsidian/Prompts/438216 ccs-frictionless-late-binding|438216 · Aggiungere late binding frictionless Chrome ↔ Codex]] · `completed` · analizzato=no · fix=—
+- [[obsidian/Prompts/438217 workflowy-late-binding-controls|438217 · Esporre pairing tardivo Chrome/Codex nella dashboard]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/485236 ccs-late-prompt-binding|485236 · Consentire l'aggancio tardivo Chrome ↔ Codex ai prompt]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/930174 workflowy-show-and-recover-prompt-links|930174 · Mostrare e recuperare i link Chrome e Codex nella dashboard]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/593872 fedora-graphics-black-screen-forensics|593872 · Diagnosi forense del blackout grafico Fedora]] · `completed` · analizzato=no · fix=—
