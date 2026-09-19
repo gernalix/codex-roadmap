@@ -5,7 +5,6 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release\|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] | running | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2\|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] | running | 2026-09-19T14:04:21Z | 2026-09-19T14:25:53Z | BLOCKED | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/489818 datasette5-personalhub-final-schema-deploy-v3\|489818 · Aggiornare e distribuire Datasette sullo schema PH finale]] | pending | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
@@ -47,6 +46,7 @@
 | [[obsidian/Prompts/255970 personalhub-english-only-places-ci-closure-v1\|255970 · English-only, diagnostica Places e CI in un solo passaggio]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/477616 personalhub-english-only-places-ci-closure-v2\|477616 · English-only, diagnostica Places e CI in un solo passaggio]] | completed | 2026-09-19T04:58:06Z | 2026-09-19T04:58:06Z | PASS | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/793678 personalhub-zombie-function-cleanup-closure\|793678 · Chiudi residui zombie dei moduli PersonalHub]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2\|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] | completed | 2026-09-19T14:04:21Z | 2026-09-19T14:25:53Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/746193 workflowy-importer-local-live-validation\|746193 · Provare davvero l’importatore Workflowy]] | blocked | 2026-09-18T19:11:43Z | 2026-09-18T19:11:43Z | BLOCKED | sì | no | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572]] | Fedora / Workflowy | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/219473 oracle-backup-notification-antiflap-runtime\|219473 · Ferma le notifiche backup Oracle transitorie]] | superseded | — | — | — | no | no | — | Oracle VM | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/781352 oracle-backup-notification-antiflap-runtime-v2\|781352 · Ferma le notifiche backup Oracle transitorie]] | completed | 2026-09-18T22:53:04Z | 2026-09-18T22:53:04Z | PASS | sì | sì | — | Oracle VM | GPT-5.6 Terra | medium |

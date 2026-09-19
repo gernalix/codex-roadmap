@@ -1,20 +1,20 @@
 ---
 prompt_id: 825147
-status: running
+status: completed
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/personalhub
 ---
 
 # 825147 · Chiudere i residui zombie PersonalHub sul single writer corrente
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../prompts/personalhub-zombie-function-cleanup-single-writer-v2|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-zombie-function-cleanup-single-writer-v2|Apri prompt]]
 - **Primo lancio:** 2026-09-19T14:04:21Z
 - **Ultimo lancio:** 2026-09-19T14:25:53Z
 - **Ultimo esito:** BLOCKED
