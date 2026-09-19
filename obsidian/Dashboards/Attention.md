@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/489818 datasette5-personalhub-final-schema-deploy-v3|489818 · Aggiornare e distribuire Datasette sullo schema PH finale]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/491628 personalhub-android17-restricted-overlay-finalize|491628 · Finalizzare permesso overlay Android 17 di PersonalHub]] · `completed` · analizzato=no · fix=—

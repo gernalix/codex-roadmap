@@ -1,20 +1,20 @@
 ---
 prompt_id: 489818
-status: running
+status: completed
 project_id: 10
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/datasette5-oracle
 ---
 
 # 489818 · Aggiornare e distribuire Datasette sullo schema PH finale
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/datasette5-oracle|datasette5 / Oracle]]
-- **Prompt:** [[../../prompts/datasette5-personalhub-final-schema-deploy-v3|Apri prompt]]
+- **Prompt:** [[../../completed/datasette5-personalhub-final-schema-deploy-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
