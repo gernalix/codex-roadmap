@@ -22,9 +22,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[477616 personalhub-english-only-places-ci-closure-v2|477616]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[576041 personalhub-pr15-autonomous-closure-v2|576041]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218]]
 - **Chat Codex:** Stessa chat Codex di 576041
 
 ## Spiegazione

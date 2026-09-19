@@ -1,8 +1,8 @@
 ---
-prompt_id: 477616
+prompt_id: 735218
 status: pending
 project_id: 49
-model: GPT-5.6 Terra
+model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
@@ -10,26 +10,26 @@ tags:
   - roadmap/project/personal-hub
 ---
 
-# 477616 · English-only, diagnostica Places e CI in un solo passaggio
+# 735218 · Chiudere PR #15 usando i secret Oracle di MegaVault
 
 - **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-english-only-places-ci-closure-v2|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-pr15-oracle-ci-secret-closure-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218]]
-- **Sblocca:** [[697834 personalhub-epoch-timestamps-migration-v4|697834]]
-- **Padri/precedenti:** [[255970 personalhub-english-only-places-ci-closure-v1|255970]]
+- **Dipende da:** —
+- **Sblocca:** [[477616 personalhub-english-only-places-ci-closure-v2|477616]]
+- **Padri/precedenti:** [[684913 personalhub-pr15-rate-limit-safe-closure-v1|684913]]
 - **Figli/follow-up:** —
-- **Chat Codex:** Nuova chat
+- **Chat Codex:** Stessa chat Codex di 684913
 
 ## Spiegazione
 
-Stesso obiettivo del task precedente, ma senza dipendenze hardcodate nel testo: la readiness è decisa soltanto dal writer e da roadmap_start.
+Recovery di 684913: il blocker reale è che l'E2E Oracle richiede datasette-runtime.json e GitHub Actions non ha ancora i secret. I valori esistono già in MegaVault/secrets; questo task li usa senza esporli, mantiene piena copertura, chiude CI/merge/cleanup.
 
 ## Esecuzioni
 
