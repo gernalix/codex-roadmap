@@ -1,20 +1,20 @@
 ---
-prompt_id: 618338
-status: superseded
+prompt_id: 637985
+status: pending
 project_id: 49
-model: GPT-5.6 Sol
+model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/personalhub
 ---
 
-# 618338 · Diagnosticare e ridurre il DB PersonalHub da ~627 MB
+# 637985 · Mantenere un solo DB auto-esportato PersonalHub
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../falliti/personalhub-pixel-sqlite-bloat-remediation|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-single-canonical-db-export|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -23,13 +23,13 @@ tags:
 - **Fix:** —
 - **Dipende da:** [[914263 personalhub-schema-persistence-all-tables-p0|914263]]
 - **Sblocca:** —
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[637985 personalhub-single-canonical-db-export|637985]]
+- **Padri/precedenti:** [[618338 personalhub-pixel-sqlite-bloat-remediation|618338]]
+- **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat dopo 914263
 
 ## Spiegazione
 
-Indaga perché il DB del Pixel è arrivato a circa 627 MB e corregge la manutenzione che lascia storico o spazio SQLite accumulato. Serve per evitare crescita inutile senza perdere i dati reali. Richiede Codex perché deve misurare, bonificare e verificare il DB vero sul Pixel.
+Fa sì che PersonalHub tenga un solo database esportato invece di accumulare decine di copie. Serve perché 38 backup locali occupavano circa 609 MB mentre il DB vero era solo ~15 MB. Richiede Codex per provarlo sul Pixel e integrare in sicurezza la PR già preparata.
 
 ## Esecuzioni
 
