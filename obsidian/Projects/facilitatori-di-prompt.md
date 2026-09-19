@@ -6,6 +6,8 @@ tags:
 # Facilitatori di prompt
 
 - [[obsidian/Prompts/319572 ccs-runtime-verification-followup|319572 · Completare la verifica runtime Chrome Codex]] · `running`
+- [[obsidian/Prompts/764381 workflowy-conversational-roadmap-dashboard|764381 · Far parlare la dashboard Workflowy]] · `pending`
+- [[obsidian/Prompts/764382 workflowy-semantic-dashboard-styling|764382 · Evidenziare visivamente problemi e azioni nella dashboard]] · `pending`
 - [[obsidian/Prompts/658142 ccs-autonomous-runtime-verifier|658142 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `blocked`
 - [[obsidian/Prompts/684327 ccs-autonomous-runtime-verifier-v2|684327 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `completed`
 - [[obsidian/Prompts/731805 workflowy-open-launches-chrome-and-codex|731805 · Fare aprire Chrome e Codex con 🚀 Apri]] · `completed`
