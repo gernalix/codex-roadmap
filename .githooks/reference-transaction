@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+"""Block local codex-roadmap main updates unless roadmap_pull.py authorized them."""
+
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+
+def git_dir() -> Path:
+    proc = subprocess.run(
+        ["git", "rev-parse", "--git-dir"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        check=True,
+    )
+    path = Path(proc.stdout.strip())
+    return path if path.is_absolute() else (Path.cwd() / path).resolve()
+
+
+state = sys.argv[1] if len(sys.argv) > 1 else ""
+updates = []
+for line in sys.stdin:
+    parts = line.strip().split()
+    if len(parts) == 3 and parts[2] == "refs/heads/main":
+        updates.append(tuple(parts))
+
+auth_path = git_dir() / "roadmap-pull-authorization.json"
+
+if state == "prepared" and updates:
+    if len(updates) != 1 or not auth_path.is_file():
+        print(
+            "BLOCKED: codex-roadmap main is guarded. "
+            "Use: python3 tools/roadmap_pull.py --repo .",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
+    try:
+        auth = json.loads(auth_path.read_text(encoding="utf-8"))
+    except Exception:
+        print("BLOCKED: invalid roadmap pull authorization", file=sys.stderr)
+        raise SystemExit(1)
+    old, new, ref = updates[0]
+    if auth.get("ref") != ref or auth.get("old") != old or auth.get("new") != new:
+        print("BLOCKED: roadmap pull authorization does not match ref update", file=sys.stderr)
+        raise SystemExit(1)
+
+if state in {"committed", "aborted"}:
+    auth_path.unlink(missing_ok=True)
