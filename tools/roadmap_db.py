@@ -36,11 +36,16 @@ def connect(repo: Path, *, writable: bool = True) -> sqlite3.Connection:
     path = db_path(repo)
     if not path.exists() and not writable:
         raise RoadmapDBError(f"database_missing:{path}")
-    conn = sqlite3.connect(path)
+    conn = (
+        sqlite3.connect(path)
+        if writable else sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
+    )
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys=ON")
     if writable:
         ensure_schema(conn)
+    else:
+        conn.execute("PRAGMA query_only=ON")
     return conn
 
 def ensure_schema(conn: sqlite3.Connection) -> None:
