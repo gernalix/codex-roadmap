@@ -12,3 +12,4 @@
 8. [[prompts/fedora-runtime-kuma-closure-v4|fedora-runtime-kuma-closure-v4]]
 9. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 10. [[prompts/personalhub-android17-restricted-overlay-finalize|personalhub-android17-restricted-overlay-finalize]]
+11. [[prompts/chrome-codex-switcher-runtime-closure|chrome-codex-switcher-runtime-closure]]
