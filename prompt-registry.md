@@ -5,6 +5,7 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0\|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]] | running | — | — | — | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install\|652361 · LivingGaul hourly systemd local install]] | running | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2\|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
@@ -13,7 +14,6 @@
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/374820 fedora-runtime-kuma-closure-v4\|374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile]] | pending | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install\|652361 · LivingGaul hourly systemd local install]] | pending | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
