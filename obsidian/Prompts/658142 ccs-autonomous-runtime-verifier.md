@@ -1,6 +1,6 @@
 ---
 prompt_id: 658142
-status: pending
+status: running
 project_id: 96
 model: GPT-5.6 Sol
 reasoning: medium
@@ -8,13 +8,13 @@ tags:
   - ccs-control-plane
   - facilitatori
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 658142 · Rendere autonomo il collaudo Chrome ↔ Codex
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../prompts/ccs-autonomous-runtime-verifier|Apri prompt]]
 - **Primo lancio:** —
