@@ -50,7 +50,7 @@ tags:
 - [[obsidian/Prompts/468205 prompt-468205|468205 · Historical prompt 468205]] · `completed`
 - [[obsidian/Prompts/472816 prompt-472816|472816 · Historical prompt 472816]] · `unknown`
 - [[obsidian/Prompts/472913 prompt-472913|472913 · Historical prompt 472913]] · `completed`
-- [[obsidian/Prompts/482731 prompt-482731|482731 · Historical prompt 482731]] · `unknown`
+- [[obsidian/Prompts/482731 prompt-482731|482731 · Historical prompt 482731]] · `failed`
 - [[obsidian/Prompts/482736 prompt-482736|482736 · Historical prompt 482736]] · `unknown`
 - [[obsidian/Prompts/483210 prompt-483210|483210 · Historical prompt 483210]] · `completed`
 - [[obsidian/Prompts/483217 prompt-483217|483217 · Historical prompt 483217]] · `completed`

@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/482731 prompt-482731|482731 · Historical prompt 482731]] · `failed` · analizzato=no · fix=—
 - [[obsidian/Prompts/731846 prompt-731846|731846 · Historical prompt 731846]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery|583742 · PersonalHub v53 freeze e dati mancanti]] · `blocked` · analizzato=no · fix=—
@@ -65,7 +66,6 @@
 - [[obsidian/Prompts/468205 prompt-468205|468205 · Historical prompt 468205]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/472816 prompt-472816|472816 · Historical prompt 472816]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/472913 prompt-472913|472913 · Historical prompt 472913]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/482731 prompt-482731|482731 · Historical prompt 482731]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/482736 prompt-482736|482736 · Historical prompt 482736]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/483210 prompt-483210|483210 · Historical prompt 483210]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/483217 prompt-483217|483217 · Historical prompt 483217]] · `completed` · analizzato=no · fix=—
