@@ -5,7 +5,6 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1\|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/240438 livinggaul-content-dedupe-local-activation\|240438 · LivingGaul content dedupe local activation]] | running | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.5 | low |
 | [[obsidian/Prompts/477616 personalhub-english-only-places-ci-closure-v2\|477616 · English-only, diagnostica Places e CI in un solo passaggio]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4\|697834 · Migrare solo i veri timestamp a epoch ms]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
@@ -262,3 +261,4 @@
 | [[obsidian/Prompts/962109 personalhub-github-ci-closure\|962109 · Chiudere definitivamente la CI GitHub di PersonalHub]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/578439 workflowy-roadmap-control-local-activation\|578439 · Attivare il controllo roadmap da Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical\|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] | blocked | — | — | BLOCKED | no | no | — | Workflowy importer | — | — |
+| [[obsidian/Prompts/240438 livinggaul-content-dedupe-local-activation\|240438 · LivingGaul content dedupe local activation]] | completed | — | — | PASS | no | no | — | livinggaul-x-downloader | GPT-5.5 | low |

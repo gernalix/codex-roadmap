@@ -10,4 +10,3 @@
 ## In esecuzione
 
 - [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]]
-- [[obsidian/Prompts/240438 livinggaul-content-dedupe-local-activation|240438 · LivingGaul content dedupe local activation]]
