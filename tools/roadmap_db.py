@@ -65,6 +65,19 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
              applied_at TEXT NOT NULL
            )"""
     )
+    conn.execute(
+        """CREATE TABLE IF NOT EXISTS terminal_requests (
+             prompt_id TEXT PRIMARY KEY
+                 REFERENCES prompts(prompt_id)
+                 ON UPDATE CASCADE
+                 ON DELETE RESTRICT,
+             requested_status TEXT NOT NULL
+                 CHECK (requested_status IN ('completed','failed','blocked','cancelled','unknown')),
+             actor TEXT NOT NULL,
+             note TEXT,
+             requested_at TEXT NOT NULL
+           )"""
+    )
     conn.commit()
 
 def materialization_hash(text: str) -> str:
@@ -174,6 +187,16 @@ def register_prompt(
         (prompt_id, "prompt_registered", ts, actor, None),
     )
 
+def assert_prompt_not_running(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    action: str,
+) -> sqlite3.Row:
+    row = prompt_row(conn, prompt_id)
+    if row["status"] == "running":
+        raise RoadmapDBError(f"running_prompt_locked:{prompt_id}:{action}")
+    return row
+
 def set_status(
     conn: sqlite3.Connection,
     prompt_id: str,
@@ -181,6 +204,7 @@ def set_status(
     *,
     actor: str,
     note: str | None = None,
+    allow_running_terminal: bool = False,
 ) -> None:
     if new_status not in ACTIVE_STATUS | TERMINAL_STATUS:
         raise RoadmapDBError(f"invalid_status:{new_status}")
@@ -190,10 +214,9 @@ def set_status(
         return
     if old in TERMINAL_STATUS and new_status in ACTIVE_STATUS:
         raise RoadmapDBError(f"terminal_prompt_cannot_reactivate:{prompt_id}:{old}->{new_status}")
-    if old == "running" and new_status == "superseded":
-        raise RoadmapDBError(f"active_prompt_cannot_be_superseded:{prompt_id}")
-    if old == "running" and new_status == "pending":
-        raise RoadmapDBError(f"active_prompt_cannot_return_to_pending:{prompt_id}")
+    if old == "running" and new_status != "running":
+        if not (allow_running_terminal and new_status in (TERMINAL_STATUS - {"superseded"})):
+            raise RoadmapDBError(f"running_prompt_locked:{prompt_id}:status:{new_status}")
     ts = now_utc()
     conn.execute(
         "UPDATE prompts SET status=?, updated_at=? WHERE prompt_id=?",
@@ -213,7 +236,7 @@ def set_model(
     actor: str = "chatgpt",
     note: str | None = None,
 ) -> None:
-    row = prompt_row(conn, prompt_id)
+    row = assert_prompt_not_running(conn, prompt_id, "model")
     old_model = row["model"]
     if old_model == model:
         return
@@ -245,7 +268,7 @@ def set_explanation(
     actor: str = "chatgpt",
     note: str | None = None,
 ) -> None:
-    row = prompt_row(conn, prompt_id)
+    row = assert_prompt_not_running(conn, prompt_id, "explanation")
     old_explanation = row["explanation"] or ""
     if old_explanation == explanation:
         return
@@ -279,7 +302,7 @@ def reorder_prompt(
 ) -> None:
     if queue_position < 1:
         raise RoadmapDBError(f"invalid_queue_position:{queue_position}")
-    row = prompt_row(conn, prompt_id)
+    row = assert_prompt_not_running(conn, prompt_id, "reorder")
     if row["status"] not in ACTIVE_STATUS:
         raise RoadmapDBError(f"reorder_terminal_prompt:{prompt_id}:{row['status']}")
     old_position = row["queue_position"]
@@ -302,7 +325,7 @@ def reorder_prompt(
     )
 
 def add_dependency(conn: sqlite3.Connection, prompt_id: str, depends_on: str, *, note: str | None = None) -> None:
-    prompt_row(conn, prompt_id)
+    assert_prompt_not_running(conn, prompt_id, "dependency")
     prompt_row(conn, depends_on)
     conn.execute(
         "INSERT OR IGNORE INTO dependencies(prompt_id,depends_on_prompt_id,note) VALUES(?,?,?)",
@@ -318,7 +341,7 @@ def replace_dependency(
     actor: str = "chatgpt",
     note: str | None = None,
 ) -> None:
-    prompt_row(conn, prompt_id)
+    assert_prompt_not_running(conn, prompt_id, "dependency_replace")
     prompt_row(conn, old_depends_on)
     prompt_row(conn, new_depends_on)
     if old_depends_on == new_depends_on:
@@ -362,10 +385,10 @@ def add_relation(
     actor: str,
     note: str | None = None,
 ) -> None:
-    source = prompt_row(conn, from_prompt_id)
-    prompt_row(conn, to_prompt_id)
-    if relation_type == "replacement" and source["status"] == "running":
-        raise RoadmapDBError(f"active_prompt_cannot_be_replaced:{from_prompt_id}")
+    source = assert_prompt_not_running(conn, from_prompt_id, f"relation:{relation_type}")
+    target = prompt_row(conn, to_prompt_id)
+    if target["status"] == "running":
+        raise RoadmapDBError(f"running_prompt_locked:{to_prompt_id}:relation_target:{relation_type}")
     ts = now_utc()
     conn.execute(
         """INSERT OR IGNORE INTO prompt_relations(
@@ -375,8 +398,52 @@ def add_relation(
     )
 
 def add_tag(conn: sqlite3.Connection, prompt_id: str, tag: str) -> None:
-    prompt_row(conn, prompt_id)
+    assert_prompt_not_running(conn, prompt_id, "tag")
     conn.execute("INSERT OR IGNORE INTO prompt_tags(prompt_id,tag) VALUES(?,?)", (prompt_id, tag))
+
+def request_terminal(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    requested_status: str,
+    *,
+    actor: str = "codex",
+    note: str | None = None,
+) -> None:
+    if requested_status not in (TERMINAL_STATUS - {"superseded"}):
+        raise RoadmapDBError(f"invalid_terminal_request:{requested_status}")
+    row = prompt_row(conn, prompt_id)
+    if row["status"] != "running":
+        raise RoadmapDBError(f"terminal_request_requires_running:{prompt_id}:{row['status']}")
+    existing = conn.execute(
+        "SELECT requested_status FROM terminal_requests WHERE prompt_id=?",
+        (prompt_id,),
+    ).fetchone()
+    if existing:
+        if existing["requested_status"] != requested_status:
+            raise RoadmapDBError(
+                f"terminal_request_conflict:{prompt_id}:{existing['requested_status']}->{requested_status}"
+            )
+        return
+    ts = now_utc()
+    conn.execute(
+        """INSERT INTO terminal_requests(prompt_id,requested_status,actor,note,requested_at)
+           VALUES(?,?,?,?,?)""",
+        (prompt_id, requested_status, actor, note, ts),
+    )
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "terminal_requested",
+            ts,
+            actor,
+            json.dumps(
+                {"requested_status": requested_status, "note": note},
+                ensure_ascii=False,
+                sort_keys=True,
+            ),
+        ),
+    )
 
 def record_execution(
     conn: sqlite3.Connection,
@@ -406,7 +473,7 @@ def record_execution(
     actor: str = "codex",
     update_status: bool = True,
 ) -> int:
-    prompt_row(conn, prompt_id)
+    row = prompt_row(conn, prompt_id)
     if outcome is not None and outcome not in FINAL_STATUS:
         raise RoadmapDBError(f"invalid_outcome:{outcome}")
     ts = now_utc()
@@ -432,8 +499,40 @@ def record_execution(
     )
     if update_status:
         if outcome:
-            set_status(conn, prompt_id, FINAL_STATUS[outcome], actor=actor, note=f"execution:{source}")
-        else:
+            target_status = FINAL_STATUS[outcome]
+            terminal_request = conn.execute(
+                "SELECT requested_status FROM terminal_requests WHERE prompt_id=?",
+                (prompt_id,),
+            ).fetchone()
+            if terminal_request and terminal_request["requested_status"] != target_status:
+                conn.execute(
+                    "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+                    (
+                        prompt_id,
+                        "terminal_outcome_mismatch",
+                        ts,
+                        actor,
+                        json.dumps(
+                            {
+                                "requested_status": terminal_request["requested_status"],
+                                "observed_status": target_status,
+                                "source": source,
+                            },
+                            sort_keys=True,
+                        ),
+                    ),
+                )
+            else:
+                set_status(
+                    conn,
+                    prompt_id,
+                    target_status,
+                    actor=actor,
+                    note=f"execution:{source}",
+                    allow_running_terminal=(source == "codex-usage"),
+                )
+                conn.execute("DELETE FROM terminal_requests WHERE prompt_id=?", (prompt_id,))
+        elif row["status"] == "pending":
             set_status(conn, prompt_id, "running", actor=actor, note=f"execution_started:{source}")
     conn.execute(
         "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
@@ -452,23 +551,12 @@ def record_terminal(
 ) -> None:
     if result not in FINAL_STATUS:
         raise RoadmapDBError(f"invalid_outcome:{result}")
-    ts = now_utc()
-    set_status(
+    request_terminal(
         conn,
         prompt_id,
         FINAL_STATUS[result],
         actor=actor,
-        note=f"terminal:{source}",
-    )
-    conn.execute(
-        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
-        (
-            prompt_id,
-            "terminal_result",
-            ts,
-            actor,
-            json.dumps({"result": result, "source": source, "note": note}, ensure_ascii=False, sort_keys=True),
-        ),
+        note=f"terminal:{source}:{result}" if note is None else note,
     )
 
 def record_analysis(
@@ -481,7 +569,7 @@ def record_analysis(
     fix_prompt_id: str | None = None,
     source_ref: str | None = None,
 ) -> None:
-    prompt_row(conn, prompt_id)
+    assert_prompt_not_running(conn, prompt_id, "analysis")
     if fix_prompt_id is not None:
         prompt_row(conn, fix_prompt_id)
     ts = now_utc()
@@ -508,7 +596,7 @@ def record_code_change(
     analysis_id: int | None = None,
     actor: str = "chatgpt",
 ) -> int:
-    prompt_row(conn, prompt_id)
+    assert_prompt_not_running(conn, prompt_id, "code_change")
     if analysis_id is None:
         row = conn.execute(
             "SELECT analysis_id FROM analyses WHERE prompt_id=? "
@@ -627,6 +715,14 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
             conn,
             str(mutation["prompt_id"]),
             str(mutation["explanation"]),
+            actor=actor,
+            note=mutation.get("note"),
+        )
+    elif op=="terminal_request":
+        request_terminal(
+            conn,
+            str(mutation["prompt_id"]),
+            str(mutation["status"]),
             actor=actor,
             note=mutation.get("note"),
         )
