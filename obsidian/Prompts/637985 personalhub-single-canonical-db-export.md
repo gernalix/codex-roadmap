@@ -24,7 +24,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[914263 personalhub-schema-persistence-all-tables-p0|914263]]
-- **Sblocca:** —
+- **Sblocca:** [[462279 personalhub-health-canonical-e2e-v4|462279]]
 - **Padri/precedenti:** [[618338 personalhub-pixel-sqlite-bloat-remediation|618338]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat dopo 914263
