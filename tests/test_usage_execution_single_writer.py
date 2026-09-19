@@ -4,6 +4,8 @@ import json
 import sys
 import tempfile
 import unittest
+import base64
+import subprocess
 from pathlib import Path
 from unittest.mock import patch
 
@@ -16,6 +18,47 @@ import roadmap_sync
 
 
 class UsageExecutionMutationTests(unittest.TestCase):
+    def test_download_remote_db_uses_git_blob_for_large_sqlite(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            conn = db.connect(repo)
+            db.register_prompt(
+                conn,
+                prompt_id="123456",
+                slug="one",
+                title="One",
+                current_path="prompts/one.md",
+                prompt_text="expected prompt",
+            )
+            conn.commit()
+            conn.close()
+            raw_db = (repo / "roadmap.sqlite").read_bytes()
+
+            tree = {"tree": [{"path": "roadmap.sqlite", "type": "blob", "sha": "blob-sha"}]}
+            blob = {"content": base64.b64encode(raw_db).decode("ascii")}
+            with patch.object(
+                roadmap_sync.subprocess,
+                "run",
+                side_effect=[
+                    subprocess.CompletedProcess([], 0, json.dumps(tree).encode(), b""),
+                    subprocess.CompletedProcess([], 0, json.dumps(blob).encode(), b""),
+                ],
+            ) as run:
+                prompt_ids, cycle_keys = roadmap_sync._download_remote_db("owner/repo", "main")
+
+            self.assertEqual({"123456"}, prompt_ids)
+            self.assertEqual(set(), cycle_keys)
+            self.assertEqual(
+                [
+                    "gh", "api", "repos/owner/repo/git/trees/main?recursive=1",
+                ],
+                run.call_args_list[0].args[0],
+            )
+            self.assertEqual(
+                ["gh", "api", "repos/owner/repo/git/blobs/blob-sha"],
+                run.call_args_list[1].args[0],
+            )
+
     def test_matching_usage_execution_updates_status(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
