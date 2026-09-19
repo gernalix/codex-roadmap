@@ -1,8 +1,8 @@
 ---
-prompt_id: 697834
+prompt_id: 477616
 status: pending
 project_id: 49
-model: GPT-5.6 Sol
+model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
@@ -10,26 +10,26 @@ tags:
   - roadmap/project/personal-hub
 ---
 
-# 697834 · Migrare solo i veri timestamp a epoch ms
+# 477616 · English-only, diagnostica Places e CI in un solo passaggio
 
 - **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-epoch-timestamps-migration-v4|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-english-only-places-ci-closure-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[477616 personalhub-english-only-places-ci-closure-v2|477616]]
-- **Sblocca:** [[462279 personalhub-health-canonical-e2e-v4|462279]]
-- **Padri/precedenti:** [[830867 personalhub-epoch-timestamps-migration-v3|830867]]
+- **Dipende da:** [[576041 personalhub-pr15-autonomous-closure-v2|576041]]
+- **Sblocca:** [[697834 personalhub-epoch-timestamps-migration-v4|697834]]
+- **Padri/precedenti:** [[255970 personalhub-english-only-places-ci-closure-v1|255970]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Corregge prima lo scanner timestamp troppo largo, poi migra solo i veri istanti temporali. Evita conversioni errate di coordinate, durate e metriche.
+Stesso obiettivo del task precedente, ma senza dipendenze hardcodate nel testo: la readiness è decisa soltanto dal writer e da roadmap_start.
 
 ## Esecuzioni
 

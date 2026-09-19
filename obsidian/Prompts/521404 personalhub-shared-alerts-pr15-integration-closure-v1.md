@@ -19,12 +19,12 @@ tags:
 - **Ultimo lancio:** 2026-09-19T01:11:22Z
 - **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
-- **Codice modificato da ChatGPT:** sì (4 interventi)
-- **Fix:** 111265
+- **Codice modificato da ChatGPT:** sì (5 interventi)
+- **Fix:** 576041
 - **Dipende da:** —
 - **Sblocca:** [[609279 personalhub-english-only-places-diagnostics-ui|609279]]
 - **Padri/precedenti:** [[380812 personalhub-shared-alerts-places-tags-integration-v5|380812]]
-- **Figli/follow-up:** [[111265 personalhub-shared-alerts-pr15-final-closure-v2|111265]]
+- **Figli/follow-up:** [[111265 personalhub-shared-alerts-pr15-final-closure-v2|111265]], [[576041 personalhub-pr15-autonomous-closure-v2|576041]]
 - **Chat Codex:** Stessa chat di 380812
 
 ## Spiegazione
@@ -40,6 +40,7 @@ Riparte dalla PR #15 già pronta e completa solo CI, prova su emulatore, merge e
 ## Analisi ChatGPT
 
 - 2026-09-19T01:27:51Z · colli di bottiglia: sì · fix: 111265 · 521404 completed the code fix on PR #15 and stopped only because the PersonalHub lease was still owned by PROMPT_ID 962109. Canonical roadmap state shows 962109 is superseded, so the lease was orphaned rather than a live concurrency conflict. PersonalHub's lease helper has now been changed to make same-owner acquire idempotent and automatically reclaim locks whose canonical owner is no longer running; roadmap execution policy was also changed to make goal/acceptance authoritative and allow in-scope tooling recovery.
+- 2026-09-19T01:30:07Z · colli di bottiglia: sì · fix: 576041 · 521404 ha lasciato la PR #15 aperta ma ha prodotto un ulteriore fix JVM-safe sul candidate. È stato inoltre corretto il helper PersonalHub lease per recuperare automaticamente lock orfani/terminali; la roadmap ora terminalizza immediatamente roadmap_result e non dipende più dalla telemetria per sbloccare i figli. Il testo esatto del blocker 521404 non è persistito nel record canonico, quindi il follow-up riparte dall'head già corretto senza rifare lavoro.
 
 ## Modifiche di codice ChatGPT
 
@@ -47,3 +48,4 @@ Riparte dalla PR #15 già pronta e completa solo CI, prova su emulatore, merge e
 - 2026-09-19T01:27:51Z · `gernalix/PersonalHub` · tests · commit `42c99feb816b2c165fbe9e67a3cdd3223da6fa22` · Added targeted tests for running-owner blocking, same-prompt idempotence, pre-TTL terminal-owner recovery, TTL fallback, and unknown-status fail-closed behavior.
 - 2026-09-19T01:27:51Z · `gernalix/PersonalHub` · execution-policy · commit `79905c1b734e492645114d00bad27a6f6c6b0b03` · PersonalHub AGENTS now treats goal and acceptance criteria as authoritative and allows autonomous in-scope recovery, including canonical lease recovery.
 - 2026-09-19T01:27:51Z · `gernalix/codex-roadmap` · roadmap-autonomy-policy · commit `0a2b327788846dc3d3d9f1c3ae6d48aa336df85a` · Roadmap contracts now explicitly allow Codex to replace stale plans, fix in-scope helpers/tooling, and continue until the requested outcome unless a true external/safety blocker remains.
+- 2026-09-19T01:30:07Z · `gernalix/PersonalHub` · fix · commit `8103410c3f92e4b5f567072224622c7916034bb6` · Aggiunto recupero automatico dei lease PersonalHub orfani/terminali e test dedicati sul branch della PR #15.

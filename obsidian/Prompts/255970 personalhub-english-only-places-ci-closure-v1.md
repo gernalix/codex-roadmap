@@ -1,20 +1,20 @@
 ---
 prompt_id: 255970
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 255970 · English-only, diagnostica Places e CI in un solo passaggio
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-english-only-places-ci-closure-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-english-only-places-ci-closure-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -22,9 +22,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[111265 personalhub-shared-alerts-pr15-final-closure-v2|111265]]
-- **Sblocca:** [[697834 personalhub-epoch-timestamps-migration-v4|697834]]
+- **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[477616 personalhub-english-only-places-ci-closure-v2|477616]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
