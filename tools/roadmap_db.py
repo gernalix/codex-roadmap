@@ -576,6 +576,88 @@ def record_terminal(
         note=f"terminal:{source}:{result}" if note is None else note,
     )
 
+def record_human_outcome(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    result: str,
+    *,
+    actor: str = "workflowy",
+    source: str = "workflowy-human",
+    cycle_key: str | None = None,
+    ended_at: str | None = None,
+) -> int:
+    """Apply an explicit human-confirmed terminal result.
+
+    This is intentionally distinct from Codex telemetry. It is allowed to close
+    a writer-locked running prompt because the human explicitly supplied the
+    terminal result through an approved control surface such as Workflowy.
+    """
+    if result not in FINAL_STATUS:
+        raise RoadmapDBError(f"invalid_outcome:{result}")
+    target_status = FINAL_STATUS[result]
+    row = prompt_row(conn, prompt_id)
+
+    if cycle_key:
+        existing = conn.execute(
+            "SELECT execution_id FROM executions WHERE cycle_key=?",
+            (cycle_key,),
+        ).fetchone()
+        if existing:
+            return int(existing["execution_id"])
+
+    if row["status"] == target_status:
+        existing = conn.execute(
+            """SELECT execution_id FROM executions
+               WHERE prompt_id=? AND outcome=? AND source=?
+               ORDER BY execution_id DESC LIMIT 1""",
+            (prompt_id, result, source),
+        ).fetchone()
+        return int(existing["execution_id"]) if existing else 0
+
+    if row["status"] != "running":
+        raise RoadmapDBError(
+            f"human_outcome_requires_running:{prompt_id}:{row['status']}"
+        )
+
+    conn.execute("DELETE FROM terminal_requests WHERE prompt_id=?", (prompt_id,))
+    set_status(
+        conn,
+        prompt_id,
+        target_status,
+        actor=actor,
+        note=f"human_execution:{source}:{result}",
+        allow_running_terminal=True,
+    )
+    execution_id = record_execution(
+        conn,
+        prompt_id,
+        cycle_key=cycle_key,
+        ended_at=ended_at or now_utc(),
+        outcome=result,
+        source=source,
+        actor=actor,
+        update_status=False,
+    )
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "human_outcome_confirmed",
+            now_utc(),
+            actor,
+            json.dumps(
+                {
+                    "outcome": result,
+                    "source": source,
+                    "cycle_key": cycle_key,
+                },
+                ensure_ascii=False,
+                sort_keys=True,
+            ),
+        ),
+    )
+    return execution_id
+
 def record_analysis(
     conn: sqlite3.Connection,
     prompt_id: str,
@@ -778,6 +860,19 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
             summary=mutation.get("summary"),
             analysis_id=mutation.get("analysis_id"),
             actor=actor,
+        )
+    elif op=="human_execution":
+        result=str(mutation["outcome"])
+        if result not in {"PASS","FAIL","BLOCKED","CANCELLED","UNKNOWN"}:
+            raise RoadmapDBError(f"invalid_outcome:{result}")
+        record_human_outcome(
+            conn,
+            str(mutation["prompt_id"]),
+            result,
+            actor=actor,
+            source=str(mutation.get("source") or "workflowy-human"),
+            cycle_key=mutation.get("cycle_key"),
+            ended_at=mutation.get("ended_at"),
         )
     elif op in {"execution","usage_execution"}:
         prompt_id=str(mutation["prompt_id"])
