@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/572280 recover-641582-missing-roadmap-registration-v1|572280 · Recuperare 641582 e correggere il bootstrap roadmap]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] · `blocked` · analizzato=no · fix=—

@@ -9,4 +9,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]]
+- Nessuno.
