@@ -152,7 +152,7 @@ Un retry/fix materializzato usa sempre un nuovo PROMPT_ID collegato al padre.
 
 Dopo che `roadmap_start.py` ha portato un prompt a `running`, quel PROMPT_ID è **congelato dal writer**: nessuna mutation ordinaria può modificarne stato, modello, spiegazione, posizione, dipendenze, tag o relazioni, né spostarne il file fuori da `prompts/`. Le viste devono continuare a mostrarlo con stato `running`.
 
-La finalizzazione è a due fasi: `roadmap_finish.py` / `roadmap_result.py` registrano soltanto l'esito richiesto; il prompt resta `running` finché `codex-usage` non registra la telemetria terminale della sessione. Solo allora il writer applica lo stato terminale e archivia il prompt.
+`roadmap_finish.py` / `roadmap_result.py` sono autoritativi per lo scheduling: il single writer applica immediatamente lo stato terminale richiesto e, su PASS, rende subito eseguibili tutti i figli le cui altre dipendenze sono soddisfatte. `codex-usage` arriva in modo indipendente per costi, durata e audit; ritardi o fingerprint mismatch della telemetria non possono più lasciare un prompt bloccato in `running`. Un eventuale mismatch tra esito dichiarato e telemetria viene registrato come anomalia da investigare, senza retrocedere automaticamente lo stato canonico.
 
 Se una decisione nuova rende il lavoro in corso parzialmente obsoleto, il task corrente continua; l'eventuale correzione diventa un follow-up successivo. Questa regola serve a non buttare token e lavoro già in corso.
 
