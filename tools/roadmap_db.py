@@ -472,6 +472,7 @@ def record_execution(
     source: str = "manual",
     actor: str = "codex",
     update_status: bool = True,
+    allow_running_terminal: bool = False,
 ) -> int:
     row = prompt_row(conn, prompt_id)
     if outcome is not None and outcome not in FINAL_STATUS:
@@ -529,7 +530,7 @@ def record_execution(
                     target_status,
                     actor=actor,
                     note=f"execution:{source}",
-                    allow_running_terminal=(source == "codex-usage"),
+                    allow_running_terminal=allow_running_terminal,
                 )
                 conn.execute("DELETE FROM terminal_requests WHERE prompt_id=?", (prompt_id,))
         elif row["status"] == "pending":
@@ -791,7 +792,14 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
                         (prompt_id,cycle_key,expected,observed,now_utc(),"codex-usage"),
                     )
                 update_status=False
-        record_execution(conn,prompt_id,actor=actor,update_status=update_status,**kwargs)
+        record_execution(
+            conn,
+            prompt_id,
+            actor=actor,
+            update_status=update_status,
+            allow_running_terminal=(op=="usage_execution"),
+            **kwargs,
+        )
     elif op=="register":
         data={k:v for k,v in mutation.items() if k not in {"op","actor"}}
         register_prompt(conn,actor=actor,**data)
