@@ -13,3 +13,4 @@
 9. [[prompts/fedora-runtime-kuma-closure-v4|fedora-runtime-kuma-closure-v4]]
 10. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 11. [[prompts/personalhub-single-canonical-db-export|personalhub-single-canonical-db-export]]
+12. [[prompts/livinggaul-duplicate-count-local-activation|livinggaul-duplicate-count-local-activation]]
