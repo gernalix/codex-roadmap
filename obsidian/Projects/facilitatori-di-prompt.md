@@ -5,4 +5,5 @@ tags:
 
 # Facilitatori di prompt
 
-- [[obsidian/Prompts/658142 ccs-autonomous-runtime-verifier|658142 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `running`
+- [[obsidian/Prompts/684327 ccs-autonomous-runtime-verifier-v2|684327 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `pending`
+- [[obsidian/Prompts/658142 ccs-autonomous-runtime-verifier|658142 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `blocked`

@@ -1,22 +1,23 @@
 ---
-prompt_id: 658142
-status: blocked
+prompt_id: 684327
+status: pending
 project_id: 96
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - ccs-control-plane
   - facilitatori
+  - replacement
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/pending
   - roadmap/project/facilitatori-di-prompt
 ---
 
-# 658142 · Rendere autonomo il collaudo Chrome ↔ Codex
+# 684327 · Rendere autonomo il collaudo Chrome ↔ Codex
 
-- **Stato:** blocked
+- **Stato:** pending
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../falliti/ccs-autonomous-runtime-verifier|Apri prompt]]
+- **Prompt:** [[../../prompts/ccs-autonomous-runtime-verifier-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -25,13 +26,13 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[684327 ccs-autonomous-runtime-verifier-v2|684327]]
-- **Chat Codex:** ChatGPT implementa direttamente; follow-up Codex solo se serve runtime locale
+- **Padri/precedenti:** [[658142 ccs-autonomous-runtime-verifier|658142]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Nuova chat Codex
 
 ## Spiegazione
 
-Aggiunge a Chrome-Codex Switcher un control plane e un comando di verifica che permettono a Codex di collaudare pairing, navigazione, overlay e note senza dipendere dal controllo visuale manuale di Chrome.
+Aggiunge a Chrome-Codex Switcher un control plane verificabile via CLI/API per collaudare binding, navigazione, overlay e note senza dipendere dal controllo visuale manuale di Chrome.
 
 ## Esecuzioni
 
