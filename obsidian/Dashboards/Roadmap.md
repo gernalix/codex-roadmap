@@ -11,4 +11,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/391746 recover-github-autosync-codex-usage-roadmap|391746 · Recupera gli alert Git autosync di codex-usage e codex-roadmap]]
+- Nessuno.

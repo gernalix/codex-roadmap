@@ -1,20 +1,20 @@
 ---
 prompt_id: 391746
-status: running
+status: completed
 project_id: 60
 model: gpt-5.6-sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/codex-usage
 ---
 
 # 391746 · Recupera gli alert Git autosync di codex-usage e codex-roadmap
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/codex-usage|codex-usage]]
-- **Prompt:** [[../../prompts/391746-recover-github-autosync-codex-usage-roadmap|Apri prompt]]
+- **Prompt:** [[../../completed/391746-recover-github-autosync-codex-usage-roadmap|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

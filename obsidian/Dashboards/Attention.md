@@ -1,5 +1,7 @@
 # Da controllare
 
+- [[obsidian/Prompts/391746 recover-github-autosync-codex-usage-roadmap|391746 · Recupera gli alert Git autosync di codex-usage e codex-roadmap]] · `completed` · analizzato=no · fix=—
+- [[obsidian/Prompts/684217 prompt-684217|684217 · Historical prompt 684217]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/482731 prompt-482731|482731 · Historical prompt 482731]] · `failed` · analizzato=no · fix=—
 - [[obsidian/Prompts/731846 prompt-731846|731846 · Historical prompt 731846]] · `unknown` · analizzato=no · fix=—
@@ -127,7 +129,6 @@
 - [[obsidian/Prompts/683214 prompt-683214|683214 · Historical prompt 683214]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/684193 prompt-684193|684193 · Historical prompt 684193]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/684215 prompt-684215|684215 · Historical prompt 684215]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/684217 prompt-684217|684217 · Historical prompt 684217]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/684271 prompt-684271|684271 · Historical prompt 684271]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/684731 prompt-684731|684731 · Historical prompt 684731]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/704216 prompt-704216|704216 · Historical prompt 704216]] · `unknown` · analizzato=no · fix=—

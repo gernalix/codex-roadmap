@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/391746 recover-github-autosync-codex-usage-roadmap\|391746 · Recupera gli alert Git autosync di codex-usage e codex-roadmap]] | running | — | — | — | no | no | — | codex-usage | gpt-5.6-sol | medium |
 | [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4\|697834 · Migrare solo i veri timestamp a epoch ms]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
@@ -194,7 +193,7 @@
 | [[obsidian/Prompts/683214 prompt-683214\|683214 · Historical prompt 683214]] | unknown | 2026-08-11T16:45:56Z | 2026-08-11T16:45:56Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/684193 prompt-684193\|684193 · Historical prompt 684193]] | completed | 2026-09-15T21:45:20Z | 2026-09-15T21:45:20Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/684215 prompt-684215\|684215 · Historical prompt 684215]] | completed | 2026-09-11T18:30:21Z | 2026-09-11T18:30:21Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/684217 prompt-684217\|684217 · Historical prompt 684217]] | unknown | 2026-09-04T00:36:15Z | 2026-09-04T00:36:15Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/684217 prompt-684217\|684217 · Historical prompt 684217]] | blocked | 2026-09-04T00:36:15Z | 2026-09-19T08:38:24Z | BLOCKED | no | no | — | — | — | — |
 | [[obsidian/Prompts/684271 prompt-684271\|684271 · Historical prompt 684271]] | unknown | 2026-08-04T15:48:23Z | 2026-08-04T15:48:23Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/684731 prompt-684731\|684731 · Historical prompt 684731]] | blocked | 2026-09-16T09:55:30Z | 2026-09-16T09:55:30Z | BLOCKED | no | no | — | — | — | — |
 | [[obsidian/Prompts/704216 prompt-704216\|704216 · Historical prompt 704216]] | unknown | 2026-08-05T05:14:37Z | 2026-08-05T05:14:37Z | UNKNOWN | no | no | — | — | — | — |
@@ -269,3 +268,4 @@
 | [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery\|583742 · PersonalHub v53 freeze e dati mancanti]] | blocked | 2026-09-19T05:42:17Z | 2026-09-19T05:54:52Z | BLOCKED | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2\|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] | completed | 2026-09-19T05:59:34Z | 2026-09-19T05:59:34Z | PASS | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/316628 livinggaul-video-catalog-view-local-activation\|316628 · LivingGaul video catalog view local activation]] | superseded | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/391746 recover-github-autosync-codex-usage-roadmap\|391746 · Recupera gli alert Git autosync di codex-usage e codex-roadmap]] | completed | — | — | PASS | no | no | — | codex-usage | gpt-5.6-sol | medium |
