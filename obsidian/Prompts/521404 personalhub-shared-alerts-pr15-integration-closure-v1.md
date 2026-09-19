@@ -15,9 +15,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-shared-alerts-pr15-integration-closure-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T01:11:22Z
+- **Ultimo lancio:** 2026-09-19T01:11:22Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Riparte dalla PR #15 già pronta e completa solo CI, prova su emulatore, merge e
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T01:11:22Z | 2026-09-19T01:13:23Z | BLOCKED | 121.204 | gpt-5.6-terra | medium | 14 | 148422 |
 
 ## Analisi ChatGPT
 
