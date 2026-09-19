@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery|583742 · PersonalHub v53 freeze e dati mancanti]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/477616 personalhub-english-only-places-ci-closure-v2|477616 · English-only, diagnostica Places e CI in un solo passaggio]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/240438 livinggaul-content-dedupe-local-activation|240438 · LivingGaul content dedupe local activation]] · `completed` · analizzato=no · fix=—

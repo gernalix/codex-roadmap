@@ -14,7 +14,6 @@
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/542078 fedora-runtime-kuma-closure-v3\|542078 · Chiudere solo il gate Kuma Fedora]] | pending | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/996524 livinggaul-metadata-v3-local-activation\|996524 · LivingGaul metadata v3 local activation]] | pending | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery\|583742 · PersonalHub v53 freeze e dati mancanti]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
@@ -264,3 +263,4 @@
 | [[obsidian/Prompts/578439 workflowy-roadmap-control-local-activation\|578439 · Attivare il controllo roadmap da Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical\|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] | blocked | — | — | BLOCKED | no | no | — | Workflowy importer | — | — |
 | [[obsidian/Prompts/240438 livinggaul-content-dedupe-local-activation\|240438 · LivingGaul content dedupe local activation]] | completed | 2026-09-19T03:56:36Z | 2026-09-19T03:56:36Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.5 | low |
+| [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery\|583742 · PersonalHub v53 freeze e dati mancanti]] | blocked | 2026-09-19T05:42:17Z | 2026-09-19T05:42:17Z | BLOCKED | no | no | — | PersonalHub | GPT-5.6 Sol | medium |

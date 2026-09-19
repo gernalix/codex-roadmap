@@ -12,4 +12,3 @@
 8. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 9. [[prompts/fedora-runtime-kuma-closure-v3|fedora-runtime-kuma-closure-v3]]
 10. [[prompts/livinggaul-metadata-v3-local-activation|livinggaul-metadata-v3-local-activation]]
-11. [[prompts/personalhub-v53-freeze-data-recovery|personalhub-v53-freeze-data-recovery]]

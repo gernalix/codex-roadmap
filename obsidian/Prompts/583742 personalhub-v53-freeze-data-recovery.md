@@ -1,23 +1,23 @@
 ---
 prompt_id: 583742
-status: pending
+status: blocked
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/blocked
   - roadmap/project/personalhub
 ---
 
 # 583742 · PersonalHub v53 freeze e dati mancanti
 
-- **Stato:** pending
+- **Stato:** blocked
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../prompts/personalhub-v53-freeze-data-recovery|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Prompt:** [[../../falliti/personalhub-v53-freeze-data-recovery|Apri prompt]]
+- **Primo lancio:** 2026-09-19T05:42:17Z
+- **Ultimo lancio:** 2026-09-19T05:42:17Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Indaga via ADB il freeze della v53 e verifica se i dati storici sono ancora pres
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T05:42:17Z | 2026-09-19T05:42:38Z | BLOCKED | 20.645 | gpt-5.6-sol | medium | 2 | 44510 |
 
 ## Analisi ChatGPT
 
