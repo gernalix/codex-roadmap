@@ -5,6 +5,8 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3|588376 · Bonificare history Logseq e attivare updater]]
+- [[obsidian/Prompts/438216 ccs-frictionless-late-binding|438216 · Aggiungere late binding frictionless Chrome ↔ Codex]]
+- [[obsidian/Prompts/438217 workflowy-late-binding-controls|438217 · Esporre pairing tardivo Chrome/Codex nella dashboard]]
 
 ## In esecuzione
 
