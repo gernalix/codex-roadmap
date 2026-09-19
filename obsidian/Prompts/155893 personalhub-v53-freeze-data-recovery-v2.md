@@ -1,20 +1,20 @@
 ---
 prompt_id: 155893
-status: running
+status: completed
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/personalhub
 ---
 
 # 155893 · Riparare freeze v53 e verificare i dati sul Pixel
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../prompts/personalhub-v53-freeze-data-recovery-v2|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-v53-freeze-data-recovery-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

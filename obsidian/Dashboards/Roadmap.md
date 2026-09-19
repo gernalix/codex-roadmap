@@ -11,4 +11,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2|155893 · Riparare freeze v53 e verificare i dati sul Pixel]]
+- Nessuno.
