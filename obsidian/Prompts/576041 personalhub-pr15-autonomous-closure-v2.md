@@ -15,9 +15,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../falliti/personalhub-pr15-autonomous-closure-v2|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T02:06:55Z
+- **Ultimo lancio:** 2026-09-19T02:06:55Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Riparte dalla PR #15 già corretta e completa autonomamente solo test residui, A
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T02:06:55Z | 2026-09-19T02:07:16Z | BLOCKED | 21.58 | gpt-5.6-terra | medium | 2 | 136260 |
 
 ## Analisi ChatGPT
 
