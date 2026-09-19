@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release\|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] | running | 2026-09-19T15:13:54Z | 2026-09-19T15:13:54Z | UNKNOWN | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/374820 fedora-runtime-kuma-closure-v4\|374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile]] | running | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure\|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] | running | — | — | — | no | no | — | chrome-codex-switcher | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/489818 datasette5-personalhub-final-schema-deploy-v3\|489818 · Aggiornare e distribuire Datasette sullo schema PH finale]] | pending | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
@@ -73,6 +72,7 @@
 | [[obsidian/Prompts/724615 personalhub-salute-ui-hub-obsidian\|724615 · Rendere Salute visibile e collegata al resto dell’app]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/862541 personalhub-salute-canonical-integration-v2\|862541 · Portare Salute dentro PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/904631 datasette5-personalhub-explorer-security-deploy-v2\|904631 · Versione online dell’esploratore dati PersonalHub]] | superseded | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/374820 fedora-runtime-kuma-closure-v4\|374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile]] | completed | — | — | PASS | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/582741 personalhub-obsidian-archive-foundation\|582741 · Prima versione dell’archivio Obsidian]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/315972 personalhub-salute-ui-hub-obsidian-v2\|315972 · Rendere Salute visibile e collegata al resto dell’app]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/811925 personalhub-datasette-lite-offline-runtime-v3\|811925 · Completare l’esploratore dati offline]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |

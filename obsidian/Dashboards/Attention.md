@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/374820 fedora-runtime-kuma-closure-v4|374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/637985 personalhub-single-canonical-db-export|637985 · Mantenere un solo DB auto-esportato PersonalHub]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/734140 livinggaul-duplicate-count-local-activation|734140 · LivingGaul duplicate count local activation]] · `completed` · analizzato=no · fix=—
