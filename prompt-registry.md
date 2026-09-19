@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release\|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] | running | 2026-09-19T15:13:54Z | 2026-09-19T15:29:32Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/491628 personalhub-android17-restricted-overlay-finalize\|491628 · Finalizzare permesso overlay Android 17 di PersonalHub]] | running | — | — | — | no | no | — | PersonalHub | GPT-5.5 | medium |
 | [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure\|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] | running | 2026-09-19T15:41:21Z | 2026-09-19T15:41:21Z | BLOCKED | no | no | — | chrome-codex-switcher | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure\|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] | pending | 2026-09-19T15:53:48Z | 2026-09-19T15:53:48Z | BLOCKED | no | no | — | chrome-codex-switcher | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
@@ -283,3 +282,4 @@
 | [[obsidian/Prompts/618338 personalhub-pixel-sqlite-bloat-remediation\|618338 · Diagnosticare e ridurre il DB PersonalHub da ~627 MB]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/637985 personalhub-single-canonical-db-export\|637985 · Mantenere un solo DB auto-esportato PersonalHub]] | completed | 2026-09-19T14:04:52Z | 2026-09-19T14:04:52Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/734140 livinggaul-duplicate-count-local-activation\|734140 · LivingGaul duplicate count local activation]] | completed | 2026-09-19T12:57:31Z | 2026-09-19T14:28:44Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/491628 personalhub-android17-restricted-overlay-finalize\|491628 · Finalizzare permesso overlay Android 17 di PersonalHub]] | completed | — | — | PASS | no | no | — | PersonalHub | GPT-5.5 | medium |
