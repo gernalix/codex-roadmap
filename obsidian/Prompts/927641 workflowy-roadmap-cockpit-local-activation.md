@@ -1,6 +1,6 @@
 ---
 prompt_id: 927641
-status: running
+status: completed
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
@@ -8,15 +8,15 @@ tags:
   - local-activation
   - workflowy-cockpit
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/workflowy-roadmap-cockpit
 ---
 
 # 927641 · Attiva il cockpit Workflowy della roadmap
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/workflowy-roadmap-cockpit|Workflowy roadmap cockpit]]
-- **Prompt:** [[../../prompts/workflowy-roadmap-cockpit-local-activation|Apri prompt]]
+- **Prompt:** [[../../completed/workflowy-roadmap-cockpit-local-activation|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
