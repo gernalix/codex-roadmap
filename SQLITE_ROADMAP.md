@@ -30,6 +30,14 @@ Questo evita che il sistema di misurazione generi più lavoro del task misurato.
 
 ### Codex
 
+Prima di iniziare qualunque lavoro sostanziale per un task della roadmap, Codex acquisisce un claim remoto:
+
+```bash
+python3 tools/roadmap_start.py --repo . --prompt-id 123456
+```
+
+Il client crea una mutation `pending -> running`, aspetta che il single writer l'abbia applicata e verifica il DB remoto. Se il prompt è già terminale o il claim non arriva a `running`, fallisce chiuso e Codex non deve iniziare il task. Una volta `running`, il DB rifiuta `running -> superseded` e rifiuta anche una relazione `replacement` con quel prompt come sorgente.
+
 Il risultato immediato viene consegnato da:
 
 ```bash
@@ -68,7 +76,7 @@ Formato:
 }
 ```
 
-Operazioni supportate: `analysis`, `code_change`, `model`, `explanation`, `status`, `relation`, `dependency`, `dependency_replace`, `tag`, `execution`, `register`. `model` aggiorna esclusivamente il modello assegnato al prompt esistente; `explanation` aggiorna esclusivamente la spiegazione user-facing mostrata nelle viste generate. Entrambe registrano l'audit dell'operazione. `analysis` e `code_change` sono usate solo per eccezioni reali; `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
+Operazioni supportate: `analysis`, `code_change`, `model`, `explanation`, `status`, `relation`, `dependency`, `dependency_replace`, `tag`, `execution`, `register`. Le transizioni di stato sono fail-closed: un prompt terminale non torna attivo e un prompt `running` non può essere portato a `superseded` da una mutation successiva. `model` aggiorna esclusivamente il modello assegnato al prompt esistente; `explanation` aggiorna esclusivamente la spiegazione user-facing mostrata nelle viste generate. Entrambe registrano l'audit dell'operazione. `analysis` e `code_change` sono usate solo per eccezioni reali; `code_change` si collega di default all’ultima analisi del PROMPT_ID e registra repository, tipo di intervento, commit opzionale e riepilogo.
 
 ## Proiezioni generate
 
