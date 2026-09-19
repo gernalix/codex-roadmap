@@ -206,6 +206,34 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertEqual(1,row["queue_position"])
             conn.close()
 
+    def test_fix_relation_auto_forwards_pending_children(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="parent",title="Parent",current_path="prompts/parent.md",status="blocked")
+            db.register_prompt(conn,prompt_id="234567",slug="fix",title="Fix",current_path="prompts/fix.md")
+            db.register_prompt(conn,prompt_id="345678",slug="child",title="Child",current_path="prompts/child.md")
+            db.add_dependency(conn,"345678","123456")
+
+            db.add_relation(conn,"123456","234567","fix",actor="chatgpt")
+
+            deps=[
+                row[0]
+                for row in conn.execute(
+                    "SELECT depends_on_prompt_id FROM dependencies WHERE prompt_id='345678' ORDER BY 1"
+                )
+            ]
+            self.assertEqual(["234567"],deps)
+            # Explicit legacy dependency_replace after auto-forwarding is idempotent.
+            db.replace_dependency(conn,"345678","123456","234567")
+            self.assertEqual(
+                1,
+                conn.execute(
+                    "SELECT COUNT(*) FROM audit_events WHERE prompt_id='345678' AND event_type='dependency_auto_forwarded'"
+                ).fetchone()[0],
+            )
+            conn.close()
+
     def test_pending_prompt_cannot_start_until_dependencies_complete(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
