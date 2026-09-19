@@ -20,6 +20,18 @@ Instead, submit one immutable `codex-roadmap.mutation.v1` request as a GitHub Is
 
 Terminal Codex results must use `tools/roadmap_result.py` or `tools/roadmap_finish.py`; they already submit through the same writer.
 
+## Operational cockpit
+
+Workflowy is the only human-facing operational cockpit. `roadmap.sqlite` remains canonical. Markdown/Obsidian projections are compatibility/audit output and MUST NOT be used to infer whether a prompt is ready, running, integrating, blocked or done.
+
+Prompt bodies are canonical SQLite materializations keyed by PROMPT_ID. Legacy `prompts/*.md` files may remain as writer-owned compatibility materializations, but state protection and copy/launch actions must prefer the SQLite body.
+
+Repository-backed operational state is composed from two authorities:
+- roadmap lifecycle from `roadmap.sqlite`;
+- integration lifecycle from `github-autosync repo-task status-all --roadmap-only`.
+
+Workflowy may project both, but must never invent state from titles, Markdown rows, URLs or branch naming.
+
 ## Generic repository single writer
 
 For roadmap tasks targeting any Git repository other than `gernalix/codex-roadmap`, `roadmap_start.py` also allocates an isolated `task/<PROMPT_ID>` worktree through `~/projects/github-autosync/repo_single_writer.py`.
@@ -37,7 +49,7 @@ Live lifecycle protection is mandatory:
 - `tools/roadmap_start.py` remains the authoritative synchronous launch claim and must run before substantive project work.
 - `codex-roadmap-live-status.timer` is the passive fallback: it tails native Codex rollouts, claims newly observed six-digit PROMPT_IDs through the same single writer, and triggers the existing usage publisher + roadmap sync when a terminal event appears.
 - The writer prioritizes start claims before ordinary mutations so a prompt that is actually running is locked before queued edits can supersede, reorder, retag, or otherwise mutate it.
-- A terminal request alone does not unblock descendants. Only an authoritative `codex-usage` terminal execution with `PASS` changes the parent to `completed`; every child whose remaining dependencies are then satisfied becomes runnable automatically.
+- An explicit terminal request from `roadmap_finish.py` / `roadmap_result.py` is authoritative and applies the terminal roadmap state immediately. `codex-usage` arrives later for telemetry/audit and must not keep completed repository work stuck in `running`.
 
 Every Codex report tied to a roadmap task must begin on line 1 with exactly `PROMPT_ID=<six-digit id>` for that task. This applies both to the final Codex response and to any Markdown/text report artifact Codex produces. When a terminal result is reported, `RESULT=PASS|BLOCKED|FAIL` belongs on line 2, not line 1.
 
