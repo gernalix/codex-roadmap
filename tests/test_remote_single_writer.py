@@ -163,6 +163,28 @@ class RemoteSingleWriterTests(unittest.TestCase):
             with self.assertRaises(submit_mutation.MutationSubmitError):
                 submit_mutation.submit_document(wanted, request_key="terminal-123456")
 
+    def test_direct_submission_skips_existing_lookup(self) -> None:
+        document = {
+            "schema": submit_mutation.SCHEMA,
+            "actor": "codex",
+            "operations": [{"op": "status", "prompt_id": "123456", "status": "running"}],
+        }
+        response = Mock(
+            returncode=0,
+            stdout=json.dumps({"number": 15, "html_url": "https://x/15"}),
+            stderr="",
+        )
+        with patch.object(submit_mutation, "_matching_issues") as lookup, patch.object(
+            submit_mutation, "_gh", return_value=response
+        ):
+            out = submit_mutation.submit_document(
+                document,
+                request_key="start-123456",
+                lookup_existing=False,
+            )
+        self.assertEqual("15", out["issue_number"])
+        lookup.assert_not_called()
+
     def test_new_submission_creates_issue_not_git_file(self) -> None:
         document = {
             "schema": submit_mutation.SCHEMA,
