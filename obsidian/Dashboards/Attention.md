@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/491628 personalhub-android17-restricted-overlay-finalize|491628 · Finalizzare permesso overlay Android 17 di PersonalHub]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/374820 fedora-runtime-kuma-closure-v4|374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] · `completed` · analizzato=no · fix=—

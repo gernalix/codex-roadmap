@@ -1,22 +1,22 @@
 ---
 prompt_id: 672841
-status: pending
+status: unknown
 project_id: —
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/unknown
   - roadmap/project/chrome-codex-switcher
 ---
 
 # 672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher
 
-- **Stato:** pending
+- **Stato:** unknown
 - **Progetto:** [[../Projects/chrome-codex-switcher|chrome-codex-switcher]]
-- **Prompt:** [[../../prompts/chrome-codex-switcher-runtime-smoke-closure|Apri prompt]]
+- **Prompt:** [[../../falliti/chrome-codex-switcher-runtime-smoke-closure|Apri prompt]]
 - **Primo lancio:** 2026-09-19T15:53:48Z
-- **Ultimo lancio:** 2026-09-19T16:38:18Z
+- **Ultimo lancio:** 2026-09-19T16:42:07Z
 - **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
@@ -39,6 +39,7 @@ Completa sul Fedora reale l’installazione e il collaudo del collegamento Chrom
 | 2026-09-19T16:21:39Z | 2026-09-19T16:23:38Z | BLOCKED | 118.929 | gpt-5.6-luna | low | 16 | 42468 |
 | 2026-09-19T16:35:04Z | 2026-09-19T16:35:11Z | UNKNOWN | 7.208 | gpt-5.6-terra | medium | 1 | 126680 |
 | 2026-09-19T16:38:18Z | 2026-09-19T16:40:31Z | UNKNOWN | 132.978 | gpt-5.6-terra | medium | 17 | 161722 |
+| 2026-09-19T16:42:07Z | 2026-09-19T16:42:16Z | UNKNOWN | 9.066 | gpt-5.6-terra | medium | 0 | 171987 |
 
 ## Analisi ChatGPT
 
