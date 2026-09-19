@@ -124,7 +124,7 @@ tags:
 - [[obsidian/Prompts/731608 prompt-731608|731608 · Historical prompt 731608]] · `completed`
 - [[obsidian/Prompts/731842 prompt-731842|731842 · Historical prompt 731842]] · `unknown`
 - [[obsidian/Prompts/731845 prompt-731845|731845 · Historical prompt 731845]] · `blocked`
-- [[obsidian/Prompts/731846 prompt-731846|731846 · Historical prompt 731846]] · `blocked`
+- [[obsidian/Prompts/731846 prompt-731846|731846 · Historical prompt 731846]] · `unknown`
 - [[obsidian/Prompts/731904 prompt-731904|731904 · Historical prompt 731904]] · `blocked`
 - [[obsidian/Prompts/734581 prompt-734581|734581 · Historical prompt 734581]] · `completed`
 - [[obsidian/Prompts/736205 prompt-736205|736205 · Historical prompt 736205]] · `unknown`
