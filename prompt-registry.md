@@ -73,7 +73,7 @@
 | [[obsidian/Prompts/582741 personalhub-obsidian-archive-foundation\|582741 · Prima versione dell’archivio Obsidian]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/315972 personalhub-salute-ui-hub-obsidian-v2\|315972 · Rendere Salute visibile e collegata al resto dell’app]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/811925 personalhub-datasette-lite-offline-runtime-v3\|811925 · Completare l’esploratore dati offline]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install\|652361 · LivingGaul hourly systemd local install]] | completed | — | — | PASS | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install\|652361 · LivingGaul hourly systemd local install]] | completed | 2026-09-19T11:21:12Z | 2026-09-19T11:21:12Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/671904 personalhub-obsidian-archive-incremental\|671904 · Aggiornare Obsidian automaticamente]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/946238 personalhub-obsidian-archive-foundation-v2\|946238 · Prima versione dell’archivio Obsidian]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/334679 personalhub-play-release-local-validation-v3\|334679 · Controllo finale locale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
