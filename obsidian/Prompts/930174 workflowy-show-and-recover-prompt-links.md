@@ -1,6 +1,6 @@
 ---
 prompt_id: 930174
-status: pending
+status: running
 project_id: 96
 model: GPT-5.6 Luna
 reasoning: low
@@ -8,13 +8,13 @@ tags:
   - facilitatori
   - workflowy-dashboard
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 930174 · Mostrare e recuperare i link Chrome e Codex nella dashboard
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../prompts/workflowy-show-and-recover-prompt-links|Apri prompt]]
 - **Primo lancio:** —
