@@ -20,6 +20,19 @@ Instead, submit one immutable `codex-roadmap.mutation.v1` request as a GitHub Is
 
 Terminal Codex results must use `tools/roadmap_result.py` or `tools/roadmap_finish.py`; they already submit through the same writer.
 
+## Generic repository single writer
+
+For roadmap tasks targeting any Git repository other than `gernalix/codex-roadmap`, `roadmap_start.py` also allocates an isolated `task/<PROMPT_ID>` worktree through `~/projects/github-autosync/repo_single_writer.py`.
+
+- Treat the returned `worktree_path` as authoritative even if the materialized prompt names the canonical checkout.
+- Never edit/commit directly on the canonical branch of a target repository.
+- Multiple tasks may run concurrently only because they have separate worktrees/branches.
+- `roadmap_finish.py` waits for the task branch to be pushed, its `[single-writer]` PR to pass checks, and the per-repository writer to merge it before the roadmap task can become completed.
+- Do not bypass a target repository's `single-writer protected` reference-transaction hook.
+- BLOCKED/FAIL leaves the task worktree/branch preserved for diagnosis or a follow-up; no destructive cleanup is allowed.
+
+The roadmap repository itself continues to use its dedicated mutation writer described above.
+
 Live lifecycle protection is mandatory:
 - `tools/roadmap_start.py` remains the authoritative synchronous launch claim and must run before substantive project work.
 - `codex-roadmap-live-status.timer` is the passive fallback: it tails native Codex rollouts, claims newly observed six-digit PROMPT_IDs through the same single writer, and triggers the existing usage publisher + roadmap sync when a terminal event appears.
