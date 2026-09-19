@@ -128,6 +128,72 @@ class RoadmapPullTests(unittest.TestCase):
 
         self.assertEqual(before, git(self.local, "rev-parse", "HEAD").stdout.strip())
 
+    def test_generated_view_dirt_is_restored_before_guarded_pull(self) -> None:
+        spiegazioni = self.local / "spiegazioni.md"
+        spiegazioni.write_text(
+            spiegazioni.read_text(encoding="utf-8") + "\nformatter-noise\n",
+            encoding="utf-8",
+        )
+        (self.seed / "README.md").write_text("remote\n", encoding="utf-8")
+        remote_head = self.push_seed("remote unrelated change")
+
+        result = roadmap_pull.guarded_pull(self.local)
+
+        self.assertEqual("PASS", result["status"])
+        self.assertIn("spiegazioni.md", result["restored_generated_views"])
+        self.assertEqual(remote_head, git(self.local, "rev-parse", "HEAD").stdout.strip())
+        self.assertNotIn("formatter-noise", spiegazioni.read_text(encoding="utf-8"))
+
+    def test_non_generated_dirt_still_blocks(self) -> None:
+        (self.local / "README.md").write_text("local edit\n", encoding="utf-8")
+
+        with self.assertRaisesRegex(
+            roadmap_pull.RoadmapPullBlocked,
+            "local_worktree_dirty_non_generated:README.md",
+        ):
+            roadmap_pull.guarded_pull(self.local)
+
+    def test_bootstrap_guard_installs_hook_before_merge(self) -> None:
+        hooks_path = Path(git(self.local, "config", "--get", "core.hooksPath").stdout.strip())
+        git(self.local, "config", "--unset", "core.hooksPath")
+        shutil.rmtree(hooks_path)
+        (self.seed / "README.md").write_text("remote\n", encoding="utf-8")
+        remote_head = self.push_seed("remote bootstrap change")
+
+        result = roadmap_pull.guarded_pull(self.local, bootstrap_guard=True)
+
+        self.assertEqual("PASS", result["status"])
+        self.assertEqual(remote_head, git(self.local, "rev-parse", "HEAD").stdout.strip())
+        installed = Path(git(self.local, "config", "--get", "core.hooksPath").stdout.strip())
+        self.assertTrue((installed / "reference-transaction").is_file())
+
+    def test_guarded_pull_refreshes_hook_after_remote_hook_change(self) -> None:
+        tracked_hook = self.seed / ".githooks" / "reference-transaction"
+        tracked_hook.write_text(
+            tracked_hook.read_text(encoding="utf-8") + "\n# remote-update\n",
+            encoding="utf-8",
+        )
+        self.push_seed("remote hook update")
+
+        result = roadmap_pull.guarded_pull(self.local)
+
+        self.assertEqual("PASS", result["status"])
+        installed = Path(git(self.local, "config", "--get", "core.hooksPath").stdout.strip())
+        self.assertEqual(
+            (self.local / ".githooks" / "reference-transaction").read_bytes(),
+            (installed / "reference-transaction").read_bytes(),
+        )
+
+    def test_unrelated_ref_update_does_not_consume_pull_authorization(self) -> None:
+        head = git(self.local, "rev-parse", "HEAD").stdout.strip()
+        auth = roadmap_pull._authorize_merge(self.local, head, head, "main")
+
+        git(self.local, "tag", "unrelated-tag")
+
+        self.assertTrue(auth.is_file())
+        auth.unlink()
+
+
     def test_terminal_codex_usage_allows_running_prompt_to_finish(self) -> None:
         conn = db.connect(self.seed)
         db.record_execution(
