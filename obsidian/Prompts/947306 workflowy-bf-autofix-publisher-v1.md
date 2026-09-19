@@ -1,6 +1,6 @@
 ---
 prompt_id: 947306
-status: pending
+status: running
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - codex-runtime
   - workflowy
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/fedora-workflowy
 ---
 
 # 947306 · Arricchire automaticamente i B/F Workflowy con il report Codex
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
 - **Prompt:** [[../../prompts/workflowy-bf-autofix-publisher-v1|Apri prompt]]
 - **Primo lancio:** —
