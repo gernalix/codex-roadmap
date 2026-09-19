@@ -8,7 +8,14 @@ Per una sessione Codex Desktop:
 
 1. scegli il primo task lanciabile dalla roadmap;
 2. imposta progetto, modello e reasoning indicati;
-3. incolla **solo il file `prompts/<task>.md`**.
+3. incolla **solo il file `prompts/<task>.md`**;
+4. **prima di qualunque lettura/modifica/build del progetto**, Codex deve acquisire il claim remoto del PROMPT_ID:
+
+```bash
+python3 ~/projects/codex-roadmap/tools/roadmap_start.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID>
+```
+
+Il comando attende il single writer e deve terminare con `roadmap_status=running`. Se fallisce, viene rifiutato o restituisce uno stato diverso, **STOP immediato senza lavorare sul progetto**: il prompt non è più eseguibile.
 
 Non usare launcher intermedi e non far leggere a Codex README, roadmap, spiegazioni, MegaVault o memoria quando il prompt contiene già lo starting point necessario. In particolare, con `MegaVault=FAST`, `project_id`/workdir già risolti e nessun fatto canonico mancante, **non leggere né dumpare MegaVault protocol, MEMORY o rollout summary**: FAST significa usare solo l'eventuale fatto specifico che manca, non caricare contesto preventivo.
 
@@ -139,6 +146,12 @@ python3 ~/projects/codex-roadmap/tools/roadmap_result.py --repo ~/projects/codex
 Questi comandi inviano una mutazione idempotente al writer remoto. Non modificano direttamente il checkout locale della roadmap.
 
 Un retry/fix materializzato usa sempre un nuovo PROMPT_ID collegato al padre.
+
+### Blocco anti-supersede dei prompt attivi
+
+Dopo che `roadmap_start.py` ha portato un prompt a `running`, quel PROMPT_ID è **protetto**: un aggiornamento della roadmap non può trasformarlo in `superseded` né collegarlo come sorgente di una relazione `replacement`. Se una decisione nuova rende il lavoro in corso parzialmente obsoleto, il task corrente continua fino al suo esito terminale; l'eventuale correzione diventa un follow-up successivo. Se l'utente decide invece di interromperlo, va prima fermata la sessione Codex e chiuso il prompt con un esito terminale coerente; solo dopo si può creare un replacement.
+
+Questa regola serve a non buttare token e lavoro già in corso.
 
 La prima riga finale deve essere `RESULT=PASS|BLOCKED|FAIL`, seguita da un report conciso con modifiche, test, commit/push e blocker residui.
 
