@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/731846 prompt-731846|731846 · Historical prompt 731846]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery|583742 · PersonalHub v53 freeze e dati mancanti]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/477616 personalhub-english-only-places-ci-closure-v2|477616 · English-only, diagnostica Places e CI in un solo passaggio]] · `completed` · analizzato=no · fix=—
@@ -138,7 +139,6 @@
 - [[obsidian/Prompts/731608 prompt-731608|731608 · Historical prompt 731608]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/731842 prompt-731842|731842 · Historical prompt 731842]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/731845 prompt-731845|731845 · Historical prompt 731845]] · `blocked` · analizzato=no · fix=—
-- [[obsidian/Prompts/731846 prompt-731846|731846 · Historical prompt 731846]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/731904 prompt-731904|731904 · Historical prompt 731904]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/734581 prompt-734581|734581 · Historical prompt 734581]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/736205 prompt-736205|736205 · Historical prompt 736205]] · `unknown` · analizzato=no · fix=—
