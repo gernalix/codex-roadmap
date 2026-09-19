@@ -172,12 +172,6 @@ def ensure_historical_stub(
            ) VALUES(?,?,?,?,?,?,?,?)""",
         (prompt_id, slug, title or f"Prompt {prompt_id}", "Prompt", status, "", ts, ts),
     )
-    if prompt_text is not None:
-        conn.execute(
-            """INSERT INTO prompt_materializations(prompt_id,body,sha256,created_at,actor)
-               VALUES(?,?,?,?,?)""",
-            (prompt_id, prompt_text, sha, ts, actor),
-        )
     conn.execute(
         "INSERT INTO status_history(prompt_id,old_status,new_status,changed_at,actor,note) "
         "VALUES(?,?,?,?,?,?)",
@@ -227,6 +221,12 @@ def register_prompt(
             status, queue_position, current_path, sha, ts, ts,
         ),
     )
+    if prompt_text is not None:
+        conn.execute(
+            """INSERT INTO prompt_materializations(prompt_id,body,sha256,created_at,actor)
+               VALUES(?,?,?,?,?)""",
+            (prompt_id, prompt_text, sha, ts, actor),
+        )
     conn.execute(
         "INSERT INTO status_history(prompt_id,old_status,new_status,changed_at,actor,note) "
         "VALUES(?,?,?,?,?,?)",
