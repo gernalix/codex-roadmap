@@ -5,6 +5,7 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4\|697834 · Migrare solo i veri timestamp a epoch ms]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/793678 personalhub-zombie-function-cleanup-closure\|793678 · Chiudi residui zombie dei moduli PersonalHub]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/489818 datasette5-personalhub-final-schema-deploy-v3\|489818 · Aggiornare e distribuire Datasette sullo schema PH finale]] | pending | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |

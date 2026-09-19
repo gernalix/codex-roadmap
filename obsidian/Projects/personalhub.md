@@ -5,6 +5,7 @@ tags:
 
 # PersonalHub
 
+- [[obsidian/Prompts/793678 personalhub-zombie-function-cleanup-closure|793678 · Chiudi residui zombie dei moduli PersonalHub]] · `pending`
 - [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] · `completed`
 - [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation|886414 · PersonalHub 100% capsule isolation — validazione locale]] · `superseded`
 - [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2|200725 · PersonalHub 100% capsule isolation — integra main e valida]] · `superseded`
