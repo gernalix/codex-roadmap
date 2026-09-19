@@ -1,18 +1,18 @@
 ---
 prompt_id: 593872
-status: pending
+status: running
 project_id: 15
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/fedora-fedora-system-monitor
 ---
 
 # 593872 · Diagnosi forense del blackout grafico Fedora
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/fedora-fedora-system-monitor|Fedora / fedora-system-monitor]]
 - **Prompt:** [[../../prompts/fedora-graphics-black-screen-forensics|Apri prompt]]
 - **Primo lancio:** —
