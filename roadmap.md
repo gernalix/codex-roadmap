@@ -15,4 +15,3 @@
 11. [[prompts/logseq-updates-pat-safety-closure-v2|logseq-updates-pat-safety-closure-v2]]
 12. [[prompts/fedora-runtime-validation-v2|fedora-runtime-validation-v2]]
 13. [[prompts/personalhub-capsule-isolation-postmerge-cleanup-v1|personalhub-capsule-isolation-postmerge-cleanup-v1]]
-14. [[prompts/personalhub-shared-alerts-places-tags-integration-v5|personalhub-shared-alerts-places-tags-integration-v5]]
