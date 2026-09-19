@@ -16,7 +16,7 @@ tags:
 - **Progetto:** [[../Projects/chrome-codex-switcher|chrome-codex-switcher]]
 - **Prompt:** [[../../prompts/chrome-codex-switcher-runtime-smoke-closure|Apri prompt]]
 - **Primo lancio:** 2026-09-19T15:53:48Z
-- **Ultimo lancio:** 2026-09-19T15:53:48Z
+- **Ultimo lancio:** 2026-09-19T16:21:39Z
 - **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
@@ -36,6 +36,7 @@ Completa sul Fedora reale l’installazione e il collaudo del collegamento Chrom
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-19T15:53:48Z | 2026-09-19T15:54:01Z | BLOCKED | 12.501 | gpt-5.6-luna | low | 1 | 67671 |
+| 2026-09-19T16:21:39Z | 2026-09-19T16:23:38Z | BLOCKED | 118.929 | gpt-5.6-luna | low | 16 | 42468 |
 
 ## Analisi ChatGPT
 
