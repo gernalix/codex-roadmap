@@ -333,27 +333,47 @@ def _show_exists(repo: Path, ref: str, path: str) -> bool:
     return _git(repo, "cat-file", "-e", f"{ref}:{path}").returncode == 0
 
 
-def _verify_remote_running_view(
+def _prompt_materialization(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+) -> sqlite3.Row | None:
+    try:
+        return conn.execute(
+            "SELECT body,sha256 FROM prompt_materializations WHERE prompt_id=?",
+            (prompt_id,),
+        ).fetchone()
+    except sqlite3.OperationalError:
+        return None
+
+
+def _verify_remote_running_materialization(
     repo: Path,
     ref: str,
     conn: sqlite3.Connection,
     prompt_id: str,
-    roadmap_text: str,
-    spiegazioni_text: str,
 ) -> None:
     row = _row(conn, prompt_id)
     if row is None or row["status"] != "running":
         raise RoadmapPullBlocked(f"remote_running_row_invalid:{prompt_id}")
+    materialization = _prompt_materialization(conn, prompt_id)
+    if materialization is not None:
+        expected = str(row["materialization_sha256"] or "")
+        observed = str(materialization["sha256"] or "")
+        if expected and observed != expected:
+            raise RoadmapPullBlocked(
+                f"remote_running_materialization_hash_mismatch:{prompt_id}"
+            )
+        if not str(materialization["body"] or "").strip():
+            raise RoadmapPullBlocked(f"remote_running_materialization_empty:{prompt_id}")
+        return
+
+    # Transitional compatibility for roadmap DBs created before prompt bodies
+    # became canonical SQLite data. No Markdown dashboard is consulted.
     path = str(row["current_path"] or "")
     if not path.startswith("prompts/") or not path.endswith(".md"):
         raise RoadmapPullBlocked(f"remote_running_path_invalid:{prompt_id}:{path}")
     if not _show_exists(repo, ref, path):
         raise RoadmapPullBlocked(f"remote_running_prompt_file_missing:{prompt_id}:{path}")
-    if f"| {prompt_id} | running |" not in spiegazioni_text:
-        raise RoadmapPullBlocked(f"remote_spiegazioni_missing_running:{prompt_id}")
-    link_target = path[:-3]
-    if f"[[{link_target}|" not in roadmap_text:
-        raise RoadmapPullBlocked(f"remote_roadmap_missing_running:{prompt_id}")
 
 
 def _authorize_merge(repo: Path, old: str, new: str, branch: str) -> Path:
@@ -418,15 +438,12 @@ def guarded_pull(
     try:
         local_running = _running_ids(local_conn)
         remote_running = _running_ids(remote_conn)
-        roadmap_text = _git_bytes(repo, "show", f"{remote_head}:roadmap.md").decode("utf-8")
-        spiegazioni_text = _git_bytes(repo, "show", f"{remote_head}:spiegazioni.md").decode("utf-8")
-
         preserved: list[str] = []
         terminal_confirmed: list[str] = []
 
         for prompt_id in sorted(remote_running):
-            _verify_remote_running_view(
-                repo, remote_head, remote_conn, prompt_id, roadmap_text, spiegazioni_text
+            _verify_remote_running_materialization(
+                repo, remote_head, remote_conn, prompt_id
             )
 
         for prompt_id in sorted(local_running):
@@ -436,11 +453,26 @@ def guarded_pull(
             if remote_row["status"] == "running":
                 if _protected_snapshot(local_conn, prompt_id) != _protected_snapshot(remote_conn, prompt_id):
                     raise RoadmapPullBlocked(f"running_prompt_modified_remote:{prompt_id}")
-                local_path = str(_row(local_conn, prompt_id)["current_path"])
-                local_blob = _git_bytes(repo, "show", f"{before}:{local_path}")
-                remote_blob = _git_bytes(repo, "show", f"{remote_head}:{local_path}")
-                if local_blob != remote_blob:
-                    raise RoadmapPullBlocked(f"running_prompt_content_modified_remote:{prompt_id}")
+                local_materialization = _prompt_materialization(local_conn, prompt_id)
+                remote_materialization = _prompt_materialization(remote_conn, prompt_id)
+                if local_materialization is not None and remote_materialization is not None:
+                    if (
+                        local_materialization["sha256"] != remote_materialization["sha256"]
+                        or local_materialization["body"] != remote_materialization["body"]
+                    ):
+                        raise RoadmapPullBlocked(
+                            f"running_prompt_content_modified_remote:{prompt_id}"
+                        )
+                else:
+                    # Transitional compatibility until the first writer mutation
+                    # backfills prompt_materializations in the canonical DB.
+                    local_path = str(_row(local_conn, prompt_id)["current_path"])
+                    local_blob = _git_bytes(repo, "show", f"{before}:{local_path}")
+                    remote_blob = _git_bytes(repo, "show", f"{remote_head}:{local_path}")
+                    if local_blob != remote_blob:
+                        raise RoadmapPullBlocked(
+                            f"running_prompt_content_modified_remote:{prompt_id}"
+                        )
                 preserved.append(prompt_id)
             elif _terminal_confirmed(remote_conn, prompt_id, str(remote_row["status"])):
                 terminal_confirmed.append(prompt_id)
