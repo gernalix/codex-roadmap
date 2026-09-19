@@ -1,0 +1,12 @@
+[Unit]
+Description=Bridge live Codex prompt state to roadmap single writer
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/daniele/projects/codex-roadmap
+ExecStart=/usr/bin/python3 /home/daniele/projects/codex-roadmap/tools/roadmap_live_watch.py --repo /home/daniele/projects/codex-roadmap --source-root /home/daniele/.codex/sessions --usage-publisher /home/daniele/projects/codex-usage-monitor/codex_usage_publisher.py --usage-source /home/daniele/projects/codex-usage
+Nice=10
+TimeoutStartSec=300
+StandardOutput=journal
+StandardError=journal
