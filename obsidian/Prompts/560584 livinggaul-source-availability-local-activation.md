@@ -1,20 +1,20 @@
 ---
 prompt_id: 560584
-status: running
+status: completed
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/livinggaul-x-downloader
 ---
 
 # 560584 · LivingGaul source availability local activation
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/livinggaul-x-downloader|livinggaul-x-downloader]]
-- **Prompt:** [[../../prompts/livinggaul-source-availability-local-activation|Apri prompt]]
+- **Prompt:** [[../../completed/livinggaul-source-availability-local-activation|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

@@ -5,7 +5,6 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4\|697834 · Migrare solo i veri timestamp a epoch ms]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/560584 livinggaul-source-availability-local-activation\|560584 · LivingGaul source availability local activation]] | running | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/489818 datasette5-personalhub-final-schema-deploy-v3\|489818 · Aggiornare e distribuire Datasette sullo schema PH finale]] | pending | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
@@ -268,5 +267,6 @@
 | [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery\|583742 · PersonalHub v53 freeze e dati mancanti]] | blocked | 2026-09-19T05:42:17Z | 2026-09-19T05:54:52Z | BLOCKED | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2\|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] | completed | 2026-09-19T05:59:34Z | 2026-09-19T05:59:34Z | PASS | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/316628 livinggaul-video-catalog-view-local-activation\|316628 · LivingGaul video catalog view local activation]] | superseded | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/560584 livinggaul-source-availability-local-activation\|560584 · LivingGaul source availability local activation]] | completed | — | — | PASS | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/391746 recover-github-autosync-codex-usage-roadmap\|391746 · Recupera gli alert Git autosync di codex-usage e codex-roadmap]] | completed | 2026-09-19T08:39:43Z | 2026-09-19T08:39:43Z | PASS | no | no | — | codex-usage | gpt-5.6-sol | medium |
 | [[obsidian/Prompts/864205 github-reconcile-production-hardening\|864205 · Rendere github-reconcile production-grade su Fedora]] | completed | 2026-09-19T09:36:49Z | 2026-09-19T09:36:49Z | PASS | no | no | — | github-autosync | gpt-6-astra | medium |

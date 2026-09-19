@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/560584 livinggaul-source-availability-local-activation|560584 · LivingGaul source availability local activation]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/864205 github-reconcile-production-hardening|864205 · Rendere github-reconcile production-grade su Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/391746 recover-github-autosync-codex-usage-roadmap|391746 · Recupera gli alert Git autosync di codex-usage e codex-roadmap]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/684217 prompt-684217|684217 · Historical prompt 684217]] · `blocked` · analizzato=no · fix=—
