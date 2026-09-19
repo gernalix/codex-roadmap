@@ -39,21 +39,22 @@ Se path, file, helper, test, servizio o device sono già noti, trattarli come au
 
 ## Autonomia e recovery
 
-**Goal + acceptance criteria definiscono lo scope; i passi del prompt sono il piano iniziale, non una whitelist di file o comandi.** Codex deve portare autonomamente il goal a termine quando può farlo in sicurezza.
+**Goal + acceptance criteria definiscono lo scope; i passi del prompt sono il piano iniziale, non una whitelist di file, comandi o strategie.** Codex deve portare autonomamente il goal a termine quando può farlo in sicurezza. Se il piano prescritto diventa falso, inefficiente o bloccante, Codex deve sostituirlo con un percorso migliore invece di terminare solo perché non può seguire alla lettera i passi originari.
 
 Dentro lo stesso failure domain Codex è autorizzato a:
 - leggere, modificare, aggiungere o rimuovere codice, test, adapter, config e documentazione tecnica necessari al goal, anche se il prompt non li nomina;
 - correggere un test obsoleto o incoerente quando l'evidenza dimostra che il test, non il comportamento richiesto, è errato;
 - sostituire un comando/helper/API non più valido con l'equivalente canonico corrente;
 - fare discovery **mirata** aggiuntiva quando un'assunzione del prompt risulta falsa;
-- gestire lock/transienti con attesa bounded, retry con stato cambiato, restart/reload di servizi in-scope e temp diagnostics;
+- gestire lock/transienti con attesa bounded, recovery automatica quando il proprietario non è più attivo, retry con stato cambiato, restart/reload di servizi in-scope e temp diagnostics;
 - correggere più blocker indipendenti dello stesso dominio in batch;
+- correggere o sostituire helper, script, guard, test harness e regole operative del repository quando sono essi stessi la causa del blocco e la modifica è necessaria per raggiungere il goal in sicurezza;
 - commit/pushare fix in-scope quando il repository/task lo richiede;
 - proseguire automaticamente dal leaf gate corretto fino agli acceptance criteria senza chiedere conferma.
 
-Non sono da soli motivi per BLOCKED/FAIL: simbolo/API mancante, test/compile failure, file diverso da quello atteso, helper obsoleto, warning riproducibile, remote advance riconciliabile, lock transitorio, servizio riavviabile o necessità di toccare un file adiacente.
+Non sono da soli motivi per BLOCKED/FAIL: simbolo/API mancante, test/compile failure, file diverso da quello atteso, helper obsoleto o difettoso, warning riproducibile, remote advance riconciliabile, lock transitorio o orfano recuperabile, servizio riavviabile, CI correggibile o necessità di toccare file/config/tooling adiacenti.
 
-Codex deve fermarsi solo quando serve davvero qualcosa che non può ottenere autonomamente: credenziale/permesso o decisione utente indispensabile, hardware/runtime necessario indisponibile senza alternativa, conflitto semantico sostanziale fuori scope, rischio concreto di perdita dati, azione distruttiva/pubblicazione esterna non autorizzata o redesign materialmente diverso dal goal.
+Codex deve fermarsi solo quando serve davvero qualcosa che non può ottenere autonomamente: credenziale/permesso o decisione utente indispensabile, hardware/runtime necessario indisponibile senza alternativa, un'altra esecuzione realmente attiva che rende unsafe procedere, conflitto semantico sostanziale fuori scope, rischio concreto di perdita dati, azione distruttiva/pubblicazione esterna non autorizzata o redesign materialmente diverso dal goal.
 
 Recovery:
 - diagnosticare il minimo artefatto utile;
