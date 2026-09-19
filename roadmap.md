@@ -1,6 +1,6 @@
 # Roadmap
 
-> Generato da `roadmap.sqlite`. Non modificare manualmente.
+> Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.
 
 1. [[prompts/personalhub-pr24-pr23-final-release|personalhub-pr24-pr23-final-release]]
 2. [[prompts/chrome-codex-switcher-runtime-closure|chrome-codex-switcher-runtime-closure]]
@@ -9,3 +9,4 @@
 5. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 6. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 7. [[prompts/workflowy-bf-autofix-publisher-v1|workflowy-bf-autofix-publisher-v1]]
+8. [[prompts/workflowy-roadmap-cockpit-local-activation|workflowy-roadmap-cockpit-local-activation]]
