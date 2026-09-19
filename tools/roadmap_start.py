@@ -166,8 +166,10 @@ def claim_start(
     branch: str = DEFAULT_REMOTE_BRANCH,
     timeout: float = 120.0,
 ) -> dict[str, str]:
-    # Local roadmap checkout is deliberately not read or modified.
-    _ = repo
+    # Compatibility only: the mutation queue lives in one canonical repository.
+    # Never let a target project name/repo redirect roadmap Issues elsewhere.
+    _ = repository
+    repository = DEFAULT_REMOTE_REPO
     if not re.fullmatch(r"\d{6}", prompt_id):
         raise RoadmapStartError(f"invalid_prompt_id:{prompt_id}")
 
@@ -254,7 +256,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--repo", default=".")
     parser.add_argument("--prompt-id", required=True)
-    parser.add_argument("--repository", default=DEFAULT_REMOTE_REPO)
+    parser.add_argument(
+        "--repository",
+        default=DEFAULT_REMOTE_REPO,
+        help=argparse.SUPPRESS,
+    )
     parser.add_argument("--branch", default=DEFAULT_REMOTE_BRANCH)
     parser.add_argument("--timeout", type=float, default=120.0)
     args = parser.parse_args(argv)
