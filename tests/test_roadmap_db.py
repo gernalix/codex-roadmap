@@ -60,7 +60,8 @@ class RoadmapDBTests(unittest.TestCase):
             conn=db.connect(repo)
             db.record_execution(
                 conn,"123456",cycle_key="real-cycle",started_at="2026-09-18T10:00:00Z",
-                ended_at="2026-09-18T10:01:00Z",outcome="PASS",source="codex-usage"
+                ended_at="2026-09-18T10:01:00Z",outcome="PASS",source="codex-usage",
+                allow_running_terminal=True,
             )
             conn.commit()
             self.assertEqual("completed",db.prompt_row(conn,"123456")["status"])
