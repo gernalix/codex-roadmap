@@ -42,7 +42,7 @@ jobs:
             : > /tmp/rejected-issues
 
             mapfile -t ISSUE_ROWS < <(
-              gh issue list                 --repo "$GITHUB_REPOSITORY"                 --state open                 --limit 1000                 --json number,title,body                 --jq 'sort_by(.number)[] | select(.title | startswith("[roadmap-mutation] ")) | @base64'
+              gh issue list                 --repo "$GITHUB_REPOSITORY"                 --state open                 --limit 1000                 --json number,title,body                 --jq 'sort_by((if (.title | startswith("[roadmap-mutation] start-")) then 0 elif (.title | startswith("[roadmap-mutation] terminal-")) then 1 elif (.title | startswith("[roadmap-mutation] usage-")) then 2 else 3 end), .number)[] | select(.title | startswith("[roadmap-mutation] ")) | @base64'
             )
 
             if [ "${#ISSUE_ROWS[@]}" -eq 0 ]; then
