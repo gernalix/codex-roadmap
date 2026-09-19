@@ -20,6 +20,12 @@ Instead, submit one immutable `codex-roadmap.mutation.v1` request as a GitHub Is
 
 Terminal Codex results must use `tools/roadmap_result.py` or `tools/roadmap_finish.py`; they already submit through the same writer.
 
+Live lifecycle protection is mandatory:
+- `tools/roadmap_start.py` remains the authoritative synchronous launch claim and must run before substantive project work.
+- `codex-roadmap-live-status.timer` is the passive fallback: it tails native Codex rollouts, claims newly observed six-digit PROMPT_IDs through the same single writer, and triggers the existing usage publisher + roadmap sync when a terminal event appears.
+- The writer prioritizes start claims before ordinary mutations so a prompt that is actually running is locked before queued edits can supersede, reorder, retag, or otherwise mutate it.
+- A terminal request alone does not unblock descendants. Only an authoritative `codex-usage` terminal execution with `PASS` changes the parent to `completed`; every child whose remaining dependencies are then satisfied becomes runnable automatically.
+
 Every Codex report tied to a roadmap task must begin on line 1 with exactly `PROMPT_ID=<six-digit id>` for that task. This applies both to the final Codex response and to any Markdown/text report artifact Codex produces. When a terminal result is reported, `RESULT=PASS|BLOCKED|FAIL` belongs on line 2, not line 1.
 
 `tools/import_codex_usage.py` and `tools/roadmap_sync.py` are writer clients, not local DB writers.
