@@ -155,7 +155,7 @@ La finalizzazione è a due fasi: `roadmap_finish.py` / `roadmap_result.py` regis
 
 Se una decisione nuova rende il lavoro in corso parzialmente obsoleto, il task corrente continua; l'eventuale correzione diventa un follow-up successivo. Questa regola serve a non buttare token e lavoro già in corso.
 
-La prima riga finale deve essere `RESULT=PASS|BLOCKED|FAIL`, seguita da un report conciso con modifiche, test, commit/push e blocker residui.
+Ogni report prodotto da Codex per un task della roadmap — inclusa la risposta finale in chat e qualunque report Markdown/testuale salvato come artefatto — deve avere come **prima riga** esattamente `PROMPT_ID=<PROMPT_ID a 6 cifre>` relativo al task. Per gli esiti terminali, la **seconda riga** deve essere `RESULT=PASS|BLOCKED|FAIL`, seguita da un report conciso con modifiche, test, commit/push e blocker residui.
 
 ## Fallback unattended
 
