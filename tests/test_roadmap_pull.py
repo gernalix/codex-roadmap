@@ -1,0 +1,160 @@
+from __future__ import annotations
+
+import shutil
+import sqlite3
+import subprocess
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+TOOLS = ROOT / "tools"
+sys.path.insert(0, str(TOOLS))
+
+import roadmap_db as db
+import roadmap_pull
+from install_roadmap_pull_guard import install
+
+
+def git(repo: Path, *args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", "-C", str(repo), *args],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=check,
+    )
+
+
+class RoadmapPullTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.tmp = tempfile.TemporaryDirectory()
+        base = Path(self.tmp.name)
+        self.remote = base / "remote.git"
+        self.seed = base / "seed"
+        self.local = base / "local"
+
+        subprocess.run(["git", "init", "--bare", str(self.remote)], check=True, stdout=subprocess.DEVNULL)
+        subprocess.run(["git", "init", "-b", "main", str(self.seed)], check=True, stdout=subprocess.DEVNULL)
+        git(self.seed, "config", "user.name", "Test")
+        git(self.seed, "config", "user.email", "test@example.com")
+
+        (self.seed / "prompts").mkdir()
+        (self.seed / "tools").mkdir()
+        (self.seed / ".githooks").mkdir()
+        shutil.copyfile(ROOT / ".githooks" / "reference-transaction", self.seed / ".githooks" / "reference-transaction")
+        (self.seed / "prompts" / "one.md").write_text("PROMPT_ID=123456\n", encoding="utf-8")
+        (self.seed / "README.md").write_text("base\n", encoding="utf-8")
+
+        conn = db.connect(self.seed)
+        db.register_prompt(
+            conn,
+            prompt_id="123456",
+            slug="one",
+            title="One",
+            current_path="prompts/one.md",
+            explanation="original",
+            model="GPT-5.6 Terra",
+            reasoning="medium",
+            queue_position=1,
+        )
+        db.refresh_materialization_hashes(conn, self.seed)
+        db.set_status(conn, "123456", "running", actor="codex", note="launch")
+        conn.commit()
+        conn.close()
+        db.render(self.seed)
+
+        git(self.seed, "add", ".")
+        git(self.seed, "commit", "-m", "initial running roadmap")
+        git(self.seed, "remote", "add", "origin", str(self.remote))
+        git(self.seed, "push", "-u", "origin", "main")
+
+        subprocess.run(
+            ["git", "clone", "-b", "main", str(self.remote), str(self.local)],
+            check=True,
+            stdout=subprocess.DEVNULL,
+        )
+        git(self.local, "config", "user.name", "Test")
+        git(self.local, "config", "user.email", "test@example.com")
+        install(self.local)
+
+    def tearDown(self) -> None:
+        self.tmp.cleanup()
+
+    def push_seed(self, message: str) -> str:
+        git(self.seed, "add", "-A")
+        git(self.seed, "commit", "-m", message)
+        git(self.seed, "push", "origin", "main")
+        return git(self.seed, "rev-parse", "HEAD").stdout.strip()
+
+    def test_raw_git_pull_is_blocked_by_reference_transaction_hook(self) -> None:
+        before = git(self.local, "rev-parse", "HEAD").stdout.strip()
+        (self.seed / "README.md").write_text("remote\n", encoding="utf-8")
+        remote_head = self.push_seed("remote change")
+
+        proc = git(self.local, "pull", "--ff-only", check=False)
+
+        self.assertNotEqual(0, proc.returncode)
+        self.assertIn("codex-roadmap main is guarded", proc.stderr)
+        self.assertEqual(before, git(self.local, "rev-parse", "HEAD").stdout.strip())
+        self.assertNotEqual(remote_head, before)
+
+    def test_guarded_pull_preserves_running_prompt_and_view(self) -> None:
+        (self.seed / "README.md").write_text("remote\n", encoding="utf-8")
+        remote_head = self.push_seed("remote unrelated change")
+
+        result = roadmap_pull.guarded_pull(self.local)
+
+        self.assertEqual("PASS", result["status"])
+        self.assertEqual(["123456"], result["preserved_running"])
+        self.assertEqual(remote_head, git(self.local, "rev-parse", "HEAD").stdout.strip())
+        conn = sqlite3.connect(self.local / "roadmap.sqlite")
+        self.assertEqual("running", conn.execute("SELECT status FROM prompts WHERE prompt_id='123456'").fetchone()[0])
+        conn.close()
+        self.assertIn("| 123456 | running |", (self.local / "spiegazioni.md").read_text(encoding="utf-8"))
+
+    def test_guarded_pull_blocks_remote_modification_of_running_prompt(self) -> None:
+        before = git(self.local, "rev-parse", "HEAD").stdout.strip()
+        conn = sqlite3.connect(self.seed / "roadmap.sqlite")
+        conn.execute("UPDATE prompts SET explanation='changed remotely' WHERE prompt_id='123456'")
+        conn.commit()
+        conn.close()
+        db.render(self.seed)
+        self.push_seed("invalid running prompt mutation")
+
+        with self.assertRaisesRegex(roadmap_pull.RoadmapPullBlocked, "running_prompt_modified_remote"):
+            roadmap_pull.guarded_pull(self.local)
+
+        self.assertEqual(before, git(self.local, "rev-parse", "HEAD").stdout.strip())
+
+    def test_terminal_codex_usage_allows_running_prompt_to_finish(self) -> None:
+        conn = db.connect(self.seed)
+        db.record_execution(
+            conn,
+            "123456",
+            cycle_key="terminal-cycle",
+            started_at="2026-09-19T00:00:00Z",
+            ended_at="2026-09-19T00:01:00Z",
+            outcome="PASS",
+            source="codex-usage",
+            allow_running_terminal=True,
+        )
+        conn.commit()
+        conn.close()
+        db.reconcile_prompt_file_locations(self.seed)
+        db.render(self.seed)
+        self.push_seed("terminal usage confirms finish")
+
+        result = roadmap_pull.guarded_pull(self.local)
+
+        self.assertEqual(["123456"], result["terminal_confirmed"])
+        conn = sqlite3.connect(self.local / "roadmap.sqlite")
+        self.assertEqual("completed", conn.execute("SELECT status FROM prompts WHERE prompt_id='123456'").fetchone()[0])
+        conn.close()
+        self.assertFalse((self.local / "prompts" / "one.md").exists())
+        self.assertTrue((self.local / "completed" / "one.md").exists())
+
+
+if __name__ == "__main__":
+    unittest.main()
