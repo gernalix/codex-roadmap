@@ -9,8 +9,10 @@ Codex-usage execution that proves it really finished.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
+import shutil
 import sqlite3
 import subprocess
 import tempfile
@@ -90,17 +92,44 @@ def _require_clean_main(repo: Path, branch: str) -> str:
     return _git_ok(repo, "rev-parse", "HEAD")
 
 
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _hook_paths(repo: Path) -> tuple[Path, Path]:
+    source = repo / ".githooks" / "reference-transaction"
+    target = (_git_dir(repo) / "roadmap-hooks" / "reference-transaction").resolve()
+    return source, target
+
+
 def _ensure_installed_hook(repo: Path) -> None:
-    expected = (_git_dir(repo) / "roadmap-hooks").resolve()
+    source, hook = _hook_paths(repo)
+    expected = hook.parent
     configured = _git_ok(repo, "config", "--get", "core.hooksPath")
     if not configured:
         raise RoadmapPullBlocked("pull_guard_not_installed:run tools/install_roadmap_pull_guard.py")
     actual = Path(configured)
     if not actual.is_absolute():
         actual = (repo / actual).resolve()
-    hook = actual / "reference-transaction"
-    if actual != expected or not hook.is_file() or not os.access(hook, os.X_OK):
-        raise RoadmapPullBlocked("pull_guard_not_installed:run tools/install_roadmap_pull_guard.py")
+    if (
+        actual != expected
+        or not source.is_file()
+        or not hook.is_file()
+        or not os.access(hook, os.X_OK)
+        or _sha256(source) != _sha256(hook)
+    ):
+        raise RoadmapPullBlocked("pull_guard_stale_or_missing:run tools/install_roadmap_pull_guard.py")
+
+
+def _refresh_installed_hook(repo: Path) -> None:
+    source, target = _hook_paths(repo)
+    if not source.is_file():
+        raise RoadmapPullBlocked("tracked_pull_guard_missing_after_merge")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    tmp = target.with_suffix(".tmp")
+    shutil.copyfile(source, tmp)
+    os.chmod(tmp, 0o700)
+    tmp.replace(target)
 
 
 def _db_from_bytes(raw: bytes) -> tuple[tempfile.NamedTemporaryFile, sqlite3.Connection]:
@@ -308,6 +337,9 @@ def guarded_pull(
             raise RoadmapPullBlocked(f"post_pull_head_mismatch:{after}:{remote_head}")
         if _git_ok(repo, "status", "--porcelain"):
             raise RoadmapPullBlocked("post_pull_worktree_dirty")
+
+        # Keep the non-worktree hook copy synchronized if the tracked hook changed.
+        _refresh_installed_hook(repo)
 
         post_conn = _open_local_db(repo)
         try:
