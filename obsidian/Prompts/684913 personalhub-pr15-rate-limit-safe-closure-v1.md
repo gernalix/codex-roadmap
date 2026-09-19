@@ -16,7 +16,7 @@ tags:
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-pr15-rate-limit-safe-closure-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-19T02:13:34Z
-- **Ultimo lancio:** 2026-09-19T02:13:34Z
+- **Ultimo lancio:** 2026-09-19T03:20:01Z
 - **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
@@ -36,6 +36,7 @@ Recovery risolutivo di 576041: evita il polling REST che ha prodotto tre BLOCKED
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-19T02:13:34Z | 2026-09-19T02:13:46Z | BLOCKED | 12.44 | gpt-5.6-terra | medium | 1 | 137988 |
+| 2026-09-19T03:20:01Z | 2026-09-19T03:22:18Z | BLOCKED | 137.131 | gpt-5.6-terra | medium | 8 | 187387 |
 
 ## Analisi ChatGPT
 
