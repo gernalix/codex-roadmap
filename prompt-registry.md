@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5\|380812 · Chiudere e integrare tag e alert di Places]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui\|609279 · Solo inglese e diagnostica Places su richiesta]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2\|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3\|830867 · Date e ore coerenti ovunque]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
@@ -18,6 +17,7 @@
 | [[obsidian/Prompts/357862 logseq-updates-pat-safety-closure-v2\|357862 · Chiusura sicurezza e attivazione updater Logseq]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/526713 fedora-runtime-validation-v2\|526713 · Ultimo controllo del monitoraggio Fedora]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | medium |
 | [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1\|418844 · Chiudere il residuo del merge capsule]] | running | 2026-09-19T00:28:37Z | 2026-09-19T00:28:37Z | PASS | no | no | — | Personal Hub | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5\|380812 · Chiudere e integrare tag e alert di Places]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
