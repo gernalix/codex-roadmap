@@ -105,6 +105,33 @@ class UsageExecutionMutationTests(unittest.TestCase):
             self.assertEqual(1, conn.execute("SELECT COUNT(*) FROM identity_conflicts").fetchone()[0])
             conn.close()
 
+    def test_sync_skips_nonterminal_metrics(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp)
+            metrics = source / "prompts" / "123456"
+            metrics.mkdir(parents=True)
+            (metrics / "metrics.json").write_text(
+                json.dumps(
+                    {
+                        "prompt_id": "123456",
+                        "cycle_key": "cycle-running",
+                        "status": "RUNNING",
+                        "prompt_text_redacted": "expected prompt",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with patch.object(
+                roadmap_sync,
+                "_download_remote_db",
+                return_value=({"123456"}, set()),
+            ), patch.object(roadmap_sync, "submit_document") as submit:
+                out = roadmap_sync.sync(Path("/not/a/git/repo"), source)
+
+            self.assertEqual(1, out["skipped_nonterminal"])
+            self.assertEqual(0, out["queued"])
+            submit.assert_not_called()
+
     def test_sync_queues_only_new_registered_cycle_without_touching_repo(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp)
