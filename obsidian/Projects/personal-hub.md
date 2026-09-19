@@ -5,7 +5,6 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] · `running`
 - [[obsidian/Prompts/477616 personalhub-english-only-places-ci-closure-v2|477616 · English-only, diagnostica Places e CI in un solo passaggio]] · `pending`
 - [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `pending`
 - [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `pending`
@@ -19,6 +18,7 @@ tags:
 - [[obsidian/Prompts/111265 personalhub-shared-alerts-pr15-final-closure-v2|111265 · Chiudere PR #15 senza rifare il lavoro]] · `superseded`
 - [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]] · `blocked`
 - [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]] · `blocked`
+- [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] · `completed`
 - [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]] · `blocked`
 - [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui|609279 · Solo inglese e diagnostica Places su richiesta]] · `superseded`
 - [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4|663657 · Chiudere e integrare tag e alert di Places]] · `blocked`

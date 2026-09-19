@@ -1,20 +1,20 @@
 ---
 prompt_id: 735218
-status: running
+status: completed
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/personal-hub
 ---
 
 # 735218 · Chiudere PR #15 usando i secret Oracle di MegaVault
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-pr15-oracle-ci-secret-closure-v1|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-pr15-oracle-ci-secret-closure-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/240438 livinggaul-content-dedupe-local-activation|240438 · LivingGaul content dedupe local activation]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]] · `blocked` · analizzato=no · fix=—
