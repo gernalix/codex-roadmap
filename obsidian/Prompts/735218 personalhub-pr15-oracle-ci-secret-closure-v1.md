@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../completed/personalhub-pr15-oracle-ci-secret-closure-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T03:59:35Z
+- **Ultimo lancio:** 2026-09-19T03:59:35Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Recovery di 684913: il blocker reale è che l'E2E Oracle richiede datasette-runt
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T03:59:35Z | 2026-09-19T04:55:14Z | PASS | 3339.707 | gpt-5.6-sol | medium | 124 | 142444 |
 
 ## Analisi ChatGPT
 
