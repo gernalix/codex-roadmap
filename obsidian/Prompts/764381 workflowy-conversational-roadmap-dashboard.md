@@ -1,6 +1,6 @@
 ---
 prompt_id: 764381
-status: pending
+status: running
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
@@ -8,13 +8,13 @@ tags:
   - human-summary
   - workflowy-dashboard
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 764381 · Far parlare la dashboard Workflowy
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../prompts/workflowy-conversational-roadmap-dashboard|Apri prompt]]
 - **Primo lancio:** —
