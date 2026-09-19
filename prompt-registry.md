@@ -5,7 +5,7 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2\|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] | running | 2026-09-19T14:04:21Z | 2026-09-19T14:25:53Z | BLOCKED | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/637985 personalhub-single-canonical-db-export\|637985 · Mantenere un solo DB auto-esportato PersonalHub]] | running | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/637985 personalhub-single-canonical-db-export\|637985 · Mantenere un solo DB auto-esportato PersonalHub]] | running | 2026-09-19T14:04:52Z | 2026-09-19T14:04:52Z | UNKNOWN | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/489818 datasette5-personalhub-final-schema-deploy-v3\|489818 · Aggiornare e distribuire Datasette sullo schema PH finale]] | pending | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |

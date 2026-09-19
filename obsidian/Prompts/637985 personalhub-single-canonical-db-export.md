@@ -17,9 +17,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../prompts/personalhub-single-canonical-db-export|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T14:04:52Z
+- **Ultimo lancio:** 2026-09-19T14:04:52Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -37,7 +37,7 @@ Fa sì che a regime esista un solo `personalhub.db` auto-esportato: durante la s
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T14:04:52Z | 2026-09-19T14:35:46Z | UNKNOWN | 1854.529 | gpt-5.6-terra | medium | 86 | 124157 |
 
 ## Analisi ChatGPT
 
