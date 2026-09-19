@@ -144,6 +144,54 @@ class RoadmapPullTests(unittest.TestCase):
         self.assertEqual(remote_head, git(self.local, "rev-parse", "HEAD").stdout.strip())
         self.assertNotIn("formatter-noise", spiegazioni.read_text(encoding="utf-8"))
 
+    def test_partial_remote_fast_forward_is_recovered_before_pull(self) -> None:
+        conn = db.connect(self.seed)
+        db.register_prompt(
+            conn, prompt_id="654321", slug="two", title="Two",
+            current_path="prompts/two.md", queue_position=2,
+        )
+        conn.commit()
+        conn.close()
+        (self.seed / "prompts" / "two.md").write_text("two\n", encoding="utf-8")
+        db.render(self.seed)
+        remote_head = self.push_seed("remote prompt")
+        git(self.local, "fetch", "origin", "main")
+        git(self.local, "restore", f"--source={remote_head}", "--staged", "--worktree", "--", ".")
+        git(self.local, "restore", "--source=HEAD", "--worktree", "--", "roadmap.sqlite")
+        self.assertEqual(0, git(self.local, "diff", "--cached", "--quiet", remote_head).returncode)
+
+        first = roadmap_pull.guarded_pull(self.local)
+        second = roadmap_pull.guarded_pull(self.local)
+
+        self.assertEqual(remote_head, first["recovered_interrupted_fast_forward"])
+        self.assertEqual("PASS", first["status"])
+        self.assertEqual("PASS", second["status"])
+        self.assertEqual("", git(self.local, "status", "--porcelain").stdout)
+
+    def test_partial_fast_forward_does_not_discard_independent_db_edit(self) -> None:
+        conn = db.connect(self.seed)
+        db.register_prompt(
+            conn, prompt_id="654321", slug="two", title="Two",
+            current_path="prompts/two.md", queue_position=2,
+        )
+        conn.commit()
+        conn.close()
+        (self.seed / "prompts" / "two.md").write_text("two\n", encoding="utf-8")
+        db.render(self.seed)
+        remote_head = self.push_seed("remote prompt")
+        git(self.local, "fetch", "origin", "main")
+        git(self.local, "restore", f"--source={remote_head}", "--staged", "--worktree", "--", ".")
+        conn = sqlite3.connect(self.local / "roadmap.sqlite")
+        conn.execute("UPDATE prompts SET title='local change' WHERE prompt_id='123456'")
+        conn.commit()
+        conn.close()
+        local_db = (self.local / "roadmap.sqlite").read_bytes()
+
+        with self.assertRaisesRegex(roadmap_pull.RoadmapPullBlocked, "local_worktree_dirty_non_generated:.*roadmap.sqlite"):
+            roadmap_pull.guarded_pull(self.local)
+
+        self.assertEqual(local_db, (self.local / "roadmap.sqlite").read_bytes())
+
     def test_non_generated_dirt_still_blocks(self) -> None:
         (self.local / "README.md").write_text("local edit\n", encoding="utf-8")
 

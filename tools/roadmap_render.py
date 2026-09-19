@@ -121,7 +121,7 @@ def reconcile_prompt_file_locations(repo: Path) -> int:
 
 def render(repo: Path) -> list[str]:
     repo = Path(repo)
-    conn = connect(repo)
+    conn = connect(repo, writable=False)
     rows = summary_rows(conn)
     pending = [r for r in rows if r["status"] in ("pending","running")]
 

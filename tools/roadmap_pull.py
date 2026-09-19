@@ -138,6 +138,45 @@ def _require_clean_main(repo: Path, branch: str) -> tuple[str, list[str]]:
     return _git_ok(repo, "rev-parse", "HEAD"), restored
 
 
+def _recover_interrupted_fast_forward(repo: Path, before: str, remote_head: str) -> str | None:
+    """Undo only an index/worktree that exactly matches a fetched remote commit.
+
+    A rejected ref update can leave Git's fast-forward files staged while HEAD
+    still points at `before`. A later worktree-only restore of roadmap.sqlite
+    produces MM. Never discard an independent local DB edit or untracked file.
+    """
+    if _untracked_paths(repo):
+        return None
+    if _git(repo, "merge-base", "--is-ancestor", before, remote_head).returncode:
+        return None
+    try:
+        index_tree = _git_ok(repo, "write-tree")
+        candidates = _git_ok(repo, "rev-list", f"{before}..{remote_head}").splitlines()
+        candidate = next(
+            (commit for commit in candidates if _git_ok(repo, "rev-parse", f"{commit}^{{tree}}") == index_tree),
+            None,
+        )
+        if candidate is None:
+            return None
+        unstaged = _nul_paths(_git_ok(repo, "diff", "--name-only", "-z"))
+        if unstaged - {"roadmap.sqlite"}:
+            return None
+        if "roadmap.sqlite" in unstaged:
+            local_db = (repo / "roadmap.sqlite").read_bytes()
+            if local_db not in (
+                _git_bytes(repo, "show", f"{before}:roadmap.sqlite"),
+                _git_bytes(repo, "show", ":roadmap.sqlite"),
+            ):
+                return None
+        changed = sorted(_tracked_dirty_paths(repo))
+        if "roadmap.sqlite" not in changed:
+            return None
+        _git_ok(repo, "restore", "--source=HEAD", "--staged", "--worktree", "--", *changed)
+        return candidate
+    except (OSError, RoadmapPullBlocked):
+        return None
+
+
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -339,12 +378,29 @@ def guarded_pull(
     bootstrap_guard: bool = False,
 ) -> dict[str, Any]:
     repo = repo.expanduser().resolve()
-    before, restored_generated_views = _require_clean_main(repo, branch)
+    fetched_head: str | None = None
+    recovered_interrupted_fast_forward: str | None = None
+    try:
+        before, restored_generated_views = _require_clean_main(repo, branch)
+    except RoadmapPullBlocked as exc:
+        if not str(exc).startswith("local_worktree_dirty_non_generated:"):
+            raise
+        before = _git_ok(repo, "rev-parse", "HEAD")
+        refspec = f"refs/heads/{branch}:refs/remotes/{remote}/{branch}"
+        _git_ok(repo, "fetch", remote, refspec)
+        fetched_head = _git_ok(repo, "rev-parse", f"{remote}/{branch}")
+        recovered_interrupted_fast_forward = _recover_interrupted_fast_forward(
+            repo, before, fetched_head
+        )
+        if recovered_interrupted_fast_forward is None:
+            raise exc
+        before, restored_generated_views = _require_clean_main(repo, branch)
 
     # Fetch is safe: it does not update the local main/worktree. Bootstrap mode
     # may install the guard from this exact fetched commit before any merge.
-    refspec = f"refs/heads/{branch}:refs/remotes/{remote}/{branch}"
-    _git_ok(repo, "fetch", remote, refspec)
+    if fetched_head is None:
+        refspec = f"refs/heads/{branch}:refs/remotes/{remote}/{branch}"
+        _git_ok(repo, "fetch", remote, refspec)
     remote_ref = f"{remote}/{branch}"
     remote_head = _git_ok(repo, "rev-parse", remote_ref)
     if bootstrap_guard:
@@ -436,6 +492,7 @@ def guarded_pull(
             "remote_running": sorted(remote_running),
             "terminal_confirmed": terminal_confirmed,
             "restored_generated_views": restored_generated_views,
+            "recovered_interrupted_fast_forward": recovered_interrupted_fast_forward,
         }
     finally:
         local_conn.close()

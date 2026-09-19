@@ -1,5 +1,5 @@
 from __future__ import annotations
-import sys, tempfile, unittest
+import hashlib, sys, tempfile, unittest
 from pathlib import Path
 
 TOOLS=Path(__file__).resolve().parents[1]/"tools"
@@ -7,6 +7,24 @@ sys.path.insert(0,str(TOOLS))
 import roadmap_db as db
 
 class RoadmapDBTests(unittest.TestCase):
+    def test_render_reads_canonical_database_without_writing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            conn = db.connect(repo)
+            db.register_prompt(conn, prompt_id="123456", slug="one", title="One", current_path="prompts/one.md")
+            conn.commit()
+            conn.close()
+            (repo / "prompts").mkdir()
+            (repo / "prompts" / "one.md").write_text("one\n", encoding="utf-8")
+            database = repo / "roadmap.sqlite"
+            before = hashlib.sha256(database.read_bytes()).hexdigest()
+            database.chmod(0o400)
+            try:
+                db.render(repo)
+            finally:
+                database.chmod(0o600)
+            self.assertEqual(before, hashlib.sha256(database.read_bytes()).hexdigest())
+
     def test_register_dependencies_execution_analysis_and_render(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
