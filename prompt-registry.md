@@ -7,6 +7,7 @@
 | [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release\|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] | running | 2026-09-19T15:13:54Z | 2026-09-19T15:29:32Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure\|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] | running | 2026-09-19T15:41:21Z | 2026-09-19T15:41:21Z | BLOCKED | no | no | — | chrome-codex-switcher | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/319572 ccs-runtime-verification-followup\|319572 · Completare la verifica runtime Chrome Codex]] | running | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/593872 fedora-graphics-black-screen-forensics\|593872 · Diagnosi forense del blackout grafico Fedora]] | pending | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |

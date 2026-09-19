@@ -4,6 +4,7 @@
 
 ## Lanciabili adesso
 
+- [[obsidian/Prompts/593872 fedora-graphics-black-screen-forensics|593872 · Diagnosi forense del blackout grafico Fedora]]
 - [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3|588376 · Bonificare history Logseq e attivare updater]]
 
 ## In esecuzione
