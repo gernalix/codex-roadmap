@@ -205,6 +205,24 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertEqual(1,row["queue_position"])
             conn.close()
 
+    def test_pending_prompt_cannot_start_until_dependencies_complete(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="parent",title="Parent",current_path="prompts/parent.md")
+            db.register_prompt(conn,prompt_id="654321",slug="child",title="Child",current_path="prompts/child.md")
+            db.add_dependency(conn,"654321","123456")
+            with self.assertRaisesRegex(
+                db.RoadmapDBError,
+                "prompt_dependencies_incomplete:654321:123456",
+            ):
+                db.set_status(conn,"654321","running",actor="codex",note="launch")
+            self.assertEqual("pending",db.prompt_row(conn,"654321")["status"])
+            db.set_status(conn,"123456","completed",actor="test")
+            db.set_status(conn,"654321","running",actor="codex",note="launch")
+            self.assertEqual("running",db.prompt_row(conn,"654321")["status"])
+            conn.close()
+
     def test_superseded_prompt_cannot_be_reactivated(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
