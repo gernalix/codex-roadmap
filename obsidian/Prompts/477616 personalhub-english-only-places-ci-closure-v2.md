@@ -1,18 +1,18 @@
 ---
 prompt_id: 477616
-status: pending
+status: running
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 477616 · English-only, diagnostica Places e CI in un solo passaggio
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-english-only-places-ci-closure-v2|Apri prompt]]
 - **Primo lancio:** —
