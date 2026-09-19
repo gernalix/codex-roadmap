@@ -22,7 +22,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[825147 personalhub-zombie-function-cleanup-single-writer-v2|825147]]
+- **Sblocca:** [[618338 personalhub-pixel-sqlite-bloat-remediation|618338]], [[825147 personalhub-zombie-function-cleanup-single-writer-v2|825147]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat Codex; P0 bloccante — eseguire prima degli altri task PersonalHub

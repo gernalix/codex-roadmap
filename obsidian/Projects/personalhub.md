@@ -7,6 +7,7 @@ tags:
 
 - [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]] · `running`
 - [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] · `pending`
+- [[obsidian/Prompts/618338 personalhub-pixel-sqlite-bloat-remediation|618338 · Diagnosticare e ridurre il DB PersonalHub da ~627 MB]] · `pending`
 - [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] · `completed`
 - [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation|886414 · PersonalHub 100% capsule isolation — validazione locale]] · `superseded`
 - [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2|200725 · PersonalHub 100% capsule isolation — integra main e valida]] · `superseded`
