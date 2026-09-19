@@ -23,7 +23,7 @@ class RepositoryConsistencyTests(unittest.TestCase):
                     FROM prompts
                     WHERE status IN ('pending','running')
                     ORDER BY
-                      CASE WHEN status='pending' THEN 0 WHEN status='running' THEN 1 ELSE 2 END,
+                      CASE WHEN status='running' THEN 0 WHEN status='pending' THEN 1 ELSE 2 END,
                       COALESCE(queue_position,2147483647), created_at, prompt_id
                     """
                 )

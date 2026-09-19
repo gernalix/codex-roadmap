@@ -12,7 +12,7 @@ from roadmap_result import RoadmapResultError, finish_result
 DEFAULT_REPO_TASK = Path.home() / "projects" / "github-autosync" / "repo_single_writer.py"
 
 
-def _wait_repo_single_writer(prompt_id: str, *, timeout: float = 900.0) -> str:
+def _handoff_repo_single_writer(prompt_id: str, *, timeout: float = 0.0) -> tuple[str, bool]:
     if not DEFAULT_REPO_TASK.is_file():
         raise RoadmapResultError("repo_task_helper_missing")
     proc = subprocess.run(
@@ -32,8 +32,10 @@ def _wait_repo_single_writer(prompt_id: str, *, timeout: float = 900.0) -> str:
     )
     if proc.returncode:
         detail = proc.stderr.strip() or proc.stdout.strip() or f"exit={proc.returncode}"
-        raise RoadmapResultError(f"repo_single_writer_not_merged:{detail}")
-    return proc.stdout.strip() or "no-task-record"
+        if "single-writer integration timeout" in detail:
+            return "pending-integration", False
+        raise RoadmapResultError(f"repo_single_writer_handoff_failed:{detail}")
+    return proc.stdout.strip() or "no-task-record", True
 
 
 def finish(
@@ -42,11 +44,20 @@ def finish(
     *,
     dry_run: bool = False,
     confirm_executed: bool = False,
-    integration_timeout: float = 900.0,
+    integration_timeout: float = 0.0,
 ):
     integration = "dry-run"
+    integrated = True
     if not dry_run:
-        integration = _wait_repo_single_writer(prompt_id, timeout=integration_timeout)
+        integration, integrated = _handoff_repo_single_writer(prompt_id, timeout=integration_timeout)
+        if not integrated:
+            return {
+                "status": "queued",
+                "prompt_id": prompt_id,
+                "result": "PENDING_INTEGRATION",
+                "finish_mode": "remote_single_writer_async",
+                "repo_integration": integration,
+            }
     payload = finish_result(
         repo,
         prompt_id,
@@ -67,7 +78,7 @@ def build_parser():
     parser.add_argument("--prompt-id", required=True)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--confirm-executed", action="store_true")
-    parser.add_argument("--integration-timeout", type=float, default=900.0)
+    parser.add_argument("--integration-timeout", type=float, default=0.0)
     return parser
 
 
