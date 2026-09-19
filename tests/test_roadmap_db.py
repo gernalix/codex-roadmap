@@ -37,7 +37,7 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertNotIn("[[obsidian/Prompts/123456 one\\|123456]]",spieg)
             self.assertTrue(db.verify(repo)["ok"])
 
-    def test_terminal_request_keeps_running_until_usage_confirms(self):
+    def test_terminal_request_finalizes_immediately_and_usage_confirms(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
             (repo/"prompts").mkdir()
@@ -48,14 +48,15 @@ class RoadmapDBTests(unittest.TestCase):
             db.set_status(conn,"123456","running",actor="codex",note="launch")
             db.record_terminal(conn,"123456","PASS",source="roadmap_result")
             conn.commit()
-            self.assertEqual("running",db.prompt_row(conn,"123456")["status"])
+            self.assertEqual("completed",db.prompt_row(conn,"123456")["status"])
             self.assertEqual(1,conn.execute("select count(*) from terminal_requests").fetchone()[0])
             conn.close()
 
+            db.reconcile_prompt_file_locations(repo)
             db.render(repo)
             spieg=(repo/"spiegazioni.md").read_text(encoding="utf-8")
-            self.assertIn("| 123456 | running |",spieg)
-            self.assertTrue((repo/"prompts/one.md").is_file())
+            self.assertNotIn("| 123456 | running |",spieg)
+            self.assertTrue((repo/"completed/one.md").is_file())
 
             conn=db.connect(repo)
             db.record_execution(
