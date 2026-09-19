@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../completed/personalhub-epoch-timestamps-migration-v4|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T09:55:42Z
+- **Ultimo lancio:** 2026-09-19T09:55:42Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Corregge prima lo scanner timestamp troppo largo, poi migra solo i veri istanti 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T09:55:42Z | 2026-09-19T10:45:44Z | UNKNOWN | 3001.91 | gpt-5.6-sol | medium | 298 | 206030 |
 
 ## Analisi ChatGPT
 
