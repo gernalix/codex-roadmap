@@ -33,6 +33,25 @@ class RoadmapStartTests(unittest.TestCase):
     @patch("roadmap_start.guarded_pull", return_value={"status":"PASS"})
     @patch("roadmap_start._wait_issue_applied")
     @patch("roadmap_start.submit_document")
+    def test_target_repository_cannot_redirect_mutation_queue(self, submit, wait, pull, record, task):
+        submit.return_value={"submission":"queued","issue_number":"42","issue_url":""}
+        start.claim_start(
+            Path("."),
+            "123456",
+            repository="livinggaul-x-downloader",
+            timeout=1,
+        )
+        self.assertEqual(
+            "gernalix/codex-roadmap",
+            submit.call_args.kwargs["repository"],
+        )
+        wait.assert_called_once_with("gernalix/codex-roadmap","42",1)
+
+    @patch("roadmap_start._repo_task_worktree", return_value=None)
+    @patch("roadmap_start._local_prompt_record", return_value={"status":"pending","repo":"","project_id":""})
+    @patch("roadmap_start.guarded_pull", return_value={"status":"PASS"})
+    @patch("roadmap_start._wait_issue_applied")
+    @patch("roadmap_start.submit_document")
     def test_claim_waits_for_writer_and_requires_running(self, submit, wait, pull, record, task):
         submit.return_value={
             "submission":"queued",
