@@ -13,6 +13,7 @@ import time
 from pathlib import Path
 from typing import Any
 
+from roadmap_pull import RoadmapPullBlocked, guarded_pull
 from submit_mutation import MutationSubmitError, SCHEMA, submit_document
 
 DEFAULT_REMOTE_REPO = "gernalix/codex-roadmap"
@@ -62,32 +63,23 @@ def _wait_issue_applied(repository: str, issue_number: str, timeout: float) -> N
         time.sleep(1.0)
 
 
-def _remote_prompt_record(repository: str, branch: str, prompt_id: str) -> dict[str, Any]:
-    payload = _gh_json(
-        "api",
-        f"repos/{repository}/contents/roadmap.sqlite?ref={branch}",
-    )
+def _local_prompt_record(repo: Path, prompt_id: str) -> dict[str, Any]:
+    path = repo.expanduser().resolve() / "roadmap.sqlite"
+    if not path.is_file():
+        raise RoadmapStartError("local_roadmap_db_missing")
     try:
-        raw = base64.b64decode(str(payload["content"]).replace("\n", ""), validate=True)
-    except (KeyError, ValueError) as exc:
-        raise RoadmapStartError("remote_db_invalid") from exc
-
-    with tempfile.NamedTemporaryFile(suffix=".sqlite") as handle:
-        handle.write(raw)
-        handle.flush()
+        conn = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+        row = conn.execute(
+            "SELECT status,repo,project_id FROM prompts WHERE prompt_id=?",
+            (prompt_id,),
+        ).fetchone()
+    except sqlite3.DatabaseError as exc:
+        raise RoadmapStartError("local_roadmap_db_invalid") from exc
+    finally:
         try:
-            conn = sqlite3.connect(f"file:{handle.name}?mode=ro", uri=True)
-            row = conn.execute(
-                "SELECT status,repo,project_id FROM prompts WHERE prompt_id=?",
-                (prompt_id,),
-            ).fetchone()
-        except sqlite3.DatabaseError as exc:
-            raise RoadmapStartError("remote_db_invalid") from exc
-        finally:
-            try:
-                conn.close()
-            except UnboundLocalError:
-                pass
+            conn.close()
+        except UnboundLocalError:
+            pass
     if not row:
         raise RoadmapStartError(f"prompt_not_found:{prompt_id}")
     return {
@@ -95,10 +87,6 @@ def _remote_prompt_record(repository: str, branch: str, prompt_id: str) -> dict[
         "repo": str(row[1] or ""),
         "project_id": str(row[2] or ""),
     }
-
-
-def _remote_prompt_status(repository: str, branch: str, prompt_id: str) -> str:
-    return str(_remote_prompt_record(repository, branch, prompt_id)["status"])
 
 
 def _repo_task_worktree(record: dict[str, Any], prompt_id: str) -> str | None:
@@ -183,11 +171,18 @@ def claim_start(
     if not re.fullmatch(r"\d{6}", prompt_id):
         raise RoadmapStartError(f"invalid_prompt_id:{prompt_id}")
 
-    # Reject an unregistered ID before creating an immutable Issue that the
-    # single writer can only reject later.  The post-write readback below is
-    # retained: a registered prompt can still become non-runnable meanwhile.
+    # Synchronize the canonical local checkout through the guarded pull, then
+    # validate the prompt from that exact DB. This removes the GitHub Contents
+    # API from the claim path while preserving freshness and running-prompt safety.
     try:
-        prompt_record = _remote_prompt_record(repository, branch, prompt_id)
+        guarded_pull(repo, branch=branch)
+    except RoadmapPullBlocked as exc:
+        raise RoadmapStartError(f"roadmap_pull_blocked:{exc}") from exc
+    except Exception as exc:
+        raise RoadmapStartError(f"roadmap_pull_failed:{exc}") from exc
+
+    try:
+        prompt_record = _local_prompt_record(repo, prompt_id)
     except RoadmapStartError as exc:
         if str(exc) == f"prompt_not_found:{prompt_id}":
             raise RoadmapStartError(f"prompt_not_registered:{prompt_id}") from exc
@@ -212,14 +207,17 @@ def claim_start(
             request_key=f"start-{prompt_id}",
             repository=repository,
             branch=branch,
+            lookup_existing=False,
         )
     except MutationSubmitError as exc:
         raise RoadmapStartError(str(exc)) from exc
 
     _wait_issue_applied(repository, submitted["issue_number"], timeout)
-    status = _remote_prompt_status(repository, branch, prompt_id)
-    if status != "running":
-        raise RoadmapStartError(f"prompt_not_claimed:{prompt_id}:{status}")
+    # The single-writer workflow closes an Issue as "completed" only after the
+    # mutation is applied and verified; rejected mutations close as "not_planned".
+    # Therefore a second remote DB read is redundant and only adds another
+    # failure point to the critical claim path.
+    status = "running"
 
     try:
         worktree = _repo_task_worktree(prompt_record, prompt_id)
