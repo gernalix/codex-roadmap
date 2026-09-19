@@ -22,7 +22,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[255970 personalhub-english-only-places-ci-closure-v1|255970]], [[609279 personalhub-english-only-places-diagnostics-ui|609279]]
+- **Sblocca:** [[609279 personalhub-english-only-places-diagnostics-ui|609279]]
 - **Padri/precedenti:** [[380812 personalhub-shared-alerts-places-tags-integration-v5|380812]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Stessa chat di 380812

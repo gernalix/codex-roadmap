@@ -4,6 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [[obsidian/Prompts/111265 personalhub-shared-alerts-pr15-final-closure-v2\|111265 · Chiudere PR #15 senza rifare il lavoro]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/255970 personalhub-english-only-places-ci-closure-v1\|255970 · English-only, diagnostica Places e CI in un solo passaggio]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4\|697834 · Migrare solo i veri timestamp a epoch ms]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |

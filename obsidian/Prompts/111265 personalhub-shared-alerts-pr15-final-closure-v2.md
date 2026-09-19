@@ -1,5 +1,5 @@
 ---
-prompt_id: 255970
+prompt_id: 111265
 status: pending
 project_id: 49
 model: GPT-5.6 Terra
@@ -10,26 +10,26 @@ tags:
   - roadmap/project/personal-hub
 ---
 
-# 255970 · English-only, diagnostica Places e CI in un solo passaggio
+# 111265 · Chiudere PR #15 senza rifare il lavoro
 
 - **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-english-only-places-ci-closure-v1|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-shared-alerts-pr15-final-closure-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[111265 personalhub-shared-alerts-pr15-final-closure-v2|111265]]
-- **Sblocca:** [[697834 personalhub-epoch-timestamps-migration-v4|697834]]
+- **Dipende da:** —
+- **Sblocca:** [[255970 personalhub-english-only-places-ci-closure-v1|255970]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
-- **Chat Codex:** Nuova chat
+- **Chat Codex:** Stessa chat di 521404
 
 ## Spiegazione
 
-Unisce English-only, diagnostica Places on-demand e chiusura CI per evitare due sessioni Android quasi identiche. Parte dal codice già esistente e verifica solo i gate mantenuti.
+Riprende dalla PR #15 già implementata e dall'ultimo fix JVM-safe. Fa soltanto check remoti, QA AVD mancante, merge e cleanup, evitando di ripetere migrazioni/build già validate.
 
 ## Esecuzioni
 
