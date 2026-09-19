@@ -149,11 +149,13 @@ Un retry/fix materializzato usa sempre un nuovo PROMPT_ID collegato al padre.
 
 ### Blocco anti-supersede dei prompt attivi
 
-Dopo che `roadmap_start.py` ha portato un prompt a `running`, quel PROMPT_ID è **protetto**: un aggiornamento della roadmap non può trasformarlo in `superseded` né collegarlo come sorgente di una relazione `replacement`. Se una decisione nuova rende il lavoro in corso parzialmente obsoleto, il task corrente continua fino al suo esito terminale; l'eventuale correzione diventa un follow-up successivo. Se l'utente decide invece di interromperlo, va prima fermata la sessione Codex e chiuso il prompt con un esito terminale coerente; solo dopo si può creare un replacement.
+Dopo che `roadmap_start.py` ha portato un prompt a `running`, quel PROMPT_ID è **congelato dal writer**: nessuna mutation ordinaria può modificarne stato, modello, spiegazione, posizione, dipendenze, tag o relazioni, né spostarne il file fuori da `prompts/`. Le viste devono continuare a mostrarlo con stato `running`.
 
-Questa regola serve a non buttare token e lavoro già in corso.
+La finalizzazione è a due fasi: `roadmap_finish.py` / `roadmap_result.py` registrano soltanto l'esito richiesto; il prompt resta `running` finché `codex-usage` non registra la telemetria terminale della sessione. Solo allora il writer applica lo stato terminale e archivia il prompt.
 
-La prima riga finale deve essere `RESULT=PASS|BLOCKED|FAIL`, seguita da un report conciso con modifiche, test, commit/push e blocker residui.
+Se una decisione nuova rende il lavoro in corso parzialmente obsoleto, il task corrente continua; l'eventuale correzione diventa un follow-up successivo. Questa regola serve a non buttare token e lavoro già in corso.
+
+Ogni report prodotto da Codex per un task della roadmap — inclusa la risposta finale in chat e qualunque report Markdown/testuale salvato come artefatto — deve avere come **prima riga** esattamente `PROMPT_ID=<PROMPT_ID a 6 cifre>` relativo al task. Per gli esiti terminali, la **seconda riga** deve essere `RESULT=PASS|BLOCKED|FAIL`, seguita da un report conciso con modifiche, test, commit/push e blocker residui.
 
 ## Fallback unattended
 

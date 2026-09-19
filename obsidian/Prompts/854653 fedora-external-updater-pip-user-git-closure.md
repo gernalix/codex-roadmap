@@ -15,9 +15,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/fedora-fedora-external-updater|Fedora / fedora-external-updater]]
 - **Prompt:** [[../../falliti/fedora-external-updater-pip-user-git-closure|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T00:13:14Z
+- **Ultimo lancio:** 2026-09-19T00:13:14Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Salva definitivamente su GitHub il fix di pip_user che è già stato testato. Se
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T00:13:14Z | 2026-09-19T00:14:29Z | BLOCKED | 75.925 | gpt-5.6-luna | low | 13 | 38233 |
 
 ## Analisi ChatGPT
 

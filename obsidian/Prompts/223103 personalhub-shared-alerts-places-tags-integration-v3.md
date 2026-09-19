@@ -1,20 +1,20 @@
 ---
 prompt_id: 223103
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 223103 · Chiudere e integrare tag e alert di Places
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-shared-alerts-places-tags-integration-v3|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-shared-alerts-places-tags-integration-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -22,9 +22,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[223679 personalhub-capsule-isolation-integration-closure-v4|223679]]
-- **Sblocca:** [[609279 personalhub-english-only-places-diagnostics-ui|609279]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[593728 personalhub-shared-alerts-places-tags-integration-v2|593728]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[663657 personalhub-shared-alerts-places-tags-integration-v4|663657]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
