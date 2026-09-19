@@ -12,3 +12,4 @@
 8. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 9. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 10. [[prompts/fedora-runtime-kuma-closure-v3|fedora-runtime-kuma-closure-v3]]
+11. [[prompts/livinggaul-metadata-v3-local-activation|livinggaul-metadata-v3-local-activation]]
