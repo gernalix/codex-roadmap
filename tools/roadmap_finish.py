@@ -12,18 +12,17 @@ from roadmap_result import RoadmapResultError, finish_result
 DEFAULT_REPO_TASK = Path.home() / "projects" / "github-autosync" / "repo_single_writer.py"
 
 
-def _handoff_repo_single_writer(prompt_id: str, *, timeout: float = 0.0) -> tuple[str, bool]:
+def _queue_repo_integration(prompt_id: str) -> tuple[str, bool]:
+    """Queue completed repository work without waiting for CI or canonical merge."""
     if not DEFAULT_REPO_TASK.is_file():
         raise RoadmapResultError("repo_task_helper_missing")
     proc = subprocess.run(
         [
             "python3",
             str(DEFAULT_REPO_TASK),
-            "wait-any",
+            "finish-any",
             "--task-id",
             prompt_id,
-            "--timeout",
-            str(timeout),
         ],
         text=True,
         stdout=subprocess.PIPE,
@@ -32,10 +31,17 @@ def _handoff_repo_single_writer(prompt_id: str, *, timeout: float = 0.0) -> tupl
     )
     if proc.returncode:
         detail = proc.stderr.strip() or proc.stdout.strip() or f"exit={proc.returncode}"
-        if "single-writer integration timeout" in detail:
-            return "pending-integration", False
-        raise RoadmapResultError(f"repo_single_writer_handoff_failed:{detail}")
-    return proc.stdout.strip() or "no-task-record", True
+        raise RoadmapResultError(f"repo_integration_queue_failed:{detail}")
+    try:
+        payload = json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise RoadmapResultError("repo_integration_queue_invalid_response") from exc
+    status = str(payload.get("status") or "")
+    if status in {"no-task-record", "merged"}:
+        return status, True
+    if status in {"queued", "ready"}:
+        return "queued", False
+    raise RoadmapResultError(f"repo_integration_queue_unexpected_status:{status or 'missing'}")
 
 
 def finish(
@@ -46,17 +52,21 @@ def finish(
     confirm_executed: bool = False,
     integration_timeout: float = 0.0,
 ):
+    # integration_timeout is retained for CLI compatibility but asynchronous
+    # workers never wait for repository integration anymore.
+    _ = integration_timeout
     integration = "dry-run"
     integrated = True
     if not dry_run:
-        integration, integrated = _handoff_repo_single_writer(prompt_id, timeout=integration_timeout)
+        integration, integrated = _queue_repo_integration(prompt_id)
         if not integrated:
             return {
                 "status": "queued",
                 "prompt_id": prompt_id,
-                "result": "PENDING_INTEGRATION",
-                "finish_mode": "remote_single_writer_async",
+                "result": "QUEUED",
+                "finish_mode": "async_integration_queue",
                 "repo_integration": integration,
+                "user_action": "none",
             }
     payload = finish_result(
         repo,
@@ -73,12 +83,12 @@ def finish(
 
 
 def build_parser():
-    parser = argparse.ArgumentParser(description="Compatibility wrapper: queue PASS for the roadmap single writer.")
+    parser = argparse.ArgumentParser(description="Queue repository integration or terminalize no-repository work.")
     parser.add_argument("--repo", default=".")
     parser.add_argument("--prompt-id", required=True)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--confirm-executed", action="store_true")
-    parser.add_argument("--integration-timeout", type=float, default=0.0)
+    parser.add_argument("--integration-timeout", type=float, default=0.0, help=argparse.SUPPRESS)
     return parser
 
 
