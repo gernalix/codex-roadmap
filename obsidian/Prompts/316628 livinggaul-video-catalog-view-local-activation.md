@@ -1,20 +1,20 @@
 ---
-prompt_id: 996524
-status: superseded
+prompt_id: 316628
+status: pending
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/livinggaul-x-downloader
 ---
 
-# 996524 · LivingGaul metadata v3 local activation
+# 316628 · LivingGaul video catalog view local activation
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/livinggaul-x-downloader|livinggaul-x-downloader]]
-- **Prompt:** [[../../falliti/livinggaul-metadata-v3-local-activation|Apri prompt]]
+- **Prompt:** [[../../prompts/livinggaul-video-catalog-view-local-activation|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Installa la v0.3.0 sul Fedora reale, migra in sicurezza il DB locale allo schema metadata v3 e verifica il backfill. Serve perché codice e CI remoti non possono modificare né controllare lo stato SQLite locale. Richiede Codex perché usa filesystem, installazione CLI e DB reali del ThinkPad.
+Installa la v0.3.1 sul Fedora reale, aggiorna in sicurezza il DB e verifica la nuova view leggibile con MB aggregabili per giorno. Serve perché la view deve esistere nel database locale reale, non solo nel codice remoto. Richiede Codex perché usa filesystem, installazione CLI e SQLite locali.
 
 ## Esecuzioni
 
