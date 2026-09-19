@@ -19,7 +19,7 @@ tags:
 - **Ultimo lancio:** 2026-09-19T10:59:16Z
 - **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** sì
-- **Codice modificato da ChatGPT:** sì (1 interventi)
+- **Codice modificato da ChatGPT:** sì (2 interventi)
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
@@ -40,7 +40,9 @@ Rollout locale finale del generic per-repository single writer, worktree isolati
 ## Analisi ChatGPT
 
 - 2026-09-19T22:15:05Z · colli di bottiglia: sì · fix: — · Post-PASS regression observed on Uptime Kuma monitor Fedora GitHub Reconcile #46: heartbeat aged out at 2026-09-19 23:41. Remote diagnosis found the periodic systemd unit was invoking forced reconcile-all every minute, while Kuma was pushed only after a completed full reconcile; fatal AutosyncError paths emitted no heartbeat and a missing Push URL was silently treated as success. github-autosync PR #16 fixes the contract by running the lightweight periodic run path, emitting Kuma status on every non-dry periodic run, emitting explicit DOWN on fatal errors, and failing closed on missing/unusable Push configuration. Remote CI is PASS and the single-writer integrator merged it as 914ae93ad95dc47222b86ecd6c1c3e7ad38db4be. Remaining work is local Fedora deployment/reinstall of units and live #46 verification only.
+- 2026-09-19T22:17:55Z · colli di bottiglia: sì · fix: — · Follow-up hardening removed the separate manual unit-reinstall dependency. github-autosync PR #17 (CI PASS) was merged by the canonical single-writer integrator as a531970063b967153ab49f8358e87b117aafe64d. On Fedora, bootstrap now compares installed github-autosync/repo-integrator user units byte-for-byte with the canonical checkout and automatically reruns install_systemd.py when stale/missing; installer failures become AutosyncError and therefore an explicit Kuma DOWN heartbeat. After the canonical checkout advances, the next reconcile can repair the legacy ExecStart automatically. Only live host/Kuma readback remains environment-specific; no broad rollout prompt should be rerun.
 
 ## Modifiche di codice ChatGPT
 
 - 2026-09-19T22:15:05Z · `gernalix/github-autosync` · runtime-reliability · commit `914ae93ad95dc47222b86ecd6c1c3e7ad38db4be` · Harden periodic Fedora GitHub Reconcile/Kuma heartbeat: lightweight timer path, heartbeat on periodic runs, explicit DOWN on fatal failures, missing Push config surfaced; CI PASS.
+- 2026-09-19T22:17:55Z · `gernalix/github-autosync` · runtime-self-heal · commit `a531970063b967153ab49f8358e87b117aafe64d` · Self-heal stale/missing user-systemd runtime units from canonical checkout; focused drift test and CI PASS.
