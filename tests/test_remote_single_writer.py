@@ -36,7 +36,7 @@ class RemoteSingleWriterTests(unittest.TestCase):
         self.assertEqual("terminal-123456", out["request_key"])
         self.assertEqual("42", out["issue_number"])
         document = submit.call_args.args[0]
-        self.assertEqual("status", document["operations"][0]["op"])
+        self.assertEqual("terminal_request", document["operations"][0]["op"])
         self.assertEqual("completed", document["operations"][0]["status"])
 
     def test_terminal_request_key_is_one_per_prompt(self) -> None:
