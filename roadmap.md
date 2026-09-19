@@ -8,3 +8,4 @@
 4. [[prompts/personalhub-datasette-lite-offline-runtime-v4|personalhub-datasette-lite-offline-runtime-v4]]
 5. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 6. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
+7. [[prompts/ccs-autonomous-runtime-verifier|ccs-autonomous-runtime-verifier]]
