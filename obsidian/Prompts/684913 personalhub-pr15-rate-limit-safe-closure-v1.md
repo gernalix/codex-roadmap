@@ -1,20 +1,20 @@
 ---
-prompt_id: 576041
-status: blocked
+prompt_id: 684913
+status: pending
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 576041 · Chiudere autonomamente la PR alert/Places
+# 684913 · Chiudere PR #15 senza polling GitHub
 
-- **Stato:** blocked
+- **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-pr15-autonomous-closure-v2|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-pr15-rate-limit-safe-closure-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -22,14 +22,14 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** —
-- **Padri/precedenti:** [[111265 personalhub-shared-alerts-pr15-final-closure-v2|111265]], [[521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404]]
-- **Figli/follow-up:** [[684913 personalhub-pr15-rate-limit-safe-closure-v1|684913]]
-- **Chat Codex:** Nuova chat
+- **Sblocca:** [[477616 personalhub-english-only-places-ci-closure-v2|477616]]
+- **Padri/precedenti:** [[576041 personalhub-pr15-autonomous-closure-v2|576041]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Stessa chat Codex di 576041
 
 ## Spiegazione
 
-Riparte dalla PR #15 già corretta e completa autonomamente solo test residui, AVD, merge e cleanup. Il lease ora recupera i lock orfani e CI pending non è più un motivo per abortire.
+Recovery risolutivo di 576041: evita il polling REST che ha prodotto tre BLOCKED consecutivi, tratta il rate-limit come transitorio, gestisce un eventuale instrumentation stale con escalation minima e chiude merge/cleanup/roadmap.
 
 ## Esecuzioni
 

@@ -5,6 +5,7 @@ tags:
 
 # Personal Hub
 
+- [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]] · `pending`
 - [[obsidian/Prompts/477616 personalhub-english-only-places-ci-closure-v2|477616 · English-only, diagnostica Places e CI in un solo passaggio]] · `pending`
 - [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `pending`
 - [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `pending`
