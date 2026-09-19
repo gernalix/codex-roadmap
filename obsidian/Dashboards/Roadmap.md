@@ -10,4 +10,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]]
+- Nessuno.

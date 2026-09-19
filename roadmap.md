@@ -13,4 +13,3 @@
 9. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 10. [[prompts/fedora-runtime-kuma-closure-v3|fedora-runtime-kuma-closure-v3]]
 11. [[prompts/workflowy-roadmap-control-local-activation|workflowy-roadmap-control-local-activation]]
-12. [[prompts/personalhub-pr15-autonomous-closure-v2|personalhub-pr15-autonomous-closure-v2]]
