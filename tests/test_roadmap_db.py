@@ -234,6 +234,16 @@ class RoadmapDBTests(unittest.TestCase):
             )
             conn.close()
 
+    def test_replacement_relation_auto_supersedes_pending_source(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="old",title="Old",current_path="prompts/old.md")
+            db.register_prompt(conn,prompt_id="234567",slug="new",title="New",current_path="prompts/new.md")
+            db.add_relation(conn,"123456","234567","replacement",actor="chatgpt")
+            self.assertEqual("superseded",db.prompt_row(conn,"123456")["status"])
+            conn.close()
+
     def test_pending_prompt_cannot_start_until_dependencies_complete(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
