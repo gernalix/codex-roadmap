@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/642913 global-repository-single-writer-rollout\|642913 · Attivare il single writer globale per tutti i repository]] | running | — | — | — | no | no | — | GitHub Autosync | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0\|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]] | running | — | — | — | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/793678 personalhub-zombie-function-cleanup-closure\|793678 · Chiudi residui zombie dei moduli PersonalHub]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
@@ -37,6 +36,7 @@
 | [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1\|684913 · Chiudere PR #15 senza polling GitHub]] | blocked | 2026-09-19T02:13:34Z | 2026-09-19T03:23:36Z | BLOCKED | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1\|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] | completed | 2026-09-19T03:59:35Z | 2026-09-19T03:59:35Z | PASS | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa\|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] | completed | 2026-09-19T06:57:57Z | 2026-09-19T06:57:57Z | PASS | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/642913 global-repository-single-writer-rollout\|642913 · Attivare il single writer globale per tutti i repository]] | completed | — | — | PASS | no | no | — | GitHub Autosync | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | blocked | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | BLOCKED | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2\|200725 · PersonalHub 100% capsule isolation — integra main e valida]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |

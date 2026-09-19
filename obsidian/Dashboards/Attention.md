@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/642913 global-repository-single-writer-rollout|642913 · Attivare il single writer globale per tutti i repository]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/560584 livinggaul-source-availability-local-activation|560584 · LivingGaul source availability local activation]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/864205 github-reconcile-production-hardening|864205 · Rendere github-reconcile production-grade su Fedora]] · `completed` · analizzato=no · fix=—

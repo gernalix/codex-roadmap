@@ -1,20 +1,20 @@
 ---
 prompt_id: 642913
-status: running
+status: completed
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/github-autosync
 ---
 
 # 642913 · Attivare il single writer globale per tutti i repository
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/github-autosync|GitHub Autosync]]
-- **Prompt:** [[../../prompts/global-repository-single-writer-rollout|Apri prompt]]
+- **Prompt:** [[../../completed/global-repository-single-writer-rollout|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

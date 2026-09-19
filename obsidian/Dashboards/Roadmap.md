@@ -12,5 +12,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/642913 global-repository-single-writer-rollout|642913 · Attivare il single writer globale per tutti i repository]]
 - [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]]
