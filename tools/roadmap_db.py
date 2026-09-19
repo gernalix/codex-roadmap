@@ -214,6 +214,22 @@ def set_status(
         return
     if old in TERMINAL_STATUS and new_status in ACTIVE_STATUS:
         raise RoadmapDBError(f"terminal_prompt_cannot_reactivate:{prompt_id}:{old}->{new_status}")
+    if old == "pending" and new_status == "running":
+        blockers = [
+            dep["depends_on_prompt_id"]
+            for dep in conn.execute(
+                """SELECT d.depends_on_prompt_id
+                   FROM dependencies d
+                   JOIN prompts dep ON dep.prompt_id=d.depends_on_prompt_id
+                   WHERE d.prompt_id=? AND dep.status<>'completed'
+                   ORDER BY d.depends_on_prompt_id""",
+                (prompt_id,),
+            ).fetchall()
+        ]
+        if blockers:
+            raise RoadmapDBError(
+                f"prompt_dependencies_incomplete:{prompt_id}:{','.join(blockers)}"
+            )
     if old == "running" and new_status != "running":
         if not (allow_running_terminal and new_status in (TERMINAL_STATUS - {"superseded"})):
             raise RoadmapDBError(f"running_prompt_locked:{prompt_id}:status:{new_status}")
