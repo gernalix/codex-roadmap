@@ -26,7 +26,7 @@ tags:
 - [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3|830867 · Date e ore coerenti ovunque]] · `superseded`
 - [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `completed`
 - [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3|790233 · Portare Salute nel database canonico]] · `superseded`
-- [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `unknown`
+- [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `blocked`
 - [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation|617205 · Chiudere i nuovi tag e alert di Places]] · `superseded`
 - [[obsidian/Prompts/416826 personalhub-salute-ui-hub-v3|416826 · Collegare Salute all’app e all’Hub]] · `superseded`
 - [[obsidian/Prompts/461839 personalhub-epoch-timestamps-migration|461839 · Date e ore coerenti ovunque]] · `superseded`

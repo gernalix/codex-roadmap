@@ -5,8 +5,8 @@ tags:
 
 # PersonalHub
 
-- [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] · `running`
 - [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] · `completed`
+- [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] · `completed`
 - [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation|886414 · PersonalHub 100% capsule isolation — validazione locale]] · `superseded`
 - [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2|200725 · PersonalHub 100% capsule isolation — integra main e valida]] · `superseded`
 - [[obsidian/Prompts/284916 personalhub-100-capsule-isolation-integrate-v3|284916 · PersonalHub 100% capsule isolation — valida e integra]] · `completed`

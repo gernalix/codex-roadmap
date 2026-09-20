@@ -1,5 +1,8 @@
 # Da controllare
 
+- [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] · `completed` · analizzato=no · fix=—
+- [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] · `blocked` · analizzato=no · fix=—
+- [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/583214 prompt-583214|583214 · Historical prompt 583214]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening|381904 · Rendere stabile il sync Workflowy senza errori 429]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/319572 ccs-runtime-verification-followup|319572 · Completare la verifica runtime Chrome Codex]] · `completed` · analizzato=no · fix=—
@@ -41,7 +44,6 @@
 - [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `unknown` · analizzato=sì · fix=—
 - [[obsidian/Prompts/734140 livinggaul-duplicate-count-local-activation|734140 · LivingGaul duplicate count local activation]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/746193 workflowy-importer-local-live-validation|746193 · Provare davvero l’importatore Workflowy]] · `blocked` · analizzato=sì · fix=693572

@@ -1,20 +1,20 @@
 ---
 prompt_id: 514458
-status: running
+status: completed
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/personalhub
 ---
 
 # 514458 · Integra PR 24 e 23 e crea release finale PersonalHub
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../prompts/personalhub-pr24-pr23-final-release|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-pr24-pr23-final-release|Apri prompt]]
 - **Primo lancio:** 2026-09-19T15:13:54Z
 - **Ultimo lancio:** 2026-09-19T15:29:32Z
 - **Ultimo esito:** PASS
