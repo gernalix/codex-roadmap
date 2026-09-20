@@ -12,3 +12,4 @@
 8. [[prompts/fedora-external-updater-megavault-git-closure-v2|fedora-external-updater-megavault-git-closure-v2]]
 9. [[prompts/recover-731845-roadmap-identity-finalize|recover-731845-roadmap-identity-finalize]]
 10. [[prompts/post-404936-runtime-validation|post-404936-runtime-validation]]
+11. [[prompts/workflowy-dashboard-dedupe-live-deploy|workflowy-dashboard-dedupe-live-deploy]]
