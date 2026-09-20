@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-Riprende solo dal migration gate fallito di 728918, riusa l’implementazione già esistente e completa il minimo residuo necessario per sbloccare la validazione Git History successiva.
+Riprende il lavoro rimasto incompleto sull’archivio Obsidian di PersonalHub e corregge solo ciò che impedisce di finirlo.
 
 ## Esecuzioni
 

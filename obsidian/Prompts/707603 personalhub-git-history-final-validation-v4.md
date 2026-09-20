@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Mette davvero alla prova la macchina del tempo di PersonalHub: cronologia Git, restore, revert e recupero di versioni precedenti. L’obiettivo è poter sperimentare senza il terrore di perdere dati, sapendo che puoi tornare indietro in sicurezza. Se passa, PersonalHub diventa molto più resistente agli errori e alle modifiche sbagliate.
+Controlla che PersonalHub possa tornare in sicurezza a versioni precedenti dei dati, così puoi recuperare errori o modifiche sbagliate senza perdere informazioni.
 
 ## Esecuzioni
 

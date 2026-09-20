@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Mette nello stesso posto cosa stavi facendo sul PC e cosa stava succedendo al sistema. Quando qualcosa va storto, avrai una timeline unica e un pacchetto dell’incidente già pronto da analizzare, invece di ricostruire tutto a mano.
+Mette insieme cosa stavi facendo sul PC e cosa stava succedendo a Fedora, così quando c’è un problema puoi capire subito cosa è successo.
 
 ## Esecuzioni
 

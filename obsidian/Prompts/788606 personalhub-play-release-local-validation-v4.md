@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Fa il controllo finale da “app pronta davvero”: build firmata, minificazione, dimensione, compatibilità e smoke test. Serve a verificare che tutto il lavoro fatto prima produca un pacchetto Android pulito, piccolo e installabile. È l’ultimo checkpoint prima di poter trattare PersonalHub come una release seria invece che come un progetto ancora in laboratorio.
+Fa l’ultimo controllo della versione Android di PersonalHub per verificare che sia pronta, installabile e ben confezionata.
 
 ## Esecuzioni
 

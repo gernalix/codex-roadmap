@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-Recupera 854653 risolvendo l'unico blocker concreto: fedora-external-updater non ha ancora un'identità canonica MegaVault. Registra o risolve il progetto senza inventare ID o remote, poi persiste una sola volta le modifiche pip_user/537184 già testate, preservando ogni hunk estraneo.
+Collega correttamente fedora-external-updater a MegaVault e salva le correzioni già pronte, senza toccare altro.
 
 ## Esecuzioni
 

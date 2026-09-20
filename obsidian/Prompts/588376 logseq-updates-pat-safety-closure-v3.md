@@ -30,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-Ripulisce in modo definitivo un vecchio segreto GitHub dalla cronologia del repo Logseq e poi attiva l’updater automatico su Fedora. Così elimini una falla storica e, nello stesso tempo, ottieni aggiornamenti gestiti in automatico. È il classico task che rende il sistema sia più sicuro sia più comodo.
+Dopo che hai revocato la vecchia chiave GitHub, la elimina anche dalla cronologia e riattiva gli aggiornamenti automatici di Logseq.
 
 ## Esecuzioni
 

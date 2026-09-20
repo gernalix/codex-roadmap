@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-519564 è ora canonically BLOCKED, ma il blocker GNOME/clipboard è stato corretto e mergiato in chrome-codex-switcher PR #1 e il successivo prompt 672841 ha poi ottenuto PASS sullo smoke reale. Questo fix deve solo riconciliare lo stato canonico senza ripetere installazione, pairing o smoke già riusciti.
+Aggiorna la roadmap per segnare correttamente come risolto un vecchio problema già sistemato, senza ripetere test o installazioni.
 
 ## Esecuzioni
 

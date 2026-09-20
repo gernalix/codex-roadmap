@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Distribuire sul Fedora reale il fix già mergeato della dashboard Workflowy e verificare live deduplica e idempotenza.
+Aggiorna la dashboard Workflowy sul tuo PC e controlla che ogni prompt compaia una sola volta, senza doppioni.
 
 ## Esecuzioni
 

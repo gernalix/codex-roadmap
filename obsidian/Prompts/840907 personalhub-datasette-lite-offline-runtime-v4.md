@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Fa funzionare il Data Explorer di PersonalHub anche completamente offline. Potrai esplorare tabelle, collegamenti e relazioni dal telefono senza dipendere da Internet o dal server. È come portarti dietro una mini versione di Datasette dentro l’app, ma usando snapshot sicuri invece del database vivo.
+Fa funzionare l’esplorazione dei dati di PersonalHub anche senza Internet, direttamente dal telefono.
 
 ## Esecuzioni
 

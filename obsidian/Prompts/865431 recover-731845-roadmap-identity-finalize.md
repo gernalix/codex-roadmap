@@ -31,7 +31,7 @@ tags:
 
 ## Spiegazione
 
-731845 ha completato il lavoro sostanziale dell’audit e il commit d8112b2 è già contenuto nel main corrente; l’unico blocker residuo è il mismatch di identità del roadmap_guard finale. Questo fix deve correggere/finalizzare solo lo stato canonico senza rieseguire scansioni o audit.
+Il lavoro di 731845 è già stato fatto. Questo prompt sistema solo il suo stato nella roadmap, senza rifare il lavoro.
 
 ## Esecuzioni
 

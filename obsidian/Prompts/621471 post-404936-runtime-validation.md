@@ -33,7 +33,7 @@ tags:
 
 ## Spiegazione
 
-Solo lavoro Codex-only rimasto: portare sul Fedora i due fix gia mergiati, verificare il runtime reale senza nuovi audit/refactor e controllare che l'analisi di 404936 esponga correttamente wait/tool-call.
+Installa sul tuo PC due correzioni già pronte e controlla che il sistema misuri correttamente quanto lavoro richiede ogni prompt.
 
 ## Esecuzioni
 
