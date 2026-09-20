@@ -11,3 +11,4 @@
 7. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 8. [[prompts/workflowy-roadmap-sync-rate-limit-hardening|workflowy-roadmap-sync-rate-limit-hardening]]
 9. [[prompts/fedora-external-updater-megavault-git-closure-v2|fedora-external-updater-megavault-git-closure-v2]]
+10. [[prompts/recover-731845-roadmap-identity-finalize|recover-731845-roadmap-identity-finalize]]
