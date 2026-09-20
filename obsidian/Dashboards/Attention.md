@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/404936 github-autosync-kuma46-autonomous-closure|404936 · Chiudere definitivamente il monitor rosso Fedora GitHub Reconcile]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/319572 ccs-runtime-verification-followup|319572 · Completare la verifica runtime Chrome Codex]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/764381 workflowy-conversational-roadmap-dashboard|764381 · Far parlare la dashboard Workflowy]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/764382 workflowy-semantic-dashboard-styling|764382 · Evidenziare visivamente problemi e azioni nella dashboard]] · `completed` · analizzato=no · fix=—

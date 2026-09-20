@@ -1,6 +1,6 @@
 ---
 prompt_id: 404936
-status: running
+status: completed
 project_id: 92
 model: GPT-5.6 Sol
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - incident-closure
   - kuma
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/github-autosync-fedora-runtime
 ---
 
 # 404936 · Chiudere definitivamente il monitor rosso Fedora GitHub Reconcile
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/github-autosync-fedora-runtime|GitHub Autosync / Fedora runtime]]
-- **Prompt:** [[../../prompts/github-autosync-kuma46-autonomous-closure|Apri prompt]]
+- **Prompt:** [[../../completed/github-autosync-kuma46-autonomous-closure|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
