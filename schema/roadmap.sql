@@ -194,6 +194,12 @@ WHERE p.status='pending'
     JOIN prompts dep ON dep.prompt_id=d.depends_on_prompt_id
     WHERE d.prompt_id=p.prompt_id AND dep.status<>'completed'
   )
+  AND NOT EXISTS (
+    SELECT 1
+    FROM prompt_tags t
+    WHERE t.prompt_id=p.prompt_id
+      AND t.tag LIKE 'manual-prerequisite:%'
+  )
 ORDER BY COALESCE(p.queue_position, 2147483647), p.created_at, p.prompt_id;
 
 CREATE VIEW v_attention AS
