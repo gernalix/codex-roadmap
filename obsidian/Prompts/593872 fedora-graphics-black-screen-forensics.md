@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/fedora-fedora-system-monitor|Fedora / fedora-system-monitor]]
 - **Prompt:** [[../../completed/fedora-graphics-black-screen-forensics|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T21:09:02Z
+- **Ultimo lancio:** 2026-09-19T21:09:02Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Ricostruisce minuto per minuto il blackout grafico usando ActivityWatch, il moni
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T21:09:02Z | 2026-09-19T21:12:30Z | UNKNOWN | 208.109 | gpt-5.6-sol | medium | 24 | 101820 |
 
 ## Analisi ChatGPT
 
