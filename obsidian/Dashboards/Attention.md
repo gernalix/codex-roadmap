@@ -1,5 +1,7 @@
 # Da controllare
 
+- [[obsidian/Prompts/583214 prompt-583214|583214 · Historical prompt 583214]] · `completed` · analizzato=no · fix=—
+- [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening|381904 · Rendere stabile il sync Workflowy senza errori 429]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/319572 ccs-runtime-verification-followup|319572 · Completare la verifica runtime Chrome Codex]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/764381 workflowy-conversational-roadmap-dashboard|764381 · Far parlare la dashboard Workflowy]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/764382 workflowy-semantic-dashboard-styling|764382 · Evidenziare visivamente problemi e azioni nella dashboard]] · `completed` · analizzato=no · fix=—
@@ -117,7 +119,6 @@
 - [[obsidian/Prompts/582413 prompt-582413|582413 · Historical prompt 582413]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/582731 prompt-582731|582731 · Historical prompt 582731]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/583142 prompt-583142|583142 · Historical prompt 583142]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/583214 prompt-583214|583214 · Historical prompt 583214]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/583216 prompt-583216|583216 · Historical prompt 583216]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/583241 prompt-583241|583241 · Historical prompt 583241]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/583417 prompt-583417|583417 · Historical prompt 583417]] · `completed` · analizzato=no · fix=—

@@ -13,7 +13,6 @@
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2\|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]] | pending | — | — | — | no | no | — | Fedora / fedora-external-updater | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize\|865431 · Finalizzare 731845 senza rieseguire l’audit]] | pending | — | — | — | no | no | — | MegaVault | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening\|381904 · Rendere stabile il sync Workflowy senza errori 429]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.5 | low |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
@@ -170,7 +169,7 @@
 | [[obsidian/Prompts/582413 prompt-582413\|582413 · Historical prompt 582413]] | unknown | 2026-08-09T02:55:18Z | 2026-08-09T02:55:18Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/582731 prompt-582731\|582731 · Historical prompt 582731]] | completed | 2026-09-07T08:46:47Z | 2026-09-07T08:46:47Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/583142 prompt-583142\|583142 · Historical prompt 583142]] | completed | 2026-09-03T19:59:52Z | 2026-09-03T19:59:52Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/583214 prompt-583214\|583214 · Historical prompt 583214]] | unknown | 2026-09-16T09:48:14Z | 2026-09-16T09:48:14Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/583214 prompt-583214\|583214 · Historical prompt 583214]] | completed | 2026-09-03T17:23:31Z | 2026-09-16T09:48:14Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/583216 prompt-583216\|583216 · Historical prompt 583216]] | completed | 2026-09-06T10:01:04Z | 2026-09-06T10:01:04Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/583241 prompt-583241\|583241 · Historical prompt 583241]] | unknown | 2026-08-30T14:50:20Z | 2026-08-30T14:50:20Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/583417 prompt-583417\|583417 · Historical prompt 583417]] | completed | 2026-09-05T11:22:56Z | 2026-09-05T11:22:56Z | PASS | no | no | — | — | — | — |
@@ -302,3 +301,4 @@
 | [[obsidian/Prompts/438217 workflowy-late-binding-controls\|438217 · Esporre pairing tardivo Chrome/Codex nella dashboard]] | completed | — | — | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/764381 workflowy-conversational-roadmap-dashboard\|764381 · Far parlare la dashboard Workflowy]] | completed | — | — | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/764382 workflowy-semantic-dashboard-styling\|764382 · Evidenziare visivamente problemi e azioni nella dashboard]] | completed | — | — | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening\|381904 · Rendere stabile il sync Workflowy senza errori 429]] | unknown | 2026-09-20T08:29:35Z | 2026-09-20T08:29:35Z | UNKNOWN | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |

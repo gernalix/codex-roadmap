@@ -73,7 +73,7 @@ tags:
 - [[obsidian/Prompts/582413 prompt-582413|582413 · Historical prompt 582413]] · `unknown`
 - [[obsidian/Prompts/582731 prompt-582731|582731 · Historical prompt 582731]] · `completed`
 - [[obsidian/Prompts/583142 prompt-583142|583142 · Historical prompt 583142]] · `completed`
-- [[obsidian/Prompts/583214 prompt-583214|583214 · Historical prompt 583214]] · `unknown`
+- [[obsidian/Prompts/583214 prompt-583214|583214 · Historical prompt 583214]] · `completed`
 - [[obsidian/Prompts/583216 prompt-583216|583216 · Historical prompt 583216]] · `completed`
 - [[obsidian/Prompts/583241 prompt-583241|583241 · Historical prompt 583241]] · `unknown`
 - [[obsidian/Prompts/583417 prompt-583417|583417 · Historical prompt 583417]] · `completed`
