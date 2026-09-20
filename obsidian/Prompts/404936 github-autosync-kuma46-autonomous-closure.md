@@ -19,9 +19,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/github-autosync-fedora-runtime|GitHub Autosync / Fedora runtime]]
 - **Prompt:** [[../../completed/github-autosync-kuma46-autonomous-closure|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-20T07:14:25Z
+- **Ultimo lancio:** 2026-09-20T07:14:25Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -39,7 +39,7 @@ Prende possesso end-to-end del monitor Fedora GitHub Reconcile ancora rosso: dia
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-20T07:14:25Z | 2026-09-20T07:34:23Z | PASS | 1197.864 | gpt-5.6-sol | medium | 86 | 125635 |
 
 ## Analisi ChatGPT
 
