@@ -95,6 +95,28 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
              requested_at TEXT NOT NULL
            )"""
     )
+    # Views are runtime contracts too. Refresh this one additively so existing
+    # schema_version=1 databases pick up readiness semantics without a rebuild.
+    conn.execute("DROP VIEW IF EXISTS v_runnable_prompts")
+    conn.execute(
+        """CREATE VIEW v_runnable_prompts AS
+           SELECT p.*
+           FROM prompts p
+           WHERE p.status='pending'
+             AND NOT EXISTS (
+               SELECT 1
+               FROM dependencies d
+               JOIN prompts dep ON dep.prompt_id=d.depends_on_prompt_id
+               WHERE d.prompt_id=p.prompt_id AND dep.status<>'completed'
+             )
+             AND NOT EXISTS (
+               SELECT 1
+               FROM prompt_tags t
+               WHERE t.prompt_id=p.prompt_id
+                 AND t.tag LIKE 'manual-prerequisite:%'
+             )
+           ORDER BY COALESCE(p.queue_position, 2147483647), p.created_at, p.prompt_id"""
+    )
     conn.commit()
 
 def materialization_hash(text: str) -> str:
