@@ -12,3 +12,4 @@
 8. [[prompts/personalhub-datasette-lite-offline-runtime-v4|personalhub-datasette-lite-offline-runtime-v4]]
 9. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 10. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
+11. [[prompts/chrome-codex-switcher-stale-blocked-reconcile-v1|chrome-codex-switcher-stale-blocked-reconcile-v1]]

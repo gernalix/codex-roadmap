@@ -28,7 +28,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[284615 chrome-codex-switcher-stale-blocked-reconcile-v1|284615]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
