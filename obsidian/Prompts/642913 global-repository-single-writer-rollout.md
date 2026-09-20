@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[404936 github-autosync-kuma46-autonomous-closure|404936]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

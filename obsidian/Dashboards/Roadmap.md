@@ -4,11 +4,12 @@
 
 ## Lanciabili adesso
 
+- [[obsidian/Prompts/404936 github-autosync-kuma46-autonomous-closure|404936 · Chiudere definitivamente il monitor rosso Fedora GitHub Reconcile]]
 - [[obsidian/Prompts/257387 fedora-context-index-runtime-activation|257387 · Attiva la timeline unificata Fedora + ActivityWatch]]
 - [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3|588376 · Bonificare history Logseq e attivare updater]]
-- [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening|381904 · Rendere stabile il sync Workflowy senza errori 429]]
 - [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]]
 - [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize|865431 · Finalizzare 731845 senza rieseguire l’audit]]
+- [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening|381904 · Rendere stabile il sync Workflowy senza errori 429]]
 
 ## In esecuzione
 
