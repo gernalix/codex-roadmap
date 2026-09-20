@@ -220,7 +220,15 @@ class RoadmapDBTests(unittest.TestCase):
             db.add_dependency(conn,"654321","123456")
             db.add_tag(conn,"777777","manual-prerequisite:kuma-login")
             db.refresh_materialization_hashes(conn,repo)
-            conn.commit(); conn.close()
+            conn.commit()
+            runnable=[
+                row["prompt_id"]
+                for row in conn.execute(
+                    "SELECT prompt_id FROM v_runnable_prompts ORDER BY queue_position"
+                )
+            ]
+            self.assertEqual(["123456"],runnable)
+            conn.close()
             db.render(repo)
             spieg=(repo/"spiegazioni.md").read_text(encoding="utf-8")
             self.assertIn("| Eseguibile ora? |",spieg)
