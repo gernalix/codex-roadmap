@@ -22,7 +22,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[637985 personalhub-single-canonical-db-export|637985]], [[697834 personalhub-epoch-timestamps-migration-v4|697834]], [[825147 personalhub-zombie-function-cleanup-single-writer-v2|825147]]
-- **Sblocca:** [[489818 datasette5-personalhub-final-schema-deploy-v3|489818]], [[728918 personalhub-obsidian-archive-complete-v4|728918]]
+- **Sblocca:** [[489818 datasette5-personalhub-final-schema-deploy-v3|489818]], [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]], [[728918 personalhub-obsidian-archive-complete-v4|728918]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat

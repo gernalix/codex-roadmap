@@ -22,9 +22,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[462279 personalhub-health-canonical-e2e-v4|462279]]
-- **Sblocca:** [[707603 personalhub-git-history-final-validation-v4|707603]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[355842 personalhub-obsidian-archive-complete-v3|355842]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione

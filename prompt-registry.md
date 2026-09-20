@@ -9,6 +9,7 @@
 | [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize\|865431 · Finalizzare 731845 senza rieseguire l’audit]] | pending | — | — | — | no | no | — | MegaVault | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2\|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]] | pending | — | — | — | no | no | — | Fedora / fedora-external-updater | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/257387 fedora-context-index-runtime-activation\|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] | pending | — | — | — | no | no | — | Fedora | GPT-5.5 | medium |
+| [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5\|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |

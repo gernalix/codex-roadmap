@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[728918 personalhub-obsidian-archive-complete-v4|728918]]
+- **Dipende da:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
 - **Sblocca:** [[840907 personalhub-datasette-lite-offline-runtime-v4|840907]]
 - **Padri/precedenti:** [[825405 personalhub-git-history-data-sync-validation-v3|825405]]
 - **Figli/follow-up:** —
