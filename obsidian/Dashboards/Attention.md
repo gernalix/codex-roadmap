@@ -169,7 +169,6 @@
 - [[obsidian/Prompts/731604 prompt-731604|731604 · Historical prompt 731604]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/731608 prompt-731608|731608 · Historical prompt 731608]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/731842 prompt-731842|731842 · Historical prompt 731842]] · `unknown` · analizzato=no · fix=—
-- [[obsidian/Prompts/731845 prompt-731845|731845 · Historical prompt 731845]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/731904 prompt-731904|731904 · Historical prompt 731904]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/734581 prompt-734581|734581 · Historical prompt 734581]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/736205 prompt-736205|736205 · Historical prompt 736205]] · `unknown` · analizzato=no · fix=—
