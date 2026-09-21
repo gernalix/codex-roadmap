@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/515955 grindr-web-exporter-recaptcha-normal-chrome-login-v1|515955 · Fix login reCAPTCHA Grindr exporter]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/601566 grindr-web-exporter-persistent-chrome-profile-v1|601566 · Chiudi blocker Chrome Grindr exporter]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/285894 grindr-web-exporter-recover-complete-all-chats-v1|285894 · Recupera Grindr exporter e automatizza tutte le chat]] · `blocked` · analizzato=sì · fix=—
