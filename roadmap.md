@@ -26,3 +26,4 @@
 22. [[prompts/personalhub-release-stale-blocked-reconcile-v1|personalhub-release-stale-blocked-reconcile-v1]]
 23. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 24. [[prompts/personalhub-soldi-on-device-visual-object-search-v1|personalhub-soldi-on-device-visual-object-search-v1]]
+25. [[prompts/eboks-native-bulk-download-capability-exploration|eboks-native-bulk-download-capability-exploration]]
