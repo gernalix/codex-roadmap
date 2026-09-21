@@ -20,9 +20,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../falliti/chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-21T21:50:23Z
+- **Ultimo lancio:** 2026-09-21T21:50:23Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -40,7 +40,7 @@ Chrome Flatpak è stato rimosso e Chrome RPM con lo switcher funziona: il task d
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-21T21:50:23Z | 2026-09-21T21:56:19Z | BLOCKED | 355.822 | gpt-5.6-terra | medium | 41 | 136377 |
 
 ## Analisi ChatGPT
 
