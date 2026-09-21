@@ -27,3 +27,4 @@
 23. [[prompts/personalhub-release-stale-blocked-reconcile-v1|personalhub-release-stale-blocked-reconcile-v1]]
 24. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 25. [[prompts/personalhub-soldi-on-device-visual-object-search-v1|personalhub-soldi-on-device-visual-object-search-v1]]
+26. [[prompts/discord-exporter-always-on-kuma-live-v1|discord-exporter-always-on-kuma-live-v1]]
