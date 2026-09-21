@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[576041 personalhub-pr15-autonomous-closure-v2|576041]]
-- **Figli/follow-up:** [[735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218]]
+- **Figli/follow-up:** [[726541 personalhub-pr15-historical-blocked-reconcile-v1|726541]], [[735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218]]
 - **Chat Codex:** Stessa chat Codex di 576041
 
 ## Spiegazione
