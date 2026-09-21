@@ -18,9 +18,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../falliti/grindr-web-exporter-persistent-chrome-profile-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-21T22:54:13Z
+- **Ultimo lancio:** 2026-09-21T22:54:13Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ Sostituisce il requisito CDP sul profilo Chrome predefinito con un profilo Chrom
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-21T22:54:13Z | 2026-09-21T22:59:58Z | BLOCKED | 344.895 | gpt-5.6-terra | medium | 16 | 140294 |
 
 ## Analisi ChatGPT
 
