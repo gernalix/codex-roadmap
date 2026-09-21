@@ -15,6 +15,7 @@
 - [[obsidian/Prompts/296843 github-autosync-stale-blocked-reconcile-v1|296843 · Riconciliare 684217 dopo la verifica PASS di github-autosync]]
 - [[obsidian/Prompts/615294 personalhub-timer-now-stale-blocked-reconcile-v1|615294 · Riconciliare 314719 dopo il completamento Timer Now]]
 - [[obsidian/Prompts/426718 personalhub-timer-tags-historical-blocked-reconcile-v1|426718 · Riconciliare 742618 dopo il repair Timer Tags già verificato]]
+- [[obsidian/Prompts/391742 codex-usage-prompt-id-source-historical-reconcile-v1|391742 · Riconciliare il mismatch storico prompt_id_source del publisher Codex]]
 
 ## In esecuzione
 
