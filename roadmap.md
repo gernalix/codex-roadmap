@@ -30,3 +30,4 @@
 26. [[prompts/fedora-systemd-services-kuma-resilience|fedora-systemd-services-kuma-resilience]]
 27. [[prompts/eboks-native-bulk-download-browser-control-fix-v1|eboks-native-bulk-download-browser-control-fix-v1]]
 28. [[prompts/prompt-history-unified-evidence-backfill-runtime-v1|prompt-history-unified-evidence-backfill-runtime-v1]]
+29. [[prompts/chatgpt-chrome-rpm-native-transport-test|chatgpt-chrome-rpm-native-transport-test]]
