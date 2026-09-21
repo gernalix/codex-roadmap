@@ -21,7 +21,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -42,7 +42,7 @@ Sostituisce il requisito CDP sul profilo Chrome predefinito con un profilo Chrom
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-21T23:01:33Z · colli di bottiglia: sì · fix: — · {"blocker":"esegui `grindr-export setup-browser`, completa il login normale nella finestra dedicata, poi rilancia `grindr-export export-all --discovery-only`.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"601566","report_ref":"codex-usage:2bd80df224249be75345790f:ae38eeffbd760c61","schema":"codex-roadmap.fix-packet.v1","work_state":{"commit":"3703835"}}
 
 ## Modifiche di codice ChatGPT
 
