@@ -1,6 +1,6 @@
 ---
 prompt_id: 865431
-status: pending
+status: running
 project_id: 23
 model: GPT-5.6 Luna
 reasoning: low
@@ -8,13 +8,13 @@ tags:
   - fix
   - roadmap-identity
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/megavault
 ---
 
 # 865431 · Finalizzare 731845 senza rieseguire l’audit
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/megavault|MegaVault]]
 - **Prompt:** [[../../prompts/recover-731845-roadmap-identity-finalize|Apri prompt]]
 - **Primo lancio:** —

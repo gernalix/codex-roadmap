@@ -2,9 +2,9 @@
 
 > Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.
 
-1. [[prompts/workflowy-dashboard-dedupe-live-deploy|workflowy-dashboard-dedupe-live-deploy]]
-2. [[prompts/post-404936-runtime-validation|post-404936-runtime-validation]]
-3. [[prompts/recover-731845-roadmap-identity-finalize|recover-731845-roadmap-identity-finalize]]
+1. [[prompts/recover-731845-roadmap-identity-finalize|recover-731845-roadmap-identity-finalize]]
+2. [[prompts/workflowy-dashboard-dedupe-live-deploy|workflowy-dashboard-dedupe-live-deploy]]
+3. [[prompts/post-404936-runtime-validation|post-404936-runtime-validation]]
 4. [[prompts/fedora-external-updater-megavault-git-closure-v2|fedora-external-updater-megavault-git-closure-v2]]
 5. [[prompts/fedora-context-index-runtime-activation|fedora-context-index-runtime-activation]]
 6. [[prompts/personalhub-obsidian-archive-blocker-closure-v5|personalhub-obsidian-archive-blocker-closure-v5]]
