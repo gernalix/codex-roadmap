@@ -2,10 +2,10 @@
 
 > Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.
 
-1. [[prompts/workflowy-dashboard-dedupe-live-deploy|workflowy-dashboard-dedupe-live-deploy]]
-2. [[prompts/fedora-libsecret-runtime-cutover|fedora-libsecret-runtime-cutover]]
-3. [[prompts/codex-desktop-roadmap-launcher|codex-desktop-roadmap-launcher]]
-4. [[prompts/chrome-codex-switcher-full-runtime-reliability-v1|chrome-codex-switcher-full-runtime-reliability-v1]]
+1. [[prompts/chrome-codex-switcher-full-runtime-reliability-v1|chrome-codex-switcher-full-runtime-reliability-v1]]
+2. [[prompts/workflowy-dashboard-dedupe-live-deploy|workflowy-dashboard-dedupe-live-deploy]]
+3. [[prompts/fedora-libsecret-runtime-cutover|fedora-libsecret-runtime-cutover]]
+4. [[prompts/codex-desktop-roadmap-launcher|codex-desktop-roadmap-launcher]]
 5. [[prompts/chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1]]
 6. [[prompts/post-404936-runtime-validation|post-404936-runtime-validation]]
 7. [[prompts/fedora-external-updater-megavault-git-closure-v2|fedora-external-updater-megavault-git-closure-v2]]

@@ -6,7 +6,6 @@
 
 - [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]]
 - [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover|729462 · Completa il cutover libsecret dei servizi Fedora]]
-- [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]]
 - [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|318764 · Chiudere il blocker di prova della shortcut GNOME]]
 - [[obsidian/Prompts/621471 post-404936-runtime-validation|621471 · Distribuire e validare l'hardening post-404936]]
 - [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]]
@@ -34,4 +33,4 @@
 
 ## In esecuzione
 
-- Nessuno.
+- [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]]

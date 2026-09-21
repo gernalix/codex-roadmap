@@ -19,9 +19,9 @@ tags:
 - **Stato:** pending
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../prompts/chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-19T06:11:24Z
+- **Ultimo lancio:** 2026-09-19T06:11:24Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -39,7 +39,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-19T06:11:24Z | 2026-09-19T06:12:07Z | PASS | 43.618 | gpt-5.6-luna | low | 4 | 67771 |
 
 ## Analisi ChatGPT
 

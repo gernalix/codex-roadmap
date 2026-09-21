@@ -1,6 +1,6 @@
 ---
 prompt_id: 741928
-status: pending
+status: running
 project_id: 96
 model: GPT-5.6 Sol
 reasoning: medium
@@ -12,13 +12,13 @@ tags:
   - regression
   - runtime-reliability
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../prompts/chrome-codex-switcher-full-runtime-reliability-v1|Apri prompt]]
 - **Primo lancio:** —
