@@ -22,8 +22,8 @@
 - [[obsidian/Prompts/905731 activity-watch-historical-oracle-permission-reconcile-v1|905731 · Riconciliare 751306 dopo il PASS ActivityWatch successivo]]
 - [[obsidian/Prompts/836417 personalhub-release-stale-blocked-reconcile-v1|836417 · Riconciliare 684731 dopo il PASS release già documentato]]
 - [[obsidian/Prompts/963514 personalhub-soldi-on-device-visual-object-search-v1|963514 · Aggiungere ricerca visiva on-device alle foto di Soldi]]
-- [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration|206756 · Verificare il download batch nativo di e-Boks]]
 
 ## In esecuzione
 
 - [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize|865431 · Finalizzare 731845 senza rieseguire l’audit]]
+- [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration|206756 · Verificare il download batch nativo di e-Boks]]

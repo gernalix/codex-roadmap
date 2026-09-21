@@ -5,6 +5,7 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize\|865431 · Finalizzare 731845 senza rieseguire l’audit]] | running | — | — | — | no | no | — | MegaVault | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration\|206756 · Verificare il download batch nativo di e-Boks]] | running | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy\|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] | pending | — | — | — | no | no | — | workflowy-importer | GPT-5.5 | low |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.5 | low |
 | [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2\|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]] | pending | — | — | — | no | no | — | Fedora / fedora-external-updater | GPT-5.6 Luna | low |
@@ -28,7 +29,6 @@
 | [[obsidian/Prompts/836417 personalhub-release-stale-blocked-reconcile-v1\|836417 · Riconciliare 684731 dopo il PASS release già documentato]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/963514 personalhub-soldi-on-device-visual-object-search-v1\|963514 · Aggiungere ricerca visiva on-device alle foto di Soldi]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration\|206756 · Verificare il download batch nativo di e-Boks]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | sì | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
