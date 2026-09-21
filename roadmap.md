@@ -20,3 +20,4 @@
 16. [[prompts/codex-usage-prompt-id-source-historical-reconcile-v1|codex-usage-prompt-id-source-historical-reconcile-v1]]
 17. [[prompts/personalhub-pr15-historical-blocked-reconcile-v1|personalhub-pr15-historical-blocked-reconcile-v1]]
 18. [[prompts/personalhub-v53-historical-blocked-reconcile-v1|personalhub-v53-historical-blocked-reconcile-v1]]
+19. [[prompts/codex-usage-session-readback-reconcile-v1|codex-usage-session-readback-reconcile-v1]]
