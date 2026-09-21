@@ -21,7 +21,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -42,7 +42,7 @@ Rende il login del profilo Grindr dedicato un normale avvio Chrome con sandbox a
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-21T23:18:49Z · colli di bottiglia: sì · fix: — · {"blocker":"completa il login Grindr normale nella finestra aperta, chiudila, poi rilancia `grindr-export export-all --discovery-only`.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"515955","report_ref":"codex-usage:2c9c223a7fe4e674a38648ef:2fddfe8733930fab","schema":"codex-roadmap.fix-packet.v1","work_state":{"commit":"8c7cb86"}}
 
 ## Modifiche di codice ChatGPT
 
