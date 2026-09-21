@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** —
+- **Dipende da:** [[741928 chrome-codex-switcher-full-runtime-reliability-v1|741928]]
 - **Sblocca:** —
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —

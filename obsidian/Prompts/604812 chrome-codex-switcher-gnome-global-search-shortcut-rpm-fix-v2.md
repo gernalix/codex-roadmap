@@ -29,7 +29,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[917403 chrome-codex-switcher-gnome-global-search-shortcut-runtime-fix-v1|917403]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[741928 chrome-codex-switcher-full-runtime-reliability-v1|741928]]
 - **Chat Codex:** —
 
 ## Spiegazione
