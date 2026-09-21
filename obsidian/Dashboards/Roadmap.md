@@ -17,6 +17,7 @@
 - [[obsidian/Prompts/426718 personalhub-timer-tags-historical-blocked-reconcile-v1|426718 · Riconciliare 742618 dopo il repair Timer Tags già verificato]]
 - [[obsidian/Prompts/391742 codex-usage-prompt-id-source-historical-reconcile-v1|391742 · Riconciliare il mismatch storico prompt_id_source del publisher Codex]]
 - [[obsidian/Prompts/726541 personalhub-pr15-historical-blocked-reconcile-v1|726541 · Riconciliare 684913 dopo la chiusura PASS della PR #15]]
+- [[obsidian/Prompts/532918 personalhub-v53-historical-blocked-reconcile-v1|532918 · Riconciliare 583742 con il retry 155893 già PASS]]
 
 ## In esecuzione
 

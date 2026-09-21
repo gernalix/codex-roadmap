@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** [[155893 personalhub-v53-freeze-data-recovery-v2|155893]]
+- **Figli/follow-up:** [[155893 personalhub-v53-freeze-data-recovery-v2|155893]], [[532918 personalhub-v53-historical-blocked-reconcile-v1|532918]]
 - **Chat Codex:** —
 
 ## Spiegazione
