@@ -13,6 +13,7 @@
 - [[obsidian/Prompts/284615 chrome-codex-switcher-stale-blocked-reconcile-v1|284615 · Riconciliare 519564 dopo il successivo smoke PASS]]
 - [[obsidian/Prompts/593164 fedora-historical-kuma-auth-reconcile-v1|593164 · Riconciliare 847392 dopo la chiusura successiva del gate Kuma]]
 - [[obsidian/Prompts/296843 github-autosync-stale-blocked-reconcile-v1|296843 · Riconciliare 684217 dopo la verifica PASS di github-autosync]]
+- [[obsidian/Prompts/615294 personalhub-timer-now-stale-blocked-reconcile-v1|615294 · Riconciliare 314719 dopo il completamento Timer Now]]
 
 ## In esecuzione
 
