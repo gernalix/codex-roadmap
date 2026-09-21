@@ -1,6 +1,6 @@
 ---
 prompt_id: 515955
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - fix
   - grindr
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/grindr-web-exporter
 ---
 
 # 515955 · Fix login reCAPTCHA Grindr exporter
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../prompts/grindr-web-exporter-recaptcha-normal-chrome-login-v1|Apri prompt]]
 - **Primo lancio:** —
