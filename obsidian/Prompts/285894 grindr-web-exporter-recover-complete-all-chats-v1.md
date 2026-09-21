@@ -27,7 +27,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[601566 grindr-web-exporter-persistent-chrome-profile-v1|601566]]
 - **Chat Codex:** Nuova chat Codex dedicata; non trascinare contesto di debugging non pertinente.
 
 ## Spiegazione

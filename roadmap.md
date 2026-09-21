@@ -21,3 +21,4 @@
 17. [[prompts/fedora-external-updater-megavault-git-closure-v2|fedora-external-updater-megavault-git-closure-v2]]
 18. [[prompts/fedora-context-index-runtime-activation|fedora-context-index-runtime-activation]]
 19. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
+20. [[prompts/grindr-web-exporter-persistent-chrome-profile-v1|grindr-web-exporter-persistent-chrome-profile-v1]]
