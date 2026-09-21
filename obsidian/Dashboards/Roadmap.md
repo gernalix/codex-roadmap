@@ -24,6 +24,7 @@
 - [[obsidian/Prompts/836417 personalhub-release-stale-blocked-reconcile-v1|836417 · Riconciliare 684731 dopo il PASS release già documentato]]
 - [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]]
 - [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
+- [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]]
 
 ## In esecuzione
 
