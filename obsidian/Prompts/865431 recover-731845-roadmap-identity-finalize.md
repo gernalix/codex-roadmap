@@ -17,9 +17,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/megavault|MegaVault]]
 - **Prompt:** [[../../completed/recover-731845-roadmap-identity-finalize|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-21T19:07:04Z
+- **Ultimo lancio:** 2026-09-21T19:07:04Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -37,7 +37,7 @@ Il lavoro di 731845 è già stato fatto. Questo prompt sistema solo il suo stato
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-21T19:07:04Z | 2026-09-21T19:10:41Z | PASS | 217.296 | gpt-5.6-luna | low | 37 | 61901 |
 
 ## Analisi ChatGPT
 

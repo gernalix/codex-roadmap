@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration\|206756 · Verificare il download batch nativo di e-Boks]] | running | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration\|206756 · Verificare il download batch nativo di e-Boks]] | running | 2026-09-21T19:12:37Z | 2026-09-21T19:12:37Z | BLOCKED | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy\|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] | pending | — | — | — | no | no | — | workflowy-importer | GPT-5.5 | low |
 | [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | pending | — | — | — | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.5 | low |
@@ -73,7 +73,7 @@
 | [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2\|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4\|697834 · Migrare solo i veri timestamp a epoch ms]] | completed | 2026-09-19T09:55:42Z | 2026-09-19T09:55:42Z | PASS | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0\|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]] | completed | — | — | PASS | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize\|865431 · Finalizzare 731845 senza rieseguire l’audit]] | completed | — | — | PASS | no | no | — | MegaVault | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize\|865431 · Finalizzare 731845 senza rieseguire l’audit]] | completed | 2026-09-21T19:07:04Z | 2026-09-21T19:07:04Z | PASS | no | no | — | MegaVault | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572 · Ultima prova reale dell’importatore Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/418906 workflowy-importer-live-smoke-secret-file-v2\|418906 · Ultima prova reale dell’importatore Workflowy]] | completed | 2026-09-18T22:54:53Z | 2026-09-18T22:54:53Z | PASS | sì | sì | [[obsidian/Prompts/856234 workflowy-live-smoke-remote-fix-closure\|856234]] | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3\|830867 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
