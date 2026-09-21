@@ -1,6 +1,6 @@
 ---
 prompt_id: 604812
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -11,13 +11,13 @@ tags:
   - runtime-fix
   - shortcut
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 604812 · Fix GNOME global search shortcut on Chrome RPM
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../prompts/chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2|Apri prompt]]
 - **Primo lancio:** —
