@@ -22,6 +22,7 @@
 - [[obsidian/Prompts/941372 personalhub-delivery-historical-blocked-reconcile-v1|941372 · Riconciliare il BLOCKED storico del delivery PersonalHub]]
 - [[obsidian/Prompts/905731 activity-watch-historical-oracle-permission-reconcile-v1|905731 · Riconciliare 751306 dopo il PASS ActivityWatch successivo]]
 - [[obsidian/Prompts/836417 personalhub-release-stale-blocked-reconcile-v1|836417 · Riconciliare 684731 dopo il PASS release già documentato]]
+- [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter|218695 · Creare e validare il repository pubblico e-Boks scraper]]
 
 ## In esecuzione
 

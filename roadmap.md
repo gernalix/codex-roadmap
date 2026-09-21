@@ -24,3 +24,4 @@
 20. [[prompts/personalhub-delivery-historical-blocked-reconcile-v1|personalhub-delivery-historical-blocked-reconcile-v1]]
 21. [[prompts/activity-watch-historical-oracle-permission-reconcile-v1|activity-watch-historical-oracle-permission-reconcile-v1]]
 22. [[prompts/personalhub-release-stale-blocked-reconcile-v1|personalhub-release-stale-blocked-reconcile-v1]]
+23. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
