@@ -1,24 +1,25 @@
 ---
-prompt_id: 917403
-status: superseded
+prompt_id: 604812
+status: pending
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - chrome-codex-switcher
+  - chrome-rpm
   - gnome
   - runtime-fix
   - shortcut
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/facilitatori-di-prompt
 ---
 
-# 917403 · Fix GNOME global Context Search shortcut
+# 604812 · Fix GNOME global search shortcut on Chrome RPM
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../falliti/chrome-codex-switcher-gnome-global-search-shortcut-runtime-fix-v1|Apri prompt]]
+- **Prompt:** [[../../prompts/chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -27,13 +28,13 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2|604812]]
+- **Padri/precedenti:** [[917403 chrome-codex-switcher-gnome-global-search-shortcut-runtime-fix-v1|917403]]
+- **Figli/follow-up:** —
 - **Chat Codex:** —
 
 ## Spiegazione
 
-La scorciatoia globale risulta configurata ma non reagisce: questo task trova il punto esatto in cui GNOME perde il comando, corregge il meccanismo e lo prova davvero da una finestra non-Chrome.
+Chrome Flatpak è stato rimosso e Chrome RPM con lo switcher funziona: il task deve isolare e correggere esclusivamente il percorso della shortcut globale GNOME verso la dashboard.
 
 ## Esecuzioni
 
