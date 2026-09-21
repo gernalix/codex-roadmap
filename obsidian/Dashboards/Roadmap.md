@@ -20,6 +20,7 @@
 - [[obsidian/Prompts/532918 personalhub-v53-historical-blocked-reconcile-v1|532918 · Riconciliare 583742 con il retry 155893 già PASS]]
 - [[obsidian/Prompts/748203 codex-usage-session-readback-reconcile-v1|748203 · Riconciliare il session readback del recovery Codex]]
 - [[obsidian/Prompts/941372 personalhub-delivery-historical-blocked-reconcile-v1|941372 · Riconciliare il BLOCKED storico del delivery PersonalHub]]
+- [[obsidian/Prompts/905731 activity-watch-historical-oracle-permission-reconcile-v1|905731 · Riconciliare 751306 dopo il PASS ActivityWatch successivo]]
 
 ## In esecuzione
 
