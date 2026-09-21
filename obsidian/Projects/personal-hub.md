@@ -14,6 +14,7 @@ tags:
 - [[obsidian/Prompts/726541 personalhub-pr15-historical-blocked-reconcile-v1|726541 · Riconciliare 684913 dopo la chiusura PASS della PR #15]] · `pending`
 - [[obsidian/Prompts/941372 personalhub-delivery-historical-blocked-reconcile-v1|941372 · Riconciliare il BLOCKED storico del delivery PersonalHub]] · `pending`
 - [[obsidian/Prompts/836417 personalhub-release-stale-blocked-reconcile-v1|836417 · Riconciliare 684731 dopo il PASS release già documentato]] · `pending`
+- [[obsidian/Prompts/963514 personalhub-soldi-on-device-visual-object-search-v1|963514 · Aggiungere ricerca visiva on-device alle foto di Soldi]] · `pending`
 - [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844 · Chiudere il residuo del merge capsule]] · `completed`
 - [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5|380812 · Chiudere e integrare tag e alert di Places]] · `blocked`
 - [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404 · Chiudere e mergiare la PR alert/Places già pronta]] · `blocked`
