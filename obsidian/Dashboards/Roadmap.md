@@ -18,4 +18,3 @@
 ## In esecuzione
 
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]]
-- [[obsidian/Prompts/515955 grindr-web-exporter-recaptcha-normal-chrome-login-v1|515955 · Fix login reCAPTCHA Grindr exporter]]
