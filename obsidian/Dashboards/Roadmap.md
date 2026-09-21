@@ -31,4 +31,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2|604812 · Fix GNOME global search shortcut on Chrome RPM]]
+- Nessuno.

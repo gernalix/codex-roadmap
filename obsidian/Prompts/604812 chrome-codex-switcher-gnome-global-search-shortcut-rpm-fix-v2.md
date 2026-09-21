@@ -1,6 +1,6 @@
 ---
 prompt_id: 604812
-status: running
+status: blocked
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -11,15 +11,15 @@ tags:
   - runtime-fix
   - shortcut
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 604812 · Fix GNOME global search shortcut on Chrome RPM
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
