@@ -23,8 +23,8 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
-- **Codice modificato da ChatGPT:** no (0 interventi)
+- **Analizzato da ChatGPT:** sì
+- **Codice modificato da ChatGPT:** sì (1 interventi)
 - **Fix:** —
 - **Dipende da:** [[621471 post-404936-runtime-validation|621471]], [[748203 codex-usage-session-readback-reconcile-v1|748203]]
 - **Sblocca:** —
@@ -34,7 +34,7 @@ tags:
 
 ## Spiegazione
 
-Attiva il nuovo evidence warehouse derivato, importa lo storico ChatGPT/Codex già disponibile, collega identità solo con evidenza deterministica e installa il sync periodico per rendere future scelte di prompt/modello basate su dati reali.
+Codice remoto base già implementato e verde da ChatGPT in gernalix/prompt-history. Il task residuo è solo l'attivazione sul Fedora reale: backfill storico ChatGPT/Codex, adapter switcher verificato sul DB locale, registrazione MegaVault, sync/rebuild, timer systemd e validazione analitica/idempotenza.
 
 ## Esecuzioni
 
@@ -44,8 +44,8 @@ Attiva il nuovo evidence warehouse derivato, importa lo storico ChatGPT/Codex gi
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-21T23:17:20Z · colli di bottiglia: no · fix: — · Remote implementation already completed directly on gernalix/prompt-history/main: normalized rebuildable SQLite evidence store, roadmap/codex-usage/ChatGPT adapters, deterministic PROMPT_ID linking, FTS5 search, analytics/recommender, tests and CI. Remaining work is Fedora-local activation/backfill/runtime integration only; no redesign or reimplementation of the remote base is needed.
 
 ## Modifiche di codice ChatGPT
 
-- Nessuna modifica di codice registrata.
+- 2026-09-21T23:17:20Z · `gernalix/prompt-history` · implementation · commit `95667890f0aebb271c755b9f99488f978840328e` · Implemented the remote base end-to-end on main: schema/provenance/idempotency, roadmap and codex-usage ingestion, ChatGPT export ingestion, deterministic ChatGPT↔Codex PROMPT_ID/parent linking, resolved_by derivation, FTS5, analytics queries, bounded recommender, tests and CI.

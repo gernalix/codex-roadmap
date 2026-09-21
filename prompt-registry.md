@@ -11,7 +11,7 @@
 | [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | pending | — | — | — | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/748203 codex-usage-session-readback-reconcile-v1\|748203 · Riconciliare il session readback del recovery Codex]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | pending | — | — | — | sì | sì | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1\|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience\|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1\|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Luna | low |
