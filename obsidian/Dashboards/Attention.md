@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/285894 grindr-web-exporter-recover-complete-all-chats-v1|285894 · Recupera Grindr exporter e automatizza tutte le chat]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|318764 · Chiudere il blocker di prova della shortcut GNOME]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration|206756 · Verificare il download batch nativo di e-Boks]] · `blocked` · analizzato=no · fix=—

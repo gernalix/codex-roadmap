@@ -5,7 +5,6 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1\|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] | running | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/285894 grindr-web-exporter-recover-complete-all-chats-v1\|285894 · Recupera Grindr exporter e automatizza tutte le chat]] | running | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy\|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] | pending | — | — | — | no | no | — | workflowy-importer | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
 | [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | pending | — | — | — | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
@@ -332,3 +331,4 @@
 | [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration\|206756 · Verificare il download batch nativo di e-Boks]] | blocked | 2026-09-21T19:12:37Z | 2026-09-21T19:19:23Z | BLOCKED | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/628541 chatgpt-chrome-rpm-native-transport-test\|628541 · Testare Chrome RPM per il bridge ChatGPT]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/917403 chrome-codex-switcher-gnome-global-search-shortcut-runtime-fix-v1\|917403 · Fix GNOME global Context Search shortcut]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/285894 grindr-web-exporter-recover-complete-all-chats-v1\|285894 · Recupera Grindr exporter e automatizza tutte le chat]] | blocked | — | — | BLOCKED | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |

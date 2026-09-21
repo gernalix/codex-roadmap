@@ -18,4 +18,3 @@
 ## In esecuzione
 
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]]
-- [[obsidian/Prompts/285894 grindr-web-exporter-recover-complete-all-chats-v1|285894 · Recupera Grindr exporter e automatizza tutte le chat]]
