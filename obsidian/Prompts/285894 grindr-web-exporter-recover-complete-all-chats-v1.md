@@ -1,6 +1,6 @@
 ---
 prompt_id: 285894
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - grindr
   - recovery
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/grindr-web-exporter
 ---
 
 # 285894 · Recupera Grindr exporter e automatizza tutte le chat
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../prompts/grindr-web-exporter-recover-complete-all-chats-v1|Apri prompt]]
 - **Primo lancio:** —
