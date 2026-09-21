@@ -26,5 +26,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize|865431 · Finalizzare 731845 senza rieseguire l’audit]]
 - [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration|206756 · Verificare il download batch nativo di e-Boks]]

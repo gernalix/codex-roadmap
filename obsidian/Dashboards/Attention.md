@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize|865431 · Finalizzare 731845 senza rieseguire l’audit]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `blocked` · analizzato=sì · fix=—
