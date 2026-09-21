@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[206756 eboks-native-bulk-download-capability-exploration|206756]]
+- **Dipende da:** [[482761 eboks-native-bulk-download-browser-control-fix-v1|482761]]
 - **Sblocca:** —
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —

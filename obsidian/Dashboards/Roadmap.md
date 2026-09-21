@@ -25,6 +25,7 @@
 - [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]]
 - [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
 - [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]]
+- [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]]
 
 ## In esecuzione
 

@@ -22,9 +22,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[218695 eboks-scraper-bootstrap-public-repo-live-adapter|218695]]
+- **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[482761 eboks-native-bulk-download-browser-control-fix-v1|482761]]
 - **Chat Codex:** Nuova chat Codex; solo browser/runtime locale, nessuna implementazione repo
 
 ## Spiegazione
