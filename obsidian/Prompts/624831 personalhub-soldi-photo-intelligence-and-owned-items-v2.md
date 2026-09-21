@@ -1,24 +1,25 @@
 ---
-prompt_id: 963514
-status: superseded
+prompt_id: 624831
+status: pending
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - on-device-ml
+  - owned-items
   - personalhub
   - soldi
   - visual-search
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 963514 · Aggiungere ricerca visiva on-device alle foto di Soldi
+# 624831 · Completare intelligence foto e oggetti posseduti in Soldi
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-soldi-on-device-visual-object-search-v1|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-soldi-photo-intelligence-and-owned-items-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -27,13 +28,13 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831]]
-- **Chat Codex:** Nuova chat Codex; eseguire solo dopo integrazione della PR #30
+- **Padri/precedenti:** [[963514 personalhub-soldi-on-device-visual-object-search-v1|963514]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Nuova chat Codex; eseguire solo dopo merge PR #31
 
 ## Spiegazione
 
-Codex-only: selezione/licensing modello on-device, migrazione Room, indicizzazione background, camera/gallery flow e QA prestazionale/device. La base URI/URL, cache e thumbnail quadrate è già implementata e non va rifatta.
+Sostituisce 963514 e copre tutte le parti rimaste della conversazione: embeddings locali, OCR/labels, ricerca testo↔immagine e foto↔foto, Trova questo oggetto, owned-item layer opzionale, focal point non distruttivo e QA prestazionale/device. La base UI/storage PR #30/#31 non va rifatta.
 
 ## Esecuzioni
 

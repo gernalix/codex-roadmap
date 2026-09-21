@@ -26,5 +26,5 @@
 22. [[prompts/activity-watch-historical-oracle-permission-reconcile-v1|activity-watch-historical-oracle-permission-reconcile-v1]]
 23. [[prompts/personalhub-release-stale-blocked-reconcile-v1|personalhub-release-stale-blocked-reconcile-v1]]
 24. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
-25. [[prompts/personalhub-soldi-on-device-visual-object-search-v1|personalhub-soldi-on-device-visual-object-search-v1]]
-26. [[prompts/discord-exporter-always-on-kuma-live-v1|discord-exporter-always-on-kuma-live-v1]]
+25. [[prompts/discord-exporter-always-on-kuma-live-v1|discord-exporter-always-on-kuma-live-v1]]
+26. [[prompts/personalhub-soldi-photo-intelligence-and-owned-items-v2|personalhub-soldi-photo-intelligence-and-owned-items-v2]]
