@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration\|206756 · Verificare il download batch nativo di e-Boks]] | running | 2026-09-21T19:12:37Z | 2026-09-21T19:12:37Z | BLOCKED | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration\|206756 · Verificare il download batch nativo di e-Boks]] | running | 2026-09-21T19:12:37Z | 2026-09-21T19:19:23Z | UNKNOWN | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy\|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] | pending | — | — | — | no | no | — | workflowy-importer | GPT-5.5 | low |
 | [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | pending | — | — | — | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.5 | low |
