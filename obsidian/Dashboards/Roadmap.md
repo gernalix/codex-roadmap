@@ -28,6 +28,7 @@
 - [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]]
 - [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1|925731 · Attivare storico unificato ChatGPT e Codex]]
 - [[obsidian/Prompts/628541 chatgpt-chrome-rpm-native-transport-test|628541 · Testare Chrome RPM per il bridge ChatGPT]]
+- [[obsidian/Prompts/917403 chrome-codex-switcher-gnome-global-search-shortcut-runtime-fix-v1|917403 · Fix GNOME global Context Search shortcut]]
 
 ## In esecuzione
 
