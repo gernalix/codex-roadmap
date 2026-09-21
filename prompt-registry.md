@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1\|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] | running | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1\|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] | running | 2026-09-21T22:35:09Z | 2026-09-21T22:35:09Z | BLOCKED | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy\|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] | pending | — | — | — | no | no | — | workflowy-importer | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
 | [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | pending | — | — | — | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
@@ -333,4 +333,4 @@
 | [[obsidian/Prompts/917403 chrome-codex-switcher-gnome-global-search-shortcut-runtime-fix-v1\|917403 · Fix GNOME global Context Search shortcut]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/285894 grindr-web-exporter-recover-complete-all-chats-v1\|285894 · Recupera Grindr exporter e automatizza tutte le chat]] | blocked | 2026-09-21T22:39:51Z | 2026-09-21T22:39:51Z | BLOCKED | sì | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/601566 grindr-web-exporter-persistent-chrome-profile-v1\|601566 · Chiudi blocker Chrome Grindr exporter]] | blocked | 2026-09-21T22:54:13Z | 2026-09-21T22:54:13Z | BLOCKED | sì | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/515955 grindr-web-exporter-recaptcha-normal-chrome-login-v1\|515955 · Fix login reCAPTCHA Grindr exporter]] | blocked | — | — | BLOCKED | sì | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/515955 grindr-web-exporter-recaptcha-normal-chrome-login-v1\|515955 · Fix login reCAPTCHA Grindr exporter]] | blocked | 2026-09-21T23:13:41Z | 2026-09-21T23:13:41Z | BLOCKED | sì | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |

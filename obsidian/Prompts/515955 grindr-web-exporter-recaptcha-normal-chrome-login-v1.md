@@ -18,9 +18,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../falliti/grindr-web-exporter-recaptcha-normal-chrome-login-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-21T23:13:41Z
+- **Ultimo lancio:** 2026-09-21T23:13:41Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ Rende il login del profilo Grindr dedicato un normale avvio Chrome con sandbox a
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-21T23:13:41Z | 2026-09-21T23:17:31Z | BLOCKED | 230.037 | gpt-5.6-terra | medium | 21 | 165538 |
 
 ## Analisi ChatGPT
 

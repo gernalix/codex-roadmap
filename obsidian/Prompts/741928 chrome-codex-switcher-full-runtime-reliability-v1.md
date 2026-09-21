@@ -21,9 +21,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../prompts/chrome-codex-switcher-full-runtime-reliability-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-21T22:35:09Z
+- **Ultimo lancio:** 2026-09-21T22:35:09Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -41,7 +41,7 @@ Fix e collaudo completo del runtime reale di chrome-codex-switcher dopo regressi
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-21T22:35:09Z | 2026-09-21T23:16:10Z | BLOCKED | 2461.544 | gpt-5.6-sol | medium | 105 | 241547 |
 
 ## Analisi ChatGPT
 
