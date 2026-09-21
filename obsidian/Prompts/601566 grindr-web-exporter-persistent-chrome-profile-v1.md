@@ -27,7 +27,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[285894 grindr-web-exporter-recover-complete-all-chats-v1|285894]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[515955 grindr-web-exporter-recaptcha-normal-chrome-login-v1|515955]]
 - **Chat Codex:** Continuazione diretta di 285894: preferisci la stessa sessione Codex se ancora disponibile; altrimenti il prompt è autosufficiente.
 
 ## Spiegazione
