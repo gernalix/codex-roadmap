@@ -18,4 +18,3 @@
 ## In esecuzione
 
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]]
-- [[obsidian/Prompts/601566 grindr-web-exporter-persistent-chrome-profile-v1|601566 · Chiudi blocker Chrome Grindr exporter]]
