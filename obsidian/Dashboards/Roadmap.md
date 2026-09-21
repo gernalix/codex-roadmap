@@ -7,6 +7,7 @@
 - [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]]
 - [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover|729462 · Completa il cutover libsecret dei servizi Fedora]]
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]]
+- [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|318764 · Chiudere il blocker di prova della shortcut GNOME]]
 - [[obsidian/Prompts/621471 post-404936-runtime-validation|621471 · Distribuire e validare l'hardening post-404936]]
 - [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]]
 - [[obsidian/Prompts/257387 fedora-context-index-runtime-activation|257387 · Attiva la timeline unificata Fedora + ActivityWatch]]
@@ -29,6 +30,7 @@
 - [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]]
 - [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1|925731 · Attivare storico unificato ChatGPT e Codex]]
 - [[obsidian/Prompts/628541 chatgpt-chrome-rpm-native-transport-test|628541 · Testare Chrome RPM per il bridge ChatGPT]]
+- [[obsidian/Prompts/285894 grindr-web-exporter-recover-complete-all-chats-v1|285894 · Recupera Grindr exporter e automatizza tutte le chat]]
 
 ## In esecuzione
 

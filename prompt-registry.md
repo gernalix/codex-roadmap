@@ -8,6 +8,7 @@
 | [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | pending | — | — | — | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
 | [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1\|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1\|318764 · Chiudere il blocker di prova della shortcut GNOME]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.5 | low |
 | [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2\|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]] | pending | — | — | — | no | no | — | Fedora / fedora-external-updater | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/257387 fedora-context-index-runtime-activation\|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] | pending | — | — | — | no | no | — | Fedora | GPT-5.5 | medium |
@@ -35,6 +36,7 @@
 | [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1\|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/628541 chatgpt-chrome-rpm-native-transport-test\|628541 · Testare Chrome RPM per il bridge ChatGPT]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/285894 grindr-web-exporter-recover-complete-all-chats-v1\|285894 · Recupera Grindr exporter e automatizza tutte le chat]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | sì | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
