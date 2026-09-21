@@ -109,7 +109,7 @@ La dashboard operativa è sincronizzata da `workflowy-importer` e mostra stati d
 - **Needs fix** solo per stato terminale negativo o hard blocker reale dell'integratore;
 - **Done** dal PASS canonico.
 
-Ogni nodo può esporre `🚀 Apri`, `📋 Copia`, switch alla tab ChatGPT e deep link Codex tramite `chrome-codex-switcher`. La chiave di correlazione è sempre il PROMPT_ID esplicito.
+Ogni nodo può esporre `🚀 Avvia`, `📋 Copia prompt` e i collegamenti espliciti Chrome/Codex tramite `chrome-codex-switcher`. `🚀 Avvia` è riservato ai task Codex: deve aprire direttamente Codex in ChatGPT Desktop, senza creare una chat/tab ChatGPT in Chrome, usando i metadati canonici `project_id/project_name/repo/model/reasoning` del prompt. I collegamenti Chrome restano azioni separate. La chiave di correlazione è sempre il PROMPT_ID esplicito.
 
 ## Viste Markdown di compatibilità
 
@@ -171,7 +171,7 @@ Prima di aumentare il modello/reasoning, ridurre scope, discovery, output e roun
 
 ## Esecuzione manuale
 
-Apri Workflowy → **Ready** e usa `🚀 Apri` (copia + crea/focalizza la tab ChatGPT nella stessa finestra) oppure `📋 Copia`. Imposta il modello/reasoning indicato e incolla il prompt canonico. Prima di qualunque lavoro sul progetto, Codex deve eseguire `python3 ~/projects/codex-roadmap/tools/roadmap_start.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID>` e procedere solo se il writer conferma `running`. Non inviare meta-prompt e non far rileggere roadmap/README/MegaVault se il prompt contiene già lo starting point necessario. `MegaVault=FAST` con progetto/workdir già risolti non autorizza un dump preventivo di MegaVault, memoria o storico: si consulta solo un fatto specifico se emerge davvero come mancante.
+Apri Workflowy → **Ready** e usa `🚀 Avvia`: il launcher deve aprire una nuova thread Codex in ChatGPT Desktop nel progetto/repo canonico, impostare esattamente modello e reasoning indicati e inserire il prompt senza inviarlo. `📋 Copia prompt` resta il fallback manuale. Non usare Work né una chat ChatGPT normale per i task della roadmap. Se progetto, modello o reasoning richiesti non sono selezionabili, il launcher deve fallire chiuso senza scegliere automaticamente un'alternativa. Prima di qualunque lavoro sul progetto, Codex deve eseguire `python3 ~/projects/codex-roadmap/tools/roadmap_start.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID>` e procedere solo se il writer conferma `running`. Non inviare meta-prompt e non far rileggere roadmap/README/MegaVault se il prompt contiene già lo starting point necessario. `MegaVault=FAST` con progetto/workdir già risolti non autorizza un dump preventivo di MegaVault, memoria o storico: si consulta solo un fatto specifico se emerge davvero come mancante.
 
 Default: un task per sessione; stesso thread solo per una continuazione diretta che riusa davvero contesto utile.
 
