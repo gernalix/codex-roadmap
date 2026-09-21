@@ -18,9 +18,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../falliti/grindr-web-exporter-recover-complete-all-chats-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-21T22:39:51Z
+- **Ultimo lancio:** 2026-09-21T22:39:51Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ Recupera il vecchio exporter Grindr dal T7 se disponibile; altrimenti lo ricostr
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-21T22:39:51Z | 2026-09-21T22:50:07Z | BLOCKED | 615.773 | gpt-5.6-terra | medium | 37 | 113274 |
 
 ## Analisi ChatGPT
 
