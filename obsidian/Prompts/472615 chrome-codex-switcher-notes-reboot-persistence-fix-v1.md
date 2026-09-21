@@ -1,6 +1,6 @@
 ---
 prompt_id: 472615
-status: pending
+status: running
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
@@ -11,13 +11,13 @@ tags:
   - reboot
   - startup-race
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 472615 · Ripristinare le note dopo reboot
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../prompts/chrome-codex-switcher-notes-reboot-persistence-fix-v1|Apri prompt]]
 - **Primo lancio:** —

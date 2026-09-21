@@ -5,7 +5,7 @@ tags:
 
 # Facilitatori di prompt
 
-- [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1|472615 · Ripristinare le note dopo reboot]] · `pending`
+- [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1|472615 · Ripristinare le note dopo reboot]] · `running`
 - [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher|989559 · Automatizza Avvia verso Codex Desktop]] · `pending`
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] · `completed`
 - [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|318764 · Chiudere il blocker di prova della shortcut GNOME]] · `completed`
