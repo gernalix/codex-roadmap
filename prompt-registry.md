@@ -331,4 +331,4 @@
 | [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration\|206756 · Verificare il download batch nativo di e-Boks]] | blocked | 2026-09-21T19:12:37Z | 2026-09-21T19:19:23Z | BLOCKED | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/628541 chatgpt-chrome-rpm-native-transport-test\|628541 · Testare Chrome RPM per il bridge ChatGPT]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/917403 chrome-codex-switcher-gnome-global-search-shortcut-runtime-fix-v1\|917403 · Fix GNOME global Context Search shortcut]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/285894 grindr-web-exporter-recover-complete-all-chats-v1\|285894 · Recupera Grindr exporter e automatizza tutte le chat]] | blocked | — | — | BLOCKED | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/285894 grindr-web-exporter-recover-complete-all-chats-v1\|285894 · Recupera Grindr exporter e automatizza tutte le chat]] | blocked | — | — | BLOCKED | sì | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |

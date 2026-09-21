@@ -21,7 +21,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -42,7 +42,7 @@ Recupera il vecchio exporter Grindr dal T7 se disponibile; altrimenti lo ricostr
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-21T22:52:14Z · colli di bottiglia: sì · fix: — · {"blocker":"avvia Chrome autenticato con `--remote-debugging-port=9222`, quindi riesegui `export-all --discovery-only`.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"285894","report_ref":"codex-usage:34066305b873110aff77576e:f33ab18383bd8ba1","schema":"codex-roadmap.fix-packet.v1","work_state":{"commit":"e875ae9"}}
 
 ## Modifiche di codice ChatGPT
 
