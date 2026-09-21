@@ -19,6 +19,7 @@
 - [[obsidian/Prompts/726541 personalhub-pr15-historical-blocked-reconcile-v1|726541 · Riconciliare 684913 dopo la chiusura PASS della PR #15]]
 - [[obsidian/Prompts/532918 personalhub-v53-historical-blocked-reconcile-v1|532918 · Riconciliare 583742 con il retry 155893 già PASS]]
 - [[obsidian/Prompts/748203 codex-usage-session-readback-reconcile-v1|748203 · Riconciliare il session readback del recovery Codex]]
+- [[obsidian/Prompts/941372 personalhub-delivery-historical-blocked-reconcile-v1|941372 · Riconciliare il BLOCKED storico del delivery PersonalHub]]
 
 ## In esecuzione
 
