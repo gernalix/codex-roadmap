@@ -23,3 +23,4 @@
 19. [[prompts/codex-usage-session-readback-reconcile-v1|codex-usage-session-readback-reconcile-v1]]
 20. [[prompts/personalhub-delivery-historical-blocked-reconcile-v1|personalhub-delivery-historical-blocked-reconcile-v1]]
 21. [[prompts/activity-watch-historical-oracle-permission-reconcile-v1|activity-watch-historical-oracle-permission-reconcile-v1]]
+22. [[prompts/personalhub-release-stale-blocked-reconcile-v1|personalhub-release-stale-blocked-reconcile-v1]]
