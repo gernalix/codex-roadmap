@@ -3,6 +3,6 @@ tags:
   - roadmap/project
 ---
 
-# github-autosync
+# GitHub autosync
 
-- [[obsidian/Prompts/864205 github-reconcile-production-hardening|864205 · Rendere github-reconcile production-grade su Fedora]] · `completed`
+- [[obsidian/Prompts/296843 github-autosync-stale-blocked-reconcile-v1|296843 · Riconciliare 684217 dopo la verifica PASS di github-autosync]] · `superseded`

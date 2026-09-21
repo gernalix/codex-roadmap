@@ -2,7 +2,7 @@
 prompt_id: 621471
 status: pending
 project_id: 92
-model: GPT-5.5
+model: GPT-5.6 Luna
 reasoning: low
 tags:
   - codex-usage-monitor
@@ -26,7 +26,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** —
+- **Sblocca:** [[925731 prompt-history-unified-evidence-backfill-runtime-v1|925731]]
 - **Padri/precedenti:** [[404936 github-autosync-kuma46-autonomous-closure|404936]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat Codex; solo deploy e validazione runtime locale dei fix gia mergiati

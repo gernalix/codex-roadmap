@@ -1,6 +1,6 @@
 ---
 prompt_id: 836417
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - historical-reconcile
   - personalhub
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 836417 · Riconciliare 684731 dopo il PASS release già documentato
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-release-stale-blocked-reconcile-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-release-stale-blocked-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

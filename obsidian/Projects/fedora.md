@@ -5,13 +5,10 @@ tags:
 
 # Fedora
 
-- [[obsidian/Prompts/257387 fedora-context-index-runtime-activation|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] · `pending`
-- [[obsidian/Prompts/391742 codex-usage-prompt-id-source-historical-reconcile-v1|391742 · Riconciliare il mismatch storico prompt_id_source del publisher Codex]] · `pending`
 - [[obsidian/Prompts/748203 codex-usage-session-readback-reconcile-v1|748203 · Riconciliare il session readback del recovery Codex]] · `pending`
-- [[obsidian/Prompts/905731 activity-watch-historical-oracle-permission-reconcile-v1|905731 · Riconciliare 751306 dopo il PASS ActivityWatch successivo]] · `pending`
 - [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] · `pending`
 - [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] · `pending`
-- [[obsidian/Prompts/628541 chatgpt-chrome-rpm-native-transport-test|628541 · Testare Chrome RPM per il bridge ChatGPT]] · `pending`
+- [[obsidian/Prompts/257387 fedora-context-index-runtime-activation|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] · `pending`
 - [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill|813383 · Attivare il tracciamento SQLite della roadmap]] · `completed`
 - [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237 · Completa il fix del salvataggio Codex sul PC]] · `blocked`
 - [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked`
@@ -23,3 +20,6 @@ tags:
 - [[obsidian/Prompts/526713 fedora-runtime-validation-v2|526713 · Ultimo controllo del monitoraggio Fedora]] · `superseded`
 - [[obsidian/Prompts/690049 fedora-runtime-validation|690049 · Ultimo controllo del monitoraggio Fedora]] · `superseded`
 - [[obsidian/Prompts/445388 logseq-updates-pat-safety-closure|445388 · Chiusura sicurezza e attivazione updater Logseq]] · `superseded`
+- [[obsidian/Prompts/391742 codex-usage-prompt-id-source-historical-reconcile-v1|391742 · Riconciliare il mismatch storico prompt_id_source del publisher Codex]] · `superseded`
+- [[obsidian/Prompts/905731 activity-watch-historical-oracle-permission-reconcile-v1|905731 · Riconciliare 751306 dopo il PASS ActivityWatch successivo]] · `superseded`
+- [[obsidian/Prompts/628541 chatgpt-chrome-rpm-native-transport-test|628541 · Testare Chrome RPM per il bridge ChatGPT]] · `superseded`

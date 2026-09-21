@@ -25,7 +25,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** —
+- **Sblocca:** [[925731 prompt-history-unified-evidence-backfill-runtime-v1|925731]]
 - **Padri/precedenti:** [[643918 prompt-643918|643918]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat

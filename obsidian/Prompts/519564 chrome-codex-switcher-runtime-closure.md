@@ -1,6 +1,6 @@
 ---
 prompt_id: 519564
-status: blocked
+status: completed
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - fedora
   - wayland
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/completed
   - roadmap/project/chrome-codex-switcher
 ---
 
 # 519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora
 
-- **Stato:** blocked
+- **Stato:** completed
 - **Progetto:** [[../Projects/chrome-codex-switcher|chrome-codex-switcher]]
-- **Prompt:** [[../../falliti/chrome-codex-switcher-runtime-closure|Apri prompt]]
+- **Prompt:** [[../../completed/chrome-codex-switcher-runtime-closure|Apri prompt]]
 - **Primo lancio:** 2026-09-19T15:41:21Z
 - **Ultimo lancio:** 2026-09-19T15:41:21Z
 - **Ultimo esito:** BLOCKED

@@ -1,6 +1,6 @@
 ---
 prompt_id: 628541
-status: pending
+status: superseded
 project_id: —
 model: GPT-5.6 Luna
 reasoning: low
@@ -10,15 +10,15 @@ tags:
   - fedora
   - runtime-validation
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/fedora
 ---
 
 # 628541 · Testare Chrome RPM per il bridge ChatGPT
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/chatgpt-chrome-rpm-native-transport-test|Apri prompt]]
+- **Prompt:** [[../../falliti/chatgpt-chrome-rpm-native-transport-test|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

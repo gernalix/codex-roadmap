@@ -19,7 +19,7 @@ tags:
 - [[obsidian/Prompts/284731 prompt-284731|284731 · Historical prompt 284731]] · `completed`
 - [[obsidian/Prompts/286419 prompt-286419|286419 · Historical prompt 286419]] · `unknown`
 - [[obsidian/Prompts/294681 prompt-294681|294681 · Historical prompt 294681]] · `unknown`
-- [[obsidian/Prompts/314719 prompt-314719|314719 · Historical prompt 314719]] · `blocked`
+- [[obsidian/Prompts/314719 prompt-314719|314719 · Historical prompt 314719]] · `completed`
 - [[obsidian/Prompts/314857 prompt-314857|314857 · Historical prompt 314857]] · `unknown`
 - [[obsidian/Prompts/315804 prompt-315804|315804 · Historical prompt 315804]] · `unknown`
 - [[obsidian/Prompts/347921 prompt-347921|347921 · Historical prompt 347921]] · `unknown`
@@ -90,7 +90,7 @@ tags:
 - [[obsidian/Prompts/615842 prompt-615842|615842 · Historical prompt 615842]] · `unknown`
 - [[obsidian/Prompts/618305 prompt-618305|618305 · Historical prompt 618305]] · `completed`
 - [[obsidian/Prompts/618427 prompt-618427|618427 · Historical prompt 618427]] · `blocked`
-- [[obsidian/Prompts/618472 prompt-618472|618472 · Historical prompt 618472]] · `blocked`
+- [[obsidian/Prompts/618472 prompt-618472|618472 · Historical prompt 618472]] · `superseded`
 - [[obsidian/Prompts/628431 prompt-628431|628431 · Historical prompt 628431]] · `completed`
 - [[obsidian/Prompts/632683 prompt-632683|632683 · Historical prompt 632683]] · `completed`
 - [[obsidian/Prompts/635814 prompt-635814|635814 · Historical prompt 635814]] · `completed`
@@ -111,9 +111,9 @@ tags:
 - [[obsidian/Prompts/683214 prompt-683214|683214 · Historical prompt 683214]] · `unknown`
 - [[obsidian/Prompts/684193 prompt-684193|684193 · Historical prompt 684193]] · `completed`
 - [[obsidian/Prompts/684215 prompt-684215|684215 · Historical prompt 684215]] · `completed`
-- [[obsidian/Prompts/684217 prompt-684217|684217 · Historical prompt 684217]] · `blocked`
+- [[obsidian/Prompts/684217 prompt-684217|684217 · Historical prompt 684217]] · `completed`
 - [[obsidian/Prompts/684271 prompt-684271|684271 · Historical prompt 684271]] · `unknown`
-- [[obsidian/Prompts/684731 prompt-684731|684731 · Historical prompt 684731]] · `blocked`
+- [[obsidian/Prompts/684731 prompt-684731|684731 · Historical prompt 684731]] · `completed`
 - [[obsidian/Prompts/704216 prompt-704216|704216 · Historical prompt 704216]] · `unknown`
 - [[obsidian/Prompts/706214 prompt-706214|706214 · Historical prompt 706214]] · `completed`
 - [[obsidian/Prompts/726105 prompt-726105|726105 · Historical prompt 726105]] · `unknown`
@@ -134,11 +134,11 @@ tags:
 - [[obsidian/Prompts/741926 prompt-741926|741926 · Historical prompt 741926]] · `unknown`
 - [[obsidian/Prompts/742591 prompt-742591|742591 · Historical prompt 742591]] · `completed`
 - [[obsidian/Prompts/742615 prompt-742615|742615 · Historical prompt 742615]] · `unknown`
-- [[obsidian/Prompts/742618 prompt-742618|742618 · Historical prompt 742618]] · `blocked`
+- [[obsidian/Prompts/742618 prompt-742618|742618 · Historical prompt 742618]] · `completed`
 - [[obsidian/Prompts/742913 prompt-742913|742913 · Historical prompt 742913]] · `unknown`
 - [[obsidian/Prompts/746323 prompt-746323|746323 · Historical prompt 746323]] · `completed`
 - [[obsidian/Prompts/748219 prompt-748219|748219 · Historical prompt 748219]] · `unknown`
-- [[obsidian/Prompts/751306 prompt-751306|751306 · Historical prompt 751306]] · `blocked`
+- [[obsidian/Prompts/751306 prompt-751306|751306 · Historical prompt 751306]] · `completed`
 - [[obsidian/Prompts/754406 prompt-754406|754406 · Historical prompt 754406]] · `blocked`
 - [[obsidian/Prompts/761284 prompt-761284|761284 · Historical prompt 761284]] · `completed`
 - [[obsidian/Prompts/762451 prompt-762451|762451 · Historical prompt 762451]] · `blocked`
@@ -160,7 +160,7 @@ tags:
 - [[obsidian/Prompts/842731 prompt-842731|842731 · Historical prompt 842731]] · `completed`
 - [[obsidian/Prompts/845217 prompt-845217|845217 · Historical prompt 845217]] · `unknown`
 - [[obsidian/Prompts/846215 prompt-846215|846215 · Historical prompt 846215]] · `unknown`
-- [[obsidian/Prompts/847392 prompt-847392|847392 · Historical prompt 847392]] · `blocked`
+- [[obsidian/Prompts/847392 prompt-847392|847392 · Historical prompt 847392]] · `completed`
 - [[obsidian/Prompts/861927 prompt-861927|861927 · Historical prompt 861927]] · `unknown`
 - [[obsidian/Prompts/863241 prompt-863241|863241 · Historical prompt 863241]] · `unknown`
 - [[obsidian/Prompts/864219 prompt-864219|864219 · Historical prompt 864219]] · `completed`
@@ -177,4 +177,4 @@ tags:
 - [[obsidian/Prompts/940316 prompt-940316|940316 · Historical prompt 940316]] · `unknown`
 - [[obsidian/Prompts/947261 prompt-947261|947261 · Historical prompt 947261]] · `completed`
 - [[obsidian/Prompts/953204 prompt-953204|953204 · Historical prompt 953204]] · `unknown`
-- [[obsidian/Prompts/978216 prompt-978216|978216 · Historical prompt 978216]] · `blocked`
+- [[obsidian/Prompts/978216 prompt-978216|978216 · Historical prompt 978216]] · `completed`

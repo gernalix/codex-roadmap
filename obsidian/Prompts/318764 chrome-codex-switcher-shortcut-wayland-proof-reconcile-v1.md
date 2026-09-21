@@ -1,6 +1,6 @@
 ---
 prompt_id: 318764
-status: pending
+status: completed
 project_id: 96
 model: GPT-5.6 Luna
 reasoning: low
@@ -10,15 +10,15 @@ tags:
   - gnome
   - shortcut
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/completed
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 318764 · Chiudere il blocker di prova della shortcut GNOME
 
-- **Stato:** pending
+- **Stato:** completed
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|Apri prompt]]
+- **Prompt:** [[../../completed/chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-19T06:11:24Z
 - **Ultimo lancio:** 2026-09-19T06:11:24Z
 - **Ultimo esito:** PASS

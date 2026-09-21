@@ -2,7 +2,7 @@
 prompt_id: 843271
 status: pending
 project_id: —
-model: GPT-5.5
+model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt

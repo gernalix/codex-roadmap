@@ -1,6 +1,6 @@
 ---
 prompt_id: 391742
-status: pending
+status: superseded
 project_id: 8
 model: GPT-5.6 Luna
 reasoning: low
@@ -8,15 +8,15 @@ tags:
   - codex-usage
   - historical-reconcile
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/fedora
 ---
 
 # 391742 · Riconciliare il mismatch storico prompt_id_source del publisher Codex
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/codex-usage-prompt-id-source-historical-reconcile-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/codex-usage-prompt-id-source-historical-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

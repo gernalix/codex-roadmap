@@ -5,22 +5,17 @@ tags:
 
 # Personal Hub
 
+- [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] · `pending`
 - [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] · `pending`
 - [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `pending`
 - [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
 - [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `pending`
-- [[obsidian/Prompts/615294 personalhub-timer-now-stale-blocked-reconcile-v1|615294 · Riconciliare 314719 dopo il completamento Timer Now]] · `pending`
-- [[obsidian/Prompts/426718 personalhub-timer-tags-historical-blocked-reconcile-v1|426718 · Riconciliare 742618 dopo il repair Timer Tags già verificato]] · `pending`
-- [[obsidian/Prompts/726541 personalhub-pr15-historical-blocked-reconcile-v1|726541 · Riconciliare 684913 dopo la chiusura PASS della PR #15]] · `pending`
-- [[obsidian/Prompts/941372 personalhub-delivery-historical-blocked-reconcile-v1|941372 · Riconciliare il BLOCKED storico del delivery PersonalHub]] · `pending`
-- [[obsidian/Prompts/836417 personalhub-release-stale-blocked-reconcile-v1|836417 · Riconciliare 684731 dopo il PASS release già documentato]] · `pending`
-- [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] · `pending`
 - [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844 · Chiudere il residuo del merge capsule]] · `completed`
 - [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5|380812 · Chiudere e integrare tag e alert di Places]] · `blocked`
 - [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404 · Chiudere e mergiare la PR alert/Places già pronta]] · `blocked`
 - [[obsidian/Prompts/111265 personalhub-shared-alerts-pr15-final-closure-v2|111265 · Chiudere PR #15 senza rifare il lavoro]] · `superseded`
 - [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]] · `blocked`
-- [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]] · `blocked`
+- [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]] · `completed`
 - [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] · `completed`
 - [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]] · `blocked`
 - [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui|609279 · Solo inglese e diagnostica Places su richiesta]] · `superseded`
@@ -59,4 +54,9 @@ tags:
 - [[obsidian/Prompts/311947 personalhub-play-release-local-validation|311947 · Controllo finale prima di Google Play]] · `superseded`
 - [[obsidian/Prompts/918536 personalhub-datasette-lite-offline-runtime-v2|918536 · Esploratore dati dentro PersonalHub anche offline]] · `superseded`
 - [[obsidian/Prompts/243871 personalhub-play-release-local-validation-v2|243871 · Controllo finale prima di Google Play]] · `superseded`
+- [[obsidian/Prompts/615294 personalhub-timer-now-stale-blocked-reconcile-v1|615294 · Riconciliare 314719 dopo il completamento Timer Now]] · `superseded`
+- [[obsidian/Prompts/426718 personalhub-timer-tags-historical-blocked-reconcile-v1|426718 · Riconciliare 742618 dopo il repair Timer Tags già verificato]] · `superseded`
+- [[obsidian/Prompts/726541 personalhub-pr15-historical-blocked-reconcile-v1|726541 · Riconciliare 684913 dopo la chiusura PASS della PR #15]] · `superseded`
+- [[obsidian/Prompts/941372 personalhub-delivery-historical-blocked-reconcile-v1|941372 · Riconciliare il BLOCKED storico del delivery PersonalHub]] · `superseded`
+- [[obsidian/Prompts/836417 personalhub-release-stale-blocked-reconcile-v1|836417 · Riconciliare 684731 dopo il PASS release già documentato]] · `superseded`
 - [[obsidian/Prompts/963514 personalhub-soldi-on-device-visual-object-search-v1|963514 · Aggiungere ricerca visiva on-device alle foto di Soldi]] · `superseded`

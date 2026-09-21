@@ -1,10 +1,10 @@
 # Da controllare
 
-- [[obsidian/Prompts/604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2|604812 · Fix GNOME global search shortcut on Chrome RPM]] · `blocked` · analizzato=sì · fix=—
+- [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|318764 · Chiudere il blocker di prova della shortcut GNOME]] · `completed` · analizzato=no · fix=—
+- [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration|206756 · Verificare il download batch nativo di e-Boks]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize|865431 · Finalizzare 731845 senza rieseguire l’audit]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/583214 prompt-583214|583214 · Historical prompt 583214]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening|381904 · Rendere stabile il sync Workflowy senza errori 429]] · `unknown` · analizzato=no · fix=—
@@ -38,14 +38,12 @@
 - [[obsidian/Prompts/560584 livinggaul-source-availability-local-activation|560584 · LivingGaul source availability local activation]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/572280 recover-641582-missing-roadmap-registration-v1|572280 · Recuperare 641582 e correggere il bootstrap roadmap]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]] · `blocked` · analizzato=sì · fix=—
-- [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery|583742 · PersonalHub v53 freeze e dati mancanti]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/637985 personalhub-single-canonical-db-export|637985 · Mantenere un solo DB auto-esportato PersonalHub]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked` · analizzato=sì · fix=817264
 - [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install|652361 · LivingGaul hourly systemd local install]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4|663657 · Chiudere e integrare tag e alert di Places]] · `blocked` · analizzato=sì · fix=380812
 - [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] · `unknown` · analizzato=no · fix=—
-- [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/734140 livinggaul-duplicate-count-local-activation|734140 · LivingGaul duplicate count local activation]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] · `completed` · analizzato=no · fix=—
@@ -54,7 +52,6 @@
 - [[obsidian/Prompts/864205 github-reconcile-production-hardening|864205 · Rendere github-reconcile production-grade su Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/842731 prompt-842731|842731 · Historical prompt 842731]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/684217 prompt-684217|684217 · Historical prompt 684217]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/482731 prompt-482731|482731 · Historical prompt 482731]] · `failed` · analizzato=sì · fix=—
 - [[obsidian/Prompts/731846 prompt-731846|731846 · Historical prompt 731846]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/151583 prompt-151583|151583 · Historical prompt 151583]] · `unknown` · analizzato=no · fix=—
@@ -70,7 +67,6 @@
 - [[obsidian/Prompts/286419 prompt-286419|286419 · Historical prompt 286419]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/294681 prompt-294681|294681 · Historical prompt 294681]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/294731 prompt-294731|294731 · Prompt 294731]] · `blocked` · analizzato=sì · fix=—
-- [[obsidian/Prompts/314719 prompt-314719|314719 · Historical prompt 314719]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/314857 prompt-314857|314857 · Historical prompt 314857]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/315804 prompt-315804|315804 · Historical prompt 315804]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/319311 prompt-319311|319311 · Prompt 319311]] · `blocked` · analizzato=sì · fix=—
@@ -140,7 +136,6 @@
 - [[obsidian/Prompts/615842 prompt-615842|615842 · Historical prompt 615842]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/618305 prompt-618305|618305 · Historical prompt 618305]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/618427 prompt-618427|618427 · Historical prompt 618427]] · `blocked` · analizzato=sì · fix=—
-- [[obsidian/Prompts/618472 prompt-618472|618472 · Historical prompt 618472]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/628431 prompt-628431|628431 · Historical prompt 628431]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/632683 prompt-632683|632683 · Historical prompt 632683]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/635814 prompt-635814|635814 · Historical prompt 635814]] · `completed` · analizzato=no · fix=—
@@ -162,7 +157,6 @@
 - [[obsidian/Prompts/684193 prompt-684193|684193 · Historical prompt 684193]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/684215 prompt-684215|684215 · Historical prompt 684215]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/684271 prompt-684271|684271 · Historical prompt 684271]] · `unknown` · analizzato=no · fix=—
-- [[obsidian/Prompts/684731 prompt-684731|684731 · Historical prompt 684731]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/704216 prompt-704216|704216 · Historical prompt 704216]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/706214 prompt-706214|706214 · Historical prompt 706214]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/726105 prompt-726105|726105 · Historical prompt 726105]] · `unknown` · analizzato=no · fix=—
@@ -180,11 +174,9 @@
 - [[obsidian/Prompts/741926 prompt-741926|741926 · Historical prompt 741926]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/742591 prompt-742591|742591 · Historical prompt 742591]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/742615 prompt-742615|742615 · Historical prompt 742615]] · `unknown` · analizzato=no · fix=—
-- [[obsidian/Prompts/742618 prompt-742618|742618 · Historical prompt 742618]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/742913 prompt-742913|742913 · Historical prompt 742913]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/746323 prompt-746323|746323 · Historical prompt 746323]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/748219 prompt-748219|748219 · Historical prompt 748219]] · `unknown` · analizzato=no · fix=—
-- [[obsidian/Prompts/751306 prompt-751306|751306 · Historical prompt 751306]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/754406 prompt-754406|754406 · Historical prompt 754406]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/761284 prompt-761284|761284 · Historical prompt 761284]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/762451 prompt-762451|762451 · Historical prompt 762451]] · `blocked` · analizzato=no · fix=—
@@ -205,7 +197,6 @@
 - [[obsidian/Prompts/842617 prompt-842617|842617 · Historical prompt 842617]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/845217 prompt-845217|845217 · Historical prompt 845217]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/846215 prompt-846215|846215 · Historical prompt 846215]] · `unknown` · analizzato=no · fix=—
-- [[obsidian/Prompts/847392 prompt-847392|847392 · Historical prompt 847392]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/861927 prompt-861927|861927 · Historical prompt 861927]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/863241 prompt-863241|863241 · Historical prompt 863241]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/864219 prompt-864219|864219 · Historical prompt 864219]] · `completed` · analizzato=no · fix=—
@@ -222,4 +213,3 @@
 - [[obsidian/Prompts/940316 prompt-940316|940316 · Historical prompt 940316]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/947261 prompt-947261|947261 · Historical prompt 947261]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/953204 prompt-953204|953204 · Historical prompt 953204]] · `unknown` · analizzato=no · fix=—
-- [[obsidian/Prompts/978216 prompt-978216|978216 · Historical prompt 978216]] · `blocked` · analizzato=sì · fix=—

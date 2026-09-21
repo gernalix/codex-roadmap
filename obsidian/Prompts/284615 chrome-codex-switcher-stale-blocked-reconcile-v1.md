@@ -1,6 +1,6 @@
 ---
 prompt_id: 284615
-status: pending
+status: superseded
 project_id: —
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - fix
   - roadmap-reconcile
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/chrome-codex-switcher
 ---
 
 # 284615 · Riconciliare 519564 dopo il successivo smoke PASS
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/chrome-codex-switcher|chrome-codex-switcher]]
-- **Prompt:** [[../../prompts/chrome-codex-switcher-stale-blocked-reconcile-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/chrome-codex-switcher-stale-blocked-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

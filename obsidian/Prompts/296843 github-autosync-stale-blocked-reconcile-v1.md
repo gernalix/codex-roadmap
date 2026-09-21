@@ -1,6 +1,6 @@
 ---
 prompt_id: 296843
-status: pending
+status: superseded
 project_id: —
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - github-autosync
   - roadmap-reconcile
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/github-autosync
 ---
 
 # 296843 · Riconciliare 684217 dopo la verifica PASS di github-autosync
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/github-autosync|GitHub autosync]]
-- **Prompt:** [[../../prompts/github-autosync-stale-blocked-reconcile-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/github-autosync-stale-blocked-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

@@ -1,6 +1,6 @@
 ---
 prompt_id: 905731
-status: pending
+status: superseded
 project_id: 15
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - fix
   - historical-reconcile
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/fedora
 ---
 
 # 905731 · Riconciliare 751306 dopo il PASS ActivityWatch successivo
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/activity-watch-historical-oracle-permission-reconcile-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/activity-watch-historical-oracle-permission-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

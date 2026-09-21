@@ -1,6 +1,6 @@
 ---
 prompt_id: 726541
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Luna
 reasoning: low
@@ -8,15 +8,15 @@ tags:
   - historical-reconcile
   - personalhub
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 726541 · Riconciliare 684913 dopo la chiusura PASS della PR #15
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-pr15-historical-blocked-reconcile-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-pr15-historical-blocked-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

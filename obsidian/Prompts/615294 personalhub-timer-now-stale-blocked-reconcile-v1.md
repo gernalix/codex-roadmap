@@ -1,6 +1,6 @@
 ---
 prompt_id: 615294
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - personalhub
   - roadmap-reconcile
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 615294 · Riconciliare 314719 dopo il completamento Timer Now
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-timer-now-stale-blocked-reconcile-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-timer-now-stale-blocked-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

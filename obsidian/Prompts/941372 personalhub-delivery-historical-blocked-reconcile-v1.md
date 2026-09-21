@@ -1,6 +1,6 @@
 ---
 prompt_id: 941372
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - fix
   - personalhub
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 941372 · Riconciliare il BLOCKED storico del delivery PersonalHub
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-delivery-historical-blocked-reconcile-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-delivery-historical-blocked-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

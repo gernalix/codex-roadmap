@@ -1,20 +1,20 @@
 ---
 prompt_id: 583742
-status: blocked
+status: completed
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/completed
   - roadmap/project/personalhub
 ---
 
 # 583742 · PersonalHub v53 freeze e dati mancanti
 
-- **Stato:** blocked
+- **Stato:** completed
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../falliti/personalhub-v53-freeze-data-recovery|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-v53-freeze-data-recovery|Apri prompt]]
 - **Primo lancio:** 2026-09-19T05:42:17Z
 - **Ultimo lancio:** 2026-09-19T05:54:52Z
 - **Ultimo esito:** BLOCKED

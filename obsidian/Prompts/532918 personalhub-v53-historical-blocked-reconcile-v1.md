@@ -1,6 +1,6 @@
 ---
 prompt_id: 532918
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Luna
 reasoning: low
@@ -8,15 +8,15 @@ tags:
   - historical-reconcile
   - personalhub
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personalhub
 ---
 
 # 532918 · Riconciliare 583742 con il retry 155893 già PASS
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../prompts/personalhub-v53-historical-blocked-reconcile-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-v53-historical-blocked-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

@@ -6,37 +6,24 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1\|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] | running | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/285894 grindr-web-exporter-recover-complete-all-chats-v1\|285894 · Recupera Grindr exporter e automatizza tutte le chat]] | running | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy\|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] | pending | — | — | — | no | no | — | workflowy-importer | GPT-5.5 | low |
-| [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | pending | — | — | — | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy\|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] | pending | — | — | — | no | no | — | workflowy-importer | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
-| [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1\|318764 · Chiudere il blocker di prova della shortcut GNOME]] | pending | 2026-09-19T06:11:24Z | 2026-09-19T06:11:24Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.5 | low |
-| [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2\|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]] | pending | — | — | — | no | no | — | Fedora / fedora-external-updater | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/257387 fedora-context-index-runtime-activation\|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] | pending | — | — | — | no | no | — | Fedora | GPT-5.5 | medium |
+| [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | pending | — | — | — | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/748203 codex-usage-session-readback-reconcile-v1\|748203 · Riconciliare il session readback del recovery Codex]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1\|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience\|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1\|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2\|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5\|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2\|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]] | pending | — | — | — | no | no | — | Fedora / fedora-external-updater | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/257387 fedora-context-index-runtime-activation\|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/284615 chrome-codex-switcher-stale-blocked-reconcile-v1\|284615 · Riconciliare 519564 dopo il successivo smoke PASS]] | pending | — | — | — | no | no | — | chrome-codex-switcher | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/593164 fedora-historical-kuma-auth-reconcile-v1\|593164 · Riconciliare 847392 dopo la chiusura successiva del gate Kuma]] | pending | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/296843 github-autosync-stale-blocked-reconcile-v1\|296843 · Riconciliare 684217 dopo la verifica PASS di github-autosync]] | pending | — | — | — | no | no | — | GitHub autosync | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/615294 personalhub-timer-now-stale-blocked-reconcile-v1\|615294 · Riconciliare 314719 dopo il completamento Timer Now]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/426718 personalhub-timer-tags-historical-blocked-reconcile-v1\|426718 · Riconciliare 742618 dopo il repair Timer Tags già verificato]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/391742 codex-usage-prompt-id-source-historical-reconcile-v1\|391742 · Riconciliare il mismatch storico prompt_id_source del publisher Codex]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/726541 personalhub-pr15-historical-blocked-reconcile-v1\|726541 · Riconciliare 684913 dopo la chiusura PASS della PR #15]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/532918 personalhub-v53-historical-blocked-reconcile-v1\|532918 · Riconciliare 583742 con il retry 155893 già PASS]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/748203 codex-usage-session-readback-reconcile-v1\|748203 · Riconciliare il session readback del recovery Codex]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/941372 personalhub-delivery-historical-blocked-reconcile-v1\|941372 · Riconciliare il BLOCKED storico del delivery PersonalHub]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/905731 activity-watch-historical-oracle-permission-reconcile-v1\|905731 · Riconciliare 751306 dopo il PASS ActivityWatch successivo]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/836417 personalhub-release-stale-blocked-reconcile-v1\|836417 · Riconciliare 684731 dopo il PASS release già documentato]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1\|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2\|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience\|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1\|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/628541 chatgpt-chrome-rpm-native-transport-test\|628541 · Testare Chrome RPM per il bridge ChatGPT]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | sì | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
@@ -55,13 +42,14 @@
 | [[obsidian/Prompts/111265 personalhub-shared-alerts-pr15-final-closure-v2\|111265 · Chiudere PR #15 senza rifare il lavoro]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2\|576041 · Chiudere autonomamente la PR alert/Places]] | blocked | 2026-09-19T02:06:55Z | 2026-09-19T02:06:55Z | BLOCKED | sì | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/572280 recover-641582-missing-roadmap-registration-v1\|572280 · Recuperare 641582 e correggere il bootstrap roadmap]] | completed | 2026-09-19T01:48:25Z | 2026-09-19T01:48:25Z | PASS | no | no | — | codex-roadmap | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1\|684913 · Chiudere PR #15 senza polling GitHub]] | blocked | 2026-09-19T02:13:34Z | 2026-09-19T03:23:36Z | BLOCKED | sì | no | — | Personal Hub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1\|684913 · Chiudere PR #15 senza polling GitHub]] | completed | 2026-09-19T02:13:34Z | 2026-09-19T03:23:36Z | PASS | sì | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1\|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] | completed | 2026-09-19T03:59:35Z | 2026-09-19T03:59:35Z | PASS | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa\|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] | completed | 2026-09-19T06:57:57Z | 2026-09-19T06:57:57Z | PASS | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/642913 global-repository-single-writer-rollout\|642913 · Attivare il single writer globale per tutti i repository]] | completed | 2026-09-19T10:59:16Z | 2026-09-19T10:59:16Z | PASS | sì | sì | — | GitHub Autosync | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release\|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] | completed | 2026-09-19T15:13:54Z | 2026-09-19T15:29:32Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/593872 fedora-graphics-black-screen-forensics\|593872 · Diagnosi forense del blackout grafico Fedora]] | completed | 2026-09-19T21:09:02Z | 2026-09-19T21:09:02Z | PASS | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/404936 github-autosync-kuma46-autonomous-closure\|404936 · Chiudere definitivamente il monitor rosso Fedora GitHub Reconcile]] | completed | 2026-09-20T07:14:25Z | 2026-09-20T07:14:25Z | PASS | sì | sì | — | GitHub Autosync / Fedora runtime | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1\|318764 · Chiudere il blocker di prova della shortcut GNOME]] | completed | 2026-09-19T06:11:24Z | 2026-09-19T06:11:24Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | blocked | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | BLOCKED | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2\|200725 · PersonalHub 100% capsule isolation — integra main e valida]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
@@ -125,7 +113,7 @@
 | [[obsidian/Prompts/243871 personalhub-play-release-local-validation-v2\|243871 · Controllo finale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/690049 fedora-runtime-validation\|690049 · Ultimo controllo del monitoraggio Fedora]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/445388 logseq-updates-pat-safety-closure\|445388 · Chiusura sicurezza e attivazione updater Logseq]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2\|604812 · Fix GNOME global search shortcut on Chrome RPM]] | blocked | 2026-09-21T21:50:23Z | 2026-09-21T21:50:23Z | BLOCKED | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2\|604812 · Fix GNOME global search shortcut on Chrome RPM]] | completed | 2026-09-21T21:50:23Z | 2026-09-21T21:50:23Z | PASS | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/255325 prompt-255325\|255325 · Prompt 255325]] | blocked | 2026-09-18T17:42:04Z | 2026-09-18T17:42:04Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/294731 prompt-294731\|294731 · Prompt 294731]] | blocked | 2026-09-16T17:42:10Z | 2026-09-16T17:42:10Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/319311 prompt-319311\|319311 · Prompt 319311]] | blocked | 2026-09-18T17:40:55Z | 2026-09-18T17:40:55Z | BLOCKED | sì | no | — | — | — | — |
@@ -141,7 +129,7 @@
 | [[obsidian/Prompts/284731 prompt-284731\|284731 · Historical prompt 284731]] | completed | 2026-09-13T12:45:15Z | 2026-09-13T12:45:15Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/286419 prompt-286419\|286419 · Historical prompt 286419]] | unknown | 2026-09-18T17:35:06Z | 2026-09-18T17:35:06Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/294681 prompt-294681\|294681 · Historical prompt 294681]] | unknown | 2026-08-05T00:21:44Z | 2026-09-03T20:17:59Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/314719 prompt-314719\|314719 · Historical prompt 314719]] | blocked | 2026-09-16T05:49:05Z | 2026-09-16T05:49:05Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/314719 prompt-314719\|314719 · Historical prompt 314719]] | completed | 2026-09-16T05:49:05Z | 2026-09-16T05:49:05Z | PASS | sì | no | — | — | — | — |
 | [[obsidian/Prompts/314857 prompt-314857\|314857 · Historical prompt 314857]] | unknown | 2026-09-07T09:51:18Z | 2026-09-07T09:51:18Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/315804 prompt-315804\|315804 · Historical prompt 315804]] | unknown | 2026-08-05T03:14:20Z | 2026-08-05T03:14:20Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/347921 prompt-347921\|347921 · Historical prompt 347921]] | unknown | 2026-08-05T09:02:52Z | 2026-08-05T10:49:04Z | UNKNOWN | no | no | — | — | — | — |
@@ -212,7 +200,7 @@
 | [[obsidian/Prompts/615842 prompt-615842\|615842 · Historical prompt 615842]] | unknown | 2026-08-04T20:22:48Z | 2026-08-04T20:22:48Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/618305 prompt-618305\|618305 · Historical prompt 618305]] | completed | 2026-09-13T13:18:26Z | 2026-09-13T13:18:26Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/618427 prompt-618427\|618427 · Historical prompt 618427]] | blocked | 2026-09-16T08:48:01Z | 2026-09-16T08:48:01Z | BLOCKED | sì | no | — | — | — | — |
-| [[obsidian/Prompts/618472 prompt-618472\|618472 · Historical prompt 618472]] | blocked | 2026-09-12T02:22:37Z | 2026-09-12T02:22:37Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/618472 prompt-618472\|618472 · Historical prompt 618472]] | superseded | 2026-09-12T02:22:37Z | 2026-09-12T02:22:37Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/628431 prompt-628431\|628431 · Historical prompt 628431]] | completed | 2026-09-07T18:42:22Z | 2026-09-07T18:42:22Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/632683 prompt-632683\|632683 · Historical prompt 632683]] | completed | 2026-09-18T17:38:09Z | 2026-09-18T17:38:09Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/635814 prompt-635814\|635814 · Historical prompt 635814]] | completed | 2026-09-16T14:33:59Z | 2026-09-16T14:33:59Z | PASS | no | no | — | — | — | — |
@@ -233,9 +221,9 @@
 | [[obsidian/Prompts/683214 prompt-683214\|683214 · Historical prompt 683214]] | unknown | 2026-08-11T16:45:56Z | 2026-08-11T16:45:56Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/684193 prompt-684193\|684193 · Historical prompt 684193]] | completed | 2026-09-15T21:45:20Z | 2026-09-15T21:45:20Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/684215 prompt-684215\|684215 · Historical prompt 684215]] | completed | 2026-09-11T18:30:21Z | 2026-09-11T18:30:21Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/684217 prompt-684217\|684217 · Historical prompt 684217]] | blocked | 2026-09-04T00:36:15Z | 2026-09-19T08:38:24Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/684217 prompt-684217\|684217 · Historical prompt 684217]] | completed | 2026-09-04T00:36:15Z | 2026-09-19T08:38:24Z | PASS | sì | no | — | — | — | — |
 | [[obsidian/Prompts/684271 prompt-684271\|684271 · Historical prompt 684271]] | unknown | 2026-08-04T15:48:23Z | 2026-08-04T15:48:23Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/684731 prompt-684731\|684731 · Historical prompt 684731]] | blocked | 2026-09-16T09:55:30Z | 2026-09-16T09:55:30Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/684731 prompt-684731\|684731 · Historical prompt 684731]] | completed | 2026-09-16T09:55:30Z | 2026-09-16T09:55:30Z | PASS | sì | no | — | — | — | — |
 | [[obsidian/Prompts/704216 prompt-704216\|704216 · Historical prompt 704216]] | unknown | 2026-08-05T05:14:37Z | 2026-08-05T05:14:37Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/706214 prompt-706214\|706214 · Historical prompt 706214]] | completed | 2026-09-13T13:01:03Z | 2026-09-13T13:01:03Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/726105 prompt-726105\|726105 · Historical prompt 726105]] | unknown | 2026-08-05T02:21:03Z | 2026-08-05T02:21:03Z | UNKNOWN | no | no | — | — | — | — |
@@ -256,11 +244,11 @@
 | [[obsidian/Prompts/741926 prompt-741926\|741926 · Historical prompt 741926]] | unknown | 2026-09-16T06:16:59Z | 2026-09-16T06:16:59Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/742591 prompt-742591\|742591 · Historical prompt 742591]] | completed | 2026-09-18T11:03:33Z | 2026-09-18T11:03:33Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/742615 prompt-742615\|742615 · Historical prompt 742615]] | unknown | 2026-09-16T10:15:22Z | 2026-09-16T10:15:22Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/742618 prompt-742618\|742618 · Historical prompt 742618]] | blocked | 2026-09-12T04:06:13Z | 2026-09-12T04:06:13Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/742618 prompt-742618\|742618 · Historical prompt 742618]] | completed | 2026-09-12T04:06:13Z | 2026-09-12T04:06:13Z | PASS | sì | no | — | — | — | — |
 | [[obsidian/Prompts/742913 prompt-742913\|742913 · Historical prompt 742913]] | unknown | 2026-09-13T15:48:35Z | 2026-09-13T15:48:35Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/746323 prompt-746323\|746323 · Historical prompt 746323]] | completed | 2026-09-16T17:37:00Z | 2026-09-16T17:37:00Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/748219 prompt-748219\|748219 · Historical prompt 748219]] | unknown | 2026-08-06T15:19:27Z | 2026-08-06T15:19:27Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/751306 prompt-751306\|751306 · Historical prompt 751306]] | blocked | 2026-09-18T17:12:02Z | 2026-09-18T17:12:02Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/751306 prompt-751306\|751306 · Historical prompt 751306]] | completed | 2026-09-18T17:12:02Z | 2026-09-18T17:12:02Z | PASS | sì | no | — | — | — | — |
 | [[obsidian/Prompts/754406 prompt-754406\|754406 · Historical prompt 754406]] | blocked | 2026-09-18T17:08:39Z | 2026-09-18T17:08:39Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/761284 prompt-761284\|761284 · Historical prompt 761284]] | completed | 2026-09-05T12:24:28Z | 2026-09-05T12:24:28Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/762451 prompt-762451\|762451 · Historical prompt 762451]] | blocked | 2026-09-11T17:36:07Z | 2026-09-11T17:36:07Z | BLOCKED | no | no | — | — | — | — |
@@ -282,7 +270,7 @@
 | [[obsidian/Prompts/842731 prompt-842731\|842731 · Historical prompt 842731]] | completed | 2026-09-09T09:08:03Z | 2026-09-19T17:07:11Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/845217 prompt-845217\|845217 · Historical prompt 845217]] | unknown | 2026-09-03T17:28:38Z | 2026-09-03T17:28:38Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/846215 prompt-846215\|846215 · Historical prompt 846215]] | unknown | 2026-09-03T05:16:32Z | 2026-09-03T05:16:32Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/847392 prompt-847392\|847392 · Historical prompt 847392]] | blocked | 2026-09-16T09:54:41Z | 2026-09-16T09:54:41Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/847392 prompt-847392\|847392 · Historical prompt 847392]] | completed | 2026-09-16T09:54:41Z | 2026-09-16T09:54:41Z | PASS | sì | no | — | — | — | — |
 | [[obsidian/Prompts/861927 prompt-861927\|861927 · Historical prompt 861927]] | unknown | 2026-08-05T01:02:46Z | 2026-08-05T01:02:46Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/863241 prompt-863241\|863241 · Historical prompt 863241]] | unknown | 2026-08-05T05:36:35Z | 2026-08-05T05:36:35Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/864219 prompt-864219\|864219 · Historical prompt 864219]] | completed | 2026-09-12T17:00:33Z | 2026-09-12T17:00:33Z | PASS | no | no | — | — | — | — |
@@ -299,13 +287,13 @@
 | [[obsidian/Prompts/940316 prompt-940316\|940316 · Historical prompt 940316]] | unknown | 2026-09-16T07:38:54Z | 2026-09-16T07:38:54Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/947261 prompt-947261\|947261 · Historical prompt 947261]] | completed | 2026-09-07T20:19:15Z | 2026-09-07T20:19:15Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/953204 prompt-953204\|953204 · Historical prompt 953204]] | unknown | 2026-08-05T01:29:48Z | 2026-08-05T01:29:48Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/978216 prompt-978216\|978216 · Historical prompt 978216]] | blocked | 2026-09-16T09:17:02Z | 2026-09-16T09:17:02Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/978216 prompt-978216\|978216 · Historical prompt 978216]] | completed | 2026-09-16T09:17:02Z | 2026-09-16T09:17:02Z | PASS | sì | no | — | — | — | — |
 | [[obsidian/Prompts/962109 personalhub-github-ci-closure\|962109 · Chiudere definitivamente la CI GitHub di PersonalHub]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/578439 workflowy-roadmap-control-local-activation\|578439 · Attivare il controllo roadmap da Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical\|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] | blocked | — | — | BLOCKED | no | no | — | Workflowy importer | — | — |
 | [[obsidian/Prompts/240438 livinggaul-content-dedupe-local-activation\|240438 · LivingGaul content dedupe local activation]] | completed | 2026-09-19T03:56:36Z | 2026-09-19T03:56:36Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.5 | low |
 | [[obsidian/Prompts/996524 livinggaul-metadata-v3-local-activation\|996524 · LivingGaul metadata v3 local activation]] | superseded | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery\|583742 · PersonalHub v53 freeze e dati mancanti]] | blocked | 2026-09-19T05:42:17Z | 2026-09-19T05:54:52Z | BLOCKED | sì | no | — | PersonalHub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery\|583742 · PersonalHub v53 freeze e dati mancanti]] | completed | 2026-09-19T05:42:17Z | 2026-09-19T05:54:52Z | PASS | sì | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2\|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] | completed | 2026-09-19T05:59:34Z | 2026-09-19T05:59:34Z | PASS | no | no | — | PersonalHub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/316628 livinggaul-video-catalog-view-local-activation\|316628 · LivingGaul video catalog view local activation]] | superseded | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/560584 livinggaul-source-availability-local-activation\|560584 · LivingGaul source availability local activation]] | completed | 2026-09-19T09:58:41Z | 2026-09-19T09:58:41Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
@@ -315,7 +303,7 @@
 | [[obsidian/Prompts/637985 personalhub-single-canonical-db-export\|637985 · Mantenere un solo DB auto-esportato PersonalHub]] | completed | 2026-09-19T14:04:52Z | 2026-09-19T14:04:52Z | PASS | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/734140 livinggaul-duplicate-count-local-activation\|734140 · LivingGaul duplicate count local activation]] | completed | 2026-09-19T12:57:31Z | 2026-09-19T14:28:44Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/491628 personalhub-android17-restricted-overlay-finalize\|491628 · Finalizzare permesso overlay Android 17 di PersonalHub]] | completed | 2026-09-19T15:46:00Z | 2026-09-19T16:51:48Z | PASS | no | no | — | PersonalHub | GPT-5.5 | medium |
-| [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure\|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] | blocked | 2026-09-19T15:41:21Z | 2026-09-19T15:41:21Z | BLOCKED | no | no | — | chrome-codex-switcher | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure\|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] | completed | 2026-09-19T15:41:21Z | 2026-09-19T15:41:21Z | PASS | no | no | — | chrome-codex-switcher | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/947306 workflowy-bf-autofix-publisher-v1\|947306 · Arricchire automaticamente i B/F Workflowy con il report Codex]] | completed | 2026-09-19T20:19:20Z | 2026-09-19T20:19:20Z | PASS | no | no | — | Fedora / Workflowy | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/927641 workflowy-roadmap-cockpit-local-activation\|927641 · Attiva il cockpit Workflowy della roadmap]] | completed | 2026-09-19T19:41:20Z | 2026-09-19T19:41:20Z | PASS | no | no | — | Workflowy roadmap cockpit | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/658142 ccs-autonomous-runtime-verifier\|658142 · Rendere autonomo il collaudo Chrome ↔ Codex]] | blocked | — | — | BLOCKED | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
@@ -329,6 +317,18 @@
 | [[obsidian/Prompts/764381 workflowy-conversational-roadmap-dashboard\|764381 · Far parlare la dashboard Workflowy]] | completed | — | — | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/764382 workflowy-semantic-dashboard-styling\|764382 · Evidenziare visivamente problemi e azioni nella dashboard]] | completed | — | — | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening\|381904 · Rendere stabile il sync Workflowy senza errori 429]] | unknown | 2026-09-20T08:29:35Z | 2026-09-20T08:29:35Z | UNKNOWN | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/284615 chrome-codex-switcher-stale-blocked-reconcile-v1\|284615 · Riconciliare 519564 dopo il successivo smoke PASS]] | superseded | — | — | — | no | no | — | chrome-codex-switcher | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/593164 fedora-historical-kuma-auth-reconcile-v1\|593164 · Riconciliare 847392 dopo la chiusura successiva del gate Kuma]] | superseded | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/296843 github-autosync-stale-blocked-reconcile-v1\|296843 · Riconciliare 684217 dopo la verifica PASS di github-autosync]] | superseded | — | — | — | no | no | — | GitHub autosync | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/615294 personalhub-timer-now-stale-blocked-reconcile-v1\|615294 · Riconciliare 314719 dopo il completamento Timer Now]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/426718 personalhub-timer-tags-historical-blocked-reconcile-v1\|426718 · Riconciliare 742618 dopo il repair Timer Tags già verificato]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/391742 codex-usage-prompt-id-source-historical-reconcile-v1\|391742 · Riconciliare il mismatch storico prompt_id_source del publisher Codex]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/726541 personalhub-pr15-historical-blocked-reconcile-v1\|726541 · Riconciliare 684913 dopo la chiusura PASS della PR #15]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/532918 personalhub-v53-historical-blocked-reconcile-v1\|532918 · Riconciliare 583742 con il retry 155893 già PASS]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/941372 personalhub-delivery-historical-blocked-reconcile-v1\|941372 · Riconciliare il BLOCKED storico del delivery PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/905731 activity-watch-historical-oracle-permission-reconcile-v1\|905731 · Riconciliare 751306 dopo il PASS ActivityWatch successivo]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/836417 personalhub-release-stale-blocked-reconcile-v1\|836417 · Riconciliare 684731 dopo il PASS release già documentato]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/963514 personalhub-soldi-on-device-visual-object-search-v1\|963514 · Aggiungere ricerca visiva on-device alle foto di Soldi]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration\|206756 · Verificare il download batch nativo di e-Boks]] | blocked | 2026-09-21T19:12:37Z | 2026-09-21T19:19:23Z | BLOCKED | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/628541 chatgpt-chrome-rpm-native-transport-test\|628541 · Testare Chrome RPM per il bridge ChatGPT]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/917403 chrome-codex-switcher-gnome-global-search-shortcut-runtime-fix-v1\|917403 · Fix GNOME global Context Search shortcut]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |

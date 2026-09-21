@@ -1,6 +1,6 @@
 ---
 prompt_id: 593164
-status: pending
+status: superseded
 project_id: 15
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - fix
   - roadmap-reconcile
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/fedora-fedora-system-monitor
 ---
 
 # 593164 · Riconciliare 847392 dopo la chiusura successiva del gate Kuma
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora-fedora-system-monitor|Fedora / fedora-system-monitor]]
-- **Prompt:** [[../../prompts/fedora-historical-kuma-auth-reconcile-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/fedora-historical-kuma-auth-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
