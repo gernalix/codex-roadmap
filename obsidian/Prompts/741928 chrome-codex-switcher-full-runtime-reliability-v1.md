@@ -28,9 +28,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[989559 codex-desktop-roadmap-launcher|989559]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[519564 chrome-codex-switcher-runtime-closure|519564]], [[604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2|604812]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1|472615]]
 - **Chat Codex:** Nuova chat Codex dedicata; richiede Fedora/GNOME/Chrome/ChatGPT Desktop reali
 
 ## Spiegazione
