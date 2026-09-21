@@ -1,6 +1,6 @@
 # Da controllare
 
-- [[obsidian/Prompts/604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2|604812 · Fix GNOME global search shortcut on Chrome RPM]] · `blocked` · analizzato=no · fix=—
+- [[obsidian/Prompts/604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2|604812 · Fix GNOME global search shortcut on Chrome RPM]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration|206756 · Verificare il download batch nativo di e-Boks]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize|865431 · Finalizzare 731845 senza rieseguire l’audit]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] · `completed` · analizzato=no · fix=—

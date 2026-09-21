@@ -23,7 +23,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -44,7 +44,7 @@ Chrome Flatpak è stato rimosso e Chrome RPM con lo switcher funziona: il task d
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-21T21:57:37Z · colli di bottiglia: sì · fix: — · {"blocker":"No privileged Wayland input injector/native UI control to prove Alt+Shift+S.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"604812","report_ref":"codex-usage:0ee05dcbfd64f034c0bc1b85:1bc5b94a6bd92292","schema":"codex-roadmap.fix-packet.v1","work_state":{"commit":"beca7f9"}}
 
 ## Modifiche di codice ChatGPT
 
