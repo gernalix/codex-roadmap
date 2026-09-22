@@ -146,6 +146,46 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertIn("gernalix/example",note)
             self.assertIn("abc123",note)
 
+    def test_prompt_text_mutation_updates_canonical_materialization(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            original="PROMPT_ID=123456\nOriginal\n"
+            updated="PROMPT_ID=123456\nUpdated\n"
+            db.register_prompt(
+                conn,
+                prompt_id="123456",
+                slug="one",
+                title="One",
+                current_path="prompts/one.md",
+                model="GPT-5.6 Terra",
+                reasoning="medium",
+                queue_position=1,
+                prompt_text=original,
+            )
+            db.apply_mutation(
+                conn,
+                {
+                    "op":"prompt_text",
+                    "prompt_id":"123456",
+                    "prompt_text":updated,
+                    "note":"expand scope",
+                },
+            )
+            conn.commit()
+            row=db.prompt_row(conn,"123456")
+            self.assertEqual(updated,db.canonical_prompt_text(conn,"123456"))
+            self.assertEqual(db.materialization_hash(updated),row["materialization_sha256"])
+            self.assertEqual("GPT-5.6 Terra",row["model"])
+            self.assertEqual("medium",row["reasoning"])
+            self.assertEqual(1,row["queue_position"])
+            self.assertEqual("pending",row["status"])
+            self.assertEqual(
+                1,
+                conn.execute("select count(*) from audit_events where event_type='prompt_text_updated'").fetchone()[0],
+            )
+            conn.close()
+
     def test_model_mutation_updates_only_model(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
@@ -249,6 +289,7 @@ class RoadmapDBTests(unittest.TestCase):
             actions=[
                 lambda: db.set_status(conn,"123456","superseded",actor="chatgpt"),
                 lambda: db.set_model(conn,"123456","GPT-5.6 Sol"),
+                lambda: db.set_prompt_text(conn,"123456","changed"),
                 lambda: db.reorder_prompt(conn,"123456",9),
                 lambda: db.add_dependency(conn,"123456","654321"),
                 lambda: db.add_relation(conn,"123456","654321","replacement",actor="chatgpt"),
