@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/946821 workflowy-needs-fix-live-closure-v2|946821 · Verificare la pulizia live di Needs fix]]
+- [[obsidian/Prompts/327684 minsp-export-initial-repo-bootstrap-v1|327684 · Creare la prima baseline Git di minsp-export]]
 - [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
 
 ## In esecuzione

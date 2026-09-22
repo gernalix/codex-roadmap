@@ -2,7 +2,7 @@
 
 - [[obsidian/Prompts/403496 codex-desktop-launcher-roadmap-branch-recovery-v1|403496 · Recuperare il launcher Desktop dopo il branch mismatch roadmap]] · `blocked` · analizzato=sì · fix=764529
 - [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export|738242 · Scaricare tutta la posta e-Boks via Browser Use]] · `blocked` · analizzato=sì · fix=582946
-- [[obsidian/Prompts/682741 minsp-export-live-authenticated-coverage|682741 · Min Sundhedsplatform — validazione export completo]] · `blocked` · analizzato=sì · fix=—
+- [[obsidian/Prompts/682741 minsp-export-live-authenticated-coverage|682741 · Min Sundhedsplatform — validazione export completo]] · `blocked` · analizzato=sì · fix=327684
 - [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2|815274 · Chiudere il residuo Kuma dei servizi Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/413647 prompt-history-runtime-pass-reconcile-v1|413647 · Riconciliare il PASS runtime di prompt-history]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/918643 fedora-systemd-kuma-hardening-recovery-v1|918643 · Completa hardening systemd e Kuma]] · `completed` · analizzato=no · fix=—

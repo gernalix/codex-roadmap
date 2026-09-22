@@ -24,11 +24,11 @@ tags:
 - **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
-- **Fix:** —
+- **Fix:** 327684
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[327684 minsp-export-initial-repo-bootstrap-v1|327684]]
 - **Chat Codex:** Nuova chat Codex
 
 ## Spiegazione
@@ -45,6 +45,7 @@ Esegue autonomamente l'export completo di Min Sundhedsplatform fino alla verific
 ## Analisi ChatGPT
 
 - 2026-09-22T02:46:57Z · colli di bottiglia: sì · fix: — · {"blocker":"il claim ha attivato il prompt, ma il single-writer non è riuscito a creare il worktree isolato e lo ha finalizzato come `blocked` (Issue #518). Lo stato canonico non è più `running`, quindi non posso avviare il repo senza un nuovo prompt/claim canonico.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"682741","report_ref":"codex-usage:748e2a854369c0d2e3370ab3:476f79614d44a9a9","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
+- 2026-09-22T02:52:00Z · colli di bottiglia: sì · fix: 327684 · Il crawler non è il blocker: gernalix/minsp-export è ancora un repository remoto vuoto, quindi il single-writer non può creare il primo worktree. 327684 esegue una sola volta il bootstrap Git sicuro dal codice locale senza dati sanitari; 781426 riprende poi il goal originale tramite normale single-writer dopo MitID.
 
 ## Modifiche di codice ChatGPT
 
