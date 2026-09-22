@@ -5,7 +5,7 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1\|472615 · Ripristinare le note dopo reboot]] | running | 2026-09-21T23:49:07Z | 2026-09-22T00:00:14Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | running | — | — | — | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy\|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] | pending | — | — | — | no | no | — | workflowy-importer | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
@@ -242,7 +242,7 @@
 | [[obsidian/Prompts/738415 prompt-738415\|738415 · Historical prompt 738415]] | unknown | 2026-08-05T00:00:29Z | 2026-08-05T00:00:29Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/739214 prompt-739214\|739214 · Historical prompt 739214]] | cancelled | 2026-09-11T21:40:58Z | 2026-09-11T21:40:58Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/741906 prompt-741906\|741906 · Historical prompt 741906]] | unknown | 2026-08-04T23:25:41Z | 2026-08-04T23:25:41Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/741926 prompt-741926\|741926 · Historical prompt 741926]] | unknown | 2026-09-16T06:16:59Z | 2026-09-16T06:16:59Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/741926 prompt-741926\|741926 · Historical prompt 741926]] | unknown | 2026-08-29T16:57:17Z | 2026-09-16T06:16:59Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/742591 prompt-742591\|742591 · Historical prompt 742591]] | completed | 2026-09-18T11:03:33Z | 2026-09-18T11:03:33Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/742615 prompt-742615\|742615 · Historical prompt 742615]] | unknown | 2026-09-16T10:15:22Z | 2026-09-16T10:15:22Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/742618 prompt-742618\|742618 · Historical prompt 742618]] | completed | 2026-09-12T04:06:13Z | 2026-09-12T04:06:13Z | PASS | sì | no | — | — | — | — |

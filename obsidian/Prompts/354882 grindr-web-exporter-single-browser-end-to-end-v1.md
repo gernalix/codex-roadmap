@@ -19,9 +19,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../prompts/grindr-web-exporter-single-browser-end-to-end-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T00:27:32Z
+- **Ultimo lancio:** 2026-09-22T00:27:32Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -39,7 +39,7 @@ Elimina il falso loop di autenticazione usando una sola istanza Chrome dall'even
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T00:27:32Z | 2026-09-22T00:34:16Z | UNKNOWN | 403.086 | gpt-5.6-terra | medium | 25 | 149115 |
 
 ## Analisi ChatGPT
 
