@@ -6,7 +6,7 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
-from roadmap_db import RoadmapDBError, connect, now_utc, prompt_row, summary_rows
+from roadmap_db import RoadmapDBError, canonical_prompt_text, connect, now_utc, prompt_row, summary_rows
 
 def _wikilink_for_prompt(row: sqlite3.Row) -> str:
     return f"[[obsidian/Prompts/{row['prompt_id']} {row['slug']}|{row['prompt_id']} · {row['title']}]]"
@@ -124,6 +124,20 @@ def render(repo: Path) -> list[str]:
     conn = connect(repo, writable=False)
     rows = summary_rows(conn)
     pending = [r for r in rows if r["status"] in ("pending","running")]
+
+    # prompt_materializations is the canonical body store. Keep legacy/current_path
+    # Markdown files as writer-owned projections so humans and older tooling never
+    # see stale prompt text after a canonical body mutation.
+    for row in rows:
+        current_path = str(row["current_path"] or "")
+        if not current_path.endswith(".md"):
+            continue
+        body = canonical_prompt_text(conn, str(row["prompt_id"]))
+        if body is None:
+            continue
+        path = repo / current_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(body, encoding="utf-8")
 
     roadmap_lines = [
         "# Roadmap",
