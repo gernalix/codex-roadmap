@@ -400,7 +400,10 @@ def set_explanation(
     actor: str = "chatgpt",
     note: str | None = None,
 ) -> None:
-    row = assert_prompt_not_running(conn, prompt_id, "explanation")
+    # `explanation` is presentation-only metadata used by human-facing
+    # views. Updating it while a prompt is running does not alter the canonical
+    # prompt body, execution parameters, dependencies, or workflow state.
+    row = prompt_row(conn, prompt_id)
     old_explanation = row["explanation"] or ""
     if old_explanation == explanation:
         return
