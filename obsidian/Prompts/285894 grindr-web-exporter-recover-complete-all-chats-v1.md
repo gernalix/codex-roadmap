@@ -1,6 +1,6 @@
 ---
 prompt_id: 285894
-status: blocked
+status: superseded
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - grindr
   - recovery
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/grindr-web-exporter
 ---
 
 # 285894 · Recupera Grindr exporter e automatizza tutte le chat
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../falliti/grindr-web-exporter-recover-complete-all-chats-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-21T22:39:51Z

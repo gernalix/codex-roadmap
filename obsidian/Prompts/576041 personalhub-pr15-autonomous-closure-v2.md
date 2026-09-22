@@ -1,20 +1,20 @@
 ---
 prompt_id: 576041
-status: blocked
+status: completed
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/completed
   - roadmap/project/personal-hub
 ---
 
 # 576041 · Chiudere autonomamente la PR alert/Places
 
-- **Stato:** blocked
+- **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-pr15-autonomous-closure-v2|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-pr15-autonomous-closure-v2|Apri prompt]]
 - **Primo lancio:** 2026-09-19T02:06:55Z
 - **Ultimo lancio:** 2026-09-19T02:06:55Z
 - **Ultimo esito:** BLOCKED

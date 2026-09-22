@@ -1,20 +1,20 @@
 ---
 prompt_id: 206756
-status: blocked
+status: completed
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/completed
   - roadmap/project/e-boks-exploration
 ---
 
 # 206756 · Verificare il download batch nativo di e-Boks
 
-- **Stato:** blocked
+- **Stato:** completed
 - **Progetto:** [[../Projects/e-boks-exploration|e-Boks exploration]]
-- **Prompt:** [[../../falliti/eboks-native-bulk-download-capability-exploration|Apri prompt]]
+- **Prompt:** [[../../completed/eboks-native-bulk-download-capability-exploration|Apri prompt]]
 - **Primo lancio:** 2026-09-21T19:12:37Z
 - **Ultimo lancio:** 2026-09-21T19:19:23Z
 - **Ultimo esito:** UNKNOWN

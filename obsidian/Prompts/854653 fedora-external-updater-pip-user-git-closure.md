@@ -1,20 +1,20 @@
 ---
 prompt_id: 854653
-status: blocked
+status: completed
 project_id: —
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/completed
   - roadmap/project/fedora-fedora-external-updater
 ---
 
 # 854653 · Persistenza Git del fix pip_user
 
-- **Stato:** blocked
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora-fedora-external-updater|Fedora / fedora-external-updater]]
-- **Prompt:** [[../../falliti/fedora-external-updater-pip-user-git-closure|Apri prompt]]
+- **Prompt:** [[../../completed/fedora-external-updater-pip-user-git-closure|Apri prompt]]
 - **Primo lancio:** 2026-09-19T00:13:14Z
 - **Ultimo lancio:** 2026-09-19T00:13:14Z
 - **Ultimo esito:** BLOCKED

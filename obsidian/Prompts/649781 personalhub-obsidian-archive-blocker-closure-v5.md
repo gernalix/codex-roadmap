@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-Fa funzionare l’archivio di PersonalHub in Obsidian. Prima recupera ciò che era già stato fatto, poi completa solo le parti che mancano.
+È il solo task rimasto per il blocker dell’archivio Obsidian PersonalHub; sostituisce 728918 e deve correggere soltanto il residuo reale senza rifare l’intero archivio.
 
 ## Esecuzioni
 

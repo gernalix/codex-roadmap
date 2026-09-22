@@ -1,6 +1,6 @@
 ---
 prompt_id: 601566
-status: blocked
+status: superseded
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - fix
   - grindr
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/grindr-web-exporter
 ---
 
 # 601566 · Chiudi blocker Chrome Grindr exporter
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../falliti/grindr-web-exporter-persistent-chrome-profile-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-21T22:54:13Z

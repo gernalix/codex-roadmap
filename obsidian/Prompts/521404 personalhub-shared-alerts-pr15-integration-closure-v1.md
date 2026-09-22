@@ -1,20 +1,20 @@
 ---
 prompt_id: 521404
-status: blocked
+status: completed
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/completed
   - roadmap/project/personal-hub
 ---
 
 # 521404 · Chiudere e mergiare la PR alert/Places già pronta
 
-- **Stato:** blocked
+- **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-shared-alerts-pr15-integration-closure-v1|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-shared-alerts-pr15-integration-closure-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-19T01:11:22Z
 - **Ultimo lancio:** 2026-09-19T01:11:22Z
 - **Ultimo esito:** BLOCKED

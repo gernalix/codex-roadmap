@@ -1,20 +1,20 @@
 ---
 prompt_id: 380812
-status: blocked
+status: completed
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/completed
   - roadmap/project/personal-hub
 ---
 
 # 380812 · Chiudere e integrare tag e alert di Places
 
-- **Stato:** blocked
+- **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../falliti/personalhub-shared-alerts-places-tags-integration-v5|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-shared-alerts-places-tags-integration-v5|Apri prompt]]
 - **Primo lancio:** 2026-09-19T00:49:16Z
 - **Ultimo lancio:** 2026-09-19T00:49:16Z
 - **Ultimo esito:** BLOCKED

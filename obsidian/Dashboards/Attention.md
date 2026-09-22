@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration|206756 · Verificare il download batch nativo di e-Boks]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2|815274 · Chiudere il residuo Kuma dei servizi Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/413647 prompt-history-runtime-pass-reconcile-v1|413647 · Riconciliare il PASS runtime di prompt-history]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/918643 fedora-systemd-kuma-hardening-recovery-v1|918643 · Completa hardening systemd e Kuma]] · `completed` · analizzato=no · fix=—
@@ -13,15 +14,10 @@
 - [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/684193 prompt-684193|684193 · Historical prompt 684193]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/515955 grindr-web-exporter-recaptcha-normal-chrome-login-v1|515955 · Fix login reCAPTCHA Grindr exporter]] · `blocked` · analizzato=sì · fix=—
-- [[obsidian/Prompts/601566 grindr-web-exporter-persistent-chrome-profile-v1|601566 · Chiudi blocker Chrome Grindr exporter]] · `blocked` · analizzato=sì · fix=—
-- [[obsidian/Prompts/285894 grindr-web-exporter-recover-complete-all-chats-v1|285894 · Recupera Grindr exporter e automatizza tutte le chat]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|318764 · Chiudere il blocker di prova della shortcut GNOME]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/519564 chrome-codex-switcher-runtime-closure|519564 · Chiudere e collaudare Chrome ↔ Codex Switcher su Fedora]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration|206756 · Verificare il download batch nativo di e-Boks]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize|865431 · Finalizzare 731845 senza rieseguire l’audit]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/583214 prompt-583214|583214 · Historical prompt 583214]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening|381904 · Rendere stabile il sync Workflowy senza errori 429]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/319572 ccs-runtime-verification-followup|319572 · Completare la verifica runtime Chrome Codex]] · `completed` · analizzato=no · fix=—
@@ -37,11 +33,9 @@
 - [[obsidian/Prompts/947306 workflowy-bf-autofix-publisher-v1|947306 · Arricchire automaticamente i B/F Workflowy con il report Codex]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/927641 workflowy-roadmap-cockpit-local-activation|927641 · Attiva il cockpit Workflowy della roadmap]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]] · `blocked` · analizzato=sì · fix=418844
 - [[obsidian/Prompts/240438 livinggaul-content-dedupe-local-activation|240438 · LivingGaul content dedupe local activation]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237 · Completa il fix del salvataggio Codex sul PC]] · `blocked` · analizzato=sì · fix=642815
 - [[obsidian/Prompts/374820 fedora-runtime-kuma-closure-v4|374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5|380812 · Chiudere e integrare tag e alert di Places]] · `blocked` · analizzato=sì · fix=521404
 - [[obsidian/Prompts/391746 recover-github-autosync-codex-usage-roadmap|391746 · Recupera gli alert Git autosync di codex-usage e codex-roadmap]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844 · Chiudere il residuo del merge capsule]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `completed` · analizzato=no · fix=—
@@ -49,22 +43,18 @@
 - [[obsidian/Prompts/489818 datasette5-personalhub-final-schema-deploy-v3|489818 · Aggiornare e distribuire Datasette sullo schema PH finale]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/491628 personalhub-android17-restricted-overlay-finalize|491628 · Finalizzare permesso overlay Android 17 di PersonalHub]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404 · Chiudere e mergiare la PR alert/Places già pronta]] · `blocked` · analizzato=sì · fix=576041
 - [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] · `blocked` · analizzato=sì · fix=371237
 - [[obsidian/Prompts/560584 livinggaul-source-availability-local-activation|560584 · LivingGaul source availability local activation]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/572280 recover-641582-missing-roadmap-registration-v1|572280 · Recuperare 641582 e correggere il bootstrap roadmap]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/637985 personalhub-single-canonical-db-export|637985 · Mantenere un solo DB auto-esportato PersonalHub]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked` · analizzato=sì · fix=817264
 - [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install|652361 · LivingGaul hourly systemd local install]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4|663657 · Chiudere e integrare tag e alert di Places]] · `blocked` · analizzato=sì · fix=380812
 - [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/734140 livinggaul-duplicate-count-local-activation|734140 · LivingGaul duplicate count local activation]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/746193 workflowy-importer-local-live-validation|746193 · Provare davvero l’importatore Workflowy]] · `blocked` · analizzato=sì · fix=693572
-- [[obsidian/Prompts/854653 fedora-external-updater-pip-user-git-closure|854653 · Persistenza Git del fix pip_user]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/864205 github-reconcile-production-hardening|864205 · Rendere github-reconcile production-grade su Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/842731 prompt-842731|842731 · Historical prompt 842731]] · `completed` · analizzato=no · fix=—

@@ -11,15 +11,15 @@ tags:
 - [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
 - [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `pending`
 - [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844 · Chiudere il residuo del merge capsule]] · `completed`
-- [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5|380812 · Chiudere e integrare tag e alert di Places]] · `blocked`
-- [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404 · Chiudere e mergiare la PR alert/Places già pronta]] · `blocked`
+- [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5|380812 · Chiudere e integrare tag e alert di Places]] · `completed`
+- [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404 · Chiudere e mergiare la PR alert/Places già pronta]] · `completed`
 - [[obsidian/Prompts/111265 personalhub-shared-alerts-pr15-final-closure-v2|111265 · Chiudere PR #15 senza rifare il lavoro]] · `superseded`
-- [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]] · `blocked`
+- [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]] · `completed`
 - [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]] · `completed`
 - [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] · `completed`
-- [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]] · `blocked`
+- [[obsidian/Prompts/223679 personalhub-capsule-isolation-integration-closure-v4|223679 · Integrare definitivamente l’isolamento capsule]] · `completed`
 - [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui|609279 · Solo inglese e diagnostica Places su richiesta]] · `superseded`
-- [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4|663657 · Chiudere e integrare tag e alert di Places]] · `blocked`
+- [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4|663657 · Chiudere e integrare tag e alert di Places]] · `completed`
 - [[obsidian/Prompts/255970 personalhub-english-only-places-ci-closure-v1|255970 · English-only, diagnostica Places e CI in un solo passaggio]] · `superseded`
 - [[obsidian/Prompts/477616 personalhub-english-only-places-ci-closure-v2|477616 · English-only, diagnostica Places e CI in un solo passaggio]] · `completed`
 - [[obsidian/Prompts/223103 personalhub-shared-alerts-places-tags-integration-v3|223103 · Chiudere e integrare tag e alert di Places]] · `superseded`
@@ -28,7 +28,7 @@ tags:
 - [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3|830867 · Date e ore coerenti ovunque]] · `superseded`
 - [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `completed`
 - [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3|790233 · Portare Salute nel database canonico]] · `superseded`
-- [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `blocked`
+- [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `superseded`
 - [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation|617205 · Chiudere i nuovi tag e alert di Places]] · `superseded`
 - [[obsidian/Prompts/416826 personalhub-salute-ui-hub-v3|416826 · Collegare Salute all’app e all’Hub]] · `superseded`
 - [[obsidian/Prompts/461839 personalhub-epoch-timestamps-migration|461839 · Date e ore coerenti ovunque]] · `superseded`

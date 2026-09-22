@@ -1,18 +1,18 @@
 ---
 prompt_id: 728918
-status: blocked
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 728918 · Implementare l’archivio Obsidian opzionale completo
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../falliti/personalhub-obsidian-archive-complete-v4|Apri prompt]]
 - **Primo lancio:** 2026-09-19T16:56:36Z

@@ -1,6 +1,6 @@
 ---
 prompt_id: 515955
-status: blocked
+status: superseded
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - fix
   - grindr
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/grindr-web-exporter
 ---
 
 # 515955 · Fix login reCAPTCHA Grindr exporter
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../falliti/grindr-web-exporter-recaptcha-normal-chrome-login-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-21T23:13:41Z
