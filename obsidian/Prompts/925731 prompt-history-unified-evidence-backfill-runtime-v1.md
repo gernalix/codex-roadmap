@@ -20,9 +20,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../falliti/prompt-history-unified-evidence-backfill-runtime-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T02:09:52Z
+- **Ultimo lancio:** 2026-09-22T02:09:52Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** sì (1 interventi)
 - **Fix:** —
@@ -40,7 +40,7 @@ Attiva uno storico unico di ChatGPT e Codex, importa anche le conversazioni pass
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T02:09:52Z | 2026-09-22T02:10:46Z | BLOCKED | 53.863 | gpt-5.6-terra | medium | 3 | 43030 |
 
 ## Analisi ChatGPT
 
