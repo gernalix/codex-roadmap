@@ -1,6 +1,6 @@
 ---
 prompt_id: 925731
-status: running
+status: blocked
 project_id: 92
 model: GPT-5.5
 reasoning: medium
@@ -11,15 +11,15 @@ tags:
   - evidence-store
   - prompt-history
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/prompt-infrastructure
 ---
 
 # 925731 · Attivare storico unificato ChatGPT e Codex
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
-- **Prompt:** [[../../prompts/prompt-history-unified-evidence-backfill-runtime-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/prompt-history-unified-evidence-backfill-runtime-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

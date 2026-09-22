@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export\|738242 · Scaricare tutta la posta e-Boks via Browser Use]] | running | 2026-09-22T01:38:01Z | 2026-09-22T02:00:47Z | UNKNOWN | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | running | — | — | — | sì | sì | — | Prompt infrastructure | GPT-5.5 | medium |
 | [[obsidian/Prompts/918643 fedora-systemd-kuma-hardening-recovery-v1\|918643 · Completa hardening systemd e Kuma]] | running | 2026-09-22T01:46:47Z | 2026-09-22T01:46:47Z | BLOCKED | no | no | — | fedora-system-monitor | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2\|815274 · Chiudere il residuo Kuma dei servizi Fedora]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
@@ -86,6 +85,7 @@
 | [[obsidian/Prompts/461839 personalhub-epoch-timestamps-migration\|461839 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/593728 personalhub-shared-alerts-places-tags-integration-v2\|593728 · Chiudere e integrare i nuovi tag e alert di Places]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/355842 personalhub-obsidian-archive-complete-v3\|355842 · Completare l’archivio Obsidian in un solo task]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | blocked | — | — | BLOCKED | sì | sì | — | Prompt infrastructure | GPT-5.5 | medium |
 | [[obsidian/Prompts/418763 personalhub-salute-canonical-integration\|418763 · Portare Salute dentro PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/734205 personalhub-epoch-timestamps-migration-v2\|734205 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/825405 personalhub-git-history-data-sync-validation-v3\|825405 · Validare cronologia, backup e ripristino dati]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
