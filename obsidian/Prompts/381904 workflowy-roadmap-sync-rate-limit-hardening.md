@@ -1,6 +1,6 @@
 ---
 prompt_id: 381904
-status: unknown
+status: completed
 project_id: 96
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - runtime-fix
   - workflowy
   - roadmap/prompt
-  - roadmap/status/unknown
+  - roadmap/status/completed
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 381904 · Rendere stabile il sync Workflowy senza errori 429
 
-- **Stato:** unknown
+- **Stato:** completed
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../falliti/workflowy-roadmap-sync-rate-limit-hardening|Apri prompt]]
+- **Prompt:** [[../../completed/workflowy-roadmap-sync-rate-limit-hardening|Apri prompt]]
 - **Primo lancio:** 2026-09-20T08:29:35Z
 - **Ultimo lancio:** 2026-09-20T08:29:35Z
 - **Ultimo esito:** UNKNOWN
@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-Corregge il sync Workflowy che può fallire quando il timer/manual start chiama nodes-export più spesso del limite ufficiale di una volta al minuto.
+Il fix dei limiti di frequenza Workflowy è già presente nel codice corrente e nei sync successivi; lo stato UNKNOWN era rimasto indietro.
 
 ## Esecuzioni
 
