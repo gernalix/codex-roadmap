@@ -80,14 +80,14 @@ Regole fail-closed:
 - un Issue number non è un PROMPT_ID;
 - non dichiarare “aggiunto alla roadmap” finché la mutation Issue non è stata applicata dal writer;
 - per un nuovo prompt, non dichiarare completato il workflow finché MegaVault non conferma anche `status=materialized` per lo stesso PROMPT_ID;
-- se il bridge remoto MegaVault non risponde e il checkout canonico locale è disponibile, usare il medesimo allocator tramite `python3 /home/daniele/MegaVault/megavault.py prompt-id allocate ...`; se anche il checkout/allocator canonico non è disponibile, lo stato corretto è “allocazione pendente/bloccata”, mai un ID manuale o una Issue informativa;
+- se il bridge remoto MegaVault non risponde e il checkout canonico locale è disponibile, usare il medesimo allocator tramite `python3 /home/daniele/MegaVault/megavault.py prompt-id allocate --request-id <REQUEST_ID> ...`; se anche il checkout/allocator canonico non è disponibile, lo stato corretto è “allocazione pendente/bloccata”, mai un ID manuale o una Issue informativa;
 - per aggiornare un prompt esistente si usa direttamente una mutation Issue e **non** si alloca un nuovo ID, salvo una vera revisione del prompt che richieda una nuova materializzazione.
 
 Bridge remoto PROMPT_ID di MegaVault:
 
 - il trasporto canonico è una GitHub Issue immutabile `[prompt-id-command] <request_id>` nel repository `gernalix/MegaVault`, con il JSON del comando nel body;
-- `request_id` è la chiave idempotente: retry identici devono restituire lo stesso PROMPT_ID; un payload diverso con lo stesso `request_id` è un conflitto;
-- MegaVault conserva una receipt durevole per ogni richiesta applicata. `.github/prompt-id-response.json` resta solo una proiezione di compatibilità dell'ultimo risultato e non è una mailbox/autoritá;
+- `request_id` è la chiave idempotente del registry SQLite stesso: `megavault.sqlite:prompt_id_allocation_requests` viene scritto atomicamente insieme alla reservation del PROMPT_ID. Retry con gli stessi parametri restituiscono lo stesso ID; parametri diversi con la stessa chiave falliscono chiuso;
+- Le receipt JSON restano solo audit/proiezioni di compatibilità. L'autorità per l'idempotenza è `megavault.sqlite`; `.github/prompt-id-response.json` non è una mailbox né una fonte canonica;
 - il percorso è sempre `allocate → register → materialize`. Se un tentativo si interrompe, si riprende dal primo stato non confermato senza riallocare o riscrivere gli stati già confermati;
 - il vecchio `.github/prompt-id-request.json` non è più un entry point operativo e non va aggiornato per inviare comandi;
 - se il runner GitHub Actions privato di MegaVault non parte, usare lo stesso allocator canonico locale con `megavault.py prompt-id allocate ...` / `materialize ...`; non creare un secondo writer e non inventare ID;
