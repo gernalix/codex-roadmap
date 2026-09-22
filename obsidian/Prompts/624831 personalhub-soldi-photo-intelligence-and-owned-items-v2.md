@@ -36,7 +36,7 @@ tags:
 
 ## Spiegazione
 
-Completa tutte le parti foto rimaste: intelligence on-device e oggetti posseduti in Soldi, più standardizzazione delle anteprime quadrate/cached/non distruttive in People (foto già esistenti) e Places, senza dipendenze feature→feature.
+È pronto: le funzioni base foto/Soldi previste dalla vecchia PR #31 risultano già presenti su PersonalHub/main. Questo task deve completare solo intelligence foto, oggetti posseduti e standardizzazione delle anteprime in People/Places.
 
 ## Esecuzioni
 
