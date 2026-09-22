@@ -5,7 +5,7 @@ tags:
 
 # Fedora / Workflowy
 
-- [[obsidian/Prompts/672304 workflowy-waiting-runtime-reconcile-v1|672304 · Riallineare Waiting nel runtime Workflowy]] · `pending`
+- [[obsidian/Prompts/672304 workflowy-waiting-runtime-reconcile-v1|672304 · Riallineare Waiting nel runtime Workflowy]] · `running`
 - [[obsidian/Prompts/438271 workflowy-live-smoke-and-local-activation-v3|438271 · Chiudere Workflowy e attivare il runtime locale]] · `superseded`
 - [[obsidian/Prompts/231789 workflowy-automation-local-activation-v3|231789 · Attivare il runtime locale Workflowy]] · `completed`
 - [[obsidian/Prompts/946527 workflowy-needs-fix-live-deploy-v1|946527 · Distribuire la pulizia Needs fix di Workflowy]] · `superseded`
