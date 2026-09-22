@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/257387 fedora-context-index-runtime-activation|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover|729462 · Completa il cutover libsecret dei servizi Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/748203 codex-usage-session-readback-reconcile-v1|748203 · Riconciliare il session readback del recovery Codex]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] · `completed` · analizzato=no · fix=—

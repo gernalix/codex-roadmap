@@ -5,7 +5,6 @@ tags:
 
 # Fedora
 
-- [[obsidian/Prompts/257387 fedora-context-index-runtime-activation|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] · `running`
 - [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] · `running`
 - [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] · `pending`
 - [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill|813383 · Attivare il tracciamento SQLite della roadmap]] · `completed`
@@ -16,6 +15,7 @@ tags:
 - [[obsidian/Prompts/856234 workflowy-live-smoke-remote-fix-closure|856234 · Confermare il live smoke Workflowy dopo il fix remoto]] · `completed`
 - [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] · `blocked`
 - [[obsidian/Prompts/748203 codex-usage-session-readback-reconcile-v1|748203 · Riconciliare il session readback del recovery Codex]] · `completed`
+- [[obsidian/Prompts/257387 fedora-context-index-runtime-activation|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] · `completed`
 - [[obsidian/Prompts/357862 logseq-updates-pat-safety-closure-v2|357862 · Chiusura sicurezza e attivazione updater Logseq]] · `superseded`
 - [[obsidian/Prompts/526713 fedora-runtime-validation-v2|526713 · Ultimo controllo del monitoraggio Fedora]] · `superseded`
 - [[obsidian/Prompts/690049 fedora-runtime-validation|690049 · Ultimo controllo del monitoraggio Fedora]] · `superseded`

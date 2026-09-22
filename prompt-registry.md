@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1\|472615 · Ripristinare le note dopo reboot]] | running | 2026-09-21T23:49:07Z | 2026-09-22T00:00:14Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/257387 fedora-context-index-runtime-activation\|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] | running | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1\|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] | running | — | — | — | no | no | — | Fedora | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/936284 megavault-local-repo-registration-fedora-external-updater-v1\|936284 · Aggiungere il contratto MegaVault per repo local-only e chiudere 417592]] | pending | — | — | — | no | no | — | MegaVault | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
@@ -89,6 +88,7 @@
 | [[obsidian/Prompts/418763 personalhub-salute-canonical-integration\|418763 · Portare Salute dentro PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/734205 personalhub-epoch-timestamps-migration-v2\|734205 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/825405 personalhub-git-history-data-sync-validation-v3\|825405 · Validare cronologia, backup e ripristino dati]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/257387 fedora-context-index-runtime-activation\|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] | completed | — | — | PASS | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/724615 personalhub-salute-ui-hub-obsidian\|724615 · Rendere Salute visibile e collegata al resto dell’app]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/862541 personalhub-salute-canonical-integration-v2\|862541 · Portare Salute dentro PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/904631 datasette5-personalhub-explorer-security-deploy-v2\|904631 · Versione online dell’esploratore dati PersonalHub]] | superseded | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |

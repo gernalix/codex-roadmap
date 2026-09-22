@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-SEED GIÀ IMPLEMENTATO; REPO GIÀ CREATO MA VUOTO: gernalix/eboks-scraper esiste già ed è pubblico, mentre il seed testato resta su seed/eboks-scraper-20260921. Dopo 482761, se lo scraper serve ancora, resta popolare main dal seed, registrare MegaVault, installare backend e calibrare/smoke dell'adapter UI reale.
+SEED GIÀ IMPLEMENTATO; REPO GIÀ CREATO MA VUOTO: gernalix/eboks-scraper esiste già ed è pubblico, mentre il seed testato resta su seed/eboks-scraper-20260921. Dopo 413258, se l'export nativo e-Boks non è sufficiente, resta popolare main dal seed, registrare MegaVault, installare backend e calibrare/smoke dell'adapter UI reale senza reintrodurre probe persistenti.
 
 ## Esecuzioni
 

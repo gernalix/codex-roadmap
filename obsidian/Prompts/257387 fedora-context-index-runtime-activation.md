@@ -1,20 +1,20 @@
 ---
 prompt_id: 257387
-status: running
+status: completed
 project_id: 15
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/fedora
 ---
 
 # 257387 · Attiva la timeline unificata Fedora + ActivityWatch
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/fedora-context-index-runtime-activation|Apri prompt]]
+- **Prompt:** [[../../completed/fedora-context-index-runtime-activation|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
