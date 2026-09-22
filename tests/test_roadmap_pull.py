@@ -129,10 +129,10 @@ class RoadmapPullTests(unittest.TestCase):
         self.assertEqual(remote_head, result["head"])
         self.assertEqual(["123456"], result["preserved_running"])
 
-    def test_guarded_pull_blocks_remote_modification_of_running_prompt(self) -> None:
+    def test_guarded_pull_blocks_remote_operational_modification_of_running_prompt(self) -> None:
         before = git(self.local, "rev-parse", "HEAD").stdout.strip()
         conn = sqlite3.connect(self.seed / "roadmap.sqlite")
-        conn.execute("UPDATE prompts SET explanation='changed remotely' WHERE prompt_id='123456'")
+        conn.execute("UPDATE prompts SET model='GPT-5.6 Sol' WHERE prompt_id='123456'")
         conn.commit()
         conn.close()
         db.render(self.seed)
@@ -142,6 +142,30 @@ class RoadmapPullTests(unittest.TestCase):
             roadmap_pull.guarded_pull(self.local)
 
         self.assertEqual(before, git(self.local, "rev-parse", "HEAD").stdout.strip())
+
+    def test_guarded_pull_allows_remote_explanation_update_for_running_prompt(self) -> None:
+        conn = sqlite3.connect(self.seed / "roadmap.sqlite")
+        conn.execute(
+            "UPDATE prompts SET explanation='Simple dashboard explanation' WHERE prompt_id='123456'"
+        )
+        conn.commit()
+        conn.close()
+        db.render(self.seed)
+        remote_head = self.push_seed("presentation-only explanation update")
+
+        result = roadmap_pull.guarded_pull(self.local)
+
+        self.assertEqual("PASS", result["status"])
+        self.assertEqual(remote_head, result["head"])
+        self.assertEqual(["123456"], result["preserved_running"])
+        conn = sqlite3.connect(self.local / "roadmap.sqlite")
+        try:
+            explanation = conn.execute(
+                "SELECT explanation FROM prompts WHERE prompt_id='123456'"
+            ).fetchone()[0]
+        finally:
+            conn.close()
+        self.assertEqual("Simple dashboard explanation", explanation)
 
     def test_generated_view_dirt_is_restored_before_guarded_pull(self) -> None:
         spiegazioni = self.local / "spiegazioni.md"
