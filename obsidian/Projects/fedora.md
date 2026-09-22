@@ -5,6 +5,7 @@ tags:
 
 # Fedora
 
+- [[obsidian/Prompts/943492 thinkpad-firmware-123-luks-tpm-recovery-preflight|943492 · Verificare recovery LUKS/TPM prima del firmware ThinkPad 1.23]] · `pending`
 - [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill|813383 · Attivare il tracciamento SQLite della roadmap]] · `completed`
 - [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237 · Completa il fix del salvataggio Codex sul PC]] · `blocked`
 - [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked`
