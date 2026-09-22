@@ -188,6 +188,7 @@ def sync(
                 request_key=request_key,
                 repository=repository,
                 branch=branch,
+                lookup_existing=False,
             )
         except MutationSubmitError as exc:
             raise SyncError(f"mutation_submit_failed:{prompt_id}:{exc}") from exc
