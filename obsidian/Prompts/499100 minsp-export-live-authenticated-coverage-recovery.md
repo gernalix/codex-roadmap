@@ -1,18 +1,18 @@
 ---
 prompt_id: 499100
-status: pending
+status: running
 project_id: 101
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/minsp-export
 ---
 
 # 499100 · Min Sundhedsplatform — export completo verificato
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/minsp-export|minsp-export]]
 - **Prompt:** [[../../prompts/minsp-export-live-authenticated-coverage-recovery|Apri prompt]]
 - **Primo lancio:** —

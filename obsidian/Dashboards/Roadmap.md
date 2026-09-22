@@ -6,8 +6,8 @@
 
 - [[obsidian/Prompts/946821 workflowy-needs-fix-live-closure-v2|946821 · Verificare la pulizia live di Needs fix]]
 - [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
-- [[obsidian/Prompts/499100 minsp-export-live-authenticated-coverage-recovery|499100 · Min Sundhedsplatform — export completo verificato]]
 
 ## In esecuzione
 
 - [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1|354882 · Elimina loop login Grindr e completa export]]
+- [[obsidian/Prompts/499100 minsp-export-live-authenticated-coverage-recovery|499100 · Min Sundhedsplatform — export completo verificato]]
