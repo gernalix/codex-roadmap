@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/515185 chatgpt-exporter-find-tab-runtime-recovery-v2|515185 · Sbloccare Find ChatGPT tab e completare il primo archivio]]
+- [[obsidian/Prompts/613408 ccs-desktop-launcher-overlay-recovery-v2|613408 · Completare launcher e overlay Codex Desktop]]
 
 ## In esecuzione
 
