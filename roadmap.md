@@ -15,3 +15,4 @@
 11. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 12. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 13. [[prompts/personalhub-shared-engines-3-8-finalize-v1|personalhub-shared-engines-3-8-finalize-v1]]
+14. [[prompts/chatgpt-exporter-live-recovery-after-736284-v1|chatgpt-exporter-live-recovery-after-736284-v1]]

@@ -28,7 +28,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[571364 prompt-history-upstream-web-desktop-runtime-v1|571364]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[788315 chatgpt-exporter-live-recovery-after-736284-v1|788315]]
 - **Chat Codex:** Stessa chat Codex di 571364; riusa il contesto runtime e controlla direttamente il Chrome reale.
 
 ## Spiegazione

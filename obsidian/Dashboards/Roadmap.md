@@ -5,7 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio]]
-- [[obsidian/Prompts/773323 personalhub-shared-engines-3-8-finalize-v1|773323 · Chiudere i motori condivisi PH 3-8]]
+- [[obsidian/Prompts/788315 chatgpt-exporter-live-recovery-after-736284-v1|788315 · Riparare ChatGPTExporter e completare il primo archivio]]
 
 ## In esecuzione
 

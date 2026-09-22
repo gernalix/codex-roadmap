@@ -21,15 +21,15 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** —
-- **Sblocca:** —
+- **Dipende da:** [[522084 personalhub-shared-tags-facets-backlinks-v1|522084]], [[613102 personalhub-global-photo-engine-people-legacy-removal-v3|613102]]
+- **Sblocca:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
 - **Chat Codex:** Nuova chat Codex; usa /goal. Non toccare tag/facet né foto/media.
 
 ## Spiegazione
 
-Completa e verifica i motori condivisi PH per notifiche/alarm, deep link, ricerca, location, tempo e piccole primitive UI, senza toccare tag/facet o foto/media.
+Aspetta i due lavori PersonalHub già in corso (522084 e 613102). Poi completa notifiche/alarm, deep link, ricerca, location, tempo e piccole primitive UI senza riaprire tag/facet o foto/media.
 
 ## Esecuzioni
 

@@ -26,7 +26,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
+- **Sblocca:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]], [[773323 personalhub-shared-engines-3-8-finalize-v1|773323]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
 - **Chat Codex:** Nuova chat Codex; usa /goal. Task unico e trasversale sullo schema PH.

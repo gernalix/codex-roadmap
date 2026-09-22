@@ -24,15 +24,15 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[462279 personalhub-health-canonical-e2e-v4|462279]], [[522084 personalhub-shared-tags-facets-backlinks-v1|522084]], [[613102 personalhub-global-photo-engine-people-legacy-removal-v3|613102]]
+- **Dipende da:** [[462279 personalhub-health-canonical-e2e-v4|462279]], [[522084 personalhub-shared-tags-facets-backlinks-v1|522084]], [[613102 personalhub-global-photo-engine-people-legacy-removal-v3|613102]], [[773323 personalhub-shared-engines-3-8-finalize-v1|773323]]
 - **Sblocca:** [[707603 personalhub-git-history-final-validation-v4|707603]]
-- **Padri/precedenti:** [[522084 personalhub-shared-tags-facets-backlinks-v1|522084]], [[728918 personalhub-obsidian-archive-complete-v4|728918]]
+- **Padri/precedenti:** [[522084 personalhub-shared-tags-facets-backlinks-v1|522084]], [[728918 personalhub-obsidian-archive-complete-v4|728918]], [[773323 personalhub-shared-engines-3-8-finalize-v1|773323]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat; continuazione diretta di 728918
 
 ## Spiegazione
 
-Aspetta anche il nuovo task Tags/Facet di PersonalHub: prima vanno unificati i motori dei tag, separati i tag Timer Now/Events/Since when e completati i link cross-module. Solo dopo ha senso chiudere l’archivio sullo schema finale.
+Aspetta 522084, 613102 e poi 773323: prima vanno stabilizzati tag/facet, foto condivise e gli altri motori comuni PH. Solo dopo va chiuso l'archivio sullo schema finale.
 
 ## Esecuzioni
 
