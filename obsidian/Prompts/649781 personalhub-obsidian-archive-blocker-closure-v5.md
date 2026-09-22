@@ -6,6 +6,7 @@ model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - fix
+  - manual-prerequisite:personalhub-tags-facets-migration
   - obsidian-archive
   - personalhub
   - roadmap/prompt
@@ -32,7 +33,7 @@ tags:
 
 ## Spiegazione
 
-Aspetta 624831 perché deve lavorare sullo schema PersonalHub finale dopo le modifiche foto/Soldi. Non va anticipato.
+Aspetta anche il nuovo task Tags/Facet di PersonalHub: prima vanno unificati i motori dei tag, separati i tag Timer Now/Events/Since when e completati i link cross-module. Solo dopo ha senso chiudere l’archivio sullo schema finale.
 
 ## Esecuzioni
 
