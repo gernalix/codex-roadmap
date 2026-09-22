@@ -14,3 +14,4 @@
 10. [[prompts/eboks-full-export-resume-after-mitid-v1|eboks-full-export-resume-after-mitid-v1]]
 11. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 12. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
+13. [[prompts/personalhub-shared-engines-3-8-finalize-v1|personalhub-shared-engines-3-8-finalize-v1]]
