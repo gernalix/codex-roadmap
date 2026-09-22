@@ -21,8 +21,8 @@ tags:
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../prompts/chrome-codex-switcher-notes-reboot-persistence-fix-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-21T23:49:07Z
-- **Ultimo lancio:** 2026-09-21T23:49:07Z
-- **Ultimo esito:** BLOCKED
+- **Ultimo lancio:** 2026-09-22T00:00:14Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -41,6 +41,7 @@ Dopo un reboot tutte le note risultano vuote: verifica se il DB è intatto e cor
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-21T23:49:07Z | 2026-09-21T23:57:07Z | BLOCKED | 479.542 | gpt-5.6-terra | medium | 33 | 102730 |
+| 2026-09-22T00:00:14Z | 2026-09-22T00:04:01Z | PASS | 227.349 | gpt-5.6-terra | medium | 22 | 157929 |
 
 ## Analisi ChatGPT
 
