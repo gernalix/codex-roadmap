@@ -21,7 +21,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -42,7 +42,7 @@ CODICE APPLICATIVO GIÀ FATTO NEL PRECEDENTE RUN LOCALE: 537184 riportava 12/12 
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T00:42:34Z · colli di bottiglia: sì · fix: — · {"blocker":"MegaVault manca un contratto canonico per creare repo local-only dal path.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"417592","report_ref":"codex-usage:1b7dbf3fab2733ca67446a09:e8fb90170dc038ca","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
