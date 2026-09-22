@@ -10,4 +10,3 @@
 
 - [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1|354882 · Elimina loop login Grindr e completa export]]
 - [[obsidian/Prompts/499100 minsp-export-live-authenticated-coverage-recovery|499100 · Min Sundhedsplatform — export completo verificato]]
-- [[obsidian/Prompts/125435 ccs-codex-per-thread-overlay-live-validation-v1|125435 · Verificare overlay Codex davvero separati per chat]]
