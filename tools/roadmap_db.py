@@ -127,6 +127,12 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
            SELECT s.*
            FROM v_prompt_summary s
            WHERE s.status IN ('failed','blocked','unknown')
+             AND (
+               COALESCE(s.current_path,'')<>''
+               OR s.project_id IS NOT NULL
+               OR COALESCE(s.project_name,'')<>''
+               OR COALESCE(s.repo,'')<>''
+             )
              AND NOT EXISTS (
                SELECT 1
                FROM prompts fix
