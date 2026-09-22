@@ -18,9 +18,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/fedora-fedora-external-updater|Fedora / fedora-external-updater]]
 - **Prompt:** [[../../falliti/fedora-external-updater-megavault-git-closure-v2|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T00:40:02Z
+- **Ultimo lancio:** 2026-09-22T00:40:02Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ CODICE APPLICATIVO GIÀ FATTO NEL PRECEDENTE RUN LOCALE: 537184 riportava 12/12 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T00:40:02Z | 2026-09-22T00:40:52Z | BLOCKED | 50.75 | gpt-5.6-luna | low | 7 | 48902 |
 
 ## Analisi ChatGPT
 
