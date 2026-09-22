@@ -1,6 +1,6 @@
 ---
 prompt_id: 736284
-status: running
+status: blocked
 project_id: 92
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - prompt-history
   - runtime-fix
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/prompt-infrastructure
 ---
 
 # 736284 · Sbloccare ChatGPTExporter e creare il primo archivio
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
-- **Prompt:** [[../../prompts/chatgpt-exporter-live-chrome-first-archive-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/chatgpt-exporter-live-chrome-first-archive-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

@@ -9,5 +9,4 @@
 ## In esecuzione
 
 - [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1|354882 · Elimina loop login Grindr e completa export]]
-- [[obsidian/Prompts/736284 chatgpt-exporter-live-chrome-first-archive-v1|736284 · Sbloccare ChatGPTExporter e creare il primo archivio]]
 - [[obsidian/Prompts/499100 minsp-export-live-authenticated-coverage-recovery|499100 · Min Sundhedsplatform — export completo verificato]]
