@@ -12,5 +12,4 @@
 
 - [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1|354882 · Elimina loop login Grindr e completa export]]
 - [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export|738242 · Scaricare tutta la posta e-Boks via Browser Use]]
-- [[obsidian/Prompts/946527 workflowy-needs-fix-live-deploy-v1|946527 · Distribuire la pulizia Needs fix di Workflowy]]
 - [[obsidian/Prompts/918643 fedora-systemd-kuma-hardening-recovery-v1|918643 · Completa hardening systemd e Kuma]]
