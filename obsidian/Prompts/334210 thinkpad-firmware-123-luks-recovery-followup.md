@@ -15,9 +15,9 @@ tags:
 - **Stato:** pending
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../prompts/thinkpad-firmware-123-luks-recovery-followup|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T12:21:34Z
+- **Ultimo lancio:** 2026-09-22T12:21:34Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Scopre come viene realmente sbloccato il disco Fedora e verifica un percorso di 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T12:21:34Z | 2026-09-22T12:22:17Z | BLOCKED | 42.261 | gpt-5.6-terra | medium | 4 | 36622 |
 
 ## Analisi ChatGPT
 
