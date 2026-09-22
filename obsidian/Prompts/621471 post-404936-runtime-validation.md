@@ -19,9 +19,9 @@ tags:
 - **Stato:** pending
 - **Progetto:** [[../Projects/github-autosync-fedora-runtime|GitHub Autosync / Fedora runtime]]
 - **Prompt:** [[../../prompts/post-404936-runtime-validation|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T01:41:09Z
+- **Ultimo lancio:** 2026-09-22T01:41:09Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -39,7 +39,7 @@ Installa sul tuo Fedora alcune correzioni che sono già state scritte e controll
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T01:41:09Z | 2026-09-22T01:41:30Z | BLOCKED | 20.895 | gpt-5.6-luna | low | 3 | 35866 |
 
 ## Analisi ChatGPT
 
