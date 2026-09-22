@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export\|738242 · Scaricare tutta la posta e-Boks via Browser Use]] | running | 2026-09-22T01:38:01Z | 2026-09-22T02:15:25Z | BLOCKED | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/413647 prompt-history-runtime-pass-reconcile-v1\|413647 · Riconciliare il PASS runtime di prompt-history]] | running | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/403496 codex-desktop-launcher-roadmap-branch-recovery-v1\|403496 · Recuperare il launcher Desktop dopo il branch mismatch roadmap]] | running | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2\|815274 · Chiudere il residuo Kuma dei servizi Fedora]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
@@ -345,3 +344,4 @@
 | [[obsidian/Prompts/601566 grindr-web-exporter-persistent-chrome-profile-v1\|601566 · Chiudi blocker Chrome Grindr exporter]] | blocked | 2026-09-21T22:54:13Z | 2026-09-21T22:54:13Z | BLOCKED | sì | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/515955 grindr-web-exporter-recaptcha-normal-chrome-login-v1\|515955 · Fix login reCAPTCHA Grindr exporter]] | blocked | 2026-09-21T23:13:41Z | 2026-09-21T23:13:41Z | BLOCKED | sì | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/918643 fedora-systemd-kuma-hardening-recovery-v1\|918643 · Completa hardening systemd e Kuma]] | completed | 2026-09-22T01:46:47Z | 2026-09-22T01:46:47Z | PASS | no | no | — | fedora-system-monitor | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/413647 prompt-history-runtime-pass-reconcile-v1\|413647 · Riconciliare il PASS runtime di prompt-history]] | completed | — | — | PASS | no | no | — | Prompt infrastructure | GPT-5.6 Luna | low |
