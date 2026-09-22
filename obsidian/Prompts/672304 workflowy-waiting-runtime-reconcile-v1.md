@@ -1,20 +1,20 @@
 ---
 prompt_id: 672304
-status: running
+status: completed
 project_id: —
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/fedora-workflowy
 ---
 
 # 672304 · Riallineare Waiting nel runtime Workflowy
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
-- **Prompt:** [[../../prompts/workflowy-waiting-runtime-reconcile-v1|Apri prompt]]
+- **Prompt:** [[../../completed/workflowy-waiting-runtime-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
