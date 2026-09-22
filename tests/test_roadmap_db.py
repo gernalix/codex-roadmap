@@ -326,6 +326,7 @@ class RoadmapDBTests(unittest.TestCase):
             db.register_prompt(conn,prompt_id="222222",slug="blocked",title="Blocked",current_path="prompts/blocked.md",status="blocked")
             db.register_prompt(conn,prompt_id="333333",slug="fix",title="Fix",current_path="prompts/fix.md",status="completed")
             db.register_prompt(conn,prompt_id="444444",slug="unresolved",title="Unresolved",current_path="prompts/unresolved.md",status="blocked")
+            db.ensure_historical_stub(conn,"555555",title="Historical",status="unknown")
             db.add_relation(conn,"222222","333333","resolved_by",actor="chatgpt")
             conn.commit()
             attention=[
