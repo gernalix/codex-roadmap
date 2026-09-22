@@ -19,10 +19,10 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../falliti/chatgpt-exporter-live-chrome-first-archive-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Primo lancio:** 2026-09-22T11:16:19Z
+- **Ultimo lancio:** 2026-09-22T11:16:19Z
+- **Ultimo esito:** BLOCKED
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -39,11 +39,11 @@ Codex deve controllare direttamente il Chrome reale, capire perché ChatGPTExpor
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T11:16:19Z | 2026-09-22T11:17:13Z | BLOCKED | 53.643 | gpt-5.6-terra | medium | 5 | 96583 |
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T11:18:42Z · colli di bottiglia: sì · fix: — · {"blocker":"Codex reported BLOCKED; inspect the linked execution report.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"736284","report_ref":"codex-usage:aa5a057986065c391dfb26f1:8b20ce294c54e8a2","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
