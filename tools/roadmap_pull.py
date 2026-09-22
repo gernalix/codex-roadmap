@@ -39,7 +39,8 @@ PROTECTED_COLUMNS = (
     "reasoning",
     "megavault_mode",
     "campaign_id",
-    "explanation",
+    # explanation is presentation-only and may change while a prompt runs.
+    # The canonical prompt body/materialization and execution metadata remain protected.
     "queue_position",
     "current_path",
     "materialization_sha256",
