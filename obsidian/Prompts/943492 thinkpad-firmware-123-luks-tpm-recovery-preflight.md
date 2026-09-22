@@ -15,9 +15,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../falliti/thinkpad-firmware-123-luks-tpm-recovery-preflight|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T12:07:10Z
+- **Ultimo lancio:** 2026-09-22T12:07:10Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Controlla che il disco Fedora possa essere sbloccato anche senza TPM prima di in
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T12:07:10Z | 2026-09-22T12:09:11Z | BLOCKED | 120.924 | gpt-5.6-terra | low | 8 | 34104 |
 
 ## Analisi ChatGPT
 
