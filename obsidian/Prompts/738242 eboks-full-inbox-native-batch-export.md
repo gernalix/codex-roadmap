@@ -1,6 +1,6 @@
 ---
 prompt_id: 738242
-status: pending
+status: running
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - eboks
   - full-export
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/e-boks-exploration
 ---
 
 # 738242 · Scaricare tutta la posta e-Boks via Browser Use
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/e-boks-exploration|e-Boks exploration]]
 - **Prompt:** [[../../prompts/eboks-full-inbox-native-batch-export|Apri prompt]]
 - **Primo lancio:** —
