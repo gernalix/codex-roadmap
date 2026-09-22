@@ -32,6 +32,7 @@ def _effective_outcome(row: sqlite3.Row | dict[str, Any]) -> Any:
     """Prefer the authoritative terminal roadmap state over stale telemetry."""
     return _FINAL_STATUS_OUTCOME.get(row["status"], row["last_outcome"])
 
+# Human-facing aliases keep Waiting reasons readable in the dashboard.
 _MANUAL_PREREQ_LABELS = {
     "revoke-pat": "revoca il vecchio PAT GitHub",
     "kuma-login": "rifai il login a Kuma",
