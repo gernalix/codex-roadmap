@@ -4,7 +4,7 @@
 
 ## Lanciabili adesso
 
-- Nessuno.
+- [[obsidian/Prompts/515185 chatgpt-exporter-find-tab-runtime-recovery-v2|515185 · Sbloccare Find ChatGPT tab e completare il primo archivio]]
 
 ## In esecuzione
 

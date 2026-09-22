@@ -1,20 +1,20 @@
 ---
-prompt_id: 788315
-status: blocked
+prompt_id: 515185
+status: pending
 project_id: 92
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/pending
   - roadmap/project/prompt-infrastructure
 ---
 
-# 788315 · Riparare ChatGPTExporter e completare il primo archivio
+# 515185 · Sbloccare Find ChatGPT tab e completare il primo archivio
 
-- **Stato:** blocked
+- **Stato:** pending
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
-- **Prompt:** [[../../falliti/chatgpt-exporter-live-recovery-after-736284-v1|Apri prompt]]
+- **Prompt:** [[../../prompts/chatgpt-exporter-find-tab-runtime-recovery-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -23,13 +23,13 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
-- **Padri/precedenti:** [[736284 chatgpt-exporter-live-chrome-first-archive-v1|736284]]
-- **Figli/follow-up:** [[515185 chatgpt-exporter-find-tab-runtime-recovery-v2|515185]]
-- **Chat Codex:** Continua nella stessa chat Codex di 736284; riusa il contesto runtime già raccolto.
+- **Padri/precedenti:** [[788315 chatgpt-exporter-live-recovery-after-736284-v1|788315]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Continua nella stessa chat Codex di 788315; riusa l'evidenza runtime già raccolta e intervieni solo sul blocco Find ChatGPT tab.
 
 ## Spiegazione
 
-Riprende il blocco di ChatGPTExporter: corregge il percorso reale dell'estensione senza automatizzare pagine chrome-extension:// e porta a termine il primo archivio importabile in prompt-history.
+Il pannello dell'esportatore ora si apre, ma si ferma su Find ChatGPT tab. Questo recovery corregge solo quel collegamento, poi completa export e import del primo archivio senza rifare il lavoro precedente.
 
 ## Esecuzioni
 
