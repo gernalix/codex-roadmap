@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/918643 fedora-systemd-kuma-hardening-recovery-v1|918643 · Completa hardening systemd e Kuma]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1|925731 · Attivare storico unificato ChatGPT e Codex]] · `blocked` · analizzato=sì · fix=413647
 - [[obsidian/Prompts/946527 workflowy-needs-fix-live-deploy-v1|946527 · Distribuire la pulizia Needs fix di Workflowy]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher|989559 · Automatizza Avvia verso Codex Desktop]] · `blocked` · analizzato=sì · fix=403496

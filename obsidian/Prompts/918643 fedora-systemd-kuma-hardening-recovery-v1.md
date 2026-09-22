@@ -1,20 +1,20 @@
 ---
 prompt_id: 918643
-status: running
+status: completed
 project_id: 15
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/fedora-system-monitor
 ---
 
 # 918643 · Completa hardening systemd e Kuma
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora-system-monitor|fedora-system-monitor]]
-- **Prompt:** [[../../prompts/fedora-systemd-kuma-hardening-recovery-v1|Apri prompt]]
+- **Prompt:** [[../../completed/fedora-systemd-kuma-hardening-recovery-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-22T01:46:47Z
 - **Ultimo lancio:** 2026-09-22T01:46:47Z
 - **Ultimo esito:** BLOCKED
