@@ -2,7 +2,7 @@
 prompt_id: 925731
 status: pending
 project_id: 92
-model: GPT-5.6 Terra
+model: GPT-5.5
 reasoning: medium
 tags:
   - backfill
@@ -34,7 +34,7 @@ tags:
 
 ## Spiegazione
 
-CODICE GIÀ COMPLETO su gernalix/prompt-history: schema normalizzato, ingestion roadmap/codex-usage/ChatGPT, FTS5, linker deterministico ChatGPT↔Codex, relazioni resolved_by e analytics/recommender sono già su main. Resta solo attivazione locale: backfill reale, rebuild/idempotenza, MegaVault e timer/sync Fedora.
+AUDIT 2026-09-22: gernalix/prompt-history/main corrisponde all'implementazione 95667890 e contiene schema, adapter ChatGPT/Codex/roadmap, FTS5, linker, analytics/recommender e test. Aspetta solo 621471; poi serve esclusivamente backfill/attivazione Fedora, MegaVault e timer/sync. Modello ridotto a GPT-5.5 medium.
 
 ## Esecuzioni
 

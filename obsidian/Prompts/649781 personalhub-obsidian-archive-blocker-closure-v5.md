@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-IMPLEMENTAZIONE REMOTA NON CONFERMATA: PersonalHub/main contiene i contratti Obsidian ma l'audit Git non trova un exporter runtime mergiato; 728918 compilava ma finì BLOCKED al migration gate senza work_state/commit registrato. Prima recuperare eventuali residui locali del parent; solo ciò che è realmente recuperabile va riusato, altrimenti il gap è più ampio di un semplice leaf fix.
+AUDIT 2026-09-22: su PersonalHub/main esistono docs/OBSIDIAN_ARCHIVE.md e docs/health/OBSIDIAN_PROJECTION.md, ma non risulta un exporter/runtime Obsidian implementato. Dopo 624831 va prima recuperato eventuale lavoro locale di 728918; se non recuperabile, serve implementare davvero exporter SAF/manifest/incrementale/WorkManager e provider necessari. Non è una semplice validazione leaf.
 
 ## Esecuzioni
 

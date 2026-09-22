@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-SEED GIÀ IMPLEMENTATO; REPO GIÀ CREATO MA VUOTO: gernalix/eboks-scraper esiste già ed è pubblico, mentre il seed testato resta su seed/eboks-scraper-20260921. Dopo 413258, se l'export nativo e-Boks non è sufficiente, resta popolare main dal seed, registrare MegaVault, installare backend e calibrare/smoke dell'adapter UI reale senza reintrodurre probe persistenti.
+AUDIT 2026-09-22: gernalix/eboks-scraper esiste ed è pubblico ma il repository Git è ancora vuoto; il seed testato resta su seed/eboks-scraper-20260921. Aspetta correttamente 738242, ora in esecuzione, che sta completando l'export via Browser Use nativo. Se 738242 dimostra che il bulk nativo è sufficiente, questo scraper può diventare inutile/supersedibile; se non basta, popolare main dal seed e fare solo calibrazione/smoke dell'adapter.
 
 ## Esecuzioni
 

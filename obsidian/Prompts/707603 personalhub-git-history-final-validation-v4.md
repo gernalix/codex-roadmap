@@ -2,7 +2,7 @@
 prompt_id: 707603
 status: pending
 project_id: 49
-model: GPT-5.6 Sol
+model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-IMPLEMENTAZIONE GIÀ AMPIA su PersonalHub/main: tracking Git, history UI, diff/blame/statistiche, revert, restore per ref/data, milestone e Time Machine risultano già implementati da numerosi commit. Task residuo = validazione safety/final-schema e correzione solo di failure reali; non riscrivere la feature.
+AUDIT 2026-09-22: PersonalHub/main contiene già un sottosistema Git data/history ampio (tracking, store, sync, safety, restore/what-if e test). Dopo 649781 resta una validazione mirata sullo schema finale e fix solo di failure reali; niente riscrittura della feature. GPT-5.6 Terra medium è sufficiente.
 
 ## Esecuzioni
 

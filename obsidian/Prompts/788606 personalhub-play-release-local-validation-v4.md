@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-INFRASTRUTTURA GIÀ COMPLETA: PersonalHub ha signing canonico, build type play/release, R8+shrink e tools/check_play_bundle.py con controlli AAB/16KiB. Resta esclusivamente il preflight finale sul main risultante dagli altri task PH: build firmata, bundletool/checker, size e smoke AVD dello stesso artifact.
+AUDIT 2026-09-22: infrastruttura Play già presente (workflow, build play/release, R8/shrink, check_play_bundle.py). Deve restare ultimo nella catena PH: solo build firmata del main finale, checker/bundletool/size e smoke AVD dello stesso artifact.
 
 ## Esecuzioni
 

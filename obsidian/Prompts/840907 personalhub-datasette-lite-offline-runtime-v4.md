@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-PARZIALMENTE IMPLEMENTATO: DataExplorerActivity, DataExplorerContract, snapshot detached e ingressi dei moduli esistono già. Il runtime offline non è completo: app/src/main/assets/datasette-lite/index.html è assente, quindi restano vendoring Datasette Lite/Pyodide/wheels, presentation DB FK/backlink equivalente e QA con rete disabilitata.
+AUDIT 2026-09-22: DataExplorerActivity, DataExplorerContract e snapshot detached esistono, ma nell'albero di PersonalHub/main non esiste ancora app/src/main/assets/datasette-lite/. Restano vendoring/runtime offline Datasette Lite/Pyodide/wheels, presentation DB con navigazione FK/backlink equivalente e QA con rete disabilitata.
 
 ## Esecuzioni
 

@@ -30,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-UPDATER GIÀ IMPLEMENTATO E CI-HARDENED su logseq_updates/main (Fedora AppImage updater + calendario persistente). Resta il lavoro sensibile: prerequisito umano di revoca PAT, rewrite mirato della history, audit clean, install/enable delle unit e un E2E + no-op runtime.
+AUDIT 2026-09-22: logseq_updates/main contiene già updater AppImage, test e unit systemd. Waiting è intenzionale e umano: prima va revocato il vecchio PAT GitHub; solo dopo Codex può fare rewrite mirato della history, audit clean, install/enable e un E2E + no-op. Nessun altro prompt della roadmap lo sblocca.
 
 ## Esecuzioni
 
