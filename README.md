@@ -48,7 +48,7 @@ Le strutture storiche `analyses` e `analysis_code_changes` restano nel DB per co
 
 `roadmap.sqlite` è l'unica fonte autorevole di metadati **e testo canonico dei prompt**. Workflowy è la dashboard operativa. `roadmap.md`, `spiegazioni.md`, `prompt-registry.md`, `obsidian/` e i file prompt restano materializzazioni di compatibilità/audit e non devono essere usati per dedurre lo stato operativo.
 
-ChatGPT, Codex e il sync `codex-usage` inviano richieste come **GitHub Issues** con titolo `[roadmap-mutation] <request_key>` e body JSON immutabile. Ogni run del workflow drena **tutte** le mutation Issue aperte in ordine, le applica serialmente, materializza eventuali nuovi prompt, rigenera le viste, aggiorna `main` e chiude le Issue processate. Se GitHub cancella un run pending per la concurrency, la Issue resta aperta e viene raccolta automaticamente dal run successivo. Una mutation invalida/collidente viene isolata, commentata e chiusa `not_planned` senza impedire l'applicazione delle Issue valide successive.
+ChatGPT, Codex e il sync `codex-usage` inviano richieste come **GitHub Issues** con titolo `[roadmap-mutation] <request_key>` e body JSON immutabile. Ogni run del workflow drena **tutte** le mutation Issue aperte in ordine, le applica serialmente, materializza eventuali nuovi prompt, verifica ogni mutation e rigenera le viste **una sola volta per batch**, poi aggiorna `main` e chiude le Issue processate. Se GitHub cancella un run pending per la concurrency, la Issue resta aperta e viene raccolta automaticamente dal run successivo. Una mutation invalida/collidente viene isolata, commentata e chiusa `not_planned` senza impedire l'applicazione delle Issue valide successive.
 
 I client non committano più file di inbox, prompt, DB o viste. Le directory `mutations/inbox/` e `mutations/applied/` restano solo come storico del trasporto precedente. Gli entry point operativi di mutazione diretta sono bloccati: `roadmap_db.py` è read-only da CLI, `import_codex_usage.py` delega a `roadmap_sync.py`, l'inbox legacy è test-only e `bootstrap_roadmap.py` richiede il contesto writer esplicito.
 
@@ -85,11 +85,13 @@ Regole fail-closed:
 
 Bridge remoto PROMPT_ID di MegaVault:
 
-- request: `gernalix/MegaVault:.github/prompt-id-request.json`;
-- response: `gernalix/MegaVault:.github/prompt-id-response.json`;
-- `request_id` deve essere unico e la risposta deve corrispondere esattamente alla richiesta corrente;
-- `allocate` precede sempre `register`; `materialize` viene inviato solo dopo che il single writer ha creato il file prompt canonico.
-- se GitHub Actions/bridge remoto è indisponibile dopo `register`, la materializzazione può essere completata con `megavault.py prompt-id materialize <ID> --content-file <file-canonico-locale>` dopo un `roadmap_pull.py` protetto; non usare hash o stato inventati.
+- il trasporto canonico è una GitHub Issue immutabile `[prompt-id-command] <request_id>` nel repository `gernalix/MegaVault`, con il JSON del comando nel body;
+- `request_id` è la chiave idempotente: retry identici devono restituire lo stesso PROMPT_ID; un payload diverso con lo stesso `request_id` è un conflitto;
+- MegaVault conserva una receipt durevole per ogni richiesta applicata. `.github/prompt-id-response.json` resta solo una proiezione di compatibilità dell'ultimo risultato e non è una mailbox/autoritá;
+- il percorso è sempre `allocate → register → materialize`. Se un tentativo si interrompe, si riprende dal primo stato non confermato senza riallocare o riscrivere gli stati già confermati;
+- il vecchio `.github/prompt-id-request.json` non è più un entry point operativo e non va aggiornato per inviare comandi;
+- se il runner GitHub Actions privato di MegaVault non parte, usare lo stesso allocator canonico locale con `megavault.py prompt-id allocate ...` / `materialize ...`; non creare un secondo writer e non inventare ID;
+- se il bridge è indisponibile dopo `register`, la materializzazione può essere completata localmente sul file canonico ottenuto dopo un `roadmap_pull.py` protetto.
 
 ## Pull locale obbligatoriamente protetto
 
