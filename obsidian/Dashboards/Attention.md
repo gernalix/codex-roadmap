@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2|815274 · Chiudere il residuo Kuma dei servizi Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/413647 prompt-history-runtime-pass-reconcile-v1|413647 · Riconciliare il PASS runtime di prompt-history]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/918643 fedora-systemd-kuma-hardening-recovery-v1|918643 · Completa hardening systemd e Kuma]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1|925731 · Attivare storico unificato ChatGPT e Codex]] · `blocked` · analizzato=sì · fix=413647

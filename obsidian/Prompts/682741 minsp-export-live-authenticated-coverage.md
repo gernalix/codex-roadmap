@@ -33,7 +33,7 @@ tags:
 
 ## Spiegazione
 
-Esegue autonomamente l'export completo di Min Sundhedsplatform, correggendo da solo gli ostacoli tecnici finché tutte le sezioni leggibili sono state acquisite e verificate. L'unico intervento umano previsto è completare MitID quando il portale richiede il login.
+Esegue autonomamente l'export completo di Min Sundhedsplatform fino alla verifica finale. Il goal è mantenuto abbastanza corto da restare direttamente nel contesto di Codex ed evitare che la semplice lettura di goal-objective.md venga scambiata per completamento; l'unico intervento umano previsto è MitID.
 
 ## Esecuzioni
 

@@ -1,20 +1,20 @@
 ---
 prompt_id: 815274
-status: running
+status: completed
 project_id: 15
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/fedora
 ---
 
 # 815274 · Chiudere il residuo Kuma dei servizi Fedora
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/fedora-systemd-kuma-runtime-closure-v2|Apri prompt]]
+- **Prompt:** [[../../completed/fedora-systemd-kuma-runtime-closure-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
