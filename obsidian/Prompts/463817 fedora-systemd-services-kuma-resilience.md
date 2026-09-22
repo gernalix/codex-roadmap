@@ -1,18 +1,18 @@
 ---
 prompt_id: 463817
-status: pending
+status: running
 project_id: 15
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/fedora
 ---
 
 # 463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../prompts/fedora-systemd-services-kuma-resilience|Apri prompt]]
 - **Primo lancio:** —
