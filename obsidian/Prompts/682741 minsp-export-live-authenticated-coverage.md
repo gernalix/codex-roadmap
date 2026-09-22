@@ -20,7 +20,7 @@ tags:
 - **Progetto:** [[../Projects/minsp-export|minsp-export]]
 - **Prompt:** [[../../falliti/minsp-export-live-authenticated-coverage|Apri prompt]]
 - **Primo lancio:** 2026-09-22T02:38:07Z
-- **Ultimo lancio:** 2026-09-22T02:46:28Z
+- **Ultimo lancio:** 2026-09-22T02:52:41Z
 - **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
@@ -42,6 +42,7 @@ Esegue autonomamente l'export completo di Min Sundhedsplatform fino alla verific
 | 2026-09-22T02:38:07Z | 2026-09-22T02:38:23Z | UNKNOWN | 16.043 | gpt-5.6-terra | medium | 4 | 33535 |
 | 2026-09-22T02:44:40Z | 2026-09-22T02:46:28Z | BLOCKED | 108.697 | gpt-5.6-terra | medium | 11 | 58700 |
 | 2026-09-22T02:46:28Z | 2026-09-22T02:47:42Z | UNKNOWN | 73.766 | gpt-5.6-terra | medium | 10 | 75696 |
+| 2026-09-22T02:52:41Z | 2026-09-22T02:53:37Z | UNKNOWN | 55.776 | gpt-5.6-terra | medium | 6 | 124216 |
 
 ## Analisi ChatGPT
 
