@@ -26,7 +26,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** —
+- **Sblocca:** [[556372 grindr-export-chatgpt-desktop-end-to-end-v1|556372]]
 - **Padri/precedenti:** [[515955 grindr-web-exporter-recaptcha-normal-chrome-login-v1|515955]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Continua nella stessa chat Codex Grindr: il contesto recente contiene i failure runtime reali. Non aprire una nuova chat.
