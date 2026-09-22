@@ -5,8 +5,8 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/946821 workflowy-needs-fix-live-closure-v2\|946821 · Verificare la pulizia live di Needs fix]] | running | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.5 | low |
 | [[obsidian/Prompts/499100 minsp-export-live-authenticated-coverage-recovery\|499100 · Min Sundhedsplatform — export completo verificato]] | running | — | — | — | no | no | — | minsp-export | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/946821 workflowy-needs-fix-live-closure-v2\|946821 · Verificare la pulizia live di Needs fix]] | pending | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.5 | low |
 | [[obsidian/Prompts/764529 codex-desktop-launcher-atspi-consumer-closure-v2\|764529 · Completare il launcher Codex Desktop con AT-SPI]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |

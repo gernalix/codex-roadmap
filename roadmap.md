@@ -3,8 +3,8 @@
 > Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.
 
 1. [[prompts/grindr-web-exporter-single-browser-end-to-end-v1|grindr-web-exporter-single-browser-end-to-end-v1]]
-2. [[prompts/minsp-export-live-authenticated-coverage-recovery|minsp-export-live-authenticated-coverage-recovery]]
-3. [[prompts/workflowy-needs-fix-live-closure-v2|workflowy-needs-fix-live-closure-v2]]
+2. [[prompts/workflowy-needs-fix-live-closure-v2|workflowy-needs-fix-live-closure-v2]]
+3. [[prompts/minsp-export-live-authenticated-coverage-recovery|minsp-export-live-authenticated-coverage-recovery]]
 4. [[prompts/codex-desktop-launcher-atspi-consumer-closure-v2|codex-desktop-launcher-atspi-consumer-closure-v2]]
 5. [[prompts/eboks-full-export-resume-after-mitid-v1|eboks-full-export-resume-after-mitid-v1]]
 6. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]

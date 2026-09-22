@@ -1,18 +1,18 @@
 ---
 prompt_id: 946821
-status: pending
+status: running
 project_id: —
 model: GPT-5.5
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/fedora-workflowy
 ---
 
 # 946821 · Verificare la pulizia live di Needs fix
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
 - **Prompt:** [[../../prompts/workflowy-needs-fix-live-closure-v2|Apri prompt]]
 - **Primo lancio:** —
