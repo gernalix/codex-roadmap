@@ -158,7 +158,9 @@ Un retry/fix materializzato usa sempre un nuovo PROMPT_ID collegato al padre.
 
 ### Blocco anti-supersede dei prompt attivi
 
-Dopo che `roadmap_start.py` ha portato un prompt a `running`, quel PROMPT_ID è **congelato dal writer**: nessuna mutation ordinaria può modificarne stato, modello, spiegazione, posizione, dipendenze, tag o relazioni, né spostarne il file fuori da `prompts/`. Le viste devono continuare a mostrarlo con stato `running`.
+Dopo che `roadmap_start.py` ha portato un prompt a `running`, quel PROMPT_ID è **congelato dal writer** per tutto ciò che può cambiare il lavoro eseguito: stato, modello, posizione, dipendenze, tag, relazioni e testo canonico restano immutabili, e il file non viene spostato fuori da `prompts/`. La sola eccezione è `explanation`, che è metadato puramente user-facing della dashboard e può essere chiarito anche durante l'esecuzione senza modificare il task. Le viste devono continuare a mostrarlo con stato `running`.
+
+Le `explanation` devono essere scritte per una persona senza competenze di programmazione: una o due frasi brevi che dicano cosa farà il prompt e quale risultato visibile produrrà. Evitare commit hash, nomi di helper, dettagli di implementazione e gergo tecnico quando non indispensabili.
 
 `roadmap_finish.py` / `roadmap_result.py` sono autoritativi per lo scheduling: il single writer applica immediatamente lo stato terminale richiesto e, su PASS, rende subito eseguibili tutti i figli le cui altre dipendenze sono soddisfatte. `codex-usage` arriva in modo indipendente per costi, durata e audit; ritardi o fingerprint mismatch della telemetria non possono più lasciare un prompt bloccato in `running`. Un eventuale mismatch tra esito dichiarato e telemetria viene registrato come anomalia da investigare, senza retrocedere automaticamente lo stato canonico.
 
