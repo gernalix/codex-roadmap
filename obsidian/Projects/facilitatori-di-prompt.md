@@ -5,7 +5,6 @@ tags:
 
 # Facilitatori di prompt
 
-- [[obsidian/Prompts/613408 ccs-desktop-launcher-overlay-recovery-v2|613408 · Completare launcher e overlay Codex Desktop]] · `running`
 - [[obsidian/Prompts/329968 workflowy-integrator-progress-live-v1|329968 · Distribuire la dashboard di avanzamento dell’integratore]] · `pending`
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] · `completed`
 - [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|318764 · Chiudere il blocker di prova della shortcut GNOME]] · `completed`
@@ -29,3 +28,4 @@ tags:
 - [[obsidian/Prompts/403496 codex-desktop-launcher-roadmap-branch-recovery-v1|403496 · Recuperare il launcher Desktop dopo il branch mismatch roadmap]] · `superseded`
 - [[obsidian/Prompts/125435 ccs-codex-per-thread-overlay-live-validation-v1|125435 · Verificare overlay Codex davvero separati per chat]] · `superseded`
 - [[obsidian/Prompts/784216 ccs-overlay-live-retry-after-desktop-v1|784216 · Riprovare overlay Codex con Desktop disponibile]] · `superseded`
+- [[obsidian/Prompts/613408 ccs-desktop-launcher-overlay-recovery-v2|613408 · Completare launcher e overlay Codex Desktop]] · `blocked`

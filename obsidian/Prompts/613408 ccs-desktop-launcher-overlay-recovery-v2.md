@@ -1,20 +1,20 @@
 ---
 prompt_id: 613408
-status: running
+status: blocked
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 613408 · Completare launcher e overlay Codex Desktop
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/ccs-desktop-launcher-overlay-recovery-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/ccs-desktop-launcher-overlay-recovery-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
