@@ -35,6 +35,10 @@ def _effective_outcome(row: sqlite3.Row | dict[str, Any]) -> Any:
 _MANUAL_PREREQ_LABELS = {
     "revoke-pat": "revoca il vecchio PAT GitHub",
     "kuma-login": "rifai il login a Kuma",
+    "login-mitid-eboks": "completa il login MitID su e-Boks",
+    "open-codex-desktop": "apri ChatGPT/Codex Desktop",
+    "login-mitid-minsp": "completa il login MitID su Min Sundhedsplatform",
+    "fallback-only-if-499100-blocked": "usa questo fallback solo se 499100 si blocca",
 }
 
 def _manual_prerequisite_text(conn: sqlite3.Connection, prompt_id: str) -> str | None:
