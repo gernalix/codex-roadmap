@@ -57,7 +57,7 @@ jobs:
               ISSUE_NUMBER="$(python3 -c 'import json; print(json.load(open("/tmp/issue.json"))["number"])')"
               python3 -c 'import json; issue=json.load(open("/tmp/issue.json", encoding="utf-8")); json.dump({"issue": issue}, open("/tmp/issue-event.json", "w", encoding="utf-8"))'
               echo "Applying roadmap mutation Issue #$ISSUE_NUMBER"
-              if python3 tools/apply_issue_mutation.py --repo . --event /tmp/issue-event.json > /tmp/apply-output 2>&1; then
+              if python3 tools/apply_issue_mutation.py --repo . --event /tmp/issue-event.json --defer-render > /tmp/apply-output 2>&1; then
                 cat /tmp/apply-output
                 python3 tools/roadmap_db.py --repo . verify
                 printf '%s\n' "$ISSUE_NUMBER" >> /tmp/processed-issues
@@ -67,6 +67,16 @@ jobs:
                 echo "Rejected roadmap mutation Issue #$ISSUE_NUMBER; continuing drain" >&2
               fi
             done
+
+            python3 - <<'PY'
+            from pathlib import Path
+            from roadmap_db import reconcile_prompt_file_locations, render
+
+            repo = Path(".")
+            reconcile_prompt_file_locations(repo)
+            render(repo)
+            PY
+            python3 tools/roadmap_db.py --repo . verify
 
             if [ -z "$(git status --porcelain)" ]; then
               pushed=1
