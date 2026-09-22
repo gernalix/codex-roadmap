@@ -214,6 +214,7 @@ class UsageExecutionMutationTests(unittest.TestCase):
             self.assertEqual("usage_execution", operation["op"])
             self.assertEqual("cycle-new", operation["cycle_key"])
             self.assertEqual("PASS", operation["outcome"])
+            self.assertFalse(submit.call_args.kwargs["lookup_existing"])
 
 
 if __name__ == "__main__":
