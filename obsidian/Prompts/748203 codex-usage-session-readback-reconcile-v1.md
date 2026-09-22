@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-Chiude in modo mirato il BLOCKED storico 643918: verifica il mismatch session_id del readback finale sul publisher corrente e applica un fix minimo solo se ancora riproducibile, senza backfill/deploy/audit globali.
+VERIFICA QUASI PURA: codex-usage-monitor/main è oltre 80 commit avanti rispetto al fix storico f1049bf e contiene parsing/persistenza espliciti di native_session_id più regression test del publisher. Verificare deterministicamente il caso equivalente e riconciliare 643918; modificare codice solo se il mismatch session identity è ancora riproducibile.
 
 ## Esecuzioni
 

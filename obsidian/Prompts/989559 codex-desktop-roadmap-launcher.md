@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Rende 🚀 Avvia desktop-first completo: progetto/repo, modello, reasoning, prompt non inviato e titolo/binding PROMPT_ID via AT-SPI.
+PARZIALMENTE IMPLEMENTATO: chrome-codex-switcher ha già launch spec, pending_desktop_launch, desktop_launch_requested, codex://threads/new, binding PROMPT_ID e metadata project/repo/model/reasoning; workflowy-importer espone già i metadata canonici. Manca il consumer AT-SPI operativo che seleziona progetto+modello+reasoning, riempie il composer senza invio e completa rename/binding.
 
 ## Esecuzioni
 

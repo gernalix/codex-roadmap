@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Codex-only perché richiede creazione del nuovo repository con tooling GitHub locale autenticato, registrazione MegaVault, installazione systemd e calibrazione/smoke nella sessione Chrome e-Boks reale. Il codice generico è già implementato e testato da ChatGPT; Codex non deve reimplementarlo.
+SEED GIÀ IMPLEMENTATO; REPO GIÀ CREATO MA VUOTO: gernalix/eboks-scraper esiste già ed è pubblico, mentre il seed testato resta su seed/eboks-scraper-20260921. Dopo 482761, se lo scraper serve ancora, resta popolare main dal seed, registrare MegaVault, installare backend e calibrare/smoke dell'adapter UI reale.
 
 ## Esecuzioni
 

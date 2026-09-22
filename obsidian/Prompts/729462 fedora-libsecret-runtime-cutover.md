@@ -22,14 +22,14 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[463817 fedora-systemd-services-kuma-resilience|463817]]
+- **Sblocca:** [[463817 fedora-systemd-services-kuma-resilience|463817]], [[621471 post-404936-runtime-validation|621471]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Sposta i token Kuma dei due servizi utente Fedora nel portachiavi di sistema libsecret, mantenendo un fallback systemd solo se serve davvero per l'avvio senza login e verificando che i timer continuino a funzionare.
+QUASI COMPLETO NEL CODICE: activity-watch-uploader ha già reader+writer libsecret e test; github-autosync preferisce già libsecret/systemd credentials ma configure_kuma.py continua a scrivere reconcile.env plaintext. Resta quel writer, poi migrazione live delle credenziali e verifica systemd/linger senza esporre segreti.
 
 ## Esecuzioni
 

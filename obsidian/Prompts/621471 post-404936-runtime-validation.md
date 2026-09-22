@@ -25,7 +25,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** —
+- **Dipende da:** [[729462 fedora-libsecret-runtime-cutover|729462]]
 - **Sblocca:** [[925731 prompt-history-unified-evidence-backfill-runtime-v1|925731]]
 - **Padri/precedenti:** [[404936 github-autosync-kuma46-autonomous-closure|404936]]
 - **Figli/follow-up:** —
@@ -33,7 +33,7 @@ tags:
 
 ## Spiegazione
 
-Installa sul tuo PC due correzioni già pronte e controlla che il sistema misuri correttamente quanto lavoro richiede ogni prompt.
+CODICE GIÀ COMPLETO E MERGIATO: github-autosync a4649b0 e codex-usage-monitor 21ef9f0 sono su main. Task residuo esclusivamente runtime: sync/deploy, test mirati, un run sano e readback dell'analisi 404936; nessun nuovo sviluppo salvo regressione introdotta dai commit.
 
 ## Esecuzioni
 

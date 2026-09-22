@@ -27,14 +27,14 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** —
+- **Sblocca:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
 - **Padri/precedenti:** [[963514 personalhub-soldi-on-device-visual-object-search-v1|963514]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat Codex; eseguire solo dopo merge PR #31
 
 ## Spiegazione
 
-Sostituisce 963514 e copre tutte le parti rimaste della conversazione: embeddings locali, OCR/labels, ricerca testo↔immagine e foto↔foto, Trova questo oggetto, owned-item layer opzionale, focal point non distruttivo e QA prestazionale/device. La base UI/storage PR #30/#31 non va rifatta.
+BASE GIÀ IMPLEMENTATA su PersonalHub/main: originali fuori SQLite, thumbnail quadrate/Coil, allegati transazione, ricerca globale live e gallery photos-only sono presenti. docs/FINANCE_PHOTOS.md dichiara invece NON implementato il visual retrieval: restano modello/embedding on-device, indice/backfill, OCR/labels, text↔image e image↔image, Trova questo oggetto, owned-item opzionale e relativo QA.
 
 ## Esecuzioni
 

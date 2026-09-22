@@ -30,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-Dopo che hai revocato la vecchia chiave GitHub, la elimina anche dalla cronologia e riattiva gli aggiornamenti automatici di Logseq.
+UPDATER GIÀ IMPLEMENTATO E CI-HARDENED su logseq_updates/main (Fedora AppImage updater + calendario persistente). Resta il lavoro sensibile: prerequisito umano di revoca PAT, rewrite mirato della history, audit clean, install/enable delle unit e un E2E + no-op runtime.
 
 ## Esecuzioni
 

@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-Collega correttamente fedora-external-updater a MegaVault e salva le correzioni già pronte, senza toccare altro.
+CODICE APPLICATIVO GIÀ FATTO NEL PRECEDENTE RUN LOCALE: 537184 riportava 12/12 test PASS e pip_user apply PASS. Non esiste un repo GitHub canonico fedora-external-updater: resta risolvere/creare l'identità MegaVault dal checkout locale e persistere una sola volta gli hunk già implementati, senza creare remote.
 
 ## Esecuzioni
 

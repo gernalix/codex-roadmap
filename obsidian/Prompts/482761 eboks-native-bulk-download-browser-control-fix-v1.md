@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-206756 ha una execution BLOCKED e due fix-packet consecutivi che identificano lo stesso ostacolo concreto: richiesta di conferma/caricamento manuale di una temporary unpacked extension. Serve completare autonomamente solo il controllo browser necessario, riusando la tab e-Boks autenticata e senza chiedere interventi manuali.
+TASK SOLO RUNTIME/BROWSER: non richiede implementazione di prodotto. Deve soltanto automatizzare l'ispezione UI e-Boks già preparata e classificare A/B/C la capacità nativa di export con test bounded. Il risultato può rendere inutile il successivo scraper se l'export nativo è sufficiente.
 
 ## Esecuzioni
 

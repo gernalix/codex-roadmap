@@ -24,7 +24,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[462279 personalhub-health-canonical-e2e-v4|462279]]
+- **Dipende da:** [[462279 personalhub-health-canonical-e2e-v4|462279]], [[624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831]]
 - **Sblocca:** [[707603 personalhub-git-history-final-validation-v4|707603]]
 - **Padri/precedenti:** [[728918 personalhub-obsidian-archive-complete-v4|728918]]
 - **Figli/follow-up:** —
@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-Riprende il lavoro rimasto incompleto sull’archivio Obsidian di PersonalHub e corregge solo ciò che impedisce di finirlo.
+IMPLEMENTAZIONE REMOTA NON CONFERMATA: PersonalHub/main contiene i contratti Obsidian ma l'audit Git non trova un exporter runtime mergiato; 728918 compilava ma finì BLOCKED al migration gate senza work_state/commit registrato. Prima recuperare eventuali residui locali del parent; solo ciò che è realmente recuperabile va riusato, altrimenti il gap è più ampio di un semplice leaf fix.
 
 ## Esecuzioni
 

@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Controlla che PersonalHub possa tornare in sicurezza a versioni precedenti dei dati, così puoi recuperare errori o modifiche sbagliate senza perdere informazioni.
+IMPLEMENTAZIONE GIÀ AMPIA su PersonalHub/main: tracking Git, history UI, diff/blame/statistiche, revert, restore per ref/data, milestone e Time Machine risultano già implementati da numerosi commit. Task residuo = validazione safety/final-schema e correzione solo di failure reali; non riscrivere la feature.
 
 ## Esecuzioni
 

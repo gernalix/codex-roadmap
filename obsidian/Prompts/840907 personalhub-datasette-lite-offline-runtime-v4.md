@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Fa funzionare l’esplorazione dei dati di PersonalHub anche senza Internet, direttamente dal telefono.
+PARZIALMENTE IMPLEMENTATO: DataExplorerActivity, DataExplorerContract, snapshot detached e ingressi dei moduli esistono già. Il runtime offline non è completo: app/src/main/assets/datasette-lite/index.html è assente, quindi restano vendoring Datasette Lite/Pyodide/wheels, presentation DB FK/backlink equivalente e QA con rete disabilitata.
 
 ## Esecuzioni
 

@@ -34,7 +34,7 @@ tags:
 
 ## Spiegazione
 
-Codex-only: richiede diagnosi journal/systemd del Fedora reale, modifica e failure-test di una user unit always-on, deploy locale con sudo, accesso SSH alla VM Oracle e mutazione transazionale/validazione del DB SQLite LIVE di Uptime Kuma con secret wiring. ChatGPT ha già mergiato i fix remoti di fedora-system-monitor; Codex non deve riscoprirli.
+PARZIALMENTE IMPLEMENTATO: fedora-system-monitor/main monitora già discord-exporter come essential e possiede endpoint/heartbeat Kuma dedicato. Restano sul Fedora reale la root cause e il supervisor/unit always-on di discord-exporter, deploy del producer e provisioning/readback del monitor Kuma live con recovery DOWN→UP.
 
 ## Esecuzioni
 

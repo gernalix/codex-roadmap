@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[729462 fedora-libsecret-runtime-cutover|729462]], [[832152 discord-exporter-always-on-kuma-live-v1|832152]]
+- **Dipende da:** [[257387 fedora-context-index-runtime-activation|257387]], [[729462 fedora-libsecret-runtime-cutover|729462]], [[832152 discord-exporter-always-on-kuma-live-v1|832152]]
 - **Sblocca:** —
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Riconcilia tutti i servizi personalizzati Fedora: i daemon davvero always-on vengono resi autoripristinanti con systemd, i timer restano timer, MegaVault viene allineata e ogni servizio operativo riceve un monitor Kuma appropriato con verifica live.
+CODICE REMOTO QUASI TUTTO GIÀ MERGIATO: fedora-system-monitor ha policy resilient + health Kuma per-servizio; MegaVault ha standard systemd/Kuma; telegram_insert_bot, adb-device-keeper e chrome-codex-switcher hanno Restart=always; workflowy-importer ha già hardening service/no-venv. Resta soprattutto inventario/deploy live, registrazione MegaVault, creazione/readback monitor Kuma e fix solo di eventuali servizi realmente scoperti.
 
 ## Esecuzioni
 

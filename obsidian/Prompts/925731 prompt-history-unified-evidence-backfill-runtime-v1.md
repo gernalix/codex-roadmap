@@ -34,7 +34,7 @@ tags:
 
 ## Spiegazione
 
-Codice remoto base già implementato e verde da ChatGPT in gernalix/prompt-history. Il task residuo è solo l'attivazione sul Fedora reale: backfill storico ChatGPT/Codex, adapter switcher verificato sul DB locale, registrazione MegaVault, sync/rebuild, timer systemd e validazione analitica/idempotenza.
+CODICE GIÀ COMPLETO su gernalix/prompt-history: schema normalizzato, ingestion roadmap/codex-usage/ChatGPT, FTS5, linker deterministico ChatGPT↔Codex, relazioni resolved_by e analytics/recommender sono già su main. Resta solo attivazione locale: backfill reale, rebuild/idempotenza, MegaVault e timer/sync Fedora.
 
 ## Esecuzioni
 

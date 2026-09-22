@@ -22,14 +22,14 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** —
+- **Sblocca:** [[463817 fedora-systemd-services-kuma-resilience|463817]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat
 
 ## Spiegazione
 
-Mette insieme cosa stavi facendo sul PC e cosa stava succedendo a Fedora, così quando c’è un problema puoi capire subito cosa è successo.
+CODICE GIÀ COMPLETO E MERGIATO in fedora-system-monitor commit 75378b8: Context Index, timeline/summary/incident bundle, CLI, timer 15 min e publisher Git fail-closed esistono già. Resta solo attivazione Fedora: test ambiente, install, prima sync, bootstrap repo privato fedora-context-data, config git_push e smoke service/query.
 
 ## Esecuzioni
 

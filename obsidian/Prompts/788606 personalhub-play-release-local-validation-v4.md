@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Fa l’ultimo controllo della versione Android di PersonalHub per verificare che sia pronta, installabile e ben confezionata.
+INFRASTRUTTURA GIÀ COMPLETA: PersonalHub ha signing canonico, build type play/release, R8+shrink e tools/check_play_bundle.py con controlli AAB/16KiB. Resta esclusivamente il preflight finale sul main risultante dagli altri task PH: build firmata, bundletool/checker, size e smoke AVD dello stesso artifact.
 
 ## Esecuzioni
 
