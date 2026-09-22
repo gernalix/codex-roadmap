@@ -280,6 +280,44 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertIn("⏳ No — prima: 123456",spieg)
             self.assertIn("⛔ No — prima: rifai il login a Kuma",spieg)
 
+    def test_untag_removes_manual_prerequisite_and_makes_prompt_runnable(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(
+                conn,
+                prompt_id="123456",
+                slug="one",
+                title="One",
+                current_path="prompts/one.md",
+                queue_position=1,
+            )
+            db.add_tag(conn,"123456","manual-prerequisite:open-codex-desktop")
+            conn.commit()
+            self.assertEqual(
+                [],
+                [row["prompt_id"] for row in conn.execute("SELECT prompt_id FROM v_runnable_prompts")],
+            )
+            db.remove_tag(
+                conn,
+                "123456",
+                "manual-prerequisite:open-codex-desktop",
+                actor="chatgpt",
+                note="prerequisite satisfied",
+            )
+            conn.commit()
+            self.assertEqual(
+                ["123456"],
+                [row["prompt_id"] for row in conn.execute("SELECT prompt_id FROM v_runnable_prompts")],
+            )
+            self.assertEqual(
+                1,
+                conn.execute(
+                    "SELECT COUNT(*) FROM audit_events WHERE prompt_id='123456' AND event_type='prompt_tag_removed'"
+                ).fetchone()[0],
+            )
+            conn.close()
+
     def test_running_prompt_is_immutable_to_roadmap_edits(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
