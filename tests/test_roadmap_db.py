@@ -318,6 +318,23 @@ class RoadmapDBTests(unittest.TestCase):
             )
             conn.close()
 
+    def test_attention_contains_only_unresolved_exceptions(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="111111",slug="done",title="Done",current_path="prompts/done.md",status="completed")
+            db.register_prompt(conn,prompt_id="222222",slug="blocked",title="Blocked",current_path="prompts/blocked.md",status="blocked")
+            db.register_prompt(conn,prompt_id="333333",slug="fix",title="Fix",current_path="prompts/fix.md",status="completed")
+            db.register_prompt(conn,prompt_id="444444",slug="unresolved",title="Unresolved",current_path="prompts/unresolved.md",status="blocked")
+            db.add_relation(conn,"222222","333333","resolved_by",actor="chatgpt")
+            conn.commit()
+            attention=[
+                row["prompt_id"]
+                for row in conn.execute("SELECT prompt_id FROM v_attention ORDER BY prompt_id")
+            ]
+            self.assertEqual(["444444"],attention)
+            conn.close()
+
     def test_running_prompt_is_immutable_to_roadmap_edits(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
