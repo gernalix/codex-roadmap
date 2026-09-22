@@ -1,6 +1,6 @@
 ---
 prompt_id: 354882
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - grindr
   - priority
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/grindr-web-exporter
 ---
 
 # 354882 · Elimina loop login Grindr e completa export
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../prompts/grindr-web-exporter-single-browser-end-to-end-v1|Apri prompt]]
 - **Primo lancio:** —
