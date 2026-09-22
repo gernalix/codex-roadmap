@@ -5,6 +5,7 @@ project_id: —
 model: GPT-5.5
 reasoning: medium
 tags:
+  - manual-prerequisite:fallback-only-if-499100-blocked
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/minsp-export
@@ -21,7 +22,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** —
+- **Dipende da:** [[499100 minsp-export-live-authenticated-coverage-recovery|499100]]
 - **Sblocca:** [[781426 minsp-export-live-authenticated-coverage-v2|781426]]
 - **Padri/precedenti:** [[682741 minsp-export-live-authenticated-coverage|682741]]
 - **Figli/follow-up:** [[781426 minsp-export-live-authenticated-coverage-v2|781426]]
@@ -29,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-Il codice locale non può ancora usare il single-writer perché il repository GitHub è vuoto. Questo task crea soltanto il primo commit sicuro, escludendo dati sanitari e segreti.
+Fallback di sicurezza: non va lanciato mentre 499100 è in corso. Serve solo se 499100 si blocca di nuovo per un problema di bootstrap Git, non per MitID o per il portale.
 
 ## Esecuzioni
 
