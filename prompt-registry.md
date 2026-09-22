@@ -7,7 +7,6 @@
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export\|738242 · Scaricare tutta la posta e-Boks via Browser Use]] | running | 2026-09-22T01:38:01Z | 2026-09-22T01:52:40Z | UNKNOWN | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/946527 workflowy-needs-fix-live-deploy-v1\|946527 · Distribuire la pulizia Needs fix di Workflowy]] | running | 2026-09-22T01:54:41Z | 2026-09-22T01:54:41Z | BLOCKED | sì | no | — | Fedora / Workflowy | GPT-5.5 | low |
-| [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | running | 2026-09-22T01:41:09Z | 2026-09-22T01:41:09Z | BLOCKED | sì | no | — | GitHub Autosync / Fedora runtime | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/918643 fedora-systemd-kuma-hardening-recovery-v1\|918643 · Completa hardening systemd e Kuma]] | running | — | — | — | no | no | — | fedora-system-monitor | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2\|815274 · Chiudere il residuo Kuma dei servizi Fedora]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | pending | — | — | — | sì | sì | — | Prompt infrastructure | GPT-5.5 | medium |
@@ -78,6 +77,7 @@
 | [[obsidian/Prompts/330522 workflowy-automation-local-activation\|330522 · Attivare le automazioni locali di Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.5 | low |
 | [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3\|790233 · Portare Salute nel database canonico]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | blocked | 2026-09-19T16:56:36Z | 2026-09-19T17:08:40Z | BLOCKED | sì | no | — | Personal Hub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | completed | 2026-09-22T01:41:09Z | 2026-09-22T01:41:09Z | PASS | sì | no | — | GitHub Autosync / Fedora runtime | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation\|617205 · Chiudere i nuovi tag e alert di Places]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/775412 workflowy-automation-local-activation-v2\|775412 · Attivare le automazioni locali di Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/416826 personalhub-salute-ui-hub-v3\|416826 · Collegare Salute all’app e all’Hub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |

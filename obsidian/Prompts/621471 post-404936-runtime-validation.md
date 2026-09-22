@@ -1,6 +1,6 @@
 ---
 prompt_id: 621471
-status: running
+status: completed
 project_id: 92
 model: GPT-5.6 Luna
 reasoning: low
@@ -10,15 +10,15 @@ tags:
   - github-autosync
   - runtime-validation
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/github-autosync-fedora-runtime
 ---
 
 # 621471 · Distribuire e validare l'hardening post-404936
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/github-autosync-fedora-runtime|GitHub Autosync / Fedora runtime]]
-- **Prompt:** [[../../prompts/post-404936-runtime-validation|Apri prompt]]
+- **Prompt:** [[../../completed/post-404936-runtime-validation|Apri prompt]]
 - **Primo lancio:** 2026-09-22T01:41:09Z
 - **Ultimo lancio:** 2026-09-22T01:41:09Z
 - **Ultimo esito:** BLOCKED
