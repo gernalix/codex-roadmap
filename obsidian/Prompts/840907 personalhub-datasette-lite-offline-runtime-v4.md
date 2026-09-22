@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-AUDIT 2026-09-22: DataExplorerActivity, DataExplorerContract e snapshot detached esistono, ma nell'albero di PersonalHub/main non esiste ancora app/src/main/assets/datasette-lite/. Restano vendoring/runtime offline Datasette Lite/Pyodide/wheels, presentation DB con navigazione FK/backlink equivalente e QA con rete disabilitata.
+Fa funzionare il visualizzatore dei dati di PersonalHub anche senza Internet. Deve permetterti di aprire i dati e passare facilmente da un elemento a quelli collegati.
 
 ## Esecuzioni
 

@@ -33,7 +33,7 @@ tags:
 
 ## Spiegazione
 
-CODICE GIÀ COMPLETO E MERGIATO: github-autosync a4649b0 e codex-usage-monitor 21ef9f0 sono su main. Task residuo esclusivamente runtime: sync/deploy, test mirati, un run sano e readback dell'analisi 404936; nessun nuovo sviluppo salvo regressione introdotta dai commit.
+Installa sul tuo Fedora alcune correzioni che sono già state scritte e controlla che funzionino davvero. Non deve aggiungere nuove funzioni, solo mettere in uso ciò che è già pronto e verificarlo.
 
 ## Esecuzioni
 

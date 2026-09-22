@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-AUDIT 2026-09-22: gernalix/eboks-scraper esiste ed è pubblico ma il repository Git è ancora vuoto; il seed testato resta su seed/eboks-scraper-20260921. Aspetta correttamente 738242, ora in esecuzione, che sta completando l'export via Browser Use nativo. Se 738242 dimostra che il bulk nativo è sufficiente, questo scraper può diventare inutile/supersedibile; se non basta, popolare main dal seed e fare solo calibrazione/smoke dell'adapter.
+Prepara e rende utilizzabile il progetto per scaricare e-Boks con uno strumento dedicato. Va fatto solo se il normale download di e-Boks non riesce già a scaricare tutto quello che ti serve.
 
 ## Esecuzioni
 

@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-CODICE REMOTO QUASI TUTTO GIÀ MERGIATO: fedora-system-monitor ha policy resilient + health Kuma per-servizio; MegaVault ha standard systemd/Kuma; telegram_insert_bot, adb-device-keeper e chrome-codex-switcher hanno Restart=always; workflowy-importer ha già hardening service/no-venv. Resta soprattutto inventario/deploy live, registrazione MegaVault, creazione/readback monitor Kuma e fix solo di eventuali servizi realmente scoperti.
+Controlla i programmi automatici che devono restare sempre attivi sul tuo Fedora. Se uno si ferma, lo fa ripartire e fa comparire il problema in Uptime Kuma.
 
 ## Esecuzioni
 

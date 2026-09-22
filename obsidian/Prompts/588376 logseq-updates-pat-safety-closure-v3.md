@@ -30,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-AUDIT 2026-09-22: logseq_updates/main contiene già updater AppImage, test e unit systemd. Waiting è intenzionale e umano: prima va revocato il vecchio PAT GitHub; solo dopo Codex può fare rewrite mirato della history, audit clean, install/enable e un E2E + no-op. Nessun altro prompt della roadmap lo sblocca.
+Rimuove dalla cronologia del progetto una vecchia chiave segreta che non deve più esserci. Poi attiva gli aggiornamenti automatici di Logseq e controlla che funzionino.
 
 ## Esecuzioni
 

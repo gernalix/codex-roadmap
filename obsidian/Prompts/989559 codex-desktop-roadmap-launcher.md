@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-PARZIALMENTE IMPLEMENTATO: chrome-codex-switcher ha già launch spec, pending_desktop_launch, desktop_launch_requested, codex://threads/new, binding PROMPT_ID e metadata project/repo/model/reasoning; workflowy-importer espone già i metadata canonici. Manca il consumer AT-SPI operativo che seleziona progetto+modello+reasoning, riempie il composer senza invio e completa rename/binding.
+Quando premi Avvia nella dashboard, apre il prompt direttamente in ChatGPT Desktop/Codex nel posto giusto e prepara anche modello e livello di ragionamento. Così non devi impostare tutto a mano.
 
 ## Esecuzioni
 

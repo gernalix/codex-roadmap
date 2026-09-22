@@ -34,7 +34,7 @@ tags:
 
 ## Spiegazione
 
-AUDIT 2026-09-22: gernalix/prompt-history/main corrisponde all'implementazione 95667890 e contiene schema, adapter ChatGPT/Codex/roadmap, FTS5, linker, analytics/recommender e test. Aspetta solo 621471; poi serve esclusivamente backfill/attivazione Fedora, MegaVault e timer/sync. Modello ridotto a GPT-5.5 medium.
+Attiva uno storico unico di ChatGPT e Codex, importa anche le conversazioni passate e collega tra loro quelle che appartengono allo stesso lavoro. Serve a ritrovare più facilmente ciò che è già successo.
 
 ## Esecuzioni
 

@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-AUDIT 2026-09-22: PersonalHub/main contiene già un sottosistema Git data/history ampio (tracking, store, sync, safety, restore/what-if e test). Dopo 649781 resta una validazione mirata sullo schema finale e fix solo di failure reali; niente riscrittura della feature. GPT-5.6 Terra medium è sufficiente.
+Controlla che la cronologia di PersonalHub permetta davvero di vedere le versioni precedenti e tornare indietro senza perdere o rovinare i dati.
 
 ## Esecuzioni
 

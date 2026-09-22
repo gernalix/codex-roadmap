@@ -34,7 +34,7 @@ tags:
 
 ## Spiegazione
 
-BASE GIÀ IMPLEMENTATA su PersonalHub/main: originali fuori SQLite, thumbnail quadrate/Coil, allegati transazione, ricerca globale live e gallery photos-only sono presenti. docs/FINANCE_PHOTOS.md dichiara invece NON implementato il visual retrieval: restano modello/embedding on-device, indice/backfill, OCR/labels, text↔image e image↔image, Trova questo oggetto, owned-item opzionale e relativo QA.
+Completa in Soldi la ricerca tramite foto: riconosce cosa c’è nelle immagini, trova foto o oggetti simili e collega i risultati alle transazioni giuste.
 
 ## Esecuzioni
 

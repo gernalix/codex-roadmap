@@ -33,7 +33,7 @@ tags:
 
 ## Spiegazione
 
-Elimina il falso loop di autenticazione usando una sola istanza Chrome dall'eventuale login fino allo scraping, distingue auth/unknown e chiude anche il vero bug di discovery.
+Fa smettere l’esportatore di Grindr di chiederti il login in continuazione. Una volta entrato, deve riuscire a scaricare le chat dall’inizio alla fine senza farti ripetere l’accesso.
 
 ## Esecuzioni
 

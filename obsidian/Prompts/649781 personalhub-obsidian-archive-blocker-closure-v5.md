@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-AUDIT 2026-09-22: su PersonalHub/main esistono docs/OBSIDIAN_ARCHIVE.md e docs/health/OBSIDIAN_PROJECTION.md, ma non risulta un exporter/runtime Obsidian implementato. Dopo 624831 va prima recuperato eventuale lavoro locale di 728918; se non recuperabile, serve implementare davvero exporter SAF/manifest/incrementale/WorkManager e provider necessari. Non è una semplice validazione leaf.
+Fa funzionare l’archivio di PersonalHub in Obsidian. Prima recupera ciò che era già stato fatto, poi completa solo le parti che mancano.
 
 ## Esecuzioni
 

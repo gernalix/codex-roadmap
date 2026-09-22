@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-413258 ha dimostrato Browser Use diretto e il download batch nativo di 15 messaggi. Questo task esegue l'export completo e resumable di entrambe le caselle e-Boks via sola UI ufficiale, senza probe né API private.
+Scarica tutta la posta delle tue caselle e-Boks, non soltanto i messaggi che vedi nella pagina. Se il lavoro si interrompe, deve poter ripartire senza ricominciare tutto da zero.
 
 ## Esecuzioni
 

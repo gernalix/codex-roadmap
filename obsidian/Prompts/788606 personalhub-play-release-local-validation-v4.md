@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-AUDIT 2026-09-22: infrastruttura Play già presente (workflow, build play/release, R8/shrink, check_play_bundle.py). Deve restare ultimo nella catena PH: solo build firmata del main finale, checker/bundletool/size e smoke AVD dello stesso artifact.
+Fa l’ultimo controllo di PersonalHub prima della pubblicazione su Google Play. Crea il pacchetto finale e verifica che abbia dimensioni corrette e che l’app si apra e funzioni.
 
 ## Esecuzioni
 
