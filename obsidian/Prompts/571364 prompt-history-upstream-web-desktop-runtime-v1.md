@@ -28,7 +28,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[736284 chatgpt-exporter-live-chrome-first-archive-v1|736284]]
 - **Chat Codex:** Nuova chat Codex dedicata; deploy/runtime Fedora. Non rifare gli adapter già implementati da ChatGPT.
 
 ## Spiegazione
