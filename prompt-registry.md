@@ -6,8 +6,8 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export\|738242 · Scaricare tutta la posta e-Boks via Browser Use]] | running | 2026-09-22T01:38:01Z | 2026-09-22T02:15:25Z | BLOCKED | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2\|815274 · Chiudere il residuo Kuma dei servizi Fedora]] | running | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/403496 codex-desktop-launcher-roadmap-branch-recovery-v1\|403496 · Recuperare il launcher Desktop dopo il branch mismatch roadmap]] | running | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2\|815274 · Chiudere il residuo Kuma dei servizi Fedora]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2\|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5\|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |

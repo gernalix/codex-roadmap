@@ -5,7 +5,7 @@ tags:
 
 # Fedora
 
-- [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2|815274 · Chiudere il residuo Kuma dei servizi Fedora]] · `pending`
+- [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2|815274 · Chiudere il residuo Kuma dei servizi Fedora]] · `running`
 - [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill|813383 · Attivare il tracciamento SQLite della roadmap]] · `completed`
 - [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237 · Completa il fix del salvataggio Codex sul PC]] · `blocked`
 - [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked`
