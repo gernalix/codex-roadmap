@@ -7,7 +7,9 @@ reasoning: medium
 tags:
   - on-device-ml
   - owned-items
+  - people
   - personalhub
+  - places
   - soldi
   - visual-search
   - roadmap/prompt
@@ -34,7 +36,7 @@ tags:
 
 ## Spiegazione
 
-Completa in Soldi la ricerca tramite foto: riconosce cosa c’è nelle immagini, trova foto o oggetti simili e collega i risultati alle transazioni giuste.
+Completa tutte le parti foto rimaste: intelligence on-device e oggetti posseduti in Soldi, più standardizzazione delle anteprime quadrate/cached/non distruttive in People (foto già esistenti) e Places, senza dipendenze feature→feature.
 
 ## Esecuzioni
 
