@@ -141,6 +141,69 @@ class RemoteSingleWriterTests(unittest.TestCase):
             out = submit_mutation.submit_document(document, request_key="terminal-123456")
         self.assertEqual("applied", out["submission"])
 
+    def test_rejected_issue_does_not_reserve_request_key(self) -> None:
+        wanted = {
+            "schema": submit_mutation.SCHEMA,
+            "actor": "codex",
+            "operations": [{"op": "status", "prompt_id": "123456", "status": "completed"}],
+        }
+        rejected = {
+            "number": 8,
+            "title": "[roadmap-mutation] terminal-123456",
+            "state": "CLOSED",
+            "state_reason": "not_planned",
+            "body": json.dumps(
+                {
+                    "schema": submit_mutation.SCHEMA,
+                    "actor": "codex",
+                    "operations": [
+                        {"op": "status", "prompt_id": "123456", "status": "blocked"}
+                    ],
+                }
+            ),
+            "url": "https://github.example/issues/8",
+        }
+        created = Mock(
+            returncode=0,
+            stdout=json.dumps({"number": 16, "html_url": "https://github.example/issues/16"}),
+            stderr="",
+        )
+        with patch.object(
+            submit_mutation, "_matching_issues", return_value=[rejected]
+        ), patch.object(submit_mutation, "_gh", return_value=created) as gh:
+            out = submit_mutation.submit_document(wanted, request_key="terminal-123456")
+
+        self.assertEqual("queued", out["submission"])
+        self.assertEqual("16", out["issue_number"])
+        gh.assert_called_once()
+
+    def test_rejected_identical_issue_is_retried(self) -> None:
+        document = {
+            "schema": submit_mutation.SCHEMA,
+            "actor": "codex",
+            "operations": [{"op": "status", "prompt_id": "123456", "status": "completed"}],
+        }
+        rejected = {
+            "number": 8,
+            "title": "[roadmap-mutation] terminal-123456",
+            "state": "CLOSED",
+            "state_reason": "not_planned",
+            "body": submit_mutation._canonical_bytes(document).decode("utf-8"),
+            "url": "https://github.example/issues/8",
+        }
+        created = Mock(
+            returncode=0,
+            stdout=json.dumps({"number": 17, "html_url": "https://github.example/issues/17"}),
+            stderr="",
+        )
+        with patch.object(
+            submit_mutation, "_matching_issues", return_value=[rejected]
+        ), patch.object(submit_mutation, "_gh", return_value=created):
+            out = submit_mutation.submit_document(document, request_key="terminal-123456")
+
+        self.assertEqual("queued", out["submission"])
+        self.assertEqual("17", out["issue_number"])
+
     def test_existing_different_issue_payload_is_rejected(self) -> None:
         wanted = {
             "schema": submit_mutation.SCHEMA,
