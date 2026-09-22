@@ -3,8 +3,8 @@
 > Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.
 
 1. [[prompts/grindr-web-exporter-single-browser-end-to-end-v1|grindr-web-exporter-single-browser-end-to-end-v1]]
-2. [[prompts/minsp-export-live-authenticated-coverage-recovery|minsp-export-live-authenticated-coverage-recovery]]
-3. [[prompts/chatgpt-exporter-live-chrome-first-archive-v1|chatgpt-exporter-live-chrome-first-archive-v1]]
+2. [[prompts/chatgpt-exporter-live-chrome-first-archive-v1|chatgpt-exporter-live-chrome-first-archive-v1]]
+3. [[prompts/minsp-export-live-authenticated-coverage-recovery|minsp-export-live-authenticated-coverage-recovery]]
 4. [[prompts/personalhub-soldi-photo-intelligence-and-owned-items-v2|personalhub-soldi-photo-intelligence-and-owned-items-v2]]
 5. [[prompts/eboks-full-export-resume-after-mitid-v1|eboks-full-export-resume-after-mitid-v1]]
 6. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
