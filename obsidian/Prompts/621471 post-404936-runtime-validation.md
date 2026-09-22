@@ -22,7 +22,7 @@ tags:
 - **Primo lancio:** 2026-09-22T01:41:09Z
 - **Ultimo lancio:** 2026-09-22T01:41:09Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[729462 fedora-libsecret-runtime-cutover|729462]]
@@ -43,7 +43,7 @@ Installa sul tuo Fedora alcune correzioni che sono già state scritte e controll
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T01:47:18Z · colli di bottiglia: sì · fix: — · {"blocker":"roadmap_start.py rejected claim: running_prompt_modified_remote:354882","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"621471","report_ref":"codex-usage:1a3ea50943c0aed04029548a:bc70da4eb110bc8c","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
