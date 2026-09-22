@@ -10,7 +10,7 @@ Prima di modificare codice verifica che PersonalHub/main contenga:
 Se una manca, BLOCKED con la sola precondizione mancante. Non cherry-pickare o reimplementare la base.
 
 # Scope
-Leggi AGENTS.md, .codex/CODE_MAP.tsv e i soli target soldi.photos / soldi.search / soldi.data + test/migrazioni necessari. Vietati audit repo-wide, refactor, cleanup e fix collaterali.
+Leggi AGENTS.md, .codex/CODE_MAP.tsv e i soli target soldi.photos / soldi.search / soldi.data, più i target People/Places strettamente necessari alla standardizzazione delle anteprime, con relativi test/migrazioni minimi. Vietati audit repo-wide, refactor, cleanup e fix collaterali.
 
 # 1. Modello e runtime on-device
 - Scegli un modello/runtime piccolo con codice E pesi licenziati per uso prodotto/commerciale.
@@ -76,6 +76,32 @@ Se center-crop è già adeguato nei test, non aggiungere UI inutile: documenta N
 - Cache/thumbnail locali devono essere eliminabili e rigenerabili.
 - Nessun BLOB immagine finance nel DB.
 
+# 8. Anteprime coerenti anche in People e Places
+Applica lo stesso meccanismo di anteprima introdotto per Soldi anche agli altri moduli che mostrano foto, senza allargare a nuova AI semantica fuori da Soldi.
+
+## People
+People ha già le foto: NON reimplementare il dominio foto e non migrare inutilmente la loro source-of-truth.
+- tutte le preview user-facing rilevanti in liste, risultati di ricerca e card contatto devono usare thumbnail 1:1 quadrate;
+- usa downsampling alla dimensione realmente mostrata + memory/disk cache, evitando decode ripetuti della foto full-resolution durante lo scroll;
+- crop solo visuale/non distruttivo, originale invariato;
+- se viene implementato il focal point del §6, rendilo riusabile anche per People invece di introdurre una seconda logica;
+- foto mancante/non leggibile → placeholder stabile senza rompere la lista;
+- preserva i percorsi/storage fotografici già canonici di People, salvo modifica minima realmente necessaria alla cache/rendering.
+
+## Places
+Porta Places allo stesso contratto visuale.
+- se Places non ha ancora una foto canonica opzionale per luogo, aggiungi il minimo supporto persistente necessario senza BLOB full-resolution nel DB;
+- supporta almeno una foto principale opzionale per Place, con riferimento persistente coerente con l'architettura PH; se esistono già riferimenti fotografici, riusali;
+- nelle entry orizzontali/lista/risultati in cui un Place ha una foto, mostra una thumbnail quadrata 1:1 con lo stesso downsampling/cache/crop non distruttivo di Soldi;
+- dettaglio Place può mostrare l'immagine più grande, ma la lista non deve decodificare originali full-resolution;
+- se il focal point del §6 esiste, riusa lo stesso contratto/coordinate;
+- assenza/errore foto → placeholder/fallback, mai crash o riga mancante.
+
+## Condivisione codice
+Preferisci UNA primitive neutra e riusabile per thumbnail/crop/cache quando questo rispetta i boundary delle capsule. Non creare dipendenze feature→feature: Soldi, People e Places devono consumare una API neutra condivisa o adapter locali minimi. Non spostare logica di dominio People/Places in Soldi.
+
+La ricerca semantica, gli embedding, OCR/labels e “Trova questo oggetto” di questo prompt restano riferiti a Soldi/oggetti acquistati; NON indicizzare automaticamente le foto People o Places salvo richiesta esplicita futura.
+
 # Verifica minima
 Prima di Gradle usa i consumer preflight prescritti da AGENTS se cambi API/Room.
 Unit:
@@ -86,6 +112,9 @@ Unit:
 - owned-item lifecycle/FK;
 - focal point math se implementato.
 Emulatore QA:
+- People: lista/card con foto esistente → preview quadrata cached, scroll/reopen, fallback foto mancante;
+- Places: luogo con/senza foto → preview quadrata, scroll/reopen, tap conserva navigazione corretta;
+- verifica che People/Places non dipendano dall'implementazione interna di Soldi;
 - attach foto → transazione salva immediatamente → indice successivo;
 - riapertura;
 - 🔍 query metadati;
@@ -114,6 +143,8 @@ PASS solo se:
 - search testo↔foto e foto↔foto funzionano;
 - same-object test con pose diverse porta il target nella shortlist;
 - photos-only gallery e ricerca globale PR #31 restano intatte;
+- People usa lo stesso contratto di thumbnail quadrata/cached/non distruttiva sulle foto già esistenti;
+- Places supporta preview fotografiche quadrate con lo stesso contratto, senza dipendenze feature→feature;
 - owned-item layer è opzionale e non trasforma consumabili in asset;
 - test non alterano dati reali;
 - targeted tests + architecture boundaries PASS.
@@ -122,4 +153,4 @@ Se un modello piccolo non raggiunge qualità utile, BLOCKED con misure concrete;
 
 # Stop
 Al PASS roadmap_result/roadmap_finish e STOP. Niente audit dopo PASS.
-Output finale max 10 righe: PROMPT_ID, RESULT, MODEL_RUNTIME, LICENSE, MODEL_SIZE, APK_DELTA, INDEX_PERF, SEARCH_QA, OWNED_ITEMS, BLOCKER.
+Output finale max 12 righe: PROMPT_ID, RESULT, MODEL_RUNTIME, LICENSE, MODEL_SIZE, APK_DELTA, INDEX_PERF, SEARCH_QA, PEOPLE_PREVIEWS, PLACES_PREVIEWS, OWNED_ITEMS, BLOCKER.
