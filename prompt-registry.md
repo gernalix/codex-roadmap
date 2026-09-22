@@ -5,7 +5,7 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export\|738242 · Scaricare tutta la posta e-Boks via Browser Use]] | running | 2026-09-22T01:38:01Z | 2026-09-22T01:38:01Z | UNKNOWN | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export\|738242 · Scaricare tutta la posta e-Boks via Browser Use]] | running | 2026-09-22T01:38:01Z | 2026-09-22T01:49:01Z | UNKNOWN | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/946527 workflowy-needs-fix-live-deploy-v1\|946527 · Distribuire la pulizia Needs fix di Workflowy]] | pending | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.5 | low |
 | [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2\|815274 · Chiudere il residuo Kuma dei servizi Fedora]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
