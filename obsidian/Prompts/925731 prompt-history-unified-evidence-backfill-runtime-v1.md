@@ -21,8 +21,8 @@ tags:
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../completed/prompt-history-unified-evidence-backfill-runtime-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-22T02:09:52Z
-- **Ultimo lancio:** 2026-09-22T02:26:43Z
-- **Ultimo esito:** BLOCKED
+- **Ultimo lancio:** 2026-09-22T03:53:27Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** sì (1 interventi)
 - **Fix:** 413647
@@ -43,6 +43,7 @@ Attiva uno storico unico di ChatGPT e Codex, importa anche le conversazioni pass
 | 2026-09-22T02:09:52Z | 2026-09-22T02:10:46Z | BLOCKED | 53.863 | gpt-5.6-terra | medium | 3 | 43030 |
 | 2026-09-22T02:19:34Z | 2026-09-22T02:23:54Z | BLOCKED | 259.315 | gpt-5.6-luna | low | 25 | 74372 |
 | 2026-09-22T02:26:43Z | 2026-09-22T02:26:58Z | BLOCKED | 14.141 | gpt-5.6-luna | low | 2 | 101114 |
+| 2026-09-22T03:53:27Z | 2026-09-22T03:53:52Z | PASS | 25.086 | gpt-5.6-terra | medium | 4 | 123620 |
 
 ## Analisi ChatGPT
 
