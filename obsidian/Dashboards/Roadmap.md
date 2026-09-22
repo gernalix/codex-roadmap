@@ -4,7 +4,6 @@
 
 ## Lanciabili adesso
 
-- [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]]
 - [[obsidian/Prompts/748203 codex-usage-session-readback-reconcile-v1|748203 · Riconciliare il session readback del recovery Codex]]
 - [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]]
 - [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]]

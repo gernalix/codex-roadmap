@@ -1,23 +1,23 @@
 ---
 prompt_id: 843271
-status: pending
+status: completed
 project_id: —
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/completed
   - roadmap/project/workflowy-importer
 ---
 
 # 843271 · Distribuire e verificare il fix deduplica dashboard Workflowy
 
-- **Stato:** pending
+- **Stato:** completed
 - **Progetto:** [[../Projects/workflowy-importer|workflowy-importer]]
-- **Prompt:** [[../../prompts/workflowy-dashboard-dedupe-live-deploy|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Prompt:** [[../../completed/workflowy-dashboard-dedupe-live-deploy|Apri prompt]]
+- **Primo lancio:** 2026-09-22T00:34:59Z
+- **Ultimo lancio:** 2026-09-22T00:34:59Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ CODICE GIÀ COMPLETO su workflowy-importer/main: deduplica, recupero mapping/exp
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T00:34:59Z | 2026-09-22T00:36:42Z | PASS | 102.372 | gpt-5.6-luna | low | 14 | 58971 |
 
 ## Analisi ChatGPT
 
