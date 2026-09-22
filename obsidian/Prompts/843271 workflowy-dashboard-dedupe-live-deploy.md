@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Aggiorna la dashboard Workflowy sul tuo PC e controlla che ogni prompt compaia una sola volta, senza doppioni.
+Distribuisce sul Fedora reale il main corrente di workflowy-importer e verifica la dashboard end-to-end: nessun PROMPT_ID duplicato, Ready/Waiting/Running mantengono l'ordine canonico queue_position dopo il filtro, i prerequisiti manuali finiscono in Waiting e una seconda sync resta idempotente.
 
 ## Esecuzioni
 
