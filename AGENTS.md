@@ -34,6 +34,7 @@ Use this exact workflow:
    - When operating remotely from ChatGPT, use the existing MegaVault remote bridge: write an `allocate` request to `gernalix/MegaVault:.github/prompt-id-request.json`.
    - Wait until `.github/prompt-id-response.json` contains the **same request_id** and `status=allocated`.
    - Never guess a six-digit ID, reuse an old one, derive one from an Issue number, or proceed while the allocation response is stale/missing.
+   - If the remote bridge is unavailable but the user has the canonical local MegaVault checkout, use the same canonical CLI allocator locally (`megavault.py prompt-id allocate`) and continue only with its returned ID. This is a supported fallback, not a bypass. The matching final `materialize` must likewise use the canonical CLI if the remote bridge remains unavailable.
 3. **Submit the canonical roadmap mutation.**
    - Create exactly one `codex-roadmap.mutation.v1` Issue named `[roadmap-mutation] <request_key>` using `tools/submit_mutation.py` or an equivalent GitHub API call.
    - For `register`, include the allocated `prompt_id`, final `prompt_text`, `current_path`, model/reasoning/project metadata and any dependencies/relations in the mutation.
