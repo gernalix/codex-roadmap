@@ -117,6 +117,31 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
              )
            ORDER BY COALESCE(p.queue_position, 2147483647), p.created_at, p.prompt_id"""
     )
+    # Attention is for unresolved exceptional states only. A completed prompt
+    # does not require analysis merely because no analysis row exists, and a
+    # negative historical parent is no longer actionable once a completed
+    # successor explicitly resolves it.
+    conn.execute("DROP VIEW IF EXISTS v_attention")
+    conn.execute(
+        """CREATE VIEW v_attention AS
+           SELECT s.*
+           FROM v_prompt_summary s
+           WHERE s.status IN ('failed','blocked','unknown')
+             AND NOT EXISTS (
+               SELECT 1
+               FROM prompts fix
+               WHERE fix.prompt_id=s.fix_prompt_id
+                 AND fix.status='completed'
+             )
+             AND NOT EXISTS (
+               SELECT 1
+               FROM prompt_relations r
+               JOIN prompts successor ON successor.prompt_id=r.to_prompt_id
+               WHERE r.from_prompt_id=s.prompt_id
+                 AND r.relation_type IN ('fix','replacement','merge','resolved_by')
+                 AND successor.status='completed'
+             )"""
+    )
     conn.commit()
 
 def materialization_hash(text: str) -> str:
