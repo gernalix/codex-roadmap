@@ -1,18 +1,18 @@
 ---
 prompt_id: 613102
-status: pending
+status: running
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 613102 · Completare motore foto globale e rimuovere pipeline legacy People
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-global-photo-engine-people-legacy-removal-v3|Apri prompt]]
 - **Primo lancio:** —
