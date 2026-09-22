@@ -86,7 +86,7 @@
 | [[obsidian/Prompts/461839 personalhub-epoch-timestamps-migration\|461839 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/593728 personalhub-shared-alerts-places-tags-integration-v2\|593728 · Chiudere e integrare i nuovi tag e alert di Places]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/355842 personalhub-obsidian-archive-complete-v3\|355842 · Completare l’archivio Obsidian in un solo task]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | blocked | 2026-09-22T02:09:52Z | 2026-09-22T02:19:34Z | BLOCKED | sì | sì | — | Prompt infrastructure | GPT-5.5 | medium |
+| [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | blocked | 2026-09-22T02:09:52Z | 2026-09-22T02:26:43Z | BLOCKED | sì | sì | — | Prompt infrastructure | GPT-5.5 | medium |
 | [[obsidian/Prompts/418763 personalhub-salute-canonical-integration\|418763 · Portare Salute dentro PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/734205 personalhub-epoch-timestamps-migration-v2\|734205 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/825405 personalhub-git-history-data-sync-validation-v3\|825405 · Validare cronologia, backup e ripristino dati]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
