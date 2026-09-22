@@ -6,7 +6,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export\|738242 · Scaricare tutta la posta e-Boks via Browser Use]] | running | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience\|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] | running | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience\|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] | running | 2026-09-22T01:19:09Z | 2026-09-22T01:19:09Z | FAIL | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | pending | — | — | — | sì | sì | — | Prompt infrastructure | GPT-5.5 | medium |

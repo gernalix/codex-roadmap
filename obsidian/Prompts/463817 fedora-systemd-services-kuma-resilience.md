@@ -15,9 +15,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../prompts/fedora-systemd-services-kuma-resilience|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T01:19:09Z
+- **Ultimo lancio:** 2026-09-22T01:19:09Z
+- **Ultimo esito:** FAIL
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ CODICE REMOTO QUASI TUTTO GIÀ MERGIATO: fedora-system-monitor ha policy resilie
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T01:19:09Z | 2026-09-22T01:25:35Z | FAIL | 386.674 | gpt-5.6-terra | medium | 26 | 100189 |
 
 ## Analisi ChatGPT
 
