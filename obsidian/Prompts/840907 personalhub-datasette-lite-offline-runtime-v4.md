@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Fa funzionare il visualizzatore dei dati di PersonalHub anche senza Internet. Deve permetterti di aprire i dati e passare facilmente da un elemento a quelli collegati.
+Aspetta 707603: il runtime Datasette Lite offline deve essere completato sullo schema e sulla history ormai definitivi.
 
 ## Esecuzioni
 

@@ -5,6 +5,7 @@ project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
+  - conditional:only-if-eboks-native-export-incomplete
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/megavault-e-boks-bootstrap
@@ -29,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-Prepara e rende utilizzabile il progetto per scaricare e-Boks con uno strumento dedicato. Va fatto solo se il normale download di e-Boks non riesce già a scaricare tutto quello che ti serve.
+Aspetta 582946. Va eseguito solo se, dopo l’export e-Boks ripreso, il download nativo risulta ancora insufficiente; se 582946 copre tutto, questo bootstrap diventa inutile e va cancellato invece di essere lanciato.
 
 ## Esecuzioni
 

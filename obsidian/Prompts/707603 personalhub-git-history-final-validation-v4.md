@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Controlla che la cronologia di PersonalHub permetta davvero di vedere le versioni precedenti e tornare indietro senza perdere o rovinare i dati.
+Aspetta 649781: la validazione Git History va fatta solo dopo che archivio Obsidian e schema finale sono stabilizzati.
 
 ## Esecuzioni
 

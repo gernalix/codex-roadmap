@@ -4,8 +4,8 @@
 
 ## Lanciabili adesso
 
-- [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
 - [[obsidian/Prompts/672304 workflowy-waiting-runtime-reconcile-v1|672304 · Riallineare Waiting nel runtime Workflowy]]
+- [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
 
 ## In esecuzione
 

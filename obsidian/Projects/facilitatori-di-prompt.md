@@ -5,11 +5,11 @@ tags:
 
 # Facilitatori di prompt
 
-- [[obsidian/Prompts/764529 codex-desktop-launcher-atspi-consumer-closure-v2|764529 · Completare il launcher Codex Desktop con AT-SPI]] · `pending`
-- [[obsidian/Prompts/784216 ccs-overlay-live-retry-after-desktop-v1|784216 · Riprovare overlay Codex con Desktop disponibile]] · `pending`
+- [[obsidian/Prompts/284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio]] · `pending`
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] · `completed`
 - [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|318764 · Chiudere il blocker di prova della shortcut GNOME]] · `completed`
 - [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1|472615 · Ripristinare le note dopo reboot]] · `completed`
+- [[obsidian/Prompts/764529 codex-desktop-launcher-atspi-consumer-closure-v2|764529 · Completare il launcher Codex Desktop con AT-SPI]] · `superseded`
 - [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher|989559 · Automatizza Avvia verso Codex Desktop]] · `superseded`
 - [[obsidian/Prompts/604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2|604812 · Fix GNOME global search shortcut on Chrome RPM]] · `completed`
 - [[obsidian/Prompts/658142 ccs-autonomous-runtime-verifier|658142 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `blocked`
@@ -25,4 +25,5 @@ tags:
 - [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening|381904 · Rendere stabile il sync Workflowy senza errori 429]] · `unknown`
 - [[obsidian/Prompts/917403 chrome-codex-switcher-gnome-global-search-shortcut-runtime-fix-v1|917403 · Fix GNOME global Context Search shortcut]] · `superseded`
 - [[obsidian/Prompts/403496 codex-desktop-launcher-roadmap-branch-recovery-v1|403496 · Recuperare il launcher Desktop dopo il branch mismatch roadmap]] · `superseded`
-- [[obsidian/Prompts/125435 ccs-codex-per-thread-overlay-live-validation-v1|125435 · Verificare overlay Codex davvero separati per chat]] · `blocked`
+- [[obsidian/Prompts/125435 ccs-codex-per-thread-overlay-live-validation-v1|125435 · Verificare overlay Codex davvero separati per chat]] · `superseded`
+- [[obsidian/Prompts/784216 ccs-overlay-live-retry-after-desktop-v1|784216 · Riprovare overlay Codex con Desktop disponibile]] · `superseded`

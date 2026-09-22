@@ -1,21 +1,21 @@
 ---
 prompt_id: 784216
-status: pending
+status: superseded
 project_id: 23
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - manual-prerequisite:open-codex-desktop
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 784216 · Riprovare overlay Codex con Desktop disponibile
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/ccs-overlay-live-retry-after-desktop-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/ccs-overlay-live-retry-after-desktop-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -25,7 +25,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[125435 ccs-codex-per-thread-overlay-live-validation-v1|125435]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653]]
 - **Chat Codex:** Stessa chat Codex di 125435; retry minimo solo quando ChatGPT/Codex Desktop è aperto.
 
 ## Spiegazione

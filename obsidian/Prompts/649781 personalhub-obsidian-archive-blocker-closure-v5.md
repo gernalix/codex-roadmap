@@ -32,7 +32,7 @@ tags:
 
 ## Spiegazione
 
-È il solo task rimasto per il blocker dell’archivio Obsidian PersonalHub; sostituisce 728918 e deve correggere soltanto il residuo reale senza rifare l’intero archivio.
+Aspetta 624831 perché deve lavorare sullo schema PersonalHub finale dopo le modifiche foto/Soldi. Non va anticipato.
 
 ## Esecuzioni
 

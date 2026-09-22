@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Fa l’ultimo controllo di PersonalHub prima della pubblicazione su Google Play. Crea il pacchetto finale e verifica che abbia dimensioni corrette e che l’app si apra e funzioni.
+Resta ultimo nella catena PersonalHub: esegue soltanto il preflight Play sul main finale dopo 840907.
 
 ## Esecuzioni
 

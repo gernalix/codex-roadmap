@@ -30,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-È il solo task attivo rimasto per e-Boks. Dopo un login MitID manuale riprende dal progress.json già esistente senza riscaricare i batch completati.
+Resta in Waiting finché non completi manualmente il login MitID su e-Boks. Subito dopo riprende dal progress.json esistente senza riscaricare i batch già salvati.
 
 ## Esecuzioni
 

@@ -1,21 +1,21 @@
 ---
 prompt_id: 764529
-status: pending
+status: superseded
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - manual-prerequisite:open-codex-desktop
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 764529 · Completare il launcher Codex Desktop con AT-SPI
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/codex-desktop-launcher-atspi-consumer-closure-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/codex-desktop-launcher-atspi-consumer-closure-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -25,7 +25,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[403496 codex-desktop-launcher-roadmap-branch-recovery-v1|403496]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653]]
 - **Chat Codex:** Stessa chat Codex di 403496; riprendi dal consumer AT-SPI mancante, senza rifare bootstrap/audit.
 
 ## Spiegazione

@@ -1,18 +1,18 @@
 ---
 prompt_id: 125435
-status: blocked
+status: superseded
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 125435 · Verificare overlay Codex davvero separati per chat
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../falliti/ccs-codex-per-thread-overlay-live-validation-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-22T03:29:13Z

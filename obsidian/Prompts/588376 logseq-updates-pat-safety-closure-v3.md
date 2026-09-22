@@ -5,6 +5,7 @@ project_id: —
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
+  - manual-prerequisite:revoke-old-github-pat
   - manual-prerequisite:revoke-pat
   - roadmap/prompt
   - roadmap/status/pending
@@ -30,7 +31,7 @@ tags:
 
 ## Spiegazione
 
-Rimuove dalla cronologia del progetto una vecchia chiave segreta che non deve più esserci. Poi attiva gli aggiornamenti automatici di Logseq e controlla che funzionino.
+Resta in Waiting per un solo motivo reale: il vecchio PAT GitHub deve essere revocato manualmente. Dopo la revoca, Codex può bonificare la history e attivare/verificare l’updater senza altri prerequisiti.
 
 ## Esecuzioni
 

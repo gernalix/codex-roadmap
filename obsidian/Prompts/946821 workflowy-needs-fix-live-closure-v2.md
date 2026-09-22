@@ -1,18 +1,18 @@
 ---
 prompt_id: 946821
-status: blocked
+status: superseded
 project_id: —
 model: GPT-5.5
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/fedora-workflowy
 ---
 
 # 946821 · Verificare la pulizia live di Needs fix
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
 - **Prompt:** [[../../falliti/workflowy-needs-fix-live-closure-v2|Apri prompt]]
 - **Primo lancio:** 2026-09-22T03:01:41Z

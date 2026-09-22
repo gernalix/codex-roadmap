@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-946821 si è bloccato perché due prompt con prerequisiti manuali non comparivano in Waiting. La roadmap canonica contiene già i tag corretti e workflowy-importer/main contiene già la logica pending + manual_prerequisites -> waiting: il residuo è quindi deploy/runtime/readback, non una nuova feature.
+È il primo task da lanciare: riallinea il runtime Workflowy in modo che i prerequisiti manuali compaiano davvero in Waiting e rimuove il residuo operativo di 946821.
 
 ## Esecuzioni
 
