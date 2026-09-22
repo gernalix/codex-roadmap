@@ -1,6 +1,6 @@
 ---
 prompt_id: 522084
-status: pending
+status: running
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - room-migration
   - tags
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 522084 · Unificare tag, facet e backlink cross-module in PersonalHub
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-shared-tags-facets-backlinks-v1|Apri prompt]]
 - **Primo lancio:** —
