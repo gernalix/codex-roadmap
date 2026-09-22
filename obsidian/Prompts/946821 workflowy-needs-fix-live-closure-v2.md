@@ -1,23 +1,23 @@
 ---
 prompt_id: 946821
-status: running
+status: blocked
 project_id: —
 model: GPT-5.5
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/fedora-workflowy
 ---
 
 # 946821 · Verificare la pulizia live di Needs fix
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
-- **Prompt:** [[../../prompts/workflowy-needs-fix-live-closure-v2|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Prompt:** [[../../falliti/workflowy-needs-fix-live-closure-v2|Apri prompt]]
+- **Primo lancio:** 2026-09-22T03:01:41Z
+- **Ultimo lancio:** 2026-09-22T03:01:41Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T03:01:41Z | 2026-09-22T03:04:36Z | BLOCKED | 175.156 | gpt-5.6-luna | low | 28 | 47168 |
 
 ## Analisi ChatGPT
 
