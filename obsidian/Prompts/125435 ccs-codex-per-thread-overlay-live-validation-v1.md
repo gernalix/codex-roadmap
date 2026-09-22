@@ -20,11 +20,11 @@ tags:
 - **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
-- **Fix:** —
+- **Fix:** 784216
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[784216 ccs-overlay-live-retry-after-desktop-v1|784216]]
 - **Chat Codex:** Nuova chat Codex; task locale autonomo. Riusa il fix già su main e fai solo deploy + prova reale per-thread, modificando codice soltanto se il runtime fallisce.
 
 ## Spiegazione
@@ -40,6 +40,7 @@ Installa la correzione già pronta e controlla dal vivo che, quando passi da una
 ## Analisi ChatGPT
 
 - 2026-09-22T03:32:52Z · colli di bottiglia: sì · fix: — · {"blocker":"Fedora esponeva solo Chrome, non una finestra Codex Desktop reale; risultato BLOCKED accodato (issue #542).","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"125435","report_ref":"codex-usage:3a56deb83a5af37ebf9eda7d:5a46d5966026caa6","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
+- 2026-09-22T03:34:51Z · colli di bottiglia: sì · fix: 784216 · 125435 è BLOCKED per un prerequisito runtime concreto: Fedora esponeva solo Chrome e nessuna finestra Codex Desktop reale, quindi la prova A→B→A non poteva iniziare. Il fix per-thread è già su chrome-codex-switcher/main; serve soltanto un retry minimo quando Desktop è disponibile.
 
 ## Modifiche di codice ChatGPT
 
