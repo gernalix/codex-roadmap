@@ -1,18 +1,18 @@
 ---
 prompt_id: 413647
-status: pending
+status: running
 project_id: 92
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/prompt-infrastructure
 ---
 
 # 413647 · Riconciliare il PASS runtime di prompt-history
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../prompts/prompt-history-runtime-pass-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —

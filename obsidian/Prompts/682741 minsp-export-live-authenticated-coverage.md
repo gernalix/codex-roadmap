@@ -2,7 +2,7 @@
 prompt_id: 682741
 status: pending
 project_id: —
-model: GPT-5.6 Terra
+model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - browser-automation
@@ -33,7 +33,7 @@ tags:
 
 ## Spiegazione
 
-Controlla sul portale reale che l'exporter scarichi davvero tutte le sezioni sanitarie visibili e aggiunge solo ciò che manca. Il login MitID resta manuale e il task non deve modificare nulla nell'account.
+Esegue autonomamente l'export completo di Min Sundhedsplatform, correggendo da solo gli ostacoli tecnici finché tutte le sezioni leggibili sono state acquisite e verificate. L'unico intervento umano previsto è completare MitID quando il portale richiede il login.
 
 ## Esecuzioni
 
