@@ -27,7 +27,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[854653 fedora-external-updater-pip-user-git-closure|854653]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[936284 megavault-local-repo-registration-fedora-external-updater-v1|936284]]
 - **Chat Codex:** Stessa chat di 854653
 
 ## Spiegazione
