@@ -6,8 +6,8 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export\|738242 · Scaricare tutta la posta e-Boks via Browser Use]] | running | 2026-09-22T01:38:01Z | 2026-09-22T01:38:01Z | UNKNOWN | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience\|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] | running | 2026-09-22T01:19:09Z | 2026-09-22T01:19:09Z | FAIL | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/946527 workflowy-needs-fix-live-deploy-v1\|946527 · Distribuire la pulizia Needs fix di Workflowy]] | pending | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.5 | low |
+| [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2\|815274 · Chiudere il residuo Kuma dei servizi Fedora]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | 2026-09-22T01:41:09Z | 2026-09-22T01:41:09Z | BLOCKED | sì | no | — | GitHub Autosync / Fedora runtime | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | pending | — | — | — | sì | sì | — | Prompt infrastructure | GPT-5.5 | medium |
@@ -111,6 +111,7 @@
 | [[obsidian/Prompts/672418 personalhub-git-history-data-sync-validation\|672418 · Cronologia, backup e ripristino dei dati PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/684930 personalhub-obsidian-archive-projections-v2\|684930 · Completare Obsidian per tutti i moduli]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/526713 fedora-runtime-validation-v2\|526713 · Ultimo controllo del monitoraggio Fedora]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | medium |
+| [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience\|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] | failed | 2026-09-22T01:19:09Z | 2026-09-22T01:19:09Z | FAIL | sì | no | [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2\|815274]] | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/861305 personalhub-datasette-lite-offline-runtime\|861305 · Esploratore dati dentro PersonalHub anche offline]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/357214 personalhub-git-history-data-sync-validation-v2\|357214 · Cronologia, backup e ripristino dei dati PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/311947 personalhub-play-release-local-validation\|311947 · Controllo finale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |

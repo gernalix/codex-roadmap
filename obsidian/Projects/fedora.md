@@ -5,7 +5,7 @@ tags:
 
 # Fedora
 
-- [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] · `running`
+- [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2|815274 · Chiudere il residuo Kuma dei servizi Fedora]] · `pending`
 - [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill|813383 · Attivare il tracciamento SQLite della roadmap]] · `completed`
 - [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237 · Completa il fix del salvataggio Codex sul PC]] · `blocked`
 - [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked`
@@ -18,6 +18,7 @@ tags:
 - [[obsidian/Prompts/357862 logseq-updates-pat-safety-closure-v2|357862 · Chiusura sicurezza e attivazione updater Logseq]] · `superseded`
 - [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] · `completed`
 - [[obsidian/Prompts/526713 fedora-runtime-validation-v2|526713 · Ultimo controllo del monitoraggio Fedora]] · `superseded`
+- [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] · `failed`
 - [[obsidian/Prompts/690049 fedora-runtime-validation|690049 · Ultimo controllo del monitoraggio Fedora]] · `superseded`
 - [[obsidian/Prompts/445388 logseq-updates-pat-safety-closure|445388 · Chiusura sicurezza e attivazione updater Logseq]] · `superseded`
 - [[obsidian/Prompts/391742 codex-usage-prompt-id-source-historical-reconcile-v1|391742 · Riconciliare il mismatch storico prompt_id_source del publisher Codex]] · `superseded`

@@ -1,30 +1,30 @@
 ---
 prompt_id: 463817
-status: running
+status: failed
 project_id: 15
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/failed
   - roadmap/project/fedora
 ---
 
 # 463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma
 
-- **Stato:** running
+- **Stato:** failed
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/fedora-systemd-services-kuma-resilience|Apri prompt]]
+- **Prompt:** [[../../falliti/fedora-systemd-services-kuma-resilience|Apri prompt]]
 - **Primo lancio:** 2026-09-22T01:19:09Z
 - **Ultimo lancio:** 2026-09-22T01:19:09Z
 - **Ultimo esito:** FAIL
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
-- **Fix:** —
+- **Fix:** 815274
 - **Dipende da:** [[257387 fedora-context-index-runtime-activation|257387]], [[729462 fedora-libsecret-runtime-cutover|729462]], [[832152 discord-exporter-always-on-kuma-live-v1|832152]]
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[815274 fedora-systemd-kuma-runtime-closure-v2|815274]]
 - **Chat Codex:** Stessa chat Fedora
 
 ## Spiegazione
@@ -39,7 +39,7 @@ Controlla i programmi automatici che devono restare sempre attivi sul tuo Fedora
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T01:48:05Z · colli di bottiglia: sì · fix: 815274 · FAIL reale ma circoscritto: il runtime non esponeva autorevolmente i path amministrativi Uptime Kuma, quindi Codex ha correttamente evitato una write DB non sicura. fedora-system-monitor/main ora espone 'kuma-runtime --json' con helper Oracle, directory Compose, DB live e template backup; commit daef956d CI PASS. Il residuo viene trasferito a 815274 senza ripetere inventario/hardening.
 
 ## Modifiche di codice ChatGPT
 

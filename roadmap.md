@@ -4,8 +4,8 @@
 
 1. [[prompts/grindr-web-exporter-single-browser-end-to-end-v1|grindr-web-exporter-single-browser-end-to-end-v1]]
 2. [[prompts/eboks-full-inbox-native-batch-export|eboks-full-inbox-native-batch-export]]
-3. [[prompts/fedora-systemd-services-kuma-resilience|fedora-systemd-services-kuma-resilience]]
-4. [[prompts/workflowy-needs-fix-live-deploy-v1|workflowy-needs-fix-live-deploy-v1]]
+3. [[prompts/workflowy-needs-fix-live-deploy-v1|workflowy-needs-fix-live-deploy-v1]]
+4. [[prompts/fedora-systemd-kuma-runtime-closure-v2|fedora-systemd-kuma-runtime-closure-v2]]
 5. [[prompts/codex-desktop-roadmap-launcher|codex-desktop-roadmap-launcher]]
 6. [[prompts/post-404936-runtime-validation|post-404936-runtime-validation]]
 7. [[prompts/prompt-history-unified-evidence-backfill-runtime-v1|prompt-history-unified-evidence-backfill-runtime-v1]]
