@@ -1,6 +1,6 @@
 # Da controllare
 
-- [[obsidian/Prompts/682741 minsp-export-live-authenticated-coverage|682741 · Min Sundhedsplatform — validazione export completo]] · `blocked` · analizzato=no · fix=—
+- [[obsidian/Prompts/682741 minsp-export-live-authenticated-coverage|682741 · Min Sundhedsplatform — validazione export completo]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2|815274 · Chiudere il residuo Kuma dei servizi Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/413647 prompt-history-runtime-pass-reconcile-v1|413647 · Riconciliare il PASS runtime di prompt-history]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/918643 fedora-systemd-kuma-hardening-recovery-v1|918643 · Completa hardening systemd e Kuma]] · `completed` · analizzato=no · fix=—

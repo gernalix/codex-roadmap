@@ -22,7 +22,7 @@ tags:
 - **Primo lancio:** 2026-09-22T02:38:07Z
 - **Ultimo lancio:** 2026-09-22T02:38:07Z
 - **Ultimo esito:** UNKNOWN
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -43,7 +43,7 @@ Esegue autonomamente l'export completo di Min Sundhedsplatform fino alla verific
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T02:46:57Z · colli di bottiglia: sì · fix: — · {"blocker":"il claim ha attivato il prompt, ma il single-writer non è riuscito a creare il worktree isolato e lo ha finalizzato come `blocked` (Issue #518). Lo stato canonico non è più `running`, quindi non posso avviare il repo senza un nuovo prompt/claim canonico.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"682741","report_ref":"codex-usage:748e2a854369c0d2e3370ab3:476f79614d44a9a9","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
