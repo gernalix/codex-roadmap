@@ -4,9 +4,9 @@
 
 1. [[prompts/grindr-web-exporter-single-browser-end-to-end-v1|grindr-web-exporter-single-browser-end-to-end-v1]]
 2. [[prompts/eboks-full-inbox-native-batch-export|eboks-full-inbox-native-batch-export]]
-3. [[prompts/fedora-systemd-kuma-hardening-recovery-v1|fedora-systemd-kuma-hardening-recovery-v1]]
-4. [[prompts/fedora-systemd-kuma-runtime-closure-v2|fedora-systemd-kuma-runtime-closure-v2]]
-5. [[prompts/prompt-history-unified-evidence-backfill-runtime-v1|prompt-history-unified-evidence-backfill-runtime-v1]]
+3. [[prompts/prompt-history-unified-evidence-backfill-runtime-v1|prompt-history-unified-evidence-backfill-runtime-v1]]
+4. [[prompts/fedora-systemd-kuma-hardening-recovery-v1|fedora-systemd-kuma-hardening-recovery-v1]]
+5. [[prompts/fedora-systemd-kuma-runtime-closure-v2|fedora-systemd-kuma-runtime-closure-v2]]
 6. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 7. [[prompts/personalhub-soldi-photo-intelligence-and-owned-items-v2|personalhub-soldi-photo-intelligence-and-owned-items-v2]]
 8. [[prompts/personalhub-obsidian-archive-blocker-closure-v5|personalhub-obsidian-archive-blocker-closure-v5]]
