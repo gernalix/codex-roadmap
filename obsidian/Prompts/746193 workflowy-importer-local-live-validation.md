@@ -1,6 +1,6 @@
 ---
 prompt_id: 746193
-status: blocked
+status: completed
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
@@ -8,15 +8,15 @@ tags:
   - project/fedora-workflowy
   - roadmap
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/completed
   - roadmap/project/fedora-workflowy
 ---
 
 # 746193 · Provare davvero l’importatore Workflowy
 
-- **Stato:** blocked
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
-- **Prompt:** [[../../falliti/workflowy-importer-local-live-validation|Apri prompt]]
+- **Prompt:** [[../../completed/workflowy-importer-local-live-validation|Apri prompt]]
 - **Primo lancio:** 2026-09-18T19:11:43Z
 - **Ultimo lancio:** 2026-09-18T19:11:43Z
 - **Ultimo esito:** BLOCKED

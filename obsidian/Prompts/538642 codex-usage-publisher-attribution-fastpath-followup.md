@@ -1,6 +1,6 @@
 ---
 prompt_id: 538642
-status: blocked
+status: completed
 project_id: 8
 model: GPT-5.6 Luna
 reasoning: low
@@ -8,15 +8,15 @@ tags:
   - project/fedora
   - roadmap
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/completed
   - roadmap/project/fedora
 ---
 
 # 538642 · Velocizzare e correggere il salvataggio dei dati Codex
 
-- **Stato:** blocked
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../falliti/codex-usage-publisher-attribution-fastpath-followup|Apri prompt]]
+- **Prompt:** [[../../completed/codex-usage-publisher-attribution-fastpath-followup|Apri prompt]]
 - **Primo lancio:** 2026-09-18T18:37:02Z
 - **Ultimo lancio:** 2026-09-18T18:37:02Z
 - **Ultimo esito:** BLOCKED
