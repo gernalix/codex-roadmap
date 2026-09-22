@@ -1,20 +1,20 @@
 ---
 prompt_id: 515185
-status: pending
+status: cancelled
 project_id: 92
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/cancelled
   - roadmap/project/prompt-infrastructure
 ---
 
 # 515185 · Sbloccare Find ChatGPT tab e completare il primo archivio
 
-- **Stato:** pending
+- **Stato:** cancelled
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
-- **Prompt:** [[../../prompts/chatgpt-exporter-find-tab-runtime-recovery-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/chatgpt-exporter-find-tab-runtime-recovery-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
