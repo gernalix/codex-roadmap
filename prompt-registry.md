@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/522084 personalhub-shared-tags-facets-backlinks-v1\|522084 · Unificare tag, facet e backlink cross-module in PersonalHub]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/613102 personalhub-global-photo-engine-people-legacy-removal-v3\|613102 · Completare motore foto globale e rimuovere pipeline legacy People]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/284653 ccs-desktop-launcher-overlay-combined-closure-v1\|284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/788315 chatgpt-exporter-live-recovery-after-736284-v1\|788315 · Riparare ChatGPTExporter e completare il primo archivio]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
@@ -364,3 +363,4 @@
 | [[obsidian/Prompts/571364 prompt-history-upstream-web-desktop-runtime-v1\|571364 · Attivare estrazione unificata ChatGPT Web + Desktop con upstream OSS]] | completed | — | — | PASS | no | no | — | Prompt infrastructure | GPT-5.5 | medium |
 | [[obsidian/Prompts/943492 thinkpad-firmware-123-luks-tpm-recovery-preflight\|943492 · Verificare recovery LUKS/TPM prima del firmware ThinkPad 1.23]] | completed | 2026-09-22T12:07:10Z | 2026-09-22T12:07:10Z | PASS | sì | no | — | Fedora | GPT-5.6 Terra | low |
 | [[obsidian/Prompts/334210 thinkpad-firmware-123-luks-recovery-followup\|334210 · Chiudere il recovery gate LUKS prima del firmware ThinkPad 1.23]] | completed | 2026-09-22T12:21:34Z | 2026-09-22T12:32:38Z | PASS | sì | no | — | Fedora | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/613102 personalhub-global-photo-engine-people-legacy-removal-v3\|613102 · Completare motore foto globale e rimuovere pipeline legacy People]] | completed | — | — | PASS | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
