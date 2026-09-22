@@ -642,6 +642,36 @@ def add_tag(conn: sqlite3.Connection, prompt_id: str, tag: str) -> None:
     assert_prompt_not_running(conn, prompt_id, "tag")
     conn.execute("INSERT OR IGNORE INTO prompt_tags(prompt_id,tag) VALUES(?,?)", (prompt_id, tag))
 
+def remove_tag(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    tag: str,
+    *,
+    actor: str = "chatgpt",
+    note: str | None = None,
+) -> None:
+    assert_prompt_not_running(conn, prompt_id, "untag")
+    existing = conn.execute(
+        "SELECT 1 FROM prompt_tags WHERE prompt_id=? AND tag=?",
+        (prompt_id, tag),
+    ).fetchone()
+    if not existing:
+        return
+    conn.execute(
+        "DELETE FROM prompt_tags WHERE prompt_id=? AND tag=?",
+        (prompt_id, tag),
+    )
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "prompt_tag_removed",
+            now_utc(),
+            actor,
+            json.dumps({"tag": tag, "note": note}, ensure_ascii=False, sort_keys=True),
+        ),
+    )
+
 def request_terminal(
     conn: sqlite3.Connection,
     prompt_id: str,
@@ -1036,6 +1066,14 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
         )
     elif op=="tag":
         add_tag(conn,str(mutation["prompt_id"]),str(mutation["tag"]))
+    elif op=="untag":
+        remove_tag(
+            conn,
+            str(mutation["prompt_id"]),
+            str(mutation["tag"]),
+            actor=actor,
+            note=mutation.get("note"),
+        )
     elif op=="code_change":
         record_code_change(
             conn,
