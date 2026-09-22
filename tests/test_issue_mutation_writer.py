@@ -49,7 +49,7 @@ class IssueMutationTests(unittest.TestCase):
             )
             self.assertFalse(out["idempotent"])
             self.assertEqual(
-                prompt_text + "\n",
+                prompt_text,
                 (repo / "prompts/test-prompt.md").read_text(encoding="utf-8"),
             )
             conn = roadmap_db.connect(repo, writable=False)
