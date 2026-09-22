@@ -1,18 +1,18 @@
 ---
 prompt_id: 729462
-status: pending
+status: running
 project_id: 92
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/github-autosync-activity-watch-uploader
 ---
 
 # 729462 · Completa il cutover libsecret dei servizi Fedora
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/github-autosync-activity-watch-uploader|github-autosync + activity-watch-uploader]]
 - **Prompt:** [[../../prompts/fedora-libsecret-runtime-cutover|Apri prompt]]
 - **Primo lancio:** —

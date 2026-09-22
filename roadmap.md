@@ -4,9 +4,9 @@
 
 1. [[prompts/chrome-codex-switcher-notes-reboot-persistence-fix-v1|chrome-codex-switcher-notes-reboot-persistence-fix-v1]]
 2. [[prompts/grindr-web-exporter-single-browser-end-to-end-v1|grindr-web-exporter-single-browser-end-to-end-v1]]
-3. [[prompts/workflowy-dashboard-dedupe-live-deploy|workflowy-dashboard-dedupe-live-deploy]]
-4. [[prompts/codex-desktop-roadmap-launcher|codex-desktop-roadmap-launcher]]
-5. [[prompts/fedora-libsecret-runtime-cutover|fedora-libsecret-runtime-cutover]]
+3. [[prompts/fedora-libsecret-runtime-cutover|fedora-libsecret-runtime-cutover]]
+4. [[prompts/workflowy-dashboard-dedupe-live-deploy|workflowy-dashboard-dedupe-live-deploy]]
+5. [[prompts/codex-desktop-roadmap-launcher|codex-desktop-roadmap-launcher]]
 6. [[prompts/post-404936-runtime-validation|post-404936-runtime-validation]]
 7. [[prompts/codex-usage-session-readback-reconcile-v1|codex-usage-session-readback-reconcile-v1]]
 8. [[prompts/prompt-history-unified-evidence-backfill-runtime-v1|prompt-history-unified-evidence-backfill-runtime-v1]]
