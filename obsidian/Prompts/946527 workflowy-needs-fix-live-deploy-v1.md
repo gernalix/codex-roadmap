@@ -15,9 +15,9 @@ tags:
 - **Stato:** pending
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
 - **Prompt:** [[../../prompts/workflowy-needs-fix-live-deploy-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T01:54:41Z
+- **Ultimo lancio:** 2026-09-22T01:54:41Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Codice e test sono già su workflowy-importer/main e CI PASS. Resta solo distrib
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T01:54:41Z | 2026-09-22T01:55:19Z | BLOCKED | 37.965 | gpt-5.6-luna | low | 3 | 35920 |
 
 ## Analisi ChatGPT
 

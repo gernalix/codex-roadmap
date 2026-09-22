@@ -1,23 +1,23 @@
 ---
 prompt_id: 989559
-status: pending
+status: blocked
 project_id: 23
 model: gpt-5.6-terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/blocked
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 989559 · Automatizza Avvia verso Codex Desktop
 
-- **Stato:** pending
+- **Stato:** blocked
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/codex-desktop-roadmap-launcher|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Prompt:** [[../../falliti/codex-desktop-roadmap-launcher|Apri prompt]]
+- **Primo lancio:** 2026-09-22T01:55:13Z
+- **Ultimo lancio:** 2026-09-22T01:55:13Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Quando premi Avvia nella dashboard, apre il prompt direttamente in ChatGPT Deskt
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T01:55:13Z | 2026-09-22T01:55:22Z | BLOCKED | 8.873 | gpt-5.6-terra | medium | 1 | 31618 |
 
 ## Analisi ChatGPT
 
