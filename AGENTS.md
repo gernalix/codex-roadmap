@@ -20,6 +20,37 @@ Instead, submit one immutable `codex-roadmap.mutation.v1` request as a GitHub Is
 
 Terminal Codex results must use `tools/roadmap_result.py` or `tools/roadmap_finish.py`; they already submit through the same writer.
 
+
+## Hard workflow for human requests to add/update the roadmap
+
+When the user says **“metti/aggiungi/aggiorna questo prompt nella roadmap”**, the request is not satisfied by creating a normal GitHub Issue, a `[plan]` Issue, a prose handoff, or a prompt file. Those are explicitly non-canonical.
+
+Use this exact workflow:
+
+1. **Decide whether this is a new materialized prompt or a mutation of an existing PROMPT_ID.**
+   - Existing prompt: do not allocate another ID unless the prompt text/meaning itself changes and therefore requires a revision.
+   - New/revised prompt: allocation is mandatory before the roadmap mutation.
+2. **For a new/revised prompt, allocate PROMPT_ID through the canonical MegaVault allocator.**
+   - When operating remotely from ChatGPT, use the existing MegaVault remote bridge: write an `allocate` request to `gernalix/MegaVault:.github/prompt-id-request.json`.
+   - Wait until `.github/prompt-id-response.json` contains the **same request_id** and `status=allocated`.
+   - Never guess a six-digit ID, reuse an old one, derive one from an Issue number, or proceed while the allocation response is stale/missing.
+3. **Submit the canonical roadmap mutation.**
+   - Create exactly one `codex-roadmap.mutation.v1` Issue named `[roadmap-mutation] <request_key>` using `tools/submit_mutation.py` or an equivalent GitHub API call.
+   - For `register`, include the allocated `prompt_id`, final `prompt_text`, `current_path`, model/reasoning/project metadata and any dependencies/relations in the mutation.
+   - A title beginning with `[plan]` is never a substitute for this step and must not be presented to the user as “added to the roadmap”.
+4. **Wait for the roadmap single writer to apply the mutation.**
+   - Do not claim success merely because the Issue was created.
+   - Verify that the mutation Issue was applied/closed successfully and that the new PROMPT_ID is present in canonical roadmap state/materialization.
+5. **Materialize the allocated PROMPT_ID in MegaVault.**
+   - Send a `materialize` request through `.github/prompt-id-request.json`, pointing `content_url` at the exact writer-materialized `gernalix/codex-roadmap/main/prompts/...md`.
+   - Wait for the matching `.github/prompt-id-response.json` with `status=materialized`.
+6. **Only after steps 1–5 succeed may ChatGPT tell the user that the prompt is in the roadmap.**
+   - If any stage fails or is pending, say exactly which stage is incomplete.
+   - Do not create a parallel `[plan]` Issue as a fallback.
+7. **Clean up process mistakes.** If a non-canonical `[plan]`/handoff Issue was created by mistake for a roadmap request, close it as superseded after the real mutation is queued/applied; do not leave two competing task representations.
+
+For ordinary metadata/state changes to an existing prompt, skip PROMPT_ID allocation/materialization and use only the appropriate `codex-roadmap.mutation.v1` operation through the single writer. Running prompts remain subject to the immutable-field rules below.
+
 ## Operational cockpit
 
 Workflowy is the only human-facing operational cockpit. `roadmap.sqlite` remains canonical. Markdown/Obsidian projections are compatibility/audit output and MUST NOT be used to infer whether a prompt is ready, running, integrating, blocked or done.
