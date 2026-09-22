@@ -336,6 +336,7 @@ class RoadmapDBTests(unittest.TestCase):
                 lambda: db.add_dependency(conn,"123456","654321"),
                 lambda: db.add_relation(conn,"123456","654321","replacement",actor="chatgpt"),
                 lambda: db.add_tag(conn,"123456","x"),
+                lambda: db.remove_tag(conn,"123456","x",actor="chatgpt"),
                 lambda: db.record_analysis(conn,"123456",summary="x"),
             ]
             for action in actions:
