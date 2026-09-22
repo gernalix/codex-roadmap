@@ -5,9 +5,9 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/788315 chatgpt-exporter-live-recovery-after-736284-v1\|788315 · Riparare ChatGPTExporter e completare il primo archivio]] | running | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/522084 personalhub-shared-tags-facets-backlinks-v1\|522084 · Unificare tag, facet e backlink cross-module in PersonalHub]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/284653 ccs-desktop-launcher-overlay-combined-closure-v1\|284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/788315 chatgpt-exporter-live-recovery-after-736284-v1\|788315 · Riparare ChatGPTExporter e completare il primo archivio]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/773323 personalhub-shared-engines-3-8-finalize-v1\|773323 · Chiudere i motori condivisi PH 3-8]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5\|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |

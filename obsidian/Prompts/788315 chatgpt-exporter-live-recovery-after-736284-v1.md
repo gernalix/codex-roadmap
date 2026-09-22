@@ -1,18 +1,18 @@
 ---
 prompt_id: 788315
-status: pending
+status: running
 project_id: 92
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/prompt-infrastructure
 ---
 
 # 788315 · Riparare ChatGPTExporter e completare il primo archivio
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../prompts/chatgpt-exporter-live-recovery-after-736284-v1|Apri prompt]]
 - **Primo lancio:** —
