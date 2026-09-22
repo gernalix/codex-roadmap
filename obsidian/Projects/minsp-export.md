@@ -5,4 +5,4 @@ tags:
 
 # minsp-export
 
-- [[obsidian/Prompts/682741 minsp-export-live-authenticated-coverage|682741 · Min Sundhedsplatform — validazione export completo]] · `running`
+- [[obsidian/Prompts/682741 minsp-export-live-authenticated-coverage|682741 · Min Sundhedsplatform — validazione export completo]] · `blocked`
