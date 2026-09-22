@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/499100 minsp-export-live-authenticated-coverage-recovery|499100 · Min Sundhedsplatform — export completo verificato]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/736284 chatgpt-exporter-live-chrome-first-archive-v1|736284 · Sbloccare ChatGPTExporter e creare il primo archivio]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/571364 prompt-history-upstream-web-desktop-runtime-v1|571364 · Attivare estrazione unificata ChatGPT Web + Desktop con upstream OSS]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/672304 workflowy-waiting-runtime-reconcile-v1|672304 · Riallineare Waiting nel runtime Workflowy]] · `completed` · analizzato=no · fix=—
