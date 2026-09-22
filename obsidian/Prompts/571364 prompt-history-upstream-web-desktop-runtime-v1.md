@@ -1,6 +1,6 @@
 ---
 prompt_id: 571364
-status: pending
+status: running
 project_id: 92
 model: GPT-5.5
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - prompt-history
   - upstream-oss
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/prompt-infrastructure
 ---
 
 # 571364 · Attivare estrazione unificata ChatGPT Web + Desktop con upstream OSS
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../prompts/prompt-history-upstream-web-desktop-runtime-v1|Apri prompt]]
 - **Primo lancio:** —
