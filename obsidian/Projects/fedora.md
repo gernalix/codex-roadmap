@@ -5,8 +5,8 @@ tags:
 
 # Fedora
 
+- [[obsidian/Prompts/257387 fedora-context-index-runtime-activation|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] · `running`
 - [[obsidian/Prompts/748203 codex-usage-session-readback-reconcile-v1|748203 · Riconciliare il session readback del recovery Codex]] · `pending`
-- [[obsidian/Prompts/257387 fedora-context-index-runtime-activation|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] · `pending`
 - [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] · `pending`
 - [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] · `pending`
 - [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill|813383 · Attivare il tracciamento SQLite della roadmap]] · `completed`
