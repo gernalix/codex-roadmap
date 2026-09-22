@@ -1,18 +1,18 @@
 ---
 prompt_id: 403496
-status: blocked
+status: superseded
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 403496 · Recuperare il launcher Desktop dopo il branch mismatch roadmap
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../falliti/codex-desktop-launcher-roadmap-branch-recovery-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-22T02:37:19Z

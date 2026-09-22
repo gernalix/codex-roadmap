@@ -1,18 +1,18 @@
 ---
 prompt_id: 989559
-status: blocked
+status: superseded
 project_id: 23
 model: gpt-5.6-terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 989559 · Automatizza Avvia verso Codex Desktop
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../falliti/codex-desktop-roadmap-launcher|Apri prompt]]
 - **Primo lancio:** 2026-09-22T01:55:13Z

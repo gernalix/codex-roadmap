@@ -1,6 +1,6 @@
 ---
 prompt_id: 682741
-status: blocked
+status: superseded
 project_id: —
 model: GPT-5.6 Sol
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - manual-auth
   - minsp-export
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/minsp-export
 ---
 
 # 682741 · Min Sundhedsplatform — validazione export completo
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/minsp-export|minsp-export]]
 - **Prompt:** [[../../falliti/minsp-export-live-authenticated-coverage|Apri prompt]]
 - **Primo lancio:** 2026-09-22T02:38:07Z

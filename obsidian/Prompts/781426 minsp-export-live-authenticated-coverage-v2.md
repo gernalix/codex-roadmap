@@ -1,21 +1,21 @@
 ---
 prompt_id: 781426
-status: pending
+status: superseded
 project_id: —
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - manual-prerequisite:login-mitid-minsp
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/minsp-export
 ---
 
 # 781426 · Completare export Min Sundhedsplatform dopo bootstrap e MitID
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/minsp-export|minsp-export]]
-- **Prompt:** [[../../prompts/minsp-export-live-authenticated-coverage-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/minsp-export-live-authenticated-coverage-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

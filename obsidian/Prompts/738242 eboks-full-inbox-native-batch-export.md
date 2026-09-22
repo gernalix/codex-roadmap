@@ -1,6 +1,6 @@
 ---
 prompt_id: 738242
-status: blocked
+status: superseded
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - eboks
   - full-export
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/e-boks-exploration
 ---
 
 # 738242 · Scaricare tutta la posta e-Boks via Browser Use
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/e-boks-exploration|e-Boks exploration]]
 - **Prompt:** [[../../falliti/eboks-full-inbox-native-batch-export|Apri prompt]]
 - **Primo lancio:** 2026-09-22T01:38:01Z

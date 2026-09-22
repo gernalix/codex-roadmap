@@ -1,14 +1,8 @@
 # Da controllare
 
-- [[obsidian/Prompts/403496 codex-desktop-launcher-roadmap-branch-recovery-v1|403496 · Recuperare il launcher Desktop dopo il branch mismatch roadmap]] · `blocked` · analizzato=sì · fix=764529
-- [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export|738242 · Scaricare tutta la posta e-Boks via Browser Use]] · `blocked` · analizzato=sì · fix=582946
-- [[obsidian/Prompts/682741 minsp-export-live-authenticated-coverage|682741 · Min Sundhedsplatform — validazione export completo]] · `blocked` · analizzato=sì · fix=327684
 - [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2|815274 · Chiudere il residuo Kuma dei servizi Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/413647 prompt-history-runtime-pass-reconcile-v1|413647 · Riconciliare il PASS runtime di prompt-history]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/918643 fedora-systemd-kuma-hardening-recovery-v1|918643 · Completa hardening systemd e Kuma]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1|925731 · Attivare storico unificato ChatGPT e Codex]] · `blocked` · analizzato=sì · fix=413647
-- [[obsidian/Prompts/946527 workflowy-needs-fix-live-deploy-v1|946527 · Distribuire la pulizia Needs fix di Workflowy]] · `blocked` · analizzato=sì · fix=946821
-- [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher|989559 · Automatizza Avvia verso Codex Desktop]] · `blocked` · analizzato=sì · fix=403496
 - [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] · `failed` · analizzato=sì · fix=815274
 - [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1|472615 · Ripristinare le note dopo reboot]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] · `completed` · analizzato=no · fix=—
@@ -17,7 +11,6 @@
 - [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover|729462 · Completa il cutover libsecret dei servizi Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/748203 codex-usage-session-readback-reconcile-v1|748203 · Riconciliare il session readback del recovery Codex]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/684193 prompt-684193|684193 · Historical prompt 684193]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/515955 grindr-web-exporter-recaptcha-normal-chrome-login-v1|515955 · Fix login reCAPTCHA Grindr exporter]] · `blocked` · analizzato=sì · fix=—

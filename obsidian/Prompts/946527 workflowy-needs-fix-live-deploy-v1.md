@@ -1,18 +1,18 @@
 ---
 prompt_id: 946527
-status: blocked
+status: superseded
 project_id: —
 model: GPT-5.5
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/fedora-workflowy
 ---
 
 # 946527 · Distribuire la pulizia Needs fix di Workflowy
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
 - **Prompt:** [[../../falliti/workflowy-needs-fix-live-deploy-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-22T01:54:41Z

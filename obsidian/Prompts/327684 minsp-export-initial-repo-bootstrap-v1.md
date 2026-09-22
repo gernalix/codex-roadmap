@@ -1,21 +1,21 @@
 ---
 prompt_id: 327684
-status: pending
+status: superseded
 project_id: —
 model: GPT-5.5
 reasoning: medium
 tags:
   - manual-prerequisite:fallback-only-if-499100-blocked
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/minsp-export
 ---
 
 # 327684 · Creare la prima baseline Git di minsp-export
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/minsp-export|minsp-export]]
-- **Prompt:** [[../../prompts/minsp-export-initial-repo-bootstrap-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/minsp-export-initial-repo-bootstrap-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

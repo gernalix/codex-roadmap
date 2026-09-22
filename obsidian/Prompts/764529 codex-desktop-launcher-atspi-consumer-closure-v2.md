@@ -30,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-Il problema di branch è già risolto. Questo task aspetta che ChatGPT/Codex Desktop sia aperto, poi completa l'automazione che sceglie progetto, modello e reasoning e inserisce il prompt senza inviarlo.
+È il solo task attivo rimasto per il launcher Desktop. Aspetta che ChatGPT/Codex Desktop sia aperto, poi completa la selezione automatica di progetto, modello e reasoning e inserisce il prompt senza inviarlo.
 
 ## Esecuzioni
 

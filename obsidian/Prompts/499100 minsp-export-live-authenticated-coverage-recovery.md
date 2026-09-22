@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Retry autonomo dopo il bootstrap che non aveva un project_id/worktree canonico; nessun accesso sanitario eseguito.
+È il recovery canonico già in esecuzione per minsp-export con PROJECT_ID=101. Continua il goal completo nel worktree assegnato; nessun altro bootstrap o follow-up parallelo deve essere lanciato.
 
 ## Esecuzioni
 

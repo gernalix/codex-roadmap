@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-La logica della dashboard è già corretta nel codice. Ora che ogni problema aperto ha un fix esplicito, questo task ridistribuisce il runtime e controlla che Needs fix contenga solo veri problemi ancora senza soluzione.
+È il solo task attivo rimasto per la pulizia di Needs fix: ridistribuisce il runtime Workflowy e controlla che la sezione contenga soltanto problemi realmente ancora aperti.
 
 ## Esecuzioni
 

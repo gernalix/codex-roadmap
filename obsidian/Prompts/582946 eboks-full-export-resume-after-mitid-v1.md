@@ -30,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-L'export è già impostato e sa ripartire da dove si era fermato. Questo task aspetta soltanto che tu completi il login MitID, poi continua senza riscaricare i batch già salvati.
+È il solo task attivo rimasto per e-Boks. Dopo un login MitID manuale riprende dal progress.json già esistente senza riscaricare i batch completati.
 
 ## Esecuzioni
 
