@@ -83,7 +83,7 @@ def materialize_registered_prompts(repo: Path, document: dict[str, Any]) -> int:
             raise IssueMutationError("register_requires_prompt_text_and_current_path")
         target = _safe_prompt_path(repo, current_path)
         target.parent.mkdir(parents=True, exist_ok=True)
-        normalized = prompt_text if prompt_text.endswith("\n") else prompt_text + "\n"
+        normalized = prompt_text
         if target.exists():
             existing = target.read_text(encoding="utf-8")
             if existing != normalized:
