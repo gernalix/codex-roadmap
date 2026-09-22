@@ -20,8 +20,8 @@ tags:
 - **Progetto:** [[../Projects/e-boks-exploration|e-Boks exploration]]
 - **Prompt:** [[../../completed/eboks-native-bulk-download-ondemand-probe-v2|Apri prompt]]
 - **Primo lancio:** 2026-09-22T00:57:15Z
-- **Ultimo lancio:** 2026-09-22T00:57:15Z
-- **Ultimo esito:** BLOCKED
+- **Ultimo lancio:** 2026-09-22T01:08:44Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -40,6 +40,7 @@ La probe MV3 persistente è stata isolata come causa del blank screen post-MitID
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-22T00:57:15Z | 2026-09-22T00:58:56Z | BLOCKED | 100.978 | gpt-5.6-terra | medium | 7 | 84902 |
+| 2026-09-22T01:08:44Z | 2026-09-22T01:12:06Z | PASS | 201.386 | gpt-5.6-terra | medium | 10 | 137868 |
 
 ## Analisi ChatGPT
 
