@@ -68,14 +68,7 @@ jobs:
               fi
             done
 
-            python3 - <<'PY'
-            from pathlib import Path
-            from roadmap_db import reconcile_prompt_file_locations, render
-
-            repo = Path(".")
-            reconcile_prompt_file_locations(repo)
-            render(repo)
-            PY
+            PYTHONPATH=tools python3 -c 'from pathlib import Path; from roadmap_db import reconcile_prompt_file_locations, render; repo=Path("."); reconcile_prompt_file_locations(repo); render(repo)'
             python3 tools/roadmap_db.py --repo . verify
 
             if [ -z "$(git status --porcelain)" ]; then
