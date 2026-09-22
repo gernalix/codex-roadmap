@@ -1,20 +1,20 @@
 ---
 prompt_id: 572554
-status: running
+status: blocked
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 572554 · Completare launcher e overlay Codex Desktop con progetto corretto
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/ccs-desktop-launcher-overlay-recovery-v3|Apri prompt]]
+- **Prompt:** [[../../falliti/ccs-desktop-launcher-overlay-recovery-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
