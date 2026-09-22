@@ -206,5 +206,17 @@ CREATE VIEW v_attention AS
 SELECT s.*
 FROM v_prompt_summary s
 WHERE s.status IN ('failed','blocked','unknown')
-   OR (s.status='completed' AND s.analyzed=0)
-   OR (s.status IN ('failed','blocked') AND s.analyzed=1 AND s.fix_prompt_id IS NULL);
+  AND NOT EXISTS (
+    SELECT 1
+    FROM prompts fix
+    WHERE fix.prompt_id=s.fix_prompt_id
+      AND fix.status='completed'
+  )
+  AND NOT EXISTS (
+    SELECT 1
+    FROM prompt_relations r
+    JOIN prompts successor ON successor.prompt_id=r.to_prompt_id
+    WHERE r.from_prompt_id=s.prompt_id
+      AND r.relation_type IN ('fix','replacement','merge','resolved_by')
+      AND successor.status='completed'
+  );
