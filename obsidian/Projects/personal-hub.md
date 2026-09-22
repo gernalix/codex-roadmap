@@ -5,7 +5,7 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] · `pending`
+- [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] · `running`
 - [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] · `pending`
 - [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `pending`
 - [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
