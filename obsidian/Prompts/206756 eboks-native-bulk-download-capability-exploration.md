@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** [[482761 eboks-native-bulk-download-browser-control-fix-v1|482761]]
+- **Figli/follow-up:** [[413258 eboks-native-bulk-download-ondemand-probe-v2|413258]], [[482761 eboks-native-bulk-download-browser-control-fix-v1|482761]]
 - **Chat Codex:** Nuova chat Codex; solo browser/runtime locale, nessuna implementazione repo
 
 ## Spiegazione

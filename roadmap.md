@@ -10,7 +10,7 @@
 6. [[prompts/codex-desktop-roadmap-launcher|codex-desktop-roadmap-launcher]]
 7. [[prompts/post-404936-runtime-validation|post-404936-runtime-validation]]
 8. [[prompts/prompt-history-unified-evidence-backfill-runtime-v1|prompt-history-unified-evidence-backfill-runtime-v1]]
-9. [[prompts/eboks-native-bulk-download-browser-control-fix-v1|eboks-native-bulk-download-browser-control-fix-v1]]
+9. [[prompts/eboks-native-bulk-download-ondemand-probe-v2|eboks-native-bulk-download-ondemand-probe-v2]]
 10. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 11. [[prompts/fedora-systemd-services-kuma-resilience|fedora-systemd-services-kuma-resilience]]
 12. [[prompts/personalhub-soldi-photo-intelligence-and-owned-items-v2|personalhub-soldi-photo-intelligence-and-owned-items-v2]]

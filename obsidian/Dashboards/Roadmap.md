@@ -6,7 +6,7 @@
 
 - [[obsidian/Prompts/936284 megavault-local-repo-registration-fedora-external-updater-v1|936284 · Aggiungere il contratto MegaVault per repo local-only e chiudere 417592]]
 - [[obsidian/Prompts/621471 post-404936-runtime-validation|621471 · Distribuire e validare l'hardening post-404936]]
-- [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]]
+- [[obsidian/Prompts/413258 eboks-native-bulk-download-ondemand-probe-v2|413258 · Esplorare e-Boks con probe on-demand non invasiva]]
 - [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
 
 ## In esecuzione

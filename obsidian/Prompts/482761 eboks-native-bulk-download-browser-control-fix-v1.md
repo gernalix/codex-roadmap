@@ -1,6 +1,6 @@
 ---
 prompt_id: 482761
-status: pending
+status: superseded
 project_id: 23
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - eboks
   - fix
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/e-boks-exploration
 ---
 
 # 482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/e-boks-exploration|e-Boks exploration]]
-- **Prompt:** [[../../prompts/eboks-native-bulk-download-browser-control-fix-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/eboks-native-bulk-download-browser-control-fix-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -25,9 +25,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[218695 eboks-scraper-bootstrap-public-repo-live-adapter|218695]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[206756 eboks-native-bulk-download-capability-exploration|206756]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[413258 eboks-native-bulk-download-ondemand-probe-v2|413258]]
 - **Chat Codex:** Stessa chat Codex di 206756; correzione diretta e scope browser-only
 
 ## Spiegazione

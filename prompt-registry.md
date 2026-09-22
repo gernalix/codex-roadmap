@@ -12,7 +12,7 @@
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | pending | — | — | — | sì | sì | — | Prompt infrastructure | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1\|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/413258 eboks-native-bulk-download-ondemand-probe-v2\|413258 · Esplorare e-Boks con probe on-demand non invasiva]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience\|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2\|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
@@ -98,6 +98,7 @@
 | [[obsidian/Prompts/315972 personalhub-salute-ui-hub-obsidian-v2\|315972 · Rendere Salute visibile e collegata al resto dell’app]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/811925 personalhub-datasette-lite-offline-runtime-v3\|811925 · Completare l’esploratore dati offline]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install\|652361 · LivingGaul hourly systemd local install]] | completed | 2026-09-19T11:21:12Z | 2026-09-19T11:21:12Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1\|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]] | superseded | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/671904 personalhub-obsidian-archive-incremental\|671904 · Aggiornare Obsidian automaticamente]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/946238 personalhub-obsidian-archive-foundation-v2\|946238 · Prima versione dell’archivio Obsidian]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/334679 personalhub-play-release-local-validation-v3\|334679 · Controllo finale locale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
