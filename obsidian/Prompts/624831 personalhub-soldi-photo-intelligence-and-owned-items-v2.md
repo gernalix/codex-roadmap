@@ -1,6 +1,6 @@
 ---
 prompt_id: 624831
-status: running
+status: failed
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
@@ -13,15 +13,15 @@ tags:
   - soldi
   - visual-search
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/failed
   - roadmap/project/personal-hub
 ---
 
 # 624831 · Completare intelligence foto e oggetti posseduti in Soldi
 
-- **Stato:** running
+- **Stato:** failed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-soldi-photo-intelligence-and-owned-items-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-soldi-photo-intelligence-and-owned-items-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

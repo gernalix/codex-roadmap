@@ -5,7 +5,6 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] · `running`
 - [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] · `pending`
 - [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `pending`
 - [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
@@ -25,6 +24,7 @@ tags:
 - [[obsidian/Prompts/223103 personalhub-shared-alerts-places-tags-integration-v3|223103 · Chiudere e integrare tag e alert di Places]] · `superseded`
 - [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] · `superseded`
 - [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `completed`
+- [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] · `failed`
 - [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3|830867 · Date e ore coerenti ovunque]] · `superseded`
 - [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `completed`
 - [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3|790233 · Portare Salute nel database canonico]] · `superseded`
