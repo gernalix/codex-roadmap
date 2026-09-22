@@ -15,9 +15,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/minsp-export|minsp-export]]
 - **Prompt:** [[../../prompts/minsp-export-live-authenticated-coverage-recovery|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T03:08:30Z
+- **Ultimo lancio:** 2026-09-22T03:08:30Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T03:08:30Z | 2026-09-22T03:10:56Z | UNKNOWN | 146.311 | gpt-5.6-sol | medium | 11 | 152277 |
 
 ## Analisi ChatGPT
 
