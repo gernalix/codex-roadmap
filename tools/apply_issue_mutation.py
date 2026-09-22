@@ -94,7 +94,12 @@ def materialize_registered_prompts(repo: Path, document: dict[str, Any]) -> int:
     return written
 
 
-def apply_issue(\n    repo: Path,\n    event_path: Path,\n    *,\n    render_views: bool = True,\n) -> dict[str, Any]:
+def apply_issue(
+    repo: Path,
+    event_path: Path,
+    *,
+    render_views: bool = True,
+) -> dict[str, Any]:
     repo = Path(repo).resolve()
     issue_number, request_key, actor, document = parse_event(event_path)
     payload_sha256 = hashlib.sha256(canonical_bytes(document)).hexdigest()
