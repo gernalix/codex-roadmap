@@ -360,6 +360,51 @@ def reconcile_terminal_requests(
     return reconciled
 
 
+def set_prompt_text(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    prompt_text: str,
+    *,
+    actor: str = "chatgpt",
+    note: str | None = None,
+) -> None:
+    row = assert_prompt_not_running(conn, prompt_id, "prompt_text")
+    old = canonical_prompt_text(conn, prompt_id)
+    if old == prompt_text:
+        return
+    ts = now_utc()
+    old_sha = row["materialization_sha256"]
+    new_sha = materialization_hash(prompt_text)
+    conn.execute(
+        """INSERT INTO prompt_materializations(prompt_id,body,sha256,created_at,actor)
+           VALUES(?,?,?,?,?)
+           ON CONFLICT(prompt_id) DO UPDATE SET
+             body=excluded.body,
+             sha256=excluded.sha256,
+             created_at=excluded.created_at,
+             actor=excluded.actor""",
+        (prompt_id, prompt_text, new_sha, ts, actor),
+    )
+    conn.execute(
+        "UPDATE prompts SET materialization_sha256=?,updated_at=? WHERE prompt_id=?",
+        (new_sha, ts, prompt_id),
+    )
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "prompt_text_updated",
+            ts,
+            actor,
+            json.dumps(
+                {"old_sha256": old_sha, "new_sha256": new_sha, "note": note},
+                ensure_ascii=False,
+                sort_keys=True,
+            ),
+        ),
+    )
+
+
 def set_model(
     conn: sqlite3.Connection,
     prompt_id: str,
@@ -933,6 +978,14 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
             bottlenecks_found=mutation.get("bottlenecks_found"),
             summary=mutation.get("summary"), fix_prompt_id=mutation.get("fix_prompt_id"),
             source_ref=mutation.get("source_ref"),
+        )
+    elif op=="prompt_text":
+        set_prompt_text(
+            conn,
+            str(mutation["prompt_id"]),
+            str(mutation["prompt_text"]),
+            actor=actor,
+            note=mutation.get("note"),
         )
     elif op=="model":
         set_model(
