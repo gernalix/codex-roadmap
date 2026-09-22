@@ -185,6 +185,10 @@ class RoadmapDBTests(unittest.TestCase):
                 conn.execute("select count(*) from audit_events where event_type='prompt_text_updated'").fetchone()[0],
             )
             conn.close()
+            (repo/"prompts").mkdir(exist_ok=True)
+            (repo/"prompts/one.md").write_text(original,encoding="utf-8")
+            db.render(repo)
+            self.assertEqual(updated,(repo/"prompts/one.md").read_text(encoding="utf-8"))
 
     def test_model_mutation_updates_only_model(self):
         with tempfile.TemporaryDirectory() as tmp:
