@@ -1,18 +1,18 @@
 ---
 prompt_id: 125435
-status: pending
+status: running
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 125435 · Verificare overlay Codex davvero separati per chat
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../prompts/ccs-codex-per-thread-overlay-live-validation-v1|Apri prompt]]
 - **Primo lancio:** —
