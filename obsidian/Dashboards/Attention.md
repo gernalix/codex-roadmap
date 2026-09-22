@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/571364 prompt-history-upstream-web-desktop-runtime-v1|571364 · Attivare estrazione unificata ChatGPT Web + Desktop con upstream OSS]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/672304 workflowy-waiting-runtime-reconcile-v1|672304 · Riallineare Waiting nel runtime Workflowy]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration|206756 · Verificare il download batch nativo di e-Boks]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2|815274 · Chiudere il residuo Kuma dei servizi Fedora]] · `completed` · analizzato=no · fix=—
