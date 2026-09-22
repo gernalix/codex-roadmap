@@ -94,7 +94,7 @@ def materialize_registered_prompts(repo: Path, document: dict[str, Any]) -> int:
     return written
 
 
-def apply_issue(repo: Path, event_path: Path) -> dict[str, Any]:
+def apply_issue(\n    repo: Path,\n    event_path: Path,\n    *,\n    render_views: bool = True,\n) -> dict[str, Any]:
     repo = Path(repo).resolve()
     issue_number, request_key, actor, document = parse_event(event_path)
     payload_sha256 = hashlib.sha256(canonical_bytes(document)).hexdigest()
@@ -149,8 +149,9 @@ def apply_issue(repo: Path, event_path: Path) -> dict[str, Any]:
     # Prompt files are part of the writer-owned materialization, not client commits.
     # On an idempotent rerun this also repairs a missing file before re-rendering.
     materialized = materialize_registered_prompts(repo, document)
-    reconcile_prompt_file_locations(repo)
-    render(repo)
+    if render_views:
+        reconcile_prompt_file_locations(repo)
+        render(repo)
     return {
         "status": "ok",
         "issue_number": issue_number,
@@ -159,6 +160,7 @@ def apply_issue(repo: Path, event_path: Path) -> dict[str, Any]:
         "materialized_prompts": materialized,
         "idempotent": idempotent,
         "reconciled_terminals": reconciled_terminals,
+        "rendered_views": render_views,
     }
 
 
@@ -168,9 +170,18 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--repo", default=".")
     parser.add_argument("--event", type=Path, required=True)
+    parser.add_argument(
+        "--defer-render",
+        action="store_true",
+        help="Apply DB/file mutation now and render generated views once at the end of the writer batch.",
+    )
     args = parser.parse_args(argv)
     try:
-        result = apply_issue(Path(args.repo), args.event)
+        result = apply_issue(
+            Path(args.repo),
+            args.event,
+            render_views=not args.defer_render,
+        )
     except (IssueMutationError, OSError, ValueError) as exc:
         print(json.dumps({"status": "blocked", "error": str(exc)}, sort_keys=True))
         return 2
