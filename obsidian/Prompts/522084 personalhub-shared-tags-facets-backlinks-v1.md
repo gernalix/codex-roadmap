@@ -33,7 +33,7 @@ tags:
 
 ## Spiegazione
 
-Unifica il motore dei tag di PersonalHub, separa i tag Timer di Now, Events e Since when, e completa facet e backlink tra People, Places, Substances e Soldi senza perdere dati.
+Il lavoro del ramo è finito, ma dopo l’ingresso di 613102 GitHub non riesce più a unire automaticamente la PR #34. Va riconciliato task/522084 con il main attuale e poi lasciato all’integratore completare il merge.
 
 ## Esecuzioni
 
