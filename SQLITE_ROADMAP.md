@@ -94,6 +94,7 @@ Operazioni supportate: `analysis`, `code_change`, `model`, `explanation`, `statu
 - `obsidian/Prompts/`: una nota per PROMPT_ID;
 - `obsidian/Projects/`: viste per progetto;
 - `obsidian/Dashboards/`: task lanciabili e task che richiedono attenzione.
+- `obsidian/Dashboards/Attention.md` mostra solo eccezioni ancora azionabili: non include PASS ordinari, stub storici non contestualizzati o failure già risolti da un successore completato.
 
 Le note Obsidian usano wikilink, backlink e tag per stato/progetto. Le relazioni sono quindi navigabili in entrambe le direzioni.
 
