@@ -18,13 +18,13 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
-- **Fix:** —
+- **Fix:** 572554
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[572554 ccs-desktop-launcher-overlay-recovery-v3|572554]]
 - **Chat Codex:** Continua preferibilmente nella stessa chat Codex di 284653/403496; riusa tutta l'evidenza AT-SPI già raccolta.
 
 ## Spiegazione
@@ -39,7 +39,7 @@ Il Desktop ora è disponibile: completa il launcher automatico e verifica dal vi
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T23:56:55Z · colli di bottiglia: sì · fix: 572554 · 613408 si è fermato prima di qualsiasi modifica perché PROJECT_ID=23 risolve MegaVault. Il project_id canonico verificato per gernalix/chrome-codex-switcher / Facilitatori di prompt è 96; il recovery 572554 corregge solo questo metadata e riusa tutta l'evidenza Desktop/AT-SPI.
 
 ## Modifiche di codice ChatGPT
 

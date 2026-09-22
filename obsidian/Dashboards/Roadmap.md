@@ -4,7 +4,7 @@
 
 ## Lanciabili adesso
 
-- Nessuno.
+- [[obsidian/Prompts/572554 ccs-desktop-launcher-overlay-recovery-v3|572554 · Completare launcher e overlay Codex Desktop con progetto corretto]]
 
 ## In esecuzione
 
