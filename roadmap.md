@@ -13,3 +13,4 @@
 9. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 10. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 11. [[prompts/ccs-desktop-launcher-overlay-combined-closure-v1|ccs-desktop-launcher-overlay-combined-closure-v1]]
+12. [[prompts/thinkpad-firmware-123-luks-recovery-followup|thinkpad-firmware-123-luks-recovery-followup]]

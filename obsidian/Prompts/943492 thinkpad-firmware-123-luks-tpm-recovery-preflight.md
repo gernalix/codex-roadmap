@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[334210 thinkpad-firmware-123-luks-recovery-followup|334210]]
 - **Chat Codex:** Nuova chat Codex; preflight locale Fedora, nessuna installazione firmware.
 
 ## Spiegazione

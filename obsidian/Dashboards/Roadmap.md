@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
+- [[obsidian/Prompts/334210 thinkpad-firmware-123-luks-recovery-followup|334210 · Chiudere il recovery gate LUKS prima del firmware ThinkPad 1.23]]
 
 ## In esecuzione
 
