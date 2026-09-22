@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1\|472615 · Ripristinare le note dopo reboot]] | running | 2026-09-21T23:49:07Z | 2026-09-22T00:00:14Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | running | — | — | — | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/257387 fedora-context-index-runtime-activation\|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] | running | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1\|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] | running | — | — | — | no | no | — | Fedora | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
@@ -73,6 +72,7 @@
 | [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3\|830867 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | completed | — | — | PASS | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure\|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] | unknown | 2026-09-19T15:53:48Z | 2026-09-19T17:52:59Z | UNKNOWN | no | no | — | chrome-codex-switcher | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | completed | — | — | PASS | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/527184 datasette5-personalhub-explorer-security-deploy\|527184 · Versione online dell’esploratore dati PersonalHub]] | superseded | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/330522 workflowy-automation-local-activation\|330522 · Attivare le automazioni locali di Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.5 | low |
 | [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3\|790233 · Portare Salute nel database canonico]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
