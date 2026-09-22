@@ -1,18 +1,18 @@
 ---
 prompt_id: 403496
-status: pending
+status: running
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 403496 · Recuperare il launcher Desktop dopo il branch mismatch roadmap
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../prompts/codex-desktop-launcher-roadmap-branch-recovery-v1|Apri prompt]]
 - **Primo lancio:** —
