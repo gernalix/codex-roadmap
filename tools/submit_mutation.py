@@ -105,23 +105,39 @@ def submit_document(
     if lookup_existing:
         existing = _matching_issues(repository, title)
         if existing:
-            for issue in existing:
+            # A closed/not_planned Issue is an explicit writer rejection: the
+            # workflow did not apply the mutation and therefore did not create a
+            # receipt.  Keep that Issue as durable audit history, but do not let
+            # it reserve the deterministic request key forever.  A later valid
+            # execution may safely submit the same key again; the DB receipt is
+            # still the authoritative idempotency boundary.
+            authoritative = [
+                issue
+                for issue in existing
+                if not (
+                    str(issue.get("state") or "").upper() == "CLOSED"
+                    and str(issue.get("state_reason") or "").lower() == "not_planned"
+                )
+            ]
+            for issue in authoritative:
                 try:
                     existing_doc = json.loads(str(issue.get("body") or ""))
                 except json.JSONDecodeError as exc:
                     raise MutationSubmitError(f"request_key_conflict:{request_key}:invalid_body") from exc
                 if _canonical_bytes(existing_doc) != _canonical_bytes(document):
                     raise MutationSubmitError(f"request_key_conflict:{request_key}")
-            # Duplicate identical Issues are harmless: the DB receipt makes application
-            # idempotent. Return the oldest canonical issue for stable reporting.
-            issue = sorted(existing, key=lambda row: int(row["number"]))[0]
-            state = "applied" if str(issue.get("state")).upper() == "CLOSED" else "pending"
-            return {
-                "submission": state,
-                "request_key": request_key,
-                "issue_number": str(issue["number"]),
-                "issue_url": str(issue.get("url") or ""),
-            }
+            if authoritative:
+                # Duplicate identical Issues are harmless: the DB receipt makes
+                # application idempotent. Return the oldest canonical issue for
+                # stable reporting.
+                issue = sorted(authoritative, key=lambda row: int(row["number"]))[0]
+                state = "applied" if str(issue.get("state")).upper() == "CLOSED" else "pending"
+                return {
+                    "submission": state,
+                    "request_key": request_key,
+                    "issue_number": str(issue["number"]),
+                    "issue_url": str(issue.get("url") or ""),
+                }
 
     proc = _gh(
         "api",
