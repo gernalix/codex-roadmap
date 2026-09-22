@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1\|472615 · Ripristinare le note dopo reboot]] | running | 2026-09-21T23:49:07Z | 2026-09-22T00:00:14Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/413258 eboks-native-bulk-download-ondemand-probe-v2\|413258 · Esplorare e-Boks con probe on-demand non invasiva]] | running | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1\|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] | running | — | — | — | no | no | — | Fedora | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.6 Luna | low |
@@ -99,6 +98,7 @@
 | [[obsidian/Prompts/811925 personalhub-datasette-lite-offline-runtime-v3\|811925 · Completare l’esploratore dati offline]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install\|652361 · LivingGaul hourly systemd local install]] | completed | 2026-09-19T11:21:12Z | 2026-09-19T11:21:12Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1\|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]] | superseded | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/413258 eboks-native-bulk-download-ondemand-probe-v2\|413258 · Esplorare e-Boks con probe on-demand non invasiva]] | blocked | — | — | BLOCKED | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/671904 personalhub-obsidian-archive-incremental\|671904 · Aggiornare Obsidian automaticamente]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/946238 personalhub-obsidian-archive-foundation-v2\|946238 · Prima versione dell’archivio Obsidian]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/334679 personalhub-play-release-local-validation-v3\|334679 · Controllo finale locale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |

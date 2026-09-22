@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/413258 eboks-native-bulk-download-ondemand-probe-v2|413258 · Esplorare e-Boks con probe on-demand non invasiva]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/936284 megavault-local-repo-registration-fedora-external-updater-v1|936284 · Aggiungere il contratto MegaVault per repo local-only e chiudere 417592]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/257387 fedora-context-index-runtime-activation|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover|729462 · Completa il cutover libsecret dei servizi Fedora]] · `completed` · analizzato=no · fix=—

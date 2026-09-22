@@ -1,6 +1,6 @@
 ---
 prompt_id: 413258
-status: running
+status: blocked
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - fix
   - on-demand-probe
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/e-boks-exploration
 ---
 
 # 413258 · Esplorare e-Boks con probe on-demand non invasiva
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/e-boks-exploration|e-Boks exploration]]
-- **Prompt:** [[../../prompts/eboks-native-bulk-download-ondemand-probe-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/eboks-native-bulk-download-ondemand-probe-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
