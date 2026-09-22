@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1\|472615 · Ripristinare le note dopo reboot]] | running | 2026-09-21T23:49:07Z | 2026-09-22T00:00:14Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1\|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] | running | — | — | — | no | no | — | Fedora | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | pending | — | — | — | sì | sì | — | Prompt infrastructure | GPT-5.6 Terra | medium |
@@ -106,6 +105,7 @@
 | [[obsidian/Prompts/845312 personalhub-obsidian-archive-projections\|845312 · Completare Obsidian per tutti i moduli]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/528163 personalhub-obsidian-archive-incremental-v2\|528163 · Aggiornare Obsidian automaticamente]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/357862 logseq-updates-pat-safety-closure-v2\|357862 · Chiusura sicurezza e attivazione updater Logseq]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1\|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] | completed | — | — | PASS | no | no | — | Fedora | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/672418 personalhub-git-history-data-sync-validation\|672418 · Cronologia, backup e ripristino dei dati PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/684930 personalhub-obsidian-archive-projections-v2\|684930 · Completare Obsidian per tutti i moduli]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/526713 fedora-runtime-validation-v2\|526713 · Ultimo controllo del monitoraggio Fedora]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | medium |

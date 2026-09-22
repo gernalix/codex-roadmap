@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/413258 eboks-native-bulk-download-ondemand-probe-v2|413258 · Esplorare e-Boks con probe on-demand non invasiva]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/936284 megavault-local-repo-registration-fedora-external-updater-v1|936284 · Aggiungere il contratto MegaVault per repo local-only e chiudere 417592]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/257387 fedora-context-index-runtime-activation|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] · `completed` · analizzato=no · fix=—

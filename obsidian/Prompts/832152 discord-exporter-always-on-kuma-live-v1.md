@@ -1,6 +1,6 @@
 ---
 prompt_id: 832152
-status: running
+status: completed
 project_id: 8
 model: GPT-5.6 Sol
 reasoning: medium
@@ -11,15 +11,15 @@ tags:
   - systemd
   - uptime-kuma
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/fedora
 ---
 
 # 832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/discord-exporter-always-on-kuma-live-v1|Apri prompt]]
+- **Prompt:** [[../../completed/discord-exporter-always-on-kuma-live-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
