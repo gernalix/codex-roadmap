@@ -22,7 +22,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -43,7 +43,7 @@ La probe MV3 persistente è stata isolata come causa del blank screen post-MitID
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T01:01:14Z · colli di bottiglia: sì · fix: — · {"blocker":"Load `<path>`; with Inbox rendered, click its toolbar action once","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"413258","report_ref":"codex-usage:54bdee8a75878d8c8872ee17:3fa9393defa67651","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
