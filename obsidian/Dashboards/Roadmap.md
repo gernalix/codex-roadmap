@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
+- [[obsidian/Prompts/571364 prompt-history-upstream-web-desktop-runtime-v1|571364 · Attivare estrazione unificata ChatGPT Web + Desktop con upstream OSS]]
 
 ## In esecuzione
 

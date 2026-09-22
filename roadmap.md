@@ -14,3 +14,4 @@
 10. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 11. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 12. [[prompts/ccs-desktop-launcher-overlay-combined-closure-v1|ccs-desktop-launcher-overlay-combined-closure-v1]]
+13. [[prompts/prompt-history-upstream-web-desktop-runtime-v1|prompt-history-upstream-web-desktop-runtime-v1]]
