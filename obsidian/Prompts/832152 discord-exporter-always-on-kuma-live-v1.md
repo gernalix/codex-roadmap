@@ -20,9 +20,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../completed/discord-exporter-always-on-kuma-live-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T00:41:59Z
+- **Ultimo lancio:** 2026-09-22T00:41:59Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -40,7 +40,7 @@ PARZIALMENTE IMPLEMENTATO: fedora-system-monitor/main monitora già discord-expo
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T00:41:59Z | 2026-09-22T01:01:11Z | PASS | 1152.21 | gpt-5.6-sol | medium | 40 | 132713 |
 
 ## Analisi ChatGPT
 
