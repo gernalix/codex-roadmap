@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** 2026-09-22T01:54:41Z
 - **Ultimo lancio:** 2026-09-22T01:54:41Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -39,7 +39,7 @@ Codice e test sono già su workflowy-importer/main e CI PASS. Resta solo distrib
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T01:58:28Z · colli di bottiglia: sì · fix: — · {"blocker":"roadmap_start.py inutilizzabile: conflitto Git irrisolto in codex-roadmap/tools/roadmap_pull.py e tests/test_roadmap_pull.py; nessuna modifica/deploy effettuata.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"946527","report_ref":"codex-usage:fc17a1c6a9268edbadd0afa6:78b65d3f65f74f97","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
