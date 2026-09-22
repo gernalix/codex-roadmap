@@ -9,4 +9,3 @@
 ## In esecuzione
 
 - [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1|354882 · Elimina loop login Grindr e completa export]]
-- [[obsidian/Prompts/943492 thinkpad-firmware-123-luks-tpm-recovery-preflight|943492 · Verificare recovery LUKS/TPM prima del firmware ThinkPad 1.23]]

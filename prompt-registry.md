@@ -5,7 +5,6 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/943492 thinkpad-firmware-123-luks-tpm-recovery-preflight\|943492 · Verificare recovery LUKS/TPM prima del firmware ThinkPad 1.23]] | running | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | low |
 | [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2\|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
@@ -359,3 +358,4 @@
 | [[obsidian/Prompts/125435 ccs-codex-per-thread-overlay-live-validation-v1\|125435 · Verificare overlay Codex davvero separati per chat]] | superseded | 2026-09-22T03:29:13Z | 2026-09-22T03:29:13Z | BLOCKED | sì | no | [[obsidian/Prompts/784216 ccs-overlay-live-retry-after-desktop-v1\|784216]] | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/784216 ccs-overlay-live-retry-after-desktop-v1\|784216 · Riprovare overlay Codex con Desktop disponibile]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/571364 prompt-history-upstream-web-desktop-runtime-v1\|571364 · Attivare estrazione unificata ChatGPT Web + Desktop con upstream OSS]] | completed | — | — | PASS | no | no | — | Prompt infrastructure | GPT-5.5 | medium |
+| [[obsidian/Prompts/943492 thinkpad-firmware-123-luks-tpm-recovery-preflight\|943492 · Verificare recovery LUKS/TPM prima del firmware ThinkPad 1.23]] | blocked | — | — | BLOCKED | no | no | — | Fedora | GPT-5.6 Terra | low |

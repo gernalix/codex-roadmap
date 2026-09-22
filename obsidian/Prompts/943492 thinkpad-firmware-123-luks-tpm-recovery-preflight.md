@@ -1,20 +1,20 @@
 ---
 prompt_id: 943492
-status: running
+status: blocked
 project_id: 92
 model: GPT-5.6 Terra
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/fedora
 ---
 
 # 943492 · Verificare recovery LUKS/TPM prima del firmware ThinkPad 1.23
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/thinkpad-firmware-123-luks-tpm-recovery-preflight|Apri prompt]]
+- **Prompt:** [[../../falliti/thinkpad-firmware-123-luks-tpm-recovery-preflight|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
