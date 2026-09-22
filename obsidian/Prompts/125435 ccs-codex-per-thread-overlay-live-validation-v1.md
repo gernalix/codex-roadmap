@@ -15,10 +15,10 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../falliti/ccs-codex-per-thread-overlay-live-validation-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Primo lancio:** 2026-09-22T03:29:13Z
+- **Ultimo lancio:** 2026-09-22T03:29:13Z
+- **Ultimo esito:** BLOCKED
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -35,11 +35,11 @@ Installa la correzione già pronta e controlla dal vivo che, quando passi da una
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T03:29:13Z | 2026-09-22T03:30:17Z | BLOCKED | 64.835 | gpt-5.6-terra | medium | 9 | 48305 |
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T03:32:52Z · colli di bottiglia: sì · fix: — · {"blocker":"Fedora esponeva solo Chrome, non una finestra Codex Desktop reale; risultato BLOCKED accodato (issue #542).","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"125435","report_ref":"codex-usage:3a56deb83a5af37ebf9eda7d:5a46d5966026caa6","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
