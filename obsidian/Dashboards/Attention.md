@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/748203 codex-usage-session-readback-reconcile-v1|748203 · Riconciliare il session readback del recovery Codex]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/684193 prompt-684193|684193 · Historical prompt 684193]] · `unknown` · analizzato=no · fix=—
