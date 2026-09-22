@@ -15,3 +15,4 @@
 11. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 12. [[prompts/minsp-export-live-authenticated-coverage|minsp-export-live-authenticated-coverage]]
 13. [[prompts/prompt-history-runtime-pass-reconcile-v1|prompt-history-runtime-pass-reconcile-v1]]
+14. [[prompts/codex-desktop-launcher-roadmap-branch-recovery-v1|codex-desktop-launcher-roadmap-branch-recovery-v1]]

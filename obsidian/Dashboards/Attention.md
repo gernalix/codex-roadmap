@@ -2,7 +2,7 @@
 
 - [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1|925731 · Attivare storico unificato ChatGPT e Codex]] · `blocked` · analizzato=sì · fix=413647
 - [[obsidian/Prompts/946527 workflowy-needs-fix-live-deploy-v1|946527 · Distribuire la pulizia Needs fix di Workflowy]] · `blocked` · analizzato=sì · fix=—
-- [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher|989559 · Automatizza Avvia verso Codex Desktop]] · `blocked` · analizzato=sì · fix=—
+- [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher|989559 · Automatizza Avvia verso Codex Desktop]] · `blocked` · analizzato=sì · fix=403496
 - [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] · `failed` · analizzato=sì · fix=815274
 - [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1|472615 · Ripristinare le note dopo reboot]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] · `completed` · analizzato=no · fix=—

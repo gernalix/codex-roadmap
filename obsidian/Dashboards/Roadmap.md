@@ -8,6 +8,7 @@
 - [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
 - [[obsidian/Prompts/682741 minsp-export-live-authenticated-coverage|682741 · Min Sundhedsplatform — validazione export completo]]
 - [[obsidian/Prompts/413647 prompt-history-runtime-pass-reconcile-v1|413647 · Riconciliare il PASS runtime di prompt-history]]
+- [[obsidian/Prompts/403496 codex-desktop-launcher-roadmap-branch-recovery-v1|403496 · Recuperare il launcher Desktop dopo il branch mismatch roadmap]]
 
 ## In esecuzione
 

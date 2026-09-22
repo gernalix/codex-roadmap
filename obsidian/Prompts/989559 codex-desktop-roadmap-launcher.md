@@ -20,11 +20,11 @@ tags:
 - **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
-- **Fix:** —
+- **Fix:** 403496
 - **Dipende da:** [[472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1|472615]]
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[403496 codex-desktop-launcher-roadmap-branch-recovery-v1|403496]]
 - **Chat Codex:** new chat
 
 ## Spiegazione
@@ -40,6 +40,7 @@ Quando premi Avvia nella dashboard, apre il prompt direttamente in ChatGPT Deskt
 ## Analisi ChatGPT
 
 - 2026-09-22T01:58:44Z · colli di bottiglia: sì · fix: — · {"blocker":"`roadmap_start.py --prompt-id 989559` ha fallito: `roadmap_pull_blocked:branch_mismatch:expected=main:actual=master`. Senza claim/worktree autoritativo, stop.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"989559","report_ref":"codex-usage:f478e0f2cefc2463e70afb25:22e0e8ffbb2c4e66","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
+- 2026-09-22T02:33:55Z · colli di bottiglia: sì · fix: 403496 · 989559 non ha raggiunto il target repo: roadmap_start si è fermato immediatamente perché il checkout locale codex-roadmap era su master, mentre il repository canonico ha default branch main. Serve un nuovo fix che ripari solo questo bootstrap in modo non distruttivo e poi esegua una volta lo scope originale.
 
 ## Modifiche di codice ChatGPT
 
