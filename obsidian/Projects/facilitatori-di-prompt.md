@@ -6,6 +6,7 @@ tags:
 # Facilitatori di prompt
 
 - [[obsidian/Prompts/613408 ccs-desktop-launcher-overlay-recovery-v2|613408 · Completare launcher e overlay Codex Desktop]] · `pending`
+- [[obsidian/Prompts/329968 workflowy-integrator-progress-live-v1|329968 · Distribuire la dashboard di avanzamento dell’integratore]] · `pending`
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] · `completed`
 - [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|318764 · Chiudere il blocker di prova della shortcut GNOME]] · `completed`
 - [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1|472615 · Ripristinare le note dopo reboot]] · `completed`

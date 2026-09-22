@@ -14,3 +14,4 @@
 10. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 11. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 12. [[prompts/ccs-desktop-launcher-overlay-recovery-v2|ccs-desktop-launcher-overlay-recovery-v2]]
+13. [[prompts/workflowy-integrator-progress-live-v1|workflowy-integrator-progress-live-v1]]

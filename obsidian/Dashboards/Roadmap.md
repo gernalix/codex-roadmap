@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/613408 ccs-desktop-launcher-overlay-recovery-v2|613408 · Completare launcher e overlay Codex Desktop]]
+- [[obsidian/Prompts/329968 workflowy-integrator-progress-live-v1|329968 · Distribuire la dashboard di avanzamento dell’integratore]]
 
 ## In esecuzione
 
