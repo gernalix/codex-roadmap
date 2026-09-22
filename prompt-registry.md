@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/284653 ccs-desktop-launcher-overlay-combined-closure-v1\|284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio]] | running | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/788315 chatgpt-exporter-live-recovery-after-736284-v1\|788315 · Riparare ChatGPTExporter e completare il primo archivio]] | running | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/522084 personalhub-shared-tags-facets-backlinks-v1\|522084 · Unificare tag, facet e backlink cross-module in PersonalHub]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/773323 personalhub-shared-engines-3-8-finalize-v1\|773323 · Chiudere i motori condivisi PH 3-8]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
@@ -88,6 +87,7 @@
 | [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3\|790233 · Portare Salute nel database canonico]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | superseded | 2026-09-19T16:56:36Z | 2026-09-19T17:08:40Z | BLOCKED | sì | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | completed | 2026-09-22T01:41:09Z | 2026-09-22T01:41:09Z | PASS | sì | no | — | GitHub Autosync / Fedora runtime | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/788315 chatgpt-exporter-live-recovery-after-736284-v1\|788315 · Riparare ChatGPTExporter e completare il primo archivio]] | blocked | — | — | BLOCKED | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation\|617205 · Chiudere i nuovi tag e alert di Places]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/775412 workflowy-automation-local-activation-v2\|775412 · Attivare le automazioni locali di Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/416826 personalhub-salute-ui-hub-v3\|416826 · Collegare Salute all’app e all’Hub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |

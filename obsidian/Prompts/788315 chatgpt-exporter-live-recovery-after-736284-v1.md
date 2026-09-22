@@ -1,20 +1,20 @@
 ---
 prompt_id: 788315
-status: running
+status: blocked
 project_id: 92
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/prompt-infrastructure
 ---
 
 # 788315 · Riparare ChatGPTExporter e completare il primo archivio
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
-- **Prompt:** [[../../prompts/chatgpt-exporter-live-recovery-after-736284-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/chatgpt-exporter-live-recovery-after-736284-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
