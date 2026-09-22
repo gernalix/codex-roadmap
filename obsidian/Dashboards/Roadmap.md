@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio]]
+- [[obsidian/Prompts/613102 personalhub-global-photo-engine-people-legacy-removal-v3|613102 · Completare motore foto globale e rimuovere pipeline legacy People]]
 
 ## In esecuzione
 

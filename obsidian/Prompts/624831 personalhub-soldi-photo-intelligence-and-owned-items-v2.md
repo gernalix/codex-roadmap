@@ -29,9 +29,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[963514 personalhub-soldi-on-device-visual-object-search-v1|963514]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[613102 personalhub-global-photo-engine-people-legacy-removal-v3|613102]]
 - **Chat Codex:** Nuova chat Codex; eseguire solo dopo merge PR #31
 
 ## Spiegazione

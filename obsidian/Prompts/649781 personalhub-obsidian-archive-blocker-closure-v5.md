@@ -24,7 +24,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[462279 personalhub-health-canonical-e2e-v4|462279]], [[522084 personalhub-shared-tags-facets-backlinks-v1|522084]], [[624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831]]
+- **Dipende da:** [[462279 personalhub-health-canonical-e2e-v4|462279]], [[522084 personalhub-shared-tags-facets-backlinks-v1|522084]], [[613102 personalhub-global-photo-engine-people-legacy-removal-v3|613102]]
 - **Sblocca:** [[707603 personalhub-git-history-final-validation-v4|707603]]
 - **Padri/precedenti:** [[522084 personalhub-shared-tags-facets-backlinks-v1|522084]], [[728918 personalhub-obsidian-archive-complete-v4|728918]]
 - **Figli/follow-up:** —
