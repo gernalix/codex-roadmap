@@ -24,5 +24,5 @@ tags:
 - [[obsidian/Prompts/391742 codex-usage-prompt-id-source-historical-reconcile-v1|391742 · Riconciliare il mismatch storico prompt_id_source del publisher Codex]] · `superseded`
 - [[obsidian/Prompts/905731 activity-watch-historical-oracle-permission-reconcile-v1|905731 · Riconciliare 751306 dopo il PASS ActivityWatch successivo]] · `superseded`
 - [[obsidian/Prompts/628541 chatgpt-chrome-rpm-native-transport-test|628541 · Testare Chrome RPM per il bridge ChatGPT]] · `superseded`
-- [[obsidian/Prompts/943492 thinkpad-firmware-123-luks-tpm-recovery-preflight|943492 · Verificare recovery LUKS/TPM prima del firmware ThinkPad 1.23]] · `blocked`
+- [[obsidian/Prompts/943492 thinkpad-firmware-123-luks-tpm-recovery-preflight|943492 · Verificare recovery LUKS/TPM prima del firmware ThinkPad 1.23]] · `completed`
 - [[obsidian/Prompts/334210 thinkpad-firmware-123-luks-recovery-followup|334210 · Chiudere il recovery gate LUKS prima del firmware ThinkPad 1.23]] · `completed`

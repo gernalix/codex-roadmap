@@ -5,7 +5,6 @@ project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
-  - manual-prerequisite:open-codex-desktop
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/facilitatori-di-prompt
@@ -30,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Accorpa i due task che aspettavano entrambi Codex Desktop: completa il launcher automatico e, nella stessa sessione, verifica che gli overlay seguano davvero la chat attiva. Evita due discovery AT-SPI, due deploy e due sessioni quasi identiche.
+È pronto: ChatGPT/Codex Desktop è disponibile. Completa in un solo passaggio il launcher automatico e verifica che overlay e note seguano davvero la chat Codex attiva.
 
 ## Esecuzioni
 

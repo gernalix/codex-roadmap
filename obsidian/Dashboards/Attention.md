@@ -1,6 +1,7 @@
 # Da controllare
 
-- [[obsidian/Prompts/943492 thinkpad-firmware-123-luks-tpm-recovery-preflight|943492 · Verificare recovery LUKS/TPM prima del firmware ThinkPad 1.23]] · `blocked` · analizzato=sì · fix=—
+- [[obsidian/Prompts/658142 ccs-autonomous-runtime-verifier|658142 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `completed` · analizzato=no · fix=—
+- [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/499100 minsp-export-live-authenticated-coverage-recovery|499100 · Min Sundhedsplatform — export completo verificato]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/736284 chatgpt-exporter-live-chrome-first-archive-v1|736284 · Sbloccare ChatGPTExporter e creare il primo archivio]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/571364 prompt-history-upstream-web-desktop-runtime-v1|571364 · Attivare estrazione unificata ChatGPT Web + Desktop con upstream OSS]] · `completed` · analizzato=no · fix=—
@@ -34,7 +35,6 @@
 - [[obsidian/Prompts/930174 workflowy-show-and-recover-prompt-links|930174 · Mostrare e recuperare i link Chrome e Codex nella dashboard]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/593872 fedora-graphics-black-screen-forensics|593872 · Diagnosi forense del blackout grafico Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/731805 workflowy-open-launches-chrome-and-codex|731805 · Fare aprire Chrome e Codex con 🚀 Apri]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/658142 ccs-autonomous-runtime-verifier|658142 · Rendere autonomo il collaudo Chrome ↔ Codex]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/947306 workflowy-bf-autofix-publisher-v1|947306 · Arricchire automaticamente i B/F Workflowy con il report Codex]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/927641 workflowy-roadmap-cockpit-local-activation|927641 · Attiva il cockpit Workflowy della roadmap]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] · `completed` · analizzato=no · fix=—
@@ -55,7 +55,6 @@
 - [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked` · analizzato=sì · fix=817264
 - [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install|652361 · LivingGaul hourly systemd local install]] · `completed` · analizzato=no · fix=—
-- [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/734140 livinggaul-duplicate-count-local-activation|734140 · LivingGaul duplicate count local activation]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/735218 personalhub-pr15-oracle-ci-secret-closure-v1|735218 · Chiudere PR #15 usando i secret Oracle di MegaVault]] · `completed` · analizzato=no · fix=—

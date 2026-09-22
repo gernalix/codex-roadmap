@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
+- [[obsidian/Prompts/284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio]]
 
 ## In esecuzione
 

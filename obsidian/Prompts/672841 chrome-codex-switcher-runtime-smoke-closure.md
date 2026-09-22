@@ -1,20 +1,20 @@
 ---
 prompt_id: 672841
-status: unknown
+status: completed
 project_id: —
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/unknown
+  - roadmap/status/completed
   - roadmap/project/chrome-codex-switcher
 ---
 
 # 672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher
 
-- **Stato:** unknown
+- **Stato:** completed
 - **Progetto:** [[../Projects/chrome-codex-switcher|chrome-codex-switcher]]
-- **Prompt:** [[../../falliti/chrome-codex-switcher-runtime-smoke-closure|Apri prompt]]
+- **Prompt:** [[../../completed/chrome-codex-switcher-runtime-smoke-closure|Apri prompt]]
 - **Primo lancio:** 2026-09-19T15:53:48Z
 - **Ultimo lancio:** 2026-09-19T17:52:59Z
 - **Ultimo esito:** PASS

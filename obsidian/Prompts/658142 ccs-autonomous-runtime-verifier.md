@@ -1,6 +1,6 @@
 ---
 prompt_id: 658142
-status: blocked
+status: completed
 project_id: 96
 model: GPT-5.6 Sol
 reasoning: medium
@@ -8,15 +8,15 @@ tags:
   - ccs-control-plane
   - facilitatori
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/completed
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 658142 · Rendere autonomo il collaudo Chrome ↔ Codex
 
-- **Stato:** blocked
+- **Stato:** completed
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../falliti/ccs-autonomous-runtime-verifier|Apri prompt]]
+- **Prompt:** [[../../completed/ccs-autonomous-runtime-verifier|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
