@@ -19,8 +19,8 @@ tags:
 - **Progetto:** [[../Projects/e-boks-exploration|e-Boks exploration]]
 - **Prompt:** [[../../prompts/eboks-full-inbox-native-batch-export|Apri prompt]]
 - **Primo lancio:** 2026-09-22T01:38:01Z
-- **Ultimo lancio:** 2026-09-22T01:52:51Z
-- **Ultimo esito:** BLOCKED
+- **Ultimo lancio:** 2026-09-22T02:00:47Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -42,6 +42,7 @@ Scarica tutta la posta delle tue caselle e-Boks, non soltanto i messaggi che ved
 | 2026-09-22T01:49:01Z | 2026-09-22T01:50:23Z | UNKNOWN | 81.776 | gpt-5.6-terra | medium | 10 | 150203 |
 | 2026-09-22T01:52:40Z | 2026-09-22T01:52:51Z | UNKNOWN | 11.564 | gpt-5.6-terra | medium | 1 | 214899 |
 | 2026-09-22T01:52:51Z | 2026-09-22T02:00:47Z | BLOCKED | 475.822 | gpt-5.6-terra | medium | 38 | 123989 |
+| 2026-09-22T02:00:47Z | 2026-09-22T02:03:01Z | UNKNOWN | 134.297 | gpt-5.6-terra | medium | 22 | 208759 |
 
 ## Analisi ChatGPT
 
