@@ -56,6 +56,40 @@ I client non committano più file di inbox, prompt, DB o viste. Le directory `mu
 
 Dettagli tecnici: [[SQLITE_ROADMAP|Roadmap SQLite]].
 
+
+### Checklist obbligatoria quando ChatGPT deve “mettere un prompt nella roadmap”
+
+Per un **nuovo prompt** il percorso completo è:
+
+```text
+richiesta utente
+  → MegaVault remote allocator: allocate
+  → risposta con PROMPT_ID canonico
+  → Issue [roadmap-mutation] con op=register
+  → GitHub Actions single writer
+  → roadmap.sqlite + prompt materializzato + viste
+  → MegaVault remote allocator: materialize sul file canonico
+  → verifica di entrambe le conferme
+  → solo allora risposta “aggiunto alla roadmap”
+```
+
+Regole fail-closed:
+
+- una normale Issue o una Issue `[plan]` **non aggiorna la roadmap**;
+- ChatGPT non deve mai usare una `[plan]` come handoff sostitutivo quando l'utente ha chiesto una mutazione reale;
+- un Issue number non è un PROMPT_ID;
+- non dichiarare “aggiunto alla roadmap” finché la mutation Issue non è stata applicata dal writer;
+- per un nuovo prompt, non dichiarare completato il workflow finché MegaVault non conferma anche `status=materialized` per lo stesso PROMPT_ID;
+- se il bridge remoto MegaVault non risponde, lo stato corretto è “allocazione pendente/bloccata”, non la creazione di un ID manuale o di una Issue informativa;
+- per aggiornare un prompt esistente si usa direttamente una mutation Issue e **non** si alloca un nuovo ID, salvo una vera revisione del prompt che richieda una nuova materializzazione.
+
+Bridge remoto PROMPT_ID di MegaVault:
+
+- request: `gernalix/MegaVault:.github/prompt-id-request.json`;
+- response: `gernalix/MegaVault:.github/prompt-id-response.json`;
+- `request_id` deve essere unico e la risposta deve corrispondere esattamente alla richiesta corrente;
+- `allocate` precede sempre `register`; `materialize` viene inviato solo dopo che il single writer ha creato il file prompt canonico.
+
 ## Pull locale obbligatoriamente protetto
 
 Sul checkout locale di `codex-roadmap`, **`git pull`, `git merge`, `git reset` o altri aggiornamenti diretti di `main` sono vietati**. Il pull canonico è:
