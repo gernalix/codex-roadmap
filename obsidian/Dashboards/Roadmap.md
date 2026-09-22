@@ -7,6 +7,7 @@
 - [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2|815274 · Chiudere il residuo Kuma dei servizi Fedora]]
 - [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
 - [[obsidian/Prompts/682741 minsp-export-live-authenticated-coverage|682741 · Min Sundhedsplatform — validazione export completo]]
+- [[obsidian/Prompts/413647 prompt-history-runtime-pass-reconcile-v1|413647 · Riconciliare il PASS runtime di prompt-history]]
 
 ## In esecuzione
 

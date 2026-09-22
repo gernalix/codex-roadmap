@@ -25,11 +25,11 @@ tags:
 - **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** sì (1 interventi)
-- **Fix:** —
+- **Fix:** 413647
 - **Dipende da:** [[621471 post-404936-runtime-validation|621471]], [[748203 codex-usage-session-readback-reconcile-v1|748203]]
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[413647 prompt-history-runtime-pass-reconcile-v1|413647]]
 - **Chat Codex:** Nuova chat Codex; attivazione/backfill Fedora del codice già implementato da ChatGPT
 
 ## Spiegazione
@@ -50,6 +50,7 @@ Attiva uno storico unico di ChatGPT e Codex, importa anche le conversazioni pass
 - 2026-09-22T02:12:17Z · colli di bottiglia: sì · fix: — · {"blocker":"roadmap claim did not confirm running; canonical DB still shows prompt 925731 pending","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"925731","report_ref":"codex-usage:fc9dd1f942e39540002df611:5935236aeb71f7ff","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 - 2026-09-22T02:25:21Z · colli di bottiglia: sì · fix: — · {"blocker":"roadmap readback is terminal BLOCKED from prior execution, so canonical completed/PASS cannot be claimed safely","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"925731","report_ref":"codex-usage:d0909f0b31601dc66d1b814a:dfc5e2675d41a912","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 - 2026-09-22T02:28:03Z · colli di bottiglia: sì · fix: — · {"blocker":"single-writer canonico mantiene 925731 terminale `blocked` e rifiuta ogni reactivation/terminalizzazione; goal marcato blocked dopo tre recovery consecutive","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"925731","report_ref":"codex-usage:5d214bed3c7eaf28da5af9a7:5d704b96424d27e2","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
+- 2026-09-22T02:33:23Z · colli di bottiglia: sì · fix: 413647 · Il lavoro sostanziale di 925731 è arrivato fino a PR #1 di prompt-history, mergiata su main, ma il parent è già terminale BLOCKED e il single writer rifiuta correttamente ulteriori reactivation/terminalizzazioni. Serve un nuovo fix che faccia solo readback runtime/idempotenza e chiuda la recovery senza riscrivere il parent.
 
 ## Modifiche di codice ChatGPT
 

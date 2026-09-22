@@ -14,3 +14,4 @@
 10. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 11. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 12. [[prompts/minsp-export-live-authenticated-coverage|minsp-export-live-authenticated-coverage]]
+13. [[prompts/prompt-history-runtime-pass-reconcile-v1|prompt-history-runtime-pass-reconcile-v1]]
