@@ -1,6 +1,6 @@
 ---
 prompt_id: 417592
-status: running
+status: blocked
 project_id: —
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - git-closure
   - megavault
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/fedora-fedora-external-updater
 ---
 
 # 417592 · Registrare fedora-external-updater e chiudere il fix pip_user
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/fedora-fedora-external-updater|Fedora / fedora-external-updater]]
-- **Prompt:** [[../../prompts/fedora-external-updater-megavault-git-closure-v2|Apri prompt]]
+- **Prompt:** [[../../falliti/fedora-external-updater-megavault-git-closure-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

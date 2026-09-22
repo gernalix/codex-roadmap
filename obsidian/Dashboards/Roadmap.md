@@ -16,4 +16,3 @@
 - [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1|354882 · Elimina loop login Grindr e completa export]]
 - [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover|729462 · Completa il cutover libsecret dei servizi Fedora]]
 - [[obsidian/Prompts/257387 fedora-context-index-runtime-activation|257387 · Attiva la timeline unificata Fedora + ActivityWatch]]
-- [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]]

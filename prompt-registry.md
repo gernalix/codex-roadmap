@@ -8,7 +8,6 @@
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | running | — | — | — | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/257387 fedora-context-index-runtime-activation\|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] | running | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2\|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]] | running | — | — | — | no | no | — | Fedora / fedora-external-updater | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy\|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]] | pending | — | — | — | no | no | — | workflowy-importer | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | gpt-5.6-terra | medium |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | pending | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-5.6 Luna | low |
@@ -93,6 +92,7 @@
 | [[obsidian/Prompts/862541 personalhub-salute-canonical-integration-v2\|862541 · Portare Salute dentro PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/904631 datasette5-personalhub-explorer-security-deploy-v2\|904631 · Versione online dell’esploratore dati PersonalHub]] | superseded | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/374820 fedora-runtime-kuma-closure-v4\|374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile]] | completed | 2026-09-19T15:43:26Z | 2026-09-19T15:43:26Z | PASS | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2\|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]] | blocked | — | — | BLOCKED | no | no | — | Fedora / fedora-external-updater | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/582741 personalhub-obsidian-archive-foundation\|582741 · Prima versione dell’archivio Obsidian]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/315972 personalhub-salute-ui-hub-obsidian-v2\|315972 · Rendere Salute visibile e collegata al resto dell’app]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/811925 personalhub-datasette-lite-offline-runtime-v3\|811925 · Completare l’esploratore dati offline]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |

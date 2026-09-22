@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/417592 fedora-external-updater-megavault-git-closure-v2|417592 · Registrare fedora-external-updater e chiudere il fix pip_user]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/684193 prompt-684193|684193 · Historical prompt 684193]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/515955 grindr-web-exporter-recaptcha-normal-chrome-login-v1|515955 · Fix login reCAPTCHA Grindr exporter]] · `blocked` · analizzato=sì · fix=—
