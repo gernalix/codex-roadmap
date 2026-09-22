@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1\|472615 · Ripristinare le note dopo reboot]] | running | 2026-09-21T23:49:07Z | 2026-09-22T00:00:14Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export\|738242 · Scaricare tutta la posta e-Boks via Browser Use]] | running | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience\|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] | running | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
@@ -45,6 +44,7 @@
 | [[obsidian/Prompts/404936 github-autosync-kuma46-autonomous-closure\|404936 · Chiudere definitivamente il monitor rosso Fedora GitHub Reconcile]] | completed | 2026-09-20T07:14:25Z | 2026-09-20T07:14:25Z | PASS | sì | sì | — | GitHub Autosync / Fedora runtime | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1\|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] | completed | 2026-09-21T22:35:09Z | 2026-09-21T23:25:26Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1\|318764 · Chiudere il blocker di prova della shortcut GNOME]] | completed | 2026-09-19T06:11:24Z | 2026-09-19T06:11:24Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1\|472615 · Ripristinare le note dopo reboot]] | completed | 2026-09-21T23:49:07Z | 2026-09-22T00:00:14Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/936284 megavault-local-repo-registration-fedora-external-updater-v1\|936284 · Aggiungere il contratto MegaVault per repo local-only e chiudere 417592]] | completed | 2026-09-22T00:53:13Z | 2026-09-22T00:53:13Z | PASS | no | no | — | MegaVault | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | blocked | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | BLOCKED | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
