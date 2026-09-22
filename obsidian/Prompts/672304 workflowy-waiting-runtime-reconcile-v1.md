@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-È il primo task da lanciare: riallinea il runtime Workflowy in modo che i prerequisiti manuali compaiano davvero in Waiting e rimuove il residuo operativo di 946821.
+È il primo task da lanciare: riallinea il runtime Workflowy e verifica i due Waiting canonici attuali, 582946 (MitID) e 284653 (Codex Desktop), ignorando i vecchi task Desktop ormai superseded.
 
 ## Esecuzioni
 
