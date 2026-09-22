@@ -13,3 +13,4 @@
 9. [[prompts/personalhub-datasette-lite-offline-runtime-v4|personalhub-datasette-lite-offline-runtime-v4]]
 10. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 11. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
+12. [[prompts/workflowy-waiting-runtime-reconcile-v1|workflowy-waiting-runtime-reconcile-v1]]

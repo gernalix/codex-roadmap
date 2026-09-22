@@ -1,7 +1,7 @@
 # Da controllare
 
 - [[obsidian/Prompts/125435 ccs-codex-per-thread-overlay-live-validation-v1|125435 · Verificare overlay Codex davvero separati per chat]] · `blocked` · analizzato=sì · fix=—
-- [[obsidian/Prompts/946821 workflowy-needs-fix-live-closure-v2|946821 · Verificare la pulizia live di Needs fix]] · `blocked` · analizzato=no · fix=—
+- [[obsidian/Prompts/946821 workflowy-needs-fix-live-closure-v2|946821 · Verificare la pulizia live di Needs fix]] · `blocked` · analizzato=sì · fix=672304
 - [[obsidian/Prompts/206756 eboks-native-bulk-download-capability-exploration|206756 · Verificare il download batch nativo di e-Boks]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2|815274 · Chiudere il residuo Kuma dei servizi Fedora]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/413647 prompt-history-runtime-pass-reconcile-v1|413647 · Riconciliare il PASS runtime di prompt-history]] · `completed` · analizzato=no · fix=—
