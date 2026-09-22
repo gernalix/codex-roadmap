@@ -1,6 +1,6 @@
 ---
 prompt_id: 936284
-status: running
+status: completed
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - local-repo
   - megavault
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/megavault
 ---
 
 # 936284 · Aggiungere il contratto MegaVault per repo local-only e chiudere 417592
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/megavault|MegaVault]]
-- **Prompt:** [[../../prompts/megavault-local-repo-registration-fedora-external-updater-v1|Apri prompt]]
+- **Prompt:** [[../../completed/megavault-local-repo-registration-fedora-external-updater-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
