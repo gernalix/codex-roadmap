@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../completed/fedora-context-index-runtime-activation|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T00:38:54Z
+- **Ultimo lancio:** 2026-09-22T00:38:54Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ CODICE GIÀ COMPLETO E MERGIATO in fedora-system-monitor commit 75378b8: Context
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T00:38:54Z | 2026-09-22T00:49:43Z | PASS | 649.084 | gpt-5.6-terra | medium | 57 | 72933 |
 
 ## Analisi ChatGPT
 

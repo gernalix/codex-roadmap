@@ -18,9 +18,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../completed/codex-usage-session-readback-reconcile-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T00:44:13Z
+- **Ultimo lancio:** 2026-09-22T00:44:13Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ VERIFICA QUASI PURA: codex-usage-monitor/main è oltre 80 commit avanti rispetto
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T00:44:13Z | 2026-09-22T00:46:22Z | PASS | 128.414 | gpt-5.6-luna | low | 13 | 64326 |
 
 ## Analisi ChatGPT
 
