@@ -4,6 +4,7 @@
 
 ## Lanciabili adesso
 
+- [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1|354882 · Elimina loop login Grindr e completa export]]
 - [[obsidian/Prompts/843271 workflowy-dashboard-dedupe-live-deploy|843271 · Distribuire e verificare il fix deduplica dashboard Workflowy]]
 - [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover|729462 · Completa il cutover libsecret dei servizi Fedora]]
 - [[obsidian/Prompts/621471 post-404936-runtime-validation|621471 · Distribuire e validare l'hardening post-404936]]

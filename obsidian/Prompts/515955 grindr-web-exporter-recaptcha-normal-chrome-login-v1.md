@@ -27,7 +27,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[601566 grindr-web-exporter-persistent-chrome-profile-v1|601566]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[354882 grindr-web-exporter-single-browser-end-to-end-v1|354882]]
 - **Chat Codex:** Continuazione diretta di 601566; usa la stessa sessione Codex se disponibile.
 
 ## Spiegazione
