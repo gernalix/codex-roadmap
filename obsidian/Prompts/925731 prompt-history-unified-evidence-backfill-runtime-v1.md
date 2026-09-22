@@ -46,6 +46,7 @@ Attiva uno storico unico di ChatGPT e Codex, importa anche le conversazioni pass
 
 - 2026-09-21T23:17:20Z · colli di bottiglia: no · fix: — · Remote implementation already completed directly on gernalix/prompt-history/main: normalized rebuildable SQLite evidence store, roadmap/codex-usage/ChatGPT adapters, deterministic PROMPT_ID linking, FTS5 search, analytics/recommender, tests and CI. Remaining work is Fedora-local activation/backfill/runtime integration only; no redesign or reimplementation of the remote base is needed.
 - 2026-09-22T02:12:17Z · colli di bottiglia: sì · fix: — · {"blocker":"roadmap claim did not confirm running; canonical DB still shows prompt 925731 pending","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"925731","report_ref":"codex-usage:fc9dd1f942e39540002df611:5935236aeb71f7ff","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
+- 2026-09-22T02:25:21Z · colli di bottiglia: sì · fix: — · {"blocker":"roadmap readback is terminal BLOCKED from prior execution, so canonical completed/PASS cannot be claimed safely","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"925731","report_ref":"codex-usage:d0909f0b31601dc66d1b814a:dfc5e2675d41a912","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
