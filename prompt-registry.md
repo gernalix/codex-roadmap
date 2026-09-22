@@ -5,9 +5,9 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export\|738242 · Scaricare tutta la posta e-Boks via Browser Use]] | running | 2026-09-22T01:38:01Z | 2026-09-22T01:52:40Z | UNKNOWN | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export\|738242 · Scaricare tutta la posta e-Boks via Browser Use]] | running | 2026-09-22T01:38:01Z | 2026-09-22T01:52:51Z | BLOCKED | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/946527 workflowy-needs-fix-live-deploy-v1\|946527 · Distribuire la pulizia Needs fix di Workflowy]] | running | 2026-09-22T01:54:41Z | 2026-09-22T01:54:41Z | BLOCKED | sì | no | — | Fedora / Workflowy | GPT-5.5 | low |
-| [[obsidian/Prompts/918643 fedora-systemd-kuma-hardening-recovery-v1\|918643 · Completa hardening systemd e Kuma]] | running | — | — | — | no | no | — | fedora-system-monitor | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/918643 fedora-systemd-kuma-hardening-recovery-v1\|918643 · Completa hardening systemd e Kuma]] | running | 2026-09-22T01:46:47Z | 2026-09-22T01:46:47Z | BLOCKED | no | no | — | fedora-system-monitor | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2\|815274 · Chiudere il residuo Kuma dei servizi Fedora]] | pending | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | pending | — | — | — | sì | sì | — | Prompt infrastructure | GPT-5.5 | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
