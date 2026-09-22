@@ -1,6 +1,6 @@
 ---
 prompt_id: 413258
-status: pending
+status: running
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - fix
   - on-demand-probe
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/e-boks-exploration
 ---
 
 # 413258 · Esplorare e-Boks con probe on-demand non invasiva
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/e-boks-exploration|e-Boks exploration]]
 - **Prompt:** [[../../prompts/eboks-native-bulk-download-ondemand-probe-v2|Apri prompt]]
 - **Primo lancio:** —
