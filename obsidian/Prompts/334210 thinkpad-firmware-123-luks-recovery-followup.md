@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** 2026-09-22T12:21:34Z
 - **Ultimo lancio:** 2026-09-22T12:21:34Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -39,7 +39,7 @@ Scopre come viene realmente sbloccato il disco Fedora e verifica un percorso di 
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T12:27:01Z · colli di bottiglia: sì · fix: — · {"blocker":"roadmap claim rejected: not_planned; no disk discovery performed","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"334210","report_ref":"codex-usage:fad196914564178b3d80fd55:c39ce8a28e6abc3d","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
