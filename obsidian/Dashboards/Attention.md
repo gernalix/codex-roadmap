@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/684193 prompt-684193|684193 · Historical prompt 684193]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/515955 grindr-web-exporter-recaptcha-normal-chrome-login-v1|515955 · Fix login reCAPTCHA Grindr exporter]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/601566 grindr-web-exporter-persistent-chrome-profile-v1|601566 · Chiudi blocker Chrome Grindr exporter]] · `blocked` · analizzato=sì · fix=—
@@ -158,7 +159,6 @@
 - [[obsidian/Prompts/681427 prompt-681427|681427 · Historical prompt 681427]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/682417 prompt-682417|682417 · Historical prompt 682417]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/683214 prompt-683214|683214 · Historical prompt 683214]] · `unknown` · analizzato=no · fix=—
-- [[obsidian/Prompts/684193 prompt-684193|684193 · Historical prompt 684193]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/684215 prompt-684215|684215 · Historical prompt 684215]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/684271 prompt-684271|684271 · Historical prompt 684271]] · `unknown` · analizzato=no · fix=—
 - [[obsidian/Prompts/704216 prompt-704216|704216 · Historical prompt 704216]] · `unknown` · analizzato=no · fix=—

@@ -220,7 +220,7 @@
 | [[obsidian/Prompts/681427 prompt-681427\|681427 · Historical prompt 681427]] | completed | 2026-09-12T07:08:04Z | 2026-09-12T07:08:04Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/682417 prompt-682417\|682417 · Historical prompt 682417]] | unknown | 2026-08-05T07:08:56Z | 2026-08-05T07:08:56Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/683214 prompt-683214\|683214 · Historical prompt 683214]] | unknown | 2026-08-11T16:45:56Z | 2026-08-11T16:45:56Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/684193 prompt-684193\|684193 · Historical prompt 684193]] | completed | 2026-09-15T21:45:20Z | 2026-09-15T21:45:20Z | PASS | no | no | — | — | — | — |
+| [[obsidian/Prompts/684193 prompt-684193\|684193 · Historical prompt 684193]] | unknown | 2026-08-02T16:00:55Z | 2026-09-15T21:45:20Z | UNKNOWN | no | no | — | — | — | — |
 | [[obsidian/Prompts/684215 prompt-684215\|684215 · Historical prompt 684215]] | completed | 2026-09-11T18:30:21Z | 2026-09-11T18:30:21Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/684217 prompt-684217\|684217 · Historical prompt 684217]] | completed | 2026-09-04T00:36:15Z | 2026-09-19T08:38:24Z | PASS | sì | no | — | — | — | — |
 | [[obsidian/Prompts/684271 prompt-684271\|684271 · Historical prompt 684271]] | unknown | 2026-08-04T15:48:23Z | 2026-08-04T15:48:23Z | UNKNOWN | no | no | — | — | — | — |
