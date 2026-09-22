@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -39,7 +39,7 @@ Controlla che il disco Fedora possa essere sbloccato anche senza TPM prima di in
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T12:11:57Z · colli di bottiglia: sì · fix: — · {"blocker":"RECOVERY_PATH=FAIL","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"943492","report_ref":"codex-usage:8b7ec0e5720046ab5d96f5b6:5362afc0e0e1e2b1","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
