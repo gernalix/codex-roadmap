@@ -4,6 +4,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 TOOLS = Path(__file__).resolve().parents[1] / "tools"
@@ -58,6 +59,42 @@ class IssueMutationTests(unittest.TestCase):
             ).fetchone()
             self.assertEqual(("register-123456", 12), tuple(receipt))
             conn.close()
+
+    def test_deferred_render_applies_mutation_without_regenerating_views(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            document = {
+                "schema": "codex-roadmap.mutation.v1",
+                "actor": "chatgpt",
+                "operations": [
+                    {
+                        "op": "register",
+                        "prompt_id": "123456",
+                        "slug": "deferred-render",
+                        "title": "Deferred render",
+                        "current_path": "prompts/deferred-render.md",
+                        "prompt_text": "PROMPT_ID=123456",
+                    }
+                ],
+            }
+            with patch.object(
+                apply_issue_mutation, "reconcile_prompt_file_locations"
+            ) as reconcile, patch.object(apply_issue_mutation, "render") as render:
+                out = apply_issue_mutation.apply_issue(
+                    repo,
+                    self._event(
+                        repo,
+                        number=14,
+                        key="register-deferred-123456",
+                        document=document,
+                    ),
+                    render_views=False,
+                )
+
+            self.assertFalse(out["rendered_views"])
+            self.assertTrue((repo / "prompts/deferred-render.md").is_file())
+            reconcile.assert_not_called()
+            render.assert_not_called()
 
     def test_same_payload_different_duplicate_issue_is_idempotent(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
