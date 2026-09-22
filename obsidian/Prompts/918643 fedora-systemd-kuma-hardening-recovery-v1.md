@@ -16,8 +16,8 @@ tags:
 - **Progetto:** [[../Projects/fedora-system-monitor|fedora-system-monitor]]
 - **Prompt:** [[../../completed/fedora-systemd-kuma-hardening-recovery-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-22T01:46:47Z
-- **Ultimo lancio:** 2026-09-22T01:46:47Z
-- **Ultimo esito:** BLOCKED
+- **Ultimo lancio:** 2026-09-22T01:50:25Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -36,6 +36,7 @@ Completa hardening dei servizi custom, monitor Kuma individuali e sincronizzazio
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-22T01:46:47Z | 2026-09-22T01:47:10Z | BLOCKED | 22.736 | gpt-5.6-terra | medium | 2 | 102959 |
+| 2026-09-22T01:50:25Z | 2026-09-22T02:37:17Z | PASS | 2812.168 | gpt-5.6-sol | medium | 165 | 124406 |
 
 ## Analisi ChatGPT
 
