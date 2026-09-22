@@ -1,6 +1,6 @@
 # Da controllare
 
-- [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher|989559 · Automatizza Avvia verso Codex Desktop]] · `blocked` · analizzato=no · fix=—
+- [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher|989559 · Automatizza Avvia verso Codex Desktop]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/463817 fedora-systemd-services-kuma-resilience|463817 · Rendi resilienti i servizi Fedora e monitora ciascuno in Kuma]] · `failed` · analizzato=sì · fix=815274
 - [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1|472615 · Ripristinare le note dopo reboot]] · `completed` · analizzato=no · fix=—
 - [[obsidian/Prompts/832152 discord-exporter-always-on-kuma-live-v1|832152 · Rendere discord-exporter always-on e monitorarlo in Uptime Kuma]] · `completed` · analizzato=no · fix=—

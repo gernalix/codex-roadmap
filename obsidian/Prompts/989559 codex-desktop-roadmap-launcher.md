@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** 2026-09-22T01:55:13Z
 - **Ultimo lancio:** 2026-09-22T01:55:13Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1|472615]]
@@ -39,7 +39,7 @@ Quando premi Avvia nella dashboard, apre il prompt direttamente in ChatGPT Deskt
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T01:58:44Z · colli di bottiglia: sì · fix: — · {"blocker":"`roadmap_start.py --prompt-id 989559` ha fallito: `roadmap_pull_blocked:branch_mismatch:expected=main:actual=master`. Senza claim/worktree autoritativo, stop.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"989559","report_ref":"codex-usage:f478e0f2cefc2463e70afb25:22e0e8ffbb2c4e66","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
