@@ -1,6 +1,6 @@
 ---
 prompt_id: 413258
-status: blocked
+status: completed
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - fix
   - on-demand-probe
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/completed
   - roadmap/project/e-boks-exploration
 ---
 
 # 413258 · Esplorare e-Boks con probe on-demand non invasiva
 
-- **Stato:** blocked
+- **Stato:** completed
 - **Progetto:** [[../Projects/e-boks-exploration|e-Boks exploration]]
-- **Prompt:** [[../../falliti/eboks-native-bulk-download-ondemand-probe-v2|Apri prompt]]
+- **Prompt:** [[../../completed/eboks-native-bulk-download-ondemand-probe-v2|Apri prompt]]
 - **Primo lancio:** 2026-09-22T00:57:15Z
 - **Ultimo lancio:** 2026-09-22T00:57:15Z
 - **Ultimo esito:** BLOCKED
@@ -26,9 +26,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[218695 eboks-scraper-bootstrap-public-repo-live-adapter|218695]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[206756 eboks-native-bulk-download-capability-exploration|206756]], [[482761 eboks-native-bulk-download-browser-control-fix-v1|482761]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[738242 eboks-full-inbox-native-batch-export|738242]]
 - **Chat Codex:** Stessa chat Codex del tentativo e-Boks; nuovo PROMPT_ID, non riusare la probe persistente
 
 ## Spiegazione
