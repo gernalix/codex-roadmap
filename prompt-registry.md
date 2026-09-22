@@ -5,6 +5,7 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/334210 thinkpad-firmware-123-luks-recovery-followup\|334210 · Chiudere il recovery gate LUKS prima del firmware ThinkPad 1.23]] | running | 2026-09-22T12:21:34Z | 2026-09-22T12:21:34Z | BLOCKED | sì | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2\|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
@@ -15,7 +16,6 @@
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/284653 ccs-desktop-launcher-overlay-combined-closure-v1\|284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/334210 thinkpad-firmware-123-luks-recovery-followup\|334210 · Chiudere il recovery gate LUKS prima del firmware ThinkPad 1.23]] | pending | 2026-09-22T12:21:34Z | 2026-09-22T12:21:34Z | BLOCKED | sì | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | sì | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
