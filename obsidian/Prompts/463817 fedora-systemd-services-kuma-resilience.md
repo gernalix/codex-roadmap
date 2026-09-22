@@ -19,7 +19,7 @@ tags:
 - **Ultimo lancio:** 2026-09-22T01:19:09Z
 - **Ultimo esito:** FAIL
 - **Analizzato da ChatGPT:** sì
-- **Codice modificato da ChatGPT:** no (0 interventi)
+- **Codice modificato da ChatGPT:** sì (1 interventi)
 - **Fix:** 815274
 - **Dipende da:** [[257387 fedora-context-index-runtime-activation|257387]], [[729462 fedora-libsecret-runtime-cutover|729462]], [[832152 discord-exporter-always-on-kuma-live-v1|832152]]
 - **Sblocca:** —
@@ -43,4 +43,4 @@ Controlla i programmi automatici che devono restare sempre attivi sul tuo Fedora
 
 ## Modifiche di codice ChatGPT
 
-- Nessuna modifica di codice registrata.
+- 2026-09-22T02:00:24Z · `gernalix/fedora-system-monitor` · fix · commit `daef956d1b0e353629b581d00da115dbf3848dcd` · Esposti nel tooling FSM i path canonici non segreti di Uptime Kuma tramite kuma-runtime --json, con test, documentazione e CI PASS; questo rimuove il blocker che aveva causato il FAIL di 463817.

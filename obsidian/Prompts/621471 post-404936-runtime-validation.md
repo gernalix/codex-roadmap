@@ -33,7 +33,7 @@ tags:
 
 ## Spiegazione
 
-Installa sul tuo Fedora alcune correzioni che sono già state scritte e controlla che funzionino davvero. Non deve aggiungere nuove funzioni, solo mettere in uso ciò che è già pronto e verificarlo.
+Il primo tentativo non è partito per un blocco della roadmap, che ora è stato corretto e testato. Il task può essere rilanciato normalmente: deve solo installare sul Fedora le correzioni già pronte e verificare che funzionino.
 
 ## Esecuzioni
 

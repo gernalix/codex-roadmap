@@ -1,18 +1,18 @@
 ---
 prompt_id: 946527
-status: pending
+status: running
 project_id: —
 model: GPT-5.5
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/fedora-workflowy
 ---
 
 # 946527 · Distribuire la pulizia Needs fix di Workflowy
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/fedora-workflowy|Fedora / Workflowy]]
 - **Prompt:** [[../../prompts/workflowy-needs-fix-live-deploy-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-22T01:54:41Z
