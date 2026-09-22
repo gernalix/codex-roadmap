@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]]
+- [[obsidian/Prompts/125435 ccs-codex-per-thread-overlay-live-validation-v1|125435 · Verificare overlay Codex davvero separati per chat]]
 
 ## In esecuzione
 
