@@ -1,6 +1,6 @@
 ---
 prompt_id: 748203
-status: pending
+status: running
 project_id: 8
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,13 +9,13 @@ tags:
   - fix
   - publisher
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/fedora
 ---
 
 # 748203 · Riconciliare il session readback del recovery Codex
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../prompts/codex-usage-session-readback-reconcile-v1|Apri prompt]]
 - **Primo lancio:** —
