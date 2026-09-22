@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[738242 eboks-full-inbox-native-batch-export|738242]]
+- **Dipende da:** [[582946 eboks-full-export-resume-after-mitid-v1|582946]]
 - **Sblocca:** —
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —

@@ -5,7 +5,7 @@ tags:
 
 # Facilitatori di prompt
 
-- [[obsidian/Prompts/403496 codex-desktop-launcher-roadmap-branch-recovery-v1|403496 · Recuperare il launcher Desktop dopo il branch mismatch roadmap]] · `running`
+- [[obsidian/Prompts/764529 codex-desktop-launcher-atspi-consumer-closure-v2|764529 · Completare il launcher Codex Desktop con AT-SPI]] · `pending`
 - [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] · `completed`
 - [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1|318764 · Chiudere il blocker di prova della shortcut GNOME]] · `completed`
 - [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1|472615 · Ripristinare le note dopo reboot]] · `completed`
@@ -23,3 +23,4 @@ tags:
 - [[obsidian/Prompts/764382 workflowy-semantic-dashboard-styling|764382 · Evidenziare visivamente problemi e azioni nella dashboard]] · `completed`
 - [[obsidian/Prompts/381904 workflowy-roadmap-sync-rate-limit-hardening|381904 · Rendere stabile il sync Workflowy senza errori 429]] · `unknown`
 - [[obsidian/Prompts/917403 chrome-codex-switcher-gnome-global-search-shortcut-runtime-fix-v1|917403 · Fix GNOME global Context Search shortcut]] · `superseded`
+- [[obsidian/Prompts/403496 codex-desktop-launcher-roadmap-branch-recovery-v1|403496 · Recuperare il launcher Desktop dopo il branch mismatch roadmap]] · `blocked`

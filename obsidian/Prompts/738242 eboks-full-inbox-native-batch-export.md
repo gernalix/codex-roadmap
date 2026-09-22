@@ -1,6 +1,6 @@
 ---
 prompt_id: 738242
-status: running
+status: blocked
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,25 +9,25 @@ tags:
   - eboks
   - full-export
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/e-boks-exploration
 ---
 
 # 738242 · Scaricare tutta la posta e-Boks via Browser Use
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/e-boks-exploration|e-Boks exploration]]
-- **Prompt:** [[../../prompts/eboks-full-inbox-native-batch-export|Apri prompt]]
+- **Prompt:** [[../../falliti/eboks-full-inbox-native-batch-export|Apri prompt]]
 - **Primo lancio:** 2026-09-22T01:38:01Z
 - **Ultimo lancio:** 2026-09-22T02:15:25Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
-- **Fix:** —
+- **Fix:** 582946
 - **Dipende da:** —
-- **Sblocca:** [[218695 eboks-scraper-bootstrap-public-repo-live-adapter|218695]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[413258 eboks-native-bulk-download-ondemand-probe-v2|413258]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[582946 eboks-full-export-resume-after-mitid-v1|582946]]
 - **Chat Codex:** Stessa chat Codex di 413258: riusa sessione Chrome RPM/e-Boks autenticata
 
 ## Spiegazione
@@ -48,7 +48,7 @@ Scarica tutta la posta delle tue caselle e-Boks, non soltanto i messaggi che ved
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-22T02:49:03Z · colli di bottiglia: sì · fix: 582946 · Il blocker attuale non è tecnico: la sessione e-Boks è terminata e il login MitID richiede azione umana. Il lavoro è resumable; 582946 riprende dal progress.json dopo login senza rifare i batch.
 
 ## Modifiche di codice ChatGPT
 
