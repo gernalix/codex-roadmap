@@ -38,6 +38,7 @@ Completa sul Fedora reale l’installazione e il collaudo del collegamento Chrom
 | 2026-09-19T15:53:48Z | 2026-09-19T15:54:01Z | BLOCKED | 12.501 | gpt-5.6-luna | low | 1 | 67671 |
 | 2026-09-19T16:21:39Z | 2026-09-19T16:23:38Z | BLOCKED | 118.929 | gpt-5.6-luna | low | 16 | 42468 |
 | 2026-09-19T16:35:04Z | 2026-09-19T16:35:11Z | UNKNOWN | 7.208 | gpt-5.6-terra | medium | 1 | 126680 |
+| 2026-09-19T16:37:59Z | 2026-09-19T16:38:01Z | UNKNOWN | 2.614 | gpt-5.6-terra | medium | 0 | 140447 |
 | 2026-09-19T16:38:18Z | 2026-09-19T16:40:31Z | UNKNOWN | 132.978 | gpt-5.6-terra | medium | 17 | 161722 |
 | 2026-09-19T16:42:07Z | 2026-09-19T16:42:16Z | UNKNOWN | 9.066 | gpt-5.6-terra | medium | 0 | 171987 |
 | 2026-09-19T16:48:21Z | 2026-09-19T16:48:31Z | UNKNOWN | 9.992 | gpt-5.6-terra | medium | 1 | 216983 |
