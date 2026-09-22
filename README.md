@@ -80,7 +80,7 @@ Regole fail-closed:
 - un Issue number non è un PROMPT_ID;
 - non dichiarare “aggiunto alla roadmap” finché la mutation Issue non è stata applicata dal writer;
 - per un nuovo prompt, non dichiarare completato il workflow finché MegaVault non conferma anche `status=materialized` per lo stesso PROMPT_ID;
-- se il bridge remoto MegaVault non risponde, lo stato corretto è “allocazione pendente/bloccata”, non la creazione di un ID manuale o di una Issue informativa;
+- se il bridge remoto MegaVault non risponde e il checkout canonico locale è disponibile, usare il medesimo allocator tramite `python3 /home/daniele/MegaVault/megavault.py prompt-id allocate ...`; se anche il checkout/allocator canonico non è disponibile, lo stato corretto è “allocazione pendente/bloccata”, mai un ID manuale o una Issue informativa;
 - per aggiornare un prompt esistente si usa direttamente una mutation Issue e **non** si alloca un nuovo ID, salvo una vera revisione del prompt che richieda una nuova materializzazione.
 
 Bridge remoto PROMPT_ID di MegaVault:
@@ -89,6 +89,7 @@ Bridge remoto PROMPT_ID di MegaVault:
 - response: `gernalix/MegaVault:.github/prompt-id-response.json`;
 - `request_id` deve essere unico e la risposta deve corrispondere esattamente alla richiesta corrente;
 - `allocate` precede sempre `register`; `materialize` viene inviato solo dopo che il single writer ha creato il file prompt canonico.
+- se GitHub Actions/bridge remoto è indisponibile dopo `register`, la materializzazione può essere completata con `megavault.py prompt-id materialize <ID> --content-file <file-canonico-locale>` dopo un `roadmap_pull.py` protetto; non usare hash o stato inventati.
 
 ## Pull locale obbligatoriamente protetto
 
