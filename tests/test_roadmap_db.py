@@ -249,7 +249,6 @@ class RoadmapDBTests(unittest.TestCase):
             actions=[
                 lambda: db.set_status(conn,"123456","superseded",actor="chatgpt"),
                 lambda: db.set_model(conn,"123456","GPT-5.6 Sol"),
-                lambda: db.set_explanation(conn,"123456","changed"),
                 lambda: db.reorder_prompt(conn,"123456",9),
                 lambda: db.add_dependency(conn,"123456","654321"),
                 lambda: db.add_relation(conn,"123456","654321","replacement",actor="chatgpt"),
@@ -259,11 +258,24 @@ class RoadmapDBTests(unittest.TestCase):
             for action in actions:
                 with self.assertRaisesRegex(db.RoadmapDBError,"running_prompt_locked"):
                     action()
+            db.set_explanation(
+                conn,
+                "123456",
+                "Simple explanation for the dashboard",
+                actor="chatgpt",
+                note="presentation-only",
+            )
             row=db.prompt_row(conn,"123456")
             self.assertEqual("running",row["status"])
-            self.assertEqual("original",row["explanation"])
+            self.assertEqual("Simple explanation for the dashboard",row["explanation"])
             self.assertEqual("GPT-5.6 Terra",row["model"])
             self.assertEqual(1,row["queue_position"])
+            self.assertEqual(
+                1,
+                conn.execute(
+                    "select count(*) from audit_events where event_type='prompt_explanation_updated'"
+                ).fetchone()[0],
+            )
             conn.close()
 
     def test_fix_relation_auto_forwards_pending_children(self):
