@@ -40,6 +40,7 @@ Codice e test sono già su workflowy-importer/main e CI PASS. Resta solo distrib
 ## Analisi ChatGPT
 
 - 2026-09-22T01:58:28Z · colli di bottiglia: sì · fix: — · {"blocker":"roadmap_start.py inutilizzabile: conflitto Git irrisolto in codex-roadmap/tools/roadmap_pull.py e tests/test_roadmap_pull.py; nessuna modifica/deploy effettuata.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"946527","report_ref":"codex-usage:fc17a1c6a9268edbadd0afa6:78b65d3f65f74f97","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
+- 2026-09-22T02:04:23Z · colli di bottiglia: sì · fix: — · {"blocker":"dashboard non conforme; roadmap_result BLOCKED queued.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"946527","report_ref":"codex-usage:38111280d0dae7f85d2eeff1:c22d8e3671884fc6","schema":"codex-roadmap.fix-packet.v1","work_state":{"commit":"5b742c6"}}
 
 ## Modifiche di codice ChatGPT
 
