@@ -26,7 +26,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[773323 personalhub-shared-engines-3-8-finalize-v1|773323]]
-- **Sblocca:** —
+- **Sblocca:** [[857906 personalhub-unified-history-search-v1|857906]]
 - **Padri/precedenti:** [[773323 personalhub-shared-engines-3-8-finalize-v1|773323]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Codex implementa nel repo PersonalHub

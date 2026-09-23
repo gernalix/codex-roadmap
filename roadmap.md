@@ -16,3 +16,4 @@
 12. [[prompts/duplicate-photos-detector-fedora-local-finalize-v1|duplicate-photos-detector-fedora-local-finalize-v1]]
 13. [[prompts/personalhub-universal-since-when-creation-ui-v1|personalhub-universal-since-when-creation-ui-v1]]
 14. [[prompts/openai-vs-chatgpt-exporter-data-completeness-v1|openai-vs-chatgpt-exporter-data-completeness-v1]]
+15. [[prompts/personalhub-unified-history-search-v1|personalhub-unified-history-search-v1]]
