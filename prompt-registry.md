@@ -6,6 +6,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/254859 chatgpt-exporter-archive-validation-v1\|254859 · Verificare completezza e correttezza dell’export ChatGPT]] | running | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/199166 openai-vs-chatgpt-exporter-data-completeness-v1\|199166 · Confrontare export OpenAI e ChatGPTExporter]] | running | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/773323 personalhub-shared-engines-3-8-finalize-v1\|773323 · Chiudere i motori condivisi PH 3-8]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5\|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
@@ -16,7 +17,6 @@
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/817056 duplicate-photos-detector-fedora-local-finalize-v1\|817056 · Rendere operativo duplicate-photos-detector su Fedora]] | pending | — | — | — | no | no | — | Fedora | GPT-5.5 | medium |
-| [[obsidian/Prompts/199166 openai-vs-chatgpt-exporter-data-completeness-v1\|199166 · Confrontare export OpenAI e ChatGPTExporter]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/857906 personalhub-unified-history-search-v1\|857906 · PersonalHub — History/Search unica cross-module]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/822595 personalhub-global-since-when-v2\|822595 · Promuovere Since When a funzione globale PersonalHub]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
