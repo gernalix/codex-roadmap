@@ -1,6 +1,6 @@
 ---
 prompt_id: 822595
-status: pending
+status: running
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - personalhub
   - since-when
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 822595 · Promuovere Since When a funzione globale PersonalHub
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-global-since-when-v2|Apri prompt]]
 - **Primo lancio:** —
