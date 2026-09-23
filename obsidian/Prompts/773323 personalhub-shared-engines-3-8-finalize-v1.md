@@ -22,9 +22,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[522084 personalhub-shared-tags-facets-backlinks-v1|522084]], [[613102 personalhub-global-photo-engine-people-legacy-removal-v3|613102]]
-- **Sblocca:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
+- **Sblocca:** [[140263 personalhub-universal-since-when-creation-ui-v1|140263]], [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
 - **Padri/precedenti:** —
-- **Figli/follow-up:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
+- **Figli/follow-up:** [[140263 personalhub-universal-since-when-creation-ui-v1|140263]], [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
 - **Chat Codex:** Nuova chat Codex; usa /goal. Non toccare tag/facet né foto/media.
 
 ## Spiegazione
