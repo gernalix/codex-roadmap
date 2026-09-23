@@ -13,3 +13,4 @@
 9. [[prompts/eboks-full-export-resume-after-mitid-v1|eboks-full-export-resume-after-mitid-v1]]
 10. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 11. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
+12. [[prompts/chatgpt-exporter-archive-validation-v1|chatgpt-exporter-archive-validation-v1]]

@@ -4,7 +4,7 @@
 
 ## Lanciabili adesso
 
-- Nessuno.
+- [[obsidian/Prompts/254859 chatgpt-exporter-archive-validation-v1|254859 · Verificare completezza e correttezza dell’export ChatGPT]]
 
 ## In esecuzione
 
