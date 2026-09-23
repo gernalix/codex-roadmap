@@ -28,7 +28,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]], [[773323 personalhub-shared-engines-3-8-finalize-v1|773323]]
 - **Padri/precedenti:** —
-- **Figli/follow-up:** [[140263 personalhub-universal-since-when-creation-ui-v1|140263]], [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
+- **Figli/follow-up:** [[140263 personalhub-universal-since-when-creation-ui-v1|140263]], [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]], [[822595 personalhub-global-since-when-v2|822595]]
 - **Chat Codex:** Nuova chat Codex; usa /goal. Task unico e trasversale sullo schema PH.
 
 ## Spiegazione

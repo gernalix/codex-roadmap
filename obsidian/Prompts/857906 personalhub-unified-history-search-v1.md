@@ -27,7 +27,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[140263 personalhub-universal-since-when-creation-ui-v1|140263]]
+- **Dipende da:** [[822595 personalhub-global-since-when-v2|822595]]
 - **Sblocca:** —
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —

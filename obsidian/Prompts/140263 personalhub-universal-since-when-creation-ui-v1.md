@@ -1,6 +1,6 @@
 ---
 prompt_id: 140263
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - shared-ui
   - since-when
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 140263 · Estendere Create Since When a entità e moduli PH
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-universal-since-when-creation-ui-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-universal-since-when-creation-ui-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -26,9 +26,9 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[773323 personalhub-shared-engines-3-8-finalize-v1|773323]]
-- **Sblocca:** [[857906 personalhub-unified-history-search-v1|857906]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[773323 personalhub-shared-engines-3-8-finalize-v1|773323]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[822595 personalhub-global-since-when-v2|822595]]
 - **Chat Codex:** Codex implementa nel repo PersonalHub
 
 ## Spiegazione
