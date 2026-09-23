@@ -5,7 +5,6 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/522084 personalhub-shared-tags-facets-backlinks-v1|522084 · Unificare tag, facet e backlink cross-module in PersonalHub]] · `running`
 - [[obsidian/Prompts/773323 personalhub-shared-engines-3-8-finalize-v1|773323 · Chiudere i motori condivisi PH 3-8]] · `pending`
 - [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] · `pending`
 - [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `pending`
@@ -62,4 +61,5 @@ tags:
 - [[obsidian/Prompts/941372 personalhub-delivery-historical-blocked-reconcile-v1|941372 · Riconciliare il BLOCKED storico del delivery PersonalHub]] · `superseded`
 - [[obsidian/Prompts/836417 personalhub-release-stale-blocked-reconcile-v1|836417 · Riconciliare 684731 dopo il PASS release già documentato]] · `superseded`
 - [[obsidian/Prompts/963514 personalhub-soldi-on-device-visual-object-search-v1|963514 · Aggiungere ricerca visiva on-device alle foto di Soldi]] · `superseded`
+- [[obsidian/Prompts/522084 personalhub-shared-tags-facets-backlinks-v1|522084 · Unificare tag, facet e backlink cross-module in PersonalHub]] · `completed`
 - [[obsidian/Prompts/613102 personalhub-global-photo-engine-people-legacy-removal-v3|613102 · Completare motore foto globale e rimuovere pipeline legacy People]] · `completed`
