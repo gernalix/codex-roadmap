@@ -12,4 +12,3 @@
 
 - [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1|354882 · Elimina loop login Grindr e completa export]]
 - [[obsidian/Prompts/254859 chatgpt-exporter-archive-validation-v1|254859 · Verificare completezza e correttezza dell’export ChatGPT]]
-- [[obsidian/Prompts/199166 openai-vs-chatgpt-exporter-data-completeness-v1|199166 · Confrontare export OpenAI e ChatGPTExporter]]

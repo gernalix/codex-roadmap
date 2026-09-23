@@ -1,20 +1,20 @@
 ---
 prompt_id: 199166
-status: running
+status: completed
 project_id: 92
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/prompt-infrastructure
 ---
 
 # 199166 · Confrontare export OpenAI e ChatGPTExporter
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
-- **Prompt:** [[../../prompts/openai-vs-chatgpt-exporter-data-completeness-v1|Apri prompt]]
+- **Prompt:** [[../../completed/openai-vs-chatgpt-exporter-data-completeness-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
