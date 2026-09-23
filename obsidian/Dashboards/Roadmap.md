@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/773323 personalhub-shared-engines-3-8-finalize-v1|773323 · Chiudere i motori condivisi PH 3-8]]
+- [[obsidian/Prompts/817056 duplicate-photos-detector-fedora-local-finalize-v1|817056 · Rendere operativo duplicate-photos-detector su Fedora]]
 
 ## In esecuzione
 
