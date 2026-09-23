@@ -3,9 +3,9 @@
 > Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.
 
 1. [[prompts/grindr-web-exporter-single-browser-end-to-end-v1|grindr-web-exporter-single-browser-end-to-end-v1]]
-2. [[prompts/chatgpt-exporter-archive-validation-v1|chatgpt-exporter-archive-validation-v1]]
-3. [[prompts/grindr-export-chatgpt-desktop-end-to-end-v1|grindr-export-chatgpt-desktop-end-to-end-v1]]
-4. [[prompts/personalhub-shared-engines-3-8-finalize-v1|personalhub-shared-engines-3-8-finalize-v1]]
+2. [[prompts/personalhub-shared-engines-3-8-finalize-v1|personalhub-shared-engines-3-8-finalize-v1]]
+3. [[prompts/chatgpt-exporter-archive-validation-v1|chatgpt-exporter-archive-validation-v1]]
+4. [[prompts/grindr-export-chatgpt-desktop-end-to-end-v1|grindr-export-chatgpt-desktop-end-to-end-v1]]
 5. [[prompts/personalhub-obsidian-archive-blocker-closure-v5|personalhub-obsidian-archive-blocker-closure-v5]]
 6. [[prompts/personalhub-git-history-final-validation-v4|personalhub-git-history-final-validation-v4]]
 7. [[prompts/personalhub-datasette-lite-offline-runtime-v4|personalhub-datasette-lite-offline-runtime-v4]]
