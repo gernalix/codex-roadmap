@@ -1,18 +1,18 @@
 ---
 prompt_id: 254859
-status: pending
+status: running
 project_id: 92
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/prompt-infrastructure
 ---
 
 # 254859 · Verificare completezza e correttezza dell’export ChatGPT
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../prompts/chatgpt-exporter-archive-validation-v1|Apri prompt]]
 - **Primo lancio:** —
