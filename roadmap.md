@@ -10,7 +10,7 @@
 6. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 7. [[prompts/personalhub-final-live-db-migration-apk-pixel-v1|personalhub-final-live-db-migration-apk-pixel-v1]]
 8. [[prompts/kuma-620949-final-runtime-cutover-v1|kuma-620949-final-runtime-cutover-v1]]
-9. [[prompts/roadmap-lifecycle-consolidation-fedora-activation-v1|roadmap-lifecycle-consolidation-fedora-activation-v1]]
+9. [[prompts/prompt-infrastructure-final-runtime-activation-v1|prompt-infrastructure-final-runtime-activation-v1]]
 10. [[prompts/chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1]]
 11. [[prompts/sqlite-to-obsidian-kuma-connection-recovery-v1|sqlite-to-obsidian-kuma-connection-recovery-v1]]
 12. [[prompts/grindr-export-chatgpt-desktop-end-to-end-v1|grindr-export-chatgpt-desktop-end-to-end-v1]]

@@ -1,35 +1,35 @@
 ---
-prompt_id: 729874
-status: superseded
-project_id: 92
+prompt_id: 302284
+status: pending
+project_id: —
 model: GPT-6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/prompt-infrastructure-fedora-runtime
 ---
 
-# 729874 · Attivare il lifecycle roadmap consolidato su Fedora
+# 302284 · Distribuisci gli ultimi fix della prompt infrastructure
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/prompt-infrastructure-fedora-runtime|Prompt infrastructure / Fedora runtime]]
-- **Prompt:** [[../../falliti/roadmap-lifecycle-consolidation-fedora-activation-v1|Apri prompt]]
+- **Prompt:** [[../../prompts/prompt-infrastructure-final-runtime-activation-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[570349 codex-usage-live-publisher-single-writer-runtime-recovery-v1|570349]]
+- **Dipende da:** [[222733 stop-runaway-788315-heartbeat|222733]]
 - **Sblocca:** —
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[302284 prompt-infrastructure-final-runtime-activation-v1|302284]]
-- **Chat Codex:** Nuova chat Codex; attivazione locale multi-repo già implementata, nessun redesign.
+- **Padri/precedenti:** [[729874 roadmap-lifecycle-consolidation-fedora-activation-v1|729874]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Nuova chat Codex breve; un solo pass Fedora sui runtime già implementati
 
 ## Spiegazione
 
-Installa sul Fedora le correzioni già pronte che rendono unico il ciclo di avvio e fine dei task e verifica che roadmap, integratore e dashboard non si duplicano più il lavoro.
+Aggiorna in un solo passaggio i servizi locali della roadmap, Workflowy, telemetria Codex e switcher, verificando anche i nuovi colori e la correzione dei costi/attribuzioni.
 
 ## Esecuzioni
 
