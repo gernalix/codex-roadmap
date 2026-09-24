@@ -1,6 +1,6 @@
 ---
 prompt_id: 422308
-status: pending
+status: running
 project_id: —
 model: GPT-6 Luna
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - notification-hygiene
   - telegram
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/fedora-telegram-notification-hygiene
 ---
 
 # 422308 · Archiviare automaticamente le notifiche Telegram per ridurre il rumore
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/fedora-telegram-notification-hygiene|Fedora / Telegram notification hygiene]]
 - **Prompt:** [[../../prompts/telegram-notification-history-fedora-collector-v1|Apri prompt]]
 - **Primo lancio:** —
