@@ -21,7 +21,7 @@ tags:
 - **Progetto:** [[../Projects/fedora-telegram-notification-hygiene|Fedora / Telegram notification hygiene]]
 - **Prompt:** [[../../falliti/telegram-notification-history-fedora-collector-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-24T10:16:14Z
-- **Ultimo lancio:** 2026-09-24T10:16:14Z
+- **Ultimo lancio:** 2026-09-24T10:33:16Z
 - **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** sì (1 interventi)
@@ -41,6 +41,7 @@ Salva automaticamente in un repo privato la chat del bot delle notifiche, così 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-24T10:16:14Z | 2026-09-24T10:31:38Z | BLOCKED | 924.522 | gpt-6-luna | medium | 50 | 98591 |
+| 2026-09-24T10:33:16Z | 2026-09-24T10:33:43Z | BLOCKED | 26.751 | gpt-6-luna | medium | 2 | 108012 |
 
 ## Analisi ChatGPT
 
