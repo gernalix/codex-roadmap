@@ -1,6 +1,6 @@
 ---
 prompt_id: 893025
-status: pending
+status: running
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
@@ -11,13 +11,13 @@ tags:
   - personalhub-data
   - sqlite-to-obsidian
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/megavault
 ---
 
 # 893025 · Creare il projector Fedora condiviso SQLite → Obsidian
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/megavault|MegaVault]]
 - **Prompt:** [[../../prompts/sqlite-to-obsidian-fedora-bootstrap-v1|Apri prompt]]
 - **Primo lancio:** —

@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -39,7 +39,7 @@ Verifica sul Desktop reale che il launcher apra Codex col progetto corretto e ch
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-24T02:13:51Z · colli di bottiglia: sì · fix: — · {"blocker":"finalizzazione `996591` BLOCKED accodata (issue #938).","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"996591","report_ref":"codex-usage:04b3c084a8acc457ea4587fd:1b01b22c5f464616","schema":"codex-roadmap.fix-packet.v1","work_state":{"commit":"b432fd3"}}
 
 ## Modifiche di codice ChatGPT
 
