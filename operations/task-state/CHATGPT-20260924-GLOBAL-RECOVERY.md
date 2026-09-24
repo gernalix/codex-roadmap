@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24
+Updated: 2026-09-24 10:40 Europe/Copenhagen
 
 ## Objective
 Apply the findings from the global audit, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before producing the final APK, migrate the live PersonalHub database externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -47,6 +47,12 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 8. Model/reasoning decisions should use empirical usage after attribution/cumulative-goal accounting is corrected.
 
 ## Completed
+- Persistent operational-memory protocol added to codex-roadmap AGENTS.md and operations/task-state/README.md.
+- Token-discipline protocol added: no model-driven waiting heartbeats, no polling CI/merge/manual actions, stop after queued integration.
+- Model/reasoning metadata-only rule added to protocol; GPT-6 Luna-first/Sol-for-complex-work policy documented.
+- Ready queue_position documented as recommended launch order invariant.
+- workflowy-importer changed to expose prompt_type /goal and model+reasoning as dedicated Workflowy metadata lines; targeted test added.
+- chrome-codex-switcher main now contains dedicated ct-roadmap-model and ct-roadmap-goal styling plus regression coverage; PR #24 has been merged into main.
 - Global Phase-1 audit.
 - Persistent operational-memory protocol added to AGENTS.md and operations/task-state/README.md.
 - Token-discipline protocol added: no model-driven waiting/heartbeats, no identical retries without new evidence, stop after asynchronous integration queue.
@@ -66,14 +72,14 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 - Initial model-efficiency findings and workflow/dashboard gaps.
 
 ## Remaining
-- Stop/disable 788315 heartbeat and verify it no longer fires.
+- Stop/disable 788315 heartbeat and verify it no longer fires. PROMPT_ID 222733 allocated; roadmap registration still pending due two rejected mutation attempts (first invalid embedded relations field, second request-key conflict).
 - Check for any other active high-cost recurring Codex/model automations and disable/rewrite them when wasteful.
 - Deploy/verify the new persistent-memory and Workflowy styling changes on Fedora when local runtime access is available.
 - Reconcile roadmap lifecycle/PBF states, including 620949/354882/254859 and the 624831->613102 relation.
 - Repair codex-usage prompt attribution and cumulative goal accounting where needed.
 - Enforce metadata-only model/reasoning in non-running prompt bodies.
 - Implement Ready recommended-launch-order invariant.
-- Implement Workflowy styling for model/reasoning and /goal.
+- Implement Workflowy styling for model/reasoning and /goal. IN PROGRESS: workflowy-importer now exposes dedicated model and /goal lines; chrome-codex-switcher main already contains purple/bold/underlined model styling and cyan /goal styling with tests.
 - Reconcile open PRs (#35 PH, #3 ActivityWatch, #24 CCS).
 - Complete PH P0 task graph and final APK/db migration workflow.
 - Then process remaining non-PH roadmap/repository work and perform final global gate.
