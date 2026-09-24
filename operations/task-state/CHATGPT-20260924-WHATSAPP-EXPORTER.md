@@ -1,7 +1,7 @@
 # Operational task state — WhatsApp exporter
 
 TASK_ID: CHATGPT-20260924-WHATSAPP-EXPORTER
-Updated: 2026-09-24 18:59 Europe/Copenhagen
+Updated: 2026-09-24 19:13 Europe/Copenhagen
 
 ## Objective
 Build a robust incremental WhatsApp exporter starting from WhatsApp Web on Fedora, reusing verified authenticated-browser access and existing whatsapp-watcher DOM discovery, with deduplication, human-readable history, media preservation when accessible, and optional relationship/block-state events for Carlo Visda.
@@ -29,9 +29,9 @@ Build a robust incremental WhatsApp exporter starting from WhatsApp Web on Fedor
 
 ### Phase 2 — Exporter architecture
 - [x] Decide whether exporter belongs in whatsapp-watcher or a dedicated repo based on scope; dedicated exporter selected.
-- [ ] Define canonical local storage schema for chats/messages/revisions/media/system events.
-- [ ] Define unique identity/deduplication keys and incremental cursor/reconciliation strategy.
-- [ ] Define human-readable no-ID view with localized/relative dates.
+- [x] Define canonical local storage schema for chats/messages/revisions/media/system events.
+- [x] Define unique identity/deduplication keys and incremental cursor/reconciliation strategy.
+- [x] Define human-readable no-ID view with localized/relative dates.
 
 ### Phase 3 — Carlo Visda first implementation
 - [ ] Export the Carlo Visda chat incrementally without duplicating previously saved messages.
@@ -49,7 +49,7 @@ Build a robust incremental WhatsApp exporter starting from WhatsApp Web on Fedor
 - [ ] Commit/push source and final roadmap checkpoint.
 
 ## Current step
-Create a dedicated whatsapp-exporter repo/runtime that connects to the authenticated headless Chrome clone over localhost CDP, then implement the storage schema, dedupe/reconciliation and Carlo-only export without touching the normal browser session.
+Run the first Carlo-only live scan against the authenticated CDP clone, verify a second unchanged scan is duplicate-free, then perform bounded upward backfill and validate local archive/media behavior before deployment.
 
 ## Verified facts
 - Existing repo: /home/daniele/projects/whatsapp-watcher, main at b6e3e9f when last inspected.
@@ -73,15 +73,19 @@ Create a dedicated whatsapp-exporter repo/runtime that connects to the authentic
 - Use a dedicated exporter repo/runtime; do not extend whatsapp-watcher for transcript/media persistence.
 - Connect the exporter to the authenticated headless Chrome clone via localhost CDP so the normal Chrome/Firefox sessions remain untouched.
 - Store private archive data under the user data directory, outside source Git; source repo contains only code/tests/docs.
+- Dedicated source repo created at /home/daniele/projects/whatsapp-exporter and pushed to private GitHub repo gernalix/whatsapp-exporter.
+- Source checkpoint ddfebba implements CDP access, conservative Carlo target gating, SQLite records/revisions/events/media, deterministic dedupe, Markdown rendering, backfill/watch CLI and best-effort media download.
+- Focused synthetic tests pass 8/8; Python and JavaScript syntax gates pass.
 
 ## Completed
 - Persistent exporter state created from prior WhatsApp discovery.
 - Existing whatsapp-watcher repo and verified Carlo DOM signals identified.
 - Rehydration complete; watcher untracked files preserved.
 - Dedicated CDP exporter architecture selected.
+- Exporter core implemented and pushed at ddfebba; synthetic dedupe/relationship tests PASS 8/8.
 
 ## Remaining
-Architecture decision, source implementation, local storage schema, Carlo-first export, dedupe/reconciliation, tests, deploy, generalization, docs, and final checkpoint.
+Live Carlo validation/backfill, media verification, runtime deployment/restart resilience, generalization, docs, and final checkpoint.
 
 ## Blockers
 No confirmed blocker.
@@ -89,6 +93,7 @@ No confirmed blocker.
 ## Evidence
 - operations/task-state/CHATGPT-20260924-WHATSAPP-CARLO-BLOCK-TRACKING.md
 - /home/daniele/projects/whatsapp-watcher README/manifest/content.js
+- gernalix/whatsapp-exporter commit ddfebba; 8/8 unittest PASS plus py_compile/node --check PASS
 - Prior live CDP discovery recorded in the block-tracking checkpoint.
 
 ## Acceptance criteria
@@ -101,4 +106,4 @@ No confirmed blocker.
 - Source/tests/checkpoint are pushed; private transcript/media are not committed to public source Git.
 
 ## Next action
-Create /home/daniele/projects/whatsapp-exporter and its remote repo, implement SQLite + human-readable Markdown persistence and deterministic dedupe/revision logic with focused tests, then validate against the existing Carlo-only CDP session on port 9222.
+Run one live Carlo-only scan via 127.0.0.1:9222, inspect only counts/paths and parser diagnostics, repeat unchanged scan to prove no duplicate insertion, then start bounded backfill if the target gate and scroll container are valid.
