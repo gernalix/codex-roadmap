@@ -18,3 +18,4 @@
 14. [[prompts/duplicate-photos-detector-fedora-timer-migration-v1|duplicate-photos-detector-fedora-timer-migration-v1]]
 15. [[prompts/pbf-lifecycle-reconciliation-protocol-v1|pbf-lifecycle-reconciliation-protocol-v1]]
 16. [[prompts/ccs-pbf-live-final-closure-v1|ccs-pbf-live-final-closure-v1]]
+17. [[prompts/sqlite-to-obsidian-fedora-bootstrap-v1|sqlite-to-obsidian-fedora-bootstrap-v1]]

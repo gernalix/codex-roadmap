@@ -27,7 +27,7 @@ tags:
 - **Dipende da:** [[462279 personalhub-health-canonical-e2e-v4|462279]], [[522084 personalhub-shared-tags-facets-backlinks-v1|522084]], [[613102 personalhub-global-photo-engine-people-legacy-removal-v3|613102]], [[773323 personalhub-shared-engines-3-8-finalize-v1|773323]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[522084 personalhub-shared-tags-facets-backlinks-v1|522084]], [[728918 personalhub-obsidian-archive-complete-v4|728918]], [[773323 personalhub-shared-engines-3-8-finalize-v1|773323]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[893025 sqlite-to-obsidian-fedora-bootstrap-v1|893025]]
 - **Chat Codex:** Nuova chat; continuazione diretta di 728918
 
 ## Spiegazione
