@@ -6,6 +6,7 @@
 
 - [[obsidian/Prompts/222733 stop-runaway-788315-heartbeat|222733 · Ferma il heartbeat Codex runaway di 788315]]
 - [[obsidian/Prompts/994029 kuma-620949-final-runtime-cutover-v1|994029 · Chiudi il cutover runtime Kuma rimasto da 620949]]
+- [[obsidian/Prompts/333860 telegram-history-runtime-closure-v1|333860 · Chiudere il collector Telegram dopo autorizzazione e collaudo]]
 
 ## In esecuzione
 

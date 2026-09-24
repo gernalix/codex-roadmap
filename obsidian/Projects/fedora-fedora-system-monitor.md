@@ -6,6 +6,7 @@ tags:
 # Fedora / fedora-system-monitor
 
 - [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] · `pending`
+- [[obsidian/Prompts/333860 telegram-history-runtime-closure-v1|333860 · Chiudere il collector Telegram dopo autorizzazione e collaudo]] · `pending`
 - [[obsidian/Prompts/593872 fedora-graphics-black-screen-forensics|593872 · Diagnosi forense del blackout grafico Fedora]] · `completed`
 - [[obsidian/Prompts/374820 fedora-runtime-kuma-closure-v4|374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile]] · `completed`
 - [[obsidian/Prompts/542078 fedora-runtime-kuma-closure-v3|542078 · Chiudere solo il gate Kuma Fedora]] · `superseded`
