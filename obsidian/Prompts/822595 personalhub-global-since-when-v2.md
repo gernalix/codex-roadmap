@@ -33,7 +33,7 @@ tags:
 
 ## Spiegazione
 
-Sposta Since When dalla navigazione Timer alla Home di PersonalHub e rende la creazione dei counter una capability condivisa per Timer, tag, luoghi, sostanze e transazioni.
+Alla ripresa di 822595, applicare lo steer concordato: nessuna migrazione DB storica nel prodotto, QA esclusivamente su emulatore senza toccare Pixel/TCL, e completamento dei soli acceptance criteria ancora aperti (wiring shared, azioni contestuali, provenance tappabile, persistenza/restart e namespace). Il task resta fail-closed e va chiuso solo dopo i gate mirati e la verifica esplicita dell’assenza di nuove migration nel diff.
 
 ## Esecuzioni
 
