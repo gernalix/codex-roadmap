@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 17:52 Europe/Copenhagen
+Updated: 2026-09-24 18:16 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -88,7 +88,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-Workflowy PR #43 is in CI. 857906 is already claimed/running but intentionally untouched. After #43 merges, sync `task/857906` to the new main before any code edit, delete absorbed Workflowy branches, then execute 857906.
+857906 is the sole active PH side branch and is synchronized to `main=b1a7f22...`. Start implementation on schema 23: shared human History/Search contract/query/UI first, then module entry-point replacement and legacy-browser removal.
 
 ## Verified facts
 - 857906 design conclusion before coding: existing `hub_activity_log` schema 23 already carries occurred_at/module/action/entity label/detail/origin/system/source/before+after payload/group/reversible/status fields, and the generic undo engine already fails closed on stale/referenced/unsupported mutations. No schema 24 appears necessary for the unified History/Search work.
@@ -200,6 +200,8 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- Workflowy is fully merged and side branches deleted: PR #43 merged as `b1a7f22ef6f56be60cff47e7d8fec2805b088af1`; all required CI PASS after lint fix `f8e4541`. Both `chatgpt/workflowy-integration` and `task/workflowy-integration` were deleted locally/remotely after containment/tree-equivalence proof.
+- PersonalHub branch set is now exactly `main` + active `task/857906`. The 857906 worktree was proven clean and fast-forwarded from pre-Workflowy `66dbe026...` to post-Workflowy `b1a7f22...` before any 857906 code edit.
 - Superseded dirty residues 624831 and 728918 were removed after verifying their preserved external evidence hashes exactly match the checkpoint and both branches have 0 commits unique versus `origin/main`. Their dirty worktrees were force-removed and local branches deleted. No remote refs existed. PersonalHub local branch set is now only `main`, active `task/920550`, and `chatgpt/workflowy-integration`.
 - Detached-worktree cleanup advanced: removed `PersonalHub-autoexport-hotfix`, `PersonalHub-capsule-isolation`, and `/tmp/personalhub-main-play-baseline` after their previously recorded ancestor/patch-equivalence proof. Removed local `codex/pr35-cleanup` worktree+branch after re-proving the integrated functional head is contained in `origin/main`. Remaining local branches are only Workflowy, `main`, superseded dirty evidence branches 624831/728918, and active 920550.
 - PR #41 instrumentation CI is now PASS on head `3f32b8c`; Play preflight and architecture are also PASS. Only Android unit CI remains non-terminal.
@@ -282,4 +284,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Reconcile `chatgpt/workflowy-integration` onto current `origin/main=66dbe026...`, rerun WorkflowyIntegrationTest + WorkflowyDaysTest + app compile + architecture gate, publish/integrate through the single-writer path, verify main containment, then delete Workflowy and local 920550 branches and immediately claim 857906.
+Implement 857906 block 1 on schema 23: extend `HubDeepLinkContract` with History/Search module/entity filters; add bounded shared activity DAO query and humanization/filter model; replace the Home Search/Activity split with one shared host screen. Run consumer-preflight/tests/compile, commit+push checkpoint, then proceed module-by-module to remove duplicate change-history browsers while preserving domain-specific chronological data.
