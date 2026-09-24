@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS prompt_relations (
   from_prompt_id TEXT NOT NULL REFERENCES prompts(prompt_id) ON DELETE CASCADE,
   to_prompt_id TEXT NOT NULL REFERENCES prompts(prompt_id) ON DELETE CASCADE,
   relation_type TEXT NOT NULL
-    CHECK (relation_type IN ('fix','followup','replacement','split','merge','parent','related')),
+    CHECK (relation_type IN ('fix','followup','replacement','split','merge','parent','related','resolved_by')),
   created_at TEXT NOT NULL,
   actor TEXT NOT NULL,
   note TEXT,

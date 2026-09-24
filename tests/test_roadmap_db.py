@@ -437,8 +437,8 @@ class RoadmapDBTests(unittest.TestCase):
             add("100002", status="blocked"); add("200002", status="pending")
             db.add_relation(conn,"100002","200002","fix",actor="chatgpt")
             add("100003", status="blocked"); add("200003", status="pending")
-            db.set_status(conn,"200003","running",actor="codex",note="launch")
             db.add_relation(conn,"100003","200003","followup",actor="chatgpt")
+            db.set_status(conn,"200003","running",actor="codex",note="launch")
             add("100004", status="blocked"); add("200004", status="completed")
             db.add_relation(conn,"100004","200004","fix",actor="chatgpt")
 

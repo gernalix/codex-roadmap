@@ -68,6 +68,40 @@ def _ensure_view(conn: sqlite3.Connection, name: str, select_sql: str) -> None:
     conn.execute(desired)
 
 
+def _ensure_prompt_relations_contract(conn: sqlite3.Connection) -> None:
+    row = conn.execute(
+        "SELECT sql FROM sqlite_master WHERE type='table' AND name='prompt_relations'"
+    ).fetchone()
+    if not row or "'resolved_by'" in str(row["sql"] or ""):
+        return
+    # These generated views depend directly/indirectly on prompt_relations.
+    # Drop them only for the bounded table-contract upgrade; ensure_schema()
+    # recreates their current definitions immediately afterwards.
+    conn.execute("DROP VIEW IF EXISTS v_attention")
+    conn.execute("DROP VIEW IF EXISTS v_pbf_dispositions")
+    conn.execute(
+        """CREATE TABLE prompt_relations_v2 (
+             from_prompt_id TEXT NOT NULL REFERENCES prompts(prompt_id) ON DELETE CASCADE,
+             to_prompt_id TEXT NOT NULL REFERENCES prompts(prompt_id) ON DELETE CASCADE,
+             relation_type TEXT NOT NULL
+               CHECK (relation_type IN ('fix','followup','replacement','split','merge','parent','related','resolved_by')),
+             created_at TEXT NOT NULL,
+             actor TEXT NOT NULL,
+             note TEXT,
+             PRIMARY KEY (from_prompt_id, to_prompt_id, relation_type)
+           )"""
+    )
+    conn.execute(
+        """INSERT INTO prompt_relations_v2(
+             from_prompt_id,to_prompt_id,relation_type,created_at,actor,note
+           )
+           SELECT from_prompt_id,to_prompt_id,relation_type,created_at,actor,note
+           FROM prompt_relations"""
+    )
+    conn.execute("DROP TABLE prompt_relations")
+    conn.execute("ALTER TABLE prompt_relations_v2 RENAME TO prompt_relations")
+
+
 def ensure_schema(conn: sqlite3.Connection) -> None:
     try:
         version = conn.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
@@ -115,6 +149,7 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
              requested_at TEXT NOT NULL
            )"""
     )
+    _ensure_prompt_relations_contract(conn)
     # Views are runtime contracts too. Refresh them only when their SQL changes;
     # opening the writer must not rewrite roadmap.sqlite on a rejected/no-op Issue.
     _ensure_view(
@@ -746,9 +781,10 @@ def add_relation(
         raise RoadmapDBError(f"running_prompt_locked:{to_prompt_id}:relation_target:{relation_type}")
     ts = now_utc()
     conn.execute(
-        """INSERT OR IGNORE INTO prompt_relations(
+        """INSERT INTO prompt_relations(
              from_prompt_id,to_prompt_id,relation_type,created_at,actor,note
-           ) VALUES(?,?,?,?,?,?)""",
+           ) VALUES(?,?,?,?,?,?)
+           ON CONFLICT(from_prompt_id,to_prompt_id,relation_type) DO NOTHING""",
         (from_prompt_id, to_prompt_id, relation_type, ts, actor, note),
     )
 
