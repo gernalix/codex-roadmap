@@ -82,3 +82,17 @@ PASS della fase collector quando il servizio legge solo la chat target, persiste
 
 ## Next action
 Ottenere API ID/hash su my.telegram.org, inserirli nel file locale ~/.config/fedora-telegram-history/collector.env senza condividerli in chat/Git, quindi eseguire il comando login già installato. Dopo `Telegram session is authorized.`, creare il follow-up minimo per RUN1/RUN2 + enable timer; non riaprire 422308.
+
+
+## Remote Desktop Commander follow-up — 2026-09-24
+- Fedora device connected successfully through Remote Desktop Commander.
+- Verified local collector config exists with mode 0600; API ID/hash/phone remain unset and Telegram session is absent.
+- Opened https://my.telegram.org in the existing Chrome session.
+- Opened a fresh visible Ptyxis terminal for the user.
+- Remote safety controls block reading/inserting authentication secrets, browser credential/session extraction, and direct GUI automation of those secret-bearing flows.
+- Attempted Telegram Desktop tdata reuse as an alternative; the remote safety layer blocked direct session conversion before any account data was read.
+- No Telegram authorization was completed and timer remains intentionally disabled.
+- Do not retry Codex or model polling until there is new evidence: API credentials are entered locally and the Telegram login succeeds.
+
+## Next action
+User completes my.telegram.org login locally, creates/opens API development tools, enters API ID/hash only into ~/.config/fedora-telegram-history/collector.env, then runs the installed login command locally. After the session is authorized, ChatGPT/Remote Desktop Commander can resume with RUN1, RUN2, timer enablement, and repository verification.
