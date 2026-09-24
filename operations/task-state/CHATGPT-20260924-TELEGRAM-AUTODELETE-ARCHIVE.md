@@ -1,7 +1,7 @@
 # Operational task state — Telegram auto-delete archive
 
 TASK_ID: CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE
-Updated: 2026-09-24 16:48 Europe/Copenhagen
+Updated: 2026-09-24 17:17 Europe/Copenhagen
 
 ## Objective
 Preserve the complete available history of one Telegram chat configured with 1-day auto-delete, without duplicate storage, while retaining edits and deletion metadata and keeping archived content after Telegram removes it.
@@ -53,12 +53,13 @@ Preserve the complete available history of one Telegram chat configured with 1-d
 - [x] Deploy relationship-state capture after a consistent SQLite backup (`quick_check=ok`), backfill the current own-block event using Telegram's exact server block date, and verify no false peer-block inference from the current `UserStatusRecently` baseline.
 - [x] Verify a second systemd sync is a relationship no-op (`relationship_events=0`), runtime/source hashes match, both Telegram timers remain active, and the archive stays duplicate-free.
 - [x] Verify `messages_human` exposes only `quando`, `mittente`, `messaggio`, `media`, `stato`, uses `oggi`/`ieri` or Italian weekday abbreviations, and has no unknown sender after same-sender fallback.
-- [ ] During global recovery Phase 4, reconcile/integrate this branch with the existing task/422308 Telegram source closure and remove the temporary branch after equivalence is proved.
+- [x] Reconcile/integrate this branch with the existing task/422308 Telegram source closure and remove the temporary branch after equivalence is proved.
 
 ## Current step
-Relationship/block-state capture is deployed and verified. Runtime work for this user request is complete; canonical source integration remains parked for global Telegram Phase 4, and control returns to the current master recovery lane.
+Runtime and canonical source integration are complete. The stable non-model collector remains active; no further source-closure task is required.
 
 ## Verified facts
+- Canonical source closure completed through PROMPT_ID 966124. `fedora-system-monitor/main` contains the full Telegram implementation including relationship/block-state tracking; terminal checkpoint records main `7c18ac68134b616228cc1e49f29b8be42eaebec4`, focused/CI/runtime PASS and deletion of absorbed temporary branches.
 - Relationship-state deployment PASS: a consistent pre-migration SQLite backup was created and returned `quick_check=ok`; installed runtime hash equals the source branch hash.
 - Live baseline after deployment: peer name resolves as Carlo Visda 2; own `blocked=true`; Telegram blocklist server timestamp is 2026-09-24T14:20:43Z, rendered in `chat_human` as `oggi 16:20 · Sistema · Hai bloccato Carlo Visda 2 · certo`.
 - Peer status is currently `UserStatusRecently(by_me=true)`; therefore no peer-block inference was created. A second systemd sync created zero additional relationship events.
@@ -84,7 +85,7 @@ Relationship/block-state capture is deployed and verified. Runtime work for this
 - Use periodic 5-minute reconciliation rather than a permanently connected second Telethon client. This reuses the already-authorized session without creating another authorization and avoids unsafe concurrent session access.
 - First run scans all visible history; later runs scan a 30-hour overlap, enough to cover the 24-hour TTL plus margin and capture edits/deletions of auto-expiring messages.
 - Preserve message/media bytes after remote deletion; deletion is represented by deleted_at_utc + deletion_reason.
-- Keep the temporary source branch until global Telegram source closure, then integrate it together with the task/422308 baseline rather than bypassing the serialized recovery plan.
+- The temporary source branch was retained until serialized Telegram source closure, then integrated with the task/422308 baseline through 966124 and removed after containment was proved.
 - Own block/unblock events are factual; peer-block events are never promoted beyond inferred confidence because Telegram exposes no direct `blocked_by_peer` flag. A change to the UI's long-time-ago state is evidence, not proof, because the same label also represents genuine >1-month inactivity/privacy behavior.
 
 ## Completed
@@ -92,13 +93,11 @@ Relationship/block-state capture is deployed and verified. Runtime work for this
 - Implementation, target discovery, local deployment, first full backfill, duplicate-free second sync, systemd activation, shared-session race fix, concurrent runtime verification and pushed source checkpoint.
 
 ## Remaining
-- No runtime action required for relationship/block tracking.
+- No runtime or source-integration action required for relationship/block tracking.
 - Historical peer-block cycles that were never observed cannot be reconstructed from Telegram retroactively; future compatible status transitions will be recorded with inferred confidence.
-- In Phase 4, integrate the source branch into canonical fedora-system-monitor main together with the existing Telegram collector closure, rerun bounded tests/readback, then delete the temporary branch.
 
 ## Blockers
-- No runtime blocker.
-- Canonical main integration is deliberately gated by the global single-active-recovery-lane protocol.
+- No runtime or source-integration blocker.
 - Inherent limitation: if Fedora and this collector are unavailable for longer than the chat's 24-hour retention window, messages created and auto-deleted entirely during that outage cannot be recovered afterward.
 
 ## Evidence
@@ -121,7 +120,7 @@ Relationship/block-state capture is deployed and verified. Runtime work for this
 - [x] Focused tests pass; deployed runtime is healthy; source and checkpoint are pushed with no secrets or private transcript content.
 - [x] Human-readable no-ID view, Italian relative dates, sender names and phone-call action rendering are deployed and verified on the live archive.
 - [x] Own block/unblock tracking is factual, current block is backfilled from Telegram's server date, probable peer block/unblock transitions are stored only as inferred evidence, and relationship events are interleaved in `chat_human` without IDs.
-- [ ] Canonical fedora-system-monitor main contains the implementation and the temporary branch is removed; deferred to global Phase 4.
+- [x] Canonical fedora-system-monitor main contains the implementation and the temporary branch is removed.
 
 ## Next action
-Return control to the current master recovery lane. Keep the Telegram runtime running as a stable non-model service. When global Phase 4 becomes active, reconcile chatgpt/telegram-autodelete-archive with task/422308, integrate the combined Telegram collector changes into fedora-system-monitor main through the canonical source-closure lane, rerun tests/runtime readback, and delete the temporary branch.
+Return control to the current master recovery lane and keep the Telegram runtime running as a stable non-model service. No Telegram source-closure task remains.
