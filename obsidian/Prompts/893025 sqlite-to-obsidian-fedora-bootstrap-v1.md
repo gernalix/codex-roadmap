@@ -20,9 +20,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/megavault|MegaVault]]
 - **Prompt:** [[../../prompts/sqlite-to-obsidian-fedora-bootstrap-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-24T02:13:28Z
+- **Ultimo lancio:** 2026-09-24T02:13:28Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** sì (5 interventi)
 - **Fix:** —
@@ -40,7 +40,7 @@ Crea un servizio Fedora separato che legge PersonalHub-data e mantiene automatic
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-24T02:13:28Z | 2026-09-24T02:21:16Z | BLOCKED | 468.272 | gpt-5.6-terra | medium | 38 | 87786 |
 
 ## Analisi ChatGPT
 
