@@ -9,6 +9,7 @@
 - [[obsidian/Prompts/994029 kuma-620949-final-runtime-cutover-v1|994029 · Chiudi il cutover runtime Kuma rimasto da 620949]]
 - [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]]
 - [[obsidian/Prompts/641903 ccs-pbf-final-live-retry-v1|641903 · Chiudere il leaf PBF finale di Codex Desktop]]
+- [[obsidian/Prompts/422308 telegram-notification-history-fedora-collector-v1|422308 · Archiviare automaticamente le notifiche Telegram per ridurre il rumore]]
 
 ## In esecuzione
 

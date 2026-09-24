@@ -19,3 +19,4 @@
 15. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 16. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 17. [[prompts/ccs-pbf-final-live-retry-v1|ccs-pbf-final-live-retry-v1]]
+18. [[prompts/telegram-notification-history-fedora-collector-v1|telegram-notification-history-fedora-collector-v1]]
