@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 17:20 Europe/Copenhagen
+Updated: 2026-09-24 17:27 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -101,6 +101,7 @@ PersonalHub P0 is now the sole master lane. 920550 is already merged; finish the
 994029 and 966124 are both terminal completed; they no longer own any repository/runtime lane. PersonalHub remains the master recovery lane.
 
 ## Verified facts
+- 857906 is canonically claimed/running (issue #1064, task branch/worktree allocated) but intentionally has no code changes yet; PH master lane waits only for Workflowy #43 merge before syncing that worktree and executing.
 - 994029 and 966124 are both terminal `completed`; their former parallel ownership rule is historical and neither owns any repository/runtime resource now.
 - PH Workflowy reconciliation is PASS on top of merged 920550; only push/PR/single-writer integration + branch deletion remain before 857906.
 - 994029 is terminal `completed`: ActivityWatch main `b8ef359` is deployed; 17 focused tests + py_compile/diff-check PASS; final real run `20260924T151113Z` advanced the data repo; timer enabled+active; proprietary Kuma producer/credentials are absent; authoritative Kuma readback shows legacy ID 45 disabled and central ID 59 active with a fresh UP heartbeat. Terminal mutation issue #1063 closed completed.
