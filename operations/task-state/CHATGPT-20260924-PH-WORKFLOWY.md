@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub Workflowy integration
 
 TASK_ID: CHATGPT-20260924-PH-WORKFLOWY
-Updated: 2026-09-24 13:36 Europe/Copenhagen
+Updated: 2026-09-24 14:06 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-PERSONALHUB-P0.md
 Global state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
@@ -52,7 +52,8 @@ Implementation and host verification are complete. The feature is deliberately p
 
 ## Verified facts
 - PersonalHub remote branch: `chatgpt/workflowy-integration`.
-- Latest verified remote branch commit at checkpoint time: `edd08138702f9ae6cc54c2964f109343a356a149`.
+- Latest verified remote branch commit: `edd08138702f9ae6cc54c2964f109343a356a149`.
+- Current comparison against PersonalHub `main` at 2026-09-24 14:06: branch is `ahead 11 / behind 2`; current `main` base commit is `57883c2531400efacbefd2c63182bc11833f9537`. Final integration therefore remains intentionally parked until the serialized PH lane resumes.
 - Existing Hub Context WEB_URL resources already provide the required 0..N relation from a PersonalHub entity to Workflowy nodes.
 - No new PersonalHub Room table, Room schema JSON, `PersonalHubDatabase.kt` version change, migration file or `version.txt` change is part of this flow.
 - Consumer preflight found the expected app/core consumers; existing callers remain compatible because the new composer anchor is optional.
