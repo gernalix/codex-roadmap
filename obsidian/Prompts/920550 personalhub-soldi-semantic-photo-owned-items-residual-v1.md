@@ -22,7 +22,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[857906 personalhub-unified-history-search-v1|857906]]
+- **Sblocca:** [[707603 personalhub-git-history-final-validation-v4|707603]], [[857906 personalhub-unified-history-search-v1|857906]]
 - **Padri/precedenti:** [[624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat Codex; /goal unico sul residuo reale di 624831, non rifare 613102
