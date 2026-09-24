@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 17:16 Europe/Copenhagen
+Updated: 2026-09-24 17:18 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -44,7 +44,7 @@ Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only g
 - [x] Record the obsolete intermediate PH DB task 383662 as superseded by the specialized final cutover path 913264; never launch 383662.
 - [x] Implement and host-verify the optional PH ↔ Workflowy integration on `chatgpt/workflowy-integration` without a Room schema/version change; detailed checkpoint: `CHATGPT-20260924-PH-WORKFLOWY.md`.
 - [x] Safely park the partially completed 302284 infrastructure task at pushed WIP commit `6f31ceeaa51e5b77b86d2a18620a34079329196a` on `codex-usage-monitor/task/302284`; do not integrate or continue it while PH is actionable.
-- [ ] Finish 920550: all local gates PASS at `0834a24`; PersonalHub PR #41 is queued and currently checks-pending under the non-model single-writer integrator.
+- [x] Finish 920550: merged to PersonalHub main as `66dbe0265ff4dcdba3221e12e7953518056ce951`; schema 23 identity `4b9b96396c8f9e750d13b0e6da70fdd9`; all CI gates PASS.
 - [ ] Reconcile and integrate `chatgpt/workflowy-integration` into the then-current PersonalHub main, rerun affected gates, delete the temporary branch, and record the merged commit.
 - [ ] Run and integrate 857906 after 920550.
 - [ ] Run and integrate 707603 on the resulting schema.
