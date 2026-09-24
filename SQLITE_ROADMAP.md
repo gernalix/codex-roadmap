@@ -22,7 +22,7 @@ Per ogni `PROMPT_ID`:
 
 Le tabelle `analyses` e `analysis_code_changes` sono storiche/opzionali: non rappresentano una checklist da completare per ogni prompt.
 
-Un PASS ordinario viene chiuso autorevolmente da `roadmap_finish.py`; `executions` aggiunge poi telemetria automatica senza trattenere lo scheduling. Non si crea un'analisi dedicata, un file audit o un follow-up salvo failure, retry, costo/tool-call anomali, conflitto/loop osservato, bug infrastrutturale o richiesta esplicita.
+Un PASS ordinario viene chiuso autorevolmente da `roadmap_finish.py` (dopo integrazione per i task repository-backed); `executions` aggiunge poi sola telemetria automatica. Non si crea un'analisi dedicata, un file audit o un follow-up salvo failure, retry, costo/tool-call anomali, conflitto/loop osservato, bug infrastrutturale o richiesta esplicita.
 
 Questo evita che il sistema di misurazione generi più lavoro del task misurato.
 
@@ -40,13 +40,14 @@ Il client crea una mutation `pending -> running`, aspetta che il single writer l
 
 Una volta `running`, il prompt è **writer-locked** per le mutation che possono cambiare l'esecuzione: stato, modello, ordine, dipendenze, tag, relazioni, testo canonico e altri metadati operativi non possono essere modificati. `explanation` è l'unica eccezione: è testo puramente user-facing della dashboard e può essere chiarito anche durante l'esecuzione. Il file resta in `prompts/` e le viste generate continuano a mostrarlo come `running`.
 
-Il risultato immediato viene consegnato da:
+L'unico ingresso operativo per un risultato terminale è:
 
 ```bash
-python3 tools/roadmap_result.py --repo . --prompt-id 123456 --result PASS --confirm-executed
+python3 tools/roadmap_finish.py --repo . --prompt-id 123456 --result PASS --confirm-executed
+# oppure --result BLOCKED / FAIL / CANCELLED
 ```
 
-`roadmap_finish.py` resta compatibile ed equivale a `PASS`. Il comando non modifica il DB o Git locale: crea una GitHub Issue immutabile `[roadmap-mutation] terminal-<PROMPT_ID>`. Il single writer registra la `terminal_request` e applica **subito** lo stato terminale richiesto; su PASS i figli diventano immediatamente lanciabili quando le altre dipendenze sono soddisfatte. `usage_execution` arriva in seguito per costi/audit e non è più un prerequisito di scheduling. Se telemetria e richiesta terminale divergono, viene registrata l'anomalia senza riaprire automaticamente il prompt. Per ogni PROMPT_ID esiste una sola chiave terminale; un retry identico è idempotente, mentre un esito terminale diverso viene rifiutato.
+`roadmap_finish.py` non scrive direttamente il DB della roadmap. Per un PASS repository-backed accoda prima l'integrazione e ritorna `QUEUED`; il repo-integrator richiama lo stesso finalizzatore dopo il merge. Negli altri casi crea la GitHub Issue immutabile `[roadmap-mutation] terminal-<PROMPT_ID>`, che il single writer applica. `roadmap_result.py` resta un helper di compatibilità interno. `usage_execution` è sempre passivo: registra costi/audit e segnala mismatch o terminal event senza richiesta esplicita, ma non modifica mai lo stato del prompt.
 
 Prima dell'import ogni prompt attivo deve avere una fingerprint della propria materializzazione. Se un vecchio `PROMPT_ID` ricompare con testo diverso, il sistema registra una collisione e non sovrascrive automaticamente lo stato del prompt corrente.
 
