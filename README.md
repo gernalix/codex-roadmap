@@ -140,7 +140,7 @@ Se una verifica fallisce, **HEAD e worktree locali non avanzano**. Non fare fall
 
 La dashboard operativa è sincronizzata da `workflowy-importer` e mostra stati derivati da fonti reali:
 
-- **Ready / Waiting** dal DB e dalle dipendenze;
+- **Ready / Waiting** dal DB e dalle dipendenze. `Ready` è sempre ordinato per `queue_position`, e `queue_position` deve rappresentare l'ordine effettivamente consigliato di lancio, non soltanto un ordine storico/stabile; quando priorità o dipendenze cambiano, il writer deve riallinearlo;
 - **Running** dal claim di `roadmap_start.py`;
 - **Integration** dallo stato task/PR/CI/rebase di `github-autosync`;
 - **Needs fix** solo per stato terminale negativo o hard blocker reale dell'integratore;
@@ -173,7 +173,8 @@ Quando due task condividono lo stesso checkout/build/device e lo stesso failure 
 
 Ogni file in `prompts/` deve essere autosufficiente e contenere solo ciò che serve al task:
 
-- `PROMPT_ID`, progetto, modello/reasoning;
+- `PROMPT_ID` e progetto/target necessari al task;
+- **mai** modello/reasoning nel corpo: `model` e `reasoning` sono esclusivamente metadati strutturati della roadmap, così possono essere cambiati prima dell'avvio senza riscrivere il prompt o cambiare PROMPT_ID;
 - goal e acceptance criteria;
 - starting point autoritativo e workdir;
 - scope/non-goal;
@@ -199,18 +200,23 @@ L'allocatore canonico MegaVault è l'autorità; non inventare ID manualmente.
 
 ## Modello/reasoning
 
-- GPT-5.6 Luna `low`: task semplici/localizzati/meccanici.
-- GPT-5.6 Terra `medium`: default per lavoro Codex non banale.
-- GPT-5.6 Sol `medium`: solo per debugging ambiguo/difficile, decisioni architetturali, modifiche trasversali complesse o rischio elevato.
-- `high`: solo con necessità concreta.
+Baseline aggiornata alla famiglia GPT-6 disponibile in Codex:
 
-Prima di aumentare il modello/reasoning, ridurre scope, discovery, output e round-trip.
+- GPT-6 Luna `low`: task semplici, localizzati, meccanici, deploy/readback e fix con soluzione evidente.
+- GPT-6 Luna `medium`: default economico per coding ordinario, debugging moderato e task focalizzati che richiedono giudizio.
+- GPT-6 Sol `medium`: solo per coding complesso/agentic, debugging ambiguo, modifiche trasversali, architettura o rischio dati elevato.
+- GPT-6 Astra: solo per i casi end-to-end più difficili quando Luna/Sol non sono adeguati; mai come default.
+- `high`/superiori: solo con necessità concreta e documentabile.
+
+Per automazioni frequenti o polling, il default non è Luna: è **nessuna chiamata modello** quando basta un controllo event-driven/native. Prima di aumentare modello/reasoning, ridurre scope, discovery, output, durata e round-trip. Le raccomandazioni future devono privilegiare i dati reali di `codex-usage` quando l'attribuzione è affidabile.
 
 ## Esecuzione manuale
 
 Apri Workflowy → **Ready** e usa `🚀 Avvia`: il launcher deve aprire una nuova thread Codex in ChatGPT Desktop nel progetto/repo canonico, impostare esattamente modello e reasoning indicati e inserire il prompt senza inviarlo. `📋 Copia prompt` resta il fallback manuale. Non usare Work né una chat ChatGPT normale per i task della roadmap. Se progetto, modello o reasoning richiesti non sono selezionabili, il launcher deve fallire chiuso senza scegliere automaticamente un'alternativa. Prima di qualunque lavoro sul progetto, Codex deve eseguire `python3 ~/projects/codex-roadmap/tools/roadmap_start.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID>` e procedere solo se il writer conferma `running`. Non inviare meta-prompt e non far rileggere roadmap/README/MegaVault se il prompt contiene già lo starting point necessario. `MegaVault=FAST` con progetto/workdir già risolti non autorizza un dump preventivo di MegaVault, memoria o storico: si consulta solo un fatto specifico se emerge davvero come mancante.
 
 Default: un task per sessione; stesso thread solo per una continuazione diretta che riusa davvero contesto utile.
+
+Non mantenere un thread Codex attivo con heartbeat automatici per aspettare login, click manuali, CI, merge, export o altri cambiamenti esterni. Salva lo stato, termina/pausa secondo protocollo e riprendi solo quando esiste nuova evidenza.
 
 Durante il task, un failure locale correggibile non deve trasformarsi in un nuovo prompt: Codex deve correggerlo e continuare. Se il failure è causato da tooling/protocollo/helper del progetto ed è sicuro correggerlo in-scope, Codex può correggere anche quello e riprendere il goal. BLOCKED/FAIL sono terminali solo per blocker esterni/safety o recovery realmente esaurito; un piano diventato obsoleto, una lease orfana recuperabile, un helper difettoso, CI pending/in-progress o correggibile, oppure una divergenza Git riconciliabile non bastano. La prontezza delle dipendenze è decisa dal DB e da `roadmap_start.py`: riferimenti storici del tipo “dopo PROMPT_ID X” dentro vecchi prompt non devono essere ricontrollati autonomamente se il claim remoto del prompt corrente è già stato accettato.
 
