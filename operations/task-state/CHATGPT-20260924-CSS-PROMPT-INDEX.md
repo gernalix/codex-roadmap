@@ -50,7 +50,7 @@ Extend `gernalix/chrome-codex-switcher` (CSS) so each persistent Chrome context 
 - [ ] Final completion checkpoint.
 
 ## Current step
-Disposable real-browser test created context `057a7d84-a62d-49d7-93f1-d0db13834a0e` for `http://127.0.0.1:43891/index.html`, but automatic prompt-ID extraction did not populate `prompt_ids` after >10 seconds. Debug the deployed scanner→background→daemon path before proceeding to manual override tests.
+Runtime root cause narrowed to stale Chrome extension registration: Preferences still records service-worker version `0.3.8` for CSS even though deployed files/manifest are `0.4.0`. A command-line `chrome://restart` did not refresh it. Session backup is complete; next perform graceful browser SIGTERM + restore-last-session reload from the canonical unpacked path.
 
 ## Verified facts / implementation
 - Canonical `prompt_bindings` remains untouched as the 1:1 prompt↔Chrome/Codex binding.
@@ -89,6 +89,13 @@ Source gates:
 - Shell syntax gates PASS.
 - GitHub Actions CI run 107 on `6b4f9da`: python PASS, Selenium E2E PASS, overall SUCCESS.
 
+Runtime reload evidence:
+- Chrome Preferences points CSS ID `mfpomnbkkfklealhaacbnmelpgpggglg` to the correct unpacked path but `service_worker_registration_info.version` remains `0.3.8`.
+- Deployed `content.js` and `background.js` hashes exactly match canonical main and contain the scanner/message routes.
+- Direct daemon `POST /api/context/prompts/observe` succeeds, narrowing failure to stale browser-side code registration.
+- `chrome://restart` invoked from the existing Chrome process did not change the registered service-worker version.
+- Session safety backup created at `~/.local/state/chrome-codex-switcher/session-backup-20260924-164432` containing Chrome `Sessions/` and `Preferences`.
+
 Runtime E2E finding:
 - Disposable page `http://127.0.0.1:43891/index.html` containing standalone IDs `583901` and `583902` created real CSS context `057a7d84-a62d-49d7-93f1-d0db13834a0e`, proving the content script can reach `context:get`.
 - `/api/list` returned `prompt_ids=[]` for that context over 20 polls / >10 seconds, and SQLite had no matching `context_prompt_ids` rows. Automatic scanning is therefore not runtime-PASS yet.
@@ -108,7 +115,7 @@ Repository implementation, source tests/CI, Fedora file deployment, daemon resta
 Exercise real page prompt-ID indexing/search/manual override behavior, verify clean final state, then mark task completed.
 
 ## Blockers
-Automatic scanner runtime path currently fails on the disposable real-browser page even though context creation succeeds and both daemon/extension report `0.4.0`. This is the active code/runtime blocker to diagnose. Direct X11 GUI automation is unavailable under the Wayland session, so debugging should prefer deployed-source/readback/control-plane evidence.
+Chrome's extension registration is stale at service-worker version `0.3.8`; deployed source and daemon are `0.4.0`. This explains why old content/background code can still create contexts but lacks the new scanner path. `chrome://restart` from command line did not refresh registration. A graceful browser process restart with session restoration is required.
 
 ## Acceptance criteria
 - [x] Searching any indexed six-digit PROMPT_ID is implemented to surface the associated context.
@@ -126,4 +133,4 @@ Automatic scanner runtime path currently fails on the disposable real-browser pa
 - [ ] Final checkout/runtime state is clean and checkpointed.
 
 ## Next action
-Compare deployed `content.js`/`background.js` with canonical main, verify scanner symbols and observe API routes exist in deployed files, then isolate whether the failure is content-script execution, message forwarding, or daemon observe handling. Fix the minimum failing layer, checkpoint, redeploy, and repeat the same disposable-page test.
+Gracefully terminate the main Chrome browser process with SIGTERM, relaunch Chrome with `--restore-last-session --load-extension=$HOME/.local/share/chrome-codex-switcher/extension`, verify session restoration and service-worker registration `0.4.0`, then repeat the same disposable-page scanner test.
