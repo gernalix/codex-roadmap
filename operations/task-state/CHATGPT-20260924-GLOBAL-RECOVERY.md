@@ -37,6 +37,7 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 - Many pending prompt bodies still contain MODEL=/REASONING= despite the new metadata-only rule.
 
 ## Decisions
+- PersonalHub detailed P0 state is delegated to `operations/task-state/CHATGPT-20260924-PERSONALHUB-P0.md`. Keep only cross-project dependencies and concise PH progress in this global file.
 1. Emergency action before all other Phase-2 work: stop the runaway 788315 heartbeat.
 2. Then prioritize PersonalHub P0 above unrelated project work.
 3. PH P0 must complete all relevant PH functional work, PBF fixes, tests, merge/reconciliation, final schema freeze, release preflight, external live-DB migration, final APK build, and Pixel installation/smoke.
@@ -88,7 +89,7 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 - Implement Ready recommended-launch-order invariant.
 - Implement Workflowy styling for model/reasoning and /goal. SOURCE DONE; local runtime deployment/readback remains.
 - Reconcile open PRs (#35 PH, #3 ActivityWatch, #24 CCS).
-- Complete PH P0 task graph and final APK/db migration workflow.
+- Complete PH P0 task graph and final APK/db migration workflow. Detailed ownership delegated to operations/task-state/CHATGPT-20260924-PERSONALHUB-P0.md.
 - Then process remaining non-PH roadmap/repository work and perform final global gate.
 
 ## Blockers
