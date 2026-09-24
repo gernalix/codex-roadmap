@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 16:31 Europe/Copenhagen
+Updated: 2026-09-24 16:34 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -91,6 +91,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 920550 head is now `b10117a` with the CI instrumentation regression fixed locally and pushed. PR #41 must rerun checks on this head. Do not start 857906 until #41 is merged and Workflowy side-branch work is integrated.
 
 ## Verified facts
+- Local branch/worktree cleanup inventory at 16:34: `task/920550` is 4 commits ahead / 0 behind current `origin/main`; `chatgpt/workflowy-integration` is 11 ahead / 2 behind. All ordinary historical local task/feature branches inspected have 0 commits unique versus `origin/main` **except** `codex/pr35-cleanup`, which is 10 ahead / 58 behind and therefore requires patch/semantic absorption analysis before deletion. Several obsolete detached worktrees also remain and must be removed during final cleanup.
 - Workflowy prospective reconciliation against 920550 head `b10117a` is already PASS in a temporary detached worktree: zero merge conflicts, one auto-merged overlap (`.codex/CODE_MAP.tsv`), consumer-preflight PASS, targeted Workflowy/Workflowy-days tests PASS, app compile PASS, architecture PASS. No published branch/main mutation was made.
 - Canonical MegaVault emulator launch command was re-verified exactly as documented: with current GNOME `DISPLAY/WAYLAND_DISPLAY/XAUTHORITY`, `python3 tools/android_target_preflight.py start` returned `status=ok`, AVD `Pixel_8a`, serial `emulator-5554`, state `device`.
 - `~/Downloads/personalhub (2).db` exactly matches the exported PH schema-22 Room identity: both report version 22 and identity hash `1b60cb2d2925f84f9ee2c527a4090ff5`. Combined with its additional domain rows versus the v59 snapshot, it is a structurally valid and substantively fresher local migration candidate, but still not automatically authoritative over the live Pixel DB.
