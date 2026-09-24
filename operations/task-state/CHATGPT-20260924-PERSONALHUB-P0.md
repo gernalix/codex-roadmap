@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 15:55 Europe/Copenhagen
+Updated: 2026-09-24 16:01 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -88,9 +88,11 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-920550 device QA is PASS and the fixes are safely pushed at `0834a24`. Because the AVD test discovered a release R8/ONNX JNI issue, rebuild Play APK+AAB once with the final keep rule, record size/hash, then run final diff/architecture sanity and finalize 920550 through the canonical integration flow.
+920550 local acceptance is complete at clean pushed HEAD `0834a24`. Finalize 920550 through the canonical roadmap/single-writer flow and perform one bounded integration readback. After main contains it, inspect schema/evidence and immediately reconcile the remaining `chatgpt/workflowy-integration` side branch.
 
 ## Verified facts
+- R8 mapping confirms the exact ONNX JNI contract now survives Play minification: `ai.onnxruntime.TensorInfo -> ai.onnxruntime.TensorInfo` and constructor `<init>(long[], String[], int)` is retained. This directly covers the JNI crash observed during QA.
+- Final 920550 local gate set is complete at clean pushed HEAD `0834a2434abe9ddd3a1c43caf23ba646c5bc3923`: dedicated AVD QA PASS 1/1, final Play APK+AAB PASS, `checkArchitectureBoundaries` PASS, `git diff --check` PASS, clean worktree.
 - Canonical emulator cleanup completed: repaired the official API36 Google APIs x86_64 system image to revision 7 (restoring missing `encryptionkey.img`), recreated `Pixel_8a`, and proved `emulator-5554` reaches ADB `device` + `sys.boot_completed=1`. Runtime identity: API 36, 1080×2400, 420 dpi. All other legacy/temporary AVDs were deleted; `emulator -list-avds` now returns only `Pixel_8a`.
 - MegaVault emulator docs were updated in isolated repo task 920550 and queued as MegaVault PR #106: canonical AVD `Pixel_8a`, API36 rev7, screen coordinate bounds x=0..1079/y=0..2399, center=(540,1200), live serial resolution, and real GNOME-session launch requirements.
 - 920550 QA packaging blocker fixed locally: QA previously packaged only `armeabi-v7a` for the TCL, so x86_64 emulator install failed with `INSTALL_FAILED_NO_MATCHING_ABIS`. QA now packages both `armeabi-v7a` and `x86_64`; rebuilt QA + androidTest artifacts PASS and install successfully on the canonical emulator.
@@ -247,4 +249,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Rebuild exactly `:app:assemblePlay :app:bundlePlay` from clean pushed commit `0834a24`, record final APK/AAB size + SHA-256 and confirm ONNX Java/JNI classes are preserved. Then run only final `git diff --check`/architecture sanity, finalize 920550 via the canonical roadmap/single-writer integration path, and inspect merged main before reconciling `chatgpt/workflowy-integration`.
+Call the canonical 920550 finalizer with PASS from a clean roadmap checkout. Do not poll CI/merge. Perform one bounded single-writer/integrator pass/readback; once `PersonalHub/main` contains 920550, verify schema 23 + commit absorption, then rebase/reconcile and integrate `chatgpt/workflowy-integration` before launching 857906.
