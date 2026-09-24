@@ -165,6 +165,7 @@ CREATE INDEX IF NOT EXISTS idx_analyses_prompt_time ON analyses(prompt_id, analy
 CREATE INDEX IF NOT EXISTS idx_code_changes_prompt_time ON analysis_code_changes(prompt_id, created_at);
 
 DROP VIEW IF EXISTS v_attention;
+DROP VIEW IF EXISTS v_pbf_dispositions;
 DROP VIEW IF EXISTS v_runnable_prompts;
 DROP VIEW IF EXISTS v_prompt_summary;
 
@@ -202,27 +203,101 @@ WHERE p.status='pending'
   )
 ORDER BY COALESCE(p.queue_position, 2147483647), p.created_at, p.prompt_id;
 
+CREATE VIEW v_pbf_dispositions AS
+WITH RECURSIVE
+pbf_base AS (
+  SELECT s.*
+  FROM v_prompt_summary s
+  WHERE s.status IN ('failed','blocked','unknown','cancelled','superseded')
+     OR EXISTS (
+       SELECT 1
+       FROM executions e
+       WHERE e.prompt_id=s.prompt_id
+         AND e.outcome IN ('FAIL','BLOCKED','UNKNOWN','CANCELLED')
+     )
+),
+relation_walk(source_prompt_id,current_prompt_id,depth,path,via_resolved_by) AS (
+  SELECT
+    r.from_prompt_id,
+    r.to_prompt_id,
+    1,
+    '|' || r.from_prompt_id || '|' || r.to_prompt_id || '|',
+    CASE WHEN r.relation_type='resolved_by' THEN 1 ELSE 0 END
+  FROM prompt_relations r
+  JOIN pbf_base b ON b.prompt_id=r.from_prompt_id
+  WHERE r.relation_type IN ('fix','replacement','followup','merge','resolved_by')
+  UNION ALL
+  SELECT
+    w.source_prompt_id,
+    r.to_prompt_id,
+    w.depth+1,
+    w.path || r.to_prompt_id || '|',
+    CASE WHEN w.via_resolved_by=1 OR r.relation_type='resolved_by' THEN 1 ELSE 0 END
+  FROM relation_walk w
+  JOIN prompt_relations r ON r.from_prompt_id=w.current_prompt_id
+  WHERE r.relation_type IN ('fix','replacement','followup','merge','resolved_by')
+    AND w.depth < 16
+    AND instr(w.path, '|' || r.to_prompt_id || '|')=0
+),
+signals AS (
+  SELECT
+    b.prompt_id,
+    EXISTS (
+      SELECT 1
+      FROM relation_walk w
+      JOIN prompts successor ON successor.prompt_id=w.current_prompt_id
+      WHERE w.source_prompt_id=b.prompt_id
+        AND successor.status='completed'
+        AND w.via_resolved_by=1
+    ) AS resolved_by_completed,
+    EXISTS (
+      SELECT 1
+      FROM relation_walk w
+      JOIN prompts successor ON successor.prompt_id=w.current_prompt_id
+      WHERE w.source_prompt_id=b.prompt_id
+        AND successor.status IN ('pending','running','completed')
+    ) AS has_live_or_completed_successor,
+    EXISTS (
+      SELECT 1
+      FROM prompt_relations r
+      WHERE r.from_prompt_id=b.prompt_id
+        AND r.relation_type='replacement'
+    ) AS has_replacement,
+    EXISTS (
+      SELECT 1
+      FROM status_history sh
+      WHERE sh.prompt_id=b.prompt_id
+        AND sh.old_status IS NOT NULL
+        AND sh.new_status IN ('cancelled','superseded')
+        AND trim(COALESCE(sh.note,''))<>''
+    ) AS has_terminal_reason,
+    (
+      COALESCE(b.current_path,'')=''
+      AND b.project_id IS NULL
+      AND COALESCE(b.project_name,'')=''
+      AND COALESCE(b.repo,'')=''
+      AND NOT EXISTS (
+        SELECT 1 FROM prompt_materializations pm WHERE pm.prompt_id=b.prompt_id
+      )
+    ) AS historical_stub
+  FROM pbf_base b
+)
+SELECT
+  b.*,
+  CASE
+    WHEN s.historical_stub THEN 'historical_unclassified'
+    WHEN b.status='completed' THEN 'resolved'
+    WHEN s.resolved_by_completed THEN 'resolved'
+    WHEN s.has_live_or_completed_successor THEN 'covered'
+    WHEN b.status IN ('cancelled','superseded')
+         AND (s.has_terminal_reason OR s.has_replacement) THEN 'waived'
+    ELSE 'needs_fix'
+  END AS pbf_disposition
+FROM pbf_base b
+JOIN signals s ON s.prompt_id=b.prompt_id;
+
 CREATE VIEW v_attention AS
 SELECT s.*
 FROM v_prompt_summary s
-WHERE s.status IN ('failed','blocked','unknown')
-  AND (
-    COALESCE(s.current_path,'')<>''
-    OR s.project_id IS NOT NULL
-    OR COALESCE(s.project_name,'')<>''
-    OR COALESCE(s.repo,'')<>''
-  )
-  AND NOT EXISTS (
-    SELECT 1
-    FROM prompts fix
-    WHERE fix.prompt_id=s.fix_prompt_id
-      AND fix.status='completed'
-  )
-  AND NOT EXISTS (
-    SELECT 1
-    FROM prompt_relations r
-    JOIN prompts successor ON successor.prompt_id=r.to_prompt_id
-    WHERE r.from_prompt_id=s.prompt_id
-      AND r.relation_type IN ('fix','replacement','merge','resolved_by')
-      AND successor.status='completed'
-  );
+JOIN v_pbf_dispositions pbf ON pbf.prompt_id=s.prompt_id
+WHERE pbf.pbf_disposition='needs_fix';
