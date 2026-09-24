@@ -1,7 +1,7 @@
 # Operational task state — checkpoint notifications via ntfy
 
 TASK_ID: CHATGPT-20260924-NTFY-CHECKPOINTS
-Updated: 2026-09-24 13:43 Europe/Copenhagen
+Updated: 2026-09-24 13:50 Europe/Copenhagen
 
 ## Objective
 Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHub publishes only after accepting a task-state push; a self-hosted ntfy service on the Oracle VM delivers to Android and browser/Fedora; Git remains canonical persistence.
@@ -23,7 +23,7 @@ Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHu
 ### Phase 2 — Implementation
 - [x] Add reproducible ntfy server deployment/configuration to vm_oracle.
 - [x] Deploy/start ntfy on Oracle with persistent storage and authentication; protected publisher/subscriber users and ACLs verified.
-- [ ] Remove the duplicate Nginx ntfy server block that still causes a harmless bootstrap warning, while preserving the verified public route.
+- [x] Remove the duplicate Nginx ntfy server block while preserving the verified public route.
 - [ ] Add a GitHub Actions publisher triggered only by accepted pushes changing `operations/task-state/**`.
 - [ ] Store publisher credentials in GitHub Actions secrets and subscriber credentials in Fedora Secret Service; never commit them.
 - [ ] Add Fedora desktop subscription/notification support and enable the browser/PWA path; document the Android one-time subscription step if device interaction is unavailable.
@@ -37,7 +37,7 @@ Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHu
 - [ ] Update protocol/docs and close this state file.
 
 ## Current step
-Phase 2: remove the duplicate Nginx ntfy server block warning without changing the working route, then wire the GitHub Actions publisher and Fedora subscriber/desktop path using the verified protected ntfy accounts.
+Phase 2: wire the GitHub Actions publisher and Fedora subscriber/desktop path using the verified protected ntfy accounts, then add the availability watchdog.
 
 ## Verified facts
 - Fedora is reachable through Remote Desktop Commander.
@@ -56,7 +56,7 @@ Phase 2: remove the duplicate Nginx ntfy server block warning without changing t
 - `/opt/ntfy/credentials.env` remains root-owned mode 0600 with the generated publisher/subscriber passwords; the corrected bootstrap has now created both users in the ntfy auth DB.
 - The bootstrap fix for password injection plus duplicate-ingress normalization is on `vm_oracle/main` in substantive commit `19b4dc3`; remote head at this checkpoint is `dd60451`.
 - Corrected bootstrap rerun completed successfully: public/origin health PASS; `checkpoint-publisher` is write-only on `chatgpt-checkpoints`, `checkpoint-subscriber` is read-only, and anonymous access remains denied.
-- Nginx still reports a duplicate `ntfy.danielegalati.com` server-name warning during bootstrap; service health is unaffected, but configuration duplication should be removed.
+- The duplicate legacy Nginx block at `/etc/nginx/conf.d/ntfy-checkpoints.conf` was removed; the canonical `sites-enabled` block is the only remaining server block and public health remains PASS.
 
 ## Decisions
 - Use one central ntfy topic/event stream rather than one topic per PROMPT_ID.
@@ -72,9 +72,10 @@ Phase 2: remove the duplicate Nginx ntfy server block warning without changing t
 - Diagnosed and repaired the duplicate stale Cloudflare ingress that caused HTTP 502.
 - Hardened the bootstrap so the two ntfy account passwords are passed via environment rather than argv and all duplicate ntfy ingress entries are normalized before adding the canonical route.
 - Reran the corrected Oracle bootstrap and verified the protected publisher/subscriber users plus their write-only/read-only topic ACLs.
+- Removed the legacy duplicate Nginx server block and hardened `vm_oracle/ntfy/bootstrap.sh` to remove it on future deploys; clean redeploy returned `NTFY_ORIGIN=PASS` and `NTFY_PUBLIC=PASS`.
 
 ## Remaining
-Remove the duplicate Nginx server block warning; create/store publisher/subscriber credentials in their final secret stores; add GitHub Actions checkpoint publisher; add Fedora/browser/Android subscription path; decide/add Kuma watchdog; run one real checkpoint end-to-end; finalize docs/state.
+Create/store publisher/subscriber credentials in their final secret stores; add GitHub Actions checkpoint publisher; add Fedora/browser/Android subscription path; decide/add Kuma watchdog; run one real checkpoint end-to-end; finalize docs/state.
 
 ## Blockers
 No external blocker. Do not regenerate or expose the existing root-only credentials file; reuse the already-generated credentials when populating GitHub Actions/Fedora secret stores.
@@ -86,7 +87,7 @@ No external blocker. Do not regenerate or expose the existing root-only credenti
 - Cloudflare config now has a single ntfy hostname route to `127.0.0.1:8001`.
 - `/opt/ntfy/credentials.env`: root:root mode 0600; values were not recorded.
 - After corrected bootstrap rerun, `ntfy user list` shows `checkpoint-publisher` with write-only access and `checkpoint-subscriber` with read-only access to `chatgpt-checkpoints`; anonymous has no access.
-- `vm_oracle` substantive hardening commit: `19b4dc3`; current remote head observed: `dd60451`.
+- `vm_oracle` auth/ingress hardening commit: `19b4dc3`; legacy Nginx cleanup is on current remote head `464808b`.
 
 ## Acceptance criteria
 - A pushed task-state checkpoint triggers a concise ntfy notification containing task ID and commit identity.
@@ -97,4 +98,4 @@ No external blocker. Do not regenerate or expose the existing root-only credenti
 - The implementation is documented, tested, committed and pushed.
 
 ## Next action
-On Fedora, inspect/remove only the duplicate Nginx ntfy server block causing the bootstrap warning, revalidate public health, then add the GitHub Actions publisher and install/store publisher/subscriber credentials in GitHub Actions/Fedora Secret Service without exposing them.
+Add the GitHub Actions publisher and populate its repository secret from the existing Oracle credential store; store the subscriber credential in Fedora Secret Service, then install and validate the Fedora desktop subscriber without exposing either value.
