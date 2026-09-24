@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[697920 chatgpt-exporter-resilience-hardening-v1|697920]]
 - **Chat Codex:** Nuova chat Codex. Non riusare la sessione lunga/interrotta di 254859.
 
 ## Spiegazione

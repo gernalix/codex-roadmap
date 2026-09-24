@@ -10,6 +10,7 @@
 - [[obsidian/Prompts/996591 ccs-pbf-live-final-closure-v1|996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop]]
 - [[obsidian/Prompts/893025 sqlite-to-obsidian-fedora-bootstrap-v1|893025 · Creare il projector Fedora condiviso SQLite → Obsidian]]
 - [[obsidian/Prompts/105883 personalhub-global-since-when-v3|105883 · Promuovere Since When a funzione globale PersonalHub]]
+- [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1|697920 · Rendere ChatGPTExporter resiliente e affidabile]]
 
 ## In esecuzione
 
