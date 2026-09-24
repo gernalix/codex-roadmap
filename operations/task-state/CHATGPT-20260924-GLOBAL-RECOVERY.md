@@ -48,6 +48,15 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 
 ## Completed
 - Global Phase-1 audit.
+- Persistent operational-memory protocol added to AGENTS.md and operations/task-state/README.md.
+- Token-discipline protocol added: no model-driven waiting/heartbeats, no identical retries without new evidence, stop after asynchronous integration queue.
+- Prompt metadata policy added: model/reasoning only in structured roadmap metadata; GPT-6 Luna-first/Sol-for-complexity policy documented.
+- Ready ordering policy documented: queue_position must represent recommended launch order.
+- Workflowy projection updated to expose prompt_type /goal and model+reasoning as dedicated metadata.
+- chrome-codex-switcher updated to style model/reasoning purple+bold+underlined and /goal bright cyan; extension bumped to 0.3.9.
+- PROMPT_ID 222733 allocated for the local runtime-only task that disables chatgptexporter-788315-completion.
+- First 222733 mutation attempt rejected because relation was incorrectly embedded in register; corrected v2 mutation uses separate relation op and is queued.
+
 - Identification of the last ten previously unaudited Codex tasks and review of outcomes/costs/artifacts.
 - Branch/PR audit for PersonalHub and global open PR shortlist.
 - Verification of current PH schema 22 and the 21->22 delta.
@@ -59,7 +68,7 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 ## Remaining
 - Stop/disable 788315 heartbeat and verify it no longer fires.
 - Check for any other active high-cost recurring Codex/model automations and disable/rewrite them when wasteful.
-- Persist protocol for operational-memory checkpoint files and ensure future long tasks use it.
+- Deploy/verify the new persistent-memory and Workflowy styling changes on Fedora when local runtime access is available.
 - Reconcile roadmap lifecycle/PBF states, including 620949/354882/254859 and the 624831->613102 relation.
 - Repair codex-usage prompt attribution and cumulative goal accounting where needed.
 - Enforce metadata-only model/reasoning in non-running prompt bodies.
@@ -95,4 +104,4 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-Disable the runaway chatgptexporter-788315-completion automation and verify no new heartbeat cycle appears, then update this checkpoint before starting further fixes.
+Verify roadmap mutation Issue #1002 registers 222733 successfully and materialize the same PROMPT_ID in MegaVault. Then continue remote lifecycle/PBF reconciliation while 222733 waits for local execution.
