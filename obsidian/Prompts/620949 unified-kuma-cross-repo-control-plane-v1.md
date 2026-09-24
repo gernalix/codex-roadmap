@@ -1,20 +1,20 @@
 ---
 prompt_id: 620949
-status: running
+status: blocked
 project_id: 15
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/fedora-fedora-system-monitor
 ---
 
 # 620949 · Unificare Uptime Kuma per tutti i repository
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/fedora-fedora-system-monitor|Fedora / fedora-system-monitor]]
-- **Prompt:** [[../../prompts/unified-kuma-cross-repo-control-plane-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/unified-kuma-cross-repo-control-plane-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-24T02:07:34Z
 - **Ultimo lancio:** 2026-09-24T03:12:24Z
 - **Ultimo esito:** BLOCKED
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[817056 duplicate-photos-detector-fedora-local-finalize-v1|817056]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[994029 kuma-620949-final-runtime-cutover-v1|994029]]
 - **Chat Codex:** Nuova chat Codex dedicata; unico goal cross-repo per il cutover Kuma.
 
 ## Spiegazione
