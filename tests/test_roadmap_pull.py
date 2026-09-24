@@ -300,7 +300,7 @@ class RoadmapPullTests(unittest.TestCase):
         self.assertTrue((self.local / "completed" / "one.md").exists())
 
 
-    def test_terminal_codex_usage_allows_running_prompt_to_finish(self) -> None:
+    def test_terminal_codex_usage_does_not_finish_running_prompt(self) -> None:
         conn = db.connect(self.seed)
         db.record_execution(
             conn,
@@ -314,18 +314,19 @@ class RoadmapPullTests(unittest.TestCase):
         )
         conn.commit()
         conn.close()
-        db.reconcile_prompt_file_locations(self.seed)
         db.render(self.seed)
-        self.push_seed("terminal usage confirms finish")
+        self.push_seed("terminal usage is telemetry only")
 
         result = roadmap_pull.guarded_pull(self.local)
 
-        self.assertEqual(["123456"], result["terminal_confirmed"])
+        self.assertEqual([], result["terminal_confirmed"])
+        self.assertEqual(["123456"], result["preserved_running"])
         conn = sqlite3.connect(self.local / "roadmap.sqlite")
-        self.assertEqual("completed", conn.execute("SELECT status FROM prompts WHERE prompt_id='123456'").fetchone()[0])
+        self.assertEqual("running", conn.execute("SELECT status FROM prompts WHERE prompt_id='123456'").fetchone()[0])
+        self.assertEqual(1, conn.execute("SELECT COUNT(*) FROM executions WHERE prompt_id='123456'").fetchone()[0])
         conn.close()
-        self.assertFalse((self.local / "prompts" / "one.md").exists())
-        self.assertTrue((self.local / "completed" / "one.md").exists())
+        self.assertTrue((self.local / "prompts" / "one.md").exists())
+        self.assertFalse((self.local / "completed" / "one.md").exists())
 
 
 if __name__ == "__main__":
