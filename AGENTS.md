@@ -21,6 +21,31 @@ Instead, submit one immutable `codex-roadmap.mutation.v1` request as a GitHub Is
 All terminal Codex results must use `tools/roadmap_finish.py --result PASS|BLOCKED|FAIL|CANCELLED`. `roadmap_result.py` is an internal compatibility helper only and must not be used as a second operational entry point.
 
 
+## Persistent operational task memory
+
+For every non-trivial ChatGPT task that spans multiple steps, repositories, expensive verification, user steering, or more than a short interaction, keep a durable operational checkpoint under `operations/task-state/`.
+
+- Use the canonical `PROMPT_ID` when one prompt owns the task; otherwise use a stable explicit `TASK_ID`.
+- The file is operational memory, not roadmap lifecycle state and not a substitute for `roadmap.sqlite`.
+- Record only: objective, constraints, verified facts, decisions, completed work, remaining work, blockers, evidence, acceptance criteria, and exactly one `Next action`.
+- Never store private chain-of-thought, hidden reasoning, secrets, raw private transcripts, or credentials.
+- Commit and push meaningful checkpoints after important conclusions, completed sub-goals, expensive verification, user steering that changes execution, before a new phase/risky operation, and whenever a task becomes long enough that session loss would cause duplicated work.
+- After a freeze, interruption, model restart, or resumed chat, read the checkpoint first and continue from `Next action`. Do not rediscover already verified facts unless new evidence contradicts them.
+- Do not use stash, reflog, uncommitted work, terminal scrollback, or an ephemeral worktree as permanent task memory.
+- Direct commits to these non-canonical operational files are allowed; canonical roadmap mutations still go only through the single writer.
+
+## Waiting, polling and token discipline
+
+A Codex/model session must not be kept alive merely to wait for an external or manual condition.
+
+- Never create a periodic model-driven heartbeat/goal continuation whose only purpose is to re-check unchanged state, CI, a manual browser action, login, export progress, PR integration, or another external condition.
+- In particular, do not run repeated high-context Codex continuations that return only `DONT_NOTIFY`, `still waiting`, or equivalent no-progress output.
+- If progress depends on user input or an external state change, persist the state, terminalize/pause according to the lifecycle contract, release the model session, and use an event-driven/non-model mechanism when monitoring is genuinely required.
+- After `roadmap_finish.py` queues repository integration, stop immediately. Do not spend model turns polling CI, PR merge, or the asynchronous integrator.
+- A retry/continuation is justified only by new evidence or a concrete state transition. Identical retry without new evidence is forbidden.
+- Prefer one bounded native check over a model round-trip. Prefer Luna over Sol for frequent/repetitive checks, but the default for pure waiting is no model call at all.
+
+
 ## Hard workflow for human requests to add/update the roadmap
 
 When the user says **“metti/aggiungi/aggiorna questo prompt nella roadmap”**, the request is not satisfied by creating a normal GitHub Issue, a `[plan]` Issue, a prose handoff, or a prompt file. Those are explicitly non-canonical.
@@ -84,6 +109,12 @@ Live lifecycle protection is mandatory:
 - `roadmap_finish.py` is the only operational terminal entry point. Its explicit terminal request is authoritative. `codex-usage` is strictly telemetry/audit: it may record outcome mismatches or missing-finalization anomalies, but it never starts, completes, blocks or fails a prompt.
 
 Every Codex report tied to a roadmap task must begin on line 1 with exactly `PROMPT_ID=<six-digit id>` for that task. This applies both to the final Codex response and to any Markdown/text report artifact Codex produces. When a terminal result is reported, `RESULT=PASS|BLOCKED|FAIL` belongs on line 2, not line 1.
+
+
+Prompt execution metadata is separate from prompt text:
+- `model` and `reasoning` live only in structured roadmap metadata and must not be embedded in the canonical prompt body.
+- Changing only model/reasoning before a prompt is running does not change prompt semantics, does not require a new PROMPT_ID, and must update only metadata.
+- Once a prompt is running, its execution metadata is immutable for that run.
 
 `tools/import_codex_usage.py` and `tools/roadmap_sync.py` are writer clients, not local DB writers.
 
