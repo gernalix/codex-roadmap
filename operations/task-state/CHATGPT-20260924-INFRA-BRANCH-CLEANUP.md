@@ -1,7 +1,7 @@
 # Operational task state — infrastructure branch cleanup
 
 TASK_ID: CHATGPT-20260924-INFRA-BRANCH-CLEANUP
-Updated: 2026-09-24
+Updated: 2026-09-24 13:14 Europe/Copenhagen
 Parent: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -38,6 +38,13 @@ Leave the infrastructure repositories with only branches that still contain genu
 
 ## Current step
 Wait for active infrastructure tasks to become terminal; then perform the single bounded local patch-equivalence/deletion pass. Do not delete active/integration branches early.
+
+## Verified facts
+- Eight infrastructure repositories were inventoried against their canonical branch (`main`, except MegaVault=`master`).
+- 25 non-canonical branches are already proven safe by ancestry because `ahead_by=0`.
+- Every `ahead_by>0` branch remains retained pending patch-equivalence/semantic review.
+- `seed/eboks-scraper-20260921` must remain until task 218695 is either executed or explicitly cancelled with evidence.
+- Active/integration task branches are excluded from deletion until terminal.
 
 ## Verified safe-to-delete branches (ahead=0)
 
@@ -165,6 +172,11 @@ Total ancestry-safe branches: 25.
 - task/prompt-id-issue-bridge-fix
 - task/prompt-id-luks-recovery-followup-943492
 
+## Decisions
+- Defer all branch deletion until active infrastructure work is terminal to avoid racing the single-writer/integrator workflow.
+- Treat ancestry (`ahead_by=0`) as sufficient proof for deletion eligibility, but require patch-id/semantic equivalence for every `ahead_by>0` branch.
+- Preserve conditional seed branches until their owning roadmap task receives an explicit terminal disposition.
+
 ## Completed
 - Enumerated all remote branches in the eight infrastructure repositories.
 - Compared every non-canonical branch against current main/master.
@@ -180,6 +192,11 @@ Total ancestry-safe branches: 25.
 ## Blockers
 - The current ChatGPT GitHub connector can compare branches but exposes no branch-delete action.
 - ahead_by>0 can still be squash/cherry-pick equivalent; ancestry alone is insufficient.
+
+## Evidence
+- Remote branch inventory and compare results recorded in this checkpoint.
+- Parent orchestration state: `operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md`.
+- Final deletion evidence will be added after the bounded local patch-equivalence pass and remote readback.
 
 ## Acceptance criteria
 - No branch with unreviewed unique work is deleted.
