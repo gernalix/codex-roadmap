@@ -30,7 +30,7 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 - [x] Abilitare timer ogni 15 minuti; enabled+active.
 - [x] Verificare dal connettore GitHub che repo privato e archive/state.json siano leggibili.
 - [x] Riparare la collisione di identità del follow-up: 333860 superseded/non azionabile; 966124 registrato e materializzato come ID remoto canonico.
-- [ ] Quando la master recovery arriva a Phase 4, eseguire SOLO 966124 per integrare su main i fix già verificati del branch task/422308 e chiudere il source/runtime gate.
+- [ ] Quando la master recovery arriva a Phase 4, eseguire SOLO 966124 per integrare su main i fix già verificati del branch task/422308 insieme al branch chatgpt/telegram-autodelete-archive (stato dedicato: CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md), poi chiudere il source/runtime gate e rimuovere i branch assorbiti.
 - [ ] Lasciare accumulare cronologia reale sufficiente.
 - [ ] Classificare notifiche verbose/incomprensibili/inutili/ripetute/flapping.
 - [ ] Applicare fix mirati ai singoli producer; niente broad refactor.
@@ -51,6 +51,7 @@ Collector runtime operativo e non-model. Il follow-up canonico 966124 è registr
 - Data repo gernalix/telegram-notification-history verificato PRIVATE e leggibile via GitHub connector.
 - archive/state.json remoto contiene last_message_id=372496.
 - telegram-notification-history.timer è enabled+active e schedulato ogni 15 minuti.
+- È operativo anche il collector separato per la chat con auto-delete 1 giorno: runtime locale SQLite+media, timer ogni 5 minuti, session lock condiviso; source branch chatgpt/telegram-autodelete-archive a fe5d371. I contenuti/peer restano locali e non vengono versionati.
 - L'allocatore remoto MegaVault per chatgpt-telegram-history-runtime-closure-20260924-v1 ha assegnato 966124.
 - Il fallback locale aveva erroneamente restituito 333860 allo stesso request_id e quel prompt era stato registrato prima del ritorno remoto.
 - Mutation roadmap #1056 ha applicato replacement 333860 -> 966124; MegaVault Issue #105 ha materializzato 966124. La materialization Issue #104 per 333860 è stata chiusa not_planned.
@@ -96,4 +97,4 @@ Collector runtime operativo e non-model. Il follow-up canonico 966124 è registr
 Collector lane source/runtime closure is complete only when runtime remains healthy/incremental, no secret is versioned, source fixes are integrated on fedora-system-monitor main through canonical 966124, 333860 is non-actionable, 966124 is canonical/materialized and terminal PASS, and the history-based audit produces producer-specific fixes.
 
 ## Next action
-Do not launch a Telegram model task now. Keep canonical/materialized PROMPT_ID 966124 parked. When the global master reaches Phase 4, claim only 966124, integrate the already-verified task/422308 changes, run its bounded gates/readback, finalize PASS, then begin the history-based notification audit.
+Do not launch a Telegram model task now. Keep canonical/materialized PROMPT_ID 966124 parked. When the global master reaches Phase 4, claim only 966124, reconcile and integrate both the already-verified task/422308 changes and chatgpt/telegram-autodelete-archive, run bounded gates/runtime readback, delete absorbed temporary branches, finalize PASS, then begin the history-based notification audit.
