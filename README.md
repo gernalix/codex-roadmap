@@ -30,6 +30,18 @@ Non implementare miglioramenti per eleganza, completezza teorica, telemetria agg
 
 **PASS chiude il sottosistema.** Dopo un PASS non creare audit, follow-up o “ulteriori ottimizzazioni” salvo nuova evidenza concreta.
 
+## Protocollo PBF
+
+PBF significa qualunque prompt con evidenza terminale non-PASS. La classificazione canonica è derivata da `v_pbf_dispositions` e non riscrive mai gli outcome storici:
+
+- `resolved`: l'obiettivo è provato chiuso successivamente (prompt completato con storico non-PASS o catena `resolved_by` completata);
+- `covered`: esiste una catena esplicita `fix/replacement/followup/merge/resolved_by` verso un successore pending/running/completed;
+- `needs_fix`: PBF reale ancora azionabile senza copertura;
+- `waived`: cancellazione/supersede intenzionale con motivo o replacement esplicito;
+- `historical_unclassified`: stub storico privo di materiale sufficiente per inventare un fix.
+
+`v_attention` e Workflowy **Needs fix** devono mostrare soltanto `needs_fix`. Le relazioni sono seguite con ricorsione bounded e cycle-safe; un task non collegato non può essere assunto come soluzione. FAIL/BLOCKED non creano automaticamente un nuovo PROMPT_ID: ChatGPT registra il minimo successore solo quando l'evidenza lo giustifica.
+
 ## Analisi prompt: solo per eccezioni
 
 Non analizzare sistematicamente ogni prompt Codex riuscito. La telemetria viene raccolta automaticamente; un'analisi ChatGPT approfondita si apre solo quando c'è almeno un segnale utile:
