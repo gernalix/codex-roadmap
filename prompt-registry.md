@@ -16,6 +16,7 @@
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-6 Luna | medium |
 | [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1\|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] | pending | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-6 Luna | low |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-6 Luna | medium |
+| [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-6 Luna | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-6 Luna | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-6 Luna | medium |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-6 Sol | medium |

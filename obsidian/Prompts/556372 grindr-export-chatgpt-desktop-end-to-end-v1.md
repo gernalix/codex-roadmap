@@ -24,7 +24,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[354882 grindr-web-exporter-single-browser-end-to-end-v1|354882]]
+- **Dipende da:** [[181259 grindr-web-exporter-post-login-resume-v1|181259]]
 - **Sblocca:** —
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
