@@ -146,6 +146,13 @@ Its output defines the exact final main commit/schema/artifact for the Pixel cut
 Goal: operate only after 788606 PASS.
 Read the actual final app schema/Room identity from the final commit. Inspect the actual live DB schema/identity on Pixel. Take immutable rollback first. Externally migrate a copy of the real DB through every required delta to the final schema, validate quick_check/integrity/FK and preservation of representative data, then transfer/install the exact final APK and migrated DB using explicit Pixel serial. Smoke Home + every module. Keep rollback until final acceptance.
 
+## Decisions
+- Keep the PH P0 chain serial whenever schema/database work can overlap: `920550 -> 857906 -> 707603 -> 840907 -> 788606 -> 913264`.
+- Do not migrate the live Pixel DB to intermediate schemas; perform one external migration only after the final schema is frozen.
+- Do not add permanent historical Room migrations solely for the user's current live DB.
+- Do not touch the primary Pixel during pre-final QA; use emulator/TCL or isolated QA data until the definitive cutover.
+- The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
+
 ## Completed
 - 920550 full `:app:assembleDebug` PASS on the task worktree. Baseline `PersonalHub/main` debug APK = 144,942,990 bytes (138.23 MiB); 920550 debug APK = 280,674,045 bytes (267.67 MiB); universal-debug delta = 135,731,055 bytes / 129.44 MiB (+93.64%). Zip inspection shows 129.04 MiB of that is ONNX Runtime native libraries duplicated across arm64-v8a, armeabi-v7a, x86 and x86_64; the arm64-v8a runtime payload actually needed by the primary Pixel is ~31.57 MiB. Model weights remain outside the APK.
 - Host-side real-model synthetic retrieval check PASS for the acceptance intent: same synthetic jacket under changed background/rotation scored 0.8904 vs 0.7926 for a shoe distractor, so the same object enters and ranks above the distractor shortlist; `black jacket` text-image scores ranked both jacket variants above the shoe.
@@ -216,4 +223,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Resume 920550 from its existing checkpoint; do not rerun already-passed tag-noop or compactor tests unless overlapping code changes invalidate them.
+Finish 920550 Play/minified size measurement and AVD-only synthetic QA from the existing checkpoint, fix only concrete failures, then finalize 920550 through the canonical integration flow. Do not rerun already-passed tag-noop or compactor tests unless overlapping code changes invalidate them.
