@@ -28,7 +28,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[822595 personalhub-global-since-when-v2|822595]]
-- **Sblocca:** —
+- **Sblocca:** [[707603 personalhub-git-history-final-validation-v4|707603]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat Codex; eseguire dopo 140263

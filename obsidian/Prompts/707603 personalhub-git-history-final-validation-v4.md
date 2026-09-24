@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
+- **Dipende da:** [[857906 personalhub-unified-history-search-v1|857906]]
 - **Sblocca:** [[840907 personalhub-datasette-lite-offline-runtime-v4|840907]]
 - **Padri/precedenti:** [[825405 personalhub-git-history-data-sync-validation-v3|825405]]
 - **Figli/follow-up:** —
@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Aspetta 649781: la validazione Git History va fatta solo dopo che archivio Obsidian e schema finale sono stabilizzati.
+Aspetta la nuova History/Search unica di PersonalHub; poi valida Git History e ripristino sullo schema finale. L’archivio Obsidian è ora esterno a PH e non blocca più questa validazione.
 
 ## Esecuzioni
 

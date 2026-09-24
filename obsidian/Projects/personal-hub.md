@@ -6,7 +6,6 @@ tags:
 # Personal Hub
 
 - [[obsidian/Prompts/822595 personalhub-global-since-when-v2|822595 · Promuovere Since When a funzione globale PersonalHub]] · `running`
-- [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] · `pending`
 - [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `pending`
 - [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
 - [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `pending`
@@ -39,6 +38,7 @@ tags:
 - [[obsidian/Prompts/418763 personalhub-salute-canonical-integration|418763 · Portare Salute dentro PersonalHub]] · `superseded`
 - [[obsidian/Prompts/734205 personalhub-epoch-timestamps-migration-v2|734205 · Date e ore coerenti ovunque]] · `superseded`
 - [[obsidian/Prompts/825405 personalhub-git-history-data-sync-validation-v3|825405 · Validare cronologia, backup e ripristino dati]] · `superseded`
+- [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] · `superseded`
 - [[obsidian/Prompts/724615 personalhub-salute-ui-hub-obsidian|724615 · Rendere Salute visibile e collegata al resto dell’app]] · `superseded`
 - [[obsidian/Prompts/862541 personalhub-salute-canonical-integration-v2|862541 · Portare Salute dentro PersonalHub]] · `superseded`
 - [[obsidian/Prompts/582741 personalhub-obsidian-archive-foundation|582741 · Prima versione dell’archivio Obsidian]] · `superseded`
