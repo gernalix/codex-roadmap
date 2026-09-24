@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 17:27 Europe/Copenhagen
+Updated: 2026-09-24 17:41 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -91,6 +91,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 Workflowy PR #43 is in CI. 857906 is already claimed/running but intentionally untouched. After #43 merges, sync `task/857906` to the new main before any code edit, delete absorbed Workflowy branches, then execute 857906.
 
 ## Verified facts
+- Workflowy CI lint blocker is fixed and pushed at `f8e454141fa9835041f83ea1255e257fa44a5f2d`; local hub-context lint + both targeted Workflowy tests PASS. PR #43 should rerun on this head.
 - 857906 canonical claim succeeded: roadmap status `running`, issue #1064, branch `task/857906`, worktree `~/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/857906`. Claim occurred while Workflowy #43 was still in CI; no 857906 code is to be modified until the worktree is synced to post-Workflowy main.
 - Workflowy source/task branch trees are byte-identical before final integration: `origin/chatgpt/workflowy-integration^{tree}` = `origin/task/workflowy-integration^{tree}` = `03fea6d0f2967cc1ae510957b17ccf313b3b8e68`. Remote PH branches are now only `main` plus those two Workflowy refs. Once PR #43 is contained in main, both side refs are safe to delete.
 - Workflowy protected integration is now PR #43 from `task/workflowy-integration`; previous PR #42 was closed because the integrator correctly rejected the non-task branch naming. The new task branch is tree-identical to the already-tested reconciled Workflowy content.
