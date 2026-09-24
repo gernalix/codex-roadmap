@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 14:18 Europe/Copenhagen
+Updated: 2026-09-24 14:53 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -52,7 +52,7 @@ Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only g
 - [ ] Run 788606 release preflight; freeze the exact final PersonalHub main commit, Room schema/identity, minified APK/AAB and hashes.
 - [ ] **ABSOLUTE NEXT STEP AFTER 788606:** execute 913264 immediately. Read the real Pixel DB identity/schema, take immutable DB/WAL/SHM + installed-APK rollback backup, externally migrate a copy directly to the frozen final schema, and pass SQLite quick_check/integrity/FK/data-preservation checks. Do not insert any unrelated task between 788606 and 913264.
 - [ ] Install the exact frozen final APK on the primary Pixel using explicit ADB serial and verify Home + every module against preserved real data before any non-PH lane resumes.
-- [ ] Finish PH branch/PR/PBF cleanup only after absorption is proved; end with clean main-only operational state.
+- [ ] Before final cutover, converge every still-relevant PH side branch into `main`: prove patch/semantic uniqueness, merge/cherry-pick/squash only valid unabsorbed work through the canonical writer, then delete all absorbed/obsolete non-main PH branches and close stale PRs. End with clean main-only operational state.
 - [ ] Do not resume non-PH recovery lanes until all PH items above are complete, unless PH is truly blocked.
 
 ### Phase 3 — Remaining prompt/infrastructure runtime closure (DEFERRED UNTIL PH COMPLETE)
