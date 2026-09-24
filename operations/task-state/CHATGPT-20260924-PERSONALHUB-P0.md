@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 17:41 Europe/Copenhagen
+Updated: 2026-09-24 17:52 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -91,6 +91,9 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 Workflowy PR #43 is in CI. 857906 is already claimed/running but intentionally untouched. After #43 merges, sync `task/857906` to the new main before any code edit, delete absorbed Workflowy branches, then execute 857906.
 
 ## Verified facts
+- 857906 design conclusion before coding: existing `hub_activity_log` schema 23 already carries occurred_at/module/action/entity label/detail/origin/system/source/before+after payload/group/reversible/status fields, and the generic undo engine already fails closed on stale/referenced/unsupported mutations. No schema 24 appears necessary for the unified History/Search work.
+- 857906 scope distinction is pinned: remove/replace duplicate **change-history browsers** (global activity/Git-history split, People contact/global history, Places History screen, Timer Timeline browser, WordPulse Timeline tab) while preserving distinct domain data functionality (People initiative/calendar features, Substances intake list/history editing, prescription history, Timer session domain operations, WordPulse sessions/explore data, Soldi transactions).
+- All six feature modules already depend on `:contracts:database`, so a canonical History/Search deep link can be shared without feature→app dependency violations. 857906 worktree remains clean at pre-Workflowy main `66dbe026...` and has no code edits yet.
 - Workflowy CI lint blocker is fixed and pushed at `f8e454141fa9835041f83ea1255e257fa44a5f2d`; local hub-context lint + both targeted Workflowy tests PASS. PR #43 should rerun on this head.
 - 857906 canonical claim succeeded: roadmap status `running`, issue #1064, branch `task/857906`, worktree `~/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/857906`. Claim occurred while Workflowy #43 was still in CI; no 857906 code is to be modified until the worktree is synced to post-Workflowy main.
 - Workflowy source/task branch trees are byte-identical before final integration: `origin/chatgpt/workflowy-integration^{tree}` = `origin/task/workflowy-integration^{tree}` = `03fea6d0f2967cc1ae510957b17ccf313b3b8e68`. Remote PH branches are now only `main` plus those two Workflowy refs. Once PR #43 is contained in main, both side refs are safe to delete.
