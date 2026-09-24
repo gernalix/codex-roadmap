@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 12:48 Europe/Copenhagen
+Updated: 2026-09-24 13:08 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -17,6 +17,71 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - PersonalHub final APK is built only after all relevant PH work/tests/fixes are complete.
 - PH DB migrations are external one-shot transformations after schema freeze; do not ship historical Room migrations just to rescue the live DB.
 - Device operations must be serial-scoped when multiple Android devices are connected.
+
+## Plan / checklist
+### Phase 0 — Recovery framework and protocol
+- [x] Establish the persistent operational-checkpoint protocol in `operations/task-state/README.md`.
+- [x] Establish single-writer-only canonical roadmap mutations.
+- [x] Establish model/reasoning as roadmap metadata only, never prompt-body text.
+- [x] Establish Ready ordering as the actual recommended launch order.
+- [x] Establish direct-ChatGPT-first execution and bounded Codex/local-runtime delegation.
+- [x] Establish mandatory PBF disposition/successor handling so failed/blocked prompts cannot disappear silently.
+
+### Phase 1 — Broad audit and stale-state reconciliation
+- [x] Complete the broad Phase-1 audit across roadmap/runtime/infrastructure and PersonalHub.
+- [x] Reconcile stale running states and allocate/materialize required successors.
+- [x] Resolve infrastructure PR residue identified by the audit (PH #35, CCS #24, ActivityWatch #3).
+- [x] Verify current Attention/PBF projection has no unresolved `needs_fix` item lacking disposition/successor coverage.
+- [x] Supersede unsafe CCS prompt 641903 with routing-safe successor 896074; never launch 641903.
+- [x] Guard conditional/manual tasks 181259, 582946, 218695 and 588376 with explicit prerequisites.
+
+### Phase 2 — Emergency and prompt-infrastructure runtime closure
+- [ ] Stop the runaway 788315 heartbeat/automation with 222733.
+- [ ] Verify 788315 produces no new model-driven heartbeat cycles after shutdown.
+- [ ] Run 302284 and verify the consolidated roadmap/Workflowy/CCS/codex-usage runtime deployment and readback.
+- [ ] Run routing-safe CCS successor 896074 only after 302284 PASS.
+- [ ] Run 994029 for the ActivityWatch/Kuma local cutover.
+- [ ] Run 714263 only after 994029, closing the sqlite-to-obsidian Kuma residual.
+- [ ] Run 812553 after 222733, using prompt-history as the canonical primary repo.
+- [x] Complete prompt-history source-level model/reasoning analytics and regressions through ff694890.
+- [ ] Verify the corresponding live/runtime import/backfill/readback during the infrastructure closure tasks above.
+
+### Phase 3 — PersonalHub P0
+Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only global gates here.
+- [ ] Complete and integrate all still-relevant PH implementation/validation work through the release-preflight gate.
+- [ ] Freeze the final PH commit/schema/artifacts and complete external live-DB backup+migration+Pixel cutover via the specialized PH lane.
+- [ ] Finish PH-specific branch/PR cleanup only after absorption is proved; end with clean main-only operational state.
+
+### Phase 4 — Notification and checkpoint infrastructure
+- [ ] Complete the Telegram notification-history collector lane after one-time human Telegram authorization; details in `CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md`.
+- [ ] After sufficient Telegram history exists, audit noisy producers and apply only producer-specific fixes.
+- [ ] Complete the ntfy checkpoint-notification lane and prove accepted Git checkpoint pushes produce one remote notification; details in `CHATGPT-20260924-NTFY-CHECKPOINTS.md`.
+
+### Phase 5 — Conditional/manual project lanes
+- [ ] Reconcile 181259's missing `gernalix/grindr-web-exporter` remote/single-writer path without guessing.
+- [ ] After the real Grindr-login prerequisite and repo-routing fix, complete 181259.
+- [ ] Run 556372 only after 181259 to avoid browser/session contention.
+- [ ] Resume 582946 only after the user completes MitID login.
+- [ ] Reevaluate 218695 after 582946: cancel it explicitly if native e-Boks export is sufficient; otherwise run it.
+- [ ] Resume 588376 only after the old GitHub PAT is manually revoked.
+
+### Phase 6 — Infrastructure branch cleanup
+Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
+- [ ] After active/integration tasks are terminal, perform the bounded patch-equivalence review and delete only proven-safe infrastructure branches.
+- [ ] Re-read every affected remote and retain only canonical branches plus explicitly justified active/seed branches.
+
+### Phase 7 — Final global gate
+- [ ] Re-run roadmap Attention/PBF reconciliation and verify every real PBF is completed, intentionally closed, or linked to an active/completed successor.
+- [ ] Verify no runaway/model-driven waiting, heartbeat or polling automation remains active.
+- [ ] Verify Waiting/manual/conditional tasks still match their real prerequisites and no obsolete prompt is launchable.
+- [ ] Verify no pending prompt contains model/reasoning execution metadata in its body or a known-invalid hard-coded project route.
+- [ ] Verify Workflowy/CCS/codex-usage runtime reflects the consolidated metadata/lifecycle behavior.
+- [ ] Verify PersonalHub final release/data migration/device acceptance is complete.
+- [ ] Verify involved repositories are tested, pushed, clean, and branch cleanup is complete.
+- [ ] Mark global recovery complete only when every acceptance criterion below is satisfied.
+
+## Current step
+Phase 2, first actionable item: stop the runaway 788315 heartbeat with existing task 222733, then prove no new model-driven cycles are produced before moving to 302284.
 
 ## Verified facts
 - Handoff checkpoint refreshed for a new ChatGPT chat at 2026-09-24 12:48 Europe/Copenhagen.
@@ -125,12 +190,4 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-In the new global-recovery chat:
-1. Read this file first and trust it over conversation memory.
-2. Re-read only the current canonical roadmap rows needed to detect concurrent progress.
-3. Do NOT duplicate running PersonalHub 920550 or the blocked Telegram 422308 lane.
-4. Highest-priority local action remains 222733: disable chatgptexporter-788315-completion and verify no new heartbeat/model polling is scheduled.
-5. After 222733 PASS, 302284 is the next prompt-infrastructure runtime gate; it deploys/verifies roadmap lifecycle, Workflowy/CCS styling and codex-usage attribution/backfill.
-6. 896074 can run only after 302284 PASS.
-7. Continue direct remote cleanup that does not require Fedora: reconcile any newly changed roadmap states, resolve 181259's missing gernalix/grindr-web-exporter remote/single-writer path without guessing, and keep conditional/manual tasks 582946/218695/588376 dormant until their real prerequisites change.
-8. Checkpoint this file again after any meaningful conclusion or steer.
+Execute the existing 222733 closure locally now: disable the `chatgptexporter-788315-completion` scheduler/heartbeat, verify the scheduler is no longer active and that no new 788315 cycle appears after the shutdown boundary, then checkpoint this file. Do not duplicate PersonalHub 920550, Telegram 422308, ntfy, or branch-cleanup work owned by their specialized lanes.
