@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 13:21 Europe/Copenhagen
+Updated: 2026-09-24 13:31 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -39,8 +39,8 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - [x] Guard conditional/manual tasks 181259, 582946, 218695 and 588376 with explicit prerequisites.
 
 ### Phase 2 — Emergency and prompt-infrastructure runtime closure
-- [ ] Stop the runaway 788315 heartbeat/automation with 222733.
-- [ ] Verify 788315 produces no new model-driven heartbeat cycles after shutdown.
+- [x] Stop the runaway 788315 heartbeat/automation with 222733.
+- [x] Verify 788315 produces no new model-driven heartbeat cycles after shutdown.
 - [ ] Run 302284 and verify the consolidated roadmap/Workflowy/CCS/codex-usage runtime deployment and readback.
 - [ ] Run routing-safe CCS successor 896074 only after 302284 PASS.
 - [ ] Run 994029 for the ActivityWatch/Kuma local cutover.
@@ -85,9 +85,11 @@ Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
 - [ ] Mark global recovery complete only when every acceptance criterion below is satisfied.
 
 ## Current step
-Phase 2, first actionable item: stop the runaway 788315 heartbeat with existing task 222733, then prove no new model-driven cycles are produced before moving to 302284.
+Phase 2, first actionable item: run 302284 to deploy/read back the consolidated prompt-infrastructure runtime now that 222733 is completed. Keep PersonalHub 920550 parked until the master lane explicitly returns to PH.
 
 ## Verified facts
+- 222733 completed canonically via single-writer commit `0e5b710ac7a783395f70b6af35d69db45dba707f`. The only Codex automation directory is `chatgptexporter-788315-completion`, now `status = "DISABLED"`; bounded scan found zero active recurring automations. Shutdown boundary was 2026-09-24T11:25:10Z; latest published 788315 cycle started 2026-09-24T11:17:26Z, so no cycle exists after shutdown.
+- PersonalHub 920550 is safely parked at pushed checkpoints. Roadmap still says `running` only because there is no pause lifecycle state; no active model/process is executing that lane.
 - All five current operational checkpoints (global, PersonalHub P0, Telegram notification hygiene, ntfy checkpoints, infrastructure branch cleanup) were read back against `operations/task-state/README.md` at 2026-09-24 13:18; each now contains Objective, Constraints, Plan/checklist, Current step, Verified facts, Decisions, Completed, Remaining, Blockers, Evidence, Acceptance criteria and Next action.
 - Handoff checkpoint refreshed for a new ChatGPT chat at 2026-09-24 12:48 Europe/Copenhagen.
 - 641903 is no longer actionable: it is superseded by routing-safe successor 896074, which must run only after 302284 and resolves the CCS project from current repo/runtime metadata instead of hard-coding project_id 96.
@@ -135,6 +137,7 @@ Phase 2, first actionable item: stop the runaway 788315 heartbeat with existing 
 7. Use empirical prompt_costs after codex-usage attribution/backfill is deployed before making future model-cost recommendations.
 
 ## Completed
+- Emergency runaway-Codex closure 222733 completed: heartbeat disabled, zero active recurring Codex automations, no post-shutdown 788315 cycle, canonical terminal state confirmed.
 - Checkpoint-protocol compliance audit completed for all current operational checkpoints; missing PH/infra sections corrected in-place without creating competing checkpoint files.
 - New-chat handoff prepared from persistent Git state; future continuation must reread this file first.
 - 641903 superseded by 896074; no future chat should launch 641903.
@@ -197,4 +200,4 @@ Phase 2, first actionable item: stop the runaway 788315 heartbeat with existing 
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-Execute the existing 222733 closure locally now: disable the `chatgptexporter-788315-completion` scheduler/heartbeat, verify the scheduler is no longer active and that no new 788315 cycle appears after the shutdown boundary, then checkpoint this file. Do not duplicate PersonalHub 920550, Telegram 422308, ntfy, or branch-cleanup work owned by their specialized lanes.
+Execute existing task 302284 locally through the canonical claim. Deploy only the already-implemented prompt-infrastructure runtime changes, run its bounded targeted gates/readback, finalize canonically, checkpoint this file, then move to 896074. Keep PersonalHub/Telegram/ntfy/branch-cleanup parked or waiting; do not launch them in parallel.
