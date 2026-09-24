@@ -100,7 +100,7 @@ Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of th
 - 641903 is no longer actionable: it is superseded by routing-safe successor 896074, which must run only after 302284 and resolves the CCS project from current repo/runtime metadata instead of hard-coding project_id 96.
 - MegaVault allocation Issue #100 is no longer a blocker; it is closed. The canonical replacement 896074 already exists in the roadmap.
 - 422308 remains terminal BLOCKED historically, but its human authorization prerequisite is now satisfied and the collector runtime is operational: RUN1 archived 4,244 messages, RUN2 was a zero-message no-op, the private history repo is readable via GitHub, and the 15-minute timer is enabled+active. Do not retry 422308; detailed ownership is in operations/task-state/CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md.
-- Telegram source closure must use remote-canonical successor 966124. A local allocator fallback incorrectly produced 333860 for the same request_id; roadmap mutation #1056 is replacing 333860 with 966124, and the wrong 333860 materialization request was closed not_planned.
+- Telegram source closure must use remote-canonical successor 966124. A local allocator fallback incorrectly produced 333860 for the same request_id; roadmap mutation #1056 superseded/replaced 333860, and MegaVault Issue #105 materialized 966124. Never launch 333860.
 - prompt-history prompt-level model analytics source work is complete through ff69489074feae82a2838504ff6f2d03875caa2b: CLI aggregation, SQL analytics, v_model_performance, README contract and regressions all use one sample per canonical PROMPT_ID from codex-usage, aggregate cycle deltas, ignore roadmap execution mirrors, and exclude mixed-model/reasoning tasks.
 - PersonalHub 920550 remains parked. The Telegram collector now runs only as a stable non-model systemd timer; no Telegram model lane is active while 302284 owns the master recovery lane.
 - 218695 is now guarded by manual-prerequisite:confirm-eboks-scraper-needed; its target public repo exists but is empty, so after 582946 the task must be reevaluated before launch.
@@ -183,7 +183,7 @@ Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of th
 - MegaVault Issue #100 is closed and no longer relevant; 896074 is the canonical routing-safe CCS successor.
 - 181259 targets a nonexistent GitHub remote (gernalix/grindr-web-exporter); local state must be reconciled before a safe successor can run.
 - Exact current live PH DB identity/schema on Pixel must be read locally before final migration.
-- Telegram runtime has no blocker; only the administrative allocator collision remains until roadmap mutation #1056 applies and 966124 is materialized. This must not interrupt the active Phase-2 master lane.
+- Telegram runtime and identity repair have no blocker: 966124 is canonical/materialized and parked until Phase 4. This must not interrupt the active Phase-2 master lane.
 
 ## Evidence
 - gernalix/codex-roadmap canonical projections, mutation Issues #1012-#1031 and task materializations.
@@ -192,7 +192,7 @@ Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of th
 - gernalix/prompt-history exists; gernalix/ChatGPTExporter and gernalix/grindr-web-exporter return GitHub 404; gernalix/grindr-export exists and has its own archive workflow.
 - ChatGPT automation readback showing "Codex Fix Queue" disabled.
 - PH/CCS/ActivityWatch repository and PR state already recorded above.
-- Telegram evidence: operations/task-state/CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md; fedora-system-monitor task/422308 through 5d8ed32; private data commit 99a9952479074f56095586a6ed3fb210111496db; MegaVault Issue #103 allocated canonical 966124; roadmap Issue #1056 repairs 333860 -> 966124.
+- Telegram evidence: operations/task-state/CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md; fedora-system-monitor task/422308 through 5d8ed32; private data commit 99a9952479074f56095586a6ed3fb210111496db; MegaVault Issue #103 allocated 966124; roadmap Issue #1056 replaced 333860 -> 966124; MegaVault Issue #105 materialized 966124.
 
 ## Acceptance criteria
 - No runaway/pointless high-cost model automation remains active.
