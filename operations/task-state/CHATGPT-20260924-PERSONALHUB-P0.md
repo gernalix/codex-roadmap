@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 17:16 Europe/Copenhagen
+Updated: 2026-09-24 17:18 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -52,7 +52,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [x] Verify real-model synthetic same-object/text-image ranking and measure debug APK/runtime size.
 - [x] Finish Play/minified artifact measurement for 920550 artifact; baseline-main comparison build is also running from an isolated temporary worktree for exact delta.
 - [x] Run AVD-only synthetic QA for save→index, semantic text/image search, non-photo exclusion, same-object shortlist, owned-item create/remove and reopen/persistence: dedicated `FinanceSemanticPhotoQaDeviceTest` PASS 1/1 on canonical `Pixel_8a` emulator.
-- [ ] Finalize 920550 through `roadmap_finish.py`, wait only via non-model integration/readback, then inspect the merged main diff/schema/evidence before unblocking 857906.
+- [x] Finalize 920550 through canonical integration and inspect merged main: PR #41 merged at `66dbe0265ff4dcdba3221e12e7953518056ce951`; schema 23 identity `4b9b96396c8f9e750d13b0e6da70fdd9`; `finance_photo_index` + `finance_owned_items` present; all required CI PASS.
 
 ### Phase 3 — 857906 unified History/Search
 - [ ] Run and review 857906 after 920550 integration.
@@ -88,7 +88,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-920550 head is now `3f32b8c`. Both prior CI blockers have local PASS evidence: instrumentation regression fixed and SyncJournal schema23 test updated. PR #41 must rerun checks on this head. Do not start 857906 until #41 is merged and Workflowy is integrated.
+920550 is merged and verified on `main`. Reconcile/integrate `chatgpt/workflowy-integration` onto main, rerun only its affected gates, delete absorbed Workflowy + local 920550 branch, then claim 857906.
 
 ## Verified facts
 - Roadmap terminality and Git integration are temporarily split for 920550: canonical roadmap registry now says `completed / PASS`, but PersonalHub PR #41 is still open on head `3f32b8c` and `origin/main` does not yet contain the task. Operational gate for 857906 is therefore stricter than roadmap dependency alone: do not claim 857906 until #41 is merged and Workflowy is integrated.
@@ -274,4 +274,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Perform one bounded PR #41 readback on head `3f32b8c`. If checks are green, run one repo-integrator pass and verify exact schema23/main containment. Then integrate the already-verified Workflowy branch, prove/delete absorbed PH side branches, and claim 857906.
+Reconcile `chatgpt/workflowy-integration` onto current `origin/main=66dbe026...`, rerun WorkflowyIntegrationTest + WorkflowyDaysTest + app compile + architecture gate, publish/integrate through the single-writer path, verify main containment, then delete Workflowy and local 920550 branches and immediately claim 857906.
