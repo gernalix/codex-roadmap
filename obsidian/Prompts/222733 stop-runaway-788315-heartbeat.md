@@ -1,20 +1,20 @@
 ---
 prompt_id: 222733
-status: running
+status: completed
 project_id: —
 model: GPT-6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/fedora-codex-runtime
 ---
 
 # 222733 · Ferma il heartbeat Codex runaway di 788315
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora-codex-runtime|Fedora / Codex runtime]]
-- **Prompt:** [[../../prompts/stop-runaway-788315-heartbeat|Apri prompt]]
+- **Prompt:** [[../../completed/stop-runaway-788315-heartbeat|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

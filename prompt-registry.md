@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/222733 stop-runaway-788315-heartbeat\|222733 · Ferma il heartbeat Codex runaway di 788315]] | running | — | — | — | no | no | — | Fedora / Codex runtime | GPT-6 Luna | low |
 | [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1\|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]] | running | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/857906 personalhub-unified-history-search-v1\|857906 · PersonalHub — History/Search unica cross-module]] | pending | — | — | — | no | no | — | PersonalHub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
@@ -58,6 +57,7 @@
 | [[obsidian/Prompts/327684 minsp-export-initial-repo-bootstrap-v1\|327684 · Creare la prima baseline Git di minsp-export]] | superseded | — | — | — | no | no | — | minsp-export | GPT-5.5 | medium |
 | [[obsidian/Prompts/672304 workflowy-waiting-runtime-reconcile-v1\|672304 · Riallineare Waiting nel runtime Workflowy]] | completed | 2026-09-22T03:37:42Z | 2026-09-22T03:37:42Z | PASS | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/736284 chatgpt-exporter-live-chrome-first-archive-v1\|736284 · Sbloccare ChatGPTExporter e creare il primo archivio]] | blocked | 2026-09-22T11:16:19Z | 2026-09-22T11:16:19Z | BLOCKED | sì | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/222733 stop-runaway-788315-heartbeat\|222733 · Ferma il heartbeat Codex runaway di 788315]] | completed | — | — | PASS | no | no | — | Fedora / Codex runtime | GPT-6 Luna | low |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | completed | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | PASS | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2\|200725 · PersonalHub 100% capsule isolation — integra main e valida]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |

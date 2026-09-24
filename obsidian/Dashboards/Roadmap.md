@@ -5,9 +5,9 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/994029 kuma-620949-final-runtime-cutover-v1|994029 · Chiudi il cutover runtime Kuma rimasto da 620949]]
+- [[obsidian/Prompts/302284 prompt-infrastructure-final-runtime-activation-v1|302284 · Distribuisci gli ultimi fix della prompt infrastructure]]
 - [[obsidian/Prompts/333860 telegram-history-runtime-closure-v1|333860 · Chiudere il collector Telegram dopo autorizzazione e collaudo]]
 
 ## In esecuzione
 
-- [[obsidian/Prompts/222733 stop-runaway-788315-heartbeat|222733 · Ferma il heartbeat Codex runaway di 788315]]
 - [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]]
