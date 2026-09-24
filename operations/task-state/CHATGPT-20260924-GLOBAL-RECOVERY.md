@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 13:08 Europe/Copenhagen
+Updated: 2026-09-24 13:18 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -26,6 +26,7 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - [x] Establish Ready ordering as the actual recommended launch order.
 - [x] Establish direct-ChatGPT-first execution and bounded Codex/local-runtime delegation.
 - [x] Establish mandatory PBF disposition/successor handling so failed/blocked prompts cannot disappear silently.
+- [x] Verify all current operational checkpoints against `operations/task-state/README.md`; PH and infrastructure-cleanup section gaps were corrected and all five current checkpoints now contain every required section.
 
 ### Phase 1 — Broad audit and stale-state reconciliation
 - [x] Complete the broad Phase-1 audit across roadmap/runtime/infrastructure and PersonalHub.
@@ -48,6 +49,7 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 
 ### Phase 3 — PersonalHub P0
 Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only global gates here.
+- [x] Record the obsolete intermediate PH DB task 383662 as superseded by the specialized final cutover path 913264; never launch 383662.
 - [ ] Complete and integrate all still-relevant PH implementation/validation work through the release-preflight gate.
 - [ ] Freeze the final PH commit/schema/artifacts and complete external live-DB backup+migration+Pixel cutover via the specialized PH lane.
 - [ ] Finish PH-specific branch/PR cleanup only after absorption is proved; end with clean main-only operational state.
@@ -84,6 +86,7 @@ Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
 Phase 2, first actionable item: stop the runaway 788315 heartbeat with existing task 222733, then prove no new model-driven cycles are produced before moving to 302284.
 
 ## Verified facts
+- All five current operational checkpoints (global, PersonalHub P0, Telegram notification hygiene, ntfy checkpoints, infrastructure branch cleanup) were read back against `operations/task-state/README.md` at 2026-09-24 13:18; each now contains Objective, Constraints, Plan/checklist, Current step, Verified facts, Decisions, Completed, Remaining, Blockers, Evidence, Acceptance criteria and Next action.
 - Handoff checkpoint refreshed for a new ChatGPT chat at 2026-09-24 12:48 Europe/Copenhagen.
 - 641903 is no longer actionable: it is superseded by routing-safe successor 896074, which must run only after 302284 and resolves the CCS project from current repo/runtime metadata instead of hard-coding project_id 96.
 - MegaVault allocation Issue #100 is no longer a blocker; it is closed. The canonical replacement 896074 already exists in the roadmap.
@@ -129,6 +132,7 @@ Phase 2, first actionable item: stop the runaway 788315 heartbeat with existing 
 7. Use empirical prompt_costs after codex-usage attribution/backfill is deployed before making future model-cost recommendations.
 
 ## Completed
+- Checkpoint-protocol compliance audit completed for all current operational checkpoints; missing PH/infra sections corrected in-place without creating competing checkpoint files.
 - New-chat handoff prepared from persistent Git state; future continuation must reread this file first.
 - 641903 superseded by 896074; no future chat should launch 641903.
 - Telegram lane 422308 implemented code/runtime preparation and is now blocked only on one-time Telegram authorization; its own checkpoint is authoritative for that lane.
