@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 16:31 Europe/Copenhagen
+Updated: 2026-09-24 17:08 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -101,6 +101,7 @@ PersonalHub P0 is now the sole master lane. Resume 920550 from its existing push
 994029 and 966124 may run in parallel in other chats under the repo/resource ownership rule above; neither changes PH priority or may touch PH state.
 
 ## Verified facts
+- PH branch cleanup has already removed 14 local zero-ahead branches proven fully absorbed; remaining PH branches are limited to active/reconciliation/superseded-evidence cases owned by the PH checkpoint.
 - 920550 branch head advanced to `3f32b8cb86552f07bcbf92042db34f4e839969eb`. The PR #41 unit failure was a stale test count after schema23 added `finance_photo_index` and `finance_owned_items`; targeted SyncJournal coverage now PASS. This last commit is test-only, so the verified Play artifact/product code is unchanged.
 - Telegram auto-delete archive branch is now `chatgpt/telegram-autodelete-archive` at `f588fd96b849495ffafa05e881dae8361e91c29e`. In addition to duplicate-free message/media/call preservation and the human view, the live runtime now records factual own block/unblock state and inferred peer block/unblock visibility transitions in a combined no-ID `chat_human` timeline. Current own block was backfilled from Telegram's exact server timestamp; peer status baseline is Recently, so no false inferred peer-block event was created. Dedicated checkpoint: `CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md`.
 - PR #41 instrumentation blocker was fixed on PH task head `b10117adc84efe3afb4de20c350b411e7b1be055`: QA remains x86_64-capable but unminified so instrumentation-only hooks survive; both the semantic 920550 device test and the previously failing Datasette instrumentation test PASS locally on canonical `Pixel_8a`.
