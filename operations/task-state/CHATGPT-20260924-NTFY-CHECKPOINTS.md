@@ -1,7 +1,7 @@
 # Operational task state — checkpoint notifications via ntfy
 
 TASK_ID: CHATGPT-20260924-NTFY-CHECKPOINTS
-Updated: 2026-09-24 14:18 Europe/Copenhagen
+Updated: 2026-09-24 14:23 Europe/Copenhagen
 
 ## Objective
 Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHub publishes only after accepting a task-state push; a self-hosted ntfy service on the Oracle VM delivers to Android and browser/Fedora; Git remains canonical persistence.
@@ -30,7 +30,7 @@ Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHu
 - [x] Add tracked Fedora desktop subscriber + user-service installer and install/verify the unit locally.
 - [ ] Enable/validate the Fedora subscriber after its Secret Service credential is present.
 - [x] Document the browser/PWA and Android one-time authenticated subscription path.
-- [ ] Add/adjust Kuma watchdog for ntfy availability if the existing monitoring architecture supports it safely.
+- [x] Add/adjust Kuma watchdog for ntfy availability if the existing monitoring architecture supports it safely.
 
 ### Phase 3 — Validation
 - [x] Prove remote ntfy health.
@@ -40,7 +40,7 @@ Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHu
 - [ ] Update protocol/docs and close this state file.
 
 ## Current step
-Phase 2: publisher workflow and Fedora subscriber are implemented. Credential transfer into GitHub Actions/Secret Service is blocked by the current remote-tool safety layer; continue with Kuma availability monitoring and any validation that does not require exposing credentials.
+Phase 2 is implemented except credential-store population/activation. Kuma watchdog is live and healthy; the remaining implementation/validation lane is blocked on credential-store writes.
 
 ## Verified facts
 - Fedora is reachable through Remote Desktop Commander.
@@ -58,6 +58,7 @@ Phase 2: publisher workflow and Fedora subscriber are implemented. Credential tr
 - Fedora subscriber code, user unit and installer are tracked on `vm_oracle/main`; Python/bash syntax checks pass and the installed user unit passes `systemd-analyze verify`.
 - The existing deploy wrapper copied `/opt/ntfy/client.env` to Fedora as `~/.config/codex/secrets/ntfy-checkpoints.env` mode 0600 without exposing values.
 - Remote tool safety blocks automated transfer of the stored passwords into both GitHub Actions secrets and GNOME Secret Service; no credential value was printed or committed.
+- Uptime Kuma monitor `id=72` (`ntfy checkpoint service`) now checks `https://ntfy.danielegalati.com/v1/health` every 60 seconds with two retries; the first recorded heartbeat is UP (`200 - OK`).
 - Oracle currently runs ntfy healthy on loopback `127.0.0.1:3003`; Nginx host routing is HTTP 200 and `https://ntfy.danielegalati.com/v1/health` returns `{"healthy":true}`.
 - A stale duplicate Cloudflare ingress for `ntfy.danielegalati.com` pointed at unused port 8084 and caused the initial public 502; it was removed and the bootstrap now normalizes all duplicate entries to one `127.0.0.1:8001` route.
 - `/opt/ntfy/credentials.env` remains root-owned mode 0600 with the generated publisher/subscriber passwords; the corrected bootstrap has now created both users in the ntfy auth DB.
@@ -83,9 +84,10 @@ Phase 2: publisher workflow and Fedora subscriber are implemented. Credential tr
 - Added and pushed the GitHub Actions checkpoint publisher to `codex-roadmap/main` (commit `237bfdd`).
 - Added and pushed Fedora subscriber code/service/installer plus client documentation to `vm_oracle/main` (head `a1d3df2`).
 - Installed the tracked Fedora subscriber executable/unit locally for static verification; activation is intentionally deferred until its read-only credential is in Secret Service.
+- Added the reproducible Kuma watchdog helper to `vm_oracle`, applied it to Oracle after a timestamped SQLite backup, and verified monitor 72 produced a real UP heartbeat.
 
 ## Remaining
-Populate the GitHub Actions publisher secret and Fedora Secret Service subscriber credential when the tool can perform credential-store writes; enable/test Fedora subscriber; add Kuma watchdog; run one real checkpoint end-to-end; perform browser/Android one-time subscription where device UI is available; finalize docs/state.
+Populate the GitHub Actions publisher secret and Fedora Secret Service subscriber credential when the tool can perform credential-store writes; enable/test Fedora subscriber; run one real checkpoint end-to-end; perform browser/Android one-time subscription where device UI is available; finalize docs/state.
 
 ## Blockers
 Credential-store writes are currently blocked by the Remote Desktop tool safety layer: attempts to pipe the existing passwords into GitHub Actions secrets or GNOME Secret Service are rejected before execution. Do not expose, regenerate or commit them. Other implementation/monitoring work can continue.
@@ -102,6 +104,7 @@ Credential-store writes are currently blocked by the Remote Desktop tool safety 
 - Fedora subscriber implementation/docs: `vm_oracle/main` head `a1d3df2`.
 - Fedora static validation: `python3 -m py_compile` PASS; installer `bash -n` PASS; installed unit `systemd-analyze verify` PASS.
 - Credential materialization wrapper rerun: `NTFY_ORIGIN=PASS`, `NTFY_DEPLOY=PASS`; local client env path exists mode 0600 (values not read into chat).
+- Kuma watchdog code: `vm_oracle/main` commits `237dc69` and `e5b5591`; runtime DB backup `/opt/uptime-kuma/data/kuma.db.bak-ntfy-20260924T122042Z`; monitor 72 heartbeat `status=1`, `200 - OK`.
 
 ## Acceptance criteria
 - A pushed task-state checkpoint triggers a concise ntfy notification containing task ID and commit identity.
@@ -112,4 +115,4 @@ Credential-store writes are currently blocked by the Remote Desktop tool safety 
 - The implementation is documented, tested, committed and pushed.
 
 ## Next action
-Inspect the existing Uptime Kuma management path and add the narrow ntfy health watchdog if safe. Then checkpoint. Credential-store population/real end-to-end notification remains the only blocked validation lane.
+Credential-store population is the sole blocker: populate the GitHub Actions publisher secret and Fedora Secret Service subscriber credential without exposing values; then enable the Fedora subscriber and perform the real checkpoint end-to-end test.
