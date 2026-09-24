@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub Workflowy integration
 
 TASK_ID: CHATGPT-20260924-PH-WORKFLOWY
-Updated: 2026-09-24 17:24 Europe/Copenhagen
+Updated: 2026-09-24 17:41 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-PERSONALHUB-P0.md
 Global state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
@@ -73,6 +73,7 @@ Implementation and reconciliation verification are complete. Actual integration 
 - Share→PH must reuse the canonical Hub composer/search instead of introducing another cross-module selector.
 
 ## Completed
+- PR #43 unit-CI lint blocker fixed on protected task branch: Compose resource lookups in `HubContextLinks` now use `stringResource` values captured before coroutine callbacks. Local `:core:hub-context:lintDebug` + targeted WorkflowyIntegrationTest + WorkflowyDaysTest PASS. Fix commit `f8e454141fa9835041f83ea1255e257fa44a5f2d` pushed to `task/workflowy-integration`.
 - Full source implementation, tests, docs and routing map are remotely persisted on the PersonalHub feature branch.
 - Host verification gates listed above are PASS.
 - A dedicated persistent checkpoint now exists in codex-roadmap main.
