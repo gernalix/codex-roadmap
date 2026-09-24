@@ -6,6 +6,7 @@ model: GPT-6 Luna
 reasoning: medium
 tags:
   - conditional:only-if-eboks-native-export-incomplete
+  - manual-prerequisite:confirm-eboks-scraper-needed
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/megavault-e-boks-bootstrap
@@ -30,7 +31,7 @@ tags:
 
 ## Spiegazione
 
-Aspetta 582946. Va eseguito solo se, dopo l’export e-Boks ripreso, il download nativo risulta ancora insufficiente; se 582946 copre tutto, questo bootstrap diventa inutile e va cancellato invece di essere lanciato.
+Dopo 582946 va prima verificato se il download e-Boks ottenuto è già sufficiente. Solo se serve ancora uno scraper, si riusa il repository pubblico eboks-scraper già esistente ma vuoto; altrimenti questo task va cancellato.
 
 ## Esecuzioni
 
