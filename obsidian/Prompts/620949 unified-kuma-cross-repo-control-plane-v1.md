@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -39,7 +39,7 @@ Riconcilia tutti i repository nel control plane Kuma unico, migra le integrazion
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-24T01:27:03Z · colli di bottiglia: sì · fix: — · Pre-implementation audit found fragmented repo-specific Kuma producers, missing cross-repo inventory, and incorrect timer health semantics. Central registry and scheduled-job freshness support were implemented before the live cutover.
 
 ## Modifiche di codice ChatGPT
 
