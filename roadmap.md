@@ -19,4 +19,4 @@
 15. [[prompts/eboks-full-export-resume-after-mitid-v1|eboks-full-export-resume-after-mitid-v1]]
 16. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 17. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
-18. [[prompts/ccs-pbf-final-live-retry-v1|ccs-pbf-final-live-retry-v1]]
+18. [[prompts/ccs-pbf-final-live-routing-safe-retry-v1|ccs-pbf-final-live-routing-safe-retry-v1]]

@@ -21,7 +21,7 @@
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-6 Luna | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-6 Luna | medium |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-6 Sol | medium |
-| [[obsidian/Prompts/641903 ccs-pbf-final-live-retry-v1\|641903 · Chiudere il leaf PBF finale di Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-6 Luna | low |
+| [[obsidian/Prompts/896074 ccs-pbf-final-live-routing-safe-retry-v1\|896074 · Chiudere il leaf CCS con routing progetto sicuro]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-6 Luna | low |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | sì | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
@@ -394,3 +394,4 @@
 | [[obsidian/Prompts/105883 personalhub-global-since-when-v3\|105883 · Promuovere Since When a funzione globale PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1\|697920 · Rendere ChatGPTExporter resiliente e affidabile]] | blocked | 2026-09-24T02:12:33Z | 2026-09-24T02:12:33Z | BLOCKED | sì | no | — | Prompt infrastructure | GPT-6 Sol | medium |
 | [[obsidian/Prompts/383662 personalhub-v60-live-db-20-21-migration-v1\|383662 · Migrare il DB reale 20→21 e validare PersonalHub v60]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/641903 ccs-pbf-final-live-retry-v1\|641903 · Chiudere il leaf PBF finale di Codex Desktop]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-6 Luna | low |

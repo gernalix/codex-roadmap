@@ -1,21 +1,22 @@
 ---
-prompt_id: 641903
-status: superseded
-project_id: 96
+prompt_id: 896074
+status: pending
+project_id: —
 model: GPT-6 Luna
 reasoning: low
 tags:
-  - manual-prerequisite:resolve-ccs-project-id
+  - ccs
+  - routing-safe
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/facilitatori-di-prompt
 ---
 
-# 641903 · Chiudere il leaf PBF finale di Codex Desktop
+# 896074 · Chiudere il leaf CCS con routing progetto sicuro
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../falliti/ccs-pbf-final-live-retry-v1|Apri prompt]]
+- **Prompt:** [[../../prompts/ccs-pbf-final-live-routing-safe-retry-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,13 +25,13 @@ tags:
 - **Fix:** —
 - **Dipende da:** [[302284 prompt-infrastructure-final-runtime-activation-v1|302284]]
 - **Sblocca:** —
-- **Padri/precedenti:** [[996591 ccs-pbf-live-final-closure-v1|996591]]
-- **Figli/follow-up:** [[896074 ccs-pbf-final-live-routing-safe-retry-v1|896074]]
-- **Chat Codex:** Nuova chat Codex breve; retry finale del solo leaf 996591 sul main CCS corrente.
+- **Padri/precedenti:** [[641903 ccs-pbf-final-live-retry-v1|641903]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Nuova chat Codex breve dopo 302284; retry live CCS senza project_id hard-coded.
 
 ## Spiegazione
 
-Aspetta il deploy infrastrutturale e la riconciliazione dell’ID progetto CCS: l’ultimo runtime ha dimostrato che il vecchio ID 96 punta a Workflowy. Poi esegue solo le due prove live launcher/overlay.
+Dopo il deploy runtime, verifica launcher e overlay CCS risolvendo il progetto dal repo/metadati correnti invece di usare il vecchio ID numerico ambiguo.
 
 ## Esecuzioni
 
