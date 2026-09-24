@@ -7,6 +7,7 @@
 - [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]]
 - [[obsidian/Prompts/570349 codex-usage-live-publisher-single-writer-runtime-recovery-v1|570349 · Ripristinare il monitoraggio live Codex remoto]]
 - [[obsidian/Prompts/620949 unified-kuma-cross-repo-control-plane-v1|620949 · Unificare Uptime Kuma per tutti i repository]]
+- [[obsidian/Prompts/970051 duplicate-photos-detector-fedora-timer-migration-v1|970051 · Migrare duplicate-photos-detector al timer periodico Fedora]]
 
 ## In esecuzione
 

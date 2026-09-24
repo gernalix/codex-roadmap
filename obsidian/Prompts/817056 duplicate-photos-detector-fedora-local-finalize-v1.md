@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** [[620949 unified-kuma-cross-repo-control-plane-v1|620949]]
+- **Figli/follow-up:** [[620949 unified-kuma-cross-repo-control-plane-v1|620949]], [[970051 duplicate-photos-detector-fedora-timer-migration-v1|970051]]
 - **Chat Codex:** Nuova chat Codex; task locale Fedora. Il codice remoto è già implementato e CI PASS: intervenire sul sorgente solo se uno smoke locale prova un bug.
 
 ## Spiegazione
