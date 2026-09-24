@@ -1,7 +1,7 @@
 # Operational task state — checkpoint notifications via ntfy
 
 TASK_ID: CHATGPT-20260924-NTFY-CHECKPOINTS
-Updated: 2026-09-24 13:20 Europe/Copenhagen
+Updated: 2026-09-24 13:43 Europe/Copenhagen
 
 ## Objective
 Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHub publishes only after accepting a task-state push; a self-hosted ntfy service on the Oracle VM delivers to Android and browser/Fedora; Git remains canonical persistence.
@@ -22,7 +22,8 @@ Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHu
 
 ### Phase 2 — Implementation
 - [x] Add reproducible ntfy server deployment/configuration to vm_oracle.
-- [ ] Deploy/start ntfy on Oracle with persistent storage and authentication. Server/edge are healthy; protected users/ACLs still need the corrected bootstrap rerun.
+- [x] Deploy/start ntfy on Oracle with persistent storage and authentication; protected publisher/subscriber users and ACLs verified.
+- [ ] Remove the duplicate Nginx ntfy server block that still causes a harmless bootstrap warning, while preserving the verified public route.
 - [ ] Add a GitHub Actions publisher triggered only by accepted pushes changing `operations/task-state/**`.
 - [ ] Store publisher credentials in GitHub Actions secrets and subscriber credentials in Fedora Secret Service; never commit them.
 - [ ] Add Fedora desktop subscription/notification support and enable the browser/PWA path; document the Android one-time subscription step if device interaction is unavailable.
@@ -36,7 +37,7 @@ Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHu
 - [ ] Update protocol/docs and close this state file.
 
 ## Current step
-Phase 2: rerun the corrected Oracle bootstrap to create the protected publisher/subscriber users and ACLs, verify them without exposing secrets, then wire GitHub Actions and Fedora subscription paths.
+Phase 2: remove the duplicate Nginx ntfy server block warning without changing the working route, then wire the GitHub Actions publisher and Fedora subscriber/desktop path using the verified protected ntfy accounts.
 
 ## Verified facts
 - Fedora is reachable through Remote Desktop Commander.
@@ -52,8 +53,10 @@ Phase 2: rerun the corrected Oracle bootstrap to create the protected publisher/
 - A GitHub `push` workflow scoped to `operations/task-state/**` is a stronger event boundary than a local Git hook: it covers checkpoints pushed by any chat/client and runs only after GitHub accepted the commit.
 - Oracle currently runs ntfy healthy on loopback `127.0.0.1:3003`; Nginx host routing is HTTP 200 and `https://ntfy.danielegalati.com/v1/health` returns `{"healthy":true}`.
 - A stale duplicate Cloudflare ingress for `ntfy.danielegalati.com` pointed at unused port 8084 and caused the initial public 502; it was removed and the bootstrap now normalizes all duplicate entries to one `127.0.0.1:8001` route.
-- `/opt/ntfy/credentials.env` exists root-owned mode 0600 with generated publisher/subscriber passwords, but the ntfy auth DB currently still lists only the anonymous user. Root cause: the earlier Compose exec form did not pass `NTFY_PASSWORD` correctly.
+- `/opt/ntfy/credentials.env` remains root-owned mode 0600 with the generated publisher/subscriber passwords; the corrected bootstrap has now created both users in the ntfy auth DB.
 - The bootstrap fix for password injection plus duplicate-ingress normalization is on `vm_oracle/main` in substantive commit `19b4dc3`; remote head at this checkpoint is `dd60451`.
+- Corrected bootstrap rerun completed successfully: public/origin health PASS; `checkpoint-publisher` is write-only on `chatgpt-checkpoints`, `checkpoint-subscriber` is read-only, and anonymous access remains denied.
+- Nginx still reports a duplicate `ntfy.danielegalati.com` server-name warning during bootstrap; service health is unaffected, but configuration duplication should be removed.
 
 ## Decisions
 - Use one central ntfy topic/event stream rather than one topic per PROMPT_ID.
@@ -68,12 +71,13 @@ Phase 2: rerun the corrected Oracle bootstrap to create the protected publisher/
 - Deployed ntfy, Nginx routing, Cloudflare DNS/ingress and Web Push keys; public health is PASS.
 - Diagnosed and repaired the duplicate stale Cloudflare ingress that caused HTTP 502.
 - Hardened the bootstrap so the two ntfy account passwords are passed via environment rather than argv and all duplicate ntfy ingress entries are normalized before adding the canonical route.
+- Reran the corrected Oracle bootstrap and verified the protected publisher/subscriber users plus their write-only/read-only topic ACLs.
 
 ## Remaining
-Rerun corrected bootstrap and verify protected users/ACLs; create/store publisher/subscriber credentials in their final secret stores; add GitHub Actions checkpoint publisher; add Fedora/browser/Android subscription path; decide/add Kuma watchdog; run one real checkpoint end-to-end; finalize docs/state.
+Remove the duplicate Nginx server block warning; create/store publisher/subscriber credentials in their final secret stores; add GitHub Actions checkpoint publisher; add Fedora/browser/Android subscription path; decide/add Kuma watchdog; run one real checkpoint end-to-end; finalize docs/state.
 
 ## Blockers
-No external blocker. Do not regenerate or expose the existing root-only credentials file; rerun the corrected bootstrap first so it creates users from the already-generated passwords.
+No external blocker. Do not regenerate or expose the existing root-only credentials file; reuse the already-generated credentials when populating GitHub Actions/Fedora secret stores.
 
 ## Evidence
 - codex-roadmap persistent-state protocol now requires an executable checklist/current step.
@@ -81,7 +85,7 @@ No external blocker. Do not regenerate or expose the existing root-only credenti
 - Oracle ntfy container: healthy, bound to `127.0.0.1:3003`; Nginx host route: HTTP 200.
 - Cloudflare config now has a single ntfy hostname route to `127.0.0.1:8001`.
 - `/opt/ntfy/credentials.env`: root:root mode 0600; values were not recorded.
-- Before corrected bootstrap rerun, `ntfy user list` shows only anonymous; this is expected to change after the next action.
+- After corrected bootstrap rerun, `ntfy user list` shows `checkpoint-publisher` with write-only access and `checkpoint-subscriber` with read-only access to `chatgpt-checkpoints`; anonymous has no access.
 - `vm_oracle` substantive hardening commit: `19b4dc3`; current remote head observed: `dd60451`.
 
 ## Acceptance criteria
@@ -93,4 +97,4 @@ No external blocker. Do not regenerate or expose the existing root-only credenti
 - The implementation is documented, tested, committed and pushed.
 
 ## Next action
-On Fedora, sync `vm_oracle`, rerun `scripts/deploy_ntfy_checkpoints.sh`, verify `checkpoint-publisher` has write-only and `checkpoint-subscriber` has read-only access to `chatgpt-checkpoints` without printing secrets, then continue with GitHub Actions secret/publisher and Fedora subscriber setup.
+On Fedora, inspect/remove only the duplicate Nginx ntfy server block causing the bootstrap warning, revalidate public health, then add the GitHub Actions publisher and install/store publisher/subscriber credentials in GitHub Actions/Fedora Secret Service without exposing them.
