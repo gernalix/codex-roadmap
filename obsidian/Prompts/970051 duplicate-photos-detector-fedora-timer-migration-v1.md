@@ -18,9 +18,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/duplicate-photos-detector|duplicate-photos-detector]]
 - **Prompt:** [[../../completed/duplicate-photos-detector-fedora-timer-migration-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-24T02:07:58Z
+- **Ultimo lancio:** 2026-09-24T02:07:58Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ Sostituisce sul Fedora reale il vecchio watcher sempre attivo con il nuovo timer
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-24T02:07:58Z | 2026-09-24T02:09:16Z | PASS | 77.779 | gpt-6-luna | low | 10 | 36907 |
 
 ## Analisi ChatGPT
 
