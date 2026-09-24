@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 11:54 Europe/Copenhagen
+Updated: 2026-09-24 12:18 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -88,6 +88,8 @@ Goal: operate only after 788606 PASS.
 Read the actual final app schema/Room identity from the final commit. Inspect the actual live DB schema/identity on Pixel. Take immutable rollback first. Externally migrate a copy of the real DB through every required delta to the final schema, validate quick_check/integrity/FK and preservation of representative data, then transfer/install the exact final APK and migrated DB using explicit Pixel serial. Smoke Home + every module. Keep rollback until final acceptance.
 
 ## Completed
+- PROMPT_ID 920550 successfully claimed at 2026-09-24 12:18 local; roadmap status `running`, issue #1030, branch `task/920550`, worktree `/home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/920550`.
+- Fixed the local roadmap/Obsidian collision that blocked claims: `Generated/PersonalHub/**` is sqlite-to-obsidian output inside the active codex-roadmap vault, now ignored by Git via codex-roadmap commit `d0d6b1384a6fcc7ead2e4d15eb0207158b9808fa`; 3,138 generated notes were preserved. Local roadmap pull then fast-forwarded cleanly.
 - Revalidated the PH P0 chain against current canonical roadmap and current `PersonalHub/main`; no newer work invalidates or reorders it.
 - Confirmed exact current PH baseline: main `2d9c5e782d94cb37747b607b7bdb46a5ea61849f`, app v60, Room schema 22, no open PRs, stale non-main branch 0 ahead/30 behind.
 - Global Phase-1 PH audit.
@@ -143,4 +145,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Start existing PROMPT_ID 920550 as the first PH execution target through the canonical `roadmap_start.py` claim on Fedora/Codex. It requires local model/download/build/AVD work, so do not duplicate or reimplement it through GitHub-only edits. Supervise 920550 through queued integration and canonical PASS, inspect its actual diff/schema/test evidence after merge, and do not allow 857906 to start until that review is complete.
+Execute PROMPT_ID 920550 only inside its claimed worktree. Read PersonalHub AGENTS.md plus the already-routed Soldi photo/search/data and database files, implement the bounded residual semantic-photo/owned-items scope, run targeted tests/build/AVD gates, then finalize with `roadmap_finish.py`. After asynchronous integration reaches canonical PASS, inspect the merged diff/schema/test evidence before allowing 857906.
