@@ -22,6 +22,9 @@ FINAL_STATUS = {
 }
 ACTIVE_STATUS = {"pending", "running"}
 TERMINAL_STATUS = set(FINAL_STATUS.values()) | {"superseded"}
+_EXECUTION_METADATA_RE = re.compile(
+    r"(?i)(?:^|[|\s])(?:model|reasoning)\s*="
+)
 
 class RoadmapDBError(RuntimeError):
     pass
@@ -248,6 +251,14 @@ def ensure_historical_stub(
         (prompt_id, None, status, ts, actor, "historical stub"),
     )
 
+def _validate_prompt_text_metadata(prompt_id: str, prompt_text: str | None) -> None:
+    if prompt_text is None:
+        return
+    header = "\n".join(prompt_text.splitlines()[:16])
+    if _EXECUTION_METADATA_RE.search(header):
+        raise RoadmapDBError(f"prompt_text_contains_execution_metadata:{prompt_id}")
+
+
 def register_prompt(
     conn: sqlite3.Connection,
     *,
@@ -274,6 +285,7 @@ def register_prompt(
         raise RoadmapDBError(f"invalid_prompt_id:{prompt_id}")
     if status not in ACTIVE_STATUS | TERMINAL_STATUS:
         raise RoadmapDBError(f"invalid_status:{status}")
+    _validate_prompt_text_metadata(prompt_id, prompt_text)
     ts = now_utc()
     sha = materialization_hash(prompt_text) if prompt_text is not None else None
     existing = conn.execute("SELECT status FROM prompts WHERE prompt_id=?", (prompt_id,)).fetchone()
@@ -417,6 +429,7 @@ def set_prompt_text(
     note: str | None = None,
 ) -> None:
     row = assert_prompt_not_running(conn, prompt_id, "prompt_text")
+    _validate_prompt_text_metadata(prompt_id, prompt_text)
     old = canonical_prompt_text(conn, prompt_id)
     if old == prompt_text:
         return
@@ -484,6 +497,39 @@ def set_model(
             ),
         ),
     )
+
+def set_reasoning(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    reasoning: str,
+    *,
+    actor: str = "chatgpt",
+    note: str | None = None,
+) -> None:
+    row = assert_prompt_not_running(conn, prompt_id, "reasoning")
+    old_reasoning = row["reasoning"]
+    if old_reasoning == reasoning:
+        return
+    ts = now_utc()
+    conn.execute(
+        "UPDATE prompts SET reasoning=?, updated_at=? WHERE prompt_id=?",
+        (reasoning, ts, prompt_id),
+    )
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "prompt_reasoning_updated",
+            ts,
+            actor,
+            json.dumps(
+                {"old_reasoning": old_reasoning, "new_reasoning": reasoning, "note": note},
+                ensure_ascii=False,
+                sort_keys=True,
+            ),
+        ),
+    )
+
 
 def set_explanation(
     conn: sqlite3.Connection,
@@ -1072,6 +1118,14 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
             conn,
             str(mutation["prompt_id"]),
             str(mutation["model"]),
+            actor=actor,
+            note=mutation.get("note"),
+        )
+    elif op=="reasoning":
+        set_reasoning(
+            conn,
+            str(mutation["prompt_id"]),
+            str(mutation["reasoning"]),
             actor=actor,
             note=mutation.get("note"),
         )
