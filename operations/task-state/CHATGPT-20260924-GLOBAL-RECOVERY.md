@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 13:31 Europe/Copenhagen
+Updated: 2026-09-24 13:34 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -85,9 +85,10 @@ Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
 - [ ] Mark global recovery complete only when every acceptance criterion below is satisfied.
 
 ## Current step
-Phase 2, first actionable item: run 302284 to deploy/read back the consolidated prompt-infrastructure runtime now that 222733 is completed. Keep PersonalHub 920550 parked until the master lane explicitly returns to PH.
+Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of the five prompt-infrastructure repositories; proceed to targeted tests/deploy only for clean, fast-forwardable checkouts.
 
 ## Verified facts
+- 302284 claimed successfully at 2026-09-24 13:34 local via roadmap issue #1055; canonical status is `running`. It is now the single active master recovery task; PH 920550 remains parked.
 - 222733 completed canonically via single-writer commit `0e5b710ac7a783395f70b6af35d69db45dba707f`. The only Codex automation directory is `chatgptexporter-788315-completion`, now `status = "DISABLED"`; bounded scan found zero active recurring automations. Shutdown boundary was 2026-09-24T11:25:10Z; latest published 788315 cycle started 2026-09-24T11:17:26Z, so no cycle exists after shutdown.
 - PersonalHub 920550 is safely parked at pushed checkpoints. Roadmap still says `running` only because there is no pause lifecycle state; no active model/process is executing that lane.
 - All five current operational checkpoints (global, PersonalHub P0, Telegram notification hygiene, ntfy checkpoints, infrastructure branch cleanup) were read back against `operations/task-state/README.md` at 2026-09-24 13:18; each now contains Objective, Constraints, Plan/checklist, Current step, Verified facts, Decisions, Completed, Remaining, Blockers, Evidence, Acceptance criteria and Next action.
