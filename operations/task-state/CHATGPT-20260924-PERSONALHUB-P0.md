@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 16:55 Europe/Copenhagen
+Updated: 2026-09-24 16:57 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -91,6 +91,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 920550 head is now `3f32b8c`. Both prior CI blockers have local PASS evidence: instrumentation regression fixed and SyncJournal schema23 test updated. PR #41 must rerun checks on this head. Do not start 857906 until #41 is merged and Workflowy is integrated.
 
 ## Verified facts
+- Exact zero-unique local branch set versus current `origin/main`: `feature/global-activity-register`, `feature/soldi-ui-v2`, `task/462279`, `task/514458`, `task/514458-23`, `task/522084`, `task/613102`, `task/620949`, `task/624831`, `task/637985`, `task/693278`, `task/728918`, `task/773323`, `task/822595`, `task/825147`, `task/879838`. These require no committed merge. Dirty uncommitted residues in 624831/728918 are separately classified as superseded and must not be integrated.
 - Dirty historical worktree dispositions are now explicit: `task/624831` has no committed work unique versus current main and belongs to failed PROMPT_ID 624831, whose valid work is split into completed 613102 plus current 920550. Its uncommitted residue is superseded and must not be literal-merged. `task/728918` likewise has no committed work unique versus main; PROMPT_ID 728918 is superseded, its successor 649781 is also superseded, and roadmap evidence states the final PH chain no longer depends on the Obsidian archive. Its dirty uncommitted archive/Obsidian residue is obsolete, not a merge candidate. Preserve until final cleanup evidence is recorded, then remove the worktrees without integrating their superseded dirty state.
 - Two historical PH worktrees are dirty and are **not safe to delete yet**: `task/624831` has modified Places/Soldi/photo/schema/UI files plus untracked schema19/photo UI files; `task/728918` has modified app/settings/database/sync/version files plus untracked archive/Obsidian code. All other listed historical worktrees are clean. Before final cleanup, diff these dirty worktrees against current/final `main` and either prove semantic absorption or checkpoint/integrate any genuinely unique valid work.
 - Detached worktree cleanup evidence: `PersonalHub-capsule-isolation@c8fe8b7` and `/tmp/personalhub-main-play-baseline@57883c2` are direct ancestors of `origin/main`. `PersonalHub-autoexport-hotfix@30dba18` is not an ancestor but is patch-identical to main commit `af008c0cbc861a66099b5ffe61400b3501957f03` (same stable patch-id `3e507cc0b4aebdabc6f7445e2455e6b47cdb5749`). All three are safe final-cleanup candidates after active PH work completes.
