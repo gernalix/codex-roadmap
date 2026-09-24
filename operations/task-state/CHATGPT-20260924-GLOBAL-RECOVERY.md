@@ -52,6 +52,8 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 ### Phase 3 — PersonalHub P0
 Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only global gates here.
 - [x] Record the obsolete intermediate PH DB task 383662 as superseded by the specialized final cutover path 913264; never launch 383662.
+- [x] Implement and host-verify the optional PH ↔ Workflowy integration on `chatgpt/workflowy-integration` without a Room schema/version change; detailed checkpoint: `CHATGPT-20260924-PH-WORKFLOWY.md`.
+- [ ] When the serialized master lane returns to PH, reconcile and integrate `chatgpt/workflowy-integration` into the then-current PersonalHub main, rerun affected gates, delete the temporary branch, and record the merged commit.
 - [ ] Complete and integrate all still-relevant PH implementation/validation work through the release-preflight gate.
 - [ ] Freeze the final PH commit/schema/artifacts and complete external live-DB backup+migration+Pixel cutover via the specialized PH lane.
 - [ ] Finish PH-specific branch/PR cleanup only after absorption is proved; end with clean main-only operational state.
@@ -88,6 +90,7 @@ Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
 Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of the five prompt-infrastructure repositories; proceed to targeted tests/deploy only for clean, fast-forwardable checkouts.
 
 ## Verified facts
+- PH ↔ Workflowy optional integration is implemented and host-verified on PersonalHub branch `chatgpt/workflowy-integration`; checkpointed remote head at this update is `edd08138702f9ae6cc54c2964f109343a356a149`. It reuses Hub Context resources, adds no Room schema/version change, and has PASS evidence for consumer preflight, targeted Workflowy tests/app compile and architecture boundaries. Final main reconciliation/integration remains intentionally parked; authoritative detail is `operations/task-state/CHATGPT-20260924-PH-WORKFLOWY.md`.
 - 302284 claimed successfully at 2026-09-24 13:34 local via roadmap issue #1055; canonical status is `running`. It is now the single active master recovery task; PH 920550 remains parked.
 - 222733 completed canonically via single-writer commit `0e5b710ac7a783395f70b6af35d69db45dba707f`. The only Codex automation directory is `chatgptexporter-788315-completion`, now `status = "DISABLED"`; bounded scan found zero active recurring automations. Shutdown boundary was 2026-09-24T11:25:10Z; latest published 788315 cycle started 2026-09-24T11:17:26Z, so no cycle exists after shutdown.
 - PersonalHub 920550 is safely parked at pushed checkpoints. Roadmap still says `running` only because there is no pause lifecycle state; no active model/process is executing that lane.
@@ -163,6 +166,7 @@ Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of th
 - Redundant hourly ChatGPT "Codex Fix Queue" automation disabled.
 
 ## Remaining
+- When the master recovery returns to PersonalHub, reconcile/integrate the verified Workflowy branch, rerun affected gates, delete the temporary branch and update both PH/global checkpoints.
 - Run routing-safe CCS successor 896074 only after 302284 PASS; never run superseded 641903.
 - Reconcile 181259's nonexistent remote repo before it can become genuinely launchable.
 - Run 222733 locally and verify 788315 no longer produces cycles.
@@ -195,10 +199,10 @@ Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of th
 - No pending prompt embeds model/reasoning execution metadata.
 - Workflowy/CCS runtime reflects the new metadata and styling after 302284.
 - No pending prompt contains a known-invalid hard-coded project routing value.
-- PH relevant work is complete before final build; final PH remote state is main-only.
+- PH relevant work, including the checkpointed optional Workflowy integration, is complete before final build; final PH remote state is main-only.
 - Live PH DB has rollback, external final-schema migration, integrity/FK/data-preservation checks.
 - Final PH APK is release-validated, installed on Pixel and all relevant modules open with preserved data.
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-Execute existing task 302284 locally through the canonical claim. Deploy only the already-implemented prompt-infrastructure runtime changes, run its bounded targeted gates/readback, finalize canonically, checkpoint this file, then move to 896074. Keep PersonalHub/Telegram/ntfy/branch-cleanup parked or waiting; do not launch them in parallel.
+Execute existing task 302284 locally through the canonical claim. Deploy only the already-implemented prompt-infrastructure runtime changes, run its bounded targeted gates/readback, finalize canonically, checkpoint this file, then move to 896074. Keep PersonalHub/Telegram/ntfy/branch-cleanup parked or waiting; do not launch them in parallel. The parked PersonalHub set now explicitly includes the verified Workflowy integration branch recorded in `CHATGPT-20260924-PH-WORKFLOWY.md`.
