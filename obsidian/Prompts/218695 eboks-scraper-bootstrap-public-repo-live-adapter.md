@@ -2,7 +2,7 @@
 prompt_id: 218695
 status: pending
 project_id: 23
-model: GPT-5.6 Terra
+model: GPT-6 Luna
 reasoning: medium
 tags:
   - conditional:only-if-eboks-native-export-incomplete

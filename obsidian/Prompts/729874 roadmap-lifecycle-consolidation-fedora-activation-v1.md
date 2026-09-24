@@ -2,8 +2,8 @@
 prompt_id: 729874
 status: pending
 project_id: 92
-model: GPT-5.6 Terra
-reasoning: medium
+model: GPT-6 Luna
+reasoning: low
 tags:
   - roadmap/prompt
   - roadmap/status/pending

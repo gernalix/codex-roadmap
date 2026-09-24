@@ -1,4 +1,4 @@
-PROMPT_ID=218695 | PROJECT=MegaVault / e-Boks bootstrap | project_id=23 | MODEL=GPT-5.6 Terra | reasoning=medium | MegaVault=FAST
+PROMPT_ID=218695 | PROJECT=MegaVault / e-Boks bootstrap | project_id=23 | MegaVault=FAST
 
 # Goal
 Crea e pubblica il repository pubblico `gernalix/eboks-scraper` dal seed già implementato, registralo canonicamente in MegaVault e calibra/verifica SOLO l'adapter UI reale di e-Boks sulla sessione Chrome autenticata di Fedora.

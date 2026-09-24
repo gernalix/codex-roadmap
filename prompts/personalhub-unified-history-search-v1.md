@@ -1,7 +1,5 @@
 PROMPT_ID=857906
 /goal
-MODEL=GPT-5.6 Terra
-REASONING=medium
 MEGAVAULT=STRICT
 PROJECT_ID=49
 REPO=gernalix/PersonalHub

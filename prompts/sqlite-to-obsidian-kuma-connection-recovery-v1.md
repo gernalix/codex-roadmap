@@ -1,8 +1,6 @@
 PROMPT_ID=714263
 PARENT_PROMPT_ID=893025
 REPO=gernalix/fedora-system-monitor
-MODEL=GPT-5.6 Luna
-REASONING=low
 MEGAVAULT=FAST
 
 # Goal

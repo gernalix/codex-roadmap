@@ -1,4 +1,4 @@
-PROMPT_ID=840907 | PARENT_PROMPT_ID=811925 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STANDARD
+PROMPT_ID=840907 | PARENT_PROMPT_ID=811925 | project_id=49 | MegaVault=STANDARD
 
 # Goal
 Completa il Data Explorer offline di PersonalHub con Datasette Lite vendorizzato, mantenendo la semantica relazionale del server e funzionando senza rete.

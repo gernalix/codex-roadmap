@@ -1,4 +1,4 @@
-PROMPT_ID=556372 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=FAST
+PROMPT_ID=556372 | MegaVault=FAST
 WORKDIR=/home/daniele/projects/grindr-export
 
 # Goal

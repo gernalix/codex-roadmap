@@ -2,7 +2,7 @@
 prompt_id: 812553
 status: pending
 project_id: —
-model: GPT-5.6 Terra
+model: GPT-6 Luna
 reasoning: medium
 tags:
   - roadmap/prompt

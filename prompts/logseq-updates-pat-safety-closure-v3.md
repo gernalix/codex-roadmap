@@ -1,4 +1,4 @@
-PROMPT_ID=588376 | PARENT_PROMPT_ID=357862 | project=logseq_updates | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT
+PROMPT_ID=588376 | PARENT_PROMPT_ID=357862 | project=logseq_updates | MegaVault=STRICT
 
 # Goal
 Dopo la revoca manuale del PAT storico, bonifica la history di gernalix/logseq_updates e attiva/verifica l'updater Fedora già implementato. Non ridisegnare la feature.

@@ -1,4 +1,4 @@
-PROMPT_ID=707603 | PARENT_PROMPT_ID=825405 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STRICT
+PROMPT_ID=707603 | PARENT_PROMPT_ID=825405 | project_id=49 | MegaVault=STRICT
 
 # Goal
 Valida e chiudi il sistema Git Data / Global History / Time Machine già implementato sullo schema PersonalHub finale. Correggi solo difetti reali trovati; non riscrivere la feature.

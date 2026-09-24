@@ -1,4 +1,4 @@
-PROMPT_ID=788606 | PARENT_PROMPT_ID=334679 | project_id=49 | model=GPT-5.6 Luna | reasoning=low | MegaVault=FAST
+PROMPT_ID=788606 | PARENT_PROMPT_ID=334679 | project_id=49 | MegaVault=FAST
 
 # Goal
 Esegui il preflight locale finale della build PersonalHub destinata a Google Play. Non aggiungere feature.

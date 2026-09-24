@@ -2,7 +2,7 @@
 prompt_id: 857906
 status: pending
 project_id: 49
-model: GPT-5.6 Terra
+model: GPT-6 Sol
 reasoning: medium
 tags:
   - architecture
