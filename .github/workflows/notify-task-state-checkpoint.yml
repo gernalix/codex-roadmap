@@ -1,0 +1,54 @@
+name: Notify task-state checkpoint
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "operations/task-state/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ntfy-task-state-checkpoints
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Publish accepted checkpoint
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+          REPOSITORY: ${{ github.repository }}
+          NTFY_PASSWORD: ${{ secrets.NTFY_CHECKPOINT_PUBLISHER_PASSWORD }}
+        run: |
+          set -euo pipefail
+          zero=0000000000000000000000000000000000000000
+          if [ "$BEFORE" = "$zero" ]; then
+            changed="$(git show --pretty='' --name-only "$AFTER")"
+          else
+            changed="$(git diff --name-only "$BEFORE" "$AFTER")"
+          fi
+          task_ids="$(
+            printf '%s\n' "$changed" |
+              sed -n 's#^operations/task-state/\([^/]*\)\.md$#\1#p' |
+              grep -v '^README$' |
+              sort -u |
+              paste -sd, -
+          )"
+          [ -n "$task_ids" ] || exit 0
+          short_sha="$(git rev-parse --short=12 "$AFTER")"
+          curl --fail-with-body --silent --show-error --retry 3 \
+            --user "checkpoint-publisher:$NTFY_PASSWORD" \
+            -H "Title: Checkpoint persisted" \
+            -H "Tags: white_check_mark" \
+            -H "Priority: default" \
+            -H "X-Message: $task_ids · $REPOSITORY@$short_sha" \
+            --data-binary "" \
+            https://ntfy.danielegalati.com/chatgpt-checkpoints
