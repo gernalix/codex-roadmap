@@ -40,6 +40,7 @@ Installa e valida localmente il matcher di foto, crea l’archivio/DB, registra 
 ## Analisi ChatGPT
 
 - 2026-09-24T01:36:45Z · colli di bottiglia: no · fix: — · Objective already achieved in duplicate-photos-detector: implementation, targeted tests and Fedora systemd activation passed; only terminalization conflicted with an existing blocked roadmap state. Status reconciled to completed without rewriting historical outcome.
+- 2026-09-24T01:53:10Z · colli di bottiglia: sì · fix: — · {"blocker":"roadmap_finish ha trovato la chiave già occupata dall’esito blocked del claim fallito sul checkout vuoto; il writer ha rifiutato il recupero PASS per conflitto blocked→completed.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"817056","report_ref":"codex-usage:90351ec6a03225965d4eb6d3:43e1edd52ea1c2a1","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
