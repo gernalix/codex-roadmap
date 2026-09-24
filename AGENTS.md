@@ -18,7 +18,7 @@ Never directly edit or commit canonical/generated roadmap state to perform a roa
 
 Instead, submit one immutable `codex-roadmap.mutation.v1` request as a GitHub Issue named `[roadmap-mutation] <request_key>`, normally through `tools/submit_mutation.py`. Let `.github/workflows/apply-roadmap-mutations.yml` serialize, apply, render, commit and push it.
 
-Terminal Codex results must use `tools/roadmap_result.py` or `tools/roadmap_finish.py`; they already submit through the same writer.
+All terminal Codex results must use `tools/roadmap_finish.py --result PASS|BLOCKED|FAIL|CANCELLED`. `roadmap_result.py` is an internal compatibility helper only and must not be used as a second operational entry point.
 
 
 ## Hard workflow for human requests to add/update the roadmap
@@ -31,8 +31,8 @@ Use this exact workflow:
    - Existing prompt: do not allocate another ID unless the prompt text/meaning itself changes and therefore requires a revision.
    - New/revised prompt: allocation is mandatory before the roadmap mutation.
 2. **For a new/revised prompt, allocate PROMPT_ID through the canonical MegaVault allocator.**
-   - When operating remotely from ChatGPT, use the existing MegaVault remote bridge: write an `allocate` request to `gernalix/MegaVault:.github/prompt-id-request.json`.
-   - Wait until `.github/prompt-id-response.json` contains the **same request_id** and `status=allocated`.
+   - When operating remotely from ChatGPT, create one immutable GitHub Issue `[prompt-id-command] <request_id>` in `gernalix/MegaVault` with `command=allocate` in the JSON body.
+   - Wait until that Issue is processed successfully by the canonical allocator. Receipt files are audit/projection only, not the command transport.
    - Never guess a six-digit ID, reuse an old one, derive one from an Issue number, or proceed while the allocation response is stale/missing.
    - If the remote bridge is unavailable but the user has the canonical local MegaVault checkout, use the same canonical CLI allocator locally (`megavault.py prompt-id allocate`) and continue only with its returned ID. This is a supported fallback, not a bypass. The matching final `materialize` must likewise use the canonical CLI if the remote bridge remains unavailable.
 3. **Submit the canonical roadmap mutation.**
@@ -43,8 +43,8 @@ Use this exact workflow:
    - Do not claim success merely because the Issue was created.
    - Verify that the mutation Issue was applied/closed successfully and that the new PROMPT_ID is present in canonical roadmap state/materialization.
 5. **Materialize the allocated PROMPT_ID in MegaVault.**
-   - Send a `materialize` request through `.github/prompt-id-request.json`, pointing `content_url` at the exact writer-materialized `gernalix/codex-roadmap/main/prompts/...md`.
-   - Wait for the matching `.github/prompt-id-response.json` with `status=materialized`.
+   - Create one immutable `[prompt-id-command] <request_id>` Issue with `command=materialize`, pointing `content_url` at the exact writer-materialized canonical prompt file.
+   - Wait for the allocator Issue to complete successfully with the same PROMPT_ID.
 6. **Only after steps 1–5 succeed may ChatGPT tell the user that the prompt is in the roadmap.**
    - If any stage fails or is pending, say exactly which stage is incomplete.
    - Do not create a parallel `[plan]` Issue as a fallback.
@@ -79,9 +79,9 @@ The roadmap repository itself continues to use its dedicated mutation writer des
 
 Live lifecycle protection is mandatory:
 - `tools/roadmap_start.py` remains the authoritative synchronous launch claim and must run before substantive project work.
-- `codex-roadmap-live-status.timer` is the passive fallback: it tails native Codex rollouts, claims newly observed six-digit PROMPT_IDs through the same single writer, and triggers the existing usage publisher + roadmap sync when a terminal event appears.
+- `codex-roadmap-live-status.timer` is a start-claim safety net only: it tails native Codex rollouts and claims a newly observed six-digit PROMPT_ID when the explicit start path was missed. Terminal events never trigger publication, sync or finalization from this watcher.
 - The writer prioritizes start claims before ordinary mutations so a prompt that is actually running is locked before queued edits can supersede, reorder, retag, or otherwise mutate it.
-- An explicit terminal request from `roadmap_finish.py` / `roadmap_result.py` is authoritative and applies the terminal roadmap state immediately. `codex-usage` arrives later for telemetry/audit and must not keep completed repository work stuck in `running`.
+- `roadmap_finish.py` is the only operational terminal entry point. Its explicit terminal request is authoritative. `codex-usage` is strictly telemetry/audit: it may record outcome mismatches or missing-finalization anomalies, but it never starts, completes, blocks or fails a prompt.
 
 Every Codex report tied to a roadmap task must begin on line 1 with exactly `PROMPT_ID=<six-digit id>` for that task. This applies both to the final Codex response and to any Markdown/text report artifact Codex produces. When a terminal result is reported, `RESULT=PASS|BLOCKED|FAIL` belongs on line 2, not line 1.
 
