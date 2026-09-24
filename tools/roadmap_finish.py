@@ -48,6 +48,7 @@ def finish(
     repo: Path,
     prompt_id: str,
     *,
+    result: str = "PASS",
     dry_run: bool = False,
     confirm_executed: bool = False,
     integration_timeout: float = 0.0,
@@ -55,9 +56,9 @@ def finish(
     # integration_timeout is retained for CLI compatibility but asynchronous
     # workers never wait for repository integration anymore.
     _ = integration_timeout
-    integration = "dry-run"
+    integration = "dry-run" if result == "PASS" else "not-applicable"
     integrated = True
-    if not dry_run:
+    if result == "PASS" and not dry_run:
         integration, integrated = _queue_repo_integration(prompt_id)
         if not integrated:
             return {
@@ -71,7 +72,7 @@ def finish(
     payload = finish_result(
         repo,
         prompt_id,
-        "PASS",
+        result,
         dry_run=dry_run,
         confirm_executed=confirm_executed,
     )
@@ -83,9 +84,10 @@ def finish(
 
 
 def build_parser():
-    parser = argparse.ArgumentParser(description="Queue repository integration or terminalize no-repository work.")
+    parser = argparse.ArgumentParser(description="Canonical finalizer for PASS/BLOCKED/FAIL/CANCELLED roadmap outcomes.")
     parser.add_argument("--repo", default=".")
     parser.add_argument("--prompt-id", required=True)
+    parser.add_argument("--result", default="PASS", choices=("PASS", "BLOCKED", "FAIL", "CANCELLED", "UNKNOWN"))
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--confirm-executed", action="store_true")
     parser.add_argument("--integration-timeout", type=float, default=0.0, help=argparse.SUPPRESS)
@@ -98,6 +100,7 @@ def main(argv=None):
         payload = finish(
             Path(args.repo).expanduser(),
             args.prompt_id,
+            result=args.result,
             dry_run=args.dry_run,
             confirm_executed=args.confirm_executed,
             integration_timeout=args.integration_timeout,
