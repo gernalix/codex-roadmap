@@ -200,17 +200,17 @@ PersonalHub P0 is now the sole master lane. Resume 920550 from its existing push
 - Run routing-safe CCS successor 896074 only after 302284 PASS; never run superseded 641903.
 - Reconcile 181259's nonexistent remote repo before it can become genuinely launchable.
 - Resume 302284 only after PH 913264 PASS (or a true PH blocker), using its preserved partial checkpoint; do not redo already-verified work.
-- Run 994029, then 714263.
+- 994029 è completo. 714263 è ora sbloccato dal suo prerequisito, ma resta soggetto all'ordine della master lane e non va lanciato finché PersonalHub P0 è azionabile.
 - Keep 812553 behind 222733.
 - Complete PH P0 chain and final external DB migration/APK/Pixel gate.
-- In Phase 4, run only canonical Telegram successor 966124 to integrate the already-verified source fixes, then perform the history-based producer audit; do not rerun 422308 or launch 333860. Then process remaining conditional/non-PH tasks according to prerequisites and perform the final global gate.
+- 966124 è completo e non va rilanciato. Quando la master lane consentirà la fase notifiche, passare direttamente all'audit history-based dei producer rumorosi; non rilanciare 422308 e non lanciare 333860.
 
 ## Blockers
 - Local Fedora/device actions are available through the connected Remote Desktop Commander; use Codex only where a Codex agent is actually required.
 - MegaVault Issue #100 is closed and no longer relevant; 896074 is the canonical routing-safe CCS successor.
 - 181259 targets a nonexistent GitHub remote (gernalix/grindr-web-exporter); local state must be reconciled before a safe successor can run.
 - Exact current live PH DB identity/schema on Pixel must be read locally before final migration.
-- Telegram runtime and identity repair have no blocker: 966124 is canonical/materialized and parked until Phase 4. This must not interrupt the active Phase-2 master lane.
+- Telegram source/runtime closure non ha blocker ed è completa: 966124 è terminale `completed`, il source canonico è integrato e i branch temporanei sono rimossi. Il successivo audit notifiche resta subordinato alla master lane.
 
 ## Evidence
 - gernalix/codex-roadmap canonical projections, mutation Issues #1012-#1031 and task materializations.
@@ -219,7 +219,7 @@ PersonalHub P0 is now the sole master lane. Resume 920550 from its existing push
 - gernalix/prompt-history exists; gernalix/ChatGPTExporter and gernalix/grindr-web-exporter return GitHub 404; gernalix/grindr-export exists and has its own archive workflow.
 - ChatGPT automation readback showing "Codex Fix Queue" disabled.
 - PH/CCS/ActivityWatch repository and PR state already recorded above.
-- Telegram evidence: operations/task-state/CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md and operations/task-state/CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md; fedora-system-monitor task/422308 through 5d8ed32 plus chatgpt/telegram-autodelete-archive through f588fd9; private data commit 99a9952479074f56095586a6ed3fb210111496db; MegaVault Issue #103 allocated 966124; roadmap Issue #1056 replaced 333860 -> 966124; MegaVault Issue #105 materialized 966124.
+- Telegram evidence: terminal checkpoint `operations/task-state/966124.md`; specialized checkpoints `CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md` and `CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md`; `fedora-system-monitor/main` contains the integrated Telegram source through relationship/block-state tracking; private history runtime remains healthy; 966124 is terminal `completed`; 333860 is superseded/non-actionable.
 
 ## Acceptance criteria
 - No runaway/pointless high-cost model automation remains active.
