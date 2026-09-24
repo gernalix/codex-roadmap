@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub Workflowy integration
 
 TASK_ID: CHATGPT-20260924-PH-WORKFLOWY
-Updated: 2026-09-24 14:06 Europe/Copenhagen
+Updated: 2026-09-24 16:31 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-PERSONALHUB-P0.md
 Global state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
@@ -42,15 +42,16 @@ Implement the optional low-friction PersonalHub ↔ Workflowy integration discus
 - [x] App compile path PASS through targeted app unit-test execution.
 - [x] `checkArchitectureBoundaries` PASS.
 - [x] Verify the branch diff does not touch Room schema files or `version.txt`.
-- [ ] Reconcile `chatgpt/workflowy-integration` with the latest PersonalHub `main` when the master recovery lane returns to PH.
-- [ ] Re-run only affected gates after reconciliation.
+- [x] Dry-run reconciliation against current 920550 head `b10117a`: synthetic merge is conflict-free; only `.codex/CODE_MAP.tsv` overlaps and auto-merges cleanly.
+- [x] Re-run affected gates on temporary combined tree `b10117a + chatgpt/workflowy-integration`: consumer-preflight PASS; `WorkflowyIntegrationTest` PASS; `WorkflowyDaysTest` PASS; `:app:compileDebugKotlin` PASS; `checkArchitectureBoundaries` PASS.
 - [ ] Integrate into PersonalHub `main`, push, then delete the temporary branch.
 - [ ] Update PersonalHub P0 checkpoint and global checkpoint with final merged commit evidence.
 
 ## Current step
-Implementation and host verification are complete. The feature is deliberately parked before final integration so it does not race the serialized master recovery/PersonalHub lanes.
+Implementation and reconciliation verification are complete. Actual integration waits only for 920550 PR #41 to land in `main`; then reproduce the already-verified merge on a protected writer branch, integrate, and delete `chatgpt/workflowy-integration` after containment proof.
 
 ## Verified facts
+- Prospective integration against 920550 head `b10117a` is verified before publication: Git synthetic merge returned no conflicts; only CODE_MAP overlaps. A temporary detached combined worktree passed consumer-preflight, targeted Workflowy tests, app compile and architecture gates. No remote branch/main mutation was made by this dry run.
 - PersonalHub remote branch: `chatgpt/workflowy-integration`.
 - Latest verified remote branch commit: `edd08138702f9ae6cc54c2964f109343a356a149`.
 - Current comparison against PersonalHub `main` at 2026-09-24 14:06: branch is `ahead 11 / behind 2`; current `main` base commit is `57883c2531400efacbefd2c63182bc11833f9537`. Final integration therefore remains intentionally parked until the serialized PH lane resumes.
@@ -100,4 +101,4 @@ Implementation and host verification are complete. The feature is deliberately p
 - Final implementation is merged into current PersonalHub main and the temporary branch is removed.
 
 ## Next action
-Keep this feature parked. When the global master lane explicitly returns to PersonalHub, fetch current `origin/main`, reconcile `chatgpt/workflowy-integration`, inspect overlaps semantically, rerun only affected gates, integrate to main, delete the branch, and checkpoint the merged commit.
+After 920550 PR #41 is merged, fetch current `origin/main`, reproduce the verified conflict-free Workflowy merge through the canonical single-writer task flow, do not rerun already-passed gates unless the final merge base differs materially, integrate to `main`, prove containment, delete `chatgpt/workflowy-integration`, and checkpoint the merged commit.
