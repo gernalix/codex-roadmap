@@ -15,4 +15,3 @@
 - [[obsidian/Prompts/254859 chatgpt-exporter-archive-validation-v1|254859 · Verificare completezza e correttezza dell’export ChatGPT]]
 - [[obsidian/Prompts/822595 personalhub-global-since-when-v2|822595 · Promuovere Since When a funzione globale PersonalHub]]
 - [[obsidian/Prompts/620949 unified-kuma-cross-repo-control-plane-v1|620949 · Unificare Uptime Kuma per tutti i repository]]
-- [[obsidian/Prompts/893025 sqlite-to-obsidian-fedora-bootstrap-v1|893025 · Creare il projector Fedora condiviso SQLite → Obsidian]]
