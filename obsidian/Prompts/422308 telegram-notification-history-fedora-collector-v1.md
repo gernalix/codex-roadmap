@@ -22,7 +22,7 @@ tags:
 - **Primo lancio:** 2026-09-24T10:16:14Z
 - **Ultimo lancio:** 2026-09-24T10:16:14Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -43,7 +43,7 @@ Salva automaticamente in un repo privato la chat del bot delle notifiche, così 
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-24T10:34:11Z · colli di bottiglia: sì · fix: — · {"blocker":"inserisci API ID/hash nella config locale, poi esegui `~<path> ~<path> login --config ~<path>` e completa il codice/2FA nel terminale; dopo il login, abilita il timer con `systemctl --user enable --now telegram-notification-history.timer`.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"422308","report_ref":"codex-usage:162e56b7c421405753dbe266:d1be327a9a116c2c","schema":"codex-roadmap.fix-packet.v1","work_state":{"commit":"f577f66"}}
 
 ## Modifiche di codice ChatGPT
 
