@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 12:18 Europe/Copenhagen
+Updated: 2026-09-24 12:27 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -13,6 +13,7 @@ The global recovery file owns cross-project orchestration, roadmap infrastructur
 Do not duplicate detailed PH state back into the global file; keep only a concise progress/dependency summary there.
 
 ## Constraints
+- User communication steer: status updates in this chat must use plain language with minimal technical jargon; report mainly what was done, what remains, blockers, and the next action.
 - Operational memory only; not canonical roadmap lifecycle state.
 - Do not store chain-of-thought. Store objective, constraints, verified facts, decisions, completed/remaining work, blockers, evidence, acceptance criteria and exactly one Next action.
 - Canonical roadmap mutations go only through the codex-roadmap single writer.
