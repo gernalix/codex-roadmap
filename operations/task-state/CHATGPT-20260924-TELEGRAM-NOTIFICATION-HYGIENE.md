@@ -51,7 +51,7 @@ Collector runtime operativo e non-model. Il follow-up canonico 966124 è registr
 - Data repo gernalix/telegram-notification-history verificato PRIVATE e leggibile via GitHub connector.
 - archive/state.json remoto contiene last_message_id=372496.
 - telegram-notification-history.timer è enabled+active e schedulato ogni 15 minuti.
-- È operativo anche il collector separato per la chat con auto-delete 1 giorno: runtime locale SQLite+media, timer ogni 5 minuti, session lock condiviso; source branch chatgpt/telegram-autodelete-archive a fe5d371. I contenuti/peer restano locali e non vengono versionati.
+- È operativo anche il collector separato per la chat con auto-delete 1 giorno: runtime locale SQLite+media, timer ogni 5 minuti, session lock condiviso; source branch chatgpt/telegram-autodelete-archive a 2fc6c38. Include una view umana senza ID (`messages_human`) con date italiane/relative, nomi mittente e rendering delle azioni Telegram (incluse le chiamate). I contenuti/peer restano locali e non vengono versionati.
 - L'allocatore remoto MegaVault per chatgpt-telegram-history-runtime-closure-20260924-v1 ha assegnato 966124.
 - Il fallback locale aveva erroneamente restituito 333860 allo stesso request_id e quel prompt era stato registrato prima del ritorno remoto.
 - Mutation roadmap #1056 ha applicato replacement 333860 -> 966124; MegaVault Issue #105 ha materializzato 966124. La materialization Issue #104 per 333860 è stata chiusa not_planned.
