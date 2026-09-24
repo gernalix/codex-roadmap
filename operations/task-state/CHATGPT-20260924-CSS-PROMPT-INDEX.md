@@ -1,7 +1,7 @@
 # Operational task state — CSS prompt-ID search
 
 TASK_ID: CHATGPT-20260924-CSS-PROMPT-INDEX
-Status: in_progress
+Status: completed
 Updated: 2026-09-24 Europe/Copenhagen
 
 ## Objective
@@ -46,11 +46,11 @@ Extend `gernalix/chrome-codex-switcher` (CSS) so each persistent Chrome context 
 - [x] Verify Chrome extension heartbeat advances from `0.3.8` to `0.4.0`.
 - [x] Perform an end-to-end runtime prompt-ID indexing/search check on a real Chrome tab/context: after full extension registration reload, `583902` was automatically indexed from the disposable page.
 - [x] Verify manual add/remove and persistent suppression at runtime on disposable context: auto-detected `583902` remained excluded after rescan; manual-only `583904` was added then fully deleted.
-- [ ] Final runtime status/readback and clean checkout verification.
-- [ ] Final completion checkpoint.
+- [x] Final runtime status/readback and clean checkout verification.
+- [x] Final completion checkpoint.
 
 ## Current step
-Automatic scan and manual override runtime tests are PASS. Clean the disposable HTTP server/context artifacts, verify final CSS checkout/runtime health/registration, then mark the task completed.
+Completed. Source, deployment, live browser registration, automatic scanning, manual override/suppression, cleanup and final readback are all PASS.
 
 ## Verified facts / implementation
 - Canonical `prompt_bindings` remains untouched as the 1:1 prompt↔Chrome/Codex binding.
@@ -89,6 +89,13 @@ Source gates:
 - Shell syntax gates PASS.
 - GitHub Actions CI run 107 on `6b4f9da`: python PASS, Selenium E2E PASS, overall SUCCESS.
 
+Final runtime cleanup/readback PASS:
+- Disposable HTTP server stopped; `/tmp/css-prompt-index-e2e` removed.
+- Disposable context `057a7d84-a62d-49d7-93f1-d0db13834a0e` and its index rows removed; `/api/list` confirms the test URL is absent.
+- CSS checkout is clean: HEAD = origin/main = `149f28478dffd57f75bdf7f883444d95b2dc7262`.
+- Daemon health OK/version `0.4.0`; live extension heartbeat `0.4.0`; Chrome Preferences service-worker registration `0.4.0` at the expected unpacked path.
+- Chrome session safety backup remains at `~/.local/state/chrome-codex-switcher/session-backup-20260924-164432` for rollback if ever needed.
+
 Runtime manual-override PASS:
 - Removing auto-detected `583902` returned effective IDs without it; after reopening/rescanning the same page, `583902` remained absent and SQLite recorded `(auto_detected=1, manual_added=0, excluded=1)`.
 - Adding manual-only `583904` made it immediately searchable; removing it deleted its row entirely. Marker: `MANUAL_OVERRIDE_PASS`.
@@ -117,13 +124,13 @@ Runtime deployment:
 - Live Chrome extension heartbeat: `version=0.4.0`; reload confirmed.
 
 ## Completed
-Repository implementation, source tests/CI, Fedora file deployment, daemon restart/health verification, runtime package version alignment, reinstallation from canonical main, and live Chrome extension reload to `0.4.0`.
+Repository implementation, source tests/CI, Fedora deployment, runtime package version alignment, live Chrome service-worker registration to `0.4.0`, automatic real-page scanning, manual add/remove and suppression persistence, disposable-test cleanup, and final clean-state verification.
 
 ## Remaining
-Exercise real page prompt-ID indexing/search/manual override behavior, verify clean final state, then mark task completed.
+None for this task.
 
 ## Blockers
-None currently. The stale Chrome service-worker registration was resolved by graceful browser SIGTERM followed by a Wayland relaunch with `--restore-last-session --load-extension=...`.
+None.
 
 ## Acceptance criteria
 - [x] Searching any indexed six-digit PROMPT_ID is implemented to surface the associated context.
@@ -137,8 +144,8 @@ None currently. The stale Chrome service-worker registration was resolved by gra
 - [x] Source changes and runtime version alignment are on canonical CSS `main`.
 - [x] Fedora daemon/files are deployed and daemon runtime is `0.4.0`.
 - [x] Live Chrome extension runtime is reloaded to `0.4.0`.
-- [ ] Real runtime search/index behavior is verified end-to-end.
-- [ ] Final checkout/runtime state is clean and checkpointed.
+- [x] Real runtime search/index behavior is verified end-to-end.
+- [x] Final checkout/runtime state is clean and checkpointed.
 
 ## Next action
-Stop the disposable HTTP server, delete only the disposable CSS DB context/index rows and temporary files, verify `/api/list` no longer exposes the test context, then read back clean Git status, daemon health/version, live extension heartbeat and Chrome service-worker registration before the final completion checkpoint.
+None. Future CSS work should start from canonical main `149f28478dffd57f75bdf7f883444d95b2dc7262` or its then-current successor.
