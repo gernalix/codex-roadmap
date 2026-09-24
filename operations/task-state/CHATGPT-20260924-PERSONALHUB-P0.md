@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 13:01 Europe/Copenhagen
+Updated: 2026-09-24 13:18 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -92,6 +92,9 @@ Goal: operate only after 788606 PASS.
 Read the actual final app schema/Room identity from the final commit. Inspect the actual live DB schema/identity on Pixel. Take immutable rollback first. Externally migrate a copy of the real DB through every required delta to the final schema, validate quick_check/integrity/FK and preservation of representative data, then transfer/install the exact final APK and migrated DB using explicit Pixel serial. Smoke Home + every module. Keep rollback until final acceptance.
 
 ## Completed
+- 920550 full `:app:assembleDebug` PASS on the task worktree. Baseline `PersonalHub/main` debug APK = 144,942,990 bytes (138.23 MiB); 920550 debug APK = 280,674,045 bytes (267.67 MiB); universal-debug delta = 135,731,055 bytes / 129.44 MiB (+93.64%). Zip inspection shows 129.04 MiB of that is ONNX Runtime native libraries duplicated across arm64-v8a, armeabi-v7a, x86 and x86_64; the arm64-v8a runtime payload actually needed by the primary Pixel is ~31.57 MiB. Model weights remain outside the APK.
+- Host-side real-model synthetic retrieval check PASS for the acceptance intent: same synthetic jacket under changed background/rotation scored 0.8904 vs 0.7926 for a shoe distractor, so the same object enters and ranks above the distractor shortlist; `black jacket` text-image scores ranked both jacket variants above the shoe.
+- Consumer-preflight scans for the new Soldi photo-index/owned-item APIs completed without unexpected consumers; `:feature:soldi:compileDebugKotlin` PASS and `checkArchitectureBoundaries` returned `ARCHITECTURE_BOUNDARIES=PASS`.
 - Implemented tag/history write-amplification hotfix at PersonalHub commit `41920af`: `refreshUsage()` updates only stale derived values; replace/assign/remove skip unchanged relationships; tag projections/rename/archive/pin skip semantic no-ops; Timer avoids repeated archive writes; Git UPDATE triggers ignore exact row no-ops for both pending revisions and semantic history.
 - Added regression coverage proving exact no-op UPDATEs create neither `hub_git_events` nor `hub_git_pending`, repeated Timer projection produces zero Git writes, and a redundant `refreshUsage()` causes zero SQLite row changes. Combined targeted tests PASS; focused low-level regression PASS; `:app:compileDebugKotlin` PASS.
 - Verified the Kotlin CLIP tokenizer against the official TinyCLIP `tokenizer.json` using six reference phrases (`red jacket`, `black winter jacket`, `giubbotto nero`, `NORTH FACE SUMMIT`, `Copenhagen café`, `shoe 42`); token ID sequences matched exactly. The verification used temporary test resources and left the worktree clean.
