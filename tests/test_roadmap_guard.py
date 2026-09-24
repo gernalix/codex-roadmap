@@ -81,7 +81,7 @@ class RoadmapGuardTests(unittest.TestCase):
             self.assertIn("sparse status checks", selected["execution_contract"])
             self.assertIn("roadmap_finish.py exactly once", selected["execution_contract"])
             self.assertIn("--confirm-executed", selected["execution_contract"])
-            self.assertIn("concurrent ref-advance push races", selected["execution_contract"])
+            self.assertIn("repo-integrator owns CI/rebase/merge", selected["execution_contract"])
             compact = guard.first_prompt(local)
             self.assertNotIn("prompt_content", compact)
             self.assertNotIn("execution_contract", compact)
