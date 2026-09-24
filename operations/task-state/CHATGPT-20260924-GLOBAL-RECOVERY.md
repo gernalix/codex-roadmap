@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 18:16 Europe/Copenhagen
+Updated: 2026-09-24 18:24 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -101,6 +101,7 @@ PersonalHub P0 is now the sole master lane. 920550 is already merged; finish the
 994029 and 966124 are both terminal completed; they no longer own any repository/runtime lane. PersonalHub remains the master recovery lane.
 
 ## Verified facts
+- 857906 WIP is checkpointed and pushed at PersonalHub `task/857906@ed21615445462c51762a633044db4eeaf02d21d4`; new chat handoff can continue directly from Git without replaying discovery.
 - Workflowy integration is complete and PH side branches are converged: PR #43 merged at `b1a7f22...`; PersonalHub now has only `main` + active `task/857906`. The 857906 worktree was synced to the new main before edits.
 - Workflowy PR #43 CI blocker fixed at task head `f8e4541`; only bounded CI/integration remains before 857906 worktree sync and code edits.
 - 857906 is canonically claimed/running (issue #1064, task branch/worktree allocated) but intentionally has no code changes yet; PH master lane waits only for Workflowy #43 merge before syncing that worktree and executing.
