@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 12:20 Europe/Copenhagen
+Updated: 2026-09-24 12:22 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -53,6 +53,11 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 7. Use empirical prompt_costs after codex-usage attribution/backfill is deployed before making future model-cost recommendations.
 
 ## Completed
+- 422308 model metadata is now GPT-6 Luna; no prompt-body rewrite was needed.
+- 641903 is guarded by manual-prerequisite:resolve-ccs-project-id because verified runtime evidence shows legacy PROJECT_ID=96 resolves workflowy-importer, not chrome-codex-switcher.
+- Synthetic SQLite validation confirmed the core regression: a three-cycle goal with a cumulative completion total plus a roadmap mirror counts as one 300-token sample; combined with a second 200-token task the reported average is 250, while a mixed-model task is excluded.
+- prompt-history source changes landed on main: cli prompt-level aggregation, model_performance/token_efficiency SQL, v_model_performance view, README contract, and tests/test_model_analytics.py regressions.
+- prompt-history model/reasoning analytics now use one sample per canonical PROMPT_ID from codex-usage only, aggregate cycle deltas, ignore roadmap mirror executions, and exclude mixed-model/reasoning tasks from ranking.
 - Global Phase-1 audit and stale-state reconciliation.
 - PBF disposition protocol landed on codex-roadmap/main and current attention projection has no unresolved needs_fix items.
 - Persistent operational checkpoint protocol landed in AGENTS.md and operations/task-state/README.md.
@@ -105,4 +110,4 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-Read MegaVault Issue #100. When allocated, register a new routing-safe successor for 641903 through the codex-roadmap single writer, relate 641903 -> successor as replacement, depend the successor on 302284, materialize it in MegaVault, then checkpoint again.
+Wait for mutation #1034 to order 812553 after 302284. Audit the remaining non-PH conditional/manual tasks (582946, 218695, 588376, 422308, 641903) for real prerequisites and duplicate scope. Resolve the canonical CCS project identity before unblocking 641903; do not guess an ID. Then checkpoint and declare which infrastructure work can only proceed locally through Codex.
