@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -39,7 +39,7 @@ Riprende il blocco di ChatGPTExporter: corregge il percorso reale dell'estension
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-24T01:47:45Z · colli di bottiglia: sì · fix: — · {"blocker":"serve una capacità di controllo dell’estensione esplicitamente consentita dall’ambiente. La roadmap resta `blocked`; PASS non è verificato.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"788315","report_ref":"codex-usage:5ce4288105bcc81551fd30f4:e3c6b9331e5d9a64","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 

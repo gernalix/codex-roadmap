@@ -40,6 +40,7 @@ Il Desktop ora è disponibile: completa il launcher automatico e verifica dal vi
 ## Analisi ChatGPT
 
 - 2026-09-22T23:56:55Z · colli di bottiglia: sì · fix: 572554 · 613408 si è fermato prima di qualsiasi modifica perché PROJECT_ID=23 risolve MegaVault. Il project_id canonico verificato per gernalix/chrome-codex-switcher / Facilitatori di prompt è 96; il recovery 572554 corregge solo questo metadata e riusa tutta l'evidenza Desktop/AT-SPI.
+- 2026-09-24T01:47:46Z · colli di bottiglia: sì · fix: — · {"blocker":"`PROJECT_ID=23` canonico risolve `MegaVault`, in conflitto con progetto CCS dichiarato","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"613408","report_ref":"codex-usage:37006a65ee3a2d4c518b8813:a083dbb7555d765b","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 

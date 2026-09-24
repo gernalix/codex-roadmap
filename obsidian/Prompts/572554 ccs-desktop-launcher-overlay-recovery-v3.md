@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -39,7 +39,7 @@ Corregge solo l’errore di instradamento che ha bloccato 613408: usa il project
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-24T01:47:46Z · colli di bottiglia: sì · fix: — · {"blocker":"metadata canonici incompatibili con CCS/Facilitatori di prompt","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"572554","report_ref":"codex-usage:d43fb1c23a37203db223b8e7:99208ae2006482dc","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 

@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -39,7 +39,7 @@ tags:
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-24T01:47:45Z · colli di bottiglia: sì · fix: — · {"blocker":"controlli Desktop/AT-SPI non disponibili per lo smoke reale","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"284653","report_ref":"codex-usage:872f4e38ce3f2900634524c8:024461ef8b07ac49","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 

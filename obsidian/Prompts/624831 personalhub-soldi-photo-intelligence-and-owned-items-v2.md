@@ -25,7 +25,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -46,7 +46,7 @@ tags:
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-24T01:47:45Z · colli di bottiglia: sì · fix: — · {"blocker":"Il requisito di eliminare completamente la pipeline People legacy e le relative prove di migrazione/integrazione non è stato completato; non è possibile dichiarare PASS.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"FAIL","prompt_id":"624831","report_ref":"codex-usage:4c6f1a361ee0143e7112f1da:f4199394f5fdb368","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
