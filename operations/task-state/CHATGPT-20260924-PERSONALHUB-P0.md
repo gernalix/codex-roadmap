@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 16:08 Europe/Copenhagen
+Updated: 2026-09-24 16:12 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -91,6 +91,8 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 920550 local acceptance is complete and PersonalHub PR #41 is queued with checks pending. Do not poll CI. While the non-model integrator owns #41, perform only read-only conflict/absorption analysis of `chatgpt/workflowy-integration`; no branch mutation until #41 is merged.
 
 ## Verified facts
+- Local DB candidate inventory for the final cutover is now recorded read-only. `~/Downloads/personalhub (2).db`: mtime 2026-09-24 11:11, 173,481,984 bytes, SQLite/Room user_version 22, identity `1b60cb2d2925f84f9ee2c527a4090ff5`, quick_check OK, 103 tables, 108,767 `hub_git_events`. Three Pixel v59 snapshots from ~01:19–01:31 are user_version 19, identity `f260af7cdaff1e252ecefb283da4445c`, quick_check OK, ~22.2 MB.
+- Freshest-DB selection remains intentionally unresolved: sampled user-data signals are identical across those local candidates (94 contacts and 2 finance transactions with matching max update timestamps). File mtime/schema/history volume alone is not sufficient. 913264 must compare the live Pixel DB and any newer candidate at cutover before choosing the migration source.
 - Expected post-920550 Room schema readback is pinned before merge: schema version 23, identity hash `4b9b96396c8f9e750d13b0e6da70fdd9`, 96 entities, including `finance_photo_index` and `finance_owned_items`. After PR #41 merges, `main` must reproduce this exact schema evidence.
 - 920550 worker finalization is now correctly routed: `repo-task finish` created PersonalHub PR #41 after `roadmap_finish` alone had only queued the terminal roadmap mutation. One bounded integrator pass returned `checks-pending`; no model/CI polling is running. The non-model repo-integrator timer owns the next integration attempt.
 - R8 mapping confirms the exact ONNX JNI contract now survives Play minification: `ai.onnxruntime.TensorInfo -> ai.onnxruntime.TensorInfo` and constructor `<init>(long[], String[], int)` is retained. This directly covers the JNI crash observed during QA.
