@@ -83,7 +83,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-Phase 2: finish the remaining 920550 validation from its existing checkpoint—Play/minified size measurement and AVD-only synthetic QA—without rerunning already-passed tests.
+Parked by global serialization after safe pushed checkpoints on task/920550. Do not resume Play/minified measurement or AVD QA until the global master lane explicitly re-enters PersonalHub P0.
 
 ## Verified facts
 - A pre-schema-upgrade PersonalHub DB was measured at ~173 MB because `hub_git_events` contained 108,401 `UPDATE hub_tags` events; 108,123 had identical before/after payloads. The confirmed code path is Timer `persist()` -> `syncTimerNowTags()` -> `TimerSharedTagBridge.syncNow()` -> `SharedTagEngine.replace()/assign()` -> global `HubTagDao.refreshUsage()` plus an unconditional Git `AFTER UPDATE` trigger.
@@ -147,6 +147,7 @@ Goal: operate only after 788606 PASS.
 Read the actual final app schema/Room identity from the final commit. Inspect the actual live DB schema/identity on Pixel. Take immutable rollback first. Externally migrate a copy of the real DB through every required delta to the final schema, validate quick_check/integrity/FK and preservation of representative data, then transfer/install the exact final APK and migrated DB using explicit Pixel serial. Smoke Home + every module. Keep rollback until final acceptance.
 
 ## Decisions
+- Global recovery serialization override: 920550 is parked at its safe pushed checkpoint while the master Phase 2 infrastructure lane runs. Roadmap status remains `running` only because the lifecycle has no pause state; this does not mean a model/process is actively executing it.
 - Keep the PH P0 chain serial whenever schema/database work can overlap: `920550 -> 857906 -> 707603 -> 840907 -> 788606 -> 913264`.
 - Do not migrate the live Pixel DB to intermediate schemas; perform one external migration only after the final schema is frozen.
 - Do not add permanent historical Room migrations solely for the user's current live DB.
@@ -223,4 +224,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Finish 920550 Play/minified size measurement and AVD-only synthetic QA from the existing checkpoint, fix only concrete failures, then finalize 920550 through the canonical integration flow. Do not rerun already-passed tag-noop or compactor tests unless overlapping code changes invalidate them.
+Wait for the global master checkpoint to explicitly hand control back to PersonalHub P0. Then resume 920550 from the existing pushed checkpoint with Play/minified size measurement and AVD-only synthetic QA; do not rerun already-passed gates.
