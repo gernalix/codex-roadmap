@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 16:34 Europe/Copenhagen
+Updated: 2026-09-24 16:37 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -91,6 +91,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 920550 head is now `b10117a` with the CI instrumentation regression fixed locally and pushed. PR #41 must rerun checks on this head. Do not start 857906 until #41 is merged and Workflowy side-branch work is integrated.
 
 ## Verified facts
+- `codex/pr35-cleanup` is now classified as **semantically absorbed/obsolete**, not a branch to literal-merge. Its functional shared-tags/Soldi content corresponds to PR #34 / task 522084 head `fabb5a53c7a8deafe70ffc8ff310e003d45bd826`, which is already an ancestor of current `main`. Relative to that integrated head, the branch differs in only 9 cleanup/test/resource files and would even remove 110 lines from the Italian Sostanze strings file. Literal merge would risk regression; final action is containment proof + deletion.
 - Local branch/worktree cleanup inventory at 16:34: `task/920550` is 4 commits ahead / 0 behind current `origin/main`; `chatgpt/workflowy-integration` is 11 ahead / 2 behind. All ordinary historical local task/feature branches inspected have 0 commits unique versus `origin/main` **except** `codex/pr35-cleanup`, which is 10 ahead / 58 behind and therefore requires patch/semantic absorption analysis before deletion. Several obsolete detached worktrees also remain and must be removed during final cleanup.
 - Workflowy prospective reconciliation against 920550 head `b10117a` is already PASS in a temporary detached worktree: zero merge conflicts, one auto-merged overlap (`.codex/CODE_MAP.tsv`), consumer-preflight PASS, targeted Workflowy/Workflowy-days tests PASS, app compile PASS, architecture PASS. No published branch/main mutation was made.
 - Canonical MegaVault emulator launch command was re-verified exactly as documented: with current GNOME `DISPLAY/WAYLAND_DISPLAY/XAUTHORITY`, `python3 tools/android_target_preflight.py start` returned `status=ok`, AVD `Pixel_8a`, serial `emulator-5554`, state `device`.
