@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 14:53 Europe/Copenhagen
+Updated: 2026-09-24 14:56 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -91,6 +91,8 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 Phase 2 / 920550: Play/minified build PASS. Complete the isolated current-main size comparison, then run AVD-only synthetic QA for semantic indexing/search/same-object/owned-items/persistence. Do not touch the Pixel.
 
 ## Verified facts
+- Current PH remote branch inventory at 2026-09-24 14:53: only `task/920550` and `chatgpt/workflowy-integration` are real non-main branches. `task/920550` is 2 ahead / 0 behind main; `chatgpt/workflowy-integration` is 11 ahead / 2 behind main. No other PH side branch needs recovery.
+- 920550 Play/minified artifact gate is complete: `app/build/outputs/apk/play/app-play.apk` = 191,469,880 bytes; `app/build/outputs/bundle/play/app-play.aab` = 87,776,741 bytes. Release/play inherit minification and resource shrinking; TinyCLIP weights remain downloaded on demand outside the APK.
 - Current lateral-branch inventory at 2026-09-24 14:24: `task/920550` = 2 ahead / 2 behind main; `chatgpt/workflowy-integration` = 11 ahead / 2 behind; `chatgpt/105883-since-when` = 0 ahead / 32 behind. The last branch has no unique work and is safe to delete immediately; the first two must be integrated only after their respective validation/reconciliation gates.
 - Current remote branch inventory at 2026-09-24 14:23: `task/920550` is 2 commits ahead / 2 behind `main`; `chatgpt/workflowy-integration` is 11 ahead / 2 behind; `chatgpt/105883-since-when` is 0 ahead / 32 behind. Therefore 920550 and Workflowy contain unique work that must be integrated; 105883 contains no unique commit and needs no merge, only final deletion after containment readback.
 - A pre-schema-upgrade PersonalHub DB was measured at ~173 MB because `hub_git_events` contained 108,401 `UPDATE hub_tags` events; 108,123 had identical before/after payloads. The confirmed code path is Timer `persist()` -> `syncTimerNowTags()` -> `TimerSharedTagBridge.syncNow()` -> `SharedTagEngine.replace()/assign()` -> global `HubTagDao.refreshUsage()` plus an unconditional Git `AFTER UPDATE` trigger.
@@ -236,4 +238,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Resume 920550 now from the existing pushed checkpoint. Complete only its remaining Play/minified-size measurement and AVD synthetic QA, fix concrete failures only, then finalize through the canonical integration flow. After 920550 merges, continue serially through 857906 → 707603 → 840907 → 788606 → 913264; at final cutover migrate the freshest coherent PH DB available.
+Run only the remaining 920550 AVD synthetic QA on an emulator/QA package: attach→save→index, semantic search, photos-only regression, same-object shortlist, owned-item create/remove and reopen/persistence. Fix concrete failures only. Then finalize/integrate 920550, verify main containment/schema evidence, reconcile+integrate `chatgpt/workflowy-integration`, and only then start 857906.
