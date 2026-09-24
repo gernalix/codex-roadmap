@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 17:08 Europe/Copenhagen
+Updated: 2026-09-24 17:12 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -192,6 +192,8 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- Detached-worktree cleanup advanced: removed `PersonalHub-autoexport-hotfix`, `PersonalHub-capsule-isolation`, and `/tmp/personalhub-main-play-baseline` after their previously recorded ancestor/patch-equivalence proof. Removed local `codex/pr35-cleanup` worktree+branch after re-proving the integrated functional head is contained in `origin/main`. Remaining local branches are only Workflowy, `main`, superseded dirty evidence branches 624831/728918, and active 920550.
+- PR #41 instrumentation CI is now PASS on head `3f32b8c`; Play preflight and architecture are also PASS. Only Android unit CI remains non-terminal.
 - Branch cleanup checkpoint: 14 clean historical local branches with 0 commits unique versus `origin/main` were deleted after proof of absorption: `feature/global-activity-register`, `feature/soldi-ui-v2`, `task/462279`, `task/514458`, `task/514458-23`, `task/522084`, `task/613102`, `task/620949`, `task/637985`, `task/693278`, `task/773323`, `task/822595`, `task/825147`, `task/879838`. Clean worktree for `task/514458` was removed first. Remaining local branches are only `chatgpt/workflowy-integration`, `codex/pr35-cleanup`, `main`, `task/624831`, `task/728918`, `task/920550`.
 - PR #41 unit failure fixed and verified: schema 23 adds two sync-journal tables, so `SyncJournalTest` expected count changed 87→89 with explicit coverage for `finance_photo_index` and `finance_owned_items`. Full targeted `SyncJournalTest` PASS locally. Test-only fix committed+pushed as `3f32b8cb86552f07bcbf92042db34f4e839969eb`; no Play rebuild is required because product/release code is unchanged from the previously verified artifact.
 - PR #41 instrumentation failure was reproduced locally and fixed. Root cause: QA had been temporarily minified, so R8 removed instrumentation-only hook `DatasetteSync.setSchedulerForTests`; production Play minification was not the cause. QA is unminified again while keeping `armeabi-v7a+x86_64`. Local canonical-emulator reruns PASS: `FinanceSemanticPhotoQaDeviceTest` 1/1 and `DatasetteSyncInstrumentedTest#journalMutationTriggersDatasetteWorkAndRecoveryWithoutPolling` 1/1. Fix committed+pushed as `b10117adc84efe3afb4de20c350b411e7b1be055`.
