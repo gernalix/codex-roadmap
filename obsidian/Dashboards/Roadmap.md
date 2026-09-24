@@ -14,4 +14,3 @@
 - [[obsidian/Prompts/822595 personalhub-global-since-when-v2|822595 · Promuovere Since When a funzione globale PersonalHub]]
 - [[obsidian/Prompts/570349 codex-usage-live-publisher-single-writer-runtime-recovery-v1|570349 · Ripristinare il monitoraggio live Codex remoto]]
 - [[obsidian/Prompts/620949 unified-kuma-cross-repo-control-plane-v1|620949 · Unificare Uptime Kuma per tutti i repository]]
-- [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1|697920 · Rendere ChatGPTExporter resiliente e affidabile]]

@@ -9,7 +9,6 @@
 | [[obsidian/Prompts/822595 personalhub-global-since-when-v2\|822595 · Promuovere Since When a funzione globale PersonalHub]] | running | 2026-09-24T00:37:09Z | 2026-09-24T00:37:09Z | UNKNOWN | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/570349 codex-usage-live-publisher-single-writer-runtime-recovery-v1\|570349 · Ripristinare il monitoraggio live Codex remoto]] | running | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-6 Luna | medium |
 | [[obsidian/Prompts/620949 unified-kuma-cross-repo-control-plane-v1\|620949 · Unificare Uptime Kuma per tutti i repository]] | running | — | — | — | sì | sì | — | Fedora / fedora-system-monitor | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1\|697920 · Rendere ChatGPTExporter resiliente e affidabile]] | running | — | — | — | no | no | — | Prompt infrastructure | GPT-6 Sol | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
@@ -383,3 +382,4 @@
 | [[obsidian/Prompts/970051 duplicate-photos-detector-fedora-timer-migration-v1\|970051 · Migrare duplicate-photos-detector al timer periodico Fedora]] | completed | 2026-09-24T02:07:58Z | 2026-09-24T02:07:58Z | PASS | no | no | — | duplicate-photos-detector | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/996591 ccs-pbf-live-final-closure-v1\|996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop]] | blocked | — | — | BLOCKED | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/105883 personalhub-global-since-when-v3\|105883 · Promuovere Since When a funzione globale PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1\|697920 · Rendere ChatGPTExporter resiliente e affidabile]] | blocked | — | — | BLOCKED | no | no | — | Prompt infrastructure | GPT-6 Sol | medium |

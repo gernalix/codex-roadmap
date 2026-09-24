@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1|697920 · Rendere ChatGPTExporter resiliente e affidabile]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/996591 ccs-pbf-live-final-closure-v1|996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/572554 ccs-desktop-launcher-overlay-recovery-v3|572554 · Completare launcher e overlay Codex Desktop con progetto corretto]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/613408 ccs-desktop-launcher-overlay-recovery-v2|613408 · Completare launcher e overlay Codex Desktop]] · `blocked` · analizzato=sì · fix=572554
