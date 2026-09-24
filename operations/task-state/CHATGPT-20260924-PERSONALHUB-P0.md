@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 14:37 Europe/Copenhagen
+Updated: 2026-09-24 14:53 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -27,7 +27,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - Preserve immutable rollback: current DB + WAL/SHM where relevant + recoverable current APK/reference before final cutover.
 - At final cutover, use the **freshest coherent PersonalHub DB available**, not automatically the oldest known backup or the easiest copy. Inventory the live Pixel DB plus viable local/export/backup candidates, compare real data freshness/provenance, and select the newest consistent source before migration.
 - One PH schema-changing implementation at a time. Avoid concurrent PH tasks that touch PersonalHubDatabase/schema/DAO because previous overlap caused schema-version collisions.
-- Final PH remote state should be main only; delete obsolete/fully absorbed branches after final verification.
+- Final PH remote state should be `main` only. Before deleting any side branch, prove its useful work is either already patch/semantically present in `main` or integrate that work first; then delete local+remote branch and close any stale PR.
 - Avoid intermediate PRs unless required by the repository single-writer/integrator protocol. Do not bypass protected writer flow.
 - Model/reasoning live only in roadmap metadata, not prompt bodies.
 - Stop Codex after queued integration/PASS; do not spend model turns polling CI/merge.
@@ -81,6 +81,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] Verify Home + every module with preserved real data; retain rollback until acceptance.
 
 ### Phase 8 — Final PH cleanup
+- [ ] Converge every still-relevant non-main PersonalHub branch into `main`: compare against current main for unique semantic work, integrate only valid unabsorbed changes through the canonical single-writer flow, then delete each absorbed/obsolete remote/local branch.
 - [ ] Converge every remaining non-main PH branch: integrate all valid unique work into `main`, prove containment/patch-equivalence, then delete the branch; final remote target is `main` only.
 - [ ] Prove obsolete PH branches/PRs contain no unique unabsorbed work, then remove them.
 - [ ] Verify no relevant PH PBF/integration/action remains pending.
