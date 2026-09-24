@@ -16,7 +16,7 @@ tags:
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../falliti/chatgpt-exporter-live-recovery-after-736284-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-24T01:47:25Z
-- **Ultimo lancio:** 2026-09-24T02:37:25Z
+- **Ultimo lancio:** 2026-09-24T02:47:25Z
 - **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
@@ -41,6 +41,7 @@ Riprende il blocco di ChatGPTExporter: corregge il percorso reale dell'estension
 | 2026-09-24T02:17:25Z | 2026-09-24T02:17:37Z | UNKNOWN | 11.569 | gpt-6-sol | medium | 1 | 205716 |
 | 2026-09-24T02:27:25Z | 2026-09-24T02:27:37Z | UNKNOWN | 11.688 | gpt-6-sol | medium | 1 | 206301 |
 | 2026-09-24T02:37:25Z | 2026-09-24T02:37:34Z | UNKNOWN | 9.025 | gpt-6-sol | medium | 1 | 206885 |
+| 2026-09-24T02:47:25Z | 2026-09-24T02:47:33Z | UNKNOWN | 8.082 | gpt-6-sol | medium | 1 | 207471 |
 
 ## Analisi ChatGPT
 
