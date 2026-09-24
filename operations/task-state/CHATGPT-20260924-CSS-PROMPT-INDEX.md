@@ -44,13 +44,13 @@ Extend `gernalix/chrome-codex-switcher` (CSS) so each persistent Chrome context 
 - [x] Reinstall from canonical current main and verify daemon runtime reports `0.4.0`.
 - [x] Reload the already-loaded unpacked Chrome extension without losing the existing browser session.
 - [x] Verify Chrome extension heartbeat advances from `0.3.8` to `0.4.0`.
-- [ ] Perform an end-to-end runtime prompt-ID indexing/search check on a real Chrome tab/context. **Current runtime finding:** context creation works but automatic scan is not populating IDs.
+- [x] Perform an end-to-end runtime prompt-ID indexing/search check on a real Chrome tab/context: after full extension registration reload, `583902` was automatically indexed from the disposable page.
 - [ ] Verify manual add/remove and persistent suppression at runtime if feasible without altering meaningful user data; otherwise use a disposable test context.
 - [ ] Final runtime status/readback and clean checkout verification.
 - [ ] Final completion checkpoint.
 
 ## Current step
-Runtime root cause narrowed to stale Chrome extension registration: Preferences still records service-worker version `0.3.8` for CSS even though deployed files/manifest are `0.4.0`. A command-line `chrome://restart` did not refresh it. Session backup is complete; next perform graceful browser SIGTERM + restore-last-session reload from the canonical unpacked path.
+Chrome was gracefully restarted and relaunched explicitly on Wayland with session restoration; service-worker registration is now `0.4.0`. Repeated disposable-page test is PASS for automatic extraction (`583902` detected within ~1.5 s). Next verify manual remove/suppression and manual-only add/remove.
 
 ## Verified facts / implementation
 - Canonical `prompt_bindings` remains untouched as the 1:1 prompt↔Chrome/Codex binding.
@@ -89,6 +89,10 @@ Source gates:
 - Shell syntax gates PASS.
 - GitHub Actions CI run 107 on `6b4f9da`: python PASS, Selenium E2E PASS, overall SUCCESS.
 
+Runtime automatic-scan PASS:
+- Graceful Chrome restart + explicit Wayland relaunch succeeded; service-worker registration now records `0.4.0` and extension heartbeat is fresh.
+- Reopening `http://127.0.0.1:43891/index.html` caused real content-script scanning to add `583902` automatically within ~1.5 s. The same regex also indexed `583903` from `x583903y`, because only adjacent digits are excluded by the current six-digit-number rule.
+
 Runtime reload evidence:
 - Chrome Preferences points CSS ID `mfpomnbkkfklealhaacbnmelpgpggglg` to the correct unpacked path but `service_worker_registration_info.version` remains `0.3.8`.
 - Deployed `content.js` and `background.js` hashes exactly match canonical main and contain the scanner/message routes.
@@ -115,7 +119,7 @@ Repository implementation, source tests/CI, Fedora file deployment, daemon resta
 Exercise real page prompt-ID indexing/search/manual override behavior, verify clean final state, then mark task completed.
 
 ## Blockers
-Chrome's extension registration is stale at service-worker version `0.3.8`; deployed source and daemon are `0.4.0`. This explains why old content/background code can still create contexts but lacks the new scanner path. `chrome://restart` from command line did not refresh registration. A graceful browser process restart with session restoration is required.
+None currently. The stale Chrome service-worker registration was resolved by graceful browser SIGTERM followed by a Wayland relaunch with `--restore-last-session --load-extension=...`.
 
 ## Acceptance criteria
 - [x] Searching any indexed six-digit PROMPT_ID is implemented to surface the associated context.
@@ -133,4 +137,4 @@ Chrome's extension registration is stale at service-worker version `0.3.8`; depl
 - [ ] Final checkout/runtime state is clean and checkpointed.
 
 ## Next action
-Gracefully terminate the main Chrome browser process with SIGTERM, relaunch Chrome with `--restore-last-session --load-extension=$HOME/.local/share/chrome-codex-switcher/extension`, verify session restoration and service-worker registration `0.4.0`, then repeat the same disposable-page scanner test.
+On disposable context `057a7d84-a62d-49d7-93f1-d0db13834a0e`, remove auto-detected `583902`, reopen the page and verify it remains excluded; then add/remove a manual-only ID and confirm deletion. After PASS, clean disposable runtime artifacts and perform final checkout/runtime readback.
