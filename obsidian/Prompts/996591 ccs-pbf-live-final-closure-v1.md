@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653]], [[572554 ccs-desktop-launcher-overlay-recovery-v3|572554]], [[613408 ccs-desktop-launcher-overlay-recovery-v2|613408]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[641903 ccs-pbf-final-live-retry-v1|641903]]
 - **Chat Codex:** Nuova chat Codex; continuazione finale della catena 284653 → 613408 → 572554.
 
 ## Spiegazione
