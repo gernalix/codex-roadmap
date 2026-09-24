@@ -43,6 +43,10 @@ jobs:
               paste -sd, -
           )"
           [ -n "$task_ids" ] || exit 0
+          [ -n "$NTFY_PASSWORD" ] || {
+            echo "Missing NTFY_CHECKPOINT_PUBLISHER_PASSWORD repository secret" >&2
+            exit 78
+          }
           short_sha="$(git rev-parse --short=12 "$AFTER")"
           curl --fail-with-body --silent --show-error --retry 3 \
             --user "checkpoint-publisher:$NTFY_PASSWORD" \
