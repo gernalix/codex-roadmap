@@ -24,7 +24,7 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** sì
-- **Codice modificato da ChatGPT:** no (0 interventi)
+- **Codice modificato da ChatGPT:** sì (5 interventi)
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
@@ -48,4 +48,8 @@ Crea un servizio Fedora separato che legge PersonalHub-data e mantiene automatic
 
 ## Modifiche di codice ChatGPT
 
-- Nessuna modifica di codice registrata.
+- 2026-09-24T01:51:03Z · `gernalix/PersonalHub` · documentation · commit `64883045dbdddd93d8d1f56acffc5d3665a20fd0` · Replaced the obsolete Android-owned Obsidian exporter contract with an external Fedora projection sourced from PersonalHub-data.
+- 2026-09-24T01:51:03Z · `gernalix/PersonalHub` · documentation · commit `8b401bc1551169276f1f7e1fd5d124c65d06b1e0` · Updated PersonalHub architecture to define Obsidian as an external Git Data consumer with zero runtime dependency.
+- 2026-09-24T01:51:03Z · `gernalix/MegaVault` · documentation · commit `ed30883b1beadfbfc572ec2337658a1b0b195ec4` · Added the cross-project Obsidian projection policy and Fedora runtime/monitoring rules to the MegaVault protocol.
+- 2026-09-24T01:51:03Z · `gernalix/MegaVault` · documentation · commit `e83ca4d2a6e892d0499538c7947580e0249a9c37` · Added the authoritative sqlite-to-obsidian architecture handoff with PersonalHub-data as the first source.
+- 2026-09-24T01:51:03Z · `gernalix/MegaVault` · documentation · commit `0474b3df0c66b3bfe07566a545a673d45483e025` · Added MegaVault AI routing so future tasks resolve Obsidian projection to the external Fedora service instead of PersonalHub Android.
