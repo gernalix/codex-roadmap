@@ -60,7 +60,7 @@ Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only g
 - [x] Verify 788315 produces no new model-driven heartbeat cycles after shutdown.
 - [ ] Resume 302284 from its parked checkpoint and finish the remaining consolidated roadmap/Workflowy/CCS/codex-usage runtime readback.
 - [ ] Run routing-safe CCS successor 896074 only after 302284 PASS.
-- [ ] Run 994029 for the ActivityWatch/Kuma local cutover.
+- [x] Run 994029 for the ActivityWatch/Kuma local cutover; terminal PASS, central monitor ID 59 fresh/UP and legacy ID 45 disabled.
 - [ ] Run 714263 only after 994029, closing the sqlite-to-obsidian Kuma residual.
 - [ ] Run 812553 after 302284, using prompt-history as the canonical primary repo.
 - [x] Complete prompt-history source-level model/reasoning analytics and regressions through ff694890.
@@ -69,7 +69,7 @@ Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only g
 ### Phase 4 — Notification and checkpoint infrastructure
 - [x] Complete Telegram collector runtime acceptance: account authorization, RUN1=4,244 messages, RUN2=0/no-op, private Git history readable, timer enabled+active; details in `CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md`.
 - [x] Deploy the user-requested one-day-auto-delete Telegram archive runtime on Fedora: duplicate-free local SQLite history, revision/tombstone handling, media/call retention, human timeline, relationship/block-state tracking, 5-minute timer, shared Telethon-session lock, and live runtime verification; details in `CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md`.
-- [ ] Complete the Telegram source/lifecycle closure through canonical successor 966124; never launch 333860. Reconcile both the verified task/422308 baseline and `chatgpt/telegram-autodelete-archive` into fedora-system-monitor main, rerun bounded gates/readback, then delete the temporary branch.
+- [x] Complete the Telegram source/lifecycle closure through canonical successor 966124; all verified Telegram source including relationship/block-state tracking is integrated on `fedora-system-monitor/main`, bounded gates/runtime readback PASS, and absorbed temporary branches are removed.
 - [ ] After sufficient Telegram history exists, audit noisy producers and apply only producer-specific fixes; verify the post-fix notification stream is quieter and still actionable.
 - [ ] Complete the ntfy checkpoint-notification lane and prove accepted Git checkpoint pushes produce one remote notification; details in `CHATGPT-20260924-NTFY-CHECKPOINTS.md`.
 
@@ -98,9 +98,11 @@ Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
 
 ## Current step
 PersonalHub P0 is now the sole master lane. Resume 920550 from its existing pushed checkpoint and continue serially through 857906 → 707603 → 840907 → 788606 → 913264. No non-PH task may run while PH is actionable.
-994029 and 966124 may run in parallel in other chats under the repo/resource ownership rule above; neither changes PH priority or may touch PH state.
+994029 and 966124 are both terminal completed; they no longer own any repository/runtime lane. PersonalHub remains the master recovery lane.
 
 ## Verified facts
+- 994029 is terminal `completed`: ActivityWatch main `b8ef359` is deployed; 17 focused tests + py_compile/diff-check PASS; final real run `20260924T151113Z` advanced the data repo; timer enabled+active; proprietary Kuma producer/credentials are absent; authoritative Kuma readback shows legacy ID 45 disabled and central ID 59 active with a fresh UP heartbeat. Terminal mutation issue #1063 closed completed.
+- 966124 is terminal `completed`: `fedora-system-monitor/main` contains the combined Telegram collector + auto-delete + relationship/block-state source; focused tests/CI/runtime readback passed, private history remains current, and absorbed Telegram branches were removed. Dedicated terminal state is `operations/task-state/966124.md`.
 - PH local branch set is now bounded to `main` plus only the two still-relevant integration branches: `task/920550` and `chatgpt/workflowy-integration`. All historical/superseded local branch residue has been dispositioned and removed with preserved evidence where needed.
 - PH cleanup removed the safe detached worktrees and semantically absorbed `codex/pr35-cleanup`; remaining PH branch cleanup is bounded to active Workflowy/920550 plus the two preserved superseded dirty-evidence branches.
 - PH branch cleanup has already removed 14 local zero-ahead branches proven fully absorbed; remaining PH branches are limited to active/reconciliation/superseded-evidence cases owned by the PH checkpoint.
