@@ -55,7 +55,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [x] Finalize 920550 through canonical integration and inspect merged main: PR #41 merged at `66dbe0265ff4dcdba3221e12e7953518056ce951`; schema 23 identity `4b9b96396c8f9e750d13b0e6da70fdd9`; `finance_photo_index` + `finance_owned_items` present; all required CI PASS.
 
 ### Phase 3 — 857906 unified History/Search
-- [ ] Run and review 857906 after 920550 integration.
+- [ ] Run and review 857906: canonical claim is active (issue #1064, `task/857906`, isolated worktree). No code changes until Workflowy PR #43 is merged; then sync worktree to new main and execute.
 - [ ] Verify one reused global/module search engine and removal/replacement of duplicate user-facing History/Log/Timeline surfaces.
 
 ### Phase 4 — 707603 Git History / restore
@@ -88,9 +88,10 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-920550 is merged and verified on `main`. Reconcile/integrate `chatgpt/workflowy-integration` onto main, rerun only its affected gates, delete absorbed Workflowy + local 920550 branch, then claim 857906.
+Workflowy PR #43 is in CI. 857906 is already claimed/running but intentionally untouched. After #43 merges, sync `task/857906` to the new main before any code edit, delete absorbed Workflowy branches, then execute 857906.
 
 ## Verified facts
+- 857906 canonical claim succeeded: roadmap status `running`, issue #1064, branch `task/857906`, worktree `~/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/857906`. Claim occurred while Workflowy #43 was still in CI; no 857906 code is to be modified until the worktree is synced to post-Workflowy main.
 - Workflowy source/task branch trees are byte-identical before final integration: `origin/chatgpt/workflowy-integration^{tree}` = `origin/task/workflowy-integration^{tree}` = `03fea6d0f2967cc1ae510957b17ccf313b3b8e68`. Remote PH branches are now only `main` plus those two Workflowy refs. Once PR #43 is contained in main, both side refs are safe to delete.
 - Workflowy protected integration is now PR #43 from `task/workflowy-integration`; previous PR #42 was closed because the integrator correctly rejected the non-task branch naming. The new task branch is tree-identical to the already-tested reconciled Workflowy content.
 - Workflowy reconciliation after 920550 is PASS on local branch head `3348a34`: zero conflicts, consumer-preflight PASS, targeted Workflowy tests PASS, app compile PASS, architecture PASS.
