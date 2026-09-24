@@ -21,6 +21,7 @@
 | [[obsidian/Prompts/519810 pbf-lifecycle-reconciliation-protocol-v1\|519810 · Rendere obbligatoria la riconciliazione dei PBF]] | pending | — | — | — | no | no | — | codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/996591 ccs-pbf-live-final-closure-v1\|996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/893025 sqlite-to-obsidian-fedora-bootstrap-v1\|893025 · Creare il projector Fedora condiviso SQLite → Obsidian]] | pending | — | — | — | sì | sì | — | MegaVault | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/105883 personalhub-global-since-when-v3\|105883 · Promuovere Since When a funzione globale PersonalHub]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | sì | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
