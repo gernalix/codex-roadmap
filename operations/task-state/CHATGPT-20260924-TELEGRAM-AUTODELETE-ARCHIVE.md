@@ -1,7 +1,7 @@
 # Operational task state — Telegram auto-delete archive
 
 TASK_ID: CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE
-Updated: 2026-09-24 16:34 Europe/Copenhagen
+Updated: 2026-09-24 16:42 Europe/Copenhagen
 
 ## Objective
 Preserve the complete available history of one Telegram chat configured with 1-day auto-delete, without duplicate storage, while retaining edits and deletion metadata and keeping archived content after Telegram removes it.
@@ -35,10 +35,10 @@ Preserve the complete available history of one Telegram chat configured with 1-d
 - [x] Add focused tests for dedupe, edits, deletions, revisions, media retention, reappearance and initial full backfill.
 - [x] Preserve Telegram service actions, including phone-call events, as structured action_type/action_json plus human-readable action_text.
 - [x] Add sender_name capture and a no-ID `messages_human` SQLite view with Italian/relative date formatting, sender name, human message/action text, media and state.
-- [ ] Add relationship-state snapshots/events for own block/unblock and peer last-seen transitions, without storing raw peer IDs in human output.
-- [ ] Detect own block/unblock as certain events from Telegram `blocked` state; use server block date when available, otherwise observation time.
-- [ ] Detect probable peer block/unblock only as inference from abrupt last-seen-status transitions compatible with Telegram's blocked-user behavior; retain raw status evidence and confidence.
-- [ ] Interleave relationship events into the human-readable chronological view and backfill only evidence Telegram still exposes now.
+- [x] Add relationship-state snapshots/events for own block/unblock and peer last-seen transitions, without storing raw peer IDs in human output.
+- [x] Detect own block/unblock as certain events from Telegram `blocked` state; use server block date when available, otherwise observation time.
+- [x] Detect probable peer block/unblock only as inference from abrupt last-seen-status transitions compatible with Telegram's blocked-user behavior; retain raw status evidence and confidence.
+- [x] Interleave relationship events into the human-readable chronological view and backfill only evidence Telegram still exposes now.
 
 ### Phase 3 — Deploy and verify
 - [x] Deploy the runtime on Fedora using the existing authorized account session.
@@ -54,9 +54,11 @@ Preserve the complete available history of one Telegram chat configured with 1-d
 - [ ] During global recovery Phase 4, reconcile/integrate this branch with the existing task/422308 Telegram source closure and remove the temporary branch after equivalence is proved.
 
 ## Current step
-Implement relationship/block-state capture on the existing Telegram auto-delete archive branch, add focused tests, deploy it to Fedora, and verify the live human timeline. Do not infer historical events that Telegram no longer exposes.
+Source implementation is checkpointed and pushed. Next, take a consistent backup of the live archive DB, deploy the updated collector, run one locked sync, verify the exact current own-block event is backfilled into `chat_human`, verify no false peer-block event is created from the current Recently baseline, and confirm both Telegram timers remain healthy.
 
 ## Verified facts
+- Relationship-state implementation is pushed on fedora-system-monitor branch `chatgpt/telegram-autodelete-archive` at `f588fd96b849495ffafa05e881dae8361e91c29e`; 16/16 Telegram tests PASS plus py_compile/diff-check.
+- Live API pre-deploy readback: target currently reports `UserStatusRecently(by_me=true)`; the user currently has the peer blocked, and Telegram's blocklist provides an exact server block timestamp. No peer-block event is inferred from this baseline because the peer status is not long-time-ago.
 - Source branch: gernalix/fedora-system-monitor chatgpt/telegram-autodelete-archive, based on task/422308; remote head 2fc6c38be783bc2022fa267f0fa46f349c19a39a.
 - Target discovery returned exactly one recent dialog whose Telegram full metadata reports ttl_period=86400; its identifier/title remain local-only.
 - Archive DB is local under ~/.local/share/fedora-telegram-autodelete with mode-restricted config/data; private chat contents are not committed.
@@ -113,4 +115,4 @@ Implement relationship/block-state capture on the existing Telegram auto-delete 
 - [ ] Canonical fedora-system-monitor main contains the implementation and the temporary branch is removed; deferred to global Phase 4.
 
 ## Next action
-Implement and test relationship-state/event capture on chatgpt/telegram-autodelete-archive, deploy it under the existing shared Telethon session lock, run a live readback, checkpoint the verified state, then return control to the current master recovery lane.
+Back up the live Telegram auto-delete SQLite DB, deploy f588fd9 to the local runtime, run a locked sync, inspect relationship_state/relationship_events/chat_human and systemd health, checkpoint the verified deployment, then return control to the current master recovery lane.
