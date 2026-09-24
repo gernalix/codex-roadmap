@@ -51,6 +51,24 @@ class FinishWrapperTests(unittest.TestCase):
         self.assertIn("finish-any",run.call_args.args[0])
 
     @patch("roadmap_finish._queue_repo_integration")
+    def test_non_pass_terminalizes_without_repo_integration(self, queue):
+        original=roadmap_finish.finish_result
+        calls=[]
+        def fake(repo,prompt_id,result,**kwargs):
+            calls.append((prompt_id,result,kwargs))
+            return {"status":"queued","prompt_id":prompt_id,"result":result}
+        roadmap_finish.finish_result=fake
+        try:
+            out=roadmap_finish.finish(
+                Path("/tmp/r"),"123456",result="BLOCKED",confirm_executed=True
+            )
+        finally:
+            roadmap_finish.finish_result=original
+        queue.assert_not_called()
+        self.assertEqual("BLOCKED",calls[0][1])
+        self.assertEqual("not-applicable",out["repo_integration"])
+
+    @patch("roadmap_finish._queue_repo_integration")
     def test_dry_run_does_not_touch_repo_queue(self, queue):
         original=roadmap_finish.finish_result
         roadmap_finish.finish_result=lambda *args,**kwargs: {"status":"dry-run"}
