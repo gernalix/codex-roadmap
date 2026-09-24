@@ -44,13 +44,13 @@ Extend `gernalix/chrome-codex-switcher` (CSS) so each persistent Chrome context 
 - [x] Reinstall from canonical current main and verify daemon runtime reports `0.4.0`.
 - [x] Reload the already-loaded unpacked Chrome extension without losing the existing browser session.
 - [x] Verify Chrome extension heartbeat advances from `0.3.8` to `0.4.0`.
-- [ ] Perform an end-to-end runtime prompt-ID indexing/search check on a real Chrome tab/context.
+- [ ] Perform an end-to-end runtime prompt-ID indexing/search check on a real Chrome tab/context. **Current runtime finding:** context creation works but automatic scan is not populating IDs.
 - [ ] Verify manual add/remove and persistent suppression at runtime if feasible without altering meaningful user data; otherwise use a disposable test context.
 - [ ] Final runtime status/readback and clean checkout verification.
 - [ ] Final completion checkpoint.
 
 ## Current step
-Live daemon and extension are both confirmed at `0.4.0`. Run a disposable real-browser functional test: automatic prompt-ID extraction, search payload visibility, manual add/remove, and auto-detected-ID suppression after reload.
+Disposable real-browser test created context `057a7d84-a62d-49d7-93f1-d0db13834a0e` for `http://127.0.0.1:43891/index.html`, but automatic prompt-ID extraction did not populate `prompt_ids` after >10 seconds. Debug the deployed scanner→background→daemon path before proceeding to manual override tests.
 
 ## Verified facts / implementation
 - Canonical `prompt_bindings` remains untouched as the 1:1 prompt↔Chrome/Codex binding.
@@ -89,6 +89,10 @@ Source gates:
 - Shell syntax gates PASS.
 - GitHub Actions CI run 107 on `6b4f9da`: python PASS, Selenium E2E PASS, overall SUCCESS.
 
+Runtime E2E finding:
+- Disposable page `http://127.0.0.1:43891/index.html` containing standalone IDs `583901` and `583902` created real CSS context `057a7d84-a62d-49d7-93f1-d0db13834a0e`, proving the content script can reach `context:get`.
+- `/api/list` returned `prompt_ids=[]` for that context over 20 polls / >10 seconds, and SQLite had no matching `context_prompt_ids` rows. Automatic scanning is therefore not runtime-PASS yet.
+
 Runtime deployment:
 - `install.sh` succeeded once Remote Desktop Commander shell exported `XDG_RUNTIME_DIR=/run/user/1000` and `DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus`.
 - GNOME companion enabled; global search shortcut remains configured.
@@ -104,7 +108,7 @@ Repository implementation, source tests/CI, Fedora file deployment, daemon resta
 Exercise real page prompt-ID indexing/search/manual override behavior, verify clean final state, then mark task completed.
 
 ## Blockers
-Temporary runtime blocker: Chrome retained the unpacked extension's old `0.3.8` service-worker registration across browser restart even though the manifest/heartbeat reports `0.4.0`. GUI Reload is not accessible through AT-SPI. Plan: trigger `chrome.runtime.reload()` from a temporary, URL-gated content-script patch loaded from the same unpacked directory, then immediately restore the deployed file and verify registration version.
+Automatic scanner runtime path currently fails on the disposable real-browser page even though context creation succeeds and both daemon/extension report `0.4.0`. This is the active code/runtime blocker to diagnose. Direct X11 GUI automation is unavailable under the Wayland session, so debugging should prefer deployed-source/readback/control-plane evidence.
 
 ## Acceptance criteria
 - [x] Searching any indexed six-digit PROMPT_ID is implemented to surface the associated context.
@@ -122,4 +126,4 @@ Temporary runtime blocker: Chrome retained the unpacked extension's old `0.3.8` 
 - [ ] Final checkout/runtime state is clean and checkpointed.
 
 ## Next action
-Gracefully restart Chrome with `--restore-last-session --load-extension=$HOME/.local/share/chrome-codex-switcher/extension`, preserve the existing session backup, and verify the extension service-worker registration version before any further functional test.
+Compare deployed `content.js`/`background.js` with canonical main, verify scanner symbols and observe API routes exist in deployed files, then isolate whether the failure is content-script execution, message forwarding, or daemon observe handling. Fix the minimum failing layer, checkpoint, redeploy, and repeat the same disposable-page test.
