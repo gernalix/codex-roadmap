@@ -22,7 +22,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** —
+- **Sblocca:** [[714263 sqlite-to-obsidian-kuma-connection-recovery-v1|714263]]
 - **Padri/precedenti:** [[620949 unified-kuma-cross-repo-control-plane-v1|620949]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat Codex breve; solo deploy/readback del residuo runtime di 620949

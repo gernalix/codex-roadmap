@@ -22,7 +22,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[222733 stop-runaway-788315-heartbeat|222733]]
-- **Sblocca:** —
+- **Sblocca:** [[641903 ccs-pbf-final-live-retry-v1|641903]]
 - **Padri/precedenti:** [[729874 roadmap-lifecycle-consolidation-fedora-activation-v1|729874]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat Codex breve; un solo pass Fedora sui runtime già implementati

@@ -2,7 +2,7 @@
 prompt_id: 641903
 status: pending
 project_id: 96
-model: GPT-5.6 Luna
+model: GPT-6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** —
+- **Dipende da:** [[302284 prompt-infrastructure-final-runtime-activation-v1|302284]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[996591 ccs-pbf-live-final-closure-v1|996591]]
 - **Figli/follow-up:** —

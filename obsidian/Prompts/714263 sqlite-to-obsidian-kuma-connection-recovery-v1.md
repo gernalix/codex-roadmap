@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** —
+- **Dipende da:** [[994029 kuma-620949-final-runtime-cutover-v1|994029]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[893025 sqlite-to-obsidian-fedora-bootstrap-v1|893025]]
 - **Figli/follow-up:** —
