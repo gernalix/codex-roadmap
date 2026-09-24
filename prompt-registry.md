@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/994029 kuma-620949-final-runtime-cutover-v1\|994029 · Chiudi il cutover runtime Kuma rimasto da 620949]] | running | — | — | — | no | no | — | Fedora / Uptime Kuma | GPT-6 Luna | low |
 | [[obsidian/Prompts/302284 prompt-infrastructure-final-runtime-activation-v1\|302284 · Distribuisci gli ultimi fix della prompt infrastructure]] | running | — | — | — | no | no | — | Prompt infrastructure / Fedora runtime | GPT-6 Luna | low |
 | [[obsidian/Prompts/857906 personalhub-unified-history-search-v1\|857906 · PersonalHub — History/Search unica cross-module]] | pending | — | — | — | no | no | — | PersonalHub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
@@ -111,6 +110,7 @@
 | [[obsidian/Prompts/257387 fedora-context-index-runtime-activation\|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] | completed | 2026-09-22T00:38:54Z | 2026-09-22T00:38:54Z | PASS | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5\|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/519810 pbf-lifecycle-reconciliation-protocol-v1\|519810 · Rendere obbligatoria la riconciliazione dei PBF]] | completed | — | — | PASS | sì | sì | — | codex-roadmap | GPT-6 Sol | medium |
+| [[obsidian/Prompts/994029 kuma-620949-final-runtime-cutover-v1\|994029 · Chiudi il cutover runtime Kuma rimasto da 620949]] | completed | — | — | PASS | no | no | — | Fedora / Uptime Kuma | GPT-6 Luna | low |
 | [[obsidian/Prompts/724615 personalhub-salute-ui-hub-obsidian\|724615 · Rendere Salute visibile e collegata al resto dell’app]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/862541 personalhub-salute-canonical-integration-v2\|862541 · Portare Salute dentro PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/904631 datasette5-personalhub-explorer-security-deploy-v2\|904631 · Versione online dell’esploratore dati PersonalHub]] | superseded | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
