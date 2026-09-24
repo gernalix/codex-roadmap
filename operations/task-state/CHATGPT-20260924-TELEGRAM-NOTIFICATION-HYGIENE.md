@@ -1,7 +1,7 @@
 # Operational task state — Telegram notification hygiene
 
 TASK_ID: CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE
-Updated: 2026-09-24 13:36 Europe/Copenhagen
+Updated: 2026-09-24 17:16 Europe/Copenhagen
 
 ## Objective
 Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e usare la cronologia reale come evidenza per ridurre rumore, duplicati, messaggi incomprensibili e flapping senza export manuali.
@@ -30,16 +30,17 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 - [x] Abilitare timer ogni 15 minuti; enabled+active.
 - [x] Verificare dal connettore GitHub che repo privato e archive/state.json siano leggibili.
 - [x] Riparare la collisione di identità del follow-up: 333860 superseded/non azionabile; 966124 registrato e materializzato come ID remoto canonico.
-- [ ] Quando la master recovery arriva a Phase 4, eseguire SOLO 966124 per integrare su main i fix già verificati del branch task/422308 insieme al branch chatgpt/telegram-autodelete-archive (stato dedicato: CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md), poi chiudere il source/runtime gate e rimuovere i branch assorbiti.
+- [x] Eseguire SOLO 966124 per integrare su main i fix verificati di task/422308 insieme a chatgpt/telegram-autodelete-archive, chiudere il source/runtime gate e rimuovere i branch assorbiti.
 - [ ] Lasciare accumulare cronologia reale sufficiente.
 - [ ] Classificare notifiche verbose/incomprensibili/inutili/ripetute/flapping.
 - [ ] Applicare fix mirati ai singoli producer; niente broad refactor.
 - [ ] Rivalutare la policy legacy del prefisso project_id visibile e spostarlo a metadata se non serve all'utente.
 
 ## Current step
-Collector runtime operativo e non-model. Il follow-up canonico 966124 è registrato/materializzato e resta parcheggiato per rispettare la master recovery; 333860 è superseded/non azionabile.
+Source/runtime closure completata tramite 966124. Lasciare accumulare cronologia reale; il prossimo lavoro è il successivo audit dei producer rumorosi, non un altro task di integrazione Telegram.
 
 ## Verified facts
+- PROMPT_ID 966124 è terminale `completed`; `fedora-system-monitor/main` integra il collector tecnico, l'archivio auto-delete e il tracking relationship/block-state. Il checkpoint terminale dedicato riporta main `7c18ac68134b616228cc1e49f29b8be42eaebec4`, CI/runtime PASS e rimozione dei branch temporanei assorbiti.
 - Baseline storica: PROMPT_ID 417826 ha già effettuato una prima signal-hygiene.
 - PROMPT_ID 422308 è terminale BLOCKED storico, ma il suo precedente prerequisito umano è ormai soddisfatto.
 - Branch sorgente: gernalix/fedora-system-monitor task/422308; ultimo commit pushato verificato 5d8ed32.
@@ -60,7 +61,7 @@ Collector runtime operativo e non-model. Il follow-up canonico 966124 è registr
 - Il runtime collector resta attivo mentre la master recovery procede perché è un servizio non-model e non muta i repo sovrapposti alla lane attiva.
 - Non rilanciare 422308.
 - Non lanciare 333860.
-- Il solo follow-up valido è 966124, dopo applicazione/materializzazione canonica e quando Phase 4 della global recovery diventa la lane attiva.
+- 966124 è stato completato e non va rilanciato. 333860 resta superseded/non azionabile.
 - L'audit delle notifiche userà la cronologia Git reale.
 - Le correzioni successive devono avvenire nei producer reali.
 
@@ -69,17 +70,17 @@ Collector runtime operativo e non-model. Il follow-up canonico 966124 è registr
 - RUN1/RUN2 e no-op semantics verificate.
 - Timer periodico attivo.
 - Repo dati accessibile da ChatGPT tramite GitHub connector.
-- Fix live persistiti sul branch task/422308 fino a 5d8ed32.
+- Fix live storici persistiti sul branch task/422308 fino a 5d8ed32.
+- Source/runtime closure completata tramite 966124 su `fedora-system-monitor/main`; branch Telegram assorbiti e rimossi.
 - Richiesta errata di materializzazione 333860 chiusa prima che il worker la applicasse.
 
 ## Remaining
-- Integrare i fix sorgente su main tramite 966124 quando la master lane arriva a Phase 4.
 - Accumulare e analizzare cronologia reale.
 - Correggere i producer rumorosi e verificare una nuova finestra di notifiche post-fix.
 
 ## Blockers
-- Nessun blocker runtime del collector.
-- Nessun blocker amministrativo: 966124 è canonico e materializzato; resta solo il gate di scheduling della master recovery.
+- Nessun blocker runtime o source-integration del collector.
+- L'audit successivo richiede solo una finestra di cronologia reale sufficientemente rappresentativa.
 
 ## Evidence
 - fedora-system-monitor task/422308: f577f66, 9d736aa, 5d8ed32.
@@ -97,4 +98,4 @@ Collector runtime operativo e non-model. Il follow-up canonico 966124 è registr
 Collector lane source/runtime closure is complete only when runtime remains healthy/incremental, no secret is versioned, source fixes are integrated on fedora-system-monitor main through canonical 966124, 333860 is non-actionable, 966124 is canonical/materialized and terminal PASS, and the history-based audit produces producer-specific fixes.
 
 ## Next action
-Do not launch a Telegram model task now. Keep canonical/materialized PROMPT_ID 966124 parked. When the global master reaches Phase 4, claim only 966124, reconcile and integrate both the already-verified task/422308 changes and chatgpt/telegram-autodelete-archive, run bounded gates/runtime readback, delete absorbed temporary branches, finalize PASS, then begin the history-based notification audit.
+Non rilanciare 422308, 333860 o 966124. Lasciare il collector non-model attivo e, quando la cronologia reale è sufficiente, eseguire l'audit history-based dei producer e applicare solo fix producer-specific.
