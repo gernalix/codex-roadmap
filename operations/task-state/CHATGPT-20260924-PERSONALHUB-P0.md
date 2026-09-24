@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 16:50 Europe/Copenhagen
+Updated: 2026-09-24 16:55 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -88,7 +88,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-920550 head is now `b10117a` with the CI instrumentation regression fixed locally and pushed. PR #41 must rerun checks on this head. Do not start 857906 until #41 is merged and Workflowy side-branch work is integrated.
+920550 head is now `3f32b8c`. Both prior CI blockers have local PASS evidence: instrumentation regression fixed and SyncJournal schema23 test updated. PR #41 must rerun checks on this head. Do not start 857906 until #41 is merged and Workflowy is integrated.
 
 ## Verified facts
 - Dirty historical worktree dispositions are now explicit: `task/624831` has no committed work unique versus current main and belongs to failed PROMPT_ID 624831, whose valid work is split into completed 613102 plus current 920550. Its uncommitted residue is superseded and must not be literal-merged. `task/728918` likewise has no committed work unique versus main; PROMPT_ID 728918 is superseded, its successor 649781 is also superseded, and roadmap evidence states the final PH chain no longer depends on the Obsidian archive. Its dirty uncommitted archive/Obsidian residue is obsolete, not a merge candidate. Preserve until final cleanup evidence is recorded, then remove the worktrees without integrating their superseded dirty state.
@@ -190,6 +190,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- PR #41 unit failure fixed and verified: schema 23 adds two sync-journal tables, so `SyncJournalTest` expected count changed 87→89 with explicit coverage for `finance_photo_index` and `finance_owned_items`. Full targeted `SyncJournalTest` PASS locally. Test-only fix committed+pushed as `3f32b8cb86552f07bcbf92042db34f4e839969eb`; no Play rebuild is required because product/release code is unchanged from the previously verified artifact.
 - PR #41 instrumentation failure was reproduced locally and fixed. Root cause: QA had been temporarily minified, so R8 removed instrumentation-only hook `DatasetteSync.setSchedulerForTests`; production Play minification was not the cause. QA is unminified again while keeping `armeabi-v7a+x86_64`. Local canonical-emulator reruns PASS: `FinanceSemanticPhotoQaDeviceTest` 1/1 and `DatasetteSyncInstrumentedTest#journalMutationTriggersDatasetteWorkAndRecoveryWithoutPolling` 1/1. Fix committed+pushed as `b10117adc84efe3afb4de20c350b411e7b1be055`.
 - MegaVault emulator documentation is merged via PR #106, merge `167b928b8478f9567fef57372845d3b937625c56`. It records the sole canonical AVD `Pixel_8a`, API36 Google APIs x86_64 rev7, 1080×2400 @420dpi coordinate bounds, live serial resolution and GNOME launch requirements. Legacy/temporary AVDs were deleted and only `Pixel_8a` remains configured.
 - 920550 AVD QA PASS 1/1 on canonical `Pixel_8a` (API36, 1080×2400, 420 dpi). The test exercised isolated synthetic transaction save, two photo indexes, semantic text→image, image→image same-object ranking, non-photo exclusion, owned-item persistence across DB reopen and removal.
@@ -266,4 +267,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Perform one bounded PR #41 readback on head `b10117a`. If checks are green, run one repo-integrator pass and verify 920550 is in `main`. Then integrate `chatgpt/workflowy-integration`, prove/delete absorbed side branches, and start 857906 through the canonical roadmap claim.
+Perform one bounded PR #41 readback on head `3f32b8c`. If checks are green, run one repo-integrator pass and verify exact schema23/main containment. Then integrate the already-verified Workflowy branch, prove/delete absorbed PH side branches, and claim 857906.
