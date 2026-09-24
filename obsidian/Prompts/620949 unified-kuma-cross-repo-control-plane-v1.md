@@ -19,7 +19,7 @@ tags:
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** sì
-- **Codice modificato da ChatGPT:** no (0 interventi)
+- **Codice modificato da ChatGPT:** sì (2 interventi)
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
@@ -43,4 +43,5 @@ Riconcilia tutti i repository nel control plane Kuma unico, migra le integrazion
 
 ## Modifiche di codice ChatGPT
 
-- Nessuna modifica di codice registrata.
+- 2026-09-24T01:27:40Z · `gernalix/MegaVault` · feature · commit `75f7a43e8a15f5a62e102ca6269930846c28efca` · Added canonical monitoring_targets registry/CLI/view and unified Uptime Kuma control-plane policy; validation CI PASS.
+- 2026-09-24T01:27:40Z · `gernalix/fedora-system-monitor` · feature · commit `96b679f124fc5b1237947541567bd62afbab3be7` · Added central scheduled-job freshness semantics, expanded project service inventory, unified control-plane docs/tests; CI PASS.
