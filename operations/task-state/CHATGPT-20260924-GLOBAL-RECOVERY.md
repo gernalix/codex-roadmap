@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 11:44 Europe/Copenhagen
+Updated: 2026-09-24 12:00 Europe/Copenhagen
 
 ## Objective
 Apply the findings from the global audit, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before producing the final APK, migrate the live PersonalHub database externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -19,6 +19,10 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 - No generic ADB install command when multiple devices are connected; device operations must be serial-scoped.
 
 ## Verified facts
+- Attention/PBF projection is now down to one unresolved leaf: 354882 (manual Grindr login, no fix successor yet).
+- PROMPT_ID 994029 is allocated, registered and materialized for the final local Kuma/ActivityWatch runtime cutover.
+- ActivityWatch PR #3 was manually audited and merged as b8ef359da6da83be2af64628a004abb27d9b39f1 after GitHub Actions failed before test execution due the external billing gate.
+- Stale roadmap Running states have been reconciled: 620949 is now blocked with successor 994029; 254859 is blocked and covered by follow-up 812553; 354882 is blocked/manual-login rather than falsely running.
 - Phase 1 audit completed read-only.
 - codex-usage publishes redacted native Codex session dumps to the private gernalix/codex-usage repository.
 - Roadmap snapshot found 3 running, 13 pending, 25 blocked, 4 failed and 77 unknown records; 26 PBFs lacked an explicit fix relation.
@@ -80,15 +84,15 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 - Initial model-efficiency findings and workflow/dashboard gaps.
 
 ## Remaining
-- Stop/disable 788315 heartbeat and verify it no longer fires. PROMPT_ID 222733 allocated; roadmap registration still pending due two rejected mutation attempts (first invalid embedded relations field, second request-key conflict).
+- Stop/disable 788315 heartbeat and verify it no longer fires. PROMPT_ID 222733 is registered/materialized and ready for local execution.
 - Check for any other active high-cost recurring Codex/model automations and disable/rewrite them when wasteful.
 - Deploy/verify the new persistent-memory and Workflowy styling changes on Fedora when local runtime access is available.
-- Reconcile roadmap lifecycle/PBF states, including 620949/354882/254859 and the 624831 successors. 624831 now has a dedicated residual successor 920550; mutation to formalize relations/dependencies has been submitted.
+- Reconcile roadmap lifecycle/PBF states. DONE for stale running states: 620949→994029, 254859→812553, 354882→blocked/manual-login. Only 354882 remains an unresolved PBF leaf.
 - Repair codex-usage prompt attribution and cumulative goal accounting where needed. SOURCE FIX DONE; runtime deploy/backfill remains local.
 - Enforce metadata-only model/reasoning in non-running prompt bodies.
 - Implement Ready recommended-launch-order invariant.
 - Implement Workflowy styling for model/reasoning and /goal. SOURCE DONE; local runtime deployment/readback remains.
-- Reconcile open PRs (#35 PH, #3 ActivityWatch, #24 CCS).
+- Reconcile open PRs (#35 PH, #3 ActivityWatch, #24 CCS). DONE: PH #35 closed stale; CCS #24 merged; ActivityWatch #3 merged.
 - Complete PH P0 task graph and final APK/db migration workflow. Detailed ownership delegated to operations/task-state/CHATGPT-20260924-PERSONALHUB-P0.md.
 - Then process remaining non-PH roadmap/repository work and perform final global gate.
 
