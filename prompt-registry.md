@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/994029 kuma-620949-final-runtime-cutover-v1\|994029 · Chiudi il cutover runtime Kuma rimasto da 620949]] | running | — | — | — | no | no | — | Fedora / Uptime Kuma | GPT-6 Luna | low |
 | [[obsidian/Prompts/302284 prompt-infrastructure-final-runtime-activation-v1\|302284 · Distribuisci gli ultimi fix della prompt infrastructure]] | running | — | — | — | no | no | — | Prompt infrastructure / Fedora runtime | GPT-6 Luna | low |
-| [[obsidian/Prompts/966124 telegram-history-runtime-closure-v2\|966124 · Chiudere il collector Telegram dopo autorizzazione e collaudo]] | running | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/857906 personalhub-unified-history-search-v1\|857906 · PersonalHub — History/Search unica cross-module]] | pending | — | — | — | no | no | — | PersonalHub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
@@ -397,3 +396,4 @@
 | [[obsidian/Prompts/641903 ccs-pbf-final-live-retry-v1\|641903 · Chiudere il leaf PBF finale di Codex Desktop]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-6 Luna | low |
 | [[obsidian/Prompts/422308 telegram-notification-history-fedora-collector-v1\|422308 · Archiviare automaticamente le notifiche Telegram per ridurre il rumore]] | blocked | 2026-09-24T10:16:14Z | 2026-09-24T10:33:16Z | BLOCKED | sì | sì | — | Fedora / Telegram notification hygiene | GPT-6 Luna | medium |
 | [[obsidian/Prompts/333860 telegram-history-runtime-closure-v1\|333860 · Chiudere il collector Telegram dopo autorizzazione e collaudo]] | superseded | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/966124 telegram-history-runtime-closure-v2\|966124 · Chiudere il collector Telegram dopo autorizzazione e collaudo]] | completed | — | — | PASS | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
