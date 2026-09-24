@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 18:16 Europe/Copenhagen
+Updated: 2026-09-24 18:24 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -88,9 +88,10 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-857906 is the sole active PH side branch and is synchronized to `main=b1a7f22...`. Start implementation on schema 23: shared human History/Search contract/query/UI first, then module entry-point replacement and legacy-browser removal.
+857906 is active on `task/857906`. Block 1 is partially implemented and checkpointed at `ed21615`: Search deep-link extensions + Activity DAO shared search + partial unified host edits. Continue from this exact WIP; do not reset/recreate it. Schema remains 23.
 
 ## Verified facts
+- 857906 handoff WIP checkpoint is safely committed+pushed as `ed21615445462c51762a633044db4eeaf02d21d4` on `task/857906`. It contains only the first partial block: Search deep-link query/entity parameters, a shared bounded Activity DAO search query, and the beginning of the unified History/Search host signature/imports/constants. This is intentionally incomplete and must be continued, not treated as PASS.
 - 857906 design conclusion before coding: existing `hub_activity_log` schema 23 already carries occurred_at/module/action/entity label/detail/origin/system/source/before+after payload/group/reversible/status fields, and the generic undo engine already fails closed on stale/referenced/unsupported mutations. No schema 24 appears necessary for the unified History/Search work.
 - 857906 scope distinction is pinned: remove/replace duplicate **change-history browsers** (global activity/Git-history split, People contact/global history, Places History screen, Timer Timeline browser, WordPulse Timeline tab) while preserving distinct domain data functionality (People initiative/calendar features, Substances intake list/history editing, prescription history, Timer session domain operations, WordPulse sessions/explore data, Soldi transactions).
 - All six feature modules already depend on `:contracts:database`, so a canonical History/Search deep link can be shared without feature→app dependency violations. 857906 worktree remains clean at pre-Workflowy main `66dbe026...` and has no code edits yet.
@@ -284,4 +285,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Implement 857906 block 1 on schema 23: extend `HubDeepLinkContract` with History/Search module/entity filters; add bounded shared activity DAO query and humanization/filter model; replace the Home Search/Activity split with one shared host screen. Run consumer-preflight/tests/compile, commit+push checkpoint, then proceed module-by-module to remove duplicate change-history browsers while preserving domain-specific chronological data.
+Resume directly from `task/857906@ed21615`. Finish `HubActivityRegisterScreen` as the shared live History/Search engine (multi-module, text, time range, entity filter, grouping, humanized details, existing undo/permalink), wire Home/deep-links, run consumer-preflight + targeted tests/compile, checkpoint, then replace legacy change-history/timeline browsers module-by-module while preserving domain-specific chronological data. No schema bump unless proven necessary.
