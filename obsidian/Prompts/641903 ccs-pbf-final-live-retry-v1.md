@@ -5,6 +5,7 @@ project_id: 96
 model: GPT-6 Luna
 reasoning: low
 tags:
+  - manual-prerequisite:resolve-ccs-project-id
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/facilitatori-di-prompt
@@ -29,7 +30,7 @@ tags:
 
 ## Spiegazione
 
-Riprova soltanto le due prove live launcher/overlay rimaste senza evidenza conclusiva; il precedente 996591 si è chiuso BLOCKED sul passaggio di finalizzazione, ora già applicato dal single writer.
+Aspetta il deploy infrastrutturale e la riconciliazione dell’ID progetto CCS: l’ultimo runtime ha dimostrato che il vecchio ID 96 punta a Workflowy. Poi esegue solo le due prove live launcher/overlay.
 
 ## Esecuzioni
 
