@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 15:31 Europe/Copenhagen
+Updated: 2026-09-24 15:55 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -51,7 +51,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [x] Pass consumer-preflight, Soldi compile, architecture gate and full debug app build.
 - [x] Verify real-model synthetic same-object/text-image ranking and measure debug APK/runtime size.
 - [x] Finish Play/minified artifact measurement for 920550 artifact; baseline-main comparison build is also running from an isolated temporary worktree for exact delta.
-- [ ] Run AVD-only synthetic QA for save→index, search, photos-only regression, same-object shortlist, owned-item create/remove and persistence.
+- [x] Run AVD-only synthetic QA for save→index, semantic text/image search, non-photo exclusion, same-object shortlist, owned-item create/remove and reopen/persistence: dedicated `FinanceSemanticPhotoQaDeviceTest` PASS 1/1 on canonical `Pixel_8a` emulator.
 - [ ] Finalize 920550 through `roadmap_finish.py`, wait only via non-model integration/readback, then inspect the merged main diff/schema/evidence before unblocking 857906.
 
 ### Phase 3 — 857906 unified History/Search
@@ -88,7 +88,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-Canonical emulator setup is complete. 920550 QA now reaches app logic and fails on a concrete Hub Context entity-binding error during synthetic finance transaction save. Determine whether the QA bridge omitted required canonical-entity setup or production save ordering is wrong; apply the smallest correct fix, rerun only the dedicated QA test, then continue 920550 finalization.
+920550 device QA is PASS and the fixes are safely pushed at `0834a24`. Because the AVD test discovered a release R8/ONNX JNI issue, rebuild Play APK+AAB once with the final keep rule, record size/hash, then run final diff/architecture sanity and finalize 920550 through the canonical integration flow.
 
 ## Verified facts
 - Canonical emulator cleanup completed: repaired the official API36 Google APIs x86_64 system image to revision 7 (restoring missing `encryptionkey.img`), recreated `Pixel_8a`, and proved `emulator-5554` reaches ADB `device` + `sys.boot_completed=1`. Runtime identity: API 36, 1080×2400, 420 dpi. All other legacy/temporary AVDs were deleted; `emulator -list-avds` now returns only `Pixel_8a`.
@@ -173,6 +173,8 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 920550 AVD QA PASS 1/1 on canonical `Pixel_8a` (API36, 1080×2400, 420 dpi). The test exercised isolated synthetic transaction save, two photo indexes, semantic text→image, image→image same-object ranking, non-photo exclusion, owned-item persistence across DB reopen and removal.
+- QA uncovered and fixed three concrete release-relevant issues, now committed+pushed as `0834a2434abe9ddd3a1c43caf23ba646c5bc3923`: QA supports TCL `armeabi-v7a` + emulator `x86_64`; temp/staging FinanceCapsule DBs no longer write links into the global canonical Hub Context DB; R8 keeps `ai.onnxruntime.**` so JNI constructors survive minification.
 - 920550 rebased cleanly onto current PersonalHub main `57883c2531400efacbefd2c63182bc11833f9537` and force-with-lease pushed as `02f79639dde0797b44a242f931366b0038556193`; no conflicts.
 - 920550 minified Play build PASS after rebase: `:app:assemblePlay :app:bundlePlay --no-configuration-cache` completed successfully. Produced signed/minified APK 191,469,880 bytes (182.60 MiB) and AAB 87,776,741 bytes (83.71 MiB). ONNX Runtime compressed payload is 129.04 MiB in the universal APK and 51.59 MiB across all ABI slices in the AAB; model weights remain outside the app artifact.
 - Deleted absorbed branch `chatgpt/105883-since-when` after proving it was 0 commits ahead / 32 behind current main; no merge was needed because it contained no unique work.
@@ -245,4 +247,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Inspect only `FinanceSemanticQaBridge`, `FinanceCapsule.saveTransaction`, `HubContextRuntime.saveFinanceTransactionLinksIfInitialized` and `HubContextRepository.bind` to explain the missing canonical entity. Fix the narrowest correct layer, rebuild only QA/test artifacts if needed, rerun `FinanceSemanticPhotoQaDeviceTest` on `emulator-5554`, then checkpoint before finalizing 920550.
+Rebuild exactly `:app:assemblePlay :app:bundlePlay` from clean pushed commit `0834a24`, record final APK/AAB size + SHA-256 and confirm ONNX Java/JNI classes are preserved. Then run only final `git diff --check`/architecture sanity, finalize 920550 via the canonical roadmap/single-writer integration path, and inspect merged main before reconciling `chatgpt/workflowy-integration`.
