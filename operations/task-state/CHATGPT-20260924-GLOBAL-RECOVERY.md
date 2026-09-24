@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 14:56 Europe/Copenhagen
+Updated: 2026-09-24 15:22 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -98,6 +98,7 @@ Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
 
 ## Current step
 PersonalHub P0 is now the sole master lane. Resume 920550 from its existing pushed checkpoint and continue serially through 857906 → 707603 → 840907 → 788606 → 913264. No non-PH task may run while PH is actionable.
+Do not launch 994029 or 966124 in parallel from another chat; both remain parked behind the PH P0 cutover.
 
 ## Verified facts
 - Current PH side-branch inventory is bounded to two real side branches: `task/920550` (2 commits ahead / 0 behind main) and `chatgpt/workflowy-integration` (11 commits ahead / 2 behind main). No other non-main PH branch contains recoverable work. Required order: finish/integrate 920550 → reconcile/integrate Workflowy branch → delete both only after main containment/semantic absorption is proved.
@@ -146,6 +147,7 @@ PersonalHub P0 is now the sole master lane. Resume 920550 from its existing push
 - A canonical replacement allocation request for never-run 641903 is open in MegaVault Issue #100: [prompt-id-command] chatgpt-ccs-641903-project-routing-replacement-20260924-v1. It must resolve current CCS project routing from authoritative metadata/repo identity rather than hard-code 96.
 
 ## Decisions
+- While PersonalHub P0 is actionable, ready non-PH tasks **994029 and 966124 must remain ready but parked**. Do not execute them from another ChatGPT chat or via Remote Desktop Commander before PH 913264 PASS, unless PersonalHub is truly blocked or a data/safety-critical emergency requires intervention.
 - User priority override: PersonalHub + live DB migration now outrank all remaining non-PH recovery work. 302284 is parked after a safe checkpoint and resumes only after PH 913264 PASS, unless PH is truly blocked.
 - Until the final global gate, recovery work is serialized: one model-driven lane at a time. Existing active tasks are first brought to a safe checkpoint/parked state before the master lane advances; no new parallel recovery prompt is launched.
 - Do not duplicate the PersonalHub or Telegram lanes from the global recovery chat. PersonalHub detail belongs to CHATGPT-20260924-PERSONALHUB-P0.md; Telegram detail belongs to CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md.
