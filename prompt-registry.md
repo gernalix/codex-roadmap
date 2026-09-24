@@ -9,6 +9,7 @@
 | [[obsidian/Prompts/822595 personalhub-global-since-when-v2\|822595 · Promuovere Since When a funzione globale PersonalHub]] | running | 2026-09-24T00:37:09Z | 2026-09-24T00:37:09Z | UNKNOWN | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/570349 codex-usage-live-publisher-single-writer-runtime-recovery-v1\|570349 · Ripristinare il monitoraggio live Codex remoto]] | running | — | — | — | no | no | — | GitHub Autosync / Fedora runtime | GPT-6 Luna | medium |
 | [[obsidian/Prompts/620949 unified-kuma-cross-repo-control-plane-v1\|620949 · Unificare Uptime Kuma per tutti i repository]] | running | — | — | — | sì | sì | — | Fedora / fedora-system-monitor | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/996591 ccs-pbf-live-final-closure-v1\|996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop]] | running | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
@@ -18,7 +19,6 @@
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/857906 personalhub-unified-history-search-v1\|857906 · PersonalHub — History/Search unica cross-module]] | pending | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/519810 pbf-lifecycle-reconciliation-protocol-v1\|519810 · Rendere obbligatoria la riconciliazione dei PBF]] | pending | — | — | — | no | no | — | codex-roadmap | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/996591 ccs-pbf-live-final-closure-v1\|996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/893025 sqlite-to-obsidian-fedora-bootstrap-v1\|893025 · Creare il projector Fedora condiviso SQLite → Obsidian]] | pending | — | — | — | sì | sì | — | MegaVault | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/729874 roadmap-lifecycle-consolidation-fedora-activation-v1\|729874 · Attivare il lifecycle roadmap consolidato su Fedora]] | pending | — | — | — | no | no | — | Prompt infrastructure / Fedora runtime | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1\|697920 · Rendere ChatGPTExporter resiliente e affidabile]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-6 Sol | medium |
