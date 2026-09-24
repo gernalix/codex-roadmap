@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 16:58 Europe/Copenhagen
+Updated: 2026-09-24 16:59 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -247,6 +247,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- Superseded dirty-worktree rollback evidence has been preserved outside Git at `~/Documents/ChatGPT/Personal Hub/evidence/recovery-20260924-superseded-worktrees/`: tracked binary patches, untracked-source tarballs and status snapshots for 624831 and 728918. Key SHA-256: 624831 patch `14c03f819adcc62af000243cc5f42ccd7b7c149bb5ec412508210bacc2840b00`, untracked archive `8005432ae18d89f42a9a9b5b489327f3c776a611dd3bd0799273d2b071f7b387`; 728918 patch `658514dfa31381b68dc94d9d018ad840569a12cc2013b7e6acbe4f3cdc858f11`, untracked archive `f7b1de3f90e25715f755f25b6b2762619aa0732526d051cf7166a7936f699436`.
 - PersonalHub `origin/main` contains hotfix `41920af` (`Fix tag history no-op write amplification`) and compactor `57883c2` (`Add safe Git no-op history compactor`). Targeted Gradle regression tests and `:app:compileDebugKotlin` PASS; `python3 tools/test_cleanup_hub_git_noop_events.py` PASS on exact `origin/main`.
 - gernalix/PersonalHub main and Room schema JSON 21/22.
 - codex-roadmap canonical prompt materializations for 920550, 857906, 707603, 840907, 788606, 913264.
