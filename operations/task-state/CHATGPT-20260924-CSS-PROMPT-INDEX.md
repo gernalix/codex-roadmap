@@ -122,4 +122,4 @@ Temporary runtime blocker: Chrome retained the unpacked extension's old `0.3.8` 
 - [ ] Final checkout/runtime state is clean and checkpointed.
 
 ## Next action
-Back up the deployed `content.js`, add a temporary reload-only branch for the disposable local test URL that calls `chrome.runtime.reload()`, open that URL, immediately restore canonical `content.js`, verify Chrome Preferences service-worker registration becomes `0.4.0`, then rerun the real-browser scanner test from a fresh disposable context.
+Gracefully restart Chrome with `--restore-last-session --load-extension=$HOME/.local/share/chrome-codex-switcher/extension`, preserve the existing session backup, and verify the extension service-worker registration version before any further functional test.
