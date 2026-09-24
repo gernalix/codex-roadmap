@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 13:18 Europe/Copenhagen
+Updated: 2026-09-24 13:30 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -38,9 +38,9 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [x] Establish external one-shot live-DB migration and explicit-device safety rules.
 
 ### Phase 1 — No-op tag/history amplification hotfix
-- [x] Implement and test hotfix commit `41920af` on isolated branch `chatgpt/tag-noop-hotfix`.
-- [ ] Integrate `41920af` into `PersonalHub/main` and verify remote main contains it.
-- [ ] Remove the temporary hotfix branch/worktree only after integration is verified.
+- [x] Implement and test hotfix commit `41920af`; integrated into `origin/main` and temporary hotfix branch removed.
+- [x] Integrate `41920af` into `PersonalHub/main` and verify remote main contains it.
+- [x] Remove the temporary hotfix branch/worktree after integration verification.
 
 ### Phase 2 — 920550 semantic photos / owned items
 - [x] Claim 920550 and isolate `task/920550`.
@@ -83,11 +83,11 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-Phase 1: integrate already-tested hotfix commit `41920af` into `PersonalHub/main`, verify remote main contains it, then resume 920550 validation from its existing checkpoint without rerunning passed tests.
+Phase 1 complete: tag/history no-op hotfix and compactor are on `PersonalHub/main`, verify remote main contains it, then resume 920550 validation from its existing checkpoint without rerunning passed tests.
 
 ## Verified current facts
 - A pre-schema-upgrade PersonalHub DB was measured at ~173 MB because `hub_git_events` contained 108,401 `UPDATE hub_tags` events; 108,123 had identical before/after payloads. The confirmed code path is Timer `persist()` -> `syncTimerNowTags()` -> `TimerSharedTagBridge.syncNow()` -> `SharedTagEngine.replace()/assign()` -> global `HubTagDao.refreshUsage()` plus an unconditional Git `AFTER UPDATE` trigger.
-- Direct hotfix work is isolated on `chatgpt/tag-noop-hotfix` at commit `41920af`; it does not change Room schema/version and its touched paths do not overlap the currently modified files in worktree `task/920550`.
+- Tag/history write-amplification hotfix `41920af` is integrated into PersonalHub `origin/main`; follow-up `57883c2` adds a safe no-op Git-history compactor. Neither changes Room schema/version.
 - For 920550, the selected implementation path is TinyCLIP ONNX int8 downloaded on demand, not bundled in the base APK. Local verification found a ~24 MiB ONNX model with native 512-dimensional text/image embeddings; model card metadata reports MIT license. Verified model SHA-256: `844d1a46ab18acf50c989e541b12fe3b6dc7f8d6004725b4e992d142788e0600`. Tokenizer/preprocessor assets remain separate and downloadable.
 - PersonalHub main is version.txt 60 and currently declares Room schema 22.
 - Schema 21 -> 22 only adds since_when_counters and since_when_migration_state; existing schema-21 entities are otherwise unchanged.
@@ -175,7 +175,6 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
-- Merge/push `chatgpt/tag-noop-hotfix` commit `41920af` into PersonalHub `main`, then delete the temporary hotfix branch/worktree after verifying the remote main SHA.
 - Run/review 920550 and inspect its actual diff, schema changes, tests and integration result before allowing 857906.
 - Run/review 857906; ensure old duplicate user-facing History/Log/Timeline surfaces are actually removed/replaced where intended and global/module search reuse is real.
 - Run/review 707603 on the resulting final-ish schema.
@@ -195,7 +194,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
-- PersonalHub hotfix commit `41920af` (`Fix tag history no-op write amplification`) on `chatgpt/tag-noop-hotfix`; targeted Gradle run PASS for `SyncJournalTest`, `SharedTagEngineTest`, and `TimerSharedTagBridgeTest`; focused `refreshUsageDoesNotRewriteTagsWhenDerivedValuesAreAlreadyCurrent` PASS; `:app:compileDebugKotlin` exit 0.
+- PersonalHub `origin/main` contains hotfix `41920af` (`Fix tag history no-op write amplification`) and compactor `57883c2` (`Add safe Git no-op history compactor`). Targeted Gradle regression tests and `:app:compileDebugKotlin` PASS; `python3 tools/test_cleanup_hub_git_noop_events.py` PASS on exact `origin/main`.
 - gernalix/PersonalHub main and Room schema JSON 21/22.
 - codex-roadmap canonical prompt materializations for 920550, 857906, 707603, 840907, 788606, 913264.
 - 613102 PASS evidence and PersonalHub merged implementation.
@@ -217,4 +216,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Merge and push `chatgpt/tag-noop-hotfix` (`41920af`) into PersonalHub `main`, verify the remote main contains the hotfix, remove the temporary branch/worktree, then resume 920550 from its existing checkpoint without rerunning already-passed targeted tests.
+Resume 920550 from its existing checkpoint; do not rerun already-passed tag-noop or compactor tests unless overlapping code changes invalidate them.
