@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 14:18 Europe/Copenhagen
+Updated: 2026-09-24 14:23 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -13,6 +13,7 @@ The global recovery file owns cross-project orchestration, roadmap infrastructur
 Do not duplicate detailed PH state back into the global file; keep only a concise progress/dependency summary there.
 
 ## Constraints
+- Every non-main PersonalHub branch must be dispositioned before PH closure: compare against final `main`, integrate every unique valid change, prove already-absorbed branches contain no unique work, then delete the remote/local branch. Final accepted PH state is `main` only.
 - User communication steer: status updates in this chat must use plain language with minimal technical jargon; report mainly what was done, what remains, blockers, and the next action.
 - Operational memory only; not canonical roadmap lifecycle state.
 - Do not store chain-of-thought. Store objective, constraints, verified facts, decisions, completed/remaining work, blockers, evidence, acceptance criteria and exactly one Next action.
@@ -88,6 +89,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 Phase 2 is active again and has global priority. Resume 920550 from its existing pushed checkpoint: finish Play/minified artifact measurement and AVD-only synthetic QA, then finalize/integrate 920550 before starting 857906.
 
 ## Verified facts
+- Current remote branch inventory at 2026-09-24 14:23: `task/920550` is 2 commits ahead / 2 behind `main`; `chatgpt/workflowy-integration` is 11 ahead / 2 behind; `chatgpt/105883-since-when` is 0 ahead / 32 behind. Therefore 920550 and Workflowy contain unique work that must be integrated; 105883 contains no unique commit and needs no merge, only final deletion after containment readback.
 - A pre-schema-upgrade PersonalHub DB was measured at ~173 MB because `hub_git_events` contained 108,401 `UPDATE hub_tags` events; 108,123 had identical before/after payloads. The confirmed code path is Timer `persist()` -> `syncTimerNowTags()` -> `TimerSharedTagBridge.syncNow()` -> `SharedTagEngine.replace()/assign()` -> global `HubTagDao.refreshUsage()` plus an unconditional Git `AFTER UPDATE` trigger.
 - Tag/history write-amplification hotfix `41920af` is integrated into PersonalHub `origin/main`; follow-up `57883c2` adds a safe no-op Git-history compactor. Neither changes Room schema/version.
 - For 920550, the selected implementation path is TinyCLIP ONNX int8 downloaded on demand, not bundled in the base APK. Local verification found a ~24 MiB ONNX model with native 512-dimensional text/image embeddings; model card metadata reports MIT license. Verified model SHA-256: `844d1a46ab18acf50c989e541b12fe3b6dc7f8d6004725b4e992d142788e0600`. Tokenizer/preprocessor assets remain separate and downloadable.
@@ -194,7 +196,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Before final migration, inspect the live Pixel DB schema/identity and take immutable backup.
 - Execute external live DB migration to the exact frozen final schema; preserve rollback and validate data/integrity/FK.
 - Install exact final APK on primary Pixel with explicit serial and verify Home + all modules with real data.
-- Reconcile/delete obsolete non-main PH branches after proving their work is absorbed.
+- Integrate `task/920550` and `chatgpt/workflowy-integration` into `main` at their proper serial points; after final containment proof delete them plus `chatgpt/105883-since-when` (already 0-ahead) and any later temporary PH branches.
 - Verify no open PH PR/issue/action remains relevant/unprocessed.
 - Ensure PersonalHub repository ends clean and main-only.
 
