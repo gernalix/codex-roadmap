@@ -2,7 +2,7 @@
 prompt_id: 422308
 status: pending
 project_id: —
-model: GPT-5.6 Terra
+model: GPT-6 Luna
 reasoning: medium
 tags:
   - fedora
