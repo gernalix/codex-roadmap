@@ -14,3 +14,4 @@
 10. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 11. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 12. [[prompts/personalhub-unified-history-search-v1|personalhub-unified-history-search-v1]]
+13. [[prompts/codex-usage-live-publisher-single-writer-runtime-recovery-v1|codex-usage-live-publisher-single-writer-runtime-recovery-v1]]

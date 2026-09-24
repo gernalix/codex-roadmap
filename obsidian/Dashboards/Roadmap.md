@@ -5,6 +5,7 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]]
+- [[obsidian/Prompts/570349 codex-usage-live-publisher-single-writer-runtime-recovery-v1|570349 · Ripristinare il monitoraggio live Codex remoto]]
 
 ## In esecuzione
 
