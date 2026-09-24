@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 17:24 Europe/Copenhagen
+Updated: 2026-09-24 17:27 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -91,6 +91,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 920550 is merged and verified on `main`. Reconcile/integrate `chatgpt/workflowy-integration` onto main, rerun only its affected gates, delete absorbed Workflowy + local 920550 branch, then claim 857906.
 
 ## Verified facts
+- Workflowy source/task branch trees are byte-identical before final integration: `origin/chatgpt/workflowy-integration^{tree}` = `origin/task/workflowy-integration^{tree}` = `03fea6d0f2967cc1ae510957b17ccf313b3b8e68`. Remote PH branches are now only `main` plus those two Workflowy refs. Once PR #43 is contained in main, both side refs are safe to delete.
 - Workflowy protected integration is now PR #43 from `task/workflowy-integration`; previous PR #42 was closed because the integrator correctly rejected the non-task branch naming. The new task branch is tree-identical to the already-tested reconciled Workflowy content.
 - Workflowy reconciliation after 920550 is PASS on local branch head `3348a34`: zero conflicts, consumer-preflight PASS, targeted Workflowy tests PASS, app compile PASS, architecture PASS.
 - Roadmap terminality and Git integration are temporarily split for 920550: canonical roadmap registry now says `completed / PASS`, but PersonalHub PR #41 is still open on head `3f32b8c` and `origin/main` does not yet contain the task. Operational gate for 857906 is therefore stricter than roadmap dependency alone: do not claim 857906 until #41 is merged and Workflowy is integrated.
