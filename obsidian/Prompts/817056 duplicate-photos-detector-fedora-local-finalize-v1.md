@@ -1,20 +1,20 @@
 ---
 prompt_id: 817056
-status: running
+status: blocked
 project_id: 92
 model: GPT-5.5
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/fedora
 ---
 
 # 817056 · Rendere operativo duplicate-photos-detector su Fedora
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../prompts/duplicate-photos-detector-fedora-local-finalize-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/duplicate-photos-detector-fedora-local-finalize-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

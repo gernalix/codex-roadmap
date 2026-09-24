@@ -5,7 +5,6 @@ tags:
 
 # Fedora
 
-- [[obsidian/Prompts/817056 duplicate-photos-detector-fedora-local-finalize-v1|817056 · Rendere operativo duplicate-photos-detector su Fedora]] · `running`
 - [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill|813383 · Attivare il tracciamento SQLite della roadmap]] · `completed`
 - [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237 · Completa il fix del salvataggio Codex sul PC]] · `completed`
 - [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked`
@@ -27,3 +26,4 @@ tags:
 - [[obsidian/Prompts/628541 chatgpt-chrome-rpm-native-transport-test|628541 · Testare Chrome RPM per il bridge ChatGPT]] · `superseded`
 - [[obsidian/Prompts/943492 thinkpad-firmware-123-luks-tpm-recovery-preflight|943492 · Verificare recovery LUKS/TPM prima del firmware ThinkPad 1.23]] · `completed`
 - [[obsidian/Prompts/334210 thinkpad-firmware-123-luks-recovery-followup|334210 · Chiudere il recovery gate LUKS prima del firmware ThinkPad 1.23]] · `completed`
+- [[obsidian/Prompts/817056 duplicate-photos-detector-fedora-local-finalize-v1|817056 · Rendere operativo duplicate-photos-detector su Fedora]] · `blocked`
