@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 12:53 Europe/Copenhagen
+Updated: 2026-09-24 13:01 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -90,6 +90,7 @@ Goal: operate only after 788606 PASS.
 Read the actual final app schema/Room identity from the final commit. Inspect the actual live DB schema/identity on Pixel. Take immutable rollback first. Externally migrate a copy of the real DB through every required delta to the final schema, validate quick_check/integrity/FK and preservation of representative data, then transfer/install the exact final APK and migrated DB using explicit Pixel serial. Smoke Home + every module. Keep rollback until final acceptance.
 
 ## Completed
+- Verified the Kotlin CLIP tokenizer against the official TinyCLIP `tokenizer.json` using six reference phrases (`red jacket`, `black winter jacket`, `giubbotto nero`, `NORTH FACE SUMMIT`, `Copenhagen café`, `shoe 42`); token ID sequences matched exactly. The verification used temporary test resources and left the worktree clean.
 - 920550 implementation checkpoint exists on `task/920550`: foundation commit `8c34afcc94031deef7b59aae4f8ba762449c5326`, refinement commit `36fff1d` pushed to origin. Worktree is clean after the push.
 - Verified 920550 targeted unit tests from one execution: 12 tests / 0 failures / 0 errors across `FinanceCapsuleTest`, `ClipBpeTokenizerTest`, `FinanceSemanticAssetStoreTest`, `FinanceSemanticMathTest`, and `SoldiSearchTest`.
 - 920550 implementation checkpoint committed+pushed on `task/920550`: `8c34afc` (`Checkpoint 920550 semantic photo foundation`). Current task schema is 23 with exported Room schema 23 JSON; no historical Room migration chain was added.
