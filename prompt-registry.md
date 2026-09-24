@@ -14,7 +14,6 @@
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Luna | low |
 | [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1\|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
-| [[obsidian/Prompts/519810 pbf-lifecycle-reconciliation-protocol-v1\|519810 · Rendere obbligatoria la riconciliazione dei PBF]] | pending | — | — | — | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/729874 roadmap-lifecycle-consolidation-fedora-activation-v1\|729874 · Attivare il lifecycle roadmap consolidato su Fedora]] | pending | — | — | — | no | no | — | Prompt infrastructure / Fedora runtime | GPT-6 Luna | low |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-6 Luna | medium |
 | [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1\|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] | pending | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-6 Luna | low |
@@ -111,6 +110,7 @@
 | [[obsidian/Prompts/825405 personalhub-git-history-data-sync-validation-v3\|825405 · Validare cronologia, backup e ripristino dati]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/257387 fedora-context-index-runtime-activation\|257387 · Attiva la timeline unificata Fedora + ActivityWatch]] | completed | 2026-09-22T00:38:54Z | 2026-09-22T00:38:54Z | PASS | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5\|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/519810 pbf-lifecycle-reconciliation-protocol-v1\|519810 · Rendere obbligatoria la riconciliazione dei PBF]] | completed | — | — | PASS | sì | sì | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/724615 personalhub-salute-ui-hub-obsidian\|724615 · Rendere Salute visibile e collegata al resto dell’app]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/862541 personalhub-salute-canonical-integration-v2\|862541 · Portare Salute dentro PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/904631 datasette5-personalhub-explorer-security-deploy-v2\|904631 · Versione online dell’esploratore dati PersonalHub]] | superseded | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |
