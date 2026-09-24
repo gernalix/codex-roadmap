@@ -50,7 +50,7 @@ Extend `gernalix/chrome-codex-switcher` (CSS) so each persistent Chrome context 
 - [ ] Final completion checkpoint.
 
 ## Current step
-Run a disposable real-browser functional test against the now-live `0.4.0` extension: automatic prompt-ID extraction, search payload visibility, manual add/remove, and auto-detected-ID suppression after reload.
+Live daemon and extension are both confirmed at `0.4.0`. Run a disposable real-browser functional test: automatic prompt-ID extraction, search payload visibility, manual add/remove, and auto-detected-ID suppression after reload.
 
 ## Verified facts / implementation
 - Canonical `prompt_bindings` remains untouched as the 1:1 prompt↔Chrome/Codex binding.
@@ -69,7 +69,7 @@ Run a disposable real-browser functional test against the now-live `0.4.0` exten
 - The version alignment was locally edited, tested (66/66 PASS), then a direct commit attempt was blocked by the expected single-writer reference-transaction hook.
 - The canonical local Git writer subsequently reconciled the version change into `origin/main`; current Fedora checkout/origin main is `149f28478dffd57f75bdf7f883444d95b2dc7262`, with both host and pyproject at `0.4.0`.
 - Reinstall from current canonical main now yields daemon runtime version `0.4.0`.
-- Chrome's currently running extension heartbeat still reports `0.3.8`, proving the browser has not yet reloaded the newly deployed unpacked extension.
+- Live Chrome extension heartbeat now reports `0.4.0` with a fresh `seen_at`, confirming the unpacked extension was reloaded successfully without losing the browser session.
 
 ## Commits
 - `2607fa90c55b964b11b859648bd43c2fc7f76837` — main implementation.
@@ -78,6 +78,8 @@ Run a disposable real-browser functional test against the now-live `0.4.0` exten
 - `149f28478dffd57f75bdf7f883444d95b2dc7262` — current canonical CSS main after local writer reconciliation, including runtime version alignment.
 
 ## Evidence
+Checkpoint readback 2026-09-24: CSS checkout is clean at `149f28478dffd57f75bdf7f883444d95b2dc7262`, matching `origin/main`; daemon reports `0.4.0`; live extension heartbeat reports `0.4.0` with fresh heartbeat.
+
 Source gates:
 - Python compile PASS.
 - `python -m unittest discover -s tests -v`: 66/66 PASS.
@@ -93,13 +95,13 @@ Runtime deployment:
 - `chrome-codex-switcher.service`: enabled + active.
 - Deployed extension file version: `0.4.0`.
 - After version alignment/reinstall: daemon version `0.4.0`, health `ok=true`.
-- Live Chrome extension heartbeat remains `version=0.3.8` until browser extension reload.
+- Live Chrome extension heartbeat: `version=0.4.0`; reload confirmed.
 
 ## Completed
-Repository implementation, source tests/CI, Fedora file deployment, daemon restart/health verification, runtime package version alignment, and reinstallation from canonical main.
+Repository implementation, source tests/CI, Fedora file deployment, daemon restart/health verification, runtime package version alignment, reinstallation from canonical main, and live Chrome extension reload to `0.4.0`.
 
 ## Remaining
-Reload live unpacked Chrome extension, confirm heartbeat `0.4.0`, exercise real page prompt-ID indexing/search/manual override behavior, verify clean final state, then mark task completed.
+Exercise real page prompt-ID indexing/search/manual override behavior, verify clean final state, then mark task completed.
 
 ## Blockers
 No product/code blocker. Remote shell GUI automation cannot directly access the Wayland Chrome window through X11 tools; extension reload must use a safe session-preserving mechanism available from the running browser/session rather than forcing an unsafe browser kill.
