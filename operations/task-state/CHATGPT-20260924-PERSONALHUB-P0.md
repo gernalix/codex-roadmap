@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 14:56 Europe/Copenhagen
+Updated: 2026-09-24 15:18 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -88,9 +88,12 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-Phase 2 / 920550: Play/minified build PASS. Complete the isolated current-main size comparison, then run AVD-only synthetic QA for semantic indexing/search/same-object/owned-items/persistence. Do not touch the Pixel.
+920550 AVD QA prerequisite: finish validating the newly created API37.1 Pixel 8a emulator in the real GNOME session. Do not delete legacy AVDs until the new AVD reaches ADB state=device and sys.boot_completed=1. Once proven, keep only one canonical AVD, update MegaVault emulator documentation, then run the dedicated 920550 QA test.
 
 ## Verified facts
+- Emulator cleanup investigation: installed API35/API36 Google APIs x86_64 system images are incomplete for current emulator runtime because they lack `encryptionkey.img`; all AVDs based on them fail immediately with “Encryption is requested but failed to create encrypt partition.”
+- Emulator 37.1.11 crashes when launched outside the real GNOME graphics session (including headless/systemd launches using SwiftShader/off), but remains stable when launched inside the user GNOME environment with `DISPLAY=:0`, `WAYLAND_DISPLAY=wayland-0`, current Mutter Xauthority, `-qt-hide-window`, cold boot and no snapshots.
+- New candidate AVD `PersonalHub_API37_1_Pixel8a` uses Pixel 8a profile + API37.1 `google_apis_playstore_ps16k/x86_64`, 1080×2400, 420 dpi. It remains alive under the real GNOME session and currently presents as `emulator-5554 offline`; final ADB boot validation is the next gate before deleting legacy AVDs or declaring it canonical.
 - Current PH remote branch inventory at 2026-09-24 14:53: only `task/920550` and `chatgpt/workflowy-integration` are real non-main branches. `task/920550` is 2 ahead / 0 behind main; `chatgpt/workflowy-integration` is 11 ahead / 2 behind main. No other PH side branch needs recovery.
 - 920550 Play/minified artifact gate is complete: `app/build/outputs/apk/play/app-play.apk` = 191,469,880 bytes; `app/build/outputs/bundle/play/app-play.aab` = 87,776,741 bytes. Release/play inherit minification and resource shrinking; TinyCLIP weights remain downloaded on demand outside the APK.
 - Current lateral-branch inventory at 2026-09-24 14:24: `task/920550` = 2 ahead / 2 behind main; `chatgpt/workflowy-integration` = 11 ahead / 2 behind; `chatgpt/105883-since-when` = 0 ahead / 32 behind. The last branch has no unique work and is safe to delete immediately; the first two must be integrated only after their respective validation/reconciliation gates.
@@ -238,4 +241,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Run only the remaining 920550 AVD synthetic QA on an emulator/QA package: attach→save→index, semantic search, photos-only regression, same-object shortlist, owned-item create/remove and reopen/persistence. Fix concrete failures only. Then finalize/integrate 920550, verify main containment/schema evidence, reconcile+integrate `chatgpt/workflowy-integration`, and only then start 857906.
+Complete one bounded ADB-readiness check for `PersonalHub_API37_1_Pixel8a`. If it reaches device+boot_completed=1, stop it, rename/recreate it as the single canonical `Pixel_8a`, delete every other non-working AVD, update MegaVault with the canonical AVD name/API/resolution/density and launch requirements, then run `FinanceSemanticPhotoQaDeviceTest` on that emulator only. If ADB stays offline, diagnose only that concrete ADB failure before further cleanup.
