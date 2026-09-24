@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 15:25 Europe/Copenhagen
+Updated: 2026-09-24 15:55 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -44,7 +44,7 @@ Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only g
 - [x] Record the obsolete intermediate PH DB task 383662 as superseded by the specialized final cutover path 913264; never launch 383662.
 - [x] Implement and host-verify the optional PH ↔ Workflowy integration on `chatgpt/workflowy-integration` without a Room schema/version change; detailed checkpoint: `CHATGPT-20260924-PH-WORKFLOWY.md`.
 - [x] Safely park the partially completed 302284 infrastructure task at pushed WIP commit `6f31ceeaa51e5b77b86d2a18620a34079329196a` on `codex-usage-monitor/task/302284`; do not integrate or continue it while PH is actionable.
-- [ ] Resume and finish 920550 from its existing pushed checkpoint; Play/minified APK+AAB gate is complete, AVD-only synthetic QA and canonical integration remain.
+- [ ] Finish 920550: AVD-only synthetic QA is PASS and QA/release fixes are pushed at `0834a24`; one final Play rebuild with the ONNX JNI keep rule plus canonical integration/readback remain.
 - [ ] Reconcile and integrate `chatgpt/workflowy-integration` into the then-current PersonalHub main, rerun affected gates, delete the temporary branch, and record the merged commit.
 - [ ] Run and integrate 857906 after 920550.
 - [ ] Run and integrate 707603 on the resulting schema.
@@ -101,6 +101,7 @@ PersonalHub P0 is now the sole master lane. Resume 920550 from its existing push
 994029 and 966124 may run in parallel in other chats under the repo/resource ownership rule above; neither changes PH priority or may touch PH state.
 
 ## Verified facts
+- 920550 AVD acceptance is now PASS on the sole canonical emulator `Pixel_8a`: dedicated semantic-photo/owned-items instrumentation 1/1 PASS. QA found and fixed release-relevant ABI, temporary-DB Hub Context isolation, and ONNX/R8 JNI issues; PH task branch checkpoint is `0834a2434abe9ddd3a1c43caf23ba646c5bc3923`.
 - Parallel side-lane allowance: 994029 is scoped to `activity-watch-uploader` + ActivityWatch units with read-only central Kuma verification; 966124 is scoped to integrating Telegram collector fixes in `fedora-system-monitor` and reading the private Telegram data repo. Neither touches PersonalHub. Therefore both may run in other chats while PH continues here, provided 994029 does not write `fedora-system-monitor` while 966124 owns it.
 - Current PH side-branch inventory is bounded to two real side branches: `task/920550` (2 commits ahead / 0 behind main) and `chatgpt/workflowy-integration` (11 commits ahead / 2 behind main). No other non-main PH branch contains recoverable work. Required order: finish/integrate 920550 → reconcile/integrate Workflowy branch → delete both only after main containment/semantic absorption is proved.
 - 920550 Play/minified artifacts were produced successfully from the task worktree with release minification/resource shrinking enabled: `app-play.apk` = 191,469,880 bytes and `app-play.aab` = 87,776,741 bytes. Model weights remain outside the base app. The single Gradle build process exited; no duplicate build was launched.
