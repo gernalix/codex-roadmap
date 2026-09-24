@@ -35,9 +35,9 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 - [x] Allocare un PROMPT_ID canonico per il task locale: 422308.
 - [x] Registrare il goal nella roadmap via single writer.
 - [x] Materializzare 422308 nel registry MegaVault: Issue #99 chiusa con status=materialized.
-- [ ] Implementare collector Telegram incrementale e test.
-- [ ] Creare/configurare repo dati privato dedicato.
-- [ ] Installare service+timer systemd --user e lock anti-overlap.
+- [x] Implementare collector Telegram incrementale e test: commit fedora-system-monitor f577f66fb4cc9e354df032ee1b5dea527006ea9e.
+- [x] Creare/configurare repo dati privato dedicato: gernalix/telegram-notification-history, PRIVATE.
+- [x] Installare service+timer systemd --user e lock anti-overlap; unit caricate, timer intenzionalmente disabilitato finché manca la sessione Telegram.
 - [ ] Eseguire login Telegram una tantum senza esporre segreti.
 - [ ] Verificare almeno due run: prima ingestione + seconda no-op.
 - [ ] Verificare commit/push solo con nuovi messaggi.
@@ -47,17 +47,27 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 - [ ] Aggiornare la policy legacy project_id visibile se il metadata strutturato rende il prefisso non più necessario.
 
 ## Completed
+- PROMPT_ID 422308 terminato BLOCKED per solo prerequisito manuale di autorizzazione Telegram; codice/test/runtime preparatorio completati.
+- Commit verificato: fedora-system-monitor f577f66fb4cc9e354df032ee1b5dea527006ea9e (`Add private Telegram notification history collector`).
+- Data repo verificato: gernalix/telegram-notification-history, visibility=private.
+- Config locale installata mode 0600; service/timer caricati; timer lasciato disabled prima del login.
+- RUN1/RUN2 non eseguiti perché TELEGRAM_API_ID/API_HASH sono vuoti e non esiste account.session.
+- Roadmap exception mutation #1042 registra analysis/code_change e manual-prerequisite:telegram-auth.
 - Architettura scelta.
 - Individuato il precedente task 417826 da trattare come baseline storica, non come policy immutabile.
 - PROMPT_ID 422308 allocato.
 - Goal collector registrato/materializzato nella roadmap dal single writer.
 
 ## Remaining
-Deployment locale, creazione data repo e audit sui messaggi reali.
+1. Ottenere TELEGRAM_API_ID e TELEGRAM_API_HASH dall'account Telegram.
+2. Inserirli solo nel config locale insieme al peer target già previsto.
+3. Eseguire una volta il comando login e completare codice Telegram/2FA nel terminale.
+4. Solo dopo nuova evidenza, creare/lanciare un follow-up minimo che esegua RUN1/RUN2, abiliti il timer e chiuda il collector.
+5. Dopo raccolta reale sufficiente, auditare e correggere i producer rumorosi.
 
 ## Blockers
-- Possibile login Telegram/2FA iniziale manuale; deve essere un solo prerequisito, non un loop Codex.
-- Il repo dati dedicato non esiste ancora.
+- Unico blocker: autorizzazione Telegram account-level una tantum. TELEGRAM_API_ID/API_HASH non sono configurati e manca la sessione Telethon.
+- Non lanciare retry Codex prima che il login produca nuova evidenza.
 
 ## Evidence
 - codex-roadmap/completed/telegram-notification-signal-hygiene.md
@@ -71,4 +81,4 @@ Deployment locale, creazione data repo e audit sui messaggi reali.
 PASS della fase collector quando il servizio legge solo la chat target, persiste nuove entry senza duplicati, non espone segreti, il timer è enabled+active, una seconda run senza nuovi messaggi è no-op e il repo privato remoto contiene l'archivio aggiornato.
 
 ## Next action
-Lanciare PROMPT_ID 422308 in Codex; se il runtime richiede login/2FA Telegram, completare la singola autorizzazione manuale e poi riprendere dal checkpoint senza rifare test già PASS.
+Ottenere API ID/hash su my.telegram.org, inserirli nel file locale ~/.config/fedora-telegram-history/collector.env senza condividerli in chat/Git, quindi eseguire il comando login già installato. Dopo `Telegram session is authorized.`, creare il follow-up minimo per RUN1/RUN2 + enable timer; non riaprire 422308.
