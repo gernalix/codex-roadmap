@@ -1,6 +1,6 @@
 ---
 prompt_id: 970051
-status: running
+status: completed
 project_id: 102
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - fedora
   - systemd
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/duplicate-photos-detector
 ---
 
 # 970051 · Migrare duplicate-photos-detector al timer periodico Fedora
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/duplicate-photos-detector|duplicate-photos-detector]]
-- **Prompt:** [[../../prompts/duplicate-photos-detector-fedora-timer-migration-v1|Apri prompt]]
+- **Prompt:** [[../../completed/duplicate-photos-detector-fedora-timer-migration-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
