@@ -27,11 +27,11 @@ EXECUTION_CONTRACT = (
     "and pushed to the intended branch unless the task is explicitly local-only; never "
     "finalize a required fix that exists only in the local checkout. For long-running commands, "
     "prefer one blocking wait or sparse status checks and do not narrate unchanged "
-    "polls. On PASS invoke roadmap_finish.py exactly once with --confirm-executed; it "
-    "handles selected-task completion, out-of-order reconcile and bounded concurrent "
-    "ref-advance push races from fresh origin/main. On BLOCKED/FAIL leave the prompt "
-    "pending and never move it manually to completed. A successful roadmap_finish.py "
-    "response with status=completed|already_completed is authoritative; do not run "
+    "polls. For every terminal outcome invoke roadmap_finish.py exactly once with "
+    "--result PASS|BLOCKED|FAIL|CANCELLED and --confirm-executed. PASS repository work "
+    "may return QUEUED because repo-integrator owns CI/rebase/merge and will submit the "
+    "canonical PASS after merge. Never write roadmap state directly. A successful "
+    "terminal response is authoritative; do not run "
     "follow-up git status/rev-parse/ls-remote or equivalent roadmap checks."
 )
 
