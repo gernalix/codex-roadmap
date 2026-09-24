@@ -64,9 +64,9 @@ Runtime and canonical source integration are complete. The stable non-model coll
 - Live baseline after deployment: peer name resolves as Carlo Visda 2; own `blocked=true`; Telegram blocklist server timestamp is 2026-09-24T14:20:43Z, rendered in `chat_human` as `oggi 16:20 · Sistema · Hai bloccato Carlo Visda 2 · certo`.
 - Peer status is currently `UserStatusRecently(by_me=true)`; therefore no peer-block inference was created. A second systemd sync created zero additional relationship events.
 - Live archive after verification: 79 rows / 79 distinct message IDs; relationship_events=1; peer inferred events=0; both Telegram timers active; auto-delete service Result=success.
-- Relationship-state implementation is pushed on fedora-system-monitor branch `chatgpt/telegram-autodelete-archive` at `f588fd96b849495ffafa05e881dae8361e91c29e`; 16/16 Telegram tests PASS plus py_compile/diff-check.
+- Relationship-state implementation was checkpointed at `f588fd96b849495ffafa05e881dae8361e91c29e` and is now integrated into canonical `fedora-system-monitor/main`; 16/16 Telegram tests PASS plus py_compile/diff-check.
 - Live API pre-deploy readback: target currently reports `UserStatusRecently(by_me=true)`; the user currently has the peer blocked, and Telegram's blocklist provides an exact server block timestamp. No peer-block event is inferred from this baseline because the peer status is not long-time-ago.
-- Source branch: gernalix/fedora-system-monitor chatgpt/telegram-autodelete-archive, based on task/422308; remote head 2fc6c38be783bc2022fa267f0fa46f349c19a39a.
+- Historical source lineage was `task/422308` → `chatgpt/telegram-autodelete-archive`; both temporary branches are now absorbed and removed. Canonical source is `fedora-system-monitor/main` at the 966124 terminal checkpoint.
 - Target discovery returned exactly one recent dialog whose Telegram full metadata reports ttl_period=86400; its identifier/title remain local-only.
 - Archive DB is local under ~/.local/share/fedora-telegram-autodelete with mode-restricted config/data; private chat contents are not committed.
 - First live backfill inserted 61 messages and retained 3 media files; archive footprint at verification was about 1.2 MiB.
@@ -101,7 +101,7 @@ Runtime and canonical source integration are complete. The stable non-model coll
 - Inherent limitation: if Fedora and this collector are unavailable for longer than the chat's 24-hour retention window, messages created and auto-deleted entirely during that outage cannot be recovered afterward.
 
 ## Evidence
-- fedora-system-monitor branch commits through 2fc6c38be783bc2022fa267f0fa46f349c19a39a.
+- Historical branch commits through `2fc6c38be783bc2022fa267f0fa46f349c19a39a`, followed by relationship-state reconciliation; canonical integrated main is recorded in `operations/task-state/966124.md`.
 - Test gate after the human-view/action update: 14 tests PASS plus py_compile and diff-check; previously verified shell/systemd gates remain valid.
 - Live archive: 61 rows / 61 distinct IDs after two reconciliations; 3 media files retained.
 - Live systemd: both timers enabled+active; concurrent service start returned success for both collectors.
