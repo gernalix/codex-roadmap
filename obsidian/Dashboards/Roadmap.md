@@ -10,4 +10,3 @@
 ## In esecuzione
 
 - [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]]
-- [[obsidian/Prompts/422308 telegram-notification-history-fedora-collector-v1|422308 · Archiviare automaticamente le notifiche Telegram per ridurre il rumore]]

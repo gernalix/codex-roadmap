@@ -5,7 +5,6 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1\|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]] | running | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
-| [[obsidian/Prompts/422308 telegram-notification-history-fedora-collector-v1\|422308 · Archiviare automaticamente le notifiche Telegram per ridurre il rumore]] | running | — | — | — | no | no | — | Fedora / Telegram notification hygiene | GPT-6 Luna | medium |
 | [[obsidian/Prompts/222733 stop-runaway-788315-heartbeat\|222733 · Ferma il heartbeat Codex runaway di 788315]] | pending | — | — | — | no | no | — | Fedora / Codex runtime | GPT-6 Luna | low |
 | [[obsidian/Prompts/857906 personalhub-unified-history-search-v1\|857906 · PersonalHub — History/Search unica cross-module]] | pending | — | — | — | no | no | — | PersonalHub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
@@ -395,3 +394,4 @@
 | [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1\|697920 · Rendere ChatGPTExporter resiliente e affidabile]] | blocked | 2026-09-24T02:12:33Z | 2026-09-24T02:12:33Z | BLOCKED | sì | no | — | Prompt infrastructure | GPT-6 Sol | medium |
 | [[obsidian/Prompts/383662 personalhub-v60-live-db-20-21-migration-v1\|383662 · Migrare il DB reale 20→21 e validare PersonalHub v60]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/641903 ccs-pbf-final-live-retry-v1\|641903 · Chiudere il leaf PBF finale di Codex Desktop]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-6 Luna | low |
+| [[obsidian/Prompts/422308 telegram-notification-history-fedora-collector-v1\|422308 · Archiviare automaticamente le notifiche Telegram per ridurre il rumore]] | blocked | — | — | BLOCKED | no | no | — | Fedora / Telegram notification hygiene | GPT-6 Luna | medium |
