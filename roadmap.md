@@ -18,4 +18,4 @@
 14. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 15. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 16. [[prompts/ccs-pbf-final-live-routing-safe-retry-v1|ccs-pbf-final-live-routing-safe-retry-v1]]
-17. [[prompts/telegram-history-runtime-closure-v1|telegram-history-runtime-closure-v1]]
+17. [[prompts/telegram-history-runtime-closure-v2|telegram-history-runtime-closure-v2]]

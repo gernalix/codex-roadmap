@@ -29,7 +29,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[417826 prompt-417826|417826]]
-- **Figli/follow-up:** [[333860 telegram-history-runtime-closure-v1|333860]]
+- **Figli/follow-up:** [[333860 telegram-history-runtime-closure-v1|333860]], [[966124 telegram-history-runtime-closure-v2|966124]]
 - **Chat Codex:** Nuova chat Codex; collector Telegram locale + repo dati privato. Nessun audit generale dei producer in questa fase.
 
 ## Spiegazione

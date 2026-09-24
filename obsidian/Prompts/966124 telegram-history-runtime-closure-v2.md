@@ -1,6 +1,6 @@
 ---
-prompt_id: 333860
-status: superseded
+prompt_id: 966124
+status: pending
 project_id: 15
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - runtime-closure
   - telegram
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/fedora-fedora-system-monitor
 ---
 
-# 333860 · Chiudere il collector Telegram dopo autorizzazione e collaudo
+# 966124 · Chiudere il collector Telegram dopo autorizzazione e collaudo
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/fedora-fedora-system-monitor|Fedora / fedora-system-monitor]]
-- **Prompt:** [[../../falliti/telegram-history-runtime-closure-v1|Apri prompt]]
+- **Prompt:** [[../../prompts/telegram-history-runtime-closure-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -26,9 +26,9 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
-- **Padri/precedenti:** [[422308 telegram-notification-history-fedora-collector-v1|422308]]
-- **Figli/follow-up:** [[966124 telegram-history-runtime-closure-v2|966124]]
-- **Chat Codex:** Follow-up minimo di 422308; integra solo i fix già verificati e registra il PASS runtime.
+- **Padri/precedenti:** [[333860 telegram-history-runtime-closure-v1|333860]], [[422308 telegram-notification-history-fedora-collector-v1|422308]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Follow-up minimo corretto di 422308; integra solo i fix già verificati e registra il PASS runtime.
 
 ## Spiegazione
 
