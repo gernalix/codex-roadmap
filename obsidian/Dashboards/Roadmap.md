@@ -4,6 +4,7 @@
 
 ## Lanciabili adesso
 
+- [[obsidian/Prompts/222733 stop-runaway-788315-heartbeat|222733 · Ferma il heartbeat Codex runaway di 788315]]
 - [[obsidian/Prompts/857906 personalhub-unified-history-search-v1|857906 · PersonalHub — History/Search unica cross-module]]
 - [[obsidian/Prompts/519810 pbf-lifecycle-reconciliation-protocol-v1|519810 · Rendere obbligatoria la riconciliazione dei PBF]]
 - [[obsidian/Prompts/729874 roadmap-lifecycle-consolidation-fedora-activation-v1|729874 · Attivare il lifecycle roadmap consolidato su Fedora]]

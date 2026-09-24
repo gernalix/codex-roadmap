@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[736284 chatgpt-exporter-live-chrome-first-archive-v1|736284]]
-- **Figli/follow-up:** [[254859 chatgpt-exporter-archive-validation-v1|254859]], [[515185 chatgpt-exporter-find-tab-runtime-recovery-v2|515185]]
+- **Figli/follow-up:** [[222733 stop-runaway-788315-heartbeat|222733]], [[254859 chatgpt-exporter-archive-validation-v1|254859]], [[515185 chatgpt-exporter-find-tab-runtime-recovery-v2|515185]]
 - **Chat Codex:** Continua nella stessa chat Codex di 736284; riusa il contesto runtime già raccolto.
 
 ## Spiegazione
