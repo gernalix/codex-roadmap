@@ -1,18 +1,18 @@
 ---
 prompt_id: 697920
-status: pending
+status: running
 project_id: 92
 model: GPT-6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/prompt-infrastructure
 ---
 
 # 697920 · Rendere ChatGPTExporter resiliente e affidabile
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../prompts/chatgpt-exporter-resilience-hardening-v1|Apri prompt]]
 - **Primo lancio:** —

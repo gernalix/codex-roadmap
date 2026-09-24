@@ -7,7 +7,7 @@
 3. [[prompts/personalhub-global-since-when-v2|personalhub-global-since-when-v2]]
 4. [[prompts/codex-usage-live-publisher-single-writer-runtime-recovery-v1|codex-usage-live-publisher-single-writer-runtime-recovery-v1]]
 5. [[prompts/unified-kuma-cross-repo-control-plane-v1|unified-kuma-cross-repo-control-plane-v1]]
-6. [[prompts/ccs-pbf-live-final-closure-v1|ccs-pbf-live-final-closure-v1]]
+6. [[prompts/chatgpt-exporter-resilience-hardening-v1|chatgpt-exporter-resilience-hardening-v1]]
 7. [[prompts/grindr-export-chatgpt-desktop-end-to-end-v1|grindr-export-chatgpt-desktop-end-to-end-v1]]
 8. [[prompts/personalhub-git-history-final-validation-v4|personalhub-git-history-final-validation-v4]]
 9. [[prompts/personalhub-datasette-lite-offline-runtime-v4|personalhub-datasette-lite-offline-runtime-v4]]
@@ -19,4 +19,3 @@
 15. [[prompts/pbf-lifecycle-reconciliation-protocol-v1|pbf-lifecycle-reconciliation-protocol-v1]]
 16. [[prompts/sqlite-to-obsidian-fedora-bootstrap-v1|sqlite-to-obsidian-fedora-bootstrap-v1]]
 17. [[prompts/roadmap-lifecycle-consolidation-fedora-activation-v1|roadmap-lifecycle-consolidation-fedora-activation-v1]]
-18. [[prompts/chatgpt-exporter-resilience-hardening-v1|chatgpt-exporter-resilience-hardening-v1]]

@@ -1,20 +1,20 @@
 ---
 prompt_id: 996591
-status: running
+status: blocked
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../prompts/ccs-pbf-live-final-closure-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/ccs-pbf-live-final-closure-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

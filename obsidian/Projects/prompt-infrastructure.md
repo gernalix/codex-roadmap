@@ -6,7 +6,7 @@ tags:
 # Prompt infrastructure
 
 - [[obsidian/Prompts/254859 chatgpt-exporter-archive-validation-v1|254859 · Verificare completezza e correttezza dell’export ChatGPT]] · `running`
-- [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1|697920 · Rendere ChatGPTExporter resiliente e affidabile]] · `pending`
+- [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1|697920 · Rendere ChatGPTExporter resiliente e affidabile]] · `running`
 - [[obsidian/Prompts/736284 chatgpt-exporter-live-chrome-first-archive-v1|736284 · Sbloccare ChatGPTExporter e creare il primo archivio]] · `blocked`
 - [[obsidian/Prompts/788315 chatgpt-exporter-live-recovery-after-736284-v1|788315 · Riparare ChatGPTExporter e completare il primo archivio]] · `blocked`
 - [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1|925731 · Attivare storico unificato ChatGPT e Codex]] · `completed`
