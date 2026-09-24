@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 15:18 Europe/Copenhagen
+Updated: 2026-09-24 15:31 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -88,9 +88,13 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-920550 AVD QA prerequisite: finish validating the newly created API37.1 Pixel 8a emulator in the real GNOME session. Do not delete legacy AVDs until the new AVD reaches ADB state=device and sys.boot_completed=1. Once proven, keep only one canonical AVD, update MegaVault emulator documentation, then run the dedicated 920550 QA test.
+Canonical emulator setup is complete. 920550 QA now reaches app logic and fails on a concrete Hub Context entity-binding error during synthetic finance transaction save. Determine whether the QA bridge omitted required canonical-entity setup or production save ordering is wrong; apply the smallest correct fix, rerun only the dedicated QA test, then continue 920550 finalization.
 
 ## Verified facts
+- Canonical emulator cleanup completed: repaired the official API36 Google APIs x86_64 system image to revision 7 (restoring missing `encryptionkey.img`), recreated `Pixel_8a`, and proved `emulator-5554` reaches ADB `device` + `sys.boot_completed=1`. Runtime identity: API 36, 1080×2400, 420 dpi. All other legacy/temporary AVDs were deleted; `emulator -list-avds` now returns only `Pixel_8a`.
+- MegaVault emulator docs were updated in isolated repo task 920550 and queued as MegaVault PR #106: canonical AVD `Pixel_8a`, API36 rev7, screen coordinate bounds x=0..1079/y=0..2399, center=(540,1200), live serial resolution, and real GNOME-session launch requirements.
+- 920550 QA packaging blocker fixed locally: QA previously packaged only `armeabi-v7a` for the TCL, so x86_64 emulator install failed with `INSTALL_FAILED_NO_MATCHING_ABIS`. QA now packages both `armeabi-v7a` and `x86_64`; rebuilt QA + androidTest artifacts PASS and install successfully on the canonical emulator.
+- First real `FinanceSemanticPhotoQaDeviceTest` execution now reaches app logic but fails at `HubContextRepository.bind` with `IllegalArgumentException: Canonical entity does not exist` during `FinanceCapsule.saveTransaction`. This is the current concrete 920550 blocker; diagnose/fix only this path before rerunning the single QA test.
 - Emulator cleanup investigation: installed API35/API36 Google APIs x86_64 system images are incomplete for current emulator runtime because they lack `encryptionkey.img`; all AVDs based on them fail immediately with “Encryption is requested but failed to create encrypt partition.”
 - Emulator 37.1.11 crashes when launched outside the real GNOME graphics session (including headless/systemd launches using SwiftShader/off), but remains stable when launched inside the user GNOME environment with `DISPLAY=:0`, `WAYLAND_DISPLAY=wayland-0`, current Mutter Xauthority, `-qt-hide-window`, cold boot and no snapshots.
 - New candidate AVD `PersonalHub_API37_1_Pixel8a` uses Pixel 8a profile + API37.1 `google_apis_playstore_ps16k/x86_64`, 1080×2400, 420 dpi. It remains alive under the real GNOME session and currently presents as `emulator-5554 offline`; final ADB boot validation is the next gate before deleting legacy AVDs or declaring it canonical.
@@ -241,4 +245,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Complete one bounded ADB-readiness check for `PersonalHub_API37_1_Pixel8a`. If it reaches device+boot_completed=1, stop it, rename/recreate it as the single canonical `Pixel_8a`, delete every other non-working AVD, update MegaVault with the canonical AVD name/API/resolution/density and launch requirements, then run `FinanceSemanticPhotoQaDeviceTest` on that emulator only. If ADB stays offline, diagnose only that concrete ADB failure before further cleanup.
+Inspect only `FinanceSemanticQaBridge`, `FinanceCapsule.saveTransaction`, `HubContextRuntime.saveFinanceTransactionLinksIfInitialized` and `HubContextRepository.bind` to explain the missing canonical entity. Fix the narrowest correct layer, rebuild only QA/test artifacts if needed, rerun `FinanceSemanticPhotoQaDeviceTest` on `emulator-5554`, then checkpoint before finalizing 920550.
