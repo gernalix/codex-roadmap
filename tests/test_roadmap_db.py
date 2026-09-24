@@ -413,6 +413,112 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertEqual(["444444"],attention)
             conn.close()
 
+    def test_pbf_dispositions_are_recursive_cycle_safe_and_preserve_history(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+
+            def add(prompt_id, status="pending", path=None):
+                db.register_prompt(
+                    conn,
+                    prompt_id=prompt_id,
+                    slug=f"p-{prompt_id}",
+                    title=f"P {prompt_id}",
+                    current_path=path or f"prompts/{prompt_id}.md",
+                    project_name="Example",
+                    repo="gernalix/example",
+                    status=status,
+                )
+
+            # A real leaf PBF remains actionable.
+            add("100001", status="blocked")
+
+            # Explicit successors in every live phase make the parent covered.
+            add("100002", status="blocked"); add("200002", status="pending")
+            db.add_relation(conn,"100002","200002","fix",actor="chatgpt")
+            add("100003", status="blocked"); add("200003", status="pending")
+            db.set_status(conn,"200003","running",actor="codex",note="launch")
+            db.add_relation(conn,"100003","200003","followup",actor="chatgpt")
+            add("100004", status="blocked"); add("200004", status="completed")
+            db.add_relation(conn,"100004","200004","fix",actor="chatgpt")
+
+            # Multi-hop paths are followed without requiring the intermediate
+            # failure itself to become active.
+            add("100005", status="blocked"); add("200005", status="blocked"); add("300005", status="pending")
+            db.add_relation(conn,"100005","200005","fix",actor="chatgpt")
+            db.add_relation(conn,"200005","300005","followup",actor="chatgpt")
+
+            # resolved_by to a completed successor is stronger than covered.
+            add("100006", status="blocked"); add("200006", status="completed")
+            db.add_relation(conn,"100006","200006","resolved_by",actor="chatgpt")
+
+            # A completed prompt with a historical non-PASS execution is a
+            # resolved PBF; the historical execution outcome remains unchanged.
+            add("100007", status="completed")
+            db.record_execution(
+                conn,
+                "100007",
+                cycle_key="historical-blocked-100007",
+                outcome="BLOCKED",
+                source="codex-usage",
+            )
+
+            # A cycle with no active/completed successor must terminate safely
+            # and remain actionable rather than disappearing.
+            add("100008", status="blocked"); add("200008", status="blocked")
+            db.add_relation(conn,"100008","200008","followup",actor="chatgpt")
+            db.add_relation(conn,"200008","100008","followup",actor="chatgpt")
+
+            # Intentional terminal states are waived only with evidence.
+            add("100009")
+            db.set_status(conn,"100009","cancelled",actor="chatgpt",note="user intentionally closed")
+            add("100010", status="cancelled")
+            add("100011"); add("200011", status="blocked")
+            db.add_relation(conn,"100011","200011","replacement",actor="chatgpt",note="intentional replacement")
+
+            # Historical stubs do not create invented repair work.
+            db.ensure_historical_stub(conn,"100012",title="Historical",status="unknown")
+
+            conn.commit()
+            dispositions={
+                row["prompt_id"]: row["pbf_disposition"]
+                for row in conn.execute(
+                    "SELECT prompt_id,pbf_disposition FROM v_pbf_dispositions"
+                )
+            }
+            self.assertEqual("needs_fix",dispositions["100001"])
+            self.assertEqual("covered",dispositions["100002"])
+            self.assertEqual("covered",dispositions["100003"])
+            self.assertEqual("covered",dispositions["100004"])
+            self.assertEqual("covered",dispositions["100005"])
+            self.assertEqual("resolved",dispositions["100006"])
+            self.assertEqual("resolved",dispositions["100007"])
+            self.assertEqual("needs_fix",dispositions["100008"])
+            self.assertEqual("needs_fix",dispositions["200008"])
+            self.assertEqual("waived",dispositions["100009"])
+            self.assertEqual("needs_fix",dispositions["100010"])
+            self.assertEqual("waived",dispositions["100011"])
+            self.assertEqual("historical_unclassified",dispositions["100012"])
+
+            self.assertEqual(
+                "BLOCKED",
+                conn.execute(
+                    "SELECT outcome FROM executions WHERE cycle_key='historical-blocked-100007'"
+                ).fetchone()[0],
+            )
+            attention={
+                row["prompt_id"]
+                for row in conn.execute("SELECT prompt_id FROM v_attention")
+            }
+            self.assertIn("100001",attention)
+            self.assertIn("100008",attention)
+            self.assertIn("200008",attention)
+            self.assertIn("100010",attention)
+            self.assertNotIn("100002",attention)
+            self.assertNotIn("100006",attention)
+            self.assertNotIn("100012",attention)
+            conn.close()
+
     def test_running_prompt_is_immutable_to_roadmap_edits(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
