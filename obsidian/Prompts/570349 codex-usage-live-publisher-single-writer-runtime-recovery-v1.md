@@ -1,6 +1,6 @@
 ---
 prompt_id: 570349
-status: pending
+status: running
 project_id: 92
 model: GPT-6 Luna
 reasoning: medium
@@ -11,13 +11,13 @@ tags:
   - live-monitoring
   - single-writer
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/github-autosync-fedora-runtime
 ---
 
 # 570349 · Ripristinare il monitoraggio live Codex remoto
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/github-autosync-fedora-runtime|GitHub Autosync / Fedora runtime]]
 - **Prompt:** [[../../prompts/codex-usage-live-publisher-single-writer-runtime-recovery-v1|Apri prompt]]
 - **Primo lancio:** —
