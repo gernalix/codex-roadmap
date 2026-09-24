@@ -22,7 +22,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** —
+- **Sblocca:** [[812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553]]
 - **Padri/precedenti:** [[788315 chatgpt-exporter-live-recovery-after-736284-v1|788315]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat Codex breve; solo runtime automation locale

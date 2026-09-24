@@ -1,20 +1,20 @@
 ---
 prompt_id: 254859
-status: running
+status: blocked
 project_id: 92
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/prompt-infrastructure
 ---
 
 # 254859 · Verificare completezza e correttezza dell’export ChatGPT
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
-- **Prompt:** [[../../prompts/chatgpt-exporter-archive-validation-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/chatgpt-exporter-archive-validation-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[788315 chatgpt-exporter-live-recovery-after-736284-v1|788315]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553]]
 - **Chat Codex:** Nuova chat Codex; task autonomo di validazione locale. Non riaprire i vecchi blocker dell’estensione.
 
 ## Spiegazione
