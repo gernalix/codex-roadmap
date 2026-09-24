@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 14:27 Europe/Copenhagen
+Updated: 2026-09-24 14:37 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -50,7 +50,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [x] Verify tokenizer against the official model tokenizer and pass targeted unit/DB tests.
 - [x] Pass consumer-preflight, Soldi compile, architecture gate and full debug app build.
 - [x] Verify real-model synthetic same-object/text-image ranking and measure debug APK/runtime size.
-- [ ] Finish Play/minified artifact measurement.
+- [x] Finish Play/minified artifact measurement for 920550 artifact; baseline-main comparison build is also running from an isolated temporary worktree for exact delta.
 - [ ] Run AVD-only synthetic QA for save→index, search, photos-only regression, same-object shortlist, owned-item create/remove and persistence.
 - [ ] Finalize 920550 through `roadmap_finish.py`, wait only via non-model integration/readback, then inspect the merged main diff/schema/evidence before unblocking 857906.
 
@@ -87,7 +87,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-Phase 2 is active again and has global priority. Resume 920550 from its existing pushed checkpoint: finish Play/minified artifact measurement and AVD-only synthetic QA, then finalize/integrate 920550 before starting 857906.
+Phase 2 / 920550: Play/minified build PASS. Complete the isolated current-main size comparison, then run AVD-only synthetic QA for semantic indexing/search/same-object/owned-items/persistence. Do not touch the Pixel.
 
 ## Verified facts
 - Current lateral-branch inventory at 2026-09-24 14:24: `task/920550` = 2 ahead / 2 behind main; `chatgpt/workflowy-integration` = 11 ahead / 2 behind; `chatgpt/105883-since-when` = 0 ahead / 32 behind. The last branch has no unique work and is safe to delete immediately; the first two must be integrated only after their respective validation/reconciliation gates.
@@ -163,6 +163,8 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 920550 rebased cleanly onto current PersonalHub main `57883c2531400efacbefd2c63182bc11833f9537` and force-with-lease pushed as `02f79639dde0797b44a242f931366b0038556193`; no conflicts.
+- 920550 minified Play build PASS after rebase: `:app:assemblePlay :app:bundlePlay --no-configuration-cache` completed successfully. Produced signed/minified APK 191,469,880 bytes (182.60 MiB) and AAB 87,776,741 bytes (83.71 MiB). ONNX Runtime compressed payload is 129.04 MiB in the universal APK and 51.59 MiB across all ABI slices in the AAB; model weights remain outside the app artifact.
 - Deleted absorbed branch `chatgpt/105883-since-when` after proving it was 0 commits ahead / 32 behind current main; no merge was needed because it contained no unique work.
 - 920550 full `:app:assembleDebug` PASS on the task worktree. Baseline `PersonalHub/main` debug APK = 144,942,990 bytes (138.23 MiB); 920550 debug APK = 280,674,045 bytes (267.67 MiB); universal-debug delta = 135,731,055 bytes / 129.44 MiB (+93.64%). Zip inspection shows 129.04 MiB of that is ONNX Runtime native libraries duplicated across arm64-v8a, armeabi-v7a, x86 and x86_64; the arm64-v8a runtime payload actually needed by the primary Pixel is ~31.57 MiB. Model weights remain outside the APK.
 - Host-side real-model synthetic retrieval check PASS for the acceptance intent: same synthetic jacket under changed background/rotation scored 0.8904 vs 0.7926 for a shoe distractor, so the same object enters and ranks above the distractor shortlist; `black jacket` text-image scores ranked both jacket variants above the shoe.
