@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 13:30 Europe/Copenhagen
+Updated: 2026-09-24 14:18 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -24,6 +24,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - Do not migrate the user's live DB to an intermediate schema. Back up/inspect early; apply the final external one-shot migration only after the PH schema is frozen.
 - Do not add permanent historical Room migrations to the APK merely to migrate this one live DB. Migration of the user's DB is an external/local operation.
 - Preserve immutable rollback: current DB + WAL/SHM where relevant + recoverable current APK/reference before final cutover.
+- At final cutover, use the **freshest coherent PersonalHub DB available**, not automatically the oldest known backup or the easiest copy. Inventory the live Pixel DB plus viable local/export/backup candidates, compare real data freshness/provenance, and select the newest consistent source before migration.
 - One PH schema-changing implementation at a time. Avoid concurrent PH tasks that touch PersonalHubDatabase/schema/DAO because previous overlap caused schema-version collisions.
 - Final PH remote state should be main only; delete obsolete/fully absorbed branches after final verification.
 - Avoid intermediate PRs unless required by the repository single-writer/integrator protocol. Do not bypass protected writer flow.
@@ -70,8 +71,9 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] Freeze exact final main commit, schema version/identity and final APK/AAB hashes/paths.
 
 ### Phase 7 — 913264 live DB migration and Pixel cutover
-- [ ] Read actual live Pixel DB schema/identity with explicit Pixel serial.
-- [ ] Take immutable rollback backup of DB/WAL/SHM and recoverable current APK/reference.
+- [ ] Inventory all viable PH DB sources at cutover (live Pixel DB plus local/export/backup copies), record provenance/timestamps/data freshness, and select the freshest coherent source.
+- [ ] Read the selected freshest source DB schema/identity; when the Pixel source is involved use the explicit Pixel serial.
+- [ ] Take immutable rollback backup of the selected freshest source DB/WAL/SHM and recoverable current APK/reference before any migration/write.
 - [ ] Externally migrate a copy of the real DB directly to the frozen final schema.
 - [ ] Pass SQLite quick_check/integrity/FK and representative-data preservation checks.
 - [ ] Install the exact frozen final APK on the primary Pixel using explicit serial.
@@ -83,7 +85,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-Parked by global serialization after safe pushed checkpoints on task/920550. Do not resume Play/minified measurement or AVD QA until the global master lane explicitly re-enters PersonalHub P0.
+Phase 2 is active again and has global priority. Resume 920550 from its existing pushed checkpoint: finish Play/minified artifact measurement and AVD-only synthetic QA, then finalize/integrate 920550 before starting 857906.
 
 ## Verified facts
 - A pre-schema-upgrade PersonalHub DB was measured at ~173 MB because `hub_git_events` contained 108,401 `UPDATE hub_tags` events; 108,123 had identical before/after payloads. The confirmed code path is Timer `persist()` -> `syncTimerNowTags()` -> `TimerSharedTagBridge.syncNow()` -> `SharedTagEngine.replace()/assign()` -> global `HubTagDao.refreshUsage()` plus an unconditional Git `AFTER UPDATE` trigger.
@@ -147,7 +149,8 @@ Goal: operate only after 788606 PASS.
 Read the actual final app schema/Room identity from the final commit. Inspect the actual live DB schema/identity on Pixel. Take immutable rollback first. Externally migrate a copy of the real DB through every required delta to the final schema, validate quick_check/integrity/FK and preservation of representative data, then transfer/install the exact final APK and migrated DB using explicit Pixel serial. Smoke Home + every module. Keep rollback until final acceptance.
 
 ## Decisions
-- Global recovery serialization override: 920550 is parked at its safe pushed checkpoint while the master Phase 2 infrastructure lane runs. Roadmap status remains `running` only because the lifecycle has no pause state; this does not mean a model/process is actively executing it.
+- At 913264, choose the freshest coherent DB candidate available at cutover using actual data freshness/provenance and consistency checks; do not prefer an older backup merely because it is already local.
+- Global priority override: PersonalHub P0 is the master recovery lane again. 920550 resumes from its safe pushed checkpoint; non-PH recovery remains parked until PH 913264 PASS unless PH becomes truly blocked.
 - Keep the PH P0 chain serial whenever schema/database work can overlap: `920550 -> 857906 -> 707603 -> 840907 -> 788606 -> 913264`.
 - Do not migrate the live Pixel DB to intermediate schemas; perform one external migration only after the final schema is frozen.
 - Do not add permanent historical Room migrations solely for the user's current live DB.
@@ -224,4 +227,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Wait for the global master checkpoint to explicitly hand control back to PersonalHub P0. Then resume 920550 from the existing pushed checkpoint with Play/minified size measurement and AVD-only synthetic QA; do not rerun already-passed gates.
+Resume 920550 now from the existing pushed checkpoint. Complete only its remaining Play/minified-size measurement and AVD synthetic QA, fix concrete failures only, then finalize through the canonical integration flow. After 920550 merges, continue serially through 857906 → 707603 → 840907 → 788606 → 913264; at final cutover migrate the freshest coherent PH DB available.
