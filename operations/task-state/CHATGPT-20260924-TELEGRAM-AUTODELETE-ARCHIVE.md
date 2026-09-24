@@ -1,7 +1,7 @@
 # Operational task state — Telegram auto-delete archive
 
 TASK_ID: CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE
-Updated: 2026-09-24 15:05 Europe/Copenhagen
+Updated: 2026-09-24 15:10 Europe/Copenhagen
 
 ## Objective
 Preserve the complete available history of one Telegram chat configured with 1-day auto-delete, without duplicate storage, while retaining edits and deletion metadata and keeping archived content after Telegram removes it.
@@ -65,6 +65,7 @@ Runtime work is complete and operational, including the human-readable view and 
 - Before the shared lock was deployed, a discovery process reproduced a real Telethon session database-lock failure in the technical collector; the deployed serialization directly addresses that failure mode.
 - The supplied UI/DB comparison was verified against Telegram itself: the blank rows at the corresponding call times are `MessageActionPhoneCall` records with `PhoneCallDiscardReasonMissed`; the collector previously archived their rows but discarded the action object. The live DB now preserves those actions and renders them human-readably.
 - `messages_human` formats current dates as `oggi H:MM`, previous-day dates as `ieri H:MM`, older dates as Italian `EEE d/m/yy H:MM`, and resolves sender names without exposing IDs. One already-expired legacy blank row could no longer have its action reconstructed, but its sender name is resolved from other rows with the same sender identity.
+- Fresh live readback at 15:09 confirmed `messages_human` contains 8 phone-call rows: the screenshot-era 19:37/19:40/19:42/19:48 events render as `ieri … · Daniele · Chiamata annullata`, and newer call events are also classified; archive remains 61 rows / 61 distinct message IDs. Both Telegram timers are active and the auto-delete service Result remains success.
 
 ## Decisions
 - Use SQLite as the canonical local archive for the private auto-delete chat; Git stores source/checkpoints, not the private transcript.
@@ -92,6 +93,7 @@ Runtime work is complete and operational, including the human-readable view and 
 - Live systemd: both timers enabled+active; concurrent service start returned success for both collectors.
 - Scheduled runtime proof at 2026-09-24 14:30 Europe/Copenhagen: both timer-triggered services completed successfully with no session lock error.
 - Live migration backup created before schema/view update; post-deploy service Result=success. The live human view shows the supplied call events as `ieri 19:37/19:40/19:42/19:48 · Daniele · Chiamata annullata`, with zero `Sconosciuto`/`Sistema` senders after fallback resolution.
+- 15:09 live readback: `messages_human` reports 8 call-action rows total; DB uniqueness still 61/61; both Telegram timers `active`; `telegram-autodelete-archive.service` Result=`success`.
 - Official Telethon documentation confirms that simultaneous clients should not share the same SQLite session; deployed services now serialize on ~/.cache/fedora-telegram-history/session.lock.
 
 ## Acceptance criteria
