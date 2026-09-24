@@ -1,18 +1,18 @@
 ---
 prompt_id: 994029
-status: pending
+status: running
 project_id: —
 model: GPT-6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/fedora-uptime-kuma
 ---
 
 # 994029 · Chiudi il cutover runtime Kuma rimasto da 620949
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/fedora-uptime-kuma|Fedora / Uptime Kuma]]
 - **Prompt:** [[../../prompts/kuma-620949-final-runtime-cutover-v1|Apri prompt]]
 - **Primo lancio:** —
