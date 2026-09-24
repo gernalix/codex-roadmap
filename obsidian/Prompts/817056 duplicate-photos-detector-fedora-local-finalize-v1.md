@@ -1,18 +1,18 @@
 ---
 prompt_id: 817056
-status: blocked
+status: superseded
 project_id: 92
 model: GPT-5.5
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/fedora
 ---
 
 # 817056 · Rendere operativo duplicate-photos-detector su Fedora
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../falliti/duplicate-photos-detector-fedora-local-finalize-v1|Apri prompt]]
 - **Primo lancio:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[620949 unified-kuma-cross-repo-control-plane-v1|620949]]
 - **Chat Codex:** Nuova chat Codex; task locale Fedora. Il codice remoto è già implementato e CI PASS: intervenire sul sorgente solo se uno smoke locale prova un bug.
 
 ## Spiegazione

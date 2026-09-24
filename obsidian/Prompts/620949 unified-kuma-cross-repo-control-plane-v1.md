@@ -23,7 +23,7 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
-- **Padri/precedenti:** —
+- **Padri/precedenti:** [[817056 duplicate-photos-detector-fedora-local-finalize-v1|817056]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat Codex dedicata; unico goal cross-repo per il cutover Kuma.
 

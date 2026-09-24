@@ -1,6 +1,5 @@
 # Da controllare
 
-- [[obsidian/Prompts/817056 duplicate-photos-detector-fedora-local-finalize-v1|817056 · Rendere operativo duplicate-photos-detector su Fedora]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/572554 ccs-desktop-launcher-overlay-recovery-v3|572554 · Completare launcher e overlay Codex Desktop con progetto corretto]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/613408 ccs-desktop-launcher-overlay-recovery-v2|613408 · Completare launcher e overlay Codex Desktop]] · `blocked` · analizzato=sì · fix=572554
 - [[obsidian/Prompts/284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio]] · `blocked` · analizzato=no · fix=—

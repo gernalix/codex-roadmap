@@ -26,4 +26,4 @@ tags:
 - [[obsidian/Prompts/628541 chatgpt-chrome-rpm-native-transport-test|628541 · Testare Chrome RPM per il bridge ChatGPT]] · `superseded`
 - [[obsidian/Prompts/943492 thinkpad-firmware-123-luks-tpm-recovery-preflight|943492 · Verificare recovery LUKS/TPM prima del firmware ThinkPad 1.23]] · `completed`
 - [[obsidian/Prompts/334210 thinkpad-firmware-123-luks-recovery-followup|334210 · Chiudere il recovery gate LUKS prima del firmware ThinkPad 1.23]] · `completed`
-- [[obsidian/Prompts/817056 duplicate-photos-detector-fedora-local-finalize-v1|817056 · Rendere operativo duplicate-photos-detector su Fedora]] · `blocked`
+- [[obsidian/Prompts/817056 duplicate-photos-detector-fedora-local-finalize-v1|817056 · Rendere operativo duplicate-photos-detector su Fedora]] · `superseded`
