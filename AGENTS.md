@@ -27,7 +27,8 @@ For every non-trivial ChatGPT task that spans multiple steps, repositories, expe
 
 - Use the canonical `PROMPT_ID` when one prompt owns the task; otherwise use a stable explicit `TASK_ID`.
 - The file is operational memory, not roadmap lifecycle state and not a substitute for `roadmap.sqlite`.
-- Record only: objective, constraints, verified facts, decisions, completed work, remaining work, blockers, evidence, acceptance criteria, and exactly one `Next action`.
+- Record only: objective, constraints, a complete executable checklist/plan, current step, verified facts, decisions, completed work, remaining work, blockers, evidence, acceptance criteria, and exactly one `Next action`.
+- Keep the checklist current as new sub-tasks, dependencies, or plan changes are discovered; split large work into phases and mark items complete only after verification.
 - Never store private chain-of-thought, hidden reasoning, secrets, raw private transcripts, or credentials.
 - Commit and push meaningful checkpoints after important conclusions, completed sub-goals, expensive verification, user steering that changes execution, before a new phase/risky operation, and whenever a task becomes long enough that session loss would cause duplicated work.
 - After a freeze, interruption, model restart, or resumed chat, read the checkpoint first and continue from `Next action`. Do not rediscover already verified facts unless new evidence contradicts them.
