@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 12:22 Europe/Copenhagen
+Updated: 2026-09-24 12:25 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -19,6 +19,10 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - Device operations must be serial-scoped when multiple Android devices are connected.
 
 ## Verified facts
+- PersonalHub 920550 and Telegram collector 422308 are currently running in their separate parallel lanes; do not duplicate their work in this global chat.
+- 218695 is now guarded by manual-prerequisite:confirm-eboks-scraper-needed; its target public repo exists but is empty, so after 582946 the task must be reevaluated before launch.
+- 641903 has been superseded by materialized routing-safe successor 896074; 896074 depends on 302284 and resolves CCS from current repo/metadata instead of hard-coding project_id 96.
+- Runaway 788315 is still active as of 2026-09-24 12:17 Europe/Copenhagen: 203 published cycles; latest heartbeat used GPT-6 Sol medium, 112823 total tokens, 1 tool call, and returned only DONT_NOTIFY.
 - Phase-1 broad audit is complete; current work is its closure/reconciliation tail.
 - Attention/PBF projection currently reports zero unresolved needs_fix items after successor coverage.
 - Stale running states were reconciled: 620949 -> blocked + 994029; 254859 -> blocked + 812553; 354882 -> blocked/manual-login + 181259.
@@ -110,4 +114,4 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-Wait for mutation #1034 to order 812553 after 302284. Audit the remaining non-PH conditional/manual tasks (582946, 218695, 588376, 422308, 641903) for real prerequisites and duplicate scope. Resolve the canonical CCS project identity before unblocking 641903; do not guess an ID. Then checkpoint and declare which infrastructure work can only proceed locally through Codex.
+Urgent local action: execute 222733 and verify no new 788315 heartbeat is scheduled. In parallel, continue direct remote cleanup: finish prompt-history prompt-level analytics verification/documentation, audit remaining conditional non-PH tasks without duplicating the running PersonalHub/Telegram lanes, and keep 896074 blocked behind 302284. After 222733 PASS, 302284 becomes the next infrastructure runtime gate.
