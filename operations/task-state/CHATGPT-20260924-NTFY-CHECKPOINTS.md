@@ -1,7 +1,7 @@
 # Operational task state — checkpoint notifications via ntfy
 
 TASK_ID: CHATGPT-20260924-NTFY-CHECKPOINTS
-Updated: 2026-09-24 12:55 Europe/Copenhagen
+Updated: 2026-09-24 13:08 Europe/Copenhagen
 
 ## Objective
 Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHub publishes only after accepting a task-state push; a self-hosted ntfy service on the Oracle VM delivers to Android and browser/Fedora; Git remains canonical persistence.
@@ -36,7 +36,7 @@ Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHu
 - [ ] Update protocol/docs and close this state file.
 
 ## Current step
-Phase 2: add the reproducible ntfy deployment and edge configuration to `vm_oracle`, then deploy it.
+Phase 2: deploy the already-versioned ntfy stack to the Oracle VM, then add the GitHub checkpoint publisher and subscriber paths.
 
 ## Verified facts
 - Fedora is reachable through Remote Desktop Commander.
@@ -82,4 +82,4 @@ None. The initial public-health false negative caused by Oracle DNS propagation 
 - The implementation is documented, tested, committed and pushed.
 
 ## Next action
-Add versioned ntfy Docker/edge deployment files to `vm_oracle`, validate them locally, checkpoint them, then deploy to the Oracle VM.
+Deploy the already-versioned ntfy stack to the Oracle VM and verify remote health; then add the GitHub Actions checkpoint publisher scoped to accepted `operations/task-state/**` pushes. Do not redo the deployment-file work already completed.
