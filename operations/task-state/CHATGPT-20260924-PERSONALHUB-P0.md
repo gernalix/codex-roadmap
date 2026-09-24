@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 14:23 Europe/Copenhagen
+Updated: 2026-09-24 14:24 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -81,6 +81,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] Verify Home + every module with preserved real data; retain rollback until acceptance.
 
 ### Phase 8 — Final PH cleanup
+- [ ] Converge every remaining non-main PH branch: integrate all valid unique work into `main`, prove containment/patch-equivalence, then delete the branch; final remote target is `main` only.
 - [ ] Prove obsolete PH branches/PRs contain no unique unabsorbed work, then remove them.
 - [ ] Verify no relevant PH PBF/integration/action remains pending.
 - [ ] End with clean, operational, main-only PersonalHub.
@@ -89,6 +90,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 Phase 2 is active again and has global priority. Resume 920550 from its existing pushed checkpoint: finish Play/minified artifact measurement and AVD-only synthetic QA, then finalize/integrate 920550 before starting 857906.
 
 ## Verified facts
+- Current lateral-branch inventory at 2026-09-24 14:24: `task/920550` = 2 ahead / 2 behind main; `chatgpt/workflowy-integration` = 11 ahead / 2 behind; `chatgpt/105883-since-when` = 0 ahead / 32 behind. The last branch has no unique work and is safe to delete immediately; the first two must be integrated only after their respective validation/reconciliation gates.
 - Current remote branch inventory at 2026-09-24 14:23: `task/920550` is 2 commits ahead / 2 behind `main`; `chatgpt/workflowy-integration` is 11 ahead / 2 behind; `chatgpt/105883-since-when` is 0 ahead / 32 behind. Therefore 920550 and Workflowy contain unique work that must be integrated; 105883 contains no unique commit and needs no merge, only final deletion after containment readback.
 - A pre-schema-upgrade PersonalHub DB was measured at ~173 MB because `hub_git_events` contained 108,401 `UPDATE hub_tags` events; 108,123 had identical before/after payloads. The confirmed code path is Timer `persist()` -> `syncTimerNowTags()` -> `TimerSharedTagBridge.syncNow()` -> `SharedTagEngine.replace()/assign()` -> global `HubTagDao.refreshUsage()` plus an unconditional Git `AFTER UPDATE` trigger.
 - Tag/history write-amplification hotfix `41920af` is integrated into PersonalHub `origin/main`; follow-up `57883c2` adds a safe no-op Git-history compactor. Neither changes Room schema/version.
@@ -151,6 +153,7 @@ Goal: operate only after 788606 PASS.
 Read the actual final app schema/Room identity from the final commit. Inspect the actual live DB schema/identity on Pixel. Take immutable rollback first. Externally migrate a copy of the real DB through every required delta to the final schema, validate quick_check/integrity/FK and preservation of representative data, then transfer/install the exact final APK and migrated DB using explicit Pixel serial. Smoke Home + every module. Keep rollback until final acceptance.
 
 ## Decisions
+- Branch convergence rule: no valid PH feature remains stranded on a side branch. For each non-main branch, first prove unique work is valid/needed, merge/integrate it into current `main`, verify containment, then delete local/remote branch. Branches with `ahead_by=0` need no dummy merge because their work is already contained and may be deleted directly.
 - At 913264, choose the freshest coherent DB candidate available at cutover using actual data freshness/provenance and consistency checks; do not prefer an older backup merely because it is already local.
 - Global priority override: PersonalHub P0 is the master recovery lane again. 920550 resumes from its safe pushed checkpoint; non-PH recovery remains parked until PH 913264 PASS unless PH becomes truly blocked.
 - Keep the PH P0 chain serial whenever schema/database work can overlap: `920550 -> 857906 -> 707603 -> 840907 -> 788606 -> 913264`.
