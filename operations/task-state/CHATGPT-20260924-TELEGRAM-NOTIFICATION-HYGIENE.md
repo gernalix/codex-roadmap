@@ -43,7 +43,7 @@ Source/runtime closure completata tramite 966124. Lasciare accumulare cronologia
 - PROMPT_ID 966124 è terminale `completed`; `fedora-system-monitor/main` integra il collector tecnico, l'archivio auto-delete e il tracking relationship/block-state. Il checkpoint terminale dedicato riporta main `7c18ac68134b616228cc1e49f29b8be42eaebec4`, CI/runtime PASS e rimozione dei branch temporanei assorbiti.
 - Baseline storica: PROMPT_ID 417826 ha già effettuato una prima signal-hygiene.
 - PROMPT_ID 422308 è terminale BLOCKED storico, ma il suo precedente prerequisito umano è ormai soddisfatto.
-- Branch sorgente: gernalix/fedora-system-monitor task/422308; ultimo commit pushato verificato 5d8ed32.
+- Lineage sorgente storico: `task/422308` fino a `5d8ed32`; il branch è stato assorbito e rimosso durante la chiusura 966124.
 - Test collector dopo i fix live: 6/6 PASS; py_compile e diff-check PASS.
 - Sessione Telegram account-level autorizzata.
 - Target reale delle notifiche rumorose: datasette_alerts_bot; il vecchio chat_id -1004426028673 risultava non valido per il bot principale.
@@ -52,7 +52,7 @@ Source/runtime closure completata tramite 966124. Lasciare accumulare cronologia
 - Data repo gernalix/telegram-notification-history verificato PRIVATE e leggibile via GitHub connector.
 - archive/state.json remoto contiene last_message_id=372496.
 - telegram-notification-history.timer è enabled+active e schedulato ogni 15 minuti.
-- È operativo anche il collector separato per la chat con auto-delete 1 giorno: runtime locale SQLite+media, timer ogni 5 minuti, session lock condiviso; source branch chatgpt/telegram-autodelete-archive a 2fc6c38. Include una view umana senza ID (`messages_human`) con date italiane/relative, nomi mittente e rendering delle azioni Telegram (incluse le chiamate). I contenuti/peer restano locali e non vengono versionati.
+- È operativo anche il collector separato per la chat con auto-delete 1 giorno: runtime locale SQLite+media, timer ogni 5 minuti e session lock condiviso. Il source è ormai integrato in `fedora-system-monitor/main` tramite 966124; include view umana, rendering chiamate e relationship/block-state tracking. I contenuti/peer restano locali e non vengono versionati.
 - L'allocatore remoto MegaVault per chatgpt-telegram-history-runtime-closure-20260924-v1 ha assegnato 966124.
 - Il fallback locale aveva erroneamente restituito 333860 allo stesso request_id e quel prompt era stato registrato prima del ritorno remoto.
 - Mutation roadmap #1056 ha applicato replacement 333860 -> 966124; MegaVault Issue #105 ha materializzato 966124. La materialization Issue #104 per 333860 è stata chiusa not_planned.
@@ -83,7 +83,7 @@ Source/runtime closure completata tramite 966124. Lasciare accumulare cronologia
 - L'audit successivo richiede solo una finestra di cronologia reale sufficientemente rappresentativa.
 
 ## Evidence
-- fedora-system-monitor task/422308: f577f66, 9d736aa, 5d8ed32.
+- Lineage storico `fedora-system-monitor task/422308`: f577f66, 9d736aa, 5d8ed32; branch poi assorbito/rimosso da 966124.
 - gernalix/telegram-notification-history commit 99a9952479074f56095586a6ed3fb210111496db.
 - GitHub readback archive/state.json: last_message_id 372496.
 - systemd runtime readback: RUN1 4244, RUN2 0, timer enabled+active.
