@@ -42,15 +42,15 @@ Extend `gernalix/chrome-codex-switcher` (CSS) so each persistent Chrome context 
 - [x] Respect the local single-writer hook: direct commit to protected `main` was rejected before ref mutation.
 - [x] Verify the local writer/reconciler absorbed the version alignment into canonical `origin/main`.
 - [x] Reinstall from canonical current main and verify daemon runtime reports `0.4.0`.
-- [ ] Reload the already-loaded unpacked Chrome extension without losing the existing browser session.
-- [ ] Verify Chrome extension heartbeat advances from `0.3.8` to `0.4.0`.
+- [x] Reload the already-loaded unpacked Chrome extension without losing the existing browser session.
+- [x] Verify Chrome extension heartbeat advances from `0.3.8` to `0.4.0`.
 - [ ] Perform an end-to-end runtime prompt-ID indexing/search check on a real Chrome tab/context.
 - [ ] Verify manual add/remove and persistent suppression at runtime if feasible without altering meaningful user data; otherwise use a disposable test context.
 - [ ] Final runtime status/readback and clean checkout verification.
 - [ ] Final completion checkpoint.
 
 ## Current step
-Perform a guarded full Chrome restart because `chrome://restart` invoked externally did not restart the existing browser and AT-SPI exposes only top-level Chrome frames, not the Extensions-page Reload control. Use the saved session backup plus `--restore-last-session`, then verify the extension heartbeat reports `0.4.0` before functional tests.
+Run a disposable real-browser functional test against the now-live `0.4.0` extension: automatic prompt-ID extraction, search payload visibility, manual add/remove, and auto-detected-ID suppression after reload.
 
 ## Verified facts / implementation
 - Canonical `prompt_bindings` remains untouched as the 1:1 prompt↔Chrome/Codex binding.
@@ -115,9 +115,9 @@ No product/code blocker. Remote shell GUI automation cannot directly access the 
 - [x] Focused/full source tests and CI, including E2E, pass.
 - [x] Source changes and runtime version alignment are on canonical CSS `main`.
 - [x] Fedora daemon/files are deployed and daemon runtime is `0.4.0`.
-- [ ] Live Chrome extension runtime is reloaded to `0.4.0`.
+- [x] Live Chrome extension runtime is reloaded to `0.4.0`.
 - [ ] Real runtime search/index behavior is verified end-to-end.
 - [ ] Final checkout/runtime state is clean and checkpointed.
 
 ## Next action
-Checkpoint complete. Gracefully terminate only the main Chrome browser process, wait for clean exit, relaunch `google-chrome-stable --restore-last-session`, verify a new browser PID and extension heartbeat `0.4.0`, and restore the saved Sessions backup only if the browser session fails to return.
+Create a disposable HTTP page containing known standalone six-digit IDs, open it in the restored Chrome session, verify `/api/list` receives those IDs from the real content script, test manual add/remove and exclusion persistence across one controlled reload, then delete the disposable context.
