@@ -45,12 +45,12 @@ Extend `gernalix/chrome-codex-switcher` (CSS) so each persistent Chrome context 
 - [x] Reload the already-loaded unpacked Chrome extension without losing the existing browser session.
 - [x] Verify Chrome extension heartbeat advances from `0.3.8` to `0.4.0`.
 - [x] Perform an end-to-end runtime prompt-ID indexing/search check on a real Chrome tab/context: after full extension registration reload, `583902` was automatically indexed from the disposable page.
-- [ ] Verify manual add/remove and persistent suppression at runtime if feasible without altering meaningful user data; otherwise use a disposable test context.
+- [x] Verify manual add/remove and persistent suppression at runtime on disposable context: auto-detected `583902` remained excluded after rescan; manual-only `583904` was added then fully deleted.
 - [ ] Final runtime status/readback and clean checkout verification.
 - [ ] Final completion checkpoint.
 
 ## Current step
-Chrome was gracefully restarted and relaunched explicitly on Wayland with session restoration; service-worker registration is now `0.4.0`. Repeated disposable-page test is PASS for automatic extraction (`583902` detected within ~1.5 s). Next verify manual remove/suppression and manual-only add/remove.
+Automatic scan and manual override runtime tests are PASS. Clean the disposable HTTP server/context artifacts, verify final CSS checkout/runtime health/registration, then mark the task completed.
 
 ## Verified facts / implementation
 - Canonical `prompt_bindings` remains untouched as the 1:1 prompt↔Chrome/Codex binding.
@@ -88,6 +88,10 @@ Source gates:
 - GNOME schema validation PASS.
 - Shell syntax gates PASS.
 - GitHub Actions CI run 107 on `6b4f9da`: python PASS, Selenium E2E PASS, overall SUCCESS.
+
+Runtime manual-override PASS:
+- Removing auto-detected `583902` returned effective IDs without it; after reopening/rescanning the same page, `583902` remained absent and SQLite recorded `(auto_detected=1, manual_added=0, excluded=1)`.
+- Adding manual-only `583904` made it immediately searchable; removing it deleted its row entirely. Marker: `MANUAL_OVERRIDE_PASS`.
 
 Runtime automatic-scan PASS:
 - Graceful Chrome restart + explicit Wayland relaunch succeeded; service-worker registration now records `0.4.0` and extension heartbeat is fresh.
@@ -137,4 +141,4 @@ None currently. The stale Chrome service-worker registration was resolved by gra
 - [ ] Final checkout/runtime state is clean and checkpointed.
 
 ## Next action
-On disposable context `057a7d84-a62d-49d7-93f1-d0db13834a0e`, remove auto-detected `583902`, reopen the page and verify it remains excluded; then add/remove a manual-only ID and confirm deletion. After PASS, clean disposable runtime artifacts and perform final checkout/runtime readback.
+Stop the disposable HTTP server, delete only the disposable CSS DB context/index rows and temporary files, verify `/api/list` no longer exposes the test context, then read back clean Git status, daemon health/version, live extension heartbeat and Chrome service-worker registration before the final completion checkpoint.
