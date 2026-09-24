@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 13:48 Europe/Copenhagen
+Updated: 2026-09-24 14:06 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -94,7 +94,7 @@ Phase 2 / 302284: targeted source gates are complete. Next, deploy each of the f
 - 302284 targeted source gates PASS: codex-roadmap 60 tests; github-autosync 57 tests; workflowy-importer 34 tests; codex-usage-monitor 17 tests; chrome-codex-switcher 3 tests plus Python host compile.
 - During 302284, codex-roadmap exposed a real `resolved_by` contract bug: the PBF view understood the relation but the table CHECK rejected it silently. Fixed on main at `f7f67c04371301ab1aae35551234ac566c21d039`; migration-on-open was verified on a copy of the live roadmap DB preserving all 166 existing relations and restoring dependent views.
 - github-autosync tests were accidentally invoking real systemd bootstrap on the user's Fedora host. Test isolation fix is integrated on main in `0abda5db71b0ea6518a4818ec2f370619302264b`; runtime behavior itself was not changed.
-- PH ↔ Workflowy optional integration is implemented and host-verified on PersonalHub branch `chatgpt/workflowy-integration`; checkpointed remote head at this update is `edd08138702f9ae6cc54c2964f109343a356a149`. It reuses Hub Context resources, adds no Room schema/version change, and has PASS evidence for consumer preflight, targeted Workflowy tests/app compile and architecture boundaries. Final main reconciliation/integration remains intentionally parked; authoritative detail is `operations/task-state/CHATGPT-20260924-PH-WORKFLOWY.md`.
+- PH ↔ Workflowy optional integration is implemented and host-verified on PersonalHub branch `chatgpt/workflowy-integration`; checkpointed remote head is `edd08138702f9ae6cc54c2964f109343a356a149`. It reuses Hub Context resources, adds no Room schema/version change, and has PASS evidence for consumer preflight, targeted Workflowy tests/app compile and architecture boundaries. At 2026-09-24 14:06 the branch is ahead 11 / behind 2 versus current PersonalHub `main` (`57883c2531400efacbefd2c63182bc11833f9537`), so final reconciliation/integration remains intentionally parked. Authoritative detail is `operations/task-state/CHATGPT-20260924-PH-WORKFLOWY.md`.
 - 302284 claimed successfully at 2026-09-24 13:34 local via roadmap issue #1055; canonical status is `running`. It is now the single active master recovery task; PH 920550 remains parked.
 - 222733 completed canonically via single-writer commit `0e5b710ac7a783395f70b6af35d69db45dba707f`. The only Codex automation directory is `chatgptexporter-788315-completion`, now `status = "DISABLED"`; bounded scan found zero active recurring automations. Shutdown boundary was 2026-09-24T11:25:10Z; latest published 788315 cycle started 2026-09-24T11:17:26Z, so no cycle exists after shutdown.
 - PersonalHub 920550 is safely parked at pushed checkpoints. Roadmap still says `running` only because there is no pause lifecycle state; no active model/process is executing that lane.
