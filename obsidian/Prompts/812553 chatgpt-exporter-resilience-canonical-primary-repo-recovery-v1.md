@@ -21,7 +21,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[222733 stop-runaway-788315-heartbeat|222733]]
+- **Dipende da:** [[222733 stop-runaway-788315-heartbeat|222733]], [[302284 prompt-infrastructure-final-runtime-activation-v1|302284]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[254859 chatgpt-exporter-archive-validation-v1|254859]], [[697920 chatgpt-exporter-resilience-hardening-v1|697920]]
 - **Figli/follow-up:** —
@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Riprende il lavoro bloccato usando prompt-history come unico repository principale; ChatGPTExporter resta un’integrazione secondaria e non viene più codificato come repository multiplo.
+Aspetta prima il deploy infrastrutturale 302284, così prompt-history legge la telemetria Codex già corretta; poi riprende l’hardening ChatGPTExporter sul main corrente di prompt-history.
 
 ## Esecuzioni
 
