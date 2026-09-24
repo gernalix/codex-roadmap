@@ -382,4 +382,4 @@
 | [[obsidian/Prompts/970051 duplicate-photos-detector-fedora-timer-migration-v1\|970051 · Migrare duplicate-photos-detector al timer periodico Fedora]] | completed | 2026-09-24T02:07:58Z | 2026-09-24T02:07:58Z | PASS | no | no | — | duplicate-photos-detector | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/996591 ccs-pbf-live-final-closure-v1\|996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop]] | blocked | — | — | BLOCKED | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/105883 personalhub-global-since-when-v3\|105883 · Promuovere Since When a funzione globale PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1\|697920 · Rendere ChatGPTExporter resiliente e affidabile]] | blocked | — | — | BLOCKED | no | no | — | Prompt infrastructure | GPT-6 Sol | medium |
+| [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1\|697920 · Rendere ChatGPTExporter resiliente e affidabile]] | blocked | — | — | BLOCKED | sì | no | — | Prompt infrastructure | GPT-6 Sol | medium |

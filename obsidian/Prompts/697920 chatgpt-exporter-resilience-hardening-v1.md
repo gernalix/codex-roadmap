@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -39,7 +39,7 @@ Rende il collector ChatGPT Web capace di ritentare e riprendere automaticamente 
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-24T02:16:06Z · colli di bottiglia: sì · fix: — · {"blocker":"il claim canonico ha fallito perché il campo repo contiene `gernalix/prompt-history + ChatGPTExporter fork`, che non identifica un worktree canonico; inoltre `PROJECT_ID=92` risolve a `github-autosync`. Serve correggere i metadati in un nuovo prompt canonico prima di iniziare il lavoro.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"697920","report_ref":"codex-usage:450d3fc0f45eaf965b268c48:1494a3333a28c4fe","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
