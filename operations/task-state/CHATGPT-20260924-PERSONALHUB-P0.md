@@ -30,6 +30,61 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - Model/reasoning live only in roadmap metadata, not prompt bodies.
 - Stop Codex after queued integration/PASS; do not spend model turns polling CI/merge.
 
+## Plan / checklist
+### Phase 0 — Baseline and ordering
+- [x] Complete the PH audit and identify the still-relevant P0 chain.
+- [x] Revalidate the chain against current roadmap and `PersonalHub/main`.
+- [x] Supersede obsolete intermediate live-DB migration 383662 with final cutover 913264.
+- [x] Establish external one-shot live-DB migration and explicit-device safety rules.
+
+### Phase 1 — No-op tag/history amplification hotfix
+- [x] Implement and test hotfix commit `41920af` on isolated branch `chatgpt/tag-noop-hotfix`.
+- [ ] Integrate `41920af` into `PersonalHub/main` and verify remote main contains it.
+- [ ] Remove the temporary hotfix branch/worktree only after integration is verified.
+
+### Phase 2 — 920550 semantic photos / owned items
+- [x] Claim 920550 and isolate `task/920550`.
+- [x] Implement schema 23 photo index + optional owned items, local TinyCLIP/ONNX retrieval, OCR, text↔image, image↔image and “Trova questo oggetto”.
+- [x] Verify tokenizer against the official model tokenizer and pass targeted unit/DB tests.
+- [x] Pass consumer-preflight, Soldi compile, architecture gate and full debug app build.
+- [x] Verify real-model synthetic same-object/text-image ranking and measure debug APK/runtime size.
+- [ ] Finish Play/minified artifact measurement.
+- [ ] Run AVD-only synthetic QA for save→index, search, photos-only regression, same-object shortlist, owned-item create/remove and persistence.
+- [ ] Finalize 920550 through `roadmap_finish.py`, wait only via non-model integration/readback, then inspect the merged main diff/schema/evidence before unblocking 857906.
+
+### Phase 3 — 857906 unified History/Search
+- [ ] Run and review 857906 after 920550 integration.
+- [ ] Verify one reused global/module search engine and removal/replacement of duplicate user-facing History/Log/Timeline surfaces.
+
+### Phase 4 — 707603 Git History / restore
+- [ ] Run 707603 on the resulting schema.
+- [ ] Validate Git Data / Global History / restore only on safe copies/staging.
+
+### Phase 5 — 840907 Datasette Lite offline
+- [ ] Run 840907 after 707603.
+- [ ] Verify true offline runtime, detached validated snapshots and acceptable artifact-size impact.
+
+### Phase 6 — 788606 final release preflight
+- [ ] Run 788606 with no new features.
+- [ ] Pass minification/resource shrink, signing, bundletool/Play gates and bounded emulator smoke.
+- [ ] Freeze exact final main commit, schema version/identity and final APK/AAB hashes/paths.
+
+### Phase 7 — 913264 live DB migration and Pixel cutover
+- [ ] Read actual live Pixel DB schema/identity with explicit Pixel serial.
+- [ ] Take immutable rollback backup of DB/WAL/SHM and recoverable current APK/reference.
+- [ ] Externally migrate a copy of the real DB directly to the frozen final schema.
+- [ ] Pass SQLite quick_check/integrity/FK and representative-data preservation checks.
+- [ ] Install the exact frozen final APK on the primary Pixel using explicit serial.
+- [ ] Verify Home + every module with preserved real data; retain rollback until acceptance.
+
+### Phase 8 — Final PH cleanup
+- [ ] Prove obsolete PH branches/PRs contain no unique unabsorbed work, then remove them.
+- [ ] Verify no relevant PH PBF/integration/action remains pending.
+- [ ] End with clean, operational, main-only PersonalHub.
+
+## Current step
+Phase 1: integrate already-tested hotfix commit `41920af` into `PersonalHub/main`, verify remote main contains it, then resume 920550 validation from its existing checkpoint without rerunning passed tests.
+
 ## Verified current facts
 - A pre-schema-upgrade PersonalHub DB was measured at ~173 MB because `hub_git_events` contained 108,401 `UPDATE hub_tags` events; 108,123 had identical before/after payloads. The confirmed code path is Timer `persist()` -> `syncTimerNowTags()` -> `TimerSharedTagBridge.syncNow()` -> `SharedTagEngine.replace()/assign()` -> global `HubTagDao.refreshUsage()` plus an unconditional Git `AFTER UPDATE` trigger.
 - Direct hotfix work is isolated on `chatgpt/tag-noop-hotfix` at commit `41920af`; it does not change Room schema/version and its touched paths do not overlap the currently modified files in worktree `task/920550`.
