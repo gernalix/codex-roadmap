@@ -18,6 +18,9 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 - telegram_insert_bot è un repo applicativo distinto; non è il posto giusto per il collector passivo.
 - L'ecosistema usa già systemd --user e repo Git privati per dati/runtime.
 - Un export affidabile della chat richiede un client Telegram account-level (es. Telethon) oppure una sorgente equivalente; Bot API da sola non è una fonte generale della cronologia dei messaggi inviati dal bot.
+- PROMPT_ID canonico allocato: 422308.
+- Mutation roadmap di registrazione applicata: codex-roadmap Issue #1026.
+- Prompt materializzato dal writer in prompts/telegram-notification-history-fedora-collector-v1.md.
 
 ## Decisions
 - Creare un collector dedicato che legge solo la chat del bot notifiche, non tutte le chat Telegram.
@@ -26,10 +29,12 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 - Repo dati privato dedicato, scritto solo dal sync service.
 - Timer consigliato: 15 minuti; commit/push solo se ci sono nuove entry.
 - L'audit successivo deve modificare i produttori reali, non filtrare le notifiche a valle.
+- Codice/runtime del collector assegnato a gernalix/fedora-system-monitor; data sink dedicato previsto: gernalix/telegram-notification-history.
 
 ## Checklist
-- [ ] Allocare un PROMPT_ID canonico per il task locale.
-- [ ] Registrare il goal nella roadmap via single writer.
+- [x] Allocare un PROMPT_ID canonico per il task locale: 422308.
+- [x] Registrare il goal nella roadmap via single writer.
+- [ ] Materializzare 422308 nel registry MegaVault (Issue #99 pending al checkpoint).
 - [ ] Implementare collector Telegram incrementale e test.
 - [ ] Creare/configurare repo dati privato dedicato.
 - [ ] Installare service+timer systemd --user e lock anti-overlap.
@@ -44,9 +49,11 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 ## Completed
 - Architettura scelta.
 - Individuato il precedente task 417826 da trattare come baseline storica, non come policy immutabile.
+- PROMPT_ID 422308 allocato.
+- Goal collector registrato/materializzato nella roadmap dal single writer.
 
 ## Remaining
-Tutto il deployment locale e l'audit sui messaggi reali.
+Materializzazione MegaVault finale, deployment locale, creazione data repo e audit sui messaggi reali.
 
 ## Blockers
 - Possibile login Telegram/2FA iniziale manuale; deve essere un solo prerequisito, non un loop Codex.
@@ -54,10 +61,14 @@ Tutto il deployment locale e l'audit sui messaggi reali.
 
 ## Evidence
 - codex-roadmap/completed/telegram-notification-signal-hygiene.md
+- codex-roadmap/prompts/telegram-notification-history-fedora-collector-v1.md
+- MegaVault Issue #96 => PROMPT_ID=422308, status=allocated.
+- codex-roadmap Issue #1026 => Applied by the roadmap single writer.
+- MegaVault Issue #99 => materialization request.
 - codex-roadmap/AGENTS.md e SQLITE_ROADMAP.md per lifecycle/roadmap writer.
 
 ## Acceptance criteria
 PASS della fase collector quando il servizio legge solo la chat target, persiste nuove entry senza duplicati, non espone segreti, il timer è enabled+active, una seconda run senza nuovi messaggi è no-op e il repo privato remoto contiene l'archivio aggiornato.
 
 ## Next action
-Allocare il PROMPT_ID canonico e registrare il goal collector nella roadmap.
+Verificare la chiusura di MegaVault Issue #99 con status=materialized; poi lanciare PROMPT_ID 422308 in Codex.
