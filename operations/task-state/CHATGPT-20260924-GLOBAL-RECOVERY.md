@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 12:00 Europe/Copenhagen
+Updated: 2026-09-24 12:05 Europe/Copenhagen
 
 ## Objective
 Apply the findings from the global audit, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before producing the final APK, migrate the live PersonalHub database externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -52,6 +52,10 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 8. Model/reasoning decisions should use empirical usage after attribution/cumulative-goal accounting is corrected.
 
 ## Completed
+- Attention/PBF dashboard now reports zero unresolved items.
+- PROMPT_ID 181259 is the waiting manual-login successor for the stale browser-export task; downstream dependency forwarding is active.
+- PROMPT_ID 302284 replaces 729874 as the consolidated Fedora runtime activation for lifecycle, Workflowy/CCS and codex-usage fixes.
+- 729874 is superseded.
 - codex-usage-monitor attribution fix implemented on main: goal continuations can override stale inherited PROMPT_ID from authoritative roadmap_start output; reassigned cycle directories are removed; semantic publication version bumped to 7; regression tests added.
 - PersonalHub P0 successors now exist: 920550 for residual photo/owned-items and 913264 for final live DB migration/APK/Pixel.
 - PBF protocol implementation for 519810 already landed directly on codex-roadmap/main: recursive cycle-safe v_pbf_dispositions, v_attention needs_fix-only, tests/docs.
@@ -122,4 +126,4 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-Verify roadmap mutation Issue #1002 registers 222733 successfully and materialize the same PROMPT_ID in MegaVault. Then continue remote lifecycle/PBF reconciliation while 222733 waits for local execution.
+Verify materialization of 181259 and 302284. Audit every remaining pending prompt for obsolete dependencies, duplicated scope, stale model metadata, and consolidation opportunities. Keep PersonalHub detail in its dedicated checkpoint.
