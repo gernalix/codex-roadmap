@@ -20,7 +20,7 @@ tags:
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../completed/personalhub-global-since-when-v2|Apri prompt]]
 - **Primo lancio:** 2026-09-24T00:37:09Z
-- **Ultimo lancio:** 2026-09-24T00:37:09Z
+- **Ultimo lancio:** 2026-09-24T04:18:33Z
 - **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
@@ -40,6 +40,7 @@ Alla ripresa di 822595, applicare lo steer concordato: nessuna migrazione DB sto
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-24T00:37:09Z | 2026-09-24T01:31:41Z | UNKNOWN | 3272.257 | gpt-6-luna | medium | 317 | 157308 |
+| 2026-09-24T04:18:33Z | 2026-09-24T04:18:45Z | UNKNOWN | 12.082 | gpt-5.6-sol | medium | 1 | 101056 |
 
 ## Analisi ChatGPT
 
