@@ -1,20 +1,20 @@
 ---
 prompt_id: 773323
-status: running
+status: completed
 project_id: 49
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/personal-hub
 ---
 
 # 773323 · Chiudere i motori condivisi PH 3-8
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-shared-engines-3-8-finalize-v1|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-shared-engines-3-8-finalize-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

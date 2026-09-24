@@ -5,7 +5,6 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/773323 personalhub-shared-engines-3-8-finalize-v1|773323 · Chiudere i motori condivisi PH 3-8]] · `running`
 - [[obsidian/Prompts/822595 personalhub-global-since-when-v2|822595 · Promuovere Since When a funzione globale PersonalHub]] · `running`
 - [[obsidian/Prompts/649781 personalhub-obsidian-archive-blocker-closure-v5|649781 · Chiudere il blocker dell’archivio Obsidian PersonalHub]] · `pending`
 - [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `pending`
@@ -36,6 +35,7 @@ tags:
 - [[obsidian/Prompts/461839 personalhub-epoch-timestamps-migration|461839 · Date e ore coerenti ovunque]] · `superseded`
 - [[obsidian/Prompts/593728 personalhub-shared-alerts-places-tags-integration-v2|593728 · Chiudere e integrare i nuovi tag e alert di Places]] · `superseded`
 - [[obsidian/Prompts/355842 personalhub-obsidian-archive-complete-v3|355842 · Completare l’archivio Obsidian in un solo task]] · `superseded`
+- [[obsidian/Prompts/773323 personalhub-shared-engines-3-8-finalize-v1|773323 · Chiudere i motori condivisi PH 3-8]] · `completed`
 - [[obsidian/Prompts/418763 personalhub-salute-canonical-integration|418763 · Portare Salute dentro PersonalHub]] · `superseded`
 - [[obsidian/Prompts/734205 personalhub-epoch-timestamps-migration-v2|734205 · Date e ore coerenti ovunque]] · `superseded`
 - [[obsidian/Prompts/825405 personalhub-git-history-data-sync-validation-v3|825405 · Validare cronologia, backup e ripristino dati]] · `superseded`

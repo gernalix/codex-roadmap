@@ -5,7 +5,6 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | running | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/773323 personalhub-shared-engines-3-8-finalize-v1\|773323 · Chiudere i motori condivisi PH 3-8]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/254859 chatgpt-exporter-archive-validation-v1\|254859 · Verificare completezza e correttezza dell’export ChatGPT]] | running | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/822595 personalhub-global-since-when-v2\|822595 · Promuovere Since When a funzione globale PersonalHub]] | running | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
@@ -99,6 +98,7 @@
 | [[obsidian/Prompts/593728 personalhub-shared-alerts-places-tags-integration-v2\|593728 · Chiudere e integrare i nuovi tag e alert di Places]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/355842 personalhub-obsidian-archive-complete-v3\|355842 · Completare l’archivio Obsidian in un solo task]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/925731 prompt-history-unified-evidence-backfill-runtime-v1\|925731 · Attivare storico unificato ChatGPT e Codex]] | completed | 2026-09-22T02:09:52Z | 2026-09-22T03:53:27Z | PASS | sì | sì | [[obsidian/Prompts/413647 prompt-history-runtime-pass-reconcile-v1\|413647]] | Prompt infrastructure | GPT-5.5 | medium |
+| [[obsidian/Prompts/773323 personalhub-shared-engines-3-8-finalize-v1\|773323 · Chiudere i motori condivisi PH 3-8]] | completed | — | — | PASS | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/418763 personalhub-salute-canonical-integration\|418763 · Portare Salute dentro PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/734205 personalhub-epoch-timestamps-migration-v2\|734205 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/825405 personalhub-git-history-data-sync-validation-v3\|825405 · Validare cronologia, backup e ripristino dati]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
