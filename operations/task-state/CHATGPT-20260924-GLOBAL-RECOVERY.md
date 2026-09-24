@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 12:05 Europe/Copenhagen
+Updated: 2026-09-24 12:10 Europe/Copenhagen
 
 ## Objective
 Apply the findings from the global audit, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before producing the final APK, migrate the live PersonalHub database externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -52,6 +52,11 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 8. Model/reasoning decisions should use empirical usage after attribution/cumulative-goal accounting is corrected.
 
 ## Completed
+- Pending model audit is GPT-6-clean after updating legacy 641903 and 422308 metadata; Sol remains only where complexity/data risk justifies it.
+- All current pending canonical prompt bodies pass the metadata-only rule: zero MODEL=/REASONING= execution metadata embedded in the first 20 lines.
+- Current HEADs of the eight infrastructure repositories have no attached GitHub Actions runs requiring repair; required verification is consolidated into local task 302284.
+- Open Issue audit across codex-roadmap, MegaVault, codex-usage-monitor, workflowy-importer, github-autosync, chrome-codex-switcher, activity-watch-uploader and prompt-history found no real open issues after transport mutations drain.
+- All infrastructure PRs identified in Phase 1 are resolved; org-wide open PR search currently returns none.
 - Attention/PBF dashboard now reports zero unresolved items.
 - PROMPT_ID 181259 is the waiting manual-login successor for the stale browser-export task; downstream dependency forwarding is active.
 - PROMPT_ID 302284 replaces 729874 as the consolidated Fedora runtime activation for lifecycle, Workflowy/CCS and codex-usage fixes.
@@ -126,4 +131,4 @@ Apply the findings from the global audit, repair the prompt/roadmap workflow, co
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-Verify materialization of 181259 and 302284. Audit every remaining pending prompt for obsolete dependencies, duplicated scope, stale model metadata, and consolidation opportunities. Keep PersonalHub detail in its dedicated checkpoint.
+Read back the final pending queue after mutation #1028. Audit remaining non-PH pending tasks for semantic obsolescence or conditional cancellation (especially e-Boks bootstrap and other manual-prerequisite chains). Then identify any direct remote fixes still possible before declaring the infrastructure track ready for the local execution sequence 222733 -> 302284 and later non-PH runtime tasks.
