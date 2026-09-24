@@ -18,3 +18,4 @@
 14. [[prompts/roadmap-lifecycle-consolidation-fedora-activation-v1|roadmap-lifecycle-consolidation-fedora-activation-v1]]
 15. [[prompts/chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1]]
 16. [[prompts/personalhub-v60-live-db-20-21-migration-v1|personalhub-v60-live-db-20-21-migration-v1]]
+17. [[prompts/sqlite-to-obsidian-kuma-connection-recovery-v1|sqlite-to-obsidian-kuma-connection-recovery-v1]]

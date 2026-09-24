@@ -8,6 +8,7 @@
 - [[obsidian/Prompts/729874 roadmap-lifecycle-consolidation-fedora-activation-v1|729874 · Attivare il lifecycle roadmap consolidato su Fedora]]
 - [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]]
 - [[obsidian/Prompts/383662 personalhub-v60-live-db-20-21-migration-v1|383662 · Migrare il DB reale 20→21 e validare PersonalHub v60]]
+- [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]]
 
 ## In esecuzione
 

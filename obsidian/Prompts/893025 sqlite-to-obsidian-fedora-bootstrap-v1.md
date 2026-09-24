@@ -29,7 +29,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[649781 personalhub-obsidian-archive-blocker-closure-v5|649781]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[714263 sqlite-to-obsidian-kuma-connection-recovery-v1|714263]]
 - **Chat Codex:** Nuova chat Codex; usa /goal. Bootstrap cross-project Fedora; nessuna modifica runtime Android a PersonalHub.
 
 ## Spiegazione
