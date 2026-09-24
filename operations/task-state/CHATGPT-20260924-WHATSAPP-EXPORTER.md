@@ -1,7 +1,7 @@
 # Operational task state — WhatsApp exporter
 
 TASK_ID: CHATGPT-20260924-WHATSAPP-EXPORTER
-Updated: 2026-09-24 17:58 Europe/Copenhagen
+Updated: 2026-09-24 18:59 Europe/Copenhagen
 
 ## Objective
 Build a robust incremental WhatsApp exporter starting from WhatsApp Web on Fedora, reusing verified authenticated-browser access and existing whatsapp-watcher DOM discovery, with deduplication, human-readable history, media preservation when accessible, and optional relationship/block-state events for Carlo Visda.
@@ -22,13 +22,13 @@ Build a robust incremental WhatsApp exporter starting from WhatsApp Web on Fedor
 
 ## Plan / checklist
 ### Phase 1 — Rehydrate context
-- [ ] Read operations/task-state/README.md.
-- [ ] Read CHATGPT-20260924-WHATSAPP-CARLO-BLOCK-TRACKING.md in full.
-- [ ] Inspect /home/daniele/projects/whatsapp-watcher and preserve any pre-existing untracked relationship-core.js / relationship-monitor.js work.
-- [ ] Reconfirm authenticated WhatsApp Web safe-inspection path and current browser/runtime state.
+- [x] Read operations/task-state/README.md.
+- [x] Read CHATGPT-20260924-WHATSAPP-CARLO-BLOCK-TRACKING.md in full.
+- [x] Inspect /home/daniele/projects/whatsapp-watcher and preserve any pre-existing untracked relationship-core.js / relationship-monitor.js work.
+- [x] Reconfirm authenticated WhatsApp Web safe-inspection path and current browser/runtime state.
 
 ### Phase 2 — Exporter architecture
-- [ ] Decide whether exporter belongs in whatsapp-watcher or a dedicated repo based on scope; prefer a dedicated exporter if transcript/media persistence would overcomplicate the read-receipt extension.
+- [x] Decide whether exporter belongs in whatsapp-watcher or a dedicated repo based on scope; dedicated exporter selected.
 - [ ] Define canonical local storage schema for chats/messages/revisions/media/system events.
 - [ ] Define unique identity/deduplication keys and incremental cursor/reconciliation strategy.
 - [ ] Define human-readable no-ID view with localized/relative dates.
@@ -49,7 +49,7 @@ Build a robust incremental WhatsApp exporter starting from WhatsApp Web on Fedor
 - [ ] Commit/push source and final roadmap checkpoint.
 
 ## Current step
-Rehydrate the verified WhatsApp Web discovery and inspect the existing whatsapp-watcher repo plus any untracked relationship-monitor files before choosing whether to extend that repo or create a dedicated exporter.
+Create a dedicated whatsapp-exporter repo/runtime that connects to the authenticated headless Chrome clone over localhost CDP, then implement the storage schema, dedupe/reconciliation and Carlo-only export without touching the normal browser session.
 
 ## Verified facts
 - Existing repo: /home/daniele/projects/whatsapp-watcher, main at b6e3e9f when last inspected.
@@ -63,22 +63,28 @@ Rehydrate the verified WhatsApp Web discovery and inspect the existing whatsapp-
 - A temporary read-only copy of the Chrome Default profile was previously used with headless CDP on localhost to inspect authenticated WhatsApp Web without modifying the original browser profile/session.
 - Both Firefox and Chrome were running; neither exposed a normal remote-debugging port in the original session.
 - Browser content-script/DOM observation was selected over Android/AT-SPI as the preferred first implementation path.
+- Safe CDP clone is currently running at 127.0.0.1:9222 with user-data-dir /home/daniele/.cache/whatsapp-cdp-profile.
+- relationship-core.js is complete and reusable as semantic reference; relationship-monitor.js is an incomplete 50-line untracked fragment and must remain untouched.
 
 ## Decisions
 - Start from WhatsApp Web, not Android.
 - Reuse verified DOM discovery; do not redo broad exploration unless current selectors fail.
 - Preserve raw evidence behind derived block/unblock classifications.
-- Prefer a dedicated exporter if transcript/media persistence materially exceeds whatsapp-watcher's narrow read-receipt purpose; otherwise reuse shared DOM utilities without mixing private archive data into source Git.
+- Use a dedicated exporter repo/runtime; do not extend whatsapp-watcher for transcript/media persistence.
+- Connect the exporter to the authenticated headless Chrome clone via localhost CDP so the normal Chrome/Firefox sessions remain untouched.
+- Store private archive data under the user data directory, outside source Git; source repo contains only code/tests/docs.
 
 ## Completed
 - Persistent exporter state created from prior WhatsApp discovery.
 - Existing whatsapp-watcher repo and verified Carlo DOM signals identified.
+- Rehydration complete; watcher untracked files preserved.
+- Dedicated CDP exporter architecture selected.
 
 ## Remaining
 Architecture decision, source implementation, local storage schema, Carlo-first export, dedupe/reconciliation, tests, deploy, generalization, docs, and final checkpoint.
 
 ## Blockers
-No confirmed blocker. Must inspect the two untracked whatsapp-watcher relationship files before modifying the repo.
+No confirmed blocker.
 
 ## Evidence
 - operations/task-state/CHATGPT-20260924-WHATSAPP-CARLO-BLOCK-TRACKING.md
@@ -95,4 +101,4 @@ No confirmed blocker. Must inspect the two untracked whatsapp-watcher relationsh
 - Source/tests/checkpoint are pushed; private transcript/media are not committed to public source Git.
 
 ## Next action
-Read the block-tracking checkpoint and inspect whatsapp-watcher including relationship-core.js and relationship-monitor.js. Then choose the smallest correct exporter architecture and implement Carlo-only incremental export first.
+Create /home/daniele/projects/whatsapp-exporter and its remote repo, implement SQLite + human-readable Markdown persistence and deterministic dedupe/revision logic with focused tests, then validate against the existing Carlo-only CDP session on port 9222.
