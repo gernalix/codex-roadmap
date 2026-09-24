@@ -5,7 +5,6 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/822595 personalhub-global-since-when-v2|822595 · Promuovere Since When a funzione globale PersonalHub]] · `running`
 - [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `pending`
 - [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
 - [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `pending`
@@ -66,4 +65,5 @@ tags:
 - [[obsidian/Prompts/522084 personalhub-shared-tags-facets-backlinks-v1|522084 · Unificare tag, facet e backlink cross-module in PersonalHub]] · `completed`
 - [[obsidian/Prompts/613102 personalhub-global-photo-engine-people-legacy-removal-v3|613102 · Completare motore foto globale e rimuovere pipeline legacy People]] · `completed`
 - [[obsidian/Prompts/140263 personalhub-universal-since-when-creation-ui-v1|140263 · Estendere Create Since When a entità e moduli PH]] · `superseded`
+- [[obsidian/Prompts/822595 personalhub-global-since-when-v2|822595 · Promuovere Since When a funzione globale PersonalHub]] · `completed`
 - [[obsidian/Prompts/105883 personalhub-global-since-when-v3|105883 · Promuovere Since When a funzione globale PersonalHub]] · `superseded`
