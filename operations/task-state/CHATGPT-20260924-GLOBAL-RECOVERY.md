@@ -111,7 +111,7 @@ PersonalHub P0 is now the sole master lane. Resume 920550 from its existing push
 - Telegram auto-delete archive branch is now `chatgpt/telegram-autodelete-archive` at `f588fd96b849495ffafa05e881dae8361e91c29e`. In addition to duplicate-free message/media/call preservation and the human view, the live runtime now records factual own block/unblock state and inferred peer block/unblock visibility transitions in a combined no-ID `chat_human` timeline. Current own block was backfilled from Telegram's exact server timestamp; peer status baseline is Recently, so no false inferred peer-block event was created. Dedicated checkpoint: `CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md`.
 - PR #41 instrumentation blocker was fixed on PH task head `b10117adc84efe3afb4de20c350b411e7b1be055`: QA remains x86_64-capable but unminified so instrumentation-only hooks survive; both the semantic 920550 device test and the previously failing Datasette instrumentation test PASS locally on canonical `Pixel_8a`.
 - 920550 AVD acceptance is now PASS on the sole canonical emulator `Pixel_8a`: dedicated semantic-photo/owned-items instrumentation 1/1 PASS. QA found and fixed release-relevant ABI, temporary-DB Hub Context isolation, and ONNX/R8 JNI issues; PH task branch checkpoint is `0834a2434abe9ddd3a1c43caf23ba646c5bc3923`.
-- Parallel side-lane allowance: 994029 is scoped to `activity-watch-uploader` + ActivityWatch units with read-only central Kuma verification; 966124 is scoped to integrating Telegram collector fixes in `fedora-system-monitor` and reading the private Telegram data repo. Neither touches PersonalHub. Therefore both may run in other chats while PH continues here, provided 994029 does not write `fedora-system-monitor` while 966124 owns it.
+- Historical side-lane note: 994029 and 966124 were safely executed with disjoint repository ownership and are now both terminal `completed`; neither owns any current lane.
 - Current PH side-branch inventory is bounded to two real side branches: `task/920550` (2 commits ahead / 0 behind main) and `chatgpt/workflowy-integration` (11 commits ahead / 2 behind main). No other non-main PH branch contains recoverable work. Required order: finish/integrate 920550 → reconcile/integrate Workflowy branch → delete both only after main containment/semantic absorption is proved.
 - 920550 Play/minified artifacts were produced successfully from the task worktree with release minification/resource shrinking enabled: `app-play.apk` = 191,469,880 bytes and `app-play.aab` = 87,776,741 bytes. Model weights remain outside the base app. The single Gradle build process exited; no duplicate build was launched.
 - A direct user request temporarily preempted the PH-only rule to implement the one-day-auto-delete Telegram archive. That bounded runtime work is complete: fedora-system-monitor branch `chatgpt/telegram-autodelete-archive` is pushed through `2fc6c38`; 14/14 Telegram tests PASS; the live archive preserves Telegram call actions, exposes a no-ID human view with Italian/relative dates and sender names, and retains the earlier 61-message/3-media backfill; both Telegram timers remain enabled+active and concurrent collector startup succeeds under the shared session lock. No model-driven Telegram work remains active, so PersonalHub resumes as master immediately. Authoritative detail: `operations/task-state/CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md`.
@@ -144,28 +144,28 @@ PersonalHub P0 is now the sole master lane. Resume 920550 from its existing push
 - A separate ChatGPT automation, "Codex Fix Queue", was active hourly and redundantly scanned B/F/PBF state with a model. It was disabled directly at 2026-09-24T10:15:47Z because the PBF protocol now handles this without model polling.
 - Pending non-PH audit:
   - 222733: valid emergency local task; run first.
-  - 994029: valid local ActivityWatch/Kuma cutover; independent of 222733.
+  - 994029: completed local ActivityWatch/Kuma cutover; terminal PASS.
   - 302284: valid consolidated prompt-infrastructure runtime deploy; depends on 222733.
   - 812553: still valid; prompt-history exists, gernalix/ChatGPTExporter still does not; depends on 222733.
-  - 714263: valid bounded sqlite-to-obsidian Kuma recovery; depends on 994029.
+  - 714263: valid bounded sqlite-to-obsidian Kuma recovery; its 994029 prerequisite is satisfied, but launch remains deferred by master-lane ordering.
   - 181259: semantically valid only after Grindr login, but its declared repo gernalix/grindr-web-exporter does not exist on GitHub. A local checkout may exist, but the current roadmap target cannot use the generic remote single-writer safely until this is reconciled.
   - 556372: gernalix/grindr-export exists and is a distinct local-first selected-conversation exporter; do not treat it as an automatic replacement for the broader grindr-web-exporter lifecycle task. It remains dependent on 181259 to avoid browser contention.
   - 582946: correctly Waiting on manual MitID login.
   - 218695: correctly conditional; launch only if 582946 proves native e-Boks export insufficient, otherwise cancel it.
   - 588376: correctly Waiting on manual revocation of the old PAT.
-  - 422308: historical BLOCKED parent with runtime now validated; do not rerun. Canonical source-closure successor is 966124 and stays parked until Phase 4.
-- 641903 is unsafe as written: its explanation/tag correctly says project_id 96 is stale/points to Workflowy, but the executable prompt still hard-codes PROJECT_ID=96 and exact project=96. Its dependency on 302284 does not fix that by itself because 302284 does not reconcile the CCS project ID.
-- A canonical replacement allocation request for never-run 641903 is open in MegaVault Issue #100: [prompt-id-command] chatgpt-ccs-641903-project-routing-replacement-20260924-v1. It must resolve current CCS project routing from authoritative metadata/repo identity rather than hard-code 96.
+  - 422308: historical BLOCKED parent with runtime now validated; do not rerun. Canonical successor 966124 is completed; no source-closure task remains.
+- 641903 is unsafe/superseded and must never run; routing-safe successor 896074 is the canonical replacement and depends on 302284.
+- MegaVault Issue #100 is closed; canonical routing-safe successor 896074 is already materialized.
 
 ## Decisions
-- Parallel side-lane rule: **994029 and 302284 may run concurrently in another chat while PH continues here**. Their verified writer scopes are disjoint from PersonalHub and from each other. 302284 must resume from its existing canonical running state and pushed WIP checkpoint `codex-usage-monitor/task/302284@6f31ceeaa51e5b77b86d2a18620a34079329196a`; do not restart it from scratch or duplicate already-completed deploy/tests.
-- **994029 and 966124 are explicitly allowed to run in parallel with PH in separate chats.** 966124 owns writes to `fedora-system-monitor`. 994029 may mutate `activity-watch-uploader` and ActivityWatch units, but must treat `fedora-system-monitor`/central Kuma control-plane state as read-only verification while 966124 is active. If 994029 needs a fedora-system-monitor code/config write, it must stop at that blocker until 966124 finishes.
+- 994029 is completed. 302284 remains parked at its canonical pushed WIP checkpoint `codex-usage-monitor/task/302284@6f31ceeaa51e5b77b86d2a18620a34079329196a` and must resume from there only when master-lane ordering allows; do not restart it from scratch.
+- 994029 and 966124 have both completed and released their repository/runtime ownership. Do not relaunch either prompt.
 - User priority override: PersonalHub + live DB migration now outrank all remaining non-PH recovery work. 302284 is parked after a safe checkpoint and resumes only after PH 913264 PASS, unless PH is truly blocked.
 - Until the final global gate, recovery work is serialized: one model-driven lane at a time. Existing active tasks are first brought to a safe checkpoint/parked state before the master lane advances; no new parallel recovery prompt is launched.
 - Do not duplicate the PersonalHub or Telegram lanes from the global recovery chat. PersonalHub detail belongs to CHATGPT-20260924-PERSONALHUB-P0.md; Telegram detail belongs to CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md.
 1. Stop 788315 heartbeat before other prompt-infrastructure runtime work.
 2. Prioritize PH P0 above unrelated work after the emergency heartbeat stop.
-3. Do not run 641903. Replace it with a routing-safe successor after MegaVault allocation Issue #100 completes; successor depends on 302284.
+3. Do not run 641903. Use already-materialized routing-safe successor 896074 only after 302284 PASS.
 4. Do not launch 181259 merely after login until the missing gernalix/grindr-web-exporter remote/single-writer path is reconciled.
 5. Keep 218695 conditional and cancel it if 582946 finishes the e-Boks export adequately.
 6. No model-driven waiting/heartbeat/polling. Use bounded readback or non-model event mechanisms.
@@ -176,7 +176,7 @@ PersonalHub P0 is now the sole master lane. Resume 920550 from its existing push
 - Checkpoint-protocol compliance audit completed for all current operational checkpoints; missing PH/infra sections corrected in-place without creating competing checkpoint files.
 - New-chat handoff prepared from persistent Git state; future continuation must reread this file first.
 - 641903 superseded by 896074; no future chat should launch 641903.
-- Telegram collector runtime is fully validated: authorization complete, RUN1/RUN2 PASS, timer active, private history repo readable. Source integration/lifecycle closure remains parked under canonical successor 966124; its specialized checkpoint is authoritative.
+- Telegram collector runtime and source integration are fully validated: authorization complete, RUN1/RUN2 PASS, timers active, private history repo readable, and canonical successor 966124 is terminal completed. Its specialized checkpoints are authoritative.
 - prompt-history analytics correction completed through ff694890 with prompt-level sampling/regressions; runtime import verification remains part of later local infrastructure work.
 - 422308 model metadata is now GPT-6 Luna; no prompt-body rewrite was needed.
 - 641903 is guarded by manual-prerequisite:resolve-ccs-project-id because verified runtime evidence shows legacy PROJECT_ID=96 resolves workflowy-importer, not chrome-codex-switcher.
