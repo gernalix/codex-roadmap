@@ -46,6 +46,7 @@ Phase 2: add the reproducible ntfy deployment and edge configuration to `vm_orac
 - Oracle VM already has Docker, cloudflared and a validated `/etc/cloudflared/config.yml`; the existing tunnel can safely add a dedicated `ntfy.danielegalati.com` ingress without opening a host firewall port.
 - Fedora already uses owner-only `~/.config/codex/secrets/` files; this is the established unattended-service credential convention.
 - ntfy server v2.28.0 is the current stable release and supports private ACLs plus persisted Web Push subscriptions.
+- First Oracle deployment reached a healthy loopback ntfy service, created the Cloudflare DNS route and exposed a healthy public endpoint from Fedora. The only failure was Oracle's resolver not seeing the just-created hostname within the bootstrap timeout; this was a validation-location bug, not an ntfy/edge failure.
 - Oracle VM has Docker/Compose, 14 GiB free disk, and Uptime Kuma already bound to loopback; the canonical Cloudflare tunnel can route another hostname.
 - Fedora already has `secret-tool`, `notify-send`, and authenticated `gh` access.
 - A GitHub `push` workflow scoped to `operations/task-state/**` is a stronger event boundary than a local Git hook: it covers checkpoints pushed by any chat/client and runs only after GitHub accepted the commit.
@@ -59,13 +60,14 @@ Phase 2: add the reproducible ntfy deployment and edge configuration to `vm_orac
 
 ## Completed
 - Created this persistent task state.
-- Added reproducible Oracle deployment files to `gernalix/vm_oracle`: pinned ntfy v2.28.0 Docker Compose, private server config, secure first-run bootstrap and Fedora deployment wrapper. Final pre-deploy commit is `6ab39cf` on remote `main`.
+- Added reproducible Oracle deployment files to `gernalix/vm_oracle`: pinned ntfy v2.28.0 Docker Compose, private server config, secure first-run bootstrap and Fedora deployment wrapper.
+- Corrected the deployment validation so Oracle proves origin/tunnel service health while Fedora proves the new public DNS/TLS path; the fix is pushed on `vm_oracle/main` at `0584ebd`.
 
 ## Remaining
 Oracle runtime deployment, Fedora remote-checkpoint publisher, subscriptions/watchdog decision, end-to-end validation and protocol finalization.
 
 ## Blockers
-None confirmed yet.
+None. The initial public-health false negative caused by Oracle DNS propagation has been corrected in the deployment script.
 
 ## Evidence
 - codex-roadmap main was clean at task start.
