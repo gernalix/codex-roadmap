@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 13:34 Europe/Copenhagen
+Updated: 2026-09-24 13:37 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -59,8 +59,9 @@ Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only g
 - [ ] Finish PH-specific branch/PR cleanup only after absorption is proved; end with clean main-only operational state.
 
 ### Phase 4 — Notification and checkpoint infrastructure
-- [ ] Complete the Telegram notification-history collector lane after one-time human Telegram authorization; details in `CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md`.
-- [ ] After sufficient Telegram history exists, audit noisy producers and apply only producer-specific fixes.
+- [x] Complete Telegram collector runtime acceptance: account authorization, RUN1=4,244 messages, RUN2=0/no-op, private Git history readable, timer enabled+active; details in `CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md`.
+- [ ] Complete the Telegram source/lifecycle closure through canonical successor 966124; never launch 333860. This integrates the already-verified task/422308 fixes onto fedora-system-monitor main after the global master lane reaches Phase 4.
+- [ ] After sufficient Telegram history exists, audit noisy producers and apply only producer-specific fixes; verify the post-fix notification stream is quieter and still actionable.
 - [ ] Complete the ntfy checkpoint-notification lane and prove accepted Git checkpoint pushes produce one remote notification; details in `CHATGPT-20260924-NTFY-CHECKPOINTS.md`.
 
 ### Phase 5 — Conditional/manual project lanes
@@ -98,10 +99,10 @@ Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of th
 - Handoff checkpoint refreshed for a new ChatGPT chat at 2026-09-24 12:48 Europe/Copenhagen.
 - 641903 is no longer actionable: it is superseded by routing-safe successor 896074, which must run only after 302284 and resolves the CCS project from current repo/runtime metadata instead of hard-coding project_id 96.
 - MegaVault allocation Issue #100 is no longer a blocker; it is closed. The canonical replacement 896074 already exists in the roadmap.
-- 422308 is now canonically BLOCKED after implementation commit f577f66fb4cc9e354df032ee1b5dea527006ea9e; its only blocker is one-time Telegram account authorization (API ID/hash + Telethon session). Detailed ownership is delegated to operations/task-state/CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md. Do not retry it before new human auth evidence.
-- Attention currently contains only 422308; treat it as a known manual-prerequisite leaf owned by the Telegram lane, not as an invitation to create another Codex retry.
+- 422308 remains terminal BLOCKED historically, but its human authorization prerequisite is now satisfied and the collector runtime is operational: RUN1 archived 4,244 messages, RUN2 was a zero-message no-op, the private history repo is readable via GitHub, and the 15-minute timer is enabled+active. Do not retry 422308; detailed ownership is in operations/task-state/CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md.
+- Telegram source closure must use remote-canonical successor 966124. A local allocator fallback incorrectly produced 333860 for the same request_id; roadmap mutation #1056 is replacing 333860 with 966124, and the wrong 333860 materialization request was closed not_planned.
 - prompt-history prompt-level model analytics source work is complete through ff69489074feae82a2838504ff6f2d03875caa2b: CLI aggregation, SQL analytics, v_model_performance, README contract and regressions all use one sample per canonical PROMPT_ID from codex-usage, aggregate cycle deltas, ignore roadmap execution mirrors, and exclude mixed-model/reasoning tasks.
-- PersonalHub 920550 and Telegram collector 422308 are currently running in their separate parallel lanes; do not duplicate their work in this global chat.
+- PersonalHub 920550 remains parked. The Telegram collector now runs only as a stable non-model systemd timer; no Telegram model lane is active while 302284 owns the master recovery lane.
 - 218695 is now guarded by manual-prerequisite:confirm-eboks-scraper-needed; its target public repo exists but is empty, so after 582946 the task must be reevaluated before launch.
 - 641903 has been superseded by materialized routing-safe successor 896074; 896074 depends on 302284 and resolves CCS from current repo/metadata instead of hard-coding project_id 96.
 - Runaway 788315 is still active as of 2026-09-24 12:17 Europe/Copenhagen: 203 published cycles; latest heartbeat used GPT-6 Sol medium, 112823 total tokens, 1 tool call, and returned only DONT_NOTIFY.
@@ -125,7 +126,7 @@ Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of th
   - 582946: correctly Waiting on manual MitID login.
   - 218695: correctly conditional; launch only if 582946 proves native e-Boks export insufficient, otherwise cancel it.
   - 588376: correctly Waiting on manual revocation of the old PAT.
-  - 422308: valid new Telegram-notification history collector; independent but low priority relative to PH/global recovery.
+  - 422308: historical BLOCKED parent with runtime now validated; do not rerun. Canonical source-closure successor is 966124 and stays parked until Phase 4.
 - 641903 is unsafe as written: its explanation/tag correctly says project_id 96 is stale/points to Workflowy, but the executable prompt still hard-codes PROJECT_ID=96 and exact project=96. Its dependency on 302284 does not fix that by itself because 302284 does not reconcile the CCS project ID.
 - A canonical replacement allocation request for never-run 641903 is open in MegaVault Issue #100: [prompt-id-command] chatgpt-ccs-641903-project-routing-replacement-20260924-v1. It must resolve current CCS project routing from authoritative metadata/repo identity rather than hard-code 96.
 
@@ -145,7 +146,7 @@ Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of th
 - Checkpoint-protocol compliance audit completed for all current operational checkpoints; missing PH/infra sections corrected in-place without creating competing checkpoint files.
 - New-chat handoff prepared from persistent Git state; future continuation must reread this file first.
 - 641903 superseded by 896074; no future chat should launch 641903.
-- Telegram lane 422308 implemented code/runtime preparation and is now blocked only on one-time Telegram authorization; its own checkpoint is authoritative for that lane.
+- Telegram collector runtime is fully validated: authorization complete, RUN1/RUN2 PASS, timer active, private history repo readable. Source integration/lifecycle closure remains parked under canonical successor 966124; its specialized checkpoint is authoritative.
 - prompt-history analytics correction completed through ff694890 with prompt-level sampling/regressions; runtime import verification remains part of later local infrastructure work.
 - 422308 model metadata is now GPT-6 Luna; no prompt-body rewrite was needed.
 - 641903 is guarded by manual-prerequisite:resolve-ccs-project-id because verified runtime evidence shows legacy PROJECT_ID=96 resolves workflowy-importer, not chrome-codex-switcher.
@@ -174,7 +175,7 @@ Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of th
 - Run 994029, then 714263.
 - Keep 812553 behind 222733.
 - Complete PH P0 chain and final external DB migration/APK/Pixel gate.
-- Then process low-priority/non-PH tasks (including 422308, Grindr/e-Boks/Logseq chains) according to prerequisites and perform the final global gate.
+- In Phase 4, run only canonical Telegram successor 966124 to integrate the already-verified source fixes, then perform the history-based producer audit; do not rerun 422308 or launch 333860. Then process remaining conditional/non-PH tasks according to prerequisites and perform the final global gate.
 
 ## Blockers
 - Local Fedora/device actions require Codex Desktop/local tooling.
@@ -182,6 +183,7 @@ Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of th
 - MegaVault Issue #100 is closed and no longer relevant; 896074 is the canonical routing-safe CCS successor.
 - 181259 targets a nonexistent GitHub remote (gernalix/grindr-web-exporter); local state must be reconciled before a safe successor can run.
 - Exact current live PH DB identity/schema on Pixel must be read locally before final migration.
+- Telegram runtime has no blocker; only the administrative allocator collision remains until roadmap mutation #1056 applies and 966124 is materialized. This must not interrupt the active Phase-2 master lane.
 
 ## Evidence
 - gernalix/codex-roadmap canonical projections, mutation Issues #1012-#1031 and task materializations.
@@ -190,6 +192,7 @@ Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of th
 - gernalix/prompt-history exists; gernalix/ChatGPTExporter and gernalix/grindr-web-exporter return GitHub 404; gernalix/grindr-export exists and has its own archive workflow.
 - ChatGPT automation readback showing "Codex Fix Queue" disabled.
 - PH/CCS/ActivityWatch repository and PR state already recorded above.
+- Telegram evidence: operations/task-state/CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md; fedora-system-monitor task/422308 through 5d8ed32; private data commit 99a9952479074f56095586a6ed3fb210111496db; MegaVault Issue #103 allocated canonical 966124; roadmap Issue #1056 repairs 333860 -> 966124.
 
 ## Acceptance criteria
 - No runaway/pointless high-cost model automation remains active.
@@ -202,7 +205,8 @@ Phase 2: execute 302284. First gate is a bounded safe-sync/readiness check of th
 - PH relevant work, including the checkpointed optional Workflowy integration, is complete before final build; final PH remote state is main-only.
 - Live PH DB has rollback, external final-schema migration, integrity/FK/data-preservation checks.
 - Final PH APK is release-validated, installed on Pixel and all relevant modules open with preserved data.
+- Telegram notification-history runtime is operational, canonical source closure is PASS, and producer-specific notification hygiene has been verified against the real post-fix stream.
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-Execute existing task 302284 locally through the canonical claim. Deploy only the already-implemented prompt-infrastructure runtime changes, run its bounded targeted gates/readback, finalize canonically, checkpoint this file, then move to 896074. Keep PersonalHub/Telegram/ntfy/branch-cleanup parked or waiting; do not launch them in parallel. The parked PersonalHub set now explicitly includes the verified Workflowy integration branch recorded in `CHATGPT-20260924-PH-WORKFLOWY.md`.
+Execute existing task 302284 locally through the canonical claim. Deploy only the already-implemented prompt-infrastructure runtime changes, run its bounded targeted gates/readback, finalize canonically, checkpoint this file, then move to 896074. Keep PersonalHub/Telegram/ntfy/branch-cleanup parked or waiting; do not launch them in parallel. The Telegram systemd collector may continue as a stable non-model background service, but 966124 stays parked until Phase 4. The parked PersonalHub set now explicitly includes the verified Workflowy integration branch recorded in `CHATGPT-20260924-PH-WORKFLOWY.md`.
