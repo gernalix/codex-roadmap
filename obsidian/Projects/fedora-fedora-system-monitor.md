@@ -5,7 +5,7 @@ tags:
 
 # Fedora / fedora-system-monitor
 
-- [[obsidian/Prompts/620949 unified-kuma-cross-repo-control-plane-v1|620949 · Unificare Uptime Kuma per tutti i repository]] · `pending`
+- [[obsidian/Prompts/620949 unified-kuma-cross-repo-control-plane-v1|620949 · Unificare Uptime Kuma per tutti i repository]] · `running`
 - [[obsidian/Prompts/593872 fedora-graphics-black-screen-forensics|593872 · Diagnosi forense del blackout grafico Fedora]] · `completed`
 - [[obsidian/Prompts/374820 fedora-runtime-kuma-closure-v4|374820 · Chiudere il gate Kuma Fedora usando l’accesso già disponibile]] · `completed`
 - [[obsidian/Prompts/542078 fedora-runtime-kuma-closure-v3|542078 · Chiudere solo il gate Kuma Fedora]] · `superseded`
