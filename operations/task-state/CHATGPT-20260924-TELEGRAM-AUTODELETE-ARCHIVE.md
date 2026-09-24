@@ -1,7 +1,7 @@
 # Operational task state — Telegram auto-delete archive
 
 TASK_ID: CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE
-Updated: 2026-09-24 14:31 Europe/Copenhagen
+Updated: 2026-09-24 15:05 Europe/Copenhagen
 
 ## Objective
 Preserve the complete available history of one Telegram chat configured with 1-day auto-delete, without duplicate storage, while retaining edits and deletion metadata and keeping archived content after Telegram removes it.
@@ -33,6 +33,8 @@ Preserve the complete available history of one Telegram chat configured with 1-d
 - [x] Serialize the new collector and the existing technical collector on one shared Telethon session lock with bounded wait.
 - [x] Preserve the existing technical-notification collector behavior and 15-minute timer.
 - [x] Add focused tests for dedupe, edits, deletions, revisions, media retention, reappearance and initial full backfill.
+- [x] Preserve Telegram service actions, including phone-call events, as structured action_type/action_json plus human-readable action_text.
+- [x] Add sender_name capture and a no-ID `messages_human` SQLite view with Italian/relative date formatting, sender name, human message/action text, media and state.
 
 ### Phase 3 — Deploy and verify
 - [x] Deploy the runtime on Fedora using the existing authorized account session.
@@ -42,23 +44,27 @@ Preserve the complete available history of one Telegram chat configured with 1-d
 - [x] Verify both user timers enabled+active.
 - [x] Start both collectors concurrently and verify shared-lock serialization: both services Result=success, no session database-lock failure.
 - [x] Verify the existing technical collector still syncs successfully after the lock change.
-- [x] Push the fedora-system-monitor source branch through commit fe5d371.
+- [x] Push the fedora-system-monitor source branch through commit 2fc6c38.
+- [x] Backfill the live DB after the human-view/action migration; verify the four call rows visible in the supplied Telegram screenshot now render as `Chiamata annullata` with sender name.
+- [x] Verify `messages_human` exposes only `quando`, `mittente`, `messaggio`, `media`, `stato`, uses `oggi`/`ieri` or Italian weekday abbreviations, and has no unknown sender after same-sender fallback.
 - [ ] During global recovery Phase 4, reconcile/integrate this branch with the existing task/422308 Telegram source closure and remove the temporary branch after equivalence is proved.
 
 ## Current step
-Runtime work is complete and operational. Source integration is intentionally parked until the global recovery reaches its Telegram Phase 4 lane; the preempted master lane can resume at 302284.
+Runtime work is complete and operational, including the human-readable view and Telegram call-event capture. Source integration is intentionally parked until the global recovery reaches its Telegram Phase 4 lane; control returns to the current PersonalHub master lane.
 
 ## Verified facts
-- Source branch: gernalix/fedora-system-monitor chatgpt/telegram-autodelete-archive, based on task/422308; remote head fe5d371c2327da83e213cdd9154b608119378ba5.
+- Source branch: gernalix/fedora-system-monitor chatgpt/telegram-autodelete-archive, based on task/422308; remote head 2fc6c38be783bc2022fa267f0fa46f349c19a39a.
 - Target discovery returned exactly one recent dialog whose Telegram full metadata reports ttl_period=86400; its identifier/title remain local-only.
 - Archive DB is local under ~/.local/share/fedora-telegram-autodelete with mode-restricted config/data; private chat contents are not committed.
 - First live backfill inserted 61 messages and retained 3 media files; archive footprint at verification was about 1.2 MiB.
 - Second live reconciliation kept 61 total rows / 61 distinct message IDs and inserted zero duplicates.
-- Focused source gates PASS: 13/13 Telegram tests, py_compile, bash -n, systemd-analyze verify, git diff --check.
+- Focused source gates PASS after the human-view/action update: 14/14 Telegram tests, py_compile and git diff --check; earlier shell/systemd unit gates remain PASS.
 - telegram-autodelete-archive.timer is enabled+active at a 5-minute cadence; telegram-notification-history.timer remains enabled+active at 15 minutes.
 - Concurrent live start of both services after the shared-lock change returned Result=success for both; auto-delete sync completed and technical history sync completed without sqlite3 database-lock errors.
 - The first scheduled post-deploy cycle also passed: technical collector ran at 14:30:00 with new_messages=0; auto-delete collector ran at 14:30:02 with inserted=0/updated=0/unchanged=60/deleted=0; both timers remain active and the archive remains 61 rows / 61 distinct IDs.
 - Before the shared lock was deployed, a discovery process reproduced a real Telethon session database-lock failure in the technical collector; the deployed serialization directly addresses that failure mode.
+- The supplied UI/DB comparison was verified against Telegram itself: the blank rows at the corresponding call times are `MessageActionPhoneCall` records with `PhoneCallDiscardReasonMissed`; the collector previously archived their rows but discarded the action object. The live DB now preserves those actions and renders them human-readably.
+- `messages_human` formats current dates as `oggi H:MM`, previous-day dates as `ieri H:MM`, older dates as Italian `EEE d/m/yy H:MM`, and resolves sender names without exposing IDs. One already-expired legacy blank row could no longer have its action reconstructed, but its sender name is resolved from other rows with the same sender identity.
 
 ## Decisions
 - Use SQLite as the canonical local archive for the private auto-delete chat; Git stores source/checkpoints, not the private transcript.
@@ -80,11 +86,12 @@ Runtime work is complete and operational. Source integration is intentionally pa
 - Inherent limitation: if Fedora and this collector are unavailable for longer than the chat's 24-hour retention window, messages created and auto-deleted entirely during that outage cannot be recovered afterward.
 
 ## Evidence
-- fedora-system-monitor branch commits through fe5d371c2327da83e213cdd9154b608119378ba5.
-- Test gate: 13 tests PASS plus py_compile, shell syntax, systemd unit verification and diff-check.
+- fedora-system-monitor branch commits through 2fc6c38be783bc2022fa267f0fa46f349c19a39a.
+- Test gate after the human-view/action update: 14 tests PASS plus py_compile and diff-check; previously verified shell/systemd gates remain valid.
 - Live archive: 61 rows / 61 distinct IDs after two reconciliations; 3 media files retained.
 - Live systemd: both timers enabled+active; concurrent service start returned success for both collectors.
 - Scheduled runtime proof at 2026-09-24 14:30 Europe/Copenhagen: both timer-triggered services completed successfully with no session lock error.
+- Live migration backup created before schema/view update; post-deploy service Result=success. The live human view shows the supplied call events as `ieri 19:37/19:40/19:42/19:48 · Daniele · Chiamata annullata`, with zero `Sconosciuto`/`Sistema` senders after fallback resolution.
 - Official Telethon documentation confirms that simultaneous clients should not share the same SQLite session; deployed services now serialize on ~/.cache/fedora-telegram-history/session.lock.
 
 ## Acceptance criteria
@@ -95,7 +102,8 @@ Runtime work is complete and operational. Source integration is intentionally pa
 - [x] Shared-session access is serialized, preventing the reproduced concurrent SQLite-session lock failure.
 - [x] Existing technical-notification archive remains operational.
 - [x] Focused tests pass; deployed runtime is healthy; source and checkpoint are pushed with no secrets or private transcript content.
+- [x] Human-readable no-ID view, Italian relative dates, sender names and phone-call action rendering are deployed and verified on the live archive.
 - [ ] Canonical fedora-system-monitor main contains the implementation and the temporary branch is removed; deferred to global Phase 4.
 
 ## Next action
-Resume the global master recovery at 302284. When Phase 4 becomes active, reconcile chatgpt/telegram-autodelete-archive with task/422308, integrate the combined Telegram collector changes into fedora-system-monitor main through the canonical source-closure lane, rerun tests/runtime readback, and delete the temporary branch.
+Return control to the current PersonalHub master recovery lane. When global Phase 4 becomes active, reconcile chatgpt/telegram-autodelete-archive with task/422308, integrate the combined Telegram collector changes into fedora-system-monitor main through the canonical source-closure lane, rerun tests/runtime readback, and delete the temporary branch.
