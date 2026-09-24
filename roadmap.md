@@ -15,3 +15,4 @@
 11. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 12. [[prompts/personalhub-unified-history-search-v1|personalhub-unified-history-search-v1]]
 13. [[prompts/codex-usage-live-publisher-single-writer-runtime-recovery-v1|codex-usage-live-publisher-single-writer-runtime-recovery-v1]]
+14. [[prompts/unified-kuma-cross-repo-control-plane-v1|unified-kuma-cross-repo-control-plane-v1]]
