@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 17:12 Europe/Copenhagen
+Updated: 2026-09-24 17:16 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -192,6 +192,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- Superseded dirty residues 624831 and 728918 were removed after verifying their preserved external evidence hashes exactly match the checkpoint and both branches have 0 commits unique versus `origin/main`. Their dirty worktrees were force-removed and local branches deleted. No remote refs existed. PersonalHub local branch set is now only `main`, active `task/920550`, and `chatgpt/workflowy-integration`.
 - Detached-worktree cleanup advanced: removed `PersonalHub-autoexport-hotfix`, `PersonalHub-capsule-isolation`, and `/tmp/personalhub-main-play-baseline` after their previously recorded ancestor/patch-equivalence proof. Removed local `codex/pr35-cleanup` worktree+branch after re-proving the integrated functional head is contained in `origin/main`. Remaining local branches are only Workflowy, `main`, superseded dirty evidence branches 624831/728918, and active 920550.
 - PR #41 instrumentation CI is now PASS on head `3f32b8c`; Play preflight and architecture are also PASS. Only Android unit CI remains non-terminal.
 - Branch cleanup checkpoint: 14 clean historical local branches with 0 commits unique versus `origin/main` were deleted after proof of absorption: `feature/global-activity-register`, `feature/soldi-ui-v2`, `task/462279`, `task/514458`, `task/514458-23`, `task/522084`, `task/613102`, `task/620949`, `task/637985`, `task/693278`, `task/773323`, `task/822595`, `task/825147`, `task/879838`. Clean worktree for `task/514458` was removed first. Remaining local branches are only `chatgpt/workflowy-integration`, `codex/pr35-cleanup`, `main`, `task/624831`, `task/728918`, `task/920550`.
