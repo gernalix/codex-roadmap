@@ -6,7 +6,7 @@ Valida e chiudi il sistema Git Data / Global History / Time Machine già impleme
 # Starting point
 - repo: /home/daniele/projects/PersonalHub;
 - docs/GIT_DATA_HISTORY.md e core/database/.../gitdata/* descrivono già sync, history, restore, patch, revert e Time Machine;
-- esegui dopo 728918 così lo stato tecnico Obsidian è presente e deve restare escluso dalla history semantica.
+- esegui dopo 857906 sullo schema PH risultante; l'archivio Obsidian è esterno a PersonalHub e non è più un prerequisito applicativo.
 
 # Esecuzione
 1. Usa CODE_MAP + docs/GIT_DATA_HISTORY.md e i test esistenti; niente audit repo-wide.

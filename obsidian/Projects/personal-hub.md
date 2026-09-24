@@ -5,10 +5,11 @@ tags:
 
 # Personal Hub
 
+- [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]] · `pending`
 - [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `pending`
 - [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
 - [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `pending`
-- [[obsidian/Prompts/383662 personalhub-v60-live-db-20-21-migration-v1|383662 · Migrare il DB reale 20→21 e validare PersonalHub v60]] · `pending`
+- [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]] · `pending`
 - [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844 · Chiudere il residuo del merge capsule]] · `completed`
 - [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5|380812 · Chiudere e integrare tag e alert di Places]] · `completed`
 - [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404 · Chiudere e mergiare la PR alert/Places già pronta]] · `completed`
@@ -67,3 +68,4 @@ tags:
 - [[obsidian/Prompts/140263 personalhub-universal-since-when-creation-ui-v1|140263 · Estendere Create Since When a entità e moduli PH]] · `superseded`
 - [[obsidian/Prompts/822595 personalhub-global-since-when-v2|822595 · Promuovere Since When a funzione globale PersonalHub]] · `completed`
 - [[obsidian/Prompts/105883 personalhub-global-since-when-v3|105883 · Promuovere Since When a funzione globale PersonalHub]] · `superseded`
+- [[obsidian/Prompts/383662 personalhub-v60-live-db-20-21-migration-v1|383662 · Migrare il DB reale 20→21 e validare PersonalHub v60]] · `superseded`

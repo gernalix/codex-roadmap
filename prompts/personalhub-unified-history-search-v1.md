@@ -3,7 +3,6 @@ PROMPT_ID=857906
 MEGAVAULT=STRICT
 PROJECT_ID=49
 REPO=gernalix/PersonalHub
-DEPENDS_ON=140263
 
 # Goal
 
@@ -24,7 +23,7 @@ Current main contiene già la base del PROMPT_ID=835204:
 
 Usa prima `.codex/CODE_MAP.tsv`, in particolare: `app.activity_register`, `hub.temporal_search`, `people.history`, `places.history`, `timer.timeline`, `wordpulse.root`, `substances.root`, `soldi.root`, `app.shell`, `app.settings`. Apri altri file solo da consumer-preflight o da un failure concreto. Niente audit repo-wide.
 
-Il PROMPT_ID=140263 (Universal Since When) deve essere già terminale/PASS. Preserva la sua capability: se un'azione “Create Since When counter” vive in una legacy history eliminata, ricollocala nel nuovo percorso condiviso o nell'entity detail canonico senza duplicare il motore Since When.
+PROMPT_ID=822595 ha già portato Since When a capability globale ed è PASS. Preserva quella capability: se un'azione “Create Since when counter” vive in una legacy history eliminata, ricollocala nel nuovo percorso condiviso o nell'entity detail canonico senza duplicare il motore Since When. La dipendenza operativa corrente è gestita dalla roadmap e include il residuo foto/owned-items 920550; non riaprire 140263.
 
 # 1. Contratto unico degli eventi
 

@@ -1,20 +1,20 @@
 ---
 prompt_id: 383662
-status: pending
+status: superseded
 project_id: —
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 383662 · Migrare il DB reale 20→21 e validare PersonalHub v60
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-v60-live-db-20-21-migration-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-v60-live-db-20-21-migration-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** —
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[913264 personalhub-final-live-db-migration-apk-pixel-v1|913264]]
 - **Chat Codex:** Usa una sessione Codex dedicata nel progetto Personal Hub; riusa gli strumenti già implementati senza nuova discovery generale.
 
 ## Spiegazione

@@ -1,35 +1,35 @@
 ---
-prompt_id: 788606
+prompt_id: 913264
 status: pending
 project_id: 49
-model: GPT-6 Luna
-reasoning: low
+model: GPT-6 Sol
+reasoning: medium
 tags:
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 788606 · Preflight finale Google Play con size e shrink
+# 913264 · Migra il DB finale e installa l’APK definitivo sul Pixel
 
 - **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-play-release-local-validation-v4|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-final-live-db-migration-apk-pixel-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[840907 personalhub-datasette-lite-offline-runtime-v4|840907]]
-- **Sblocca:** [[913264 personalhub-final-live-db-migration-apk-pixel-v1|913264]]
-- **Padri/precedenti:** [[334679 personalhub-play-release-local-validation-v3|334679]]
+- **Dipende da:** [[788606 personalhub-play-release-local-validation-v4|788606]]
+- **Sblocca:** —
+- **Padri/precedenti:** [[383662 personalhub-v60-live-db-20-21-migration-v1|383662]]
 - **Figli/follow-up:** —
-- **Chat Codex:** Nuova chat
+- **Chat Codex:** Nuova chat Codex; /goal finale ad alto rischio dati, solo dopo preflight release
 
 ## Spiegazione
 
-Resta ultimo nella catena PersonalHub: esegue soltanto il preflight Play sul main finale dopo 840907.
+Dopo tutti i lavori PH e il preflight finale, salva un rollback completo, migra una tantum il DB reale allo schema finale, installa l’APK definitivo e verifica tutti i moduli sul Pixel.
 
 ## Esecuzioni
 

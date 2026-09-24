@@ -27,7 +27,7 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[822595 personalhub-global-since-when-v2|822595]]
+- **Dipende da:** [[822595 personalhub-global-since-when-v2|822595]], [[920550 personalhub-soldi-semantic-photo-owned-items-residual-v1|920550]]
 - **Sblocca:** [[707603 personalhub-git-history-final-validation-v4|707603]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —

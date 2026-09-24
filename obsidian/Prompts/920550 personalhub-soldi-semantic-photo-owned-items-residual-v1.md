@@ -1,35 +1,35 @@
 ---
-prompt_id: 788606
+prompt_id: 920550
 status: pending
 project_id: 49
-model: GPT-6 Luna
-reasoning: low
+model: GPT-6 Sol
+reasoning: medium
 tags:
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/personal-hub
 ---
 
-# 788606 · Preflight finale Google Play con size e shrink
+# 920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi
 
 - **Stato:** pending
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-play-release-local-validation-v4|Apri prompt]]
+- **Prompt:** [[../../prompts/personalhub-soldi-semantic-photo-owned-items-residual-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[840907 personalhub-datasette-lite-offline-runtime-v4|840907]]
-- **Sblocca:** [[913264 personalhub-final-live-db-migration-apk-pixel-v1|913264]]
-- **Padri/precedenti:** [[334679 personalhub-play-release-local-validation-v3|334679]]
+- **Dipende da:** —
+- **Sblocca:** [[857906 personalhub-unified-history-search-v1|857906]]
+- **Padri/precedenti:** [[624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831]]
 - **Figli/follow-up:** —
-- **Chat Codex:** Nuova chat
+- **Chat Codex:** Nuova chat Codex; /goal unico sul residuo reale di 624831, non rifare 613102
 
 ## Spiegazione
 
-Resta ultimo nella catena PersonalHub: esegue soltanto il preflight Play sul main finale dopo 840907.
+Completa solo le parti foto/Soldi ancora mancanti: ricerca semantica locale, confronto foto, Trova questo oggetto e oggetti posseduti, riusando il motore foto globale già integrato.
 
 ## Esecuzioni
 

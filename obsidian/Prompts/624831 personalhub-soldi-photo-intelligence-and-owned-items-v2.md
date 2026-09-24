@@ -31,7 +31,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[963514 personalhub-soldi-on-device-visual-object-search-v1|963514]]
-- **Figli/follow-up:** [[613102 personalhub-global-photo-engine-people-legacy-removal-v3|613102]]
+- **Figli/follow-up:** [[613102 personalhub-global-photo-engine-people-legacy-removal-v3|613102]], [[920550 personalhub-soldi-semantic-photo-owned-items-residual-v1|920550]]
 - **Chat Codex:** Nuova chat Codex; eseguire solo dopo merge PR #31
 
 ## Spiegazione
