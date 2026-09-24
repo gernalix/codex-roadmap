@@ -48,6 +48,23 @@ def connect(repo: Path, *, writable: bool = True) -> sqlite3.Connection:
         conn.execute("PRAGMA query_only=ON")
     return conn
 
+def _normalize_sql(sql: str | None) -> str:
+    return re.sub(r"\\s+", " ", str(sql or "").strip()).lower()
+
+
+def _ensure_view(conn: sqlite3.Connection, name: str, select_sql: str) -> None:
+    """Refresh a generated view only when its definition actually changed."""
+    desired = f"CREATE VIEW {name} AS {select_sql.strip()}"
+    row = conn.execute(
+        "SELECT sql FROM sqlite_master WHERE type='view' AND name=?",
+        (name,),
+    ).fetchone()
+    if row and _normalize_sql(row["sql"]) == _normalize_sql(desired):
+        return
+    conn.execute(f"DROP VIEW IF EXISTS {name}")
+    conn.execute(desired)
+
+
 def ensure_schema(conn: sqlite3.Connection) -> None:
     try:
         version = conn.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
@@ -95,12 +112,12 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
              requested_at TEXT NOT NULL
            )"""
     )
-    # Views are runtime contracts too. Refresh this one additively so existing
-    # schema_version=1 databases pick up readiness semantics without a rebuild.
-    conn.execute("DROP VIEW IF EXISTS v_runnable_prompts")
-    conn.execute(
-        """CREATE VIEW v_runnable_prompts AS
-           SELECT p.*
+    # Views are runtime contracts too. Refresh them only when their SQL changes;
+    # opening the writer must not rewrite roadmap.sqlite on a rejected/no-op Issue.
+    _ensure_view(
+        conn,
+        "v_runnable_prompts",
+        """SELECT p.*
            FROM prompts p
            WHERE p.status='pending'
              AND NOT EXISTS (
@@ -115,16 +132,16 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
                WHERE t.prompt_id=p.prompt_id
                  AND t.tag LIKE 'manual-prerequisite:%'
              )
-           ORDER BY COALESCE(p.queue_position, 2147483647), p.created_at, p.prompt_id"""
+           ORDER BY COALESCE(p.queue_position, 2147483647), p.created_at, p.prompt_id""",
     )
     # Attention is for unresolved exceptional states only. A completed prompt
     # does not require analysis merely because no analysis row exists, and a
     # negative historical parent is no longer actionable once a completed
     # successor explicitly resolves it.
-    conn.execute("DROP VIEW IF EXISTS v_attention")
-    conn.execute(
-        """CREATE VIEW v_attention AS
-           SELECT s.*
+    _ensure_view(
+        conn,
+        "v_attention",
+        """SELECT s.*
            FROM v_prompt_summary s
            WHERE s.status IN ('failed','blocked','unknown')
              AND (
@@ -146,7 +163,7 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
                WHERE r.from_prompt_id=s.prompt_id
                  AND r.relation_type IN ('fix','replacement','merge','resolved_by')
                  AND successor.status='completed'
-             )"""
+             )""",
     )
     conn.commit()
 
@@ -1124,7 +1141,7 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
             "tool_call_count","input_tokens","cached_input_tokens","uncached_input_tokens","output_tokens",
             "reasoning_output_tokens","total_tokens","source"
         ) if k in mutation}
-        update_status=True
+        update_status=op!="usage_execution"
         if op=="usage_execution":
             row=prompt_row(conn,prompt_id)
             observed=mutation.get("materialization_sha256")
@@ -1144,7 +1161,51 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
                            ) VALUES(?,?,?,?,?,?)""",
                         (prompt_id,cycle_key,expected,observed,now_utc(),"codex-usage"),
                     )
-                update_status=False
+
+            # codex-usage is telemetry only: it may report a lifecycle anomaly,
+            # but it must never start or finish a roadmap prompt.
+            observed_outcome=str(mutation.get("outcome") or "")
+            if observed_outcome in FINAL_STATUS:
+                observed_status=FINAL_STATUS[observed_outcome]
+                terminal_request=conn.execute(
+                    "SELECT requested_status FROM terminal_requests WHERE prompt_id=?",
+                    (prompt_id,),
+                ).fetchone()
+                current_status=str(row["status"])
+                mismatch_payload=None
+                event_type=None
+                if terminal_request and str(terminal_request["requested_status"]) != observed_status:
+                    event_type="terminal_outcome_mismatch"
+                    mismatch_payload={
+                        "requested_status": str(terminal_request["requested_status"]),
+                        "observed_status": observed_status,
+                        "source": "codex-usage",
+                    }
+                elif current_status in TERMINAL_STATUS and current_status != observed_status:
+                    event_type="terminal_outcome_mismatch"
+                    mismatch_payload={
+                        "current_status": current_status,
+                        "observed_status": observed_status,
+                        "source": "codex-usage",
+                    }
+                elif current_status in ACTIVE_STATUS and not terminal_request:
+                    event_type="terminal_observed_without_request"
+                    mismatch_payload={
+                        "current_status": current_status,
+                        "observed_status": observed_status,
+                        "source": "codex-usage",
+                    }
+                if event_type:
+                    conn.execute(
+                        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+                        (
+                            prompt_id,
+                            event_type,
+                            now_utc(),
+                            actor,
+                            json.dumps(mismatch_payload, sort_keys=True),
+                        ),
+                    )
         record_execution(
             conn,
             prompt_id,
