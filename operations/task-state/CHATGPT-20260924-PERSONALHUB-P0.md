@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 17:18 Europe/Copenhagen
+Updated: 2026-09-24 17:21 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -91,6 +91,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 920550 is merged and verified on `main`. Reconcile/integrate `chatgpt/workflowy-integration` onto main, rerun only its affected gates, delete absorbed Workflowy + local 920550 branch, then claim 857906.
 
 ## Verified facts
+- Workflowy reconciliation after 920550 is PASS on local branch head `3348a34`: zero conflicts, consumer-preflight PASS, targeted Workflowy tests PASS, app compile PASS, architecture PASS.
 - Roadmap terminality and Git integration are temporarily split for 920550: canonical roadmap registry now says `completed / PASS`, but PersonalHub PR #41 is still open on head `3f32b8c` and `origin/main` does not yet contain the task. Operational gate for 857906 is therefore stricter than roadmap dependency alone: do not claim 857906 until #41 is merged and Workflowy is integrated.
 - Exact zero-unique local branch set versus current `origin/main`: `feature/global-activity-register`, `feature/soldi-ui-v2`, `task/462279`, `task/514458`, `task/514458-23`, `task/522084`, `task/613102`, `task/620949`, `task/624831`, `task/637985`, `task/693278`, `task/728918`, `task/773323`, `task/822595`, `task/825147`, `task/879838`. These require no committed merge. Dirty uncommitted residues in 624831/728918 are separately classified as superseded and must not be integrated.
 - Dirty historical worktree dispositions are now explicit: `task/624831` has no committed work unique versus current main and belongs to failed PROMPT_ID 624831, whose valid work is split into completed 613102 plus current 920550. Its uncommitted residue is superseded and must not be literal-merged. `task/728918` likewise has no committed work unique versus main; PROMPT_ID 728918 is superseded, its successor 649781 is also superseded, and roadmap evidence states the final PH chain no longer depends on the Obsidian archive. Its dirty uncommitted archive/Obsidian residue is obsolete, not a merge candidate. Preserve until final cleanup evidence is recorded, then remove the worktrees without integrating their superseded dirty state.
