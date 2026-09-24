@@ -1,6 +1,6 @@
 ---
 prompt_id: 857906
-status: pending
+status: running
 project_id: 49
 model: GPT-6 Sol
 reasoning: medium
@@ -12,13 +12,13 @@ tags:
   - search
   - undo
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personalhub
 ---
 
 # 857906 · PersonalHub — History/Search unica cross-module
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../prompts/personalhub-unified-history-search-v1|Apri prompt]]
 - **Primo lancio:** —
