@@ -20,8 +20,8 @@ tags:
 - **Progetto:** [[../Projects/github-autosync-fedora-runtime|GitHub Autosync / Fedora runtime]]
 - **Prompt:** [[../../completed/post-404936-runtime-validation|Apri prompt]]
 - **Primo lancio:** 2026-09-22T01:41:09Z
-- **Ultimo lancio:** 2026-09-22T01:41:09Z
-- **Ultimo esito:** BLOCKED
+- **Ultimo lancio:** 2026-09-22T01:57:03Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -40,6 +40,7 @@ Il primo tentativo non è partito per un blocco della roadmap, che ora è stato 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-22T01:41:09Z | 2026-09-22T01:41:30Z | BLOCKED | 20.895 | gpt-5.6-luna | low | 3 | 35866 |
+| 2026-09-22T01:57:03Z | 2026-09-22T02:01:23Z | PASS | 259.831 | gpt-5.6-luna | low | 37 | 104349 |
 
 ## Analisi ChatGPT
 
