@@ -31,6 +31,8 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - Stop Codex after queued integration/PASS; do not spend model turns polling CI/merge.
 
 ## Verified current facts
+- A pre-schema-upgrade PersonalHub DB was measured at ~173 MB because `hub_git_events` contained 108,401 `UPDATE hub_tags` events; 108,123 had identical before/after payloads. The confirmed code path is Timer `persist()` -> `syncTimerNowTags()` -> `TimerSharedTagBridge.syncNow()` -> `SharedTagEngine.replace()/assign()` -> global `HubTagDao.refreshUsage()` plus an unconditional Git `AFTER UPDATE` trigger.
+- Direct hotfix work is isolated on `chatgpt/tag-noop-hotfix` at commit `41920af`; it does not change Room schema/version and its touched paths do not overlap the currently modified files in worktree `task/920550`.
 - For 920550, the selected implementation path is TinyCLIP ONNX int8 downloaded on demand, not bundled in the base APK. Local verification found a ~24 MiB ONNX model with native 512-dimensional text/image embeddings; model card metadata reports MIT license. Verified model SHA-256: `844d1a46ab18acf50c989e541b12fe3b6dc7f8d6004725b4e992d142788e0600`. Tokenizer/preprocessor assets remain separate and downloadable.
 - PersonalHub main is version.txt 60 and currently declares Room schema 22.
 - Schema 21 -> 22 only adds since_when_counters and since_when_migration_state; existing schema-21 entities are otherwise unchanged.
@@ -90,6 +92,8 @@ Goal: operate only after 788606 PASS.
 Read the actual final app schema/Room identity from the final commit. Inspect the actual live DB schema/identity on Pixel. Take immutable rollback first. Externally migrate a copy of the real DB through every required delta to the final schema, validate quick_check/integrity/FK and preservation of representative data, then transfer/install the exact final APK and migrated DB using explicit Pixel serial. Smoke Home + every module. Keep rollback until final acceptance.
 
 ## Completed
+- Implemented tag/history write-amplification hotfix at PersonalHub commit `41920af`: `refreshUsage()` updates only stale derived values; replace/assign/remove skip unchanged relationships; tag projections/rename/archive/pin skip semantic no-ops; Timer avoids repeated archive writes; Git UPDATE triggers ignore exact row no-ops for both pending revisions and semantic history.
+- Added regression coverage proving exact no-op UPDATEs create neither `hub_git_events` nor `hub_git_pending`, repeated Timer projection produces zero Git writes, and a redundant `refreshUsage()` causes zero SQLite row changes. Combined targeted tests PASS; focused low-level regression PASS; `:app:compileDebugKotlin` PASS.
 - Verified the Kotlin CLIP tokenizer against the official TinyCLIP `tokenizer.json` using six reference phrases (`red jacket`, `black winter jacket`, `giubbotto nero`, `NORTH FACE SUMMIT`, `Copenhagen café`, `shoe 42`); token ID sequences matched exactly. The verification used temporary test resources and left the worktree clean.
 - 920550 implementation checkpoint exists on `task/920550`: foundation commit `8c34afcc94031deef7b59aae4f8ba762449c5326`, refinement commit `36fff1d` pushed to origin. Worktree is clean after the push.
 - Verified 920550 targeted unit tests from one execution: 12 tests / 0 failures / 0 errors across `FinanceCapsuleTest`, `ClipBpeTokenizerTest`, `FinanceSemanticAssetStoreTest`, `FinanceSemanticMathTest`, and `SoldiSearchTest`.
@@ -113,6 +117,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
+- Merge/push `chatgpt/tag-noop-hotfix` commit `41920af` into PersonalHub `main`, then delete the temporary hotfix branch/worktree after verifying the remote main SHA.
 - Run/review 920550 and inspect its actual diff, schema changes, tests and integration result before allowing 857906.
 - Run/review 857906; ensure old duplicate user-facing History/Log/Timeline surfaces are actually removed/replaced where intended and global/module search reuse is real.
 - Run/review 707603 on the resulting final-ish schema.
@@ -132,6 +137,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- PersonalHub hotfix commit `41920af` (`Fix tag history no-op write amplification`) on `chatgpt/tag-noop-hotfix`; targeted Gradle run PASS for `SyncJournalTest`, `SharedTagEngineTest`, and `TimerSharedTagBridgeTest`; focused `refreshUsageDoesNotRewriteTagsWhenDerivedValuesAreAlreadyCurrent` PASS; `:app:compileDebugKotlin` exit 0.
 - gernalix/PersonalHub main and Room schema JSON 21/22.
 - codex-roadmap canonical prompt materializations for 920550, 857906, 707603, 840907, 788606, 913264.
 - 613102 PASS evidence and PersonalHub merged implementation.
@@ -153,4 +159,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Continue 920550 from pushed checkpoint `8c34afc`: run the targeted Soldi semantic/search/database tests, fix only concrete failures, update docs/CODE_MAP, then run architecture/build and AVD QA including real on-device model download, indexing, semantic text query, same-object shortlist with distractor, owned-item persistence/removal and reopen. Measure model/APK/runtime impact. If all acceptance gates pass, call `roadmap_finish.py` and stop waiting for asynchronous integration; inspect canonical merged evidence before 857906.
+Merge and push `chatgpt/tag-noop-hotfix` (`41920af`) into PersonalHub `main`, verify the remote main contains the hotfix, remove the temporary branch/worktree, then resume 920550 from its existing checkpoint without rerunning already-passed targeted tests.
