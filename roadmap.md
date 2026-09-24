@@ -18,3 +18,4 @@
 14. [[prompts/pbf-lifecycle-reconciliation-protocol-v1|pbf-lifecycle-reconciliation-protocol-v1]]
 15. [[prompts/roadmap-lifecycle-consolidation-fedora-activation-v1|roadmap-lifecycle-consolidation-fedora-activation-v1]]
 16. [[prompts/chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1]]
+17. [[prompts/personalhub-v60-live-db-20-21-migration-v1|personalhub-v60-live-db-20-21-migration-v1]]
