@@ -25,6 +25,19 @@ class RoadmapDBTests(unittest.TestCase):
                 database.chmod(0o600)
             self.assertEqual(before, hashlib.sha256(database.read_bytes()).hexdigest())
 
+    def test_reopening_stable_database_does_not_rewrite_view_schema(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="123456",slug="one",title="One",current_path="prompts/one.md")
+            conn.commit(); conn.close()
+            database=repo/"roadmap.sqlite"
+            before=hashlib.sha256(database.read_bytes()).hexdigest()
+            conn=db.connect(repo)
+            conn.close()
+            after=hashlib.sha256(database.read_bytes()).hexdigest()
+            self.assertEqual(before,after)
+
     def test_prompt_body_is_canonical_sqlite_materialization(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
@@ -89,7 +102,7 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertEqual(["654321","123456"], [row["prompt_id"] for row in rows[:2]])
             conn.close()
 
-    def test_terminal_request_finalizes_immediately_and_usage_confirms(self):
+    def test_terminal_request_finalizes_immediately_and_usage_stays_passive(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
             (repo/"prompts").mkdir()
@@ -118,7 +131,7 @@ class RoadmapDBTests(unittest.TestCase):
             )
             conn.commit()
             self.assertEqual("completed",db.prompt_row(conn,"123456")["status"])
-            self.assertEqual(0,conn.execute("select count(*) from terminal_requests").fetchone()[0])
+            self.assertEqual(1,conn.execute("select count(*) from terminal_requests").fetchone()[0])
             self.assertEqual(1,conn.execute("select count(*) from executions").fetchone()[0])
             conn.close()
 
