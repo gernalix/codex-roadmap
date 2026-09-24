@@ -104,7 +104,7 @@ Repository implementation, source tests/CI, Fedora file deployment, daemon resta
 Exercise real page prompt-ID indexing/search/manual override behavior, verify clean final state, then mark task completed.
 
 ## Blockers
-No product/code blocker. Remote shell GUI automation cannot directly access the Wayland Chrome window through X11 tools; extension reload must use a safe session-preserving mechanism available from the running browser/session rather than forcing an unsafe browser kill.
+Temporary runtime blocker: Chrome retained the unpacked extension's old `0.3.8` service-worker registration across browser restart even though the manifest/heartbeat reports `0.4.0`. GUI Reload is not accessible through AT-SPI. Plan: trigger `chrome.runtime.reload()` from a temporary, URL-gated content-script patch loaded from the same unpacked directory, then immediately restore the deployed file and verify registration version.
 
 ## Acceptance criteria
 - [x] Searching any indexed six-digit PROMPT_ID is implemented to surface the associated context.
@@ -122,4 +122,4 @@ No product/code blocker. Remote shell GUI automation cannot directly access the 
 - [ ] Final checkout/runtime state is clean and checkpointed.
 
 ## Next action
-Create a disposable HTTP page containing known standalone six-digit IDs, open it in the restored Chrome session, verify `/api/list` receives those IDs from the real content script, test manual add/remove and exclusion persistence across one controlled reload, then delete the disposable context.
+Back up the deployed `content.js`, add a temporary reload-only branch for the disposable local test URL that calls `chrome.runtime.reload()`, open that URL, immediately restore canonical `content.js`, verify Chrome Preferences service-worker registration becomes `0.4.0`, then rerun the real-browser scanner test from a fresh disposable context.
