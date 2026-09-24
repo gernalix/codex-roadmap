@@ -25,7 +25,7 @@ Riusa la chat precedente solo quando il contesto non materializzato riduce davve
 
 Un prompt deve essere autosufficiente ma piccolo. Deve contenere soltanto:
 
-- `PROMPT_ID`, progetto, modello/reasoning;
+- `PROMPT_ID` nel testo; progetto, modello e reasoning restano metadati strutturati della roadmap e **non vanno duplicati nel prompt**;
 - goal e acceptance criteria;
 - checkout/workdir e starting point già verificati;
 - scope e non-goal;
@@ -111,7 +111,7 @@ Nel task worktree:
 - commit intermedi solo quando tecnicamente necessari;
 - test e fix restano sul task branch.
 
-Su PASS, `roadmap_finish.py` checkpointa/pusha il task branch tramite il generic writer, crea/riusa la PR `[single-writer]`, attende CI e merge serializzato nel branch canonico e **solo dopo** marca il PROMPT_ID completed. Un vero conflitto o CI fallita impediscono PASS senza perdere il branch/worktree.
+Su PASS, `roadmap_finish.py` checkpointa/pusha il task branch tramite il generic writer e accoda la PR `[single-writer]`, poi ritorna subito `QUEUED`. Il `repo-integrator` gestisce CI/rebase/merge in modo asincrono e, solo dopo il merge, richiama lo stesso finalizzatore per il PASS canonico. Codex non deve attendere o fare polling dell'integrazione.
 
 Il writer protegge il branch canonico con hook locale. Un errore “single-writer protected” indica che si sta lavorando nel checkout sbagliato: usare il `worktree_path` restituito da `roadmap_start.py`, non tentare di bypassare il guard.
 
@@ -139,20 +139,14 @@ Per PersonalHub:
 
 ## Finalizzazione roadmap
 
-PASS:
+Usa sempre lo stesso finalizzatore:
 
 ```bash
-python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID> --confirm-executed
+python3 ~/projects/codex-roadmap/tools/roadmap_finish.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID> --result PASS --confirm-executed
+# oppure --result BLOCKED / FAIL / CANCELLED
 ```
 
-BLOCKED/FAIL:
-
-```bash
-python3 ~/projects/codex-roadmap/tools/roadmap_result.py --repo ~/projects/codex-roadmap --prompt-id <PROMPT_ID> --result BLOCKED --confirm-executed
-# oppure --result FAIL
-```
-
-Questi comandi inviano una mutazione idempotente al writer remoto. Non modificano direttamente il checkout locale della roadmap.
+Per PASS repository-backed il primo invio può restituire `QUEUED`: significa che l'integratore possiede da quel momento CI/rebase/merge e finalizzerà il PASS dopo il merge. Per gli altri esiti la richiesta terminale viene inoltrata subito al writer. `roadmap_result.py` resta solo compatibilità interna e non è un secondo percorso operativo.
 
 Un retry/fix materializzato usa sempre un nuovo PROMPT_ID collegato al padre.
 
@@ -162,7 +156,7 @@ Dopo che `roadmap_start.py` ha portato un prompt a `running`, quel PROMPT_ID è 
 
 Le `explanation` devono essere scritte per una persona senza competenze di programmazione: una o due frasi brevi che dicano cosa farà il prompt e quale risultato visibile produrrà. Evitare commit hash, nomi di helper, dettagli di implementazione e gergo tecnico quando non indispensabili.
 
-`roadmap_finish.py` / `roadmap_result.py` sono autoritativi per lo scheduling: il single writer applica immediatamente lo stato terminale richiesto e, su PASS, rende subito eseguibili tutti i figli le cui altre dipendenze sono soddisfatte. `codex-usage` arriva in modo indipendente per costi, durata e audit; ritardi o fingerprint mismatch della telemetria non possono più lasciare un prompt bloccato in `running`. Un eventuale mismatch tra esito dichiarato e telemetria viene registrato come anomalia da investigare, senza retrocedere automaticamente lo stato canonico.
+`roadmap_finish.py` è l'unico ingresso operativo terminale. Il single writer applica gli esiti non-PASS immediatamente; per PASS repository-backed il PASS canonico arriva soltanto dopo il merge dell'integratore. `codex-usage` è indipendente e sola lettura rispetto al lifecycle: registra costi, durata, audit e anomalie senza cambiare lo stato canonico.
 
 Se una decisione nuova rende il lavoro in corso parzialmente obsoleto, il task corrente continua; l'eventuale correzione diventa un follow-up successivo. Questa regola serve a non buttare token e lavoro già in corso.
 
