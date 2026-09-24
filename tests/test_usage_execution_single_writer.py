@@ -59,7 +59,7 @@ class UsageExecutionMutationTests(unittest.TestCase):
                 run.call_args_list[1].args[0],
             )
 
-    def test_matching_usage_execution_updates_status(self) -> None:
+    def test_matching_usage_execution_records_telemetry_without_status_change(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             conn = db.connect(repo)
@@ -99,9 +99,15 @@ class UsageExecutionMutationTests(unittest.TestCase):
 
             apply_mutations.apply_inbox(repo, test_only=True)
             conn = db.connect(repo, writable=False)
-            self.assertEqual("completed", db.prompt_row(conn, "123456")["status"])
+            self.assertEqual("pending", db.prompt_row(conn, "123456")["status"])
             self.assertEqual(1, conn.execute("SELECT COUNT(*) FROM executions").fetchone()[0])
             self.assertEqual(0, conn.execute("SELECT COUNT(*) FROM identity_conflicts").fetchone()[0])
+            self.assertEqual(
+                1,
+                conn.execute(
+                    "SELECT COUNT(*) FROM audit_events WHERE event_type='terminal_observed_without_request'"
+                ).fetchone()[0],
+            )
             conn.close()
 
     def test_mismatched_usage_execution_records_conflict_without_status_change(self) -> None:
