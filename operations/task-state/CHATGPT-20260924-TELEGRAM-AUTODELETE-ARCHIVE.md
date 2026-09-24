@@ -1,7 +1,7 @@
 # Operational task state — Telegram auto-delete archive
 
 TASK_ID: CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE
-Updated: 2026-09-24 14:29 Europe/Copenhagen
+Updated: 2026-09-24 14:31 Europe/Copenhagen
 
 ## Objective
 Preserve the complete available history of one Telegram chat configured with 1-day auto-delete, without duplicate storage, while retaining edits and deletion metadata and keeping archived content after Telegram removes it.
@@ -57,6 +57,7 @@ Runtime work is complete and operational. Source integration is intentionally pa
 - Focused source gates PASS: 13/13 Telegram tests, py_compile, bash -n, systemd-analyze verify, git diff --check.
 - telegram-autodelete-archive.timer is enabled+active at a 5-minute cadence; telegram-notification-history.timer remains enabled+active at 15 minutes.
 - Concurrent live start of both services after the shared-lock change returned Result=success for both; auto-delete sync completed and technical history sync completed without sqlite3 database-lock errors.
+- The first scheduled post-deploy cycle also passed: technical collector ran at 14:30:00 with new_messages=0; auto-delete collector ran at 14:30:02 with inserted=0/updated=0/unchanged=60/deleted=0; both timers remain active and the archive remains 61 rows / 61 distinct IDs.
 - Before the shared lock was deployed, a discovery process reproduced a real Telethon session database-lock failure in the technical collector; the deployed serialization directly addresses that failure mode.
 
 ## Decisions
@@ -83,6 +84,7 @@ Runtime work is complete and operational. Source integration is intentionally pa
 - Test gate: 13 tests PASS plus py_compile, shell syntax, systemd unit verification and diff-check.
 - Live archive: 61 rows / 61 distinct IDs after two reconciliations; 3 media files retained.
 - Live systemd: both timers enabled+active; concurrent service start returned success for both collectors.
+- Scheduled runtime proof at 2026-09-24 14:30 Europe/Copenhagen: both timer-triggered services completed successfully with no session lock error.
 - Official Telethon documentation confirms that simultaneous clients should not share the same SQLite session; deployed services now serialize on ~/.cache/fedora-telegram-history/session.lock.
 
 ## Acceptance criteria
