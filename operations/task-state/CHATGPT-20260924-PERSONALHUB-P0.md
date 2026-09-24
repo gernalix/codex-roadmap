@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 16:12 Europe/Copenhagen
+Updated: 2026-09-24 16:22 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -172,6 +172,7 @@ Goal: operate only after 788606 PASS.
 Read the actual final app schema/Room identity from the final commit. Inspect the actual live DB schema/identity on Pixel. Take immutable rollback first. Externally migrate a copy of the real DB through every required delta to the final schema, validate quick_check/integrity/FK and preservation of representative data, then transfer/install the exact final APK and migrated DB using explicit Pixel serial. Smoke Home + every module. Keep rollback until final acceptance.
 
 ## Decisions
+- User steer 16:22: execute 857906 in this chat via Remote Desktop Commander and converge **all** PersonalHub non-main branches into `main`, deleting them only after main-containment/semantic-absorption proof. Operational order: resolve PR #41 CI blocker → integrate 920550 → reconcile/integrate `chatgpt/workflowy-integration` → execute/integrate 857906 → inventory remaining non-main branches → delete every absorbed/obsolete branch.
 - Branch convergence rule: no valid PH feature remains stranded on a side branch. For each non-main branch, first prove unique work is valid/needed, merge/integrate it into current `main`, verify containment, then delete local/remote branch. Branches with `ahead_by=0` need no dummy merge because their work is already contained and may be deleted directly.
 - At 913264, choose the freshest coherent DB candidate available at cutover using actual data freshness/provenance and consistency checks; do not prefer an older backup merely because it is already local.
 - Global priority override: PersonalHub P0 is the master recovery lane again. 920550 resumes from its safe pushed checkpoint; non-PH recovery remains parked until PH 913264 PASS unless PH becomes truly blocked.
@@ -257,4 +258,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Compare `chatgpt/workflowy-integration` read-only against `task/920550`/prospective main to identify overlapping files and unique work. Then perform one bounded readback of PR #41 after that analysis. If merged, fast-forward PersonalHub main, verify schema 23 and 920550 containment, then reconcile/integrate Workflowy. If still pending, leave integration to the non-model timer and do not start 857906.
+Fix the concrete PR #41 instrumentation failure `DatasetteSyncInstrumentedTest#journalMutationTriggersDatasetteWorkAndRecoveryWithoutPolling` with the smallest scoped change; rerun only that failing test locally on the canonical emulator if needed, push to task/920550, let CI/integrator merge #41, then immediately integrate Workflowy and execute 857906. Finish by proving and deleting all non-main PH branches.
