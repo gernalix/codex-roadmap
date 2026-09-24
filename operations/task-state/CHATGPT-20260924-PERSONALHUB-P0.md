@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 12:48 Europe/Copenhagen
+Updated: 2026-09-24 12:27 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -31,6 +31,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - Stop Codex after queued integration/PASS; do not spend model turns polling CI/merge.
 
 ## Verified current facts
+- For 920550, the selected implementation path is TinyCLIP ONNX int8 downloaded on demand, not bundled in the base APK. Local verification found a ~24 MiB ONNX model with native 512-dimensional text/image embeddings; model card metadata reports MIT license. Verified model SHA-256: `844d1a46ab18acf50c989e541b12fe3b6dc7f8d6004725b4e992d142788e0600`. Tokenizer/preprocessor assets remain separate and downloadable.
 - PersonalHub main is version.txt 60 and currently declares Room schema 22.
 - Schema 21 -> 22 only adds since_when_counters and since_when_migration_state; existing schema-21 entities are otherwise unchanged.
 - The old live-DB task 383662 (20 -> 21) is obsolete/superseded; do not launch it.
