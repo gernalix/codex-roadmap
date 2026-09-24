@@ -6,15 +6,13 @@ import fcntl
 import json
 import os
 import re
-import subprocess
-import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from roadmap_start import RoadmapStartError, claim_start
 
-SCHEMA = 1
+SCHEMA = 2
 DEFAULT_SOURCE_ROOT = Path.home() / ".codex" / "sessions"
 DEFAULT_STATE = Path.home() / ".local" / "state" / "codex-roadmap" / "live-status.json"
 DEFAULT_USAGE_PUBLISHER = Path.home() / ".local" / "lib" / "codex-usage-monitor" / "current" / "codex_usage_publisher.py"
@@ -84,13 +82,12 @@ def _load_state(path: Path) -> dict[str, Any]:
     try:
         state = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
-        return {"schema": SCHEMA, "initialized": False, "files": {}, "claimed": {}, "terminal_refresh_pending": False}
+        return {"schema": SCHEMA, "initialized": False, "files": {}, "claimed": {}}
     if not isinstance(state, dict) or state.get("schema") != SCHEMA:
-        return {"schema": SCHEMA, "initialized": False, "files": {}, "claimed": {}, "terminal_refresh_pending": False}
+        return {"schema": SCHEMA, "initialized": False, "files": {}, "claimed": {}}
     state.setdefault("initialized", False)
     state.setdefault("files", {})
     state.setdefault("claimed", {})
-    state.setdefault("terminal_refresh_pending", False)
     return state
 
 
@@ -167,66 +164,13 @@ def _claim_prompt(repo: Path, prompt_id: str) -> tuple[bool, str]:
     return True, str(result.get("roadmap_status") or "running")
 
 
-def _run_json_command(cmd: list[str], *, timeout: int) -> tuple[bool, dict[str, Any] | None, str]:
-    try:
-        proc = subprocess.run(
-            cmd,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=timeout,
-            check=False,
-        )
-    except (OSError, subprocess.TimeoutExpired) as exc:
-        return False, None, str(exc)
-    raw = (proc.stdout or "").strip().splitlines()
-    parsed = None
-    if raw:
-        try:
-            value = json.loads(raw[-1])
-            if isinstance(value, dict):
-                parsed = value
-        except json.JSONDecodeError:
-            parsed = None
-    ok = proc.returncode == 0 and not (parsed and parsed.get("status") in {"error", "blocked", "locked"})
-    detail = (proc.stderr or proc.stdout or "").strip()
-    return ok, parsed, detail
-
-
-def _refresh_terminal(repo: Path, usage_publisher: Path, usage_source: Path) -> tuple[bool, dict[str, Any]]:
-    if not usage_publisher.is_file():
-        return False, {"error": f"usage_publisher_missing:{usage_publisher}"}
-    publisher_ok, publisher_json, publisher_detail = _run_json_command(
-        [sys.executable, str(usage_publisher), "run", "--wait-lock-seconds", "30"],
-        timeout=240,
-    )
-    if not publisher_ok:
-        return False, {"publisher": publisher_json, "detail": publisher_detail}
-
-    sync_script = repo / "tools" / "roadmap_sync.py"
-    sync_ok, sync_json, sync_detail = _run_json_command(
-        [
-            sys.executable,
-            str(sync_script),
-            "--repo",
-            str(repo),
-            "--source",
-            str(usage_source),
-        ],
-        timeout=180,
-    )
-    if not sync_ok:
-        return False, {"publisher": publisher_json, "sync": sync_json, "detail": sync_detail}
-    return True, {"publisher": publisher_json, "sync": sync_json}
-
-
 def watch_once(
     *,
     repo: Path,
     source_root: Path,
     state_path: Path,
-    usage_publisher: Path,
-    usage_source: Path,
+    usage_publisher: Path | None = None,
+    usage_source: Path | None = None,
 ) -> dict[str, Any]:
     state = _load_state(state_path)
     bootstrap = not bool(state.get("initialized"))
@@ -261,17 +205,14 @@ def watch_once(
         for key in sorted(claimed, key=lambda k: str(claimed[k]))[:-500]:
             claimed.pop(key, None)
 
+    # This watcher is a start-claim safety net only. Terminal events are observed
+    # for diagnostics but never trigger publisher/sync/finalization side effects.
+    # Telemetry has its own timer and roadmap state has one explicit finalizer.
+    _ = usage_publisher, usage_source
     state["schema"] = SCHEMA
     state["initialized"] = True
     state["files"] = files_state
     state["claimed"] = claimed
-    state["terminal_refresh_pending"] = bool(state.get("terminal_refresh_pending")) or terminal_seen
-
-    refresh: dict[str, Any] | None = None
-    if state["terminal_refresh_pending"]:
-        ok, refresh = _refresh_terminal(repo, usage_publisher, usage_source)
-        if ok:
-            state["terminal_refresh_pending"] = False
 
     _write_state(state_path, state)
     return {
@@ -280,8 +221,7 @@ def watch_once(
         "files": len(source_paths),
         "active_prompt_ids": sorted(active_ids),
         "claim_attempts": attempts,
-        "terminal_refresh_pending": bool(state["terminal_refresh_pending"]),
-        "refresh": refresh,
+        "terminal_event_observed": terminal_seen,
     }
 
 
@@ -292,8 +232,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--repo", default=str(DEFAULT_REPO))
     parser.add_argument("--source-root", default=str(DEFAULT_SOURCE_ROOT))
     parser.add_argument("--state", default=str(DEFAULT_STATE))
-    parser.add_argument("--usage-publisher", default=str(DEFAULT_USAGE_PUBLISHER))
-    parser.add_argument("--usage-source", default=str(DEFAULT_USAGE_SOURCE))
+    parser.add_argument("--usage-publisher", default=str(DEFAULT_USAGE_PUBLISHER), help=argparse.SUPPRESS)
+    parser.add_argument("--usage-source", default=str(DEFAULT_USAGE_SOURCE), help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
 
     state_path = Path(args.state).expanduser()
