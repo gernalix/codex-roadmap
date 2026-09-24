@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 16:01 Europe/Copenhagen
+Updated: 2026-09-24 16:05 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -88,9 +88,10 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-920550 local acceptance is complete at clean pushed HEAD `0834a24`. Finalize 920550 through the canonical roadmap/single-writer flow and perform one bounded integration readback. After main contains it, inspect schema/evidence and immediately reconcile the remaining `chatgpt/workflowy-integration` side branch.
+920550 local acceptance is complete and PersonalHub PR #41 is queued with checks pending. Do not poll CI. While the non-model integrator owns #41, perform only read-only conflict/absorption analysis of `chatgpt/workflowy-integration`; no branch mutation until #41 is merged.
 
 ## Verified facts
+- 920550 worker finalization is now correctly routed: `repo-task finish` created PersonalHub PR #41 after `roadmap_finish` alone had only queued the terminal roadmap mutation. One bounded integrator pass returned `checks-pending`; no model/CI polling is running. The non-model repo-integrator timer owns the next integration attempt.
 - R8 mapping confirms the exact ONNX JNI contract now survives Play minification: `ai.onnxruntime.TensorInfo -> ai.onnxruntime.TensorInfo` and constructor `<init>(long[], String[], int)` is retained. This directly covers the JNI crash observed during QA.
 - Final 920550 local gate set is complete at clean pushed HEAD `0834a2434abe9ddd3a1c43caf23ba646c5bc3923`: dedicated AVD QA PASS 1/1, final Play APK+AAB PASS, `checkArchitectureBoundaries` PASS, `git diff --check` PASS, clean worktree.
 - Canonical emulator cleanup completed: repaired the official API36 Google APIs x86_64 system image to revision 7 (restoring missing `encryptionkey.img`), recreated `Pixel_8a`, and proved `emulator-5554` reaches ADB `device` + `sys.boot_completed=1`. Runtime identity: API 36, 1080×2400, 420 dpi. All other legacy/temporary AVDs were deleted; `emulator -list-avds` now returns only `Pixel_8a`.
@@ -249,4 +250,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Call the canonical 920550 finalizer with PASS from a clean roadmap checkout. Do not poll CI/merge. Perform one bounded single-writer/integrator pass/readback; once `PersonalHub/main` contains 920550, verify schema 23 + commit absorption, then rebase/reconcile and integrate `chatgpt/workflowy-integration` before launching 857906.
+Compare `chatgpt/workflowy-integration` read-only against `task/920550`/prospective main to identify overlapping files and unique work. Then perform one bounded readback of PR #41 after that analysis. If merged, fast-forward PersonalHub main, verify schema 23 and 920550 containment, then reconcile/integrate Workflowy. If still pending, leave integration to the non-model timer and do not start 857906.
