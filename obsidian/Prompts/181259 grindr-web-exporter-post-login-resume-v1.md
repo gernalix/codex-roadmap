@@ -6,6 +6,7 @@ model: GPT-6 Luna
 reasoning: medium
 tags:
   - manual-prerequisite:grindr-login
+  - manual-prerequisite:restore-grindr-web-exporter-repo
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/grindr-web-exporter
@@ -30,7 +31,7 @@ tags:
 
 ## Spiegazione
 
-Resta in attesa senza consumare modello finché non hai effettuato il login Grindr; poi riprende il vecchio export e chiude soltanto i bug browser/discovery ancora reali.
+Resta in Waiting finché sono soddisfatti due prerequisiti: login Grindr manuale completato e percorso repository canonico ripristinato/registrato. Il remoto dichiarato gernalix/grindr-web-exporter oggi non esiste su GitHub, quindi il generic single-writer non può avviare questo task in sicurezza. Non confonderlo con gernalix/grindr-export, che ha uno scope diverso.
 
 ## Esecuzioni
 
