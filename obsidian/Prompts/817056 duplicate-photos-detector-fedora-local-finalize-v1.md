@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../completed/duplicate-photos-detector-fedora-local-finalize-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-24T00:03:52Z
+- **Ultimo lancio:** 2026-09-24T00:03:52Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Installa e valida localmente il matcher di foto, crea l’archivio/DB, registra 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-24T00:03:52Z | 2026-09-24T00:12:28Z | BLOCKED | 515.693 | gpt-6-luna | medium | 41 | 79167 |
 
 ## Analisi ChatGPT
 

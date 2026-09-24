@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../completed/workflowy-integrator-progress-live-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T23:52:46Z
+- **Ultimo lancio:** 2026-09-22T23:52:46Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Installa sul Fedora reale la nuova vista dell’integratore e controlla che Work
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T23:52:46Z | 2026-09-22T23:54:51Z | PASS | 125.632 | gpt-5.6-luna | low | 14 | 55877 |
 
 ## Analisi ChatGPT
 

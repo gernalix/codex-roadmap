@@ -19,9 +19,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../completed/personalhub-shared-tags-facets-backlinks-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T18:00:12Z
+- **Ultimo lancio:** 2026-09-22T18:00:12Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -39,7 +39,7 @@ Il lavoro del ramo è finito, ma dopo l’ingresso di 613102 GitHub non riesce p
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T18:00:12Z | 2026-09-22T20:02:06Z | PASS | 7313.728 | gpt-5.6-sol | medium | 599 | 125990 |
 
 ## Analisi ChatGPT
 

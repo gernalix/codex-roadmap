@@ -15,9 +15,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../falliti/ccs-desktop-launcher-overlay-combined-closure-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T21:23:01Z
+- **Ultimo lancio:** 2026-09-22T21:23:01Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T21:23:01Z | 2026-09-22T21:28:12Z | BLOCKED | 310.174 | gpt-5.6-terra | medium | 24 | 91927 |
 
 ## Analisi ChatGPT
 

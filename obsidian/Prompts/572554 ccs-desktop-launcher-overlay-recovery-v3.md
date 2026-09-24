@@ -15,9 +15,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../falliti/ccs-desktop-launcher-overlay-recovery-v3|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T23:58:52Z
+- **Ultimo lancio:** 2026-09-22T23:58:52Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Corregge solo l’errore di instradamento che ha bloccato 613408: usa il project
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T23:58:52Z | 2026-09-22T23:59:35Z | BLOCKED | 42.99 | gpt-5.6-terra | medium | 4 | 97084 |
 
 ## Analisi ChatGPT
 

@@ -22,9 +22,9 @@ tags:
 - **Stato:** failed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../falliti/personalhub-soldi-photo-intelligence-and-owned-items-v2|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T18:00:57Z
+- **Ultimo lancio:** 2026-09-22T18:00:57Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -42,7 +42,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T18:00:57Z | 2026-09-22T19:22:40Z | PASS | 4902.61 | gpt-5.6-sol | medium | 178 | 226050 |
 
 ## Analisi ChatGPT
 

@@ -15,9 +15,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../falliti/ccs-desktop-launcher-overlay-recovery-v2|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-22T23:51:48Z
+- **Ultimo lancio:** 2026-09-22T23:51:48Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** 572554
@@ -35,7 +35,7 @@ Il Desktop ora è disponibile: completa il launcher automatico e verifica dal vi
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-22T23:51:48Z | 2026-09-22T23:52:43Z | BLOCKED | 54.125 | gpt-5.6-terra | medium | 4 | 94808 |
 
 ## Analisi ChatGPT
 

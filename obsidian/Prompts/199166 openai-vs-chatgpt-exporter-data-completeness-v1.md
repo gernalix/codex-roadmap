@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../completed/openai-vs-chatgpt-exporter-data-completeness-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-23T23:34:45Z
+- **Ultimo lancio:** 2026-09-23T23:34:45Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Confronta il grande ZIP ufficiale OpenAI con l’archivio ChatGPTExporter, crea 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-23T23:34:45Z | 2026-09-23T23:45:06Z | PASS | 621.38 | gpt-6-sol | medium | 38 | 88755 |
 
 ## Analisi ChatGPT
 

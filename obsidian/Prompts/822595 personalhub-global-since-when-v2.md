@@ -19,9 +19,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-global-since-when-v2|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-24T00:37:09Z
+- **Ultimo lancio:** 2026-09-24T00:37:09Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -39,7 +39,7 @@ Sposta Since When dalla navigazione Timer alla Home di PersonalHub e rende la cr
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-24T00:37:09Z | 2026-09-24T01:31:41Z | UNKNOWN | 3272.257 | gpt-6-luna | medium | 317 | 157308 |
 
 ## Analisi ChatGPT
 

@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../completed/personalhub-shared-engines-3-8-finalize-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-23T23:52:54Z
+- **Ultimo lancio:** 2026-09-23T23:52:54Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Aspetta i due lavori PersonalHub già in corso (522084 e 613102). Poi completa n
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-23T23:52:54Z | 2026-09-24T00:22:09Z | PASS | 1754.019 | gpt-6-sol | medium | 117 | 116947 |
 
 ## Analisi ChatGPT
 
