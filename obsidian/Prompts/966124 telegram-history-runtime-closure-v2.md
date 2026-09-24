@@ -1,6 +1,6 @@
 ---
 prompt_id: 966124
-status: pending
+status: running
 project_id: 15
 model: GPT-5.6 Luna
 reasoning: low
@@ -9,13 +9,13 @@ tags:
   - runtime-closure
   - telegram
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/fedora-fedora-system-monitor
 ---
 
 # 966124 · Chiudere il collector Telegram dopo autorizzazione e collaudo
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/fedora-fedora-system-monitor|Fedora / fedora-system-monitor]]
 - **Prompt:** [[../../prompts/telegram-history-runtime-closure-v2|Apri prompt]]
 - **Primo lancio:** —
