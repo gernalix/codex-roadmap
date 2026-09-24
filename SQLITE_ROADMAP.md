@@ -105,6 +105,12 @@ Le note Obsidian usano wikilink, backlink e tag per stato/progetto. Le relazioni
 
 Un prompt concluso `FAIL/BLOCKED` non viene rilanciato con lo stesso ID. Viene archiviato in `falliti/`; un eventuale fix è un nuovo prompt con nuovo ID e relazione `fix` o `followup`.
 
+## PBF / disposition non-PASS
+
+La vista `v_pbf_dispositions` è il contratto canonico di riconciliazione dei prompt non-PASS. Deriva `resolved|covered|needs_fix|waived|historical_unclassified` da stato, execution outcome, relazioni esplicite e provenance disponibile; segue `fix/replacement/followup/merge/resolved_by` fino a 16 hop con cycle guard. Non modifica `executions` né `status_history`.
+
+`v_attention` è una proiezione di `v_pbf_dispositions WHERE pbf_disposition='needs_fix'`; pertanto un PBF coperto/risolto non duplica il suo successore in Workflowy, mentre un leaf reale non può sparire in Archive.
+
 ## Verifica
 
 ```bash
