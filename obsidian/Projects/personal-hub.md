@@ -5,7 +5,6 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]] · `running`
 - [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `pending`
 - [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
 - [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `pending`
@@ -22,6 +21,7 @@ tags:
 - [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4|663657 · Chiudere e integrare tag e alert di Places]] · `completed`
 - [[obsidian/Prompts/255970 personalhub-english-only-places-ci-closure-v1|255970 · English-only, diagnostica Places e CI in un solo passaggio]] · `superseded`
 - [[obsidian/Prompts/477616 personalhub-english-only-places-ci-closure-v2|477616 · English-only, diagnostica Places e CI in un solo passaggio]] · `completed`
+- [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]] · `completed`
 - [[obsidian/Prompts/223103 personalhub-shared-alerts-places-tags-integration-v3|223103 · Chiudere e integrare tag e alert di Places]] · `superseded`
 - [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] · `superseded`
 - [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `completed`

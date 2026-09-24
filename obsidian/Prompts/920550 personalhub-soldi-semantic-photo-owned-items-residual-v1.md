@@ -1,20 +1,20 @@
 ---
 prompt_id: 920550
-status: running
+status: completed
 project_id: 49
 model: GPT-6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/personal-hub
 ---
 
 # 920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-soldi-semantic-photo-owned-items-residual-v1|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-soldi-semantic-photo-owned-items-residual-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

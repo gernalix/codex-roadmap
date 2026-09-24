@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1\|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]] | running | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/994029 kuma-620949-final-runtime-cutover-v1\|994029 · Chiudi il cutover runtime Kuma rimasto da 620949]] | running | — | — | — | no | no | — | Fedora / Uptime Kuma | GPT-6 Luna | low |
 | [[obsidian/Prompts/302284 prompt-infrastructure-final-runtime-activation-v1\|302284 · Distribuisci gli ultimi fix della prompt infrastructure]] | running | — | — | — | no | no | — | Prompt infrastructure / Fedora runtime | GPT-6 Luna | low |
 | [[obsidian/Prompts/966124 telegram-history-runtime-closure-v2\|966124 · Chiudere il collector Telegram dopo autorizzazione e collaudo]] | running | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
@@ -74,6 +73,7 @@
 | [[obsidian/Prompts/764529 codex-desktop-launcher-atspi-consumer-closure-v2\|764529 · Completare il launcher Codex Desktop con AT-SPI]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/781426 minsp-export-live-authenticated-coverage-v2\|781426 · Completare export Min Sundhedsplatform dopo bootstrap e MitID]] | superseded | — | — | — | no | no | — | minsp-export | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/284653 ccs-desktop-launcher-overlay-combined-closure-v1\|284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio]] | blocked | 2026-09-22T21:23:01Z | 2026-09-22T21:23:01Z | BLOCKED | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1\|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]] | completed | — | — | PASS | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/746193 workflowy-importer-local-live-validation\|746193 · Provare davvero l’importatore Workflowy]] | completed | 2026-09-18T19:11:43Z | 2026-09-18T19:11:43Z | PASS | sì | no | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572]] | Fedora / Workflowy | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/219473 oracle-backup-notification-antiflap-runtime\|219473 · Ferma le notifiche backup Oracle transitorie]] | superseded | — | — | — | no | no | — | Oracle VM | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/781352 oracle-backup-notification-antiflap-runtime-v2\|781352 · Ferma le notifiche backup Oracle transitorie]] | completed | 2026-09-18T22:53:04Z | 2026-09-18T22:53:04Z | PASS | sì | sì | — | Oracle VM | GPT-5.6 Terra | medium |
