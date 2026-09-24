@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 16:27 Europe/Copenhagen
+Updated: 2026-09-24 16:29 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -150,6 +150,7 @@ PersonalHub P0 is now the sole master lane. Resume 920550 from its existing push
 - A canonical replacement allocation request for never-run 641903 is open in MegaVault Issue #100: [prompt-id-command] chatgpt-ccs-641903-project-routing-replacement-20260924-v1. It must resolve current CCS project routing from authoritative metadata/repo identity rather than hard-code 96.
 
 ## Decisions
+- Parallel side-lane rule: **994029 and 302284 may run concurrently in another chat while PH continues here**. Their verified writer scopes are disjoint from PersonalHub and from each other. 302284 must resume from its existing canonical running state and pushed WIP checkpoint `codex-usage-monitor/task/302284@6f31ceeaa51e5b77b86d2a18620a34079329196a`; do not restart it from scratch or duplicate already-completed deploy/tests.
 - **994029 and 966124 are explicitly allowed to run in parallel with PH in separate chats.** 966124 owns writes to `fedora-system-monitor`. 994029 may mutate `activity-watch-uploader` and ActivityWatch units, but must treat `fedora-system-monitor`/central Kuma control-plane state as read-only verification while 966124 is active. If 994029 needs a fedora-system-monitor code/config write, it must stop at that blocker until 966124 finishes.
 - User priority override: PersonalHub + live DB migration now outrank all remaining non-PH recovery work. 302284 is parked after a safe checkpoint and resumes only after PH 913264 PASS, unless PH is truly blocked.
 - Until the final global gate, recovery work is serialized: one model-driven lane at a time. Existing active tasks are first brought to a safe checkpoint/parked state before the master lane advances; no new parallel recovery prompt is launched.
