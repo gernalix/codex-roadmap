@@ -1,7 +1,7 @@
 # Operational task state — Telegram auto-delete archive
 
 TASK_ID: CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE
-Updated: 2026-09-24 17:17 Europe/Copenhagen
+Updated: 2026-09-24 17:55 Europe/Copenhagen
 
 ## Objective
 Preserve the complete available history of one Telegram chat configured with 1-day auto-delete, without duplicate storage, while retaining edits and deletion metadata and keeping archived content after Telegram removes it.
@@ -64,6 +64,7 @@ Runtime and canonical source integration are complete. The stable non-model coll
 - Live baseline after deployment: peer name resolves as Carlo Visda 2; own `blocked=true`; Telegram blocklist server timestamp is 2026-09-24T14:20:43Z, rendered in `chat_human` as `oggi 16:20 · Sistema · Hai bloccato Carlo Visda 2 · certo`.
 - Peer status is currently `UserStatusRecently(by_me=true)`; therefore no peer-block inference was created. A second systemd sync created zero additional relationship events.
 - Live archive after verification: 79 rows / 79 distinct message IDs; relationship_events=1; peer inferred events=0; both Telegram timers active; auto-delete service Result=success.
+- Subsequent live observation verified the forward detector too: a new `peer_block_inferred` event was recorded at 2026-09-24T15:40:02Z when the peer visibility transitioned to the long-time-ago-compatible state. Unlock logic is already symmetric: own unblock is certain on `blocked=true→false`; peer unblock is inferred on `long_time_ago→recent visibility` and is stored as `peer_unblock_inferred` with raw before/after evidence.
 - Relationship-state implementation was checkpointed at `f588fd96b849495ffafa05e881dae8361e91c29e` and is now integrated into canonical `fedora-system-monitor/main`; 16/16 Telegram tests PASS plus py_compile/diff-check.
 - Live API pre-deploy readback: target currently reports `UserStatusRecently(by_me=true)`; the user currently has the peer blocked, and Telegram's blocklist provides an exact server block timestamp. No peer-block event is inferred from this baseline because the peer status is not long-time-ago.
 - Historical source lineage was `task/422308` → `chatgpt/telegram-autodelete-archive`; both temporary branches are now absorbed and removed. Canonical source is `fedora-system-monitor/main` at the 966124 terminal checkpoint.
