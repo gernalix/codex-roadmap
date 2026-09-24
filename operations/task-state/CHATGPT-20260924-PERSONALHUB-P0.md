@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 16:22 Europe/Copenhagen
+Updated: 2026-09-24 16:24 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -91,6 +91,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 920550 local acceptance is complete and PersonalHub PR #41 is queued with checks pending. Do not poll CI. While the non-model integrator owns #41, perform only read-only conflict/absorption analysis of `chatgpt/workflowy-integration`; no branch mutation until #41 is merged.
 
 ## Verified facts
+- Canonical MegaVault emulator launch command was re-verified exactly as documented: with current GNOME `DISPLAY/WAYLAND_DISPLAY/XAUTHORITY`, `python3 tools/android_target_preflight.py start` returned `status=ok`, AVD `Pixel_8a`, serial `emulator-5554`, state `device`.
 - `~/Downloads/personalhub (2).db` exactly matches the exported PH schema-22 Room identity: both report version 22 and identity hash `1b60cb2d2925f84f9ee2c527a4090ff5`. Combined with its additional domain rows versus the v59 snapshot, it is a structurally valid and substantively fresher local migration candidate, but still not automatically authoritative over the live Pixel DB.
 - PR #41 CI timing was rechecked against the real Fedora clock: jobs started at 15:59 Europe/Copenhagen and were only ~9 minutes old at 16:08. This is within the observed normal range (previous Play preflight ~9m54s), so no cancel/retry is justified; leave checks to complete normally.
 - The schema-22 `personalhub (2).db` is not merely larger because of Git history: versus the latest local Pixel-v59 snapshot it also contains +60 `word_entries`, +5 `quick_event_entries`, +3 `intake_events`, +3 `place_events`, +3 `stock_adjustments`, +2 `sessions`, +1 quick-event template, plus newer Hub Context/tag structures. It is therefore the current **freshest local candidate by substantive row evidence**, while the final authority still requires comparison with the live Pixel DB at 913264.
