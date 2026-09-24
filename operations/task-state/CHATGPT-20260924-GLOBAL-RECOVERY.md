@@ -1,12 +1,13 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 13:18 Europe/Copenhagen
+Updated: 2026-09-24 13:21 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
 
 ## Constraints
+- **Single active recovery lane until global recovery is complete:** run only one model-driven recovery task/corsia at a time. Do not launch another phase/task until the current one is terminal and checkpointed. Manual-prerequisite/Waiting tasks may remain parked; stable non-model background services may continue only if they do not mutate overlapping repos/state.
 - This file is operational memory only; canonical lifecycle remains in roadmap.sqlite.
 - Store conclusions/state only, never chain-of-thought, secrets or raw private transcripts.
 - Canonical roadmap mutations go only through the codex-roadmap single writer.
@@ -20,6 +21,7 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 
 ## Plan / checklist
 ### Phase 0 — Recovery framework and protocol
+- [x] Adopt single-active-recovery-lane execution until the final global gate; parallel model-driven recovery prompts are suspended/avoided.
 - [x] Establish the persistent operational-checkpoint protocol in `operations/task-state/README.md`.
 - [x] Establish single-writer-only canonical roadmap mutations.
 - [x] Establish model/reasoning as roadmap metadata only, never prompt-body text.
@@ -122,6 +124,7 @@ Phase 2, first actionable item: stop the runaway 788315 heartbeat with existing 
 - A canonical replacement allocation request for never-run 641903 is open in MegaVault Issue #100: [prompt-id-command] chatgpt-ccs-641903-project-routing-replacement-20260924-v1. It must resolve current CCS project routing from authoritative metadata/repo identity rather than hard-code 96.
 
 ## Decisions
+- Until the final global gate, recovery work is serialized: one model-driven lane at a time. Existing active tasks are first brought to a safe checkpoint/parked state before the master lane advances; no new parallel recovery prompt is launched.
 - Do not duplicate the PersonalHub or Telegram lanes from the global recovery chat. PersonalHub detail belongs to CHATGPT-20260924-PERSONALHUB-P0.md; Telegram detail belongs to CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md.
 1. Stop 788315 heartbeat before other prompt-infrastructure runtime work.
 2. Prioritize PH P0 above unrelated work after the emergency heartbeat stop.
