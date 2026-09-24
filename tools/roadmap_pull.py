@@ -297,13 +297,11 @@ def _protected_snapshot(conn: sqlite3.Connection, prompt_id: str) -> dict[str, A
 
 
 def _terminal_confirmed(conn: sqlite3.Connection, prompt_id: str, remote_status: str) -> bool:
-    expected = TERMINAL_OUTCOME.get(remote_status)
-    if expected is None:
+    if TERMINAL_OUTCOME.get(remote_status) is None:
         return False
 
-    # roadmap_result/roadmap_finish are authoritative for scheduling. A matching
-    # terminal request is enough to let a protected local running prompt advance
-    # to the terminal remote state; telemetry may arrive later.
+    # Only the explicit roadmap finalizer can authorize a local running prompt
+    # to advance to a remote terminal state. codex-usage is telemetry only.
     try:
         request = conn.execute(
             "SELECT requested_status FROM terminal_requests WHERE prompt_id=?",
@@ -311,23 +309,7 @@ def _terminal_confirmed(conn: sqlite3.Connection, prompt_id: str, remote_status:
         ).fetchone()
     except sqlite3.OperationalError:
         request = None
-    if request is not None and str(request["requested_status"]) == remote_status:
-        return True
-
-    row = conn.execute(
-        "SELECT outcome,ended_at,source,materialization_sha256 "
-        "FROM executions WHERE prompt_id=? AND outcome IS NOT NULL "
-        "ORDER BY execution_id DESC LIMIT 1",
-        (prompt_id,),
-    ).fetchone()
-    if row is None:
-        return False
-    if row["outcome"] != expected or row["source"] != "codex-usage" or not row["ended_at"]:
-        return False
-    prompt = _row(conn, prompt_id)
-    observed = row["materialization_sha256"]
-    canonical = prompt["materialization_sha256"] if prompt else None
-    return not (observed and canonical and observed != canonical)
+    return request is not None and str(request["requested_status"]) == remote_status
 
 
 def _show_exists(repo: Path, ref: str, path: str) -> bool:
