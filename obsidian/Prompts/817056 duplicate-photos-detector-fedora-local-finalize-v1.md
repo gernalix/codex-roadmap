@@ -1,24 +1,24 @@
 ---
 prompt_id: 817056
-status: superseded
+status: completed
 project_id: 92
 model: GPT-5.5
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/completed
   - roadmap/project/fedora
 ---
 
 # 817056 · Rendere operativo duplicate-photos-detector su Fedora
 
-- **Stato:** superseded
+- **Stato:** completed
 - **Progetto:** [[../Projects/fedora|Fedora]]
-- **Prompt:** [[../../falliti/duplicate-photos-detector-fedora-local-finalize-v1|Apri prompt]]
+- **Prompt:** [[../../completed/duplicate-photos-detector-fedora-local-finalize-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
@@ -39,7 +39,7 @@ Installa e valida localmente il matcher di foto, crea l’archivio/DB, registra 
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-24T01:36:45Z · colli di bottiglia: no · fix: — · Objective already achieved in duplicate-photos-detector: implementation, targeted tests and Fedora systemd activation passed; only terminalization conflicted with an existing blocked roadmap state. Status reconciled to completed without rewriting historical outcome.
 
 ## Modifiche di codice ChatGPT
 

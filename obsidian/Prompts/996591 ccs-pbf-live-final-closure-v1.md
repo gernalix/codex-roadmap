@@ -1,20 +1,20 @@
 ---
-prompt_id: 572554
-status: blocked
+prompt_id: 996591
+status: pending
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/pending
   - roadmap/project/facilitatori-di-prompt
 ---
 
-# 572554 · Completare launcher e overlay Codex Desktop con progetto corretto
+# 996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop
 
-- **Stato:** blocked
+- **Stato:** pending
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
-- **Prompt:** [[../../falliti/ccs-desktop-launcher-overlay-recovery-v3|Apri prompt]]
+- **Prompt:** [[../../prompts/ccs-pbf-live-final-closure-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -23,13 +23,13 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** —
-- **Padri/precedenti:** [[613408 ccs-desktop-launcher-overlay-recovery-v2|613408]]
-- **Figli/follow-up:** [[996591 ccs-pbf-live-final-closure-v1|996591]]
-- **Chat Codex:** Continua nella stessa chat Codex di 613408; riusa il fatto già verificato che Desktop è visibile via AT-SPI.
+- **Padri/precedenti:** [[284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653]], [[572554 ccs-desktop-launcher-overlay-recovery-v3|572554]], [[613408 ccs-desktop-launcher-overlay-recovery-v2|613408]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Nuova chat Codex; continuazione finale della catena 284653 → 613408 → 572554.
 
 ## Spiegazione
 
-Corregge solo l’errore di instradamento che ha bloccato 613408: usa il project_id canonico 96 per chrome-codex-switcher e riprende direttamente dalla selezione progetto/modello/reasoning, poi verifica launcher e overlay.
+Verifica sul Desktop reale che il launcher apra Codex col progetto corretto e che overlay/note seguano la chat Codex attiva; corregge solo eventuali residui.
 
 ## Esecuzioni
 

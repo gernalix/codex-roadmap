@@ -17,3 +17,5 @@
 13. [[prompts/codex-usage-live-publisher-single-writer-runtime-recovery-v1|codex-usage-live-publisher-single-writer-runtime-recovery-v1]]
 14. [[prompts/unified-kuma-cross-repo-control-plane-v1|unified-kuma-cross-repo-control-plane-v1]]
 15. [[prompts/duplicate-photos-detector-fedora-timer-migration-v1|duplicate-photos-detector-fedora-timer-migration-v1]]
+16. [[prompts/pbf-lifecycle-reconciliation-protocol-v1|pbf-lifecycle-reconciliation-protocol-v1]]
+17. [[prompts/ccs-pbf-live-final-closure-v1|ccs-pbf-live-final-closure-v1]]

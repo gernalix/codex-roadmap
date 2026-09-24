@@ -8,6 +8,8 @@
 - [[obsidian/Prompts/570349 codex-usage-live-publisher-single-writer-runtime-recovery-v1|570349 · Ripristinare il monitoraggio live Codex remoto]]
 - [[obsidian/Prompts/620949 unified-kuma-cross-repo-control-plane-v1|620949 · Unificare Uptime Kuma per tutti i repository]]
 - [[obsidian/Prompts/970051 duplicate-photos-detector-fedora-timer-migration-v1|970051 · Migrare duplicate-photos-detector al timer periodico Fedora]]
+- [[obsidian/Prompts/519810 pbf-lifecycle-reconciliation-protocol-v1|519810 · Rendere obbligatoria la riconciliazione dei PBF]]
+- [[obsidian/Prompts/996591 ccs-pbf-live-final-closure-v1|996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop]]
 
 ## In esecuzione
 

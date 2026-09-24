@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[764529 codex-desktop-launcher-atspi-consumer-closure-v2|764529]], [[784216 ccs-overlay-live-retry-after-desktop-v1|784216]]
-- **Figli/follow-up:** [[613408 ccs-desktop-launcher-overlay-recovery-v2|613408]]
+- **Figli/follow-up:** [[613408 ccs-desktop-launcher-overlay-recovery-v2|613408]], [[996591 ccs-pbf-live-final-closure-v1|996591]]
 - **Chat Codex:** Continua preferibilmente nella chat Codex di 403496; riusa anche l’evidenza di 125435. Un solo task dopo aver aperto ChatGPT/Codex Desktop.
 
 ## Spiegazione

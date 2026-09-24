@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653]]
-- **Figli/follow-up:** [[572554 ccs-desktop-launcher-overlay-recovery-v3|572554]]
+- **Figli/follow-up:** [[572554 ccs-desktop-launcher-overlay-recovery-v3|572554]], [[996591 ccs-pbf-live-final-closure-v1|996591]]
 - **Chat Codex:** Continua preferibilmente nella stessa chat Codex di 284653/403496; riusa tutta l'evidenza AT-SPI già raccolta.
 
 ## Spiegazione
