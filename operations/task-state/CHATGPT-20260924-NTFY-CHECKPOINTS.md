@@ -21,7 +21,7 @@ Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHu
 - [x] Check existing notification/credential conventions on Fedora.
 
 ### Phase 2 — Implementation
-- [ ] Add reproducible ntfy server deployment/configuration to vm_oracle.
+- [x] Add reproducible ntfy server deployment/configuration to vm_oracle.
 - [ ] Deploy and start ntfy on the Oracle VM with persistent storage and authentication.
 - [ ] Add a GitHub Actions publisher triggered only by accepted pushes changing `operations/task-state/**`.
 - [ ] Store ntfy publishing credentials outside Git (GitHub Actions secrets; Fedora Secret Service for local subscriber credentials if needed).
@@ -43,6 +43,9 @@ Phase 2: add the reproducible ntfy deployment and edge configuration to `vm_orac
 - Local repos codex-roadmap and vm_oracle are clean at task start.
 - MegaVault has unrelated local modifications and must not be touched casually.
 - ntfy is not currently installed as a Fedora command or service.
+- Oracle VM already has Docker, cloudflared and a validated `/etc/cloudflared/config.yml`; the existing tunnel can safely add a dedicated `ntfy.danielegalati.com` ingress without opening a host firewall port.
+- Fedora already uses owner-only `~/.config/codex/secrets/` files; this is the established unattended-service credential convention.
+- ntfy server v2.28.0 is the current stable release and supports private ACLs plus persisted Web Push subscriptions.
 - Oracle VM has Docker/Compose, 14 GiB free disk, and Uptime Kuma already bound to loopback; the canonical Cloudflare tunnel can route another hostname.
 - Fedora already has `secret-tool`, `notify-send`, and authenticated `gh` access.
 - A GitHub `push` workflow scoped to `operations/task-state/**` is a stronger event boundary than a local Git hook: it covers checkpoints pushed by any chat/client and runs only after GitHub accepted the commit.
@@ -56,9 +59,10 @@ Phase 2: add the reproducible ntfy deployment and edge configuration to `vm_orac
 
 ## Completed
 - Created this persistent task state.
+- Added reproducible Oracle deployment files to `gernalix/vm_oracle`: pinned ntfy v2.28.0 Docker Compose, private server config, secure first-run bootstrap and Fedora deployment wrapper. Final pre-deploy commit is `6ab39cf` on remote `main`.
 
 ## Remaining
-All discovery, implementation, deployment and validation steps above.
+Oracle runtime deployment, Fedora remote-checkpoint publisher, subscriptions/watchdog decision, end-to-end validation and protocol finalization.
 
 ## Blockers
 None confirmed yet.
