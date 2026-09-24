@@ -4,3 +4,4 @@ roadmap.sqlite-journal
 __pycache__/
 *.pyc
 .obsidian/workspace.json
+Generated/
