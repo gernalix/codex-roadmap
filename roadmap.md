@@ -2,8 +2,8 @@
 
 > Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.
 
-1. [[prompts/stop-runaway-788315-heartbeat|stop-runaway-788315-heartbeat]]
-2. [[prompts/personalhub-soldi-semantic-photo-owned-items-residual-v1|personalhub-soldi-semantic-photo-owned-items-residual-v1]]
+1. [[prompts/personalhub-soldi-semantic-photo-owned-items-residual-v1|personalhub-soldi-semantic-photo-owned-items-residual-v1]]
+2. [[prompts/stop-runaway-788315-heartbeat|stop-runaway-788315-heartbeat]]
 3. [[prompts/personalhub-unified-history-search-v1|personalhub-unified-history-search-v1]]
 4. [[prompts/personalhub-git-history-final-validation-v4|personalhub-git-history-final-validation-v4]]
 5. [[prompts/personalhub-datasette-lite-offline-runtime-v4|personalhub-datasette-lite-offline-runtime-v4]]

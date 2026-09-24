@@ -5,7 +5,7 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]] · `pending`
+- [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]] · `running`
 - [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `pending`
 - [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
 - [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `pending`
