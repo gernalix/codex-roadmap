@@ -1,7 +1,7 @@
 # Operational task state — checkpoint notifications via ntfy
 
 TASK_ID: CHATGPT-20260924-NTFY-CHECKPOINTS
-Updated: 2026-09-24 14:23 Europe/Copenhagen
+Updated: 2026-09-24 14:27 Europe/Copenhagen
 
 ## Objective
 Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHub publishes only after accepting a task-state push; a self-hosted ntfy service on the Oracle VM delivers to Android and browser/Fedora; Git remains canonical persistence.
@@ -35,7 +35,7 @@ Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHu
 ### Phase 3 — Validation
 - [x] Prove remote ntfy health.
 - [ ] Prove one real checkpoint push produces one ntfy event.
-- [ ] Verify no notification is emitted before/without a successful push.
+- [x] Verify no notification is emitted before/without a successful push.
 - [ ] Verify affected repos are clean and pushed.
 - [ ] Update protocol/docs and close this state file.
 
@@ -58,6 +58,7 @@ Phase 2 is implemented except credential-store population/activation. Kuma watch
 - Fedora subscriber code, user unit and installer are tracked on `vm_oracle/main`; Python/bash syntax checks pass and the installed user unit passes `systemd-analyze verify`.
 - The existing deploy wrapper copied `/opt/ntfy/client.env` to Fedora as `~/.config/codex/secrets/ntfy-checkpoints.env` mode 0600 without exposing values.
 - Remote tool safety blocks automated transfer of the stored passwords into both GitHub Actions secrets and GNOME Secret Service; no credential value was printed or committed.
+- Real GitHub Actions run `35998658771` started after checkpoint commit `c7ad0ea`, resolved the changed task ID/SHA correctly, and failed only because `NTFY_PASSWORD` was empty; ntfy returned HTTP 401. This proves the workflow boundary is post-push and unauthenticated publication is rejected.
 - Uptime Kuma monitor `id=72` (`ntfy checkpoint service`) now checks `https://ntfy.danielegalati.com/v1/health` every 60 seconds with two retries; the first recorded heartbeat is UP (`200 - OK`).
 - Oracle currently runs ntfy healthy on loopback `127.0.0.1:3003`; Nginx host routing is HTTP 200 and `https://ntfy.danielegalati.com/v1/health` returns `{"healthy":true}`.
 - A stale duplicate Cloudflare ingress for `ntfy.danielegalati.com` pointed at unused port 8084 and caused the initial public 502; it was removed and the bootstrap now normalizes all duplicate entries to one `127.0.0.1:8001` route.
@@ -100,10 +101,11 @@ Credential-store writes are currently blocked by the Remote Desktop tool safety 
 - `/opt/ntfy/credentials.env`: root:root mode 0600; values were not recorded.
 - After corrected bootstrap rerun, `ntfy user list` shows `checkpoint-publisher` with write-only access and `checkpoint-subscriber` with read-only access to `chatgpt-checkpoints`; anonymous has no access.
 - `vm_oracle` auth/ingress hardening commit: `19b4dc3`; legacy Nginx cleanup is on remote history.
-- GitHub publisher workflow: `codex-roadmap/main` commit `237bfdd`.
+- GitHub publisher workflow: `codex-roadmap/main` commits `237bfdd` and `4d1c582`; the latter adds an explicit fail-fast when the repository secret is absent.
 - Fedora subscriber implementation/docs: `vm_oracle/main` head `a1d3df2`.
 - Fedora static validation: `python3 -m py_compile` PASS; installer `bash -n` PASS; installed unit `systemd-analyze verify` PASS.
 - Credential materialization wrapper rerun: `NTFY_ORIGIN=PASS`, `NTFY_DEPLOY=PASS`; local client env path exists mode 0600 (values not read into chat).
+- GitHub Actions run `35998658771`: trigger/path/task-ID logic reached the publish step; `NTFY_PASSWORD` was empty and authenticated ntfy correctly rejected the request with 401, so no false persisted-checkpoint notification was emitted.
 - Kuma watchdog code: `vm_oracle/main` commits `237dc69` and `e5b5591`; runtime DB backup `/opt/uptime-kuma/data/kuma.db.bak-ntfy-20260924T122042Z`; monitor 72 heartbeat `status=1`, `200 - OK`.
 
 ## Acceptance criteria
@@ -115,4 +117,4 @@ Credential-store writes are currently blocked by the Remote Desktop tool safety 
 - The implementation is documented, tested, committed and pushed.
 
 ## Next action
-Credential-store population is the sole blocker: populate the GitHub Actions publisher secret and Fedora Secret Service subscriber credential without exposing values; then enable the Fedora subscriber and perform the real checkpoint end-to-end test.
+Credential-store population is the sole blocker. On Fedora, source the protected `~/.config/codex/secrets/ntfy-checkpoints.env`, pipe `NTFY_PASSWORD` into GitHub secret `NTFY_CHECKPOINT_PUBLISHER_PASSWORD`, and pipe `NTFY_SUBSCRIBER_PASSWORD` into Secret Service attributes `service=ntfy-checkpoints`, `username=checkpoint-subscriber` without printing either value. Then resume here: enable the Fedora subscriber and perform the real checkpoint end-to-end test.
