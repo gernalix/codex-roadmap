@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 14:53 Europe/Copenhagen
+Updated: 2026-09-24 14:56 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -44,7 +44,7 @@ Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only g
 - [x] Record the obsolete intermediate PH DB task 383662 as superseded by the specialized final cutover path 913264; never launch 383662.
 - [x] Implement and host-verify the optional PH ↔ Workflowy integration on `chatgpt/workflowy-integration` without a Room schema/version change; detailed checkpoint: `CHATGPT-20260924-PH-WORKFLOWY.md`.
 - [x] Safely park the partially completed 302284 infrastructure task at pushed WIP commit `6f31ceeaa51e5b77b86d2a18620a34079329196a` on `codex-usage-monitor/task/302284`; do not integrate or continue it while PH is actionable.
-- [ ] Resume and finish 920550 from its existing pushed checkpoint; validate, integrate, and inspect the merged schema/evidence.
+- [ ] Resume and finish 920550 from its existing pushed checkpoint; Play/minified APK+AAB gate is complete, AVD-only synthetic QA and canonical integration remain.
 - [ ] Reconcile and integrate `chatgpt/workflowy-integration` into the then-current PersonalHub main, rerun affected gates, delete the temporary branch, and record the merged commit.
 - [ ] Run and integrate 857906 after 920550.
 - [ ] Run and integrate 707603 on the resulting schema.
@@ -100,6 +100,8 @@ Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
 PersonalHub P0 is now the sole master lane. Resume 920550 from its existing pushed checkpoint and continue serially through 857906 → 707603 → 840907 → 788606 → 913264. No non-PH task may run while PH is actionable.
 
 ## Verified facts
+- Current PH side-branch inventory is bounded to two real side branches: `task/920550` (2 commits ahead / 0 behind main) and `chatgpt/workflowy-integration` (11 commits ahead / 2 behind main). No other non-main PH branch contains recoverable work. Required order: finish/integrate 920550 → reconcile/integrate Workflowy branch → delete both only after main containment/semantic absorption is proved.
+- 920550 Play/minified artifacts were produced successfully from the task worktree with release minification/resource shrinking enabled: `app-play.apk` = 191,469,880 bytes and `app-play.aab` = 87,776,741 bytes. Model weights remain outside the base app. The single Gradle build process exited; no duplicate build was launched.
 - A direct user request temporarily preempted the PH-only rule to implement the one-day-auto-delete Telegram archive. That bounded runtime work is complete: fedora-system-monitor branch `chatgpt/telegram-autodelete-archive` is pushed through `fe5d371`; 13/13 Telegram tests and unit/syntax/systemd gates PASS; the first live backfill archived 61 unique messages and 3 media files; both Telegram timers are enabled+active; concurrent collector startup succeeds under the shared session lock. No model-driven Telegram work remains active, so PersonalHub resumes as master immediately. Authoritative detail: `operations/task-state/CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md`.
 - 302284 partial prompt-cost work is safely parked and pushed at `codex-usage-monitor/task/302284` commit `6f31ceeaa51e5b77b86d2a18620a34079329196a`; it is intentionally incomplete and must not be merged before PH 913264 PASS.
 - Final PH migration source policy: at cutover, inventory the live Pixel DB plus all viable local/export/backup copies and migrate the freshest coherent dataset; do not assume an older backup is authoritative merely because it is easier to access.
