@@ -50,7 +50,7 @@ Extend `gernalix/chrome-codex-switcher` (CSS) so each persistent Chrome context 
 - [ ] Final completion checkpoint.
 
 ## Current step
-Reload the unpacked Chrome extension in the live Chrome session while preserving tabs, then wait for the extension heartbeat to report `0.4.0`.
+Perform a guarded full Chrome restart because `chrome://restart` invoked externally did not restart the existing browser and AT-SPI exposes only top-level Chrome frames, not the Extensions-page Reload control. Use the saved session backup plus `--restore-last-session`, then verify the extension heartbeat reports `0.4.0` before functional tests.
 
 ## Verified facts / implementation
 - Canonical `prompt_bindings` remains untouched as the 1:1 prompt↔Chrome/Codex binding.
@@ -120,4 +120,4 @@ No product/code blocker. Remote shell GUI automation cannot directly access the 
 - [ ] Final checkout/runtime state is clean and checkpointed.
 
 ## Next action
-Find and use a session-preserving way to reload the already-loaded unpacked extension, then verify the daemon's extension heartbeat changes to `0.4.0` before runtime functional testing.
+Checkpoint complete. Gracefully terminate only the main Chrome browser process, wait for clean exit, relaunch `google-chrome-stable --restore-last-session`, verify a new browser PID and extension heartbeat `0.4.0`, and restore the saved Sessions backup only if the browser session fails to return.
