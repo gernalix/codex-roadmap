@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub Workflowy integration
 
 TASK_ID: CHATGPT-20260924-PH-WORKFLOWY
-Updated: 2026-09-24 17:21 Europe/Copenhagen
+Updated: 2026-09-24 17:24 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-PERSONALHUB-P0.md
 Global state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
@@ -51,6 +51,7 @@ Implement the optional low-friction PersonalHub ↔ Workflowy integration discus
 Implementation and reconciliation verification are complete. Actual integration waits only for 920550 PR #41 to land in `main`; then reproduce the already-verified merge on a protected writer branch, integrate, and delete `chatgpt/workflowy-integration` after containment proof.
 
 ## Verified facts
+- Protected integration handoff is now correct: non-conforming PR #42 from `chatgpt/workflowy-integration` was closed unmerged; identical tree content was moved to single-writer branch `task/workflowy-integration` and PR #43. Tree hash equality was verified before handoff. PR #43 architecture CI is PASS; unit/instrumentation/play-preflight are in progress.
 - Prospective integration against 920550 head `b10117a` is verified before publication: Git synthetic merge returned no conflicts; only CODE_MAP overlaps. A temporary detached combined worktree passed consumer-preflight, targeted Workflowy tests, app compile and architecture gates. No remote branch/main mutation was made by this dry run.
 - PersonalHub remote branch: `chatgpt/workflowy-integration`.
 - Latest verified remote branch commit: `edd08138702f9ae6cc54c2964f109343a356a149`.
