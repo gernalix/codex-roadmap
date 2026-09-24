@@ -1,7 +1,7 @@
 # Operational task state — Telegram auto-delete archive
 
 TASK_ID: CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE
-Updated: 2026-09-24 15:10 Europe/Copenhagen
+Updated: 2026-09-24 16:34 Europe/Copenhagen
 
 ## Objective
 Preserve the complete available history of one Telegram chat configured with 1-day auto-delete, without duplicate storage, while retaining edits and deletion metadata and keeping archived content after Telegram removes it.
@@ -35,6 +35,10 @@ Preserve the complete available history of one Telegram chat configured with 1-d
 - [x] Add focused tests for dedupe, edits, deletions, revisions, media retention, reappearance and initial full backfill.
 - [x] Preserve Telegram service actions, including phone-call events, as structured action_type/action_json plus human-readable action_text.
 - [x] Add sender_name capture and a no-ID `messages_human` SQLite view with Italian/relative date formatting, sender name, human message/action text, media and state.
+- [ ] Add relationship-state snapshots/events for own block/unblock and peer last-seen transitions, without storing raw peer IDs in human output.
+- [ ] Detect own block/unblock as certain events from Telegram `blocked` state; use server block date when available, otherwise observation time.
+- [ ] Detect probable peer block/unblock only as inference from abrupt last-seen-status transitions compatible with Telegram's blocked-user behavior; retain raw status evidence and confidence.
+- [ ] Interleave relationship events into the human-readable chronological view and backfill only evidence Telegram still exposes now.
 
 ### Phase 3 — Deploy and verify
 - [x] Deploy the runtime on Fedora using the existing authorized account session.
@@ -50,7 +54,7 @@ Preserve the complete available history of one Telegram chat configured with 1-d
 - [ ] During global recovery Phase 4, reconcile/integrate this branch with the existing task/422308 Telegram source closure and remove the temporary branch after equivalence is proved.
 
 ## Current step
-Runtime work is complete and operational, including the human-readable view and Telegram call-event capture. Source integration is intentionally parked until the global recovery reaches its Telegram Phase 4 lane; control returns to the current PersonalHub master lane.
+Implement relationship/block-state capture on the existing Telegram auto-delete archive branch, add focused tests, deploy it to Fedora, and verify the live human timeline. Do not infer historical events that Telegram no longer exposes.
 
 ## Verified facts
 - Source branch: gernalix/fedora-system-monitor chatgpt/telegram-autodelete-archive, based on task/422308; remote head 2fc6c38be783bc2022fa267f0fa46f349c19a39a.
@@ -73,6 +77,7 @@ Runtime work is complete and operational, including the human-readable view and 
 - First run scans all visible history; later runs scan a 30-hour overlap, enough to cover the 24-hour TTL plus margin and capture edits/deletions of auto-expiring messages.
 - Preserve message/media bytes after remote deletion; deletion is represented by deleted_at_utc + deletion_reason.
 - Keep the temporary source branch until global Telegram source closure, then integrate it together with the task/422308 baseline rather than bypassing the serialized recovery plan.
+- Own block/unblock events are factual; peer-block events are never promoted beyond inferred confidence because Telegram exposes no direct `blocked_by_peer` flag. A change to the UI's long-time-ago state is evidence, not proof, because the same label also represents genuine >1-month inactivity/privacy behavior.
 
 ## Completed
 - Implementation, target discovery, local deployment, first full backfill, duplicate-free second sync, systemd activation, shared-session race fix, concurrent runtime verification and pushed source checkpoint.
@@ -108,4 +113,4 @@ Runtime work is complete and operational, including the human-readable view and 
 - [ ] Canonical fedora-system-monitor main contains the implementation and the temporary branch is removed; deferred to global Phase 4.
 
 ## Next action
-Return control to the current PersonalHub master recovery lane. When global Phase 4 becomes active, reconcile chatgpt/telegram-autodelete-archive with task/422308, integrate the combined Telegram collector changes into fedora-system-monitor main through the canonical source-closure lane, rerun tests/runtime readback, and delete the temporary branch.
+Implement and test relationship-state/event capture on chatgpt/telegram-autodelete-archive, deploy it under the existing shared Telethon session lock, run a live readback, checkpoint the verified state, then return control to the current master recovery lane.
