@@ -1,12 +1,13 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 14:06 Europe/Copenhagen
+Updated: 2026-09-24 14:12 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
 
 ## Constraints
+- **PersonalHub P0 and the live-DB migration/cutover are the highest-priority recovery lane.** After the already-completed runaway-heartbeat emergency closure, no non-PH recovery task may preempt PH until the full PH chain reaches 913264 PASS, including final schema freeze, immutable live-DB backup, external migration, exact final APK install on Pixel, real-data validation, and PH cleanup. Exception only for a true PH blocker or a data/safety-critical emergency.
 - **Single active recovery lane until global recovery is complete:** run only one model-driven recovery task/corsia at a time. Do not launch another phase/task until the current one is terminal and checkpointed. Manual-prerequisite/Waiting tasks may remain parked; stable non-model background services may continue only if they do not mutate overlapping repos/state.
 - This file is operational memory only; canonical lifecycle remains in roadmap.sqlite.
 - Store conclusions/state only, never chain-of-thought, secrets or raw private transcripts.
@@ -38,25 +39,32 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - [x] Supersede unsafe CCS prompt 641903 with routing-safe successor 896074; never launch 641903.
 - [x] Guard conditional/manual tasks 181259, 582946, 218695 and 588376 with explicit prerequisites.
 
-### Phase 2 — Emergency and prompt-infrastructure runtime closure
-- [x] Stop the runaway 788315 heartbeat/automation with 222733.
-- [x] Verify 788315 produces no new model-driven heartbeat cycles after shutdown.
-- [ ] Run 302284 and verify the consolidated roadmap/Workflowy/CCS/codex-usage runtime deployment and readback.
-- [ ] Run routing-safe CCS successor 896074 only after 302284 PASS.
-- [ ] Run 994029 for the ActivityWatch/Kuma local cutover.
-- [ ] Run 714263 only after 994029, closing the sqlite-to-obsidian Kuma residual.
-- [ ] Run 812553 after 222733, using prompt-history as the canonical primary repo.
-- [x] Complete prompt-history source-level model/reasoning analytics and regressions through ff694890.
-- [ ] Verify the corresponding live/runtime import/backfill/readback during the infrastructure closure tasks above.
-
-### Phase 3 — PersonalHub P0
+### Phase 2 — PersonalHub P0 + live DB migration (HIGHEST PRIORITY)
 Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only global gates here.
 - [x] Record the obsolete intermediate PH DB task 383662 as superseded by the specialized final cutover path 913264; never launch 383662.
 - [x] Implement and host-verify the optional PH ↔ Workflowy integration on `chatgpt/workflowy-integration` without a Room schema/version change; detailed checkpoint: `CHATGPT-20260924-PH-WORKFLOWY.md`.
-- [ ] When the serialized master lane returns to PH, reconcile and integrate `chatgpt/workflowy-integration` into the then-current PersonalHub main, rerun affected gates, delete the temporary branch, and record the merged commit.
-- [ ] Complete and integrate all still-relevant PH implementation/validation work through the release-preflight gate.
-- [ ] Freeze the final PH commit/schema/artifacts and complete external live-DB backup+migration+Pixel cutover via the specialized PH lane.
-- [ ] Finish PH-specific branch/PR cleanup only after absorption is proved; end with clean main-only operational state.
+- [ ] Safely park the partially completed 302284 infrastructure task at a pushed checkpoint; do not continue non-PH runtime work while PH is actionable.
+- [ ] Resume and finish 920550 from its existing pushed checkpoint; validate, integrate, and inspect the merged schema/evidence.
+- [ ] Reconcile and integrate `chatgpt/workflowy-integration` into the then-current PersonalHub main, rerun affected gates, delete the temporary branch, and record the merged commit.
+- [ ] Run and integrate 857906 after 920550.
+- [ ] Run and integrate 707603 on the resulting schema.
+- [ ] Run and integrate 840907, including true offline behavior and artifact-size impact.
+- [ ] Run 788606 release preflight; freeze the exact final PersonalHub main commit, Room schema/identity, minified APK/AAB and hashes.
+- [ ] Immediately after schema freeze, execute 913264: read the real Pixel DB identity/schema, take immutable DB/WAL/SHM + installed-APK rollback backup, externally migrate a copy directly to the frozen final schema, and pass SQLite integrity/FK/data-preservation checks.
+- [ ] Install the exact frozen final APK on the primary Pixel using explicit ADB serial and verify Home + every module against preserved real data.
+- [ ] Finish PH branch/PR/PBF cleanup only after absorption is proved; end with clean main-only operational state.
+- [ ] Do not resume non-PH recovery lanes until all PH items above are complete, unless PH is truly blocked.
+
+### Phase 3 — Remaining prompt/infrastructure runtime closure (DEFERRED UNTIL PH COMPLETE)
+- [x] Stop the runaway 788315 heartbeat/automation with 222733.
+- [x] Verify 788315 produces no new model-driven heartbeat cycles after shutdown.
+- [ ] Resume 302284 from its parked checkpoint and finish the remaining consolidated roadmap/Workflowy/CCS/codex-usage runtime readback.
+- [ ] Run routing-safe CCS successor 896074 only after 302284 PASS.
+- [ ] Run 994029 for the ActivityWatch/Kuma local cutover.
+- [ ] Run 714263 only after 994029, closing the sqlite-to-obsidian Kuma residual.
+- [ ] Run 812553 after 302284, using prompt-history as the canonical primary repo.
+- [x] Complete prompt-history source-level model/reasoning analytics and regressions through ff694890.
+- [ ] Verify the corresponding live/runtime import/backfill/readback during the infrastructure closure tasks above.
 
 ### Phase 4 — Notification and checkpoint infrastructure
 - [x] Complete Telegram collector runtime acceptance: account authorization, RUN1=4,244 messages, RUN2=0/no-op, private Git history readable, timer enabled+active; details in `CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md`.
@@ -88,7 +96,7 @@ Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
 - [ ] Mark global recovery complete only when every acceptance criterion below is satisfied.
 
 ## Current step
-Phase 2 / 302284: targeted source gates are complete. Next, deploy each of the five already-versioned runtimes exactly once, then perform the bounded systemd/Workflowy/CCS/codex-usage readback.
+Priority override: safely checkpoint/park the partially completed 302284 work, then return immediately to PersonalHub P0. Resume 920550 from its existing pushed checkpoint and keep the PH chain serial through 857906 → 707603 → 840907 → 788606 → 913264. The live DB migration/Pixel cutover is the first global milestone; all remaining non-PH closure work waits behind it.
 
 ## Verified facts
 - 302284 targeted source gates PASS: codex-roadmap 60 tests; github-autosync 57 tests; workflowy-importer 34 tests; codex-usage-monitor 17 tests; chrome-codex-switcher 3 tests plus Python host compile.
@@ -134,6 +142,7 @@ Phase 2 / 302284: targeted source gates are complete. Next, deploy each of the f
 - A canonical replacement allocation request for never-run 641903 is open in MegaVault Issue #100: [prompt-id-command] chatgpt-ccs-641903-project-routing-replacement-20260924-v1. It must resolve current CCS project routing from authoritative metadata/repo identity rather than hard-code 96.
 
 ## Decisions
+- User priority override: PersonalHub + live DB migration now outrank all remaining non-PH recovery work. 302284 is parked after a safe checkpoint and resumes only after PH 913264 PASS, unless PH is truly blocked.
 - Until the final global gate, recovery work is serialized: one model-driven lane at a time. Existing active tasks are first brought to a safe checkpoint/parked state before the master lane advances; no new parallel recovery prompt is launched.
 - Do not duplicate the PersonalHub or Telegram lanes from the global recovery chat. PersonalHub detail belongs to CHATGPT-20260924-PERSONALHUB-P0.md; Telegram detail belongs to CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md.
 1. Stop 788315 heartbeat before other prompt-infrastructure runtime work.
@@ -212,4 +221,4 @@ Phase 2 / 302284: targeted source gates are complete. Next, deploy each of the f
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-Execute existing task 302284 locally through the canonical claim. Deploy only the already-implemented prompt-infrastructure runtime changes, run its bounded targeted gates/readback, finalize canonically, checkpoint this file, then move to 896074. Keep PersonalHub/Telegram/ntfy/branch-cleanup parked or waiting; do not launch them in parallel. The Telegram systemd collector may continue as a stable non-model background service, but 966124 stays parked until Phase 4. The parked PersonalHub set now explicitly includes the verified Workflowy integration branch recorded in `CHATGPT-20260924-PH-WORKFLOWY.md`.
+Checkpoint and park the current partial 302284 work without discarding verified fixes. Then hand control back to `CHATGPT-20260924-PERSONALHUB-P0.md` and resume 920550 exactly from its existing pushed checkpoint. Continue the PH chain serially through 913264; do not resume 302284/896074/994029/714263/812553/Telegram/ntfy/branch-cleanup while PH remains actionable.
