@@ -34,7 +34,7 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 ## Checklist
 - [x] Allocare un PROMPT_ID canonico per il task locale: 422308.
 - [x] Registrare il goal nella roadmap via single writer.
-- [ ] Materializzare 422308 nel registry MegaVault (Issue #99 pending al checkpoint).
+- [x] Materializzare 422308 nel registry MegaVault: Issue #99 chiusa con status=materialized.
 - [ ] Implementare collector Telegram incrementale e test.
 - [ ] Creare/configurare repo dati privato dedicato.
 - [ ] Installare service+timer systemd --user e lock anti-overlap.
@@ -53,7 +53,7 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 - Goal collector registrato/materializzato nella roadmap dal single writer.
 
 ## Remaining
-Materializzazione MegaVault finale, deployment locale, creazione data repo e audit sui messaggi reali.
+Deployment locale, creazione data repo e audit sui messaggi reali.
 
 ## Blockers
 - Possibile login Telegram/2FA iniziale manuale; deve essere un solo prerequisito, non un loop Codex.
@@ -64,11 +64,11 @@ Materializzazione MegaVault finale, deployment locale, creazione data repo e aud
 - codex-roadmap/prompts/telegram-notification-history-fedora-collector-v1.md
 - MegaVault Issue #96 => PROMPT_ID=422308, status=allocated.
 - codex-roadmap Issue #1026 => Applied by the roadmap single writer.
-- MegaVault Issue #99 => materialization request.
+- MegaVault Issue #99 => PROMPT_ID=422308, status=materialized.
 - codex-roadmap/AGENTS.md e SQLITE_ROADMAP.md per lifecycle/roadmap writer.
 
 ## Acceptance criteria
 PASS della fase collector quando il servizio legge solo la chat target, persiste nuove entry senza duplicati, non espone segreti, il timer è enabled+active, una seconda run senza nuovi messaggi è no-op e il repo privato remoto contiene l'archivio aggiornato.
 
 ## Next action
-Verificare la chiusura di MegaVault Issue #99 con status=materialized; poi lanciare PROMPT_ID 422308 in Codex.
+Lanciare PROMPT_ID 422308 in Codex; se il runtime richiede login/2FA Telegram, completare la singola autorizzazione manuale e poi riprendere dal checkpoint senza rifare test già PASS.
