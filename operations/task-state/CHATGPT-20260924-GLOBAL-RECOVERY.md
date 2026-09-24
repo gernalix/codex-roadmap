@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 12:25 Europe/Copenhagen
+Updated: 2026-09-24 12:48 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -19,6 +19,12 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - Device operations must be serial-scoped when multiple Android devices are connected.
 
 ## Verified facts
+- Handoff checkpoint refreshed for a new ChatGPT chat at 2026-09-24 12:48 Europe/Copenhagen.
+- 641903 is no longer actionable: it is superseded by routing-safe successor 896074, which must run only after 302284 and resolves the CCS project from current repo/runtime metadata instead of hard-coding project_id 96.
+- MegaVault allocation Issue #100 is no longer a blocker; it is closed. The canonical replacement 896074 already exists in the roadmap.
+- 422308 is now canonically BLOCKED after implementation commit f577f66fb4cc9e354df032ee1b5dea527006ea9e; its only blocker is one-time Telegram account authorization (API ID/hash + Telethon session). Detailed ownership is delegated to operations/task-state/CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md. Do not retry it before new human auth evidence.
+- Attention currently contains only 422308; treat it as a known manual-prerequisite leaf owned by the Telegram lane, not as an invitation to create another Codex retry.
+- prompt-history prompt-level model analytics source work is complete through ff69489074feae82a2838504ff6f2d03875caa2b: CLI aggregation, SQL analytics, v_model_performance, README contract and regressions all use one sample per canonical PROMPT_ID from codex-usage, aggregate cycle deltas, ignore roadmap execution mirrors, and exclude mixed-model/reasoning tasks.
 - PersonalHub 920550 and Telegram collector 422308 are currently running in their separate parallel lanes; do not duplicate their work in this global chat.
 - 218695 is now guarded by manual-prerequisite:confirm-eboks-scraper-needed; its target public repo exists but is empty, so after 582946 the task must be reevaluated before launch.
 - 641903 has been superseded by materialized routing-safe successor 896074; 896074 depends on 302284 and resolves CCS from current repo/metadata instead of hard-coding project_id 96.
@@ -48,6 +54,7 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - A canonical replacement allocation request for never-run 641903 is open in MegaVault Issue #100: [prompt-id-command] chatgpt-ccs-641903-project-routing-replacement-20260924-v1. It must resolve current CCS project routing from authoritative metadata/repo identity rather than hard-code 96.
 
 ## Decisions
+- Do not duplicate the PersonalHub or Telegram lanes from the global recovery chat. PersonalHub detail belongs to CHATGPT-20260924-PERSONALHUB-P0.md; Telegram detail belongs to CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md.
 1. Stop 788315 heartbeat before other prompt-infrastructure runtime work.
 2. Prioritize PH P0 above unrelated work after the emergency heartbeat stop.
 3. Do not run 641903. Replace it with a routing-safe successor after MegaVault allocation Issue #100 completes; successor depends on 302284.
@@ -57,6 +64,10 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 7. Use empirical prompt_costs after codex-usage attribution/backfill is deployed before making future model-cost recommendations.
 
 ## Completed
+- New-chat handoff prepared from persistent Git state; future continuation must reread this file first.
+- 641903 superseded by 896074; no future chat should launch 641903.
+- Telegram lane 422308 implemented code/runtime preparation and is now blocked only on one-time Telegram authorization; its own checkpoint is authoritative for that lane.
+- prompt-history analytics correction completed through ff694890 with prompt-level sampling/regressions; runtime import verification remains part of later local infrastructure work.
 - 422308 model metadata is now GPT-6 Luna; no prompt-body rewrite was needed.
 - 641903 is guarded by manual-prerequisite:resolve-ccs-project-id because verified runtime evidence shows legacy PROJECT_ID=96 resolves workflowy-importer, not chrome-codex-switcher.
 - Synthetic SQLite validation confirmed the core regression: a three-cycle goal with a cumulative completion total plus a roadmap mirror counts as one 300-token sample; combined with a second 200-token task the reported average is 250, while a mixed-model task is excluded.
@@ -76,7 +87,7 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - Redundant hourly ChatGPT "Codex Fix Queue" automation disabled.
 
 ## Remaining
-- Complete MegaVault Issue #100 allocation; register/materialize the routing-safe replacement of 641903 and supersede 641903.
+- Run routing-safe CCS successor 896074 only after 302284 PASS; never run superseded 641903.
 - Reconcile 181259's nonexistent remote repo before it can become genuinely launchable.
 - Run 222733 locally and verify 788315 no longer produces cycles.
 - After 222733 PASS, run 302284 for the consolidated prompt-infrastructure runtime deploy/readback.
@@ -88,7 +99,7 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 ## Blockers
 - Local Fedora/device actions require Codex Desktop/local tooling.
 - 788315 scheduler is local and not controllable through ChatGPT automations; 222733 must disable it.
-- MegaVault allocation Issue #100 is still open at this checkpoint.
+- MegaVault Issue #100 is closed and no longer relevant; 896074 is the canonical routing-safe CCS successor.
 - 181259 targets a nonexistent GitHub remote (gernalix/grindr-web-exporter); local state must be reconciled before a safe successor can run.
 - Exact current live PH DB identity/schema on Pixel must be read locally before final migration.
 
@@ -114,4 +125,12 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-Urgent local action: execute 222733 and verify no new 788315 heartbeat is scheduled. In parallel, continue direct remote cleanup: finish prompt-history prompt-level analytics verification/documentation, audit remaining conditional non-PH tasks without duplicating the running PersonalHub/Telegram lanes, and keep 896074 blocked behind 302284. After 222733 PASS, 302284 becomes the next infrastructure runtime gate.
+In the new global-recovery chat:
+1. Read this file first and trust it over conversation memory.
+2. Re-read only the current canonical roadmap rows needed to detect concurrent progress.
+3. Do NOT duplicate running PersonalHub 920550 or the blocked Telegram 422308 lane.
+4. Highest-priority local action remains 222733: disable chatgptexporter-788315-completion and verify no new heartbeat/model polling is scheduled.
+5. After 222733 PASS, 302284 is the next prompt-infrastructure runtime gate; it deploys/verifies roadmap lifecycle, Workflowy/CCS styling and codex-usage attribution/backfill.
+6. 896074 can run only after 302284 PASS.
+7. Continue direct remote cleanup that does not require Fedora: reconcile any newly changed roadmap states, resolve 181259's missing gernalix/grindr-web-exporter remote/single-writer path without guessing, and keep conditional/manual tasks 582946/218695/588376 dormant until their real prerequisites change.
+8. Checkpoint this file again after any meaningful conclusion or steer.
