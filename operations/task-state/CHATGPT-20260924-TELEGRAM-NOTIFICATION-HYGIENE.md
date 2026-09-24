@@ -1,111 +1,99 @@
 # Operational task state — Telegram notification hygiene
 
 TASK_ID: CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE
-Updated: 2026-09-24 13:08 Europe/Copenhagen
+Updated: 2026-09-24 13:36 Europe/Copenhagen
 
 ## Objective
-Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e usarla come evidenza per ridurre rumore, duplicati, messaggi incomprensibili e flapping senza richiedere export manuali all'utente.
+Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e usare la cronologia reale come evidenza per ridurre rumore, duplicati, messaggi incomprensibili e flapping senza export manuali.
 
 ## Constraints
-- Fedora user service/timer, nessun processo model-driven sempre acceso.
-- Archivio Git privato; nessun token, session file, API hash, chat secret o credenziale nel repository.
-- Export incrementale e resumable; nessun commit/push se non ci sono nuovi messaggi.
+- Fedora user service/timer; nessun processo model-driven always-on.
+- Archivio Git privato; nessun token, session file, API hash, OTP, 2FA o credenziale nel repository/checkpoint.
+- Export incrementale e resumable; nessun commit/push quando non ci sono nuovi messaggi.
 - Collector separato da telegram_insert_bot.
-- Testi futuri comprensibili a un non tecnico, brevi, autoesplicativi, con emoji e formattazione Telegram.
-- Stesso incidente invariato non deve notificare ripetutamente; recovery utile una volta sola dopo un alert realmente inviato.
-- Non cambiare trigger/frequenze storicamente dichiarati come eccezioni (es. quota Codex/spazio disco) finché l'evidenza nuova non giustifica esplicitamente una revisione.
-- Il project_id non deve essere necessario come prefisso tecnico visibile se può essere conservato come metadata strutturato nell'archivio/audit.
-
-## Verified facts
-- Esiste un precedente task completato di Telegram signal hygiene (PROMPT_ID 417826) con deduplica parziale e regola legacy project_id visibile.
-- telegram_insert_bot è un repo applicativo distinto; non è il posto giusto per il collector passivo.
-- L'ecosistema usa già systemd --user e repo Git privati per dati/runtime.
-- Un export affidabile della chat richiede un client Telegram account-level (es. Telethon) oppure una sorgente equivalente; Bot API da sola non è una fonte generale della cronologia dei messaggi inviati dal bot.
-- PROMPT_ID canonico allocato: 422308.
-- Mutation roadmap di registrazione applicata: codex-roadmap Issue #1026.
-- Prompt materializzato dal writer in prompts/telegram-notification-history-fedora-collector-v1.md.
-
-## Decisions
-- Creare un collector dedicato che legge solo la chat del bot notifiche, non tutte le chat Telegram.
-- Autorizzazione Telegram una tantum; poi esecuzione unattended.
-- Dati canonici in JSONL append-only con message_id, timestamp, testo/caption, sender/peer minimale ed eventuale metadata media; niente download media salvo necessità.
-- Repo dati privato dedicato, scritto solo dal sync service.
-- Timer consigliato: 15 minuti; commit/push solo se ci sono nuove entry.
-- L'audit successivo deve modificare i produttori reali, non filtrare le notifiche a valle.
-- Codice/runtime del collector assegnato a gernalix/fedora-system-monitor; data sink dedicato previsto: gernalix/telegram-notification-history.
+- Correggere i producer reali, non filtrare a valle le notifiche.
+- Testi futuri comprensibili a un non tecnico: brevi, autoesplicativi, ben formattati, con emoji utili.
+- Stesso incidente invariato => silenzio; recovery una sola volta dopo un alert realmente inviato.
+- Rispettare la single-active-recovery-lane globale: il timer può continuare come servizio non-model, ma nessun nuovo task modello Telegram va lanciato in parallelo alla master lane.
 
 ## Plan / checklist
-- [x] Allocare un PROMPT_ID canonico per il task locale: 422308.
-- [x] Registrare il goal nella roadmap via single writer.
-- [x] Materializzare 422308 nel registry MegaVault: Issue #99 chiusa con status=materialized.
-- [x] Implementare collector Telegram incrementale e test: commit fedora-system-monitor f577f66fb4cc9e354df032ee1b5dea527006ea9e.
-- [x] Creare/configurare repo dati privato dedicato: gernalix/telegram-notification-history, PRIVATE.
-- [x] Installare service+timer systemd --user e lock anti-overlap; unit caricate, timer intenzionalmente disabilitato finché manca la sessione Telegram.
-- [ ] Eseguire login Telegram una tantum senza esporre segreti.
-- [ ] Verificare almeno due run: prima ingestione + seconda no-op.
-- [ ] Verificare commit/push solo con nuovi messaggi.
-- [ ] Rendere il repo leggibile dal connettore GitHub usato da ChatGPT.
-- [ ] Dopo raccolta sufficiente, classificare notifiche verbose/incomprensibili/inutili/ripetute/flapping.
-- [ ] Creare fix mirati per i singoli producer; niente broad refactor.
-- [ ] Aggiornare la policy legacy project_id visibile se il metadata strutturato rende il prefisso non più necessario.
+- [x] Allocare/materializzare il task iniziale 422308.
+- [x] Implementare collector incrementale + test in fedora-system-monitor.
+- [x] Creare il repo dati privato gernalix/telegram-notification-history.
+- [x] Installare service+timer systemd --user e lock anti-overlap.
+- [x] Completare autorizzazione Telegram account-level senza versionare segreti.
+- [x] Correggere login con TELEGRAM_PHONE vuoto; commit 9d736aa.
+- [x] Correggere runtime reale e persistere i fix; commit 5d8ed32.
+- [x] Verificare test mirati: 6/6 PASS + py_compile + git diff --check.
+- [x] RUN1 reale: 4.244 messaggi archiviati e pushati.
+- [x] RUN2 reale: new_messages=0 e commit remoto invariato.
+- [x] Abilitare timer ogni 15 minuti; enabled+active.
+- [x] Verificare dal connettore GitHub che repo privato e archive/state.json siano leggibili.
+- [ ] Riparare la collisione di identità del follow-up: 333860 non canonico; 966124 ID remoto canonico. Mutation roadmap #1056 deve sostituire 333860 con 966124 e poi 966124 va materializzato.
+- [ ] Quando la master recovery arriva a Phase 4, eseguire SOLO 966124 per integrare su main i fix già verificati del branch task/422308 e chiudere il source/runtime gate.
+- [ ] Lasciare accumulare cronologia reale sufficiente.
+- [ ] Classificare notifiche verbose/incomprensibili/inutili/ripetute/flapping.
+- [ ] Applicare fix mirati ai singoli producer; niente broad refactor.
+- [ ] Rivalutare la policy legacy del prefisso project_id visibile e spostarlo a metadata se non serve all'utente.
 
 ## Current step
-Human prerequisite: complete the already-open Telegram account login locally. No model/Codex retry is actionable until the Telethon session reports authorized; after that, resume with RUN1 → RUN2 no-op → timer enablement → private-repo verification.
+Collector runtime operativo e non-model. Il lavoro modello è parcheggiato per rispettare la master recovery. In parallelo va completata solo la correzione amministrativa dell'identità del follow-up: 966124 è il PROMPT_ID canonico remoto; 333860 deve restare superseded/non azionabile.
+
+## Verified facts
+- Baseline storica: PROMPT_ID 417826 ha già effettuato una prima signal-hygiene.
+- PROMPT_ID 422308 è terminale BLOCKED storico, ma il suo precedente prerequisito umano è ormai soddisfatto.
+- Branch sorgente: gernalix/fedora-system-monitor task/422308; ultimo commit pushato verificato 5d8ed32.
+- Test collector dopo i fix live: 6/6 PASS; py_compile e diff-check PASS.
+- Sessione Telegram account-level autorizzata.
+- Target reale delle notifiche rumorose: datasette_alerts_bot; il vecchio chat_id -1004426028673 risultava non valido per il bot principale.
+- RUN1 PASS: new_messages=4244; data commit 99a9952479074f56095586a6ed3fb210111496db.
+- RUN2 PASS: new_messages=0; origin/main invariato.
+- Data repo gernalix/telegram-notification-history verificato PRIVATE e leggibile via GitHub connector.
+- archive/state.json remoto contiene last_message_id=372496.
+- telegram-notification-history.timer è enabled+active e schedulato ogni 15 minuti.
+- L'allocatore remoto MegaVault per chatgpt-telegram-history-runtime-closure-20260924-v1 ha assegnato 966124.
+- Il fallback locale aveva erroneamente restituito 333860 allo stesso request_id e quel prompt era stato registrato prima del ritorno remoto.
+- Mutation roadmap #1056 corregge la collisione tramite replacement 333860 -> 966124; la materialization Issue MegaVault #104 per 333860 è stata chiusa not_planned.
+
+## Decisions
+- Il runtime collector resta attivo mentre la master recovery procede perché è un servizio non-model e non muta i repo sovrapposti alla lane attiva.
+- Non rilanciare 422308.
+- Non lanciare 333860.
+- Il solo follow-up valido è 966124, dopo applicazione/materializzazione canonica e quando Phase 4 della global recovery diventa la lane attiva.
+- L'audit delle notifiche userà la cronologia Git reale.
+- Le correzioni successive devono avvenire nei producer reali.
 
 ## Completed
-- PROMPT_ID 422308 terminato BLOCKED per solo prerequisito manuale di autorizzazione Telegram; codice/test/runtime preparatorio completati.
-- Commit verificato: fedora-system-monitor f577f66fb4cc9e354df032ee1b5dea527006ea9e (`Add private Telegram notification history collector`).
-- Data repo verificato: gernalix/telegram-notification-history, visibility=private.
-- Config locale installata mode 0600; service/timer caricati; timer lasciato disabled prima del login.
-- RUN1/RUN2 non eseguiti perché TELEGRAM_API_ID/API_HASH sono vuoti e non esiste account.session.
-- Roadmap exception mutation #1042 registra analysis/code_change e manual-prerequisite:telegram-auth.
-- Architettura scelta.
-- Individuato il precedente task 417826 da trattare come baseline storica, non come policy immutabile.
-- PROMPT_ID 422308 allocato.
-- Goal collector registrato/materializzato nella roadmap dal single writer.
+- Implementazione collector, data repo privato, autorizzazione, runtime deploy e validazione E2E.
+- RUN1/RUN2 e no-op semantics verificate.
+- Timer periodico attivo.
+- Repo dati accessibile da ChatGPT tramite GitHub connector.
+- Fix live persistiti sul branch task/422308 fino a 5d8ed32.
+- Richiesta errata di materializzazione 333860 chiusa prima che il worker la applicasse.
 
 ## Remaining
-1. Ottenere TELEGRAM_API_ID e TELEGRAM_API_HASH dall'account Telegram.
-2. Inserirli solo nel config locale insieme al peer target già previsto.
-3. Eseguire una volta il comando login e completare codice Telegram/2FA nel terminale.
-4. Solo dopo nuova evidenza, creare/lanciare un follow-up minimo che esegua RUN1/RUN2, abiliti il timer e chiuda il collector.
-5. Dopo raccolta reale sufficiente, auditare e correggere i producer rumorosi.
+- Attendere/applicare roadmap mutation #1056 e materializzare 966124.
+- Integrare i fix sorgente su main tramite 966124 quando la master lane arriva a Phase 4.
+- Accumulare e analizzare cronologia reale.
+- Correggere i producer rumorosi e verificare una nuova finestra di notifiche post-fix.
 
 ## Blockers
-- Unico blocker: autorizzazione Telegram account-level una tantum. TELEGRAM_API_ID/API_HASH non sono configurati e manca la sessione Telethon.
-- Non lanciare retry Codex prima che il login produca nuova evidenza.
+- Nessun blocker runtime del collector.
+- Blocker amministrativo corrente: collisione allocator locale/remoto da riconciliare completamente con 966124 prima di qualunque source-closure task.
 
 ## Evidence
-- codex-roadmap/completed/telegram-notification-signal-hygiene.md
-- codex-roadmap/prompts/telegram-notification-history-fedora-collector-v1.md
-- MegaVault Issue #96 => PROMPT_ID=422308, status=allocated.
-- codex-roadmap Issue #1026 => Applied by the roadmap single writer.
-- MegaVault Issue #99 => PROMPT_ID=422308, status=materialized.
-- codex-roadmap/AGENTS.md e SQLITE_ROADMAP.md per lifecycle/roadmap writer.
+- fedora-system-monitor task/422308: f577f66, 9d736aa, 5d8ed32.
+- gernalix/telegram-notification-history commit 99a9952479074f56095586a6ed3fb210111496db.
+- GitHub readback archive/state.json: last_message_id 372496.
+- systemd runtime readback: RUN1 4244, RUN2 0, timer enabled+active.
+- MegaVault Issue #103: remote allocation => PROMPT_ID 966124.
+- codex-roadmap Issue #1050: accidental local-fallback prompt 333860.
+- codex-roadmap Issue #1056: canonical replacement 333860 -> 966124.
+- MegaVault Issue #104: wrong 333860 materialization closed not_planned.
+- completed/telegram-notification-signal-hygiene.md baseline 417826.
 
 ## Acceptance criteria
-PASS della fase collector quando il servizio legge solo la chat target, persiste nuove entry senza duplicati, non espone segreti, il timer è enabled+active, una seconda run senza nuovi messaggi è no-op e il repo privato remoto contiene l'archivio aggiornato.
-
-
-## Remote Desktop Commander follow-up — 2026-09-24
-- Fedora device connected successfully through Remote Desktop Commander.
-- Verified local collector config exists with mode 0600; API ID/hash/phone remain unset and Telegram session is absent.
-- Opened https://my.telegram.org in the existing Chrome session.
-- Opened a fresh visible Ptyxis terminal for the user.
-- Remote safety controls block reading/inserting authentication secrets, browser credential/session extraction, and direct GUI automation of those secret-bearing flows.
-- Attempted Telegram Desktop tdata reuse as an alternative; the remote safety layer blocked direct session conversion before any account data was read.
-- No Telegram authorization was completed and timer remains intentionally disabled.
-- Do not retry Codex or model polling until there is new evidence: API credentials are entered locally and the Telegram login succeeds.
-
-
-## Login bug fix — 2026-09-24
-- The API credentials from my.telegram.org were entered into the local 0600 config only; they were not committed to Git.
-- First login attempt exposed a concrete bug: blank TELEGRAM_PHONE was passed explicitly as None to Telethon, causing ValueError before any prompt.
-- Fixed both task worktree and installed runtime to call client.start() when TELEGRAM_PHONE is blank, allowing Telethon to prompt interactively.
-- Targeted collector suite: 5/5 PASS; py_compile and git diff --check PASS.
-- Fix committed and pushed on task/422308: 9d736aa (Prompt for phone during Telegram login).
-- A visible Ptyxis login terminal is open and currently waits for the user's phone number, followed by Telegram code/optional 2FA.
-- Noninteractive authorization readback still reports unauthorized; timer remains disabled.
+Collector lane source/runtime closure is complete only when runtime remains healthy/incremental, no secret is versioned, source fixes are integrated on fedora-system-monitor main through canonical 966124, 333860 is non-actionable, 966124 is canonical/materialized and terminal PASS, and the history-based audit produces producer-specific fixes.
 
 ## Next action
-Wait for the user to finish the visible Telegram login locally. Once the session is authorized, run RUN1, then RUN2 no-op, enable the timer, verify the private data repo remote and persistence, and create only the minimal roadmap follow-up needed to close the collector; do not relaunch terminal PROMPT_ID 422308.
+Do not launch a Telegram model task now. Verify roadmap mutation #1056 applies, materialize canonical PROMPT_ID 966124, and keep it parked. When the global master reaches Phase 4, claim only 966124, integrate the already-verified task/422308 changes, run its bounded gates/readback, finalize PASS, then begin the history-based notification audit.
