@@ -50,7 +50,8 @@ Extend `gernalix/chrome-codex-switcher` (CSS) so each persistent Chrome context 
 - [x] Final completion checkpoint.
 
 ## Current step
-Completed. Source, deployment, live browser registration, automatic scanning, manual override/suppression, cleanup and final readback are all PASS.
+
+Completed. Source implementation, Fedora deployment, true Chrome extension reload, real-browser functional acceptance, cleanup and final health/readback gates all PASS.
 
 ## Verified facts / implementation
 - Canonical `prompt_bindings` remains untouched as the 1:1 prompt↔Chrome/Codex binding.
@@ -78,74 +79,80 @@ Completed. Source, deployment, live browser registration, automatic scanning, ma
 - `149f28478dffd57f75bdf7f883444d95b2dc7262` — current canonical CSS main after local writer reconciliation, including runtime version alignment.
 
 ## Evidence
-Checkpoint readback 2026-09-24: CSS checkout is clean at `149f28478dffd57f75bdf7f883444d95b2dc7262`, matching `origin/main`; daemon reports `0.4.0`; live extension heartbeat reports `0.4.0` with fresh heartbeat.
 
-Source gates:
+Source verification:
+- Final Fedora checkout: `149f28478dffd57f75bdf7f883444d95b2dc7262`.
+- `HEAD == origin/main`; working tree clean.
 - Python compile PASS.
-- `python -m unittest discover -s tests -v`: 66/66 PASS.
-- Manifest JSON validation PASS.
-- Node syntax checks for background/content/sidepanel and GNOME companion PASS.
-- GNOME schema validation PASS.
-- Shell syntax gates PASS.
-- GitHub Actions CI run 107 on `6b4f9da`: python PASS, Selenium E2E PASS, overall SUCCESS.
+- `python -m unittest discover -s tests -q`: 66/66 PASS.
+- Manifest JSON and Chrome extension JS syntax PASS.
+- `git diff --check` PASS.
+- Deployed `extension/` and `host/` match the canonical checkout byte-for-byte (excluding Python `__pycache__`).
 
-Final runtime cleanup/readback PASS:
-- Disposable HTTP server stopped; `/tmp/css-prompt-index-e2e` removed.
-- Disposable context `057a7d84-a62d-49d7-93f1-d0db13834a0e` and its index rows removed; `/api/list` confirms the test URL is absent.
-- CSS checkout is clean: HEAD = origin/main = `149f28478dffd57f75bdf7f883444d95b2dc7262`.
-- Daemon health OK/version `0.4.0`; live extension heartbeat `0.4.0`; Chrome Preferences service-worker registration `0.4.0` at the expected unpacked path.
-- Chrome session safety backup remains at `~/.local/state/chrome-codex-switcher/session-backup-20260924-164432` for rollback if ever needed.
+GitHub Actions:
+- CI run #109, run id `36012778807`, head `149f28478dffd57f75bdf7f883444d95b2dc7262`.
+- Overall conclusion: SUCCESS.
+- Earlier implementation CI #107 also passed both Python and Selenium E2E jobs.
 
-Runtime manual-override PASS:
-- Removing auto-detected `583902` returned effective IDs without it; after reopening/rescanning the same page, `583902` remained absent and SQLite recorded `(auto_detected=1, manual_added=0, excluded=1)`.
-- Adding manual-only `583904` made it immediately searchable; removing it deleted its row entirely. Marker: `MANUAL_OVERRIDE_PASS`.
-
-Runtime automatic-scan PASS:
-- Graceful Chrome restart + explicit Wayland relaunch succeeded; service-worker registration now records `0.4.0` and extension heartbeat is fresh.
-- Reopening `http://127.0.0.1:43891/index.html` caused real content-script scanning to add `583902` automatically within ~1.5 s. The same regex also indexed `583903` from `x583903y`, because only adjacent digits are excluded by the current six-digit-number rule.
-
-Runtime reload evidence:
-- Chrome Preferences points CSS ID `mfpomnbkkfklealhaacbnmelpgpggglg` to the correct unpacked path but `service_worker_registration_info.version` remains `0.3.8`.
-- Deployed `content.js` and `background.js` hashes exactly match canonical main and contain the scanner/message routes.
-- Direct daemon `POST /api/context/prompts/observe` succeeds, narrowing failure to stale browser-side code registration.
-- `chrome://restart` invoked from the existing Chrome process did not change the registered service-worker version.
-- Session safety backup created at `~/.local/state/chrome-codex-switcher/session-backup-20260924-164432` containing Chrome `Sessions/` and `Preferences`.
-
-Runtime E2E finding:
-- Disposable page `http://127.0.0.1:43891/index.html` containing standalone IDs `583901` and `583902` created real CSS context `057a7d84-a62d-49d7-93f1-d0db13834a0e`, proving the content script can reach `context:get`.
-- `/api/list` returned `prompt_ids=[]` for that context over 20 polls / >10 seconds, and SQLite had no matching `context_prompt_ids` rows. Automatic scanning is therefore not runtime-PASS yet.
-
-Runtime deployment:
-- `install.sh` succeeded once Remote Desktop Commander shell exported `XDG_RUNTIME_DIR=/run/user/1000` and `DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus`.
-- GNOME companion enabled; global search shortcut remains configured.
+Runtime deployment/readback:
 - `chrome-codex-switcher.service`: enabled + active.
-- Deployed extension file version: `0.4.0`.
-- After version alignment/reinstall: daemon version `0.4.0`, health `ok=true`.
-- Live Chrome extension heartbeat: `version=0.4.0`; reload confirmed.
+- Daemon health: `ok=true`, version `0.4.0`.
+- Live extension heartbeat: version `0.4.0`.
+- Chrome Preferences service-worker registration: version `0.4.0`.
+- Browser session survived guarded restart; 12 top-level Chrome frames were present after restore, matching the pre-restart count.
+- The stale `0.3.8` service worker was resolved by a temporary URL-gated extension-page call to `chrome.runtime.reload()`; the temporary `sidepanel.js` patch was restored and byte-compared equal to canonical source.
+
+Real-browser functional acceptance:
+- Automatic scan PASS on disposable `verify.html`: context `61172d07-39ca-49d1-b4f1-e0da2207585f` automatically indexed `827365` and `918274`.
+- Manual add PASS: `736455` became `manual_added=1, excluded=0`.
+- Manual remove PASS: manual-only `736455` was removed while automatic IDs remained.
+- Persistent suppression PASS on disposable context `b0c6c582-5d72-4357-b0e0-4a62d3abe3f3`: auto ID `554433` changed to `auto_detected=1, manual_added=0, excluded=1`; after the same tab reloaded and re-observed the ID, `updated_at` advanced from `1790261518.95922` to `1790261535.47834` while effective-search count remained `0`.
+- Live non-test contexts (including Workflowy/Fedora pages) are also automatically receiving visible six-digit IDs.
+
+Cleanup/integrity:
+- Targeted extension-page cleanup closed 3 localhost test tabs.
+- 5 disposable localhost contexts and 6 disposable prompt-index rows were removed.
+- Zero orphan prompt-index rows remain.
+- SQLite `PRAGMA quick_check` = `ok`; foreign-key check clean.
+- Temporary HTTP server stopped; zero contexts remain for `http://127.0.0.1:8766/%`.
+- Temporary test directory, reload patches, logs and Chrome-session rollback backup were removed after successful acceptance.
 
 ## Completed
-Repository implementation, source tests/CI, Fedora deployment, runtime package version alignment, live Chrome service-worker registration to `0.4.0`, automatic real-page scanning, manual add/remove and suppression persistence, disposable-test cleanup, and final clean-state verification.
+
+All requested work is complete:
+- CSS source implementation and dashboard note prominence changes are on canonical `main`.
+- Runtime version alignment is on canonical `main`.
+- Fedora daemon/extension deployment is current and healthy.
+- Chrome's live unpacked extension and service worker are both truly loaded at `0.4.0`.
+- Real-browser automatic scan, manual add/remove and persistent exclusion behavior were verified.
+- Disposable tabs, contexts, test server/files, temporary patches/logs and rollback backup were cleaned up.
+- Final local gates and GitHub Actions are green.
 
 ## Remaining
-None for this task.
+
+None.
 
 ## Blockers
+
 None.
 
 ## Acceptance criteria
-- [x] Searching any indexed six-digit PROMPT_ID is implemented to surface the associated context.
+
+- [x] Searching any indexed six-digit PROMPT_ID surfaces the associated context.
 - [x] Multiple IDs can coexist on one context and one ID may appear on multiple contexts.
 - [x] User can manually add an ID.
-- [x] User can remove an ID; an auto-detected removed ID stays suppressed on future scans.
+- [x] User can remove an ID; an auto-detected removed ID stays suppressed on future scans/reloads.
 - [x] Existing canonical prompt binding behavior remains intact.
 - [x] Scanner is debounced/incremental and avoids full-page rescans on every mutation.
 - [x] Notes are visibly more prominent than title/meta/buttons in both dashboard surfaces.
 - [x] Focused/full source tests and CI, including E2E, pass.
 - [x] Source changes and runtime version alignment are on canonical CSS `main`.
 - [x] Fedora daemon/files are deployed and daemon runtime is `0.4.0`.
-- [x] Live Chrome extension runtime is reloaded to `0.4.0`.
-- [x] Real runtime search/index behavior is verified end-to-end.
+- [x] Live Chrome extension runtime and service worker are reloaded to `0.4.0`.
+- [x] Real runtime automatic indexing, manual overrides and suppression behavior are verified end-to-end.
+- [x] Test artifacts/contexts/tabs are removed.
 - [x] Final checkout/runtime state is clean and checkpointed.
 
 ## Next action
-None. Future CSS work should start from canonical main `149f28478dffd57f75bdf7f883444d95b2dc7262` or its then-current successor.
+
+None. Task complete. Future CSS work should start from canonical `gernalix/chrome-codex-switcher` main at or after `149f28478dffd57f75bdf7f883444d95b2dc7262` and this state file can be used as the runtime acceptance record.
