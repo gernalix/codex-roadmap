@@ -1,4 +1,7 @@
-# TASK_ID=CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE
+# Operational task state — Telegram notification hygiene
+
+TASK_ID: CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE
+Updated: 2026-09-24 13:08 Europe/Copenhagen
 
 ## Objective
 Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e usarla come evidenza per ridurre rumore, duplicati, messaggi incomprensibili e flapping senza richiedere export manuali all'utente.
@@ -31,7 +34,7 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 - L'audit successivo deve modificare i produttori reali, non filtrare le notifiche a valle.
 - Codice/runtime del collector assegnato a gernalix/fedora-system-monitor; data sink dedicato previsto: gernalix/telegram-notification-history.
 
-## Checklist
+## Plan / checklist
 - [x] Allocare un PROMPT_ID canonico per il task locale: 422308.
 - [x] Registrare il goal nella roadmap via single writer.
 - [x] Materializzare 422308 nel registry MegaVault: Issue #99 chiusa con status=materialized.
@@ -45,6 +48,9 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 - [ ] Dopo raccolta sufficiente, classificare notifiche verbose/incomprensibili/inutili/ripetute/flapping.
 - [ ] Creare fix mirati per i singoli producer; niente broad refactor.
 - [ ] Aggiornare la policy legacy project_id visibile se il metadata strutturato rende il prefisso non più necessario.
+
+## Current step
+Human prerequisite: complete the already-open Telegram account login locally. No model/Codex retry is actionable until the Telethon session reports authorized; after that, resume with RUN1 → RUN2 no-op → timer enablement → private-repo verification.
 
 ## Completed
 - PROMPT_ID 422308 terminato BLOCKED per solo prerequisito manuale di autorizzazione Telegram; codice/test/runtime preparatorio completati.
@@ -80,9 +86,6 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 ## Acceptance criteria
 PASS della fase collector quando il servizio legge solo la chat target, persiste nuove entry senza duplicati, non espone segreti, il timer è enabled+active, una seconda run senza nuovi messaggi è no-op e il repo privato remoto contiene l'archivio aggiornato.
 
-## Next action
-Ottenere API ID/hash su my.telegram.org, inserirli nel file locale ~/.config/fedora-telegram-history/collector.env senza condividerli in chat/Git, quindi eseguire il comando login già installato. Dopo `Telegram session is authorized.`, creare il follow-up minimo per RUN1/RUN2 + enable timer; non riaprire 422308.
-
 
 ## Remote Desktop Commander follow-up — 2026-09-24
 - Fedora device connected successfully through Remote Desktop Commander.
@@ -93,9 +96,6 @@ Ottenere API ID/hash su my.telegram.org, inserirli nel file locale ~/.config/fed
 - Attempted Telegram Desktop tdata reuse as an alternative; the remote safety layer blocked direct session conversion before any account data was read.
 - No Telegram authorization was completed and timer remains intentionally disabled.
 - Do not retry Codex or model polling until there is new evidence: API credentials are entered locally and the Telegram login succeeds.
-
-## Next action
-User completes my.telegram.org login locally, creates/opens API development tools, enters API ID/hash only into ~/.config/fedora-telegram-history/collector.env, then runs the installed login command locally. After the session is authorized, ChatGPT/Remote Desktop Commander can resume with RUN1, RUN2, timer enablement, and repository verification.
 
 
 ## Login bug fix — 2026-09-24
@@ -108,4 +108,4 @@ User completes my.telegram.org login locally, creates/opens API development tool
 - Noninteractive authorization readback still reports unauthorized; timer remains disabled.
 
 ## Next action
-User completes the visible Telegram login terminal locally. As soon as the account session becomes authorized, run RUN1, then RUN2 no-op, enable the timer, verify the private data repo remote, persist the runtime closure, and create the minimal roadmap follow-up instead of relaunching terminal PROMPT_ID 422308.
+Wait for the user to finish the visible Telegram login locally. Once the session is authorized, run RUN1, then RUN2 no-op, enable the timer, verify the private data repo remote and persistence, and create only the minimal roadmap follow-up needed to close the collector; do not relaunch terminal PROMPT_ID 422308.
