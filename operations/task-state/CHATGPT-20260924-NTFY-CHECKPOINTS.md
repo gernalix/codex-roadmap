@@ -1,7 +1,7 @@
 # Operational task state — checkpoint notifications via ntfy
 
 TASK_ID: CHATGPT-20260924-NTFY-CHECKPOINTS
-Updated: 2026-09-24 13:08 Europe/Copenhagen
+Updated: 2026-09-24 13:20 Europe/Copenhagen
 
 ## Objective
 Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHub publishes only after accepting a task-state push; a self-hosted ntfy service on the Oracle VM delivers to Android and browser/Fedora; Git remains canonical persistence.
@@ -22,21 +22,21 @@ Implement reliable notifications for persistent ChatGPT/Codex checkpoints: GitHu
 
 ### Phase 2 — Implementation
 - [x] Add reproducible ntfy server deployment/configuration to vm_oracle.
-- [ ] Deploy and start ntfy on the Oracle VM with persistent storage and authentication.
+- [ ] Deploy/start ntfy on Oracle with persistent storage and authentication. Server/edge are healthy; protected users/ACLs still need the corrected bootstrap rerun.
 - [ ] Add a GitHub Actions publisher triggered only by accepted pushes changing `operations/task-state/**`.
-- [ ] Store ntfy publishing credentials outside Git (GitHub Actions secrets; Fedora Secret Service for local subscriber credentials if needed).
+- [ ] Store publisher credentials in GitHub Actions secrets and subscriber credentials in Fedora Secret Service; never commit them.
 - [ ] Add Fedora desktop subscription/notification support and enable the browser/PWA path; document the Android one-time subscription step if device interaction is unavailable.
 - [ ] Add/adjust Kuma watchdog for ntfy availability if the existing monitoring architecture supports it safely.
 
 ### Phase 3 — Validation
-- [ ] Prove remote ntfy health.
+- [x] Prove remote ntfy health.
 - [ ] Prove one real checkpoint push produces one ntfy event.
 - [ ] Verify no notification is emitted before/without a successful push.
 - [ ] Verify affected repos are clean and pushed.
 - [ ] Update protocol/docs and close this state file.
 
 ## Current step
-Phase 2: deploy the already-versioned ntfy stack to the Oracle VM, then add the GitHub checkpoint publisher and subscriber paths.
+Phase 2: rerun the corrected Oracle bootstrap to create the protected publisher/subscriber users and ACLs, verify them without exposing secrets, then wire GitHub Actions and Fedora subscription paths.
 
 ## Verified facts
 - Fedora is reachable through Remote Desktop Commander.
@@ -50,6 +50,10 @@ Phase 2: deploy the already-versioned ntfy stack to the Oracle VM, then add the 
 - Oracle VM has Docker/Compose, 14 GiB free disk, and Uptime Kuma already bound to loopback; the canonical Cloudflare tunnel can route another hostname.
 - Fedora already has `secret-tool`, `notify-send`, and authenticated `gh` access.
 - A GitHub `push` workflow scoped to `operations/task-state/**` is a stronger event boundary than a local Git hook: it covers checkpoints pushed by any chat/client and runs only after GitHub accepted the commit.
+- Oracle currently runs ntfy healthy on loopback `127.0.0.1:3003`; Nginx host routing is HTTP 200 and `https://ntfy.danielegalati.com/v1/health` returns `{"healthy":true}`.
+- A stale duplicate Cloudflare ingress for `ntfy.danielegalati.com` pointed at unused port 8084 and caused the initial public 502; it was removed and the bootstrap now normalizes all duplicate entries to one `127.0.0.1:8001` route.
+- `/opt/ntfy/credentials.env` exists root-owned mode 0600 with generated publisher/subscriber passwords, but the ntfy auth DB currently still lists only the anonymous user. Root cause: the earlier Compose exec form did not pass `NTFY_PASSWORD` correctly.
+- The bootstrap fix for password injection plus duplicate-ingress normalization is on `vm_oracle/main` in substantive commit `19b4dc3`; remote head at this checkpoint is `dd60451`.
 
 ## Decisions
 - Use one central ntfy topic/event stream rather than one topic per PROMPT_ID.
@@ -59,19 +63,26 @@ Phase 2: deploy the already-versioned ntfy stack to the Oracle VM, then add the 
 - Keep a Fedora subscriber/desktop notification path as a local convenience; Chrome/Android use ntfy subscriptions directly.
 
 ## Completed
-- Created this persistent task state.
-- Added reproducible Oracle deployment files to `gernalix/vm_oracle`: pinned ntfy v2.28.0 Docker Compose, private server config, secure first-run bootstrap and Fedora deployment wrapper.
-- Corrected the deployment validation so Oracle proves origin/tunnel service health while Fedora proves the new public DNS/TLS path; the fix is pushed on `vm_oracle/main` at `0584ebd`.
+- Created this persistent task state and updated the persistent-state protocol to require a complete executable checklist/current step.
+- Added reproducible Oracle deployment files to `gernalix/vm_oracle`: pinned ntfy v2.28.0 Docker Compose, private server config, bootstrap and Fedora deployment wrapper.
+- Deployed ntfy, Nginx routing, Cloudflare DNS/ingress and Web Push keys; public health is PASS.
+- Diagnosed and repaired the duplicate stale Cloudflare ingress that caused HTTP 502.
+- Hardened the bootstrap so the two ntfy account passwords are passed via environment rather than argv and all duplicate ntfy ingress entries are normalized before adding the canonical route.
 
 ## Remaining
-Oracle runtime deployment, Fedora remote-checkpoint publisher, subscriptions/watchdog decision, end-to-end validation and protocol finalization.
+Rerun corrected bootstrap and verify protected users/ACLs; create/store publisher/subscriber credentials in their final secret stores; add GitHub Actions checkpoint publisher; add Fedora/browser/Android subscription path; decide/add Kuma watchdog; run one real checkpoint end-to-end; finalize docs/state.
 
 ## Blockers
-None. The initial public-health false negative caused by Oracle DNS propagation has been corrected in the deployment script.
+No external blocker. Do not regenerate or expose the existing root-only credentials file; rerun the corrected bootstrap first so it creates users from the already-generated passwords.
 
 ## Evidence
-- codex-roadmap main was clean at task start.
-- vm_oracle main was clean at task start.
+- codex-roadmap persistent-state protocol now requires an executable checklist/current step.
+- Public ntfy health: HTTP 200 with `{"healthy":true}`.
+- Oracle ntfy container: healthy, bound to `127.0.0.1:3003`; Nginx host route: HTTP 200.
+- Cloudflare config now has a single ntfy hostname route to `127.0.0.1:8001`.
+- `/opt/ntfy/credentials.env`: root:root mode 0600; values were not recorded.
+- Before corrected bootstrap rerun, `ntfy user list` shows only anonymous; this is expected to change after the next action.
+- `vm_oracle` substantive hardening commit: `19b4dc3`; current remote head observed: `dd60451`.
 
 ## Acceptance criteria
 - A pushed task-state checkpoint triggers a concise ntfy notification containing task ID and commit identity.
@@ -82,4 +93,4 @@ None. The initial public-health false negative caused by Oracle DNS propagation 
 - The implementation is documented, tested, committed and pushed.
 
 ## Next action
-Deploy the already-versioned ntfy stack to the Oracle VM and verify remote health; then add the GitHub Actions checkpoint publisher scoped to accepted `operations/task-state/**` pushes. Do not redo the deployment-file work already completed.
+On Fedora, sync `vm_oracle`, rerun `scripts/deploy_ntfy_checkpoints.sh`, verify `checkpoint-publisher` has write-only and `checkpoint-subscriber` has read-only access to `chatgpt-checkpoints` without printing secrets, then continue with GitHub Actions secret/publisher and Fedora subscriber setup.
