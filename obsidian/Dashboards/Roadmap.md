@@ -6,6 +6,7 @@
 
 - [[obsidian/Prompts/519810 pbf-lifecycle-reconciliation-protocol-v1|519810 · Rendere obbligatoria la riconciliazione dei PBF]]
 - [[obsidian/Prompts/729874 roadmap-lifecycle-consolidation-fedora-activation-v1|729874 · Attivare il lifecycle roadmap consolidato su Fedora]]
+- [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]]
 
 ## In esecuzione
 

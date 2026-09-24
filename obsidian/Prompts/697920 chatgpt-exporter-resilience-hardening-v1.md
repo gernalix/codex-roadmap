@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[199166 openai-vs-chatgpt-exporter-data-completeness-v1|199166]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553]]
 - **Chat Codex:** Nuova chat Codex. Riusa come evidenza i report di 199166, non la sua sessione lunga.
 
 ## Spiegazione

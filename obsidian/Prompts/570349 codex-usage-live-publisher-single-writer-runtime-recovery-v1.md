@@ -20,9 +20,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/github-autosync-fedora-runtime|GitHub Autosync / Fedora runtime]]
 - **Prompt:** [[../../completed/codex-usage-live-publisher-single-writer-runtime-recovery-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-24T02:06:50Z
+- **Ultimo lancio:** 2026-09-24T02:06:50Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -40,7 +40,7 @@ Distribuisce sul Fedora il fix già mergiato che esenta codex-usage dal generic 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-24T02:06:50Z | 2026-09-24T02:17:50Z | PASS | 660.232 | gpt-6-luna | medium | 41 | 76776 |
 
 ## Analisi ChatGPT
 
