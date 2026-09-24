@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 12:27 Europe/Copenhagen
+Updated: 2026-09-24 12:48 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -89,6 +89,9 @@ Goal: operate only after 788606 PASS.
 Read the actual final app schema/Room identity from the final commit. Inspect the actual live DB schema/identity on Pixel. Take immutable rollback first. Externally migrate a copy of the real DB through every required delta to the final schema, validate quick_check/integrity/FK and preservation of representative data, then transfer/install the exact final APK and migrated DB using explicit Pixel serial. Smoke Home + every module. Keep rollback until final acceptance.
 
 ## Completed
+- 920550 implementation checkpoint committed+pushed on `task/920550`: `8c34afc` (`Checkpoint 920550 semantic photo foundation`). Current task schema is 23 with exported Room schema 23 JSON; no historical Room migration chain was added.
+- 920550 foundation now includes local TinyCLIP/ONNX semantic photo indexing, OCR text capture, text-to-photo and photo-to-photo ranking, `Trova questo oggetto` camera/gallery flow, optional owned-items persistence/UI, model/checksum pinning with weights outside the APK, and targeted unit/DB tests. Full app `:app:compileDebugKotlin` PASS after three bounded compiler fixes.
+- TinyCLIP candidate was locally quality-checked before integration: synthetic red-object vs blue-circle text ranking behaved correctly in English and simple Italian; transformed same-object image similarity was 0.959 vs distractor 0.784.
 - PROMPT_ID 920550 successfully claimed at 2026-09-24 12:18 local; roadmap status `running`, issue #1030, branch `task/920550`, worktree `/home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/920550`.
 - Fixed the local roadmap/Obsidian collision that blocked claims: `Generated/PersonalHub/**` is sqlite-to-obsidian output inside the active codex-roadmap vault, now ignored by Git via codex-roadmap commit `d0d6b1384a6fcc7ead2e4d15eb0207158b9808fa`; 3,138 generated notes were preserved. Local roadmap pull then fast-forwarded cleanly.
 - Revalidated the PH P0 chain against current canonical roadmap and current `PersonalHub/main`; no newer work invalidates or reorders it.
@@ -146,4 +149,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Execute PROMPT_ID 920550 only inside its claimed worktree. Read PersonalHub AGENTS.md plus the already-routed Soldi photo/search/data and database files, implement the bounded residual semantic-photo/owned-items scope, run targeted tests/build/AVD gates, then finalize with `roadmap_finish.py`. After asynchronous integration reaches canonical PASS, inspect the merged diff/schema/test evidence before allowing 857906.
+Continue 920550 from pushed checkpoint `8c34afc`: run the targeted Soldi semantic/search/database tests, fix only concrete failures, update docs/CODE_MAP, then run architecture/build and AVD QA including real on-device model download, indexing, semantic text query, same-object shortlist with distractor, owned-item persistence/removal and reopen. Measure model/APK/runtime impact. If all acceptance gates pass, call `roadmap_finish.py` and stop waiting for asynchronous integration; inspect canonical merged evidence before 857906.
