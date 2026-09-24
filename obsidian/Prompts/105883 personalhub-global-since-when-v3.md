@@ -1,6 +1,6 @@
 ---
 prompt_id: 105883
-status: pending
+status: superseded
 project_id: 49
 model: GPT-5.6 Sol
 reasoning: medium
@@ -11,15 +11,15 @@ tags:
   - personalhub
   - since-when
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 105883 · Promuovere Since When a funzione globale PersonalHub
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-global-since-when-v3|Apri prompt]]
+- **Prompt:** [[../../falliti/personalhub-global-since-when-v3|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -34,7 +34,7 @@ tags:
 
 ## Spiegazione
 
-Sposta Since When dalla navigazione Timer alla Home di PersonalHub e usa un unico motore globale per counter manuali e derivati da Timer, tag, luoghi, sostanze e transazioni.
+Non va eseguito: il dump live mostra che 822595 ha già implementato gran parte della stessa feature nel suo worktree. Manteniamo un solo writer/task e completiamo 822595.
 
 ## Esecuzioni
 
