@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 16:12 Europe/Copenhagen
+Updated: 2026-09-24 16:15 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -179,6 +179,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- MegaVault emulator documentation is merged via PR #106, merge `167b928b8478f9567fef57372845d3b937625c56`. It records the sole canonical AVD `Pixel_8a`, API36 Google APIs x86_64 rev7, 1080×2400 @420dpi coordinate bounds, live serial resolution and GNOME launch requirements. Legacy/temporary AVDs were deleted and only `Pixel_8a` remains configured.
 - 920550 AVD QA PASS 1/1 on canonical `Pixel_8a` (API36, 1080×2400, 420 dpi). The test exercised isolated synthetic transaction save, two photo indexes, semantic text→image, image→image same-object ranking, non-photo exclusion, owned-item persistence across DB reopen and removal.
 - QA uncovered and fixed three concrete release-relevant issues, now committed+pushed as `0834a2434abe9ddd3a1c43caf23ba646c5bc3923`: QA supports TCL `armeabi-v7a` + emulator `x86_64`; temp/staging FinanceCapsule DBs no longer write links into the global canonical Hub Context DB; R8 keeps `ai.onnxruntime.**` so JNI constructors survive minification.
 - 920550 rebased cleanly onto current PersonalHub main `57883c2531400efacbefd2c63182bc11833f9537` and force-with-lease pushed as `02f79639dde0797b44a242f931366b0038556193`; no conflicts.
