@@ -816,6 +816,8 @@ def record_execution(
     allow_running_terminal: bool = False,
 ) -> int:
     row = prompt_row(conn, prompt_id)
+    if source == "codex-usage":
+        update_status = False
     if outcome is not None and outcome not in FINAL_STATUS:
         raise RoadmapDBError(f"invalid_outcome:{outcome}")
     ts = now_utc()
