@@ -27,7 +27,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** —
+- **Sblocca:** [[729874 roadmap-lifecycle-consolidation-fedora-activation-v1|729874]]
 - **Padri/precedenti:** [[642913 global-repository-single-writer-rollout|642913]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat Codex; goal locale Fedora, scope stretto

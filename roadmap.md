@@ -20,3 +20,4 @@
 16. [[prompts/ccs-pbf-live-final-closure-v1|ccs-pbf-live-final-closure-v1]]
 17. [[prompts/sqlite-to-obsidian-fedora-bootstrap-v1|sqlite-to-obsidian-fedora-bootstrap-v1]]
 18. [[prompts/personalhub-global-since-when-v3|personalhub-global-since-when-v3]]
+19. [[prompts/roadmap-lifecycle-consolidation-fedora-activation-v1|roadmap-lifecycle-consolidation-fedora-activation-v1]]
