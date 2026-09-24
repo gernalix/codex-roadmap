@@ -16,6 +16,29 @@ Leave the infrastructure repositories with only branches that still contain genu
 - Never delete a running/integration branch.
 - Keep seed/eboks-scraper-20260921 until 218695 is executed or cancelled with evidence.
 
+## Plan / checklist
+### Phase 1 — Inventory and safe ancestry classification
+- [x] Enumerate remote branches across the eight infrastructure repositories.
+- [x] Compare every non-canonical branch against current main/master.
+- [x] Mark the 25 branches with `ahead_by=0` as ancestry-safe candidates.
+- [x] Preserve every `ahead_by>0` branch for patch-equivalence/semantic review.
+- [x] Protect active/integration branches and the conditional e-Boks seed branch.
+
+### Phase 2 — Patch-equivalence review
+- [ ] Wait until active infrastructure tasks are terminal.
+- [ ] Fetch all refs locally once and run bounded `git cherry` / patch-id review on every `ahead_by>0` candidate.
+- [ ] Integrate any genuinely unique useful commit before considering its branch deletable.
+- [ ] Record explicit keep/delete disposition for every review branch.
+
+### Phase 3 — Deletion and readback
+- [ ] Delete ancestry-safe and proven-equivalent branches with authenticated local/GitHub tooling.
+- [ ] Re-read all remote branch lists.
+- [ ] Retain only canonical branches plus explicitly justified active/seed branches.
+- [ ] Update this checkpoint with final evidence and close the cleanup lane.
+
+## Current step
+Wait for active infrastructure tasks to become terminal; then perform the single bounded local patch-equivalence/deletion pass. Do not delete active/integration branches early.
+
 ## Verified safe-to-delete branches (ahead=0)
 
 ### gernalix/activity-watch-uploader
