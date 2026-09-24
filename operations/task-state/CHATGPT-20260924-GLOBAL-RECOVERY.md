@@ -1,13 +1,13 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 14:12 Europe/Copenhagen
+Updated: 2026-09-24 14:15 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
 
 ## Constraints
-- **PersonalHub P0 and the live-DB migration/cutover are the highest-priority recovery lane.** After the already-completed runaway-heartbeat emergency closure, no non-PH recovery task may preempt PH until the full PH chain reaches 913264 PASS, including final schema freeze, immutable live-DB backup, external migration, exact final APK install on Pixel, real-data validation, and PH cleanup. Exception only for a true PH blocker or a data/safety-critical emergency.
+- **PersonalHub P0 is the master recovery lane now, and the live-DB migration/cutover is its highest-priority terminal milestone.** No non-PH recovery task may preempt PH while PH is actionable. After 788606 freezes the final commit/schema/artifacts, 913264 must run immediately—before any infrastructure, notification, branch-cleanup, or unrelated recovery work—to take rollback backups, migrate the real DB externally to the exact final schema, install the exact final APK on Pixel, and validate preserved real data. Exception only for a true PH blocker or a data/safety-critical emergency.
 - **Single active recovery lane until global recovery is complete:** run only one model-driven recovery task/corsia at a time. Do not launch another phase/task until the current one is terminal and checkpointed. Manual-prerequisite/Waiting tasks may remain parked; stable non-model background services may continue only if they do not mutate overlapping repos/state.
 - This file is operational memory only; canonical lifecycle remains in roadmap.sqlite.
 - Store conclusions/state only, never chain-of-thought, secrets or raw private transcripts.
@@ -43,15 +43,15 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only global gates here.
 - [x] Record the obsolete intermediate PH DB task 383662 as superseded by the specialized final cutover path 913264; never launch 383662.
 - [x] Implement and host-verify the optional PH ↔ Workflowy integration on `chatgpt/workflowy-integration` without a Room schema/version change; detailed checkpoint: `CHATGPT-20260924-PH-WORKFLOWY.md`.
-- [ ] Safely park the partially completed 302284 infrastructure task at a pushed checkpoint; do not continue non-PH runtime work while PH is actionable.
+- [ ] Safely park the partially completed 302284 infrastructure task at a pushed checkpoint; do not continue non-PH runtime work while PH is actionable. This is the only non-PH handoff allowed before resuming PH.
 - [ ] Resume and finish 920550 from its existing pushed checkpoint; validate, integrate, and inspect the merged schema/evidence.
 - [ ] Reconcile and integrate `chatgpt/workflowy-integration` into the then-current PersonalHub main, rerun affected gates, delete the temporary branch, and record the merged commit.
 - [ ] Run and integrate 857906 after 920550.
 - [ ] Run and integrate 707603 on the resulting schema.
 - [ ] Run and integrate 840907, including true offline behavior and artifact-size impact.
 - [ ] Run 788606 release preflight; freeze the exact final PersonalHub main commit, Room schema/identity, minified APK/AAB and hashes.
-- [ ] Immediately after schema freeze, execute 913264: read the real Pixel DB identity/schema, take immutable DB/WAL/SHM + installed-APK rollback backup, externally migrate a copy directly to the frozen final schema, and pass SQLite integrity/FK/data-preservation checks.
-- [ ] Install the exact frozen final APK on the primary Pixel using explicit ADB serial and verify Home + every module against preserved real data.
+- [ ] **ABSOLUTE NEXT STEP AFTER 788606:** execute 913264 immediately. Read the real Pixel DB identity/schema, take immutable DB/WAL/SHM + installed-APK rollback backup, externally migrate a copy directly to the frozen final schema, and pass SQLite quick_check/integrity/FK/data-preservation checks. Do not insert any unrelated task between 788606 and 913264.
+- [ ] Install the exact frozen final APK on the primary Pixel using explicit ADB serial and verify Home + every module against preserved real data before any non-PH lane resumes.
 - [ ] Finish PH branch/PR/PBF cleanup only after absorption is proved; end with clean main-only operational state.
 - [ ] Do not resume non-PH recovery lanes until all PH items above are complete, unless PH is truly blocked.
 
@@ -96,14 +96,14 @@ Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
 - [ ] Mark global recovery complete only when every acceptance criterion below is satisfied.
 
 ## Current step
-Priority override: safely checkpoint/park the partially completed 302284 work, then return immediately to PersonalHub P0. Resume 920550 from its existing pushed checkpoint and keep the PH chain serial through 857906 → 707603 → 840907 → 788606 → 913264. The live DB migration/Pixel cutover is the first global milestone; all remaining non-PH closure work waits behind it.
+PersonalHub P0 is the master lane. First preserve the already-partial 302284 work in a safe pushed checkpoint without continuing it; then resume 920550 from its existing pushed checkpoint. Continue serially through 857906 → 707603 → 840907 → 788606 → **913264 immediately**. The first global milestone is not merely a release build: it is the successfully migrated real DB plus exact final APK installed and validated on the Pixel.
 
 ## Verified facts
 - 302284 targeted source gates PASS: codex-roadmap 60 tests; github-autosync 57 tests; workflowy-importer 34 tests; codex-usage-monitor 17 tests; chrome-codex-switcher 3 tests plus Python host compile.
 - During 302284, codex-roadmap exposed a real `resolved_by` contract bug: the PBF view understood the relation but the table CHECK rejected it silently. Fixed on main at `f7f67c04371301ab1aae35551234ac566c21d039`; migration-on-open was verified on a copy of the live roadmap DB preserving all 166 existing relations and restoring dependent views.
 - github-autosync tests were accidentally invoking real systemd bootstrap on the user's Fedora host. Test isolation fix is integrated on main in `0abda5db71b0ea6518a4818ec2f370619302264b`; runtime behavior itself was not changed.
 - PH ↔ Workflowy optional integration is implemented and host-verified on PersonalHub branch `chatgpt/workflowy-integration`; checkpointed remote head is `edd08138702f9ae6cc54c2964f109343a356a149`. It reuses Hub Context resources, adds no Room schema/version change, and has PASS evidence for consumer preflight, targeted Workflowy tests/app compile and architecture boundaries. At 2026-09-24 14:06 the branch is ahead 11 / behind 2 versus current PersonalHub `main` (`57883c2531400efacbefd2c63182bc11833f9537`), so final reconciliation/integration remains intentionally parked. Authoritative detail is `operations/task-state/CHATGPT-20260924-PH-WORKFLOWY.md`.
-- 302284 claimed successfully at 2026-09-24 13:34 local via roadmap issue #1055; canonical status is `running`. It is now the single active master recovery task; PH 920550 remains parked.
+- 302284 was claimed at 2026-09-24 13:34 local via roadmap issue #1055 and remains canonically `running`, but user priority override now parks it operationally. It is no longer the master lane; PersonalHub P0 is.
 - 222733 completed canonically via single-writer commit `0e5b710ac7a783395f70b6af35d69db45dba707f`. The only Codex automation directory is `chatgptexporter-788315-completion`, now `status = "DISABLED"`; bounded scan found zero active recurring automations. Shutdown boundary was 2026-09-24T11:25:10Z; latest published 788315 cycle started 2026-09-24T11:17:26Z, so no cycle exists after shutdown.
 - PersonalHub 920550 is safely parked at pushed checkpoints. Roadmap still says `running` only because there is no pause lifecycle state; no active model/process is executing that lane.
 - All five current operational checkpoints (global, PersonalHub P0, Telegram notification hygiene, ntfy checkpoints, infrastructure branch cleanup) were read back against `operations/task-state/README.md` at 2026-09-24 13:18; each now contains Objective, Constraints, Plan/checklist, Current step, Verified facts, Decisions, Completed, Remaining, Blockers, Evidence, Acceptance criteria and Next action.
@@ -113,10 +113,9 @@ Priority override: safely checkpoint/park the partially completed 302284 work, t
 - 422308 remains terminal BLOCKED historically, but its human authorization prerequisite is now satisfied and the collector runtime is operational: RUN1 archived 4,244 messages, RUN2 was a zero-message no-op, the private history repo is readable via GitHub, and the 15-minute timer is enabled+active. Do not retry 422308; detailed ownership is in operations/task-state/CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md.
 - Telegram source closure must use remote-canonical successor 966124. A local allocator fallback incorrectly produced 333860 for the same request_id; roadmap mutation #1056 superseded/replaced 333860, and MegaVault Issue #105 materialized 966124. Never launch 333860.
 - prompt-history prompt-level model analytics source work is complete through ff69489074feae82a2838504ff6f2d03875caa2b: CLI aggregation, SQL analytics, v_model_performance, README contract and regressions all use one sample per canonical PROMPT_ID from codex-usage, aggregate cycle deltas, ignore roadmap execution mirrors, and exclude mixed-model/reasoning tasks.
-- PersonalHub 920550 remains parked. The Telegram collector now runs only as a stable non-model systemd timer; no Telegram model lane is active while 302284 owns the master recovery lane.
+- PersonalHub 920550 is the next active master target after the one-time safe checkpoint of partial 302284 work. Telegram may continue only as a stable non-model timer; no non-PH model lane may run while PH is actionable.
 - 218695 is now guarded by manual-prerequisite:confirm-eboks-scraper-needed; its target public repo exists but is empty, so after 582946 the task must be reevaluated before launch.
 - 641903 has been superseded by materialized routing-safe successor 896074; 896074 depends on 302284 and resolves CCS from current repo/metadata instead of hard-coding project_id 96.
-- Runaway 788315 is still active as of 2026-09-24 12:17 Europe/Copenhagen: 203 published cycles; latest heartbeat used GPT-6 Sol medium, 112823 total tokens, 1 tool call, and returned only DONT_NOTIFY.
 - Phase-1 broad audit is complete; current work is its closure/reconciliation tail.
 - Attention/PBF projection currently reports zero unresolved needs_fix items after successor coverage.
 - Stale running states were reconciled: 620949 -> blocked + 994029; 254859 -> blocked + 812553; 354882 -> blocked/manual-login + 181259.
@@ -124,7 +123,6 @@ Priority override: safely checkpoint/park the partially completed 302284 work, t
 - PH current main uses Room schema 22; 383662 (live DB 20 -> 21) is obsolete and replaced by the final migration path 913264.
 - 920550 is running for the residual semantic-photo/owned-items scope; the later PH chain is 857906 -> 707603 -> 840907 -> 788606 -> 913264.
 - All infrastructure PRs identified by the audit were resolved: PH #35 closed stale, CCS #24 merged, ActivityWatch #3 merged as b8ef359da6da83be2af64628a004abb27d9b39f1.
-- 788315 still has a runaway local automation chatgptexporter-788315-completion; latest observed published cycle started 2026-09-24T10:07:25Z using GPT-6 Sol medium with ~112k input tokens. It is not exposed through ChatGPT task automation controls, so PROMPT_ID 222733 remains required locally.
 - A separate ChatGPT automation, "Codex Fix Queue", was active hourly and redundantly scanned B/F/PBF state with a model. It was disabled directly at 2026-09-24T10:15:47Z because the PBF protocol now handles this without model polling.
 - Pending non-PH audit:
   - 222733: valid emergency local task; run first.
@@ -182,16 +180,14 @@ Priority override: safely checkpoint/park the partially completed 302284 work, t
 - When the master recovery returns to PersonalHub, reconcile/integrate the verified Workflowy branch, rerun affected gates, delete the temporary branch and update both PH/global checkpoints.
 - Run routing-safe CCS successor 896074 only after 302284 PASS; never run superseded 641903.
 - Reconcile 181259's nonexistent remote repo before it can become genuinely launchable.
-- Run 222733 locally and verify 788315 no longer produces cycles.
-- After 222733 PASS, run 302284 for the consolidated prompt-infrastructure runtime deploy/readback.
+- Resume 302284 only after PH 913264 PASS (or a true PH blocker), using its preserved partial checkpoint; do not redo already-verified work.
 - Run 994029, then 714263.
 - Keep 812553 behind 222733.
 - Complete PH P0 chain and final external DB migration/APK/Pixel gate.
 - In Phase 4, run only canonical Telegram successor 966124 to integrate the already-verified source fixes, then perform the history-based producer audit; do not rerun 422308 or launch 333860. Then process remaining conditional/non-PH tasks according to prerequisites and perform the final global gate.
 
 ## Blockers
-- Local Fedora/device actions require Codex Desktop/local tooling.
-- 788315 scheduler is local and not controllable through ChatGPT automations; 222733 must disable it.
+- Local Fedora/device actions are available through the connected Remote Desktop Commander; use Codex only where a Codex agent is actually required.
 - MegaVault Issue #100 is closed and no longer relevant; 896074 is the canonical routing-safe CCS successor.
 - 181259 targets a nonexistent GitHub remote (gernalix/grindr-web-exporter); local state must be reconciled before a safe successor can run.
 - Exact current live PH DB identity/schema on Pixel must be read locally before final migration.
@@ -221,4 +217,4 @@ Priority override: safely checkpoint/park the partially completed 302284 work, t
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-Checkpoint and park the current partial 302284 work without discarding verified fixes. Then hand control back to `CHATGPT-20260924-PERSONALHUB-P0.md` and resume 920550 exactly from its existing pushed checkpoint. Continue the PH chain serially through 913264; do not resume 302284/896074/994029/714263/812553/Telegram/ntfy/branch-cleanup while PH remains actionable.
+Checkpoint and push the current partial 302284 work without finishing further non-PH scope, then immediately hand control to `CHATGPT-20260924-PERSONALHUB-P0.md` and resume 920550 from its existing pushed checkpoint. Keep PH serial through 857906 → 707603 → 840907 → 788606 → 913264. After 788606, run 913264 with no intervening task: immutable live-DB/APK backup → external migration to the exact frozen schema → integrity/FK/data checks → exact final APK install on the Pixel → Home/all-module real-data smoke. Only then resume non-PH recovery.
