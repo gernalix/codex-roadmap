@@ -68,7 +68,8 @@ Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only g
 
 ### Phase 4 — Notification and checkpoint infrastructure
 - [x] Complete Telegram collector runtime acceptance: account authorization, RUN1=4,244 messages, RUN2=0/no-op, private Git history readable, timer enabled+active; details in `CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md`.
-- [ ] Complete the Telegram source/lifecycle closure through canonical successor 966124; never launch 333860. This integrates the already-verified task/422308 fixes onto fedora-system-monitor main after the global master lane reaches Phase 4.
+- [x] Deploy the user-requested one-day-auto-delete Telegram archive runtime on Fedora: duplicate-free local SQLite history, revision/tombstone handling, media retention, 5-minute timer, shared Telethon-session lock, and live runtime verification; details in `CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md`.
+- [ ] Complete the Telegram source/lifecycle closure through canonical successor 966124; never launch 333860. Reconcile both the verified task/422308 baseline and `chatgpt/telegram-autodelete-archive` into fedora-system-monitor main, rerun bounded gates/readback, then delete the temporary branch.
 - [ ] After sufficient Telegram history exists, audit noisy producers and apply only producer-specific fixes; verify the post-fix notification stream is quieter and still actionable.
 - [ ] Complete the ntfy checkpoint-notification lane and prove accepted Git checkpoint pushes produce one remote notification; details in `CHATGPT-20260924-NTFY-CHECKPOINTS.md`.
 
@@ -99,6 +100,7 @@ Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
 PersonalHub P0 is now the sole master lane. Resume 920550 from its existing pushed checkpoint and continue serially through 857906 → 707603 → 840907 → 788606 → 913264. No non-PH task may run while PH is actionable.
 
 ## Verified facts
+- A direct user request temporarily preempted the PH-only rule to implement the one-day-auto-delete Telegram archive. That bounded runtime work is complete: fedora-system-monitor branch `chatgpt/telegram-autodelete-archive` is pushed through `fe5d371`; 13/13 Telegram tests and unit/syntax/systemd gates PASS; the first live backfill archived 61 unique messages and 3 media files; both Telegram timers are enabled+active; concurrent collector startup succeeds under the shared session lock. No model-driven Telegram work remains active, so PersonalHub resumes as master immediately. Authoritative detail: `operations/task-state/CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md`.
 - 302284 partial prompt-cost work is safely parked and pushed at `codex-usage-monitor/task/302284` commit `6f31ceeaa51e5b77b86d2a18620a34079329196a`; it is intentionally incomplete and must not be merged before PH 913264 PASS.
 - Final PH migration source policy: at cutover, inventory the live Pixel DB plus all viable local/export/backup copies and migrate the freshest coherent dataset; do not assume an older backup is authoritative merely because it is easier to access.
 - 302284 targeted source gates PASS: codex-roadmap 60 tests; github-autosync 57 tests; workflowy-importer 34 tests; codex-usage-monitor 17 tests; chrome-codex-switcher 3 tests plus Python host compile.
@@ -202,7 +204,7 @@ PersonalHub P0 is now the sole master lane. Resume 920550 from its existing push
 - gernalix/prompt-history exists; gernalix/ChatGPTExporter and gernalix/grindr-web-exporter return GitHub 404; gernalix/grindr-export exists and has its own archive workflow.
 - ChatGPT automation readback showing "Codex Fix Queue" disabled.
 - PH/CCS/ActivityWatch repository and PR state already recorded above.
-- Telegram evidence: operations/task-state/CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md; fedora-system-monitor task/422308 through 5d8ed32; private data commit 99a9952479074f56095586a6ed3fb210111496db; MegaVault Issue #103 allocated 966124; roadmap Issue #1056 replaced 333860 -> 966124; MegaVault Issue #105 materialized 966124.
+- Telegram evidence: operations/task-state/CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md and operations/task-state/CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md; fedora-system-monitor task/422308 through 5d8ed32 plus chatgpt/telegram-autodelete-archive through fe5d371; private data commit 99a9952479074f56095586a6ed3fb210111496db; MegaVault Issue #103 allocated 966124; roadmap Issue #1056 replaced 333860 -> 966124; MegaVault Issue #105 materialized 966124.
 
 ## Acceptance criteria
 - No runaway/pointless high-cost model automation remains active.
