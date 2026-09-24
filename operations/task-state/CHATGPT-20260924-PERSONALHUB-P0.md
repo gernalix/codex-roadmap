@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 16:05 Europe/Copenhagen
+Updated: 2026-09-24 16:08 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -91,6 +91,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 920550 local acceptance is complete and PersonalHub PR #41 is queued with checks pending. Do not poll CI. While the non-model integrator owns #41, perform only read-only conflict/absorption analysis of `chatgpt/workflowy-integration`; no branch mutation until #41 is merged.
 
 ## Verified facts
+- Expected post-920550 Room schema readback is pinned before merge: schema version 23, identity hash `4b9b96396c8f9e750d13b0e6da70fdd9`, 96 entities, including `finance_photo_index` and `finance_owned_items`. After PR #41 merges, `main` must reproduce this exact schema evidence.
 - 920550 worker finalization is now correctly routed: `repo-task finish` created PersonalHub PR #41 after `roadmap_finish` alone had only queued the terminal roadmap mutation. One bounded integrator pass returned `checks-pending`; no model/CI polling is running. The non-model repo-integrator timer owns the next integration attempt.
 - R8 mapping confirms the exact ONNX JNI contract now survives Play minification: `ai.onnxruntime.TensorInfo -> ai.onnxruntime.TensorInfo` and constructor `<init>(long[], String[], int)` is retained. This directly covers the JNI crash observed during QA.
 - Final 920550 local gate set is complete at clean pushed HEAD `0834a2434abe9ddd3a1c43caf23ba646c5bc3923`: dedicated AVD QA PASS 1/1, final Play APK+AAB PASS, `checkArchitectureBoundaries` PASS, `git diff --check` PASS, clean worktree.
