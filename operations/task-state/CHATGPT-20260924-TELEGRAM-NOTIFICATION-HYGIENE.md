@@ -96,3 +96,16 @@ Ottenere API ID/hash su my.telegram.org, inserirli nel file locale ~/.config/fed
 
 ## Next action
 User completes my.telegram.org login locally, creates/opens API development tools, enters API ID/hash only into ~/.config/fedora-telegram-history/collector.env, then runs the installed login command locally. After the session is authorized, ChatGPT/Remote Desktop Commander can resume with RUN1, RUN2, timer enablement, and repository verification.
+
+
+## Login bug fix — 2026-09-24
+- The API credentials from my.telegram.org were entered into the local 0600 config only; they were not committed to Git.
+- First login attempt exposed a concrete bug: blank TELEGRAM_PHONE was passed explicitly as None to Telethon, causing ValueError before any prompt.
+- Fixed both task worktree and installed runtime to call client.start() when TELEGRAM_PHONE is blank, allowing Telethon to prompt interactively.
+- Targeted collector suite: 5/5 PASS; py_compile and git diff --check PASS.
+- Fix committed and pushed on task/422308: 9d736aa (Prompt for phone during Telegram login).
+- A visible Ptyxis login terminal is open and currently waits for the user's phone number, followed by Telegram code/optional 2FA.
+- Noninteractive authorization readback still reports unauthorized; timer remains disabled.
+
+## Next action
+User completes the visible Telegram login terminal locally. As soon as the account session becomes authorized, run RUN1, then RUN2 no-op, enable the timer, verify the private data repo remote, persist the runtime closure, and create the minimal roadmap follow-up instead of relaunching terminal PROMPT_ID 422308.
