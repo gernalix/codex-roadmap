@@ -29,7 +29,7 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 - [x] RUN2 reale: new_messages=0 e commit remoto invariato.
 - [x] Abilitare timer ogni 15 minuti; enabled+active.
 - [x] Verificare dal connettore GitHub che repo privato e archive/state.json siano leggibili.
-- [ ] Riparare la collisione di identità del follow-up: 333860 non canonico; 966124 ID remoto canonico. Mutation roadmap #1056 deve sostituire 333860 con 966124 e poi 966124 va materializzato.
+- [x] Riparare la collisione di identità del follow-up: 333860 superseded/non azionabile; 966124 registrato e materializzato come ID remoto canonico.
 - [ ] Quando la master recovery arriva a Phase 4, eseguire SOLO 966124 per integrare su main i fix già verificati del branch task/422308 e chiudere il source/runtime gate.
 - [ ] Lasciare accumulare cronologia reale sufficiente.
 - [ ] Classificare notifiche verbose/incomprensibili/inutili/ripetute/flapping.
@@ -37,7 +37,7 @@ Automatizzare la raccolta della chat Telegram usata per le notifiche tecniche e 
 - [ ] Rivalutare la policy legacy del prefisso project_id visibile e spostarlo a metadata se non serve all'utente.
 
 ## Current step
-Collector runtime operativo e non-model. Il lavoro modello è parcheggiato per rispettare la master recovery. In parallelo va completata solo la correzione amministrativa dell'identità del follow-up: 966124 è il PROMPT_ID canonico remoto; 333860 deve restare superseded/non azionabile.
+Collector runtime operativo e non-model. Il follow-up canonico 966124 è registrato/materializzato e resta parcheggiato per rispettare la master recovery; 333860 è superseded/non azionabile.
 
 ## Verified facts
 - Baseline storica: PROMPT_ID 417826 ha già effettuato una prima signal-hygiene.
@@ -53,7 +53,7 @@ Collector runtime operativo e non-model. Il lavoro modello è parcheggiato per r
 - telegram-notification-history.timer è enabled+active e schedulato ogni 15 minuti.
 - L'allocatore remoto MegaVault per chatgpt-telegram-history-runtime-closure-20260924-v1 ha assegnato 966124.
 - Il fallback locale aveva erroneamente restituito 333860 allo stesso request_id e quel prompt era stato registrato prima del ritorno remoto.
-- Mutation roadmap #1056 corregge la collisione tramite replacement 333860 -> 966124; la materialization Issue MegaVault #104 per 333860 è stata chiusa not_planned.
+- Mutation roadmap #1056 ha applicato replacement 333860 -> 966124; MegaVault Issue #105 ha materializzato 966124. La materialization Issue #104 per 333860 è stata chiusa not_planned.
 
 ## Decisions
 - Il runtime collector resta attivo mentre la master recovery procede perché è un servizio non-model e non muta i repo sovrapposti alla lane attiva.
@@ -72,14 +72,13 @@ Collector runtime operativo e non-model. Il lavoro modello è parcheggiato per r
 - Richiesta errata di materializzazione 333860 chiusa prima che il worker la applicasse.
 
 ## Remaining
-- Attendere/applicare roadmap mutation #1056 e materializzare 966124.
 - Integrare i fix sorgente su main tramite 966124 quando la master lane arriva a Phase 4.
 - Accumulare e analizzare cronologia reale.
 - Correggere i producer rumorosi e verificare una nuova finestra di notifiche post-fix.
 
 ## Blockers
 - Nessun blocker runtime del collector.
-- Blocker amministrativo corrente: collisione allocator locale/remoto da riconciliare completamente con 966124 prima di qualunque source-closure task.
+- Nessun blocker amministrativo: 966124 è canonico e materializzato; resta solo il gate di scheduling della master recovery.
 
 ## Evidence
 - fedora-system-monitor task/422308: f577f66, 9d736aa, 5d8ed32.
@@ -88,7 +87,8 @@ Collector runtime operativo e non-model. Il lavoro modello è parcheggiato per r
 - systemd runtime readback: RUN1 4244, RUN2 0, timer enabled+active.
 - MegaVault Issue #103: remote allocation => PROMPT_ID 966124.
 - codex-roadmap Issue #1050: accidental local-fallback prompt 333860.
-- codex-roadmap Issue #1056: canonical replacement 333860 -> 966124.
+- codex-roadmap Issue #1056: canonical replacement 333860 -> 966124 applicato.
+- MegaVault Issue #105: PROMPT_ID 966124 materialized.
 - MegaVault Issue #104: wrong 333860 materialization closed not_planned.
 - completed/telegram-notification-signal-hygiene.md baseline 417826.
 
@@ -96,4 +96,4 @@ Collector runtime operativo e non-model. Il lavoro modello è parcheggiato per r
 Collector lane source/runtime closure is complete only when runtime remains healthy/incremental, no secret is versioned, source fixes are integrated on fedora-system-monitor main through canonical 966124, 333860 is non-actionable, 966124 is canonical/materialized and terminal PASS, and the history-based audit produces producer-specific fixes.
 
 ## Next action
-Do not launch a Telegram model task now. Verify roadmap mutation #1056 applies, materialize canonical PROMPT_ID 966124, and keep it parked. When the global master reaches Phase 4, claim only 966124, integrate the already-verified task/422308 changes, run its bounded gates/readback, finalize PASS, then begin the history-based notification audit.
+Do not launch a Telegram model task now. Keep canonical/materialized PROMPT_ID 966124 parked. When the global master reaches Phase 4, claim only 966124, integrate the already-verified task/422308 changes, run its bounded gates/readback, finalize PASS, then begin the history-based notification audit.
