@@ -233,6 +233,70 @@ class RoadmapDBTests(unittest.TestCase):
             )
             conn.close()
 
+    def test_reasoning_mutation_updates_only_reasoning(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(
+                conn,
+                prompt_id="123456",
+                slug="one",
+                title="One",
+                current_path="prompts/one.md",
+                model="GPT-6 Luna",
+                reasoning="medium",
+                queue_position=1,
+            )
+            db.apply_mutation(
+                conn,
+                {"op":"reasoning","prompt_id":"123456","reasoning":"low","note":"reasoning-only update"},
+            )
+            conn.commit()
+            row=db.prompt_row(conn,"123456")
+            self.assertEqual("GPT-6 Luna",row["model"])
+            self.assertEqual("low",row["reasoning"])
+            self.assertEqual(1,row["queue_position"])
+            self.assertEqual("pending",row["status"])
+            self.assertEqual(
+                1,
+                conn.execute("select count(*) from audit_events where event_type='prompt_reasoning_updated'").fetchone()[0],
+            )
+            conn.close()
+
+    def test_prompt_materialization_rejects_execution_metadata_in_header(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            for body in (
+                "PROMPT_ID=123456\nMODEL=GPT-6 Luna\n# Goal\nTest\n",
+                "PROMPT_ID=123456 | model=GPT-6 Luna | reasoning=low\n# Goal\nTest\n",
+            ):
+                with self.assertRaisesRegex(
+                    db.RoadmapDBError,
+                    "prompt_text_contains_execution_metadata:123456",
+                ):
+                    db.register_prompt(
+                        conn,
+                        prompt_id="123456",
+                        slug="one",
+                        title="One",
+                        current_path="prompts/one.md",
+                        prompt_text=body,
+                    )
+            db.register_prompt(
+                conn,
+                prompt_id="123456",
+                slug="one",
+                title="One",
+                current_path="prompts/one.md",
+                model="GPT-6 Luna",
+                reasoning="low",
+                prompt_text="PROMPT_ID=123456\n# Goal\nTest\n",
+            )
+            self.assertEqual("GPT-6 Luna", db.prompt_row(conn,"123456")["model"])
+            self.assertEqual("low", db.prompt_row(conn,"123456")["reasoning"])
+            conn.close()
+
     def test_explanation_mutation_updates_only_explanation(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
@@ -362,6 +426,7 @@ class RoadmapDBTests(unittest.TestCase):
             actions=[
                 lambda: db.set_status(conn,"123456","superseded",actor="chatgpt"),
                 lambda: db.set_model(conn,"123456","GPT-5.6 Sol"),
+                lambda: db.set_reasoning(conn,"123456","low"),
                 lambda: db.set_prompt_text(conn,"123456","changed"),
                 lambda: db.reorder_prompt(conn,"123456",9),
                 lambda: db.add_dependency(conn,"123456","654321"),
