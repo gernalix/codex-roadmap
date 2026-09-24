@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 17:21 Europe/Copenhagen
+Updated: 2026-09-24 17:20 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -101,6 +101,7 @@ PersonalHub P0 is now the sole master lane. Resume 920550 from its existing push
 994029 and 966124 are both terminal completed; they no longer own any repository/runtime lane. PersonalHub remains the master recovery lane.
 
 ## Verified facts
+- 994029 and 966124 are currently active in parallel side chats. This is allowed because both are disjoint from PersonalHub. Write ownership rule remains: 966124 owns `fedora-system-monitor`; 994029 may only read that repo/control-plane state while 966124 is active.
 - PH Workflowy reconciliation is PASS on top of merged 920550; only push/PR/single-writer integration + branch deletion remain before 857906.
 - 994029 is terminal `completed`: ActivityWatch main `b8ef359` is deployed; 17 focused tests + py_compile/diff-check PASS; final real run `20260924T151113Z` advanced the data repo; timer enabled+active; proprietary Kuma producer/credentials are absent; authoritative Kuma readback shows legacy ID 45 disabled and central ID 59 active with a fresh UP heartbeat. Terminal mutation issue #1063 closed completed.
 - 966124 is terminal `completed`: `fedora-system-monitor/main` contains the combined Telegram collector + auto-delete + relationship/block-state source; focused tests/CI/runtime readback passed, private history remains current, and absorbed Telegram branches were removed. Dedicated terminal state is `operations/task-state/966124.md`.
