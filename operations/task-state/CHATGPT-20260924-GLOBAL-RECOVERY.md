@@ -1,14 +1,14 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 15:22 Europe/Copenhagen
+Updated: 2026-09-24 15:25 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
 
 ## Constraints
 - **PersonalHub P0 is the master recovery lane now, and the live-DB migration/cutover is its highest-priority terminal milestone.** No non-PH recovery task may preempt PH while PH is actionable. After 788606 freezes the final commit/schema/artifacts, 913264 must run immediately—before any infrastructure, notification, branch-cleanup, or unrelated recovery work—to take rollback backups, migrate the real DB externally to the exact final schema, install the exact final APK on Pixel, and validate preserved real data. Exception only for a true PH blocker or a data/safety-critical emergency.
-- **Single active recovery lane until global recovery is complete:** run only one model-driven recovery task/corsia at a time. Do not launch another phase/task until the current one is terminal and checkpointed. Manual-prerequisite/Waiting tasks may remain parked; stable non-model background services may continue only if they do not mutate overlapping repos/state.
+- **PersonalHub remains the master-priority lane, but independent side lanes may run in parallel when they are truly disjoint.** Enforce one active writer per repository/risky runtime resource, not one chat globally. A parallel task is allowed only if it cannot mutate PersonalHub, its DB/schema/branches/devices, or any repo/runtime currently owned by the PH lane; shared resources must be read-only unless ownership is explicit.
 - This file is operational memory only; canonical lifecycle remains in roadmap.sqlite.
 - Store conclusions/state only, never chain-of-thought, secrets or raw private transcripts.
 - Canonical roadmap mutations go only through the codex-roadmap single writer.
@@ -22,7 +22,7 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 
 ## Plan / checklist
 ### Phase 0 — Recovery framework and protocol
-- [x] Adopt single-active-recovery-lane execution until the final global gate; parallel model-driven recovery prompts are suspended/avoided.
+- [x] Replace coarse global serialization with repo/resource-scoped serialization: PH keeps master priority, while independent non-PH tasks may run in parallel if they have disjoint writers and cannot touch PH state.
 - [x] Establish the persistent operational-checkpoint protocol in `operations/task-state/README.md`.
 - [x] Establish single-writer-only canonical roadmap mutations.
 - [x] Establish model/reasoning as roadmap metadata only, never prompt-body text.
@@ -98,9 +98,10 @@ Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
 
 ## Current step
 PersonalHub P0 is now the sole master lane. Resume 920550 from its existing pushed checkpoint and continue serially through 857906 → 707603 → 840907 → 788606 → 913264. No non-PH task may run while PH is actionable.
-Do not launch 994029 or 966124 in parallel from another chat; both remain parked behind the PH P0 cutover.
+994029 and 966124 may run in parallel in other chats under the repo/resource ownership rule above; neither changes PH priority or may touch PH state.
 
 ## Verified facts
+- Parallel side-lane allowance: 994029 is scoped to `activity-watch-uploader` + ActivityWatch units with read-only central Kuma verification; 966124 is scoped to integrating Telegram collector fixes in `fedora-system-monitor` and reading the private Telegram data repo. Neither touches PersonalHub. Therefore both may run in other chats while PH continues here, provided 994029 does not write `fedora-system-monitor` while 966124 owns it.
 - Current PH side-branch inventory is bounded to two real side branches: `task/920550` (2 commits ahead / 0 behind main) and `chatgpt/workflowy-integration` (11 commits ahead / 2 behind main). No other non-main PH branch contains recoverable work. Required order: finish/integrate 920550 → reconcile/integrate Workflowy branch → delete both only after main containment/semantic absorption is proved.
 - 920550 Play/minified artifacts were produced successfully from the task worktree with release minification/resource shrinking enabled: `app-play.apk` = 191,469,880 bytes and `app-play.aab` = 87,776,741 bytes. Model weights remain outside the base app. The single Gradle build process exited; no duplicate build was launched.
 - A direct user request temporarily preempted the PH-only rule to implement the one-day-auto-delete Telegram archive. That bounded runtime work is complete: fedora-system-monitor branch `chatgpt/telegram-autodelete-archive` is pushed through `2fc6c38`; 14/14 Telegram tests PASS; the live archive preserves Telegram call actions, exposes a no-ID human view with Italian/relative dates and sender names, and retains the earlier 61-message/3-media backfill; both Telegram timers remain enabled+active and concurrent collector startup succeeds under the shared session lock. No model-driven Telegram work remains active, so PersonalHub resumes as master immediately. Authoritative detail: `operations/task-state/CHATGPT-20260924-TELEGRAM-AUTODELETE-ARCHIVE.md`.
@@ -147,7 +148,7 @@ Do not launch 994029 or 966124 in parallel from another chat; both remain parked
 - A canonical replacement allocation request for never-run 641903 is open in MegaVault Issue #100: [prompt-id-command] chatgpt-ccs-641903-project-routing-replacement-20260924-v1. It must resolve current CCS project routing from authoritative metadata/repo identity rather than hard-code 96.
 
 ## Decisions
-- While PersonalHub P0 is actionable, ready non-PH tasks **994029 and 966124 must remain ready but parked**. Do not execute them from another ChatGPT chat or via Remote Desktop Commander before PH 913264 PASS, unless PersonalHub is truly blocked or a data/safety-critical emergency requires intervention.
+- **994029 and 966124 are explicitly allowed to run in parallel with PH in separate chats.** 966124 owns writes to `fedora-system-monitor`. 994029 may mutate `activity-watch-uploader` and ActivityWatch units, but must treat `fedora-system-monitor`/central Kuma control-plane state as read-only verification while 966124 is active. If 994029 needs a fedora-system-monitor code/config write, it must stop at that blocker until 966124 finishes.
 - User priority override: PersonalHub + live DB migration now outrank all remaining non-PH recovery work. 302284 is parked after a safe checkpoint and resumes only after PH 913264 PASS, unless PH is truly blocked.
 - Until the final global gate, recovery work is serialized: one model-driven lane at a time. Existing active tasks are first brought to a safe checkpoint/parked state before the master lane advances; no new parallel recovery prompt is launched.
 - Do not duplicate the PersonalHub or Telegram lanes from the global recovery chat. PersonalHub detail belongs to CHATGPT-20260924-PERSONALHUB-P0.md; Telegram detail belongs to CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE.md.
