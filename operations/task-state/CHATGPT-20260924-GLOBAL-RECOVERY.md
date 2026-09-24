@@ -1,7 +1,7 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 17:12 Europe/Copenhagen
+Updated: 2026-09-24 17:16 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
@@ -101,6 +101,7 @@ PersonalHub P0 is now the sole master lane. Resume 920550 from its existing push
 994029 and 966124 may run in parallel in other chats under the repo/resource ownership rule above; neither changes PH priority or may touch PH state.
 
 ## Verified facts
+- PH local branch set is now bounded to `main` plus only the two still-relevant integration branches: `task/920550` and `chatgpt/workflowy-integration`. All historical/superseded local branch residue has been dispositioned and removed with preserved evidence where needed.
 - PH cleanup removed the safe detached worktrees and semantically absorbed `codex/pr35-cleanup`; remaining PH branch cleanup is bounded to active Workflowy/920550 plus the two preserved superseded dirty-evidence branches.
 - PH branch cleanup has already removed 14 local zero-ahead branches proven fully absorbed; remaining PH branches are limited to active/reconciliation/superseded-evidence cases owned by the PH checkpoint.
 - 920550 branch head advanced to `3f32b8cb86552f07bcbf92042db34f4e839969eb`. The PR #41 unit failure was a stale test count after schema23 added `finance_photo_index` and `finance_owned_items`; targeted SyncJournal coverage now PASS. This last commit is test-only, so the verified Play artifact/product code is unchanged.
