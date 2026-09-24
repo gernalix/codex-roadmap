@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 11:44 Europe/Copenhagen
+Updated: 2026-09-24 11:54 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -46,6 +46,10 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - PROMPT_ID 913264 is the final live-DB migration + definitive APK/Pixel task and depends on 788606.
 - Canonical intended PH P0 chain is therefore:
   920550 -> 857906 -> 707603 -> 840907 -> 788606 -> 913264
+- Revalidation at 2026-09-24 11:54 confirms all six chain tasks are still `pending`; 920550 is listed as launchable now and none of its downstream tasks has started.
+- PersonalHub `main` is currently commit `2d9c5e782d94cb37747b607b7bdb46a5ea61849f`, `version.txt` is 60, and `PersonalHubDatabase` still declares Room `version = 22` / `SCHEMA_VERSION = 22`.
+- PersonalHub PR #40 (`task/620949`) merged after the previous audit but only removed the stale consolidated-main Pixel updater service/timer; it did not change app functionality or schema and does not invalidate the P0 chain.
+- PersonalHub currently has no open PRs. The only non-main branch remains `chatgpt/105883-since-when`, confirmed `ahead_by=0`, `behind_by=30`; it still contains no unique work requiring recovery.
 - The chain is intentionally serial to avoid schema/worktree collisions.
 - PersonalHub PR #35 was stale/non-mergeable and has been closed.
 - Recent PH PRs #38/#39 had green CI; #39 was large and therefore requires semantic confidence, not CI alone.
@@ -84,6 +88,8 @@ Goal: operate only after 788606 PASS.
 Read the actual final app schema/Room identity from the final commit. Inspect the actual live DB schema/identity on Pixel. Take immutable rollback first. Externally migrate a copy of the real DB through every required delta to the final schema, validate quick_check/integrity/FK and preservation of representative data, then transfer/install the exact final APK and migrated DB using explicit Pixel serial. Smoke Home + every module. Keep rollback until final acceptance.
 
 ## Completed
+- Revalidated the PH P0 chain against current canonical roadmap and current `PersonalHub/main`; no newer work invalidates or reorders it.
+- Confirmed exact current PH baseline: main `2d9c5e782d94cb37747b607b7bdb46a5ea61849f`, app v60, Room schema 22, no open PRs, stale non-main branch 0 ahead/30 behind.
 - Global Phase-1 PH audit.
 - Verified current main schema 22 and 21->22 delta.
 - Identified 624831 residual vs work already completed by 613102.
@@ -97,7 +103,6 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
-- Verify no newer PH main/roadmap change invalidated this chain before launching work.
 - Run/review 920550 and inspect its actual diff, schema changes, tests and integration result before allowing 857906.
 - Run/review 857906; ensure old duplicate user-facing History/Log/Timeline surfaces are actually removed/replaced where intended and global/module search reuse is real.
 - Run/review 707603 on the resulting final-ish schema.
@@ -138,4 +143,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Read this file first in the new chat. Then read the current canonical roadmap entries for 920550/857906/707603/840907/788606/913264 and current PersonalHub main/branches. Confirm the chain is still current. Do NOT launch or duplicate tasks blindly. Begin by auditing the current state/result of 920550 if it has started; otherwise make 920550 the first PH execution target and supervise it through integration before advancing the chain.
+Start existing PROMPT_ID 920550 as the first PH execution target through the canonical `roadmap_start.py` claim on Fedora/Codex. It requires local model/download/build/AVD work, so do not duplicate or reimplement it through GitHub-only edits. Supervise 920550 through queued integration and canonical PASS, inspect its actual diff/schema/test evidence after merge, and do not allow 857906 to start until that review is complete.
