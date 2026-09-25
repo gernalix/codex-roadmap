@@ -2,8 +2,16 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from c2_chatgpt_executor import dispatch,ChatWorkerError
+from c2_chatgpt_executor import dispatch
+
+class FakeTaskConfig:
+    def __init__(self,**kwargs):
+        self.__dict__.update(kwargs)
+
+def fake_supervisor_types():
+    return FakeBrowser,lambda url:url.startswith('https://chatgpt.com/c/'),FakeTaskConfig,FakeStore
 
 class FakeBrowser:
     def __init__(self):self.calls=[]
@@ -15,6 +23,10 @@ class FakeStore:
     def save_task(self,task):self.tasks.append(task)
 
 class BrowserExecutorTests(unittest.TestCase):
+    def setUp(self):
+        self.supervisor_patch=patch('c2_chatgpt_executor._supervisor_types',fake_supervisor_types)
+        self.supervisor_patch.start()
+        self.addCleanup(self.supervisor_patch.stop)
     def test_new_chat_uses_work_item_identity_and_replays_without_resend(self):
         with tempfile.TemporaryDirectory() as tmp:
             browser=FakeBrowser();store=FakeStore()
