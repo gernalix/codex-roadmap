@@ -140,7 +140,13 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120):
     # Every observed running item counts, including adopted legacy runs.
     active = conn.execute("SELECT COUNT(*) FROM work_items WHERE status='running'").fetchone()[0]
     results = []
-    candidates = conn.execute('SELECT * FROM v_work_item_runnable').fetchall()
+    candidates = conn.execute('''SELECT w.* FROM v_work_item_runnable w
+      ORDER BY CASE
+        WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p0') THEN 0
+        WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p1') THEN 1
+        WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
+        ELSE 3 END,
+        COALESCE(w.sort_order,2147483647),w.created_at,w.work_item_id''').fetchall()
     for item in candidates:
         if active >= max_parallel:
             break

@@ -16,6 +16,22 @@ import work_items_migration as migration
 
 
 class C2IntakeTests(unittest.TestCase):
+    def test_prepare_codex_reuses_only_unique_proven_model_pair(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path=self.make_cutover_db(Path(tmp))
+            conn=c2_intake._connect(path)
+            try:
+                conn.execute("UPDATE work_items SET repo='https://example.test/roadmap' WHERE prompt_id='123456'")
+                for cycle in ('one','two'):
+                    db.record_execution(conn,'123456',cycle_key=cycle,outcome='PASS',
+                        model='GPT-5.6 Sol',reasoning='medium',update_status=False)
+                item=c2_intake.add_work_item(conn,title='Follow-up',project='51')
+                result=c2_intake.prepare_codex(conn,item['work_item_id'],
+                    prompt_text='# Follow-up\n',source='c2-intake:test')
+                self.assertEqual(('GPT-5.6 Sol','medium'),(result['model'],result['reasoning']))
+            finally:
+                conn.close()
+
     def make_cutover_db(self, root: Path) -> Path:
         repo = root / "repo"
         repo.mkdir()

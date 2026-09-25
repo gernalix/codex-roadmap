@@ -34,6 +34,12 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(runs,scheduler.schedule(self.conn,event_key='intake-1',now=11,max_parallel=3))
         self.assertEqual(2,self.conn.execute('SELECT COUNT(*) FROM work_item_runs').fetchone()[0])
 
+    def test_explicit_priority_tag_precedes_sort_order(self):
+        normal=self.add('normal')
+        urgent=self.add('urgent')
+        self.conn.execute("INSERT INTO work_item_tags(work_item_id,tag) VALUES(?,'priority:p0')",(urgent,))
+        self.assertEqual(urgent,scheduler.schedule(self.conn,event_key='priority',now=1,max_parallel=1)[0]['work_item_id'])
+
     def test_crash_recovery_reuses_identity_and_locks(self):
         a=self.add(); self.add()
         run=scheduler.schedule(self.conn,event_key='first',now=10)[0]

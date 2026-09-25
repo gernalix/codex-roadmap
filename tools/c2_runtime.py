@@ -111,7 +111,12 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             s.activity,s.model,s.reasoning,s.worktree,s.project_url,s.resources_json
           FROM v_work_item_runnable w
           JOIN work_item_execution_specs s USING(work_item_id)
-          ORDER BY COALESCE(w.sort_order,2147483647),w.work_item_id''')]
+          ORDER BY CASE
+            WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p0') THEN 0
+            WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p1') THEN 1
+            WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
+            ELSE 3 END,
+            COALESCE(w.sort_order,2147483647),w.work_item_id''')]
     statuses=[tuple(r) for r in db.execute('SELECT work_item_id,status FROM work_items WHERE status="running" ORDER BY work_item_id')]
     dependencies=[tuple(r) for r in db.execute('''SELECT d.work_item_id,d.depends_on_work_item_id,w.status
           FROM work_item_dependencies d JOIN work_items w ON w.work_item_id=d.depends_on_work_item_id

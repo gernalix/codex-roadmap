@@ -48,6 +48,24 @@ def _new_work_item_id() -> str:
     return "wi:" + uuid.uuid4().hex
 
 
+def _proven_codex_pair(conn: sqlite3.Connection, item: sqlite3.Row,
+                       model: str | None, reasoning: str | None) -> tuple[str,str] | None:
+    """Reuse one exact successful pair only within the same project and repo."""
+    if not item['project_id'] or not item['repo']:
+        return None
+    rows=conn.execute('''SELECT e.model,e.reasoning,
+          SUM(CASE WHEN e.outcome='PASS' THEN 1 ELSE 0 END) AS passed,
+          SUM(CASE WHEN e.outcome IN ('FAIL','BLOCKED') THEN 1 ELSE 0 END) AS failed
+        FROM executions e JOIN work_items w ON w.prompt_id=e.prompt_id
+        WHERE w.project_id=? AND w.repo=? AND e.model IS NOT NULL AND e.reasoning IS NOT NULL
+          AND (? IS NULL OR e.model=?) AND (? IS NULL OR e.reasoning=?)
+        GROUP BY e.model,e.reasoning''',
+        (item['project_id'],item['repo'],model,model,reasoning,reasoning)).fetchall()
+    qualified=[(str(row['model']),str(row['reasoning'])) for row in rows
+               if row['passed']>=2 and row['failed']==0]
+    return qualified[0] if len(qualified)==1 else None
+
+
 def _project_and_repo(
     conn: sqlite3.Connection,
     project: str | None,
@@ -200,6 +218,11 @@ def prepare_codex(
     header = "\n".join(str(prompt_text).splitlines()[:16])
     if re.search(r"(?i)(?:^|[|\s])(?:model|reasoning)\s*=", header):
         raise C2IntakeError("prompt_text_contains_execution_metadata")
+    if model is None or reasoning is None:
+        proven=_proven_codex_pair(conn,item,model,reasoning)
+        if proven:
+            model=model or proven[0]
+            reasoning=reasoning or proven[1]
     project_id = int(item["project_id"]) if item["project_id"] is not None else None
     prompt_id = c2_identity.allocate_prompt_id(
         conn,
