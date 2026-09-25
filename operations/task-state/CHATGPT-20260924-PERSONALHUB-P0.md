@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 22:21 Europe/Copenhagen
+Updated: 2026-09-25 22:22 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -76,7 +76,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 
 ### Phase 6 — 788606 final release preflight
 - [ ] Before release, disposition the three unique commits on `origin/c2/107210` (external DB migrator and startup gate changes) through the protected integration flow; retain only changes still needed.
-- [ ] Run 788606 with no new features.
+- [ ] Continue already-running 788606 with no new features; do not re-claim or duplicate its gates.
 - [ ] Pass minification/resource shrink, signing, bundletool/Play gates and bounded emulator smoke.
 - [ ] Freeze exact final main commit, schema version/identity and final APK/AAB hashes/paths.
 
@@ -97,7 +97,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-PROMPT_ID 840907 is integrated and canonical `completed`: PersonalHub PR #46 merged final task head `f8f15feec27f29d5c63ba4764bdd922f23d41b39` as main `ba61688ef1cc59b29d3400e0c0a16845a0b271f3`. C2 has already advanced PROMPT_ID 788606 to `running`; do not re-claim it. Continue 788606 from its canonical checkpoint/worktree, beginning with disposition of the three unique `origin/c2/107210` commits before the final release freeze.
+PROMPT_ID 788606 is already canonical `running` in isolated PersonalHub worktree `/home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/788606` at head `b273a20224a9dd37e9e4a372d8761b0265691e78`. Continue/supervise that existing worker only; do not re-claim or duplicate release gates. 840907 is terminal `completed` and merged. Final cutover 913264 remains pending until 788606 PASS and final-source freeze are verified.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -281,7 +281,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 
 ## Remaining
 - Disposition `origin/c2/107210` unique changes before release.
-- Run/review 788606 and freeze exact release commit, schema version/identity, APK/AAB hashes/paths and shrink state.
+- Finish the already-running 788606 worker and freeze exact release commit, schema version/identity, APK/AAB hashes/paths and shrink state.
 - Before final migration, inspect the live Pixel DB schema/identity and take immutable backup.
 - Execute external live DB migration to the exact frozen final schema; preserve rollback and validate data/integrity/FK.
 - Install exact final APK on primary Pixel with explicit serial and verify Home + all modules with real data.
@@ -289,16 +289,17 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
+- No blocker for 788606 itself. Final APK+DB Pixel cutover 913264 is gated on 788606 PASS/final-source freeze; release preflight build/test work is permitted now.
+- Physical Pixel 8a is currently online at explicit serial `192.168.1.37:36755`; do not modify its live DB until 913264 backup/migration gates begin.
 - Release dependency, not a product blocker: before 788606 freezes main, disposition the three commits unique to `origin/c2/107210` through the protected integration flow.
-- User-directed artifact gate: do not retry PH APK/DB compilation, testing, installation or cutover until the remaining PH implementation/test tasks have completed and the final schema/release commit is frozen.
 - 857906 has no blocker and is already canonical `completed`; no CI polling or retry remains.
 - Local Android build/device/real-DB work is available through Remote Desktop Commander on Fedora.
 - The actual live Pixel DB schema/identity is not yet read and must not be guessed.
-- Final DB target cannot be frozen until upstream PH tasks are complete.
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 - Physical Pixel 8a was last verified online; re-resolve its explicit serial at final cutover rather than assuming continued availability.
 ## Evidence
+- 2026-09-25 22:22 Europe/Copenhagen 788606 ownership readback: canonical roadmap reports 840907=`completed`, 788606=`running`, 913264=`pending`; single-writer task 788606 is active in `/home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/788606` at `b273a20224a9dd37e9e4a372d8761b0265691e78`; current Gradle gate is running there. ADB shows TCL `192.168.1.200:46451`, physical Pixel 8a `192.168.1.37:36755`, and emulator `emulator-5554` online. No 788606 work was re-claimed or duplicated.
 - 2026-09-25 22:21 Europe/Copenhagen 840907 terminal readback: PersonalHub PR #46=`MERGED`, merge `ba61688ef1cc59b29d3400e0c0a16845a0b271f3`, final task head `f8f15feec27f29d5c63ba4764bdd922f23d41b39`; single-writer status=`merged`; canonical codex-roadmap main reports 840907=`completed`, 788606=`running`, 913264=`pending`. Direct offline instrumentation evidence: app install PASS, test APK install PASS, airplane mode 1, IP probe offline, `OK (1 test)`, `INSTRUMENTATION_CODE: -1`, exit 0.
 - 2026-09-25 22:20 Europe/Copenhagen 840907 terminal evidence: PersonalHub PR #46 MERGED; task head `f8f15feec27f29d5c63ba4764bdd922f23d41b39`; merge commit `ba61688ef1cc59b29d3400e0c0a16845a0b271f3`; roadmap main `29a4b596f8d571e3aac0444bef0eabc2d34bb831` reports 840907=`completed`, 788606/913264=`pending`. Final device gate uses host-controlled offline mode and only verifies no validated Internet from instrumentation; product runtime unchanged from already-PASS host/browser/AVD evidence.
 - 2026-09-25 22:03 Europe/Copenhagen 840907 evidence: branch head `07148cd14282a9f61a8928054197f223b5fd4588`; host gate `test_datasette_lite_offline.py` PASS with 10 envelope rows, 120 presentation tables and cross-module relation targets; browser E2E rendered `contact_fields`/`Ada Example` with external host resolution blocked; AVD XML reports tests=1 failures=0 errors=0 skipped=0 for `DataExplorerOfflineQaDeviceTest` (16.444s) under airplane mode; assets raw=25,743,829 bytes, QA APK compressed contribution=12,251,271 bytes across 52 entries; canonical roadmap main `adc8217d36a8779dd4a3490421dc7bdcf02c4da7` still has 840907=`running` and 788606/913264=`pending`.
@@ -347,4 +348,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Continue the already-running PROMPT_ID 788606 from its canonical C2 checkpoint/worktree without re-claiming it; first disposition the unique `origin/c2/107210` changes, then execute the existing final release preflight/freeze acceptance criteria.
+Supervise and continue the existing PROMPT_ID 788606 worker from worktree head `b273a20224a9dd37e9e4a372d8761b0265691e78`; consume its current Gradle gate result, fix only concrete failures if any, then integrate/terminalize 788606 PASS before starting 913264.
