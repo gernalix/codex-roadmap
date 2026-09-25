@@ -152,7 +152,9 @@ The delivery-timeout incident shown on the PersonalHub worker is resolved in dep
 - CCS suite 68/68 PASS.
 - Live deployed-file SHA-256 pairs matched for extension/background.js and host/store.py.
 - Live CCS services: supervisor=active, ccs=active, pending_ccs=0.
-- Cross-device discovery deployment: supervisor active since 2026-09-25 10:11:15 CEST; chats.json refreshed automatically at 10:11:18 CEST with 21 total / 4 managed / 17 inventory-only.
+- Cross-device discovery deployment initially recorded 21 total / 4 managed / 17 inventory-only; current live CLI readback records 56 total / 6 managed / 50 inventory-only.
+- Current global runtime state: rate_limit_until_epoch=0.
+- Recent source HEAD c4bd9e5 merges timeout-continua recovery; 298370d introduced delivery-timeout detection and 5c9cb89 changed its action to `NUDGE_CONTINUE`.
 - PersonalHub slow-thinking occurrence was recovered by stopping the generation and sending exactly 'continua' in the PersonalHub tab.
 - Delivery-timeout fix: canonical PR #2 merged at c4bd9e5; live service restarted active; global.json rate_limit_until_epoch=0.0; targeted PersonalHub run reported generation active.
 - Canonical ADB keeper checkpoint: codex-roadmap b463dd1; task source ff62956; PR #2 remains externally blocked by GitHub Actions billing/spending limit.
