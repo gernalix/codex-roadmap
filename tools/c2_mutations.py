@@ -22,6 +22,7 @@ def apply(conn, mutation):
         'checkpoint': c2_scheduler.checkpoint,
         'recover': c2_scheduler.recover,
         'complete': c2_scheduler.complete,
+        'reconcile_run': c2_scheduler.reconcile_terminal_run,
     }
     if action not in operations:
         raise ValueError('unknown_c2_operation:'+action)

@@ -243,3 +243,22 @@ def complete(conn, run_id, *, succeeded, worker_ref):
     conn.execute('UPDATE work_item_runs SET state=? WHERE run_id=?',(target,run_id))
     conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(run_id,))
     conn.execute('UPDATE work_items SET status=? WHERE work_item_id=?',(target,run['work_item_id']))
+
+
+def reconcile_terminal_run(conn, run_id):
+    """Release a Codex run only after the canonical terminal writer has acted."""
+    _transaction(conn)
+    row=conn.execute('''SELECT r.state,r.executor,w.status AS item_status
+      FROM work_item_runs r JOIN work_items w USING(work_item_id)
+      WHERE r.run_id=?''',(run_id,)).fetchone()
+    if not row or row['executor']!='codex':
+        raise SchedulingError('codex_run_required')
+    if row['item_status'] not in ('completed','failed','blocked','cancelled'):
+        raise SchedulingError('canonical_terminal_state_required')
+    target='completed' if row['item_status']=='completed' else 'failed'
+    if row['state']==target:
+        return
+    if row['state'] not in ('claimed','running','recovering'):
+        raise SchedulingError('run_not_active')
+    conn.execute('UPDATE work_item_runs SET state=? WHERE run_id=?',(target,run_id))
+    conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(run_id,))

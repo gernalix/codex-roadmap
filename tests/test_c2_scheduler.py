@@ -84,3 +84,17 @@ class SchedulerTests(unittest.TestCase):
                   'semantic':'chatgpt','external':None,'human':'human'}
         for activity,executor in expected.items():
             self.assertEqual(executor,scheduler.choose_executor('auto',activity))
+
+    def test_codex_run_reconciles_only_after_canonical_terminal(self):
+        self.conn.execute("UPDATE work_items SET status='running' WHERE prompt_id='123456'")
+        self.conn.execute("""INSERT INTO work_item_runs VALUES(
+            'r','prompt:123456','event',1,'codex','running',100,'c2-run:r',NULL,'{}',1)""")
+        self.conn.execute("INSERT INTO work_item_resource_leases VALUES('repo:roadmap','r')")
+        with self.assertRaisesRegex(scheduler.SchedulingError,'canonical_terminal'):
+            scheduler.reconcile_terminal_run(self.conn,'r')
+        self.conn.execute("UPDATE work_items SET status='completed' WHERE prompt_id='123456'")
+        scheduler.reconcile_terminal_run(self.conn,'r')
+        scheduler.reconcile_terminal_run(self.conn,'r')
+        self.assertEqual('completed',self.conn.execute(
+            "SELECT state FROM work_item_runs WHERE run_id='r'").fetchone()[0])
+        self.assertEqual(0,self.conn.execute('SELECT COUNT(*) FROM work_item_resource_leases').fetchone()[0])

@@ -1,0 +1,13 @@
+[Unit]
+Description=Advance Checklist 2.0 from the accepted roadmap snapshot
+After=codex-roadmap-sync.service
+ConditionPathExists=/home/daniele/projects/codex-roadmap/roadmap.sqlite
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /home/daniele/projects/codex-roadmap/tools/c2_runtime.py
+TimeoutStartSec=90
+Nice=5
+
+[Install]
+WantedBy=default.target

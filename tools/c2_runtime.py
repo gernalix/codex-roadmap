@@ -64,10 +64,19 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
        JOIN work_items w USING(work_item_id)
        WHERE r.state IN ('claimed','running','recovering')
        AND w.status='running' ORDER BY r.created_at,r.run_id""")]
+    terminal_runs=db.execute('''SELECT r.run_id FROM work_item_runs r
+       JOIN work_items w USING(work_item_id)
+       WHERE r.executor='codex' AND r.state IN ('claimed','running','recovering')
+       AND w.status IN ('completed','failed','blocked','cancelled')''').fetchall()
+    for row in terminal_runs:
+        run_id=str(row['run_id'])
+        submit('reconcile_run',{'run_id':run_id},'c2-reconcile-'+run_id)
+        events.append(('reconcile_run',run_id))
     for run in active:
         if run['state'] in ('claimed','recovering'):
             metadata=json.loads(run['metadata_json'])
-            key=_key('c2-ack',{'run_id':run['run_id'],'metadata':metadata})
+            key=_key('c2-ack',{'run_id':run['run_id'],'metadata':metadata,
+                               'state':run['state'],'lease_until':run['lease_until']})
             submit('acknowledge',{'run_id':run['run_id'],'worker_ref':'c2-run:'+run['run_id'],
                 'metadata':metadata},key)
             events.append(('acknowledge',run['run_id']))

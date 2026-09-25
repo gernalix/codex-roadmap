@@ -180,6 +180,18 @@ WHERE w.status='pending'
     WHERE t.work_item_id=w.work_item_id
       AND t.tag LIKE 'manual-prerequisite:%'
   )
+  AND NOT EXISTS (
+    WITH RECURSIVE ancestors(id) AS (
+      SELECT w.parent_id
+      UNION ALL
+      SELECT p.parent_id FROM work_items p
+      JOIN ancestors a ON p.work_item_id=a.id
+      WHERE p.parent_id IS NOT NULL
+    )
+    SELECT 1 FROM ancestors a
+    JOIN work_items parent ON parent.work_item_id=a.id
+    WHERE parent.status='running'
+  )
 ORDER BY COALESCE(w.sort_order,2147483647), w.created_at, w.work_item_id;
 
 
