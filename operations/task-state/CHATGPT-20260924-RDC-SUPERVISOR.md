@@ -55,8 +55,8 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 Core supervisor acceptance is complete. The synthetic rollover worker reached a fresh replacement chat from its pushed checkpoint and is disabled. A later account-wide `Too many requests` incident exposed a new safety gap; the supervisor is now hardened to auto-dismiss that dialog, treat rate limits as non-reloadable stalls, and place all autonomous workers into a persistent global backoff before any more model requests.
 
 ## Verified facts
-- Supervisor source repo current pushed main: 19f2fd1.
-- Unit suite: 13/13 PASS.
+- Supervisor source repo current pushed main: f1eb35d (contains rate-limit hardening 7eab77e + 19f2fd1).
+- Unit suite: 14/14 PASS.
 - Dedicated ChatGPT profile is authenticated and CDP is usable.
 - PersonalHub worker CHATGPT-20260924-PERSONALHUB-P0 is registered and has already responded to a real supervisor checkpoint request.
 - Grindr worker CHATGPT-20260924-GRINDR-WEB-LOGIN-ERROR is registered against a pushed checkpoint and is healthy after the transcript-error detector fix.
@@ -102,7 +102,7 @@ None. The remaining issue is a bounded frontend synchronization defect isolated 
 
 ## Evidence
 - Supervisor commits include 1409400, 45f5fa0, f0ee5ea, 6a988b5, 2cedbcf, e3f334c, 0644282, ea8dc9a, 7eab77e, 19f2fd1.
-- 13 unittest cases PASS after the rate-limit hardening.
+- 14 unittest cases PASS on current pushed main f1eb35d; rate-limit hardening commits 7eab77e and 19f2fd1 remain ancestors of HEAD.
 - PersonalHub event log recorded action=request-checkpoint followed by status=working.
 - Synthetic fixture checkpoint records the rollover task complete and the worker disabled.
 - Live RDC probe after mitigation reported zero remaining visible `Too many requests` dialogs.
