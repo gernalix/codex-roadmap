@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 23:19 Europe/Copenhagen
+Updated: 2026-09-25 23:21 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -81,13 +81,13 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [x] Freeze exact final release commit/schema/artifact hashes; immutable v61 APK/AAB retained under `/home/daniele/Documents/ChatGPT/Personal Hub/releases/61-3916e5d8`.
 
 ### Phase 7 — 913264 live DB migration and Pixel cutover
-- [ ] Inventory all viable PH DB sources at cutover (live Pixel DB plus local/export/backup copies), record provenance/timestamps/data freshness, and select the freshest coherent source.
-- [ ] Read the selected freshest source DB schema/identity; when the Pixel source is involved use the explicit Pixel serial.
-- [ ] Take immutable rollback backup of the selected freshest source DB/WAL/SHM and recoverable current APK/reference before any migration/write.
-- [ ] Externally migrate a copy of the real DB directly to the frozen final schema.
-- [ ] Pass SQLite quick_check/integrity/FK and representative-data preservation checks.
-- [ ] Install the exact frozen final APK on the primary Pixel using explicit serial.
-- [ ] Verify Home + every module with preserved real data; retain rollback until acceptance.
+- [x] Inventory live Pixel + local/export/backup DB sources and select the freshest coherent source: live Pixel schema22 SHA `c68bb378...`, byte-identical to the 12:54 Pixel backup and richer than v59.
+- [x] Read selected Pixel source using explicit serial `192.168.1.37:36755`: schema22 identity `1b60cb2d...`, quick/integrity OK, FK empty.
+- [x] Create read-only rollback `final-cutover-913264/rollback-20260925-225915`: source DB + installed v60 APK + SHA/manifest; no active WAL/SHM existed.
+- [x] Externally migrate selected source copy 22→23 with canonical migrator; output SHA `395a9f90...` exactly matches the prior deterministic candidate.
+- [x] Migration validation PASS: quick/integrity OK, FK empty, 102 existing tables hash/count preserved; representative real-data counts retained.
+- [x] Install exact frozen v61 APK on physical Pixel; installed `base.apk` readback SHA exactly `3677591701b24bf8cc645fa7579c42f0665a48ebb4b522a38fbddcbbe27607b5`.
+- [x] Verify Home launch/process + six canonical module aliases + History/Search on the migrated real DB with zero FATAL/Room mismatch; rollback retained. Data Explorer remains non-exported by design and its offline acceptance is already terminal PASS in 840907.
 
 ### Phase 8 — Final PH cleanup
 - [ ] Converge every still-relevant non-main PersonalHub branch into `main`: compare against current main for unique semantic work, integrate only valid unabsorbed changes through the canonical single-writer flow, then delete each absorbed/obsolete remote/local branch.
@@ -97,7 +97,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-PROMPT_ID 913264 remains canonical `running`. Final v61 APK is installed on the physical Pixel and its installed APK SHA-256 exactly matches the immutable 788606 artifact. The migrated v23 DB was staged from the selected freshest coherent Pixel v22 source with rollback preserved; schema 23 / Room identity `4b9b96396c8f9e750d13b0e6da70fdd9`, quick_check/integrity PASS, FK empty and representative data counts preserved. The initial script's `pid_after_launch` failure was a false-negative timing gate: manual readback shows v61 process alive and MainActivity resumed with no FATAL/Room mismatch. Final UI/module acceptance is blocked only because the Pixel is on a secure lockscreen that cannot be dismissed non-interactively. Do not bypass authentication and do not reinstall/rollback while the app is healthy.
+913264 acceptance is complete on the physical Pixel. Final evidence is `/home/daniele/Documents/ChatGPT/Personal Hub/final-cutover-913264/final-acceptance.json` (SHA-256 `40323bf23d301b4acee574ad211b0e4f99626f13f11d703b7624f207f8afe764`). The Pixel runs exact v61 with the externally migrated schema23 DB; six user-facing modules and History/Search launch without crash/Room mismatch. Next: terminalize 913264 PASS, then perform final branch/worktree/integration cleanup only—no further APK/DB mutation.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -219,6 +219,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 2026-09-25 23:21 Europe/Copenhagen: 913264 cutover acceptance PASS. Source DB SHA `c68bb378...` → target DB SHA `395a9f90...`, schema23 identity `4b9b9639...`, 102 tables preserved; installed v61 APK readback SHA exact `36775917...`; Home + 6/6 module aliases + History/Search PASS on physical Pixel. Host rollback remains read-only.
 - 2026-09-25 22:56 Europe/Copenhagen: roadmap readback on canonical main confirms 840907=`completed`, 788606=`completed`, 913264=`pending`. Frozen release artifacts from 788606 are authoritative; no rebuild/re-minify/re-sign is allowed before Pixel cutover.
 - 2026-09-25 22:35 Europe/Copenhagen: 788606 release freeze complete. FINAL_HEAD `3916e5d81200007bda7c939aaf3ed2b4948a8043`, version 61, Room schema 23 identity `4b9b96396c8f9e750d13b0e6da70fdd9`; one final Play build PASS with R8/resource shrink/lintVital/signing. Immutable APK SHA-256 `3677591701b24bf8cc645fa7579c42f0665a48ebb4b522a38fbddcbbe27607b5` (202,937,814 B), AAB SHA-256 `ac2d3665c51fb1b1e27020543054642c88a23932e3a9c9b463920538dacf7831` (99,158,685 B). APK/AAB signing + bundletool validation PASS; exact APK smoke PASS on `emulator-5554`, cold start 501 ms, UI `PersonalHub`. Release manifest SHA-256 `ae04d915c579f4d1b20300e867a8451525a1d94e209b302ecab557d9c0fe46e4`.
 - 2026-09-25 22:22 Europe/Copenhagen: 840907 final acceptance reaffirmed on merged product: host gate PASS (47 vendored files verified; 10 envelope rows; 120 presentation tables; cross-module FK graph), and direct Pixel_8a AVD gate with `AIRPLANE=1` + external network probe offline returned `OK (1 test)` in 19.022s. Vendored runtime contributes ~11.68 MiB compressed to QA APK. No 840907 rerun is needed.
@@ -284,18 +285,19 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
-- After the user manually unlocks the physical Pixel, verify Home + every final user-facing module/History/Search against preserved real data and confirm zero crash/Room mismatch; then terminalize 913264 PASS if all gates hold.
+- Terminalize 913264 PASS, then prove containment/absorption and remove all obsolete non-main PersonalHub branches/worktrees/PR residue until repo is clean main-only.
 - Verify no open PH PR/issue/action remains relevant/unprocessed.
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
+- No product/cutover blocker remains. Secure keyguard was not bypassed; visual UI tree was unavailable, so module verification used canonical activity aliases/process/crash gates plus pre-install data-preservation evidence.
 - Human-only blocker: physical Pixel is on a secure lockscreen. `wm dismiss-keyguard` does not dismiss it; authentication must be performed manually. Do not request/store/bypass the device credential. All non-UI cutover gates are already PASS.
 - 857906 has no blocker and is already canonical `completed`; no CI polling or retry remains.
 - Local Android build/device/real-DB work is available through Remote Desktop Commander on Fedora.
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
-- Physical Pixel 8a was last verified online; re-resolve its explicit serial at final cutover rather than assuming continued availability.
 ## Evidence
+- 2026-09-25 23:21 Europe/Copenhagen 913264 final acceptance: evidence SHA `40323bf23d301b4acee574ad211b0e4f99626f13f11d703b7624f207f8afe764`; source DB SHA `c68bb378...` schema22 → target `395a9f90...` schema23 identity `4b9b9639...`; installed v61 APK readback SHA `36775917...`; Home process/resumed activity PASS, six public module aliases PASS, global History/Search PASS, no FATAL/Room mismatch. Data Explorer shell start is correctly denied because activity is `exported=false`; 840907 already holds the offline E2E acceptance.
 - 2026-09-25 23:19 Europe/Copenhagen v61 live readback: Pixel package versionCode/versionName=61; installed base.apk SHA-256 `3677591701b24bf8cc645fa7579c42f0665a48ebb4b522a38fbddcbbe27607b5` exactly matches frozen release; process `com.gernalix.personalhub` observed alive with MainActivity Resumed and no FATAL/Room mismatch. Secure lockscreen prevents final UI inspection.
 - 2026-09-25 23:19 Europe/Copenhagen final staging DB revalidation: `/home/daniele/Documents/ChatGPT/Personal Hub/final-cutover-913264/staging-20260925-2305/personalhub-v23-final.db` user_version=23, Room identity `4b9b96396c8f9e750d13b0e6da70fdd9`, quick_check=ok, integrity_check=ok, foreign_key_check empty, SHA-256 `395a9f90be7924788206da9cafe6ebd191a59f236bca0f2089b11f6fa3139abf`; representative counts contacts=94, places=80, substances=46, sessions=700, word_entries=28918, finance_transactions=2, hub_contexts=4, hub_activity_log=331.
 - 2026-09-25 23:19 Europe/Copenhagen rollback evidence retained under `/home/daniele/Documents/ChatGPT/Personal Hub/final-cutover-913264/rollback-20260925-225915`: source Pixel v22 DB SHA-256 `c68bb37877c32551bbd17dd40d647bb3c7140ee3f9e2b03e749eb1e941b4b737`, v60 APK SHA-256 `d63fbee7e5599b8f2565621e9466ab911858109f44a343df6ed225d919e42a51`. Earlier automated rollback attempt failed because v61 is non-debuggable; no uninstall/clear-data was used. Current v61 state is healthy and should not be disturbed pending UI acceptance.
@@ -352,4 +354,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-After the user manually unlocks the physical Pixel 8a, resume 913264 without reinstalling anything: verify Home and every final user-facing module/History/Search with preserved real data, inspect crash/Room logs, then terminalize PASS and perform final main-only branch cleanup if all checks pass.
+Terminalize PROMPT_ID 913264 PASS without changing artifacts/device state; then audit current PersonalHub branches/worktrees/PRs against main, remove only proven absorbed/obsolete residue, and finish with clean main-only PersonalHub.
