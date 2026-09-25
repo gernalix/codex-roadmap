@@ -76,6 +76,10 @@ class C2IdentityTests(unittest.TestCase):
               content_sha256 TEXT, created_at_utc TEXT NOT NULL,
               materialized_at_utc TEXT, used_at_utc TEXT, cancelled_at_utc TEXT
             );
+            CREATE TABLE prompt_id_allocation_requests(
+              request_id TEXT PRIMARY KEY,prompt_id INTEGER UNIQUE REFERENCES prompt_id_registry(prompt_id),
+              source TEXT NOT NULL,project_id INTEGER,parent_prompt_id INTEGER,created_at_utc TEXT NOT NULL
+            );
             CREATE TABLE prompt_id_events(
               event_id INTEGER PRIMARY KEY AUTOINCREMENT,
               prompt_id INTEGER NOT NULL REFERENCES prompt_id_registry(prompt_id),
@@ -155,6 +159,7 @@ class C2IdentityTests(unittest.TestCase):
             c2_identity.import_megavault_subset(target, source)
             conn = c2_identity.connect_db(target)
             try:
+                conn.execute("BEGIN IMMEDIATE")
                 allocated = c2_identity.allocate_prompt_id(
                     conn,
                     source="c2-intake:test",
@@ -204,6 +209,7 @@ class C2IdentityTests(unittest.TestCase):
             c2_identity.import_megavault_subset(target, source)
             conn = c2_identity.connect_db(target)
             try:
+                conn.execute("BEGIN IMMEDIATE")
                 prompt_id = c2_identity.allocate_prompt_id(
                     conn,
                     source="c2-intake:test",
@@ -227,6 +233,24 @@ class C2IdentityTests(unittest.TestCase):
                     c2_identity.materialize_prompt_id(
                         conn, 123456, content_sha256="b" * 64
                     )
+            finally:
+                conn.close()
+
+    def test_allocation_request_replay_and_conflict(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = self.make_target(root)
+            source = self.make_megavault(root)
+            c2_identity.import_megavault_subset(target, source)
+            conn = c2_identity.connect_db(target)
+            try:
+                conn.execute("BEGIN IMMEDIATE")
+                first = c2_identity.allocate_prompt_id(conn, source="test", request_id="stable", project_id=51)
+                conn.commit()
+                conn.execute("BEGIN IMMEDIATE")
+                self.assertEqual(first, c2_identity.allocate_prompt_id(conn, source="test", request_id="stable", project_id=51))
+                with self.assertRaisesRegex(c2_identity.C2IdentityError, "allocation_request_conflict"):
+                    c2_identity.allocate_prompt_id(conn, source="different", request_id="stable", project_id=51)
             finally:
                 conn.close()
 

@@ -200,6 +200,7 @@ def prepare_codex(
     prompt_id = c2_identity.allocate_prompt_id(
         conn,
         source=source,
+        request_id="c2-prepare-" + work_item_id.replace(":", "-"),
         project_id=project_id,
         parent_prompt_id=parent_prompt_id,
     )

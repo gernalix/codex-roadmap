@@ -347,3 +347,14 @@ BEFORE DELETE ON prompt_id_events
 BEGIN
   SELECT RAISE(ABORT, 'PROMPT_ID_EVENT_IMMUTABLE');
 END;
+
+
+-- Preserve allocator request replay identity across the authority migration.
+CREATE TABLE IF NOT EXISTS prompt_id_allocation_requests (
+  request_id TEXT PRIMARY KEY CHECK(length(request_id) BETWEEN 1 AND 180
+    AND request_id NOT GLOB '*[^A-Za-z0-9._-]*'),
+  prompt_id INTEGER NOT NULL UNIQUE REFERENCES prompt_id_registry(prompt_id)
+    ON UPDATE CASCADE ON DELETE RESTRICT,
+  source TEXT NOT NULL, project_id INTEGER, parent_prompt_id INTEGER,
+  created_at_utc TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);

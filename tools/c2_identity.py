@@ -6,13 +6,14 @@ from contextlib import closing
 from datetime import datetime, timezone
 import hashlib
 import json
+import re
 from pathlib import Path
 import secrets
 import sqlite3
 from typing import Any
 
 IDENTITY_IMPORT_META = "c2_identity_import_version"
-IDENTITY_IMPORT_VERSION = "1"
+IDENTITY_IMPORT_VERSION = "2"
 PROMPT_ID_MIN = 100000
 PROMPT_ID_MAX = 999999
 
@@ -54,6 +55,7 @@ IMPORT_TABLES = (
     "project_operations",
     "prompt_id_registry",
     "prompt_id_events",
+    "prompt_id_allocation_requests",
 )
 
 def _table_columns(conn: sqlite3.Connection, table: str) -> list[str]:
@@ -279,12 +281,25 @@ def allocate_prompt_id(
     conn: sqlite3.Connection,
     *,
     source: str,
+    request_id: str | None = None,
     project_id: int | None = None,
     parent_prompt_id: int | None = None,
 ) -> int:
     source = str(source).strip()
     if not source or source.startswith("historical-"):
         raise C2IdentityError("invalid_prompt_id_source")
+    if not conn.in_transaction:
+        raise C2IdentityError("allocator_transaction_required")
+    if request_id is not None:
+        if not re.fullmatch(r"[A-Za-z0-9._-]{1,180}", request_id):
+            raise C2IdentityError("invalid_request_id")
+        existing = conn.execute(
+            "SELECT * FROM prompt_id_allocation_requests WHERE request_id=?", (request_id,)
+        ).fetchone()
+        if existing:
+            if (existing["source"],existing["project_id"],existing["parent_prompt_id"]) != (source,project_id,parent_prompt_id):
+                raise C2IdentityError("allocation_request_conflict")
+            return int(existing["prompt_id"])
     if project_id is not None:
         resolve_project_id(conn, project_id)
     if parent_prompt_id is not None:
@@ -324,6 +339,13 @@ def allocate_prompt_id(
            VALUES(?,'allocated',?,?)""",
         (prompt_id, now, source),
     )
+    if request_id is not None:
+        conn.execute(
+            """INSERT INTO prompt_id_allocation_requests
+               (request_id,prompt_id,source,project_id,parent_prompt_id,created_at_utc)
+               VALUES(?,?,?,?,?,?)""",
+            (request_id,prompt_id,source,project_id,parent_prompt_id,now),
+        )
     return prompt_id
 
 def _registry_row(conn: sqlite3.Connection, prompt_id: int) -> sqlite3.Row:
@@ -426,6 +448,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     alloc = sub.add_parser("allocate")
     alloc.add_argument("--source", required=True)
+    alloc.add_argument("--request-id", required=True)
     alloc.add_argument("--project-id")
     alloc.add_argument("--parent-prompt-id", type=int)
 
@@ -463,6 +486,7 @@ def main(argv: list[str] | None = None) -> int:
                         prompt_id = allocate_prompt_id(
                             conn,
                             source=args.source,
+                            request_id=args.request_id,
                             project_id=project_id,
                             parent_prompt_id=args.parent_prompt_id,
                         )
