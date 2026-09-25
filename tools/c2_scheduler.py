@@ -137,8 +137,12 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120):
     prior = conn.execute('SELECT result_json FROM work_item_scheduler_events WHERE event_key=?', (event_key,)).fetchone()
     if prior:
         return json.loads(prior[0])
-    # Every observed running item counts, including adopted legacy runs.
-    active = conn.execute("SELECT COUNT(*) FROM work_items WHERE status='running'").fetchone()[0]
+    # Imported task-state roots can say running without owning a C2 worker.
+    # Count only actual leases and adopted prompt-backed executions.
+    active = conn.execute('''SELECT COUNT(*) FROM work_items w
+      WHERE w.status='running' AND (w.prompt_id IS NOT NULL OR EXISTS(
+        SELECT 1 FROM work_item_runs r WHERE r.work_item_id=w.work_item_id
+        AND r.state IN ('claimed','running','recovering')))''').fetchone()[0]
     results = []
     candidates = conn.execute('''SELECT w.* FROM v_work_item_runnable w
       ORDER BY CASE

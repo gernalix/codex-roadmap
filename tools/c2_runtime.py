@@ -117,7 +117,11 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
             ELSE 3 END,
             COALESCE(w.sort_order,2147483647),w.work_item_id''')]
-    statuses=[tuple(r) for r in db.execute('SELECT work_item_id,status FROM work_items WHERE status="running" ORDER BY work_item_id')]
+    statuses=[tuple(r) for r in db.execute('''SELECT w.work_item_id,w.status FROM work_items w
+       WHERE w.status='running' AND (w.prompt_id IS NOT NULL OR EXISTS(
+         SELECT 1 FROM work_item_runs r WHERE r.work_item_id=w.work_item_id
+         AND r.state IN ('claimed','running','recovering')))
+       ORDER BY w.work_item_id''')]
     dependencies=[tuple(r) for r in db.execute('''SELECT d.work_item_id,d.depends_on_work_item_id,w.status
           FROM work_item_dependencies d JOIN work_items w ON w.work_item_id=d.depends_on_work_item_id
           ORDER BY d.work_item_id,d.depends_on_work_item_id''')]

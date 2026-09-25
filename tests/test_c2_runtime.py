@@ -11,6 +11,26 @@ from test_c2_intake import C2IntakeTests
 
 
 class RuntimeTests(unittest.TestCase):
+    def test_imported_running_state_does_not_block_event(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                writer.execute("UPDATE work_items SET status='running' WHERE prompt_id='123456'")
+                for n in range(3):
+                    orphan=c2_intake.add_work_item(writer,title='Imported '+str(n),repo='imported-'+str(n))
+                    writer.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",
+                        (orphan['work_item_id'],))
+                item=c2_intake.add_work_item(writer,title='Ready',repo='independent')
+                c2_scheduler.configure(writer,item['work_item_id'],activity='native',command=['true'])
+                writer.commit()
+            submitted=[]
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                result=c2_runtime.advance(snapshot,submit=lambda op,args,key:submitted.append(op),
+                    launch=lambda _:None,launch_notify=lambda _:None,now=1,max_parallel=2)
+            self.assertEqual(1,result['ready'])
+            self.assertEqual(['schedule'],submitted)
+
     def test_snapshot_to_writer_then_worker_without_duplicate_schedule(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=C2IntakeTests().make_cutover_db(Path(tmp))
