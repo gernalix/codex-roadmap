@@ -24,9 +24,10 @@ Identify why Grindr Web shows “Something went wrong / Check your internet conn
 - [x] Apply the minimum targeted fix/workaround to the real browser flow.
 - [x] Verify the real normal browser succeeds after login/reload; retest private/incognito only if still relevant.
 - [x] Record final evidence and cleanup temporary diagnostic runtime/profile.
+- [x] Replacement-worker checkpoint: verify terminal state against current `origin/main` and persist it without repeating completed diagnostics.
 
 ## Current step
-Task complete. The user confirmed that the real default-profile Chrome shows the normal authenticated Grindr interface after a clean navigation to `/chat`; temporary diagnostic browser processes/profiles were then removed.
+Task complete. The user confirmed that the real default-profile Chrome shows the normal authenticated Grindr interface after a clean navigation to `/chat`; temporary diagnostic browser processes/profiles were then removed. Replacement-worker resume on 2026-09-25 revalidated the terminal state against current `origin/main`; no diagnostics need repetition.
 
 ## Verified facts
 - User reports the same generic failure immediately after login in Chrome, Firefox, and private/incognito mode.
@@ -82,6 +83,7 @@ Task complete. The user confirmed that the real default-profile Chrome shows the
 - User confirmed the real normal Chrome is authenticated and renders the normal Grindr interface after that navigation.
 - Stopped all task-owned Grindr diagnostic Chrome processes and removed `/home/daniele/.cache/grindr-cdp-profile` and `/home/daniele/.cache/grindr-normal-current-clone`; ports 9224/9225 are no longer listening.
 - 2026-09-25 checkpoint refresh: canonical `codex-roadmap` was synchronized and this terminal task state was re-read; there is no remaining work or blocker to resume.
+- 2026-09-25 replacement-worker checkpoint: current `origin/main` state was re-read from an isolated clean worktree because the primary checkout contains an unrelated staged supervisor change; this Grindr task remains terminal with no remaining work or blockers.
 
 ## Remaining
 None.
@@ -103,6 +105,7 @@ None.
 - User confirmation after that navigation: normal authenticated Grindr interface; no generic error.
 - Cleanup verification: no task-owned Grindr diagnostic Chrome process remained, temporary diagnostic profile directories were absent, and ports 9224/9225 were not listening.
 - 2026-09-25 checkpoint refresh after guarded roadmap sync confirmed the persisted terminal state is internally complete: checklist complete, `Remaining=None`, `Blockers=None`, and one terminal `Next action`.
+- Replacement-worker verification used current `origin/main` at `23d94ad05550769a6a9095320f084ab9ca1aba19` as its base and did not alter or include the unrelated staged `CHATGPT-20260924-RDC-SUPERVISOR.md` change from the primary checkout.
 - No authentication values or chat contents are stored in this state file.
 
 ## Acceptance criteria
