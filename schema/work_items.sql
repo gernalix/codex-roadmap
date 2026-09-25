@@ -181,3 +181,169 @@ WHERE w.status='pending'
       AND t.tag LIKE 'manual-prerequisite:%'
   )
 ORDER BY COALESCE(w.sort_order,2147483647), w.created_at, w.work_item_id;
+
+
+-- C2-owned project/repository identity and PROMPT_ID registry imported once from MegaVault.
+CREATE TABLE IF NOT EXISTS projects (
+  project_id INTEGER PRIMARY KEY,
+  slug TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL,
+  status TEXT NOT NULL,
+  archived INTEGER NOT NULL DEFAULT 0 CHECK(archived IN (0,1)),
+  created_source TEXT NOT NULL,
+  notes TEXT
+);
+CREATE TABLE IF NOT EXISTS project_aliases (
+  alias TEXT PRIMARY KEY,
+  project_id INTEGER NOT NULL REFERENCES projects(project_id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+CREATE TABLE IF NOT EXISTS repositories (
+  repository_id TEXT PRIMARY KEY,
+  project_id INTEGER NOT NULL REFERENCES projects(project_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  location TEXT NOT NULL,
+  kind TEXT NOT NULL,
+  branch TEXT,
+  head TEXT,
+  status TEXT,
+  canonical INTEGER NOT NULL DEFAULT 1 CHECK(canonical IN (0,1)),
+  repository_kind TEXT,
+  host_id TEXT,
+  worktree_path TEXT,
+  remote_url TEXT,
+  runtime_path TEXT
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_repositories_one_canonical_worktree
+  ON repositories(project_id) WHERE repository_kind='local_worktree' AND canonical=1;
+CREATE INDEX IF NOT EXISTS idx_repositories_project_kind
+  ON repositories(project_id,repository_kind,canonical,repository_id);
+CREATE TABLE IF NOT EXISTS project_components (
+  component_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  project_id INTEGER NOT NULL REFERENCES projects(project_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  component TEXT NOT NULL,
+  type TEXT NOT NULL,
+  path TEXT NOT NULL,
+  purpose TEXT NOT NULL,
+  UNIQUE(project_id,component)
+);
+CREATE INDEX IF NOT EXISTS idx_project_components_project
+  ON project_components(project_id,type,component);
+CREATE TABLE IF NOT EXISTS project_operations (
+  operation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  project_id INTEGER NOT NULL REFERENCES projects(project_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  operation TEXT NOT NULL,
+  command TEXT NOT NULL,
+  scope TEXT NOT NULL,
+  host TEXT,
+  workdir TEXT,
+  risk_level TEXT NOT NULL CHECK(risk_level IN ('low','medium','high')),
+  notes TEXT,
+  UNIQUE(project_id,operation)
+);
+CREATE INDEX IF NOT EXISTS idx_project_operations_project
+  ON project_operations(project_id,risk_level,operation);
+
+CREATE TABLE IF NOT EXISTS prompt_id_registry (
+  prompt_id INTEGER PRIMARY KEY CHECK (prompt_id BETWEEN 100000 AND 999999),
+  parent_prompt_id INTEGER
+    REFERENCES prompt_id_registry(prompt_id)
+    ON UPDATE CASCADE ON DELETE RESTRICT,
+  project_id INTEGER
+    REFERENCES projects(project_id)
+    ON UPDATE CASCADE ON DELETE SET NULL,
+  source TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'allocated'
+    CHECK (status IN ('allocated','materialized','used','cancelled')),
+  content_sha256 TEXT
+    CHECK (
+      content_sha256 IS NULL OR (
+        length(content_sha256)=64
+        AND content_sha256 NOT GLOB '*[^0-9a-f]*'
+      )
+    ),
+  created_at_utc TEXT NOT NULL,
+  materialized_at_utc TEXT,
+  used_at_utc TEXT,
+  cancelled_at_utc TEXT,
+  CHECK (parent_prompt_id IS NULL OR parent_prompt_id <> prompt_id),
+  CHECK (
+    (status='allocated' AND content_sha256 IS NULL
+      AND materialized_at_utc IS NULL AND used_at_utc IS NULL AND cancelled_at_utc IS NULL)
+    OR
+    (status='materialized' AND content_sha256 IS NOT NULL
+      AND materialized_at_utc IS NOT NULL AND used_at_utc IS NULL AND cancelled_at_utc IS NULL)
+    OR
+    (status='used' AND content_sha256 IS NOT NULL
+      AND materialized_at_utc IS NOT NULL AND used_at_utc IS NOT NULL AND cancelled_at_utc IS NULL)
+    OR
+    (status='cancelled' AND used_at_utc IS NULL AND cancelled_at_utc IS NOT NULL
+      AND ((content_sha256 IS NULL AND materialized_at_utc IS NULL)
+        OR (content_sha256 IS NOT NULL AND materialized_at_utc IS NOT NULL)))
+  )
+);
+CREATE INDEX IF NOT EXISTS idx_prompt_id_parent ON prompt_id_registry(parent_prompt_id);
+CREATE INDEX IF NOT EXISTS idx_prompt_id_project_created ON prompt_id_registry(project_id,created_at_utc);
+CREATE INDEX IF NOT EXISTS idx_prompt_id_status ON prompt_id_registry(status,created_at_utc);
+
+CREATE TABLE IF NOT EXISTS prompt_id_events (
+  event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  prompt_id INTEGER NOT NULL
+    REFERENCES prompt_id_registry(prompt_id)
+    ON UPDATE CASCADE ON DELETE RESTRICT,
+  event_type TEXT NOT NULL
+    CHECK (event_type IN ('allocated','materialized','used','cancelled')),
+  event_at_utc TEXT NOT NULL,
+  detail TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_prompt_id_events_prompt
+  ON prompt_id_events(prompt_id,event_id);
+
+CREATE TRIGGER IF NOT EXISTS prompt_id_registry_no_delete
+BEFORE DELETE ON prompt_id_registry
+BEGIN
+  SELECT RAISE(ABORT, 'PROMPT_ID_REUSE_FORBIDDEN');
+END;
+
+CREATE TRIGGER IF NOT EXISTS prompt_id_identity_immutable
+BEFORE UPDATE OF prompt_id,parent_prompt_id,project_id,source,created_at_utc
+ON prompt_id_registry
+WHEN
+  NEW.prompt_id IS NOT OLD.prompt_id
+  OR NEW.parent_prompt_id IS NOT OLD.parent_prompt_id
+  OR NEW.project_id IS NOT OLD.project_id
+  OR NEW.source IS NOT OLD.source
+  OR NEW.created_at_utc IS NOT OLD.created_at_utc
+BEGIN
+  SELECT RAISE(ABORT, 'PROMPT_ID_IDENTITY_IMMUTABLE');
+END;
+
+CREATE TRIGGER IF NOT EXISTS prompt_id_hash_immutable_after_set
+BEFORE UPDATE OF content_sha256 ON prompt_id_registry
+WHEN OLD.content_sha256 IS NOT NULL
+  AND NEW.content_sha256 IS NOT OLD.content_sha256
+BEGIN
+  SELECT RAISE(ABORT, 'PROMPT_ID_CONTENT_IMMUTABLE');
+END;
+
+CREATE TRIGGER IF NOT EXISTS prompt_id_state_transition_guard
+BEFORE UPDATE OF status ON prompt_id_registry
+WHEN NEW.status IS NOT OLD.status
+  AND NOT (
+    (OLD.status='allocated' AND NEW.status IN ('materialized','cancelled'))
+    OR
+    (OLD.status='materialized' AND NEW.status IN ('used','cancelled'))
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'PROMPT_ID_INVALID_STATE_TRANSITION');
+END;
+
+CREATE TRIGGER IF NOT EXISTS prompt_id_events_no_update
+BEFORE UPDATE ON prompt_id_events
+BEGIN
+  SELECT RAISE(ABORT, 'PROMPT_ID_EVENT_IMMUTABLE');
+END;
+
+CREATE TRIGGER IF NOT EXISTS prompt_id_events_no_delete
+BEFORE DELETE ON prompt_id_events
+BEGIN
+  SELECT RAISE(ABORT, 'PROMPT_ID_EVENT_IMMUTABLE');
+END;
