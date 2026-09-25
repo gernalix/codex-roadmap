@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | running | — | — | — | no | no | — | Personal Hub | GPT-6 Luna | low |
 | [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
 | [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1\|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-6 Luna | medium |
@@ -62,6 +61,7 @@
 | [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui\|609279 · Solo inglese e diagnostica Places su richiesta]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4\|663657 · Chiudere e integrare tag e alert di Places]] | completed | 2026-09-19T00:30:43Z | 2026-09-19T00:30:43Z | PASS | sì | no | [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5\|380812]] | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/255970 personalhub-english-only-places-ci-closure-v1\|255970 · English-only, diagnostica Places e CI in un solo passaggio]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | completed | — | — | PASS | no | no | — | Personal Hub | GPT-6 Luna | low |
 | [[obsidian/Prompts/477616 personalhub-english-only-places-ci-closure-v2\|477616 · English-only, diagnostica Places e CI in un solo passaggio]] | completed | 2026-09-19T04:58:06Z | 2026-09-19T04:58:06Z | PASS | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/793678 personalhub-zombie-function-cleanup-closure\|793678 · Chiudi residui zombie dei moduli PersonalHub]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2\|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] | completed | 2026-09-19T14:04:21Z | 2026-09-19T14:25:53Z | PASS | sì | no | — | PersonalHub | GPT-5.6 Terra | medium |

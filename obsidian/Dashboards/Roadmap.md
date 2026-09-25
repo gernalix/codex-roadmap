@@ -5,7 +5,8 @@
 ## Lanciabili adesso
 
 - [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1|851204 · Bonificare radicalmente Datasette Alerts]]
+- [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]]
 
 ## In esecuzione
 
-- [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]]
+- Nessuno.

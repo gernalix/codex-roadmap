@@ -5,7 +5,6 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `running`
 - [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]] · `pending`
 - [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] · `superseded`
 - [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844 · Chiudere il residuo del merge capsule]] · `completed`
@@ -20,6 +19,7 @@ tags:
 - [[obsidian/Prompts/609279 personalhub-english-only-places-diagnostics-ui|609279 · Solo inglese e diagnostica Places su richiesta]] · `superseded`
 - [[obsidian/Prompts/663657 personalhub-shared-alerts-places-tags-integration-v4|663657 · Chiudere e integrare tag e alert di Places]] · `completed`
 - [[obsidian/Prompts/255970 personalhub-english-only-places-ci-closure-v1|255970 · English-only, diagnostica Places e CI in un solo passaggio]] · `superseded`
+- [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `completed`
 - [[obsidian/Prompts/477616 personalhub-english-only-places-ci-closure-v2|477616 · English-only, diagnostica Places e CI in un solo passaggio]] · `completed`
 - [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]] · `completed`
 - [[obsidian/Prompts/223103 personalhub-shared-alerts-places-tags-integration-v3|223103 · Chiudere e integrare tag e alert di Places]] · `superseded`
