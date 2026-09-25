@@ -1,19 +1,19 @@
 ---
 prompt_id: 913264
-status: pending
+status: running
 project_id: 49
 model: GPT-6 Sol
 reasoning: medium
 tags:
   - priority:p0
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 913264 · Migra il DB finale e installa l’APK definitivo sul Pixel
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-final-live-db-migration-apk-pixel-v1|Apri prompt]]
 - **Primo lancio:** —

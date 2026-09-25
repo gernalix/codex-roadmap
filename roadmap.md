@@ -2,8 +2,8 @@
 
 > Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.
 
-1. [[prompts/c2-datasette-alerts-radical-hygiene-v1|c2-datasette-alerts-radical-hygiene-v1]]
-2. [[prompts/personalhub-final-live-db-migration-apk-pixel-v1|personalhub-final-live-db-migration-apk-pixel-v1]]
+1. [[prompts/personalhub-final-live-db-migration-apk-pixel-v1|personalhub-final-live-db-migration-apk-pixel-v1]]
+2. [[prompts/c2-datasette-alerts-radical-hygiene-v1|c2-datasette-alerts-radical-hygiene-v1]]
 3. [[prompts/chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1]]
 4. [[prompts/grindr-export-chatgpt-desktop-end-to-end-v1|grindr-export-chatgpt-desktop-end-to-end-v1]]
 5. [[prompts/grindr-web-exporter-post-login-resume-v1|grindr-web-exporter-post-login-resume-v1]]
