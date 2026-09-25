@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 09:02 Europe/Copenhagen
+Updated: 2026-09-25 09:15 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -60,8 +60,10 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [x] Re-synchronize the P0 operational lane after chat handoff; verify clean `task/857906` HEAD and remote both equal `9d835d8198f7b088f6577cc404306e2a50d5a2aa`, with roadmap guarded pull PASS at `12ef9f8`.
 - [x] Replace People legacy contact/global History runtime with the shared scoped History/Search route; remove `ContactHistoryCapsule`/owner/state while preserving and correctly re-wiring the separate initiative/calendar feature.
 - [x] Replace Places legacy `ui/history/HistoryScreen` with a domain-only Visits surface; remove its duplicate change-history undo/redo UI and expose shared Places History/Search separately via `moduleHistoryUri("places")`.
-- [ ] Replace Timer and WordPulse legacy change-history/timeline surfaces, then confirm Substances/Soldi contain only domain chronology plus a shared module History/Search entry.
-- [ ] Add/confirm legacy-route architecture guard, run final targeted module tests and canonical `Pixel_8a` emulator QA for global + at least two fixed-module entry points.
+- [x] Replace Timer and WordPulse legacy change-history/timeline surfaces; confirm Substances/Soldi retain domain chronology and expose the shared scoped History/Search route.
+- [x] Remove the user-facing Git History/Time Machine settings page and technical Git-history injection from temporal episode search; keep the Git backend for sync/recovery.
+- [x] Add the History/Search architecture guard and pass final consumer gates, touched-module compiles, app compile and `checkArchitectureBoundaries`.
+- [ ] Run canonical `Pixel_8a` emulator QA for global History/Search + at least two fixed-module entry points, including live filters, hidden before/after text search and one safe compensating undo.
 
 ### Phase 4 — 707603 Git History / restore
 - [ ] Run 707603 on the resulting schema.
@@ -93,9 +95,11 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-857906 is active on `task/857906`. Shared host work plus People/Places convergence is checkpointed and pushed at `a1541d99e491228f76f61d792d1fcb396c8cfebd`; schema remains 23. People no longer has a parallel history capsule/runtime, and Places now separates domain Visits from shared change History/Search. Current phase is Timer/WordPulse convergence, followed by Substances/Soldi confirmation.
+857906 is active on `task/857906`. Full source convergence is pushed through `1f94c49e6e7c88dbf337214b5d389a5321832831`; schema remains 23. All six modules now reuse the host-owned scoped History/Search route, legacy People/Places/Timer/WordPulse change-history surfaces are removed, Settings no longer exposes Git History/Time Machine, and temporal episode search no longer injects technical Git events. Current phase is canonical `Pixel_8a` emulator QA only.
 
 ## Verified facts
+- 857906 source convergence is pushed through PersonalHub `task/857906@1f94c49e6e7c88dbf337214b5d389a5321832831` (preceded by `0243e2ba5372876a73ef55ec17a1c60686723e3a`). Timer no longer exposes the Timeline screen/dialogs; WordPulse no longer exposes its Timeline tab; Substances preserves editable intake chronology and Soldi preserves transaction/domain chronology while both expose shared module History/Search. Settings Git History/Time Machine UI is removed; `HubTemporalSearchScreen` no longer mixes Git technical events into episode search.
+- Final source gates before emulator QA PASS on the converged branch: consumer-forbid for removed legacy symbols PASS; `:feature:multitimetracker`, `:feature:wordpulse`, `:feature:sostanze`, `:feature:soldi`, `:feature:supercontacts` compile gates PASS; `:app:compileDebugKotlin` PASS; `checkArchitectureBoundaries` PASS; `git diff --check` PASS. The architecture guard now rejects the exact removed legacy History/Timeline surfaces and requires all six feature modules to route History/Search through `HubDeepLinkContract.moduleHistoryUri(...)`.
 - 857906 People/Places checkpoint is pushed at PersonalHub `a1541d99e491228f76f61d792d1fcb396c8cfebd` and matches `origin/task/857906`. People consumer gate forbids `ContactHistoryCapsule`, `ContactHistoryOwner` and `ContactHistoryState`; `:feature:supercontacts:compileDebugKotlin` PASS. Places old package `com.gernalix.luoghi.ui.history` is absent by consumer gate; `:feature:luoghi:compileDebugKotlin` PASS after converting the surface to domain-only Visits and adding shared module History/Search.
 - 2026-09-25 takeover checkpoint: guarded roadmap synchronization PASS to `12ef9f89eba6e32f006e280d2f4e715115ca7ff0`; the pre-sync dirty state files were proven byte-identical to `origin/main` before realignment. PersonalHub `task/857906` is clean at local+remote `9d835d8198f7b088f6577cc404306e2a50d5a2aa`; no WIP was lost.
 - 857906 shared-engine checkpoint is safely committed+pushed as `9d835d8198f7b088f6577cc404306e2a50d5a2aa` on `task/857906` (remote hash verified exact). Home now has one 🔍 History/Search destination; Search/Event deep links route to the same `HubHistorySearchScreen`; module scoping is represented by the public `moduleHistoryUri` contract and hidden immutable scope state. No Room schema change; schema remains 23.
@@ -210,6 +214,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 857906 source-side legacy convergence completed and pushed through `1f94c49`: shared host engine remains the only user-facing change History/Search UI; People/Places/Timer/WordPulse duplicate browsers are removed; Substances/Soldi domain chronology is preserved with shared History/Search entry points; Git History/Time Machine user UI and temporal-search Git injection are removed; source/compile/architecture gates PASS.
 - 857906 People + Places legacy-surface sub-goal completed and pushed at `a1541d9`: People parallel history owner/state removed and history buttons route to the host shared engine (entity-scoped for contact detail); initiative/calendar stays domain-owned. Places legacy HistoryScreen/package became Visits, user-facing undo/redo change-history controls were removed, and a separate Places shared History/Search entry was added. Both feature compile gates PASS.
 - New chat ownership checkpoint completed for PersonalHub P0 / 857906: roadmap re-synchronized through the guarded pull, current PH task hash/remote/worktree cleanliness verified, and execution resumes from the existing tested `9d835d8` shared-engine checkpoint rather than repeating discovery.
 - 857906 block 1 completed and checkpointed at PersonalHub `9d835d8`: shared bounded Activity-backed History/Search host, semantic humanization/grouping, live filters, Home/deep-link unification, conservative undo refresh, public fixed-module deep-link contract, targeted tests, compile, consumer gate and architecture gate all PASS.
@@ -255,26 +260,25 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
-- Finish 857906 legacy-surface convergence for Timer and WordPulse; confirm Substances/Soldi retain only domain chronological data and expose the shared module History/Search without adding a parallel engine.
-- Finish 857906 legacy-route guard + targeted module tests + canonical Pixel_8a emulator QA, then integrate 857906 through the canonical writer flow.
+- Finish 857906 with canonical `Pixel_8a` emulator QA on the exact current branch, then record terminal PASS and integrate `task/857906` through the canonical repository writer flow.
 - Run/review 707603 on the resulting final-ish schema.
 - Run/review 840907, including true offline behavior and artifact-size impact.
 - Run/review 788606 and freeze exact release commit, schema version/identity, APK/AAB hashes/paths and shrink state.
 - Before final migration, inspect the live Pixel DB schema/identity and take immutable backup.
 - Execute external live DB migration to the exact frozen final schema; preserve rollback and validate data/integrity/FK.
 - Install exact final APK on primary Pixel with explicit serial and verify Home + all modules with real data.
-- Integrate `task/920550` and `chatgpt/workflowy-integration` into `main` at their proper serial points; after final containment proof delete them plus `chatgpt/105883-since-when` (already 0-ahead) and any later temporary PH branches.
 - Verify no open PH PR/issue/action remains relevant/unprocessed.
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
-- No active blocker for the current 857906 legacy-surface convergence phase; Fedora access is available through Remote Desktop Commander.
+- No active blocker for 857906; only canonical emulator acceptance remains, and Fedora/emulator access is available through Remote Desktop Commander.
 - Local Android build/device/real-DB work requires Codex/local Fedora access.
 - The actual live Pixel DB schema/identity is not yet read and must not be guessed.
 - Final DB target cannot be frozen until upstream PH tasks are complete.
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- PersonalHub source convergence checkpoint: `task/857906@1f94c49e6e7c88dbf337214b5d389a5321832831` pushed to `origin/task/857906`; source block commit `0243e2ba5372876a73ef55ec17a1c60686723e3a`; worktree clean after follow-up push. Final consumer-forbid PASS, touched-feature compiles PASS, app compile PASS, `ARCHITECTURE_BOUNDARIES=PASS`, and `git diff --check` PASS.
 - Mandatory checkpoint refresh 2026-09-25 09:02: guarded roadmap sync PASS; PersonalHub `task/857906` is clean and local/remote HEAD remain exactly `a1541d99e491228f76f61d792d1fcb396c8cfebd`; checklist/current step/remaining/blockers/Next action were re-read from Git and remain authoritative.
 - PersonalHub `task/857906@a1541d99e491228f76f61d792d1fcb396c8cfebd`: remote hash exact; clean worktree after push. People consumer-forbid PASS plus `:feature:supercontacts:compileDebugKotlin` PASS. Places old-package forbid PASS plus `:feature:luoghi:compileDebugKotlin` PASS. `git diff --check` PASS before commit.
 - Takeover verification 2026-09-25: guarded roadmap pull PASS at `12ef9f89eba6e32f006e280d2f4e715115ca7ff0`; PersonalHub worktree status clean; local HEAD and `origin/task/857906` both `9d835d8198f7b088f6577cc404306e2a50d5a2aa`.
@@ -302,4 +306,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-From `task/857906@a1541d9`, use the existing CODE_MAP Timer/WordPulse targets only: replace their user-facing duplicate Timeline/change-history entry points with the public scoped `HubDeepLinkContract.moduleHistoryUri(moduleId)` route while preserving Timer session operations and WordPulse session/metrics domain data. Then confirm Substances/Soldi and add the targeted legacy-route architecture guard. No schema bump.
+From clean `task/857906@1f94c49e6e7c88dbf337214b5d389a5321832831`, run one focused canonical `Pixel_8a` emulator QA on the exact branch: Home 🔍 opens ALL History/Search; date/module/text filters react live; search finds human text present only in before/after detail; one safe undo creates a compensating entry; open at least two different modules and verify both launch the same screen in immutable MODULE scope without module filter; verify removed legacy History/Timeline/Git-History entry points are not reachable. No physical device, release build or schema bump.
