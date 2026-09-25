@@ -44,17 +44,19 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - [x] Create and push synthetic disposable rollover fixture; source 6a988b5.
 - [x] Reject provisional /c/WEB: URLs as successful rollovers; source 2cedbcf.
 - [x] Fix send-message race by waiting for the real send button; source e3f334c.
-- [x] Increase rollover persistence window and systemd watchdog headroom; current source ea8dc9a.
-- [x] Re-run suite after rollover hardening: 12/12 PASS.
-- [ ] Replace sleep/poll URL persistence detection with Playwright event-driven waiting and verify one real fresh-chat rollover end-to-end.
-- [ ] Disable/remove the synthetic worker after PASS and record final acceptance evidence.
+- [x] Increase rollover persistence window and systemd watchdog headroom; source ea8dc9a.
+- [x] Replace polling with persisted-URL waiting and complete one real fresh-chat rollover end-to-end.
+- [x] Disable the synthetic worker after PASS and record final acceptance evidence.
+- [x] Detect `Too many requests` dialogs, dismiss them automatically, and stop automatic reloads on rate-limit responses; source 7eab77e.
+- [x] Add account-wide persistent rate-limit backoff, explicit-resume semantics for human-required workers, and bounded failed-rollover accounting; source 19f2fd1.
+- [x] Re-run the suite after rate-limit hardening: 13/13 PASS.
 
 ## Current step
-The synthetic worker is safely isolated and has repeatedly selected the correct proactive rollover action. The remaining defect is limited to detecting when ChatGPT converts the provisional /c/WEB: URL into its persisted UUID: a manual probe showed the UUID immediately after new_chat returned, indicating the current sleep/poll loop can miss the frontend navigation event. Replace that polling with Playwright event-driven waiting, then rerun the same synthetic rollover.
+Core supervisor acceptance is complete. The synthetic rollover worker reached a fresh replacement chat from its pushed checkpoint and is disabled. A later account-wide `Too many requests` incident exposed a new safety gap; the supervisor is now hardened to auto-dismiss that dialog, treat rate limits as non-reloadable stalls, and place all autonomous workers into a persistent global backoff before any more model requests.
 
 ## Verified facts
-- Supervisor source repo current pushed main: ea8dc9a.
-- Unit suite: 12/12 PASS.
+- Supervisor source repo current pushed main: 19f2fd1.
+- Unit suite: 13/13 PASS.
 - Dedicated ChatGPT profile is authenticated and CDP is usable.
 - PersonalHub worker CHATGPT-20260924-PERSONALHUB-P0 is registered and has already responded to a real supervisor checkpoint request.
 - Grindr worker CHATGPT-20260924-GRINDR-WEB-LOGIN-ERROR is registered against a pushed checkpoint and is healthy after the transcript-error detector fix.
@@ -62,9 +64,10 @@ The synthetic worker is safely isolated and has repeatedly selected the correct 
 - Synthetic fixture is pushed in chatgpt-rdc-supervisor at commit 6a988b5; its initial persisted chat URL is https://chatgpt.com/c/6ab61996-1c7c-83eb-bf0f-340e4b32767f.
 - Synthetic run-once correctly chose action=rollover, reason=proactive context rollover, from pushed checkpoint 6a988b50b750502b8a46ccb6f21f4d61e5875627.
 - Failed synthetic rollover attempts did not overwrite the registry URL; they stopped safely as human-required.
-- Manual new_chat probe returned provisional https://chatgpt.com/c/WEB:e92896a9-54ef-41cf-a9af-698bc38730fc, and immediately after return the same page reported persisted URL https://chatgpt.com/c/6ab61af3-6f04-83eb-9963-1b5b1b102387 with two turns and title "Continua task worker sostitutivo".
-- That probe proves the handoff message is sent and ChatGPT does create the replacement conversation; the unresolved issue is reliable observation of the final URL transition inside new_chat().
-- systemd watchdog headroom is now 180 seconds; browser health timer remains independent.
+- Synthetic rollover acceptance is complete: a fresh replacement worker was reached, responded `READY`, and the synthetic task is now disabled.
+- During the later rate-limit incident, four visible `Too many requests` dialogs were found across supervised ChatGPT tabs; RDC dismissed them and a follow-up probe reported `rate_limit_dialogs_remaining 0`.
+- The global cooldown is persisted in `~/.local/state/chatgpt-rdc-supervisor/global.json`; the deployed supervisor consults it before any autonomous task action.
+- systemd watchdog headroom is 180 seconds; browser health timer remains independent.
 - Browser supervision stores structural metadata only; raw private transcripts are not persisted.
 
 ## Decisions
@@ -73,8 +76,9 @@ The synthetic worker is safely isolated and has repeatedly selected the correct 
 - Two rollovers on one unchanged checkpoint exhaust the automatic rollover budget.
 - Error detection must use platform UI surfaces, never arbitrary conversation text.
 - A rollover is successful only after a persisted non-WEB conversation URL is observed.
-- Use Playwright event-driven URL/navigation waiting rather than extending fixed sleeps further.
-- Final rollover acceptance continues on the synthetic worker only.
+- Use persisted conversation URLs only for rollover success; provisional `/c/WEB:` URLs never count as success.
+- Treat `Too many requests` as account-wide: auto-dismiss its modal, never reload it automatically, and back off all autonomous workers for the configured cooldown.
+- A `human-required` worker is terminal until an explicit `resume`, which resets its recovery state instead of silently retrying.
 
 ## Completed
 - Core supervisor implemented, deployed and pushed.
@@ -85,24 +89,24 @@ The synthetic worker is safely isolated and has repeatedly selected the correct 
 - Transcript false-positive detector fixed.
 - Provisional URL handling and send-button race fixed.
 - Synthetic Git-backed worker created and exercised without touching active user workloads.
-- Current source hardening through ea8dc9a deployed.
+- Fresh-chat rollover acceptance completed and synthetic worker disabled.
+- Rate-limit dialog handling committed and pushed in 7eab77e.
+- Global backoff and explicit-resume hardening committed and pushed in 19f2fd1.
+- Updated source is deployed; chatgpt-rdc-supervisor.service is active.
 
 ## Remaining
-- Replace the new_chat sleep/poll loop with event-driven persisted-URL waiting.
-- Re-run 12-test suite and add/adjust URL-wait regression coverage if practical.
-- Reset only the synthetic worker runtime and rerun one forced rollover.
-- Verify new persisted URL, registry update, rollover_count increment, event-log rollover record, and checkpoint-based handoff.
-- Disable/remove the synthetic worker and checkpoint final PASS.
+- None for the current acceptance scope. If a rate-limit dialog recurs, inspect the new UI surface before changing selectors; do not reintroduce automatic reload/retry storms.
 
 ## Blockers
 None. The remaining issue is a bounded frontend synchronization defect isolated to synthetic rollover acceptance.
 
 ## Evidence
-- Supervisor commits: 1409400, 45f5fa0, f0ee5ea, 6a988b5, 2cedbcf, e3f334c, 0644282, ea8dc9a.
-- 12 unittest cases PASS after latest source changes.
+- Supervisor commits include 1409400, 45f5fa0, f0ee5ea, 6a988b5, 2cedbcf, e3f334c, 0644282, ea8dc9a, 7eab77e, 19f2fd1.
+- 13 unittest cases PASS after the rate-limit hardening.
 - PersonalHub event log recorded action=request-checkpoint followed by status=working.
-- Synthetic run-once logs recorded action=rollover with pushed checkpoint, then safe human-required because persisted URL was not observed in time.
-- Manual probe proved the replacement chat exists with a persisted UUID immediately after new_chat() returns.
+- Synthetic fixture checkpoint records the rollover task complete and the worker disabled.
+- Live RDC probe after mitigation reported zero remaining visible `Too many requests` dialogs.
+- `global.json` records the active rate-limit backoff epoch and chatgpt-rdc-supervisor.service is active.
 - systemd/browser watchdog recovery evidence remains PASS from prior checkpoint.
 
 ## Acceptance criteria
@@ -114,7 +118,8 @@ None. The remaining issue is a bounded frontend synchronization defect isolated 
 - [x] Browser/auth/DOM blockers are surfaced explicitly.
 - [x] Authenticated real-chat checkpoint intervention has been observed.
 - [x] Tests pass, services are deployed, source is pushed.
-- [ ] One real fresh-chat rollover from a pushed checkpoint updates the registry end-to-end.
+- [x] One real fresh-chat rollover from a pushed checkpoint updates the worker end-to-end.
+- [x] Rate-limit dialogs are automatically dismissed and autonomous requests enter a persistent global backoff instead of reloading/retrying.
 
 ## Next action
-Replace new_chat() fixed sleep/poll URL persistence detection with Playwright event-driven waiting for a non-WEB /c/ conversation URL, rerun the synthetic forced rollover, verify registry/event/runtime updates, then disable the synthetic worker and checkpoint final PASS.
+No further action for the current task. Keep the supervisor running with the global backoff in force; only reopen this task if a rate-limit dialog reappears or a registered worker requires explicit resume.
