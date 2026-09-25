@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 20:44 Europe/Copenhagen
+Updated: 2026-09-25 20:49 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -96,7 +96,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-707603 functional acceptance and PR #45 CI are complete. PR #45 is mergeable and all required checks are PASS; canonical roadmap still reports 707603=`running`. The only remaining step for 707603 is targeted single-writer integration of PR #45 followed by canonical PASS terminalization. 840907 must not start before that terminal state is observed.
+707603 acceptance and PR #45 CI are fully PASS, but the targeted single-writer initially rejected integration because GitHub status rollup still contains superseded CANCELLED runs. Root cause is in github-autosync check-rollup handling. Fix `cf616aa` is pushed as github-autosync PR #27 with focused suite 21/21 PASS; wait only for that PR CI/integration, then merge PR #45 and terminalize 707603.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -218,6 +218,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 2026-09-25 20:49 Europe/Copenhagen: diagnosed 707603 integration blocker: single-writer treated superseded CANCELLED duplicate check runs as current failures. Fix `cf616aa` deduplicates by workflow/check and keeps latest pending/failing runs fail-closed; `tests.test_repo_single_writer` 21/21 PASS; github-autosync PR #27 opened.
 - 2026-09-25 20:44 Europe/Copenhagen: 707603 final PR #45 CI gate is fully PASS: instrumentation, unit, both play-preflight jobs, capsule-boundaries and GitGuardian all PASS; no test rerun was performed.
 - 2026-09-25 20:21 Europe/Copenhagen: 707603 acceptance evidence re-used from canonical checkpoint 19: GitDataFinalValidationTest + GitHubDataTransportTest PASS, architecture boundary PASS, HubHistorySearchQaDeviceTest PASS on Pixel_8a AVD; no rerun performed.
 - 2026-09-25 20:15 Europe/Copenhagen: C2 / 175908 verified canonical `completed` from roadmap SQLite; the PH priority hold is released. No PH implementation/test work was repeated during this checkpoint.
@@ -271,7 +272,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
-- Target-integrate PersonalHub PR #45 through the single-writer, then canonicalize 707603 PASS and verify `completed` before starting 840907.
+- Merge github-autosync PR #27 after its CI PASS; then re-run targeted single-writer integration for PersonalHub PR #45, terminalize 707603 PASS, verify `completed`, and only then start 840907.
 - Run/review 840907, including true offline behavior and artifact-size impact.
 - Run/review 788606 and freeze exact release commit, schema version/identity, APK/AAB hashes/paths and shrink state.
 - Before final migration, inspect the live Pixel DB schema/identity and take immutable backup.
@@ -281,7 +282,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
-- No functional/CI blocker remains for 707603; only canonical single-writer merge + terminal state propagation is outstanding.
+- Non-product integration blocker: github-autosync PR #27 CI is pending. Its fix is required so superseded CANCELLED checks do not falsely block the already-green PersonalHub PR #45.
 - User-directed artifact gate: do not retry PH APK/DB compilation, testing, installation or cutover until the remaining PH implementation/test tasks have completed and the final schema/release commit is frozen.
 - 857906 has no blocker and is already canonical `completed`; no CI polling or retry remains.
 - Physical Pixel is currently absent from canonical ADB discovery (`pixel_physical_required_but_absent`); this does not block 857906 and matters only for later final cutover 913264.
@@ -291,6 +292,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- 2026-09-25 20:49 Europe/Copenhagen single-writer regression evidence: `repo_single_writer.integrate_pr(gernalix/PersonalHub,45)` returned `checks-failed` despite all current checks PASS because old CANCELLED duplicates remain in `statusCheckRollup`. Fix branch `task/707603-rollup-fix@cf616aa412663ee6fd05282df0be01d55ecf4f24`; 21/21 unit tests PASS; PR #27 is open and mergeable with CI running.
 - 2026-09-25 20:44 Europe/Copenhagen PR #45 readback: head `6c8b91e1b24ca1a83bad469cc38298abaefcde1e`; instrumentation PASS 16m37s, unit PASS 12m38s, play-preflight PASS 11m3s and 10m37s, capsule-boundaries PASS, GitGuardian PASS. Canonical roadmap at `8047c690a8f28b54c8696b12986f93b6d0e17b04` still reports 707603=`running`, 840907/788606/913264=`pending`.
 - 2026-09-25 20:21 Europe/Copenhagen 707603 integration readback: canonical checkpoint 19 has `remaining=[]`; PR #45 head `6c8b91e1b24ca1a83bad469cc38298abaefcde1e` changes only `GitDataRestoreDeviceTest.kt` and `GitDataFinalValidationTest.kt`; architecture/GitGuardian PASS while Android unit/instrumentation/play-preflight remain pending.
 - 2026-09-25 20:15 Europe/Copenhagen C2 terminality readback: canonical `roadmap.sqlite` on current main reports 175908=`completed`, 707603=`running`, 851204=`pending`. PH priority is therefore released to the already-running 707603 task; no duplicate claim is permitted.
@@ -330,4 +332,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Run the targeted PersonalHub single-writer integration for PR #45; when merged, invoke canonical `roadmap_finish.py` for 707603 PASS, verify roadmap `completed`, then start 840907 from its existing materialization.
+When github-autosync PR #27 CI is PASS, integrate #27 through the protected single-writer; then re-run targeted integration of PersonalHub PR #45, canonicalize 707603 PASS, verify `completed`, and start 840907.
