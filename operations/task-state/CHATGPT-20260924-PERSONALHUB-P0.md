@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 09:58 Europe/Copenhagen
+Updated: 2026-09-25 10:06 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -95,7 +95,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-857906 implementation and acceptance are complete. Canonical emulator acceptance PASS 3/3 on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`; the branch then advanced only by the targeted presentation-hardening commit `a4b9e82a8f95d2d24660cf09b393b5b4665d215b`, whose presentation unit test, app compile, architecture gate and diff check all PASS. Schema remains 23. Current phase is canonical integration of `task/857906` into `main`, containment proof, branch cleanup and terminal roadmap PASS.
+857906 implementation, acceptance and Git integration are complete. PR #44 merged `task/857906@a4b9e82a8f95d2d24660cf09b393b5b4665d215b` into PersonalHub `main` as `ba7089770b552f2c4a73c121ba1356862cec38e4`; containment and tree equivalence both PASS, the remote/local task branch and all 857906 worktrees are removed, and PersonalHub is main-only. Schema remains 23. The only remaining 857906 gate is readback of the already-running GitHub Actions jobs on the accepted task head before canonical roadmap terminal PASS.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -217,6 +217,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 857906 Git integration completed: PR #44 merged as PersonalHub `main@ba7089770b552f2c4a73c121ba1356862cec38e4`; task head `a4b9e82a8f95d2d24660cf09b393b5b4665d215b` is contained and tree-equivalent; remote/local `task/857906` plus 857906 QA/diagnostic worktrees were removed; final PersonalHub branch/worktree inventory is main-only.
 - 857906 emulator acceptance completed: 3/3 `HubHistorySearchQaDeviceTest` cases PASS on canonical `Pixel_8a` only, after fixing Timer main-thread Choreographer startup and explicit package scoping for shared History/Search deep links. Final branch head additionally hardens technical-value suppression with targeted unit/compile/architecture PASS.
 - 857906 source-side legacy convergence completed and pushed through `1f94c49`: shared host engine remains the only user-facing change History/Search UI; People/Places/Timer/WordPulse duplicate browsers are removed; Substances/Soldi domain chronology is preserved with shared History/Search entry points; Git History/Time Machine user UI and temporal-search Git injection are removed; source/compile/architecture gates PASS.
 - 857906 People + Places legacy-surface sub-goal completed and pushed at `a1541d9`: People parallel history owner/state removed and history buttons route to the host shared engine (entity-scoped for contact detail); initiative/calendar stays domain-owned. Places legacy HistoryScreen/package became Visits, user-facing undo/redo change-history controls were removed, and a separate Places shared History/Search entry was added. Both feature compile gates PASS.
@@ -264,7 +265,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
-- Integrate `task/857906@a4b9e82a8f95d2d24660cf09b393b5b4665d215b` into PersonalHub `main` through the protected repository flow, prove containment, delete the absorbed task branch/worktree, and record canonical roadmap 857906 terminal PASS.
+- Read back the already-running GitHub Actions jobs for accepted 857906 head `a4b9e82a8f95d2d24660cf09b393b5b4665d215b`; if they are all terminal PASS, record canonical roadmap 857906 terminal PASS through the single writer.
 - Run/review 707603 on the resulting final-ish schema.
 - Run/review 840907, including true offline behavior and artifact-size impact.
 - Run/review 788606 and freeze exact release commit, schema version/identity, APK/AAB hashes/paths and shrink state.
@@ -275,7 +276,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
-- No active blocker for 857906 integration/terminalization.
+- No product/source blocker remains for 857906. Terminal roadmap finalization is waiting only on the already-running post-acceptance GitHub Actions jobs; no retry or duplicate workflow has been launched.
 - Physical Pixel is currently absent from canonical ADB discovery (`pixel_physical_required_but_absent`); this does not block 857906 and matters only for later final cutover 913264.
 - Local Android build/device/real-DB work is available through Remote Desktop Commander on Fedora.
 - The actual live Pixel DB schema/identity is not yet read and must not be guessed.
@@ -283,6 +284,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- 857906 integration evidence: PR #44 state `MERGED`, merge commit `ba7089770b552f2c4a73c121ba1356862cec38e4`; `git merge-base --is-ancestor a4b9e82a... origin/main` PASS; `git diff --quiet a4b9e82a... origin/main` PASS; remote `task/857906` absent after prune; local branch deleted; `git branch -vv` and `git worktree list` show only `main` at the merge commit.
 - 857906 acceptance command on isolated canonical emulator: `ANDROID_SERIAL=emulator-5554 ./gradlew -Ppersonalhub.testBuildType=qa :app:connectedQaAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.gernalix.personalhub.HubHistorySearchQaDeviceTest --no-daemon --console=plain` → `BUILD SUCCESSFUL`, 3/3 PASS on `Pixel_8a(AVD) - 16`. Acceptance source commit: `1f6e65f99d8f319213c7469c95ab6e29758022b6`.
 - Post-acceptance presentation hardening commit `a4b9e82a8f95d2d24660cf09b393b5b4665d215b` is pushed to `origin/task/857906`; targeted `HubActivityPresentationTest`, `:app:compileDebugKotlin`, `checkArchitectureBoundaries`, and `git diff --check` PASS.
 - Interim artifact evidence (non-final): APK SHA-256 `37a3ff6a6d0bbcbff3fe25905cd784d9d8d2ee01711b6deaaf6a17ab6d04d180`; corrected DB SHA-256 `9d6c73c8319a7f605d4f10d8863b5ff344e3db7444317635d710fd9bec5bc2bc`; corrected DB ZIP SHA-256 `4dba373995b13fc582dbcac14b6808b04cbfd9dc72c191a538e4f94ff615d87a`; Android validator + cold-start PASS; Telegram delivery completed. Physical Pixel install blocked by device absence and was not attempted via unsafe fallback.
@@ -314,4 +316,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Integrate `task/857906@a4b9e82a8f95d2d24660cf09b393b5b4665d215b` into current PersonalHub `main` through the protected repository flow using existing PASS evidence; after merge prove containment, delete the absorbed task branch/worktree, record roadmap 857906 terminal PASS through the single writer, then advance the P0 lane to 707603. Do not rerun already-PASS QA unless the merge base changes materially.
+Read back the four already-running GitHub Actions runs for accepted head `a4b9e82a8f95d2d24660cf09b393b5b4665d215b`. If all are terminal PASS, run the canonical roadmap finalizer for PROMPT_ID 857906 with result PASS, guarded-pull the applied single-writer state, checkpoint the terminal evidence, then advance the P0 lane to 707603. If any run fails, repair only the concrete failure evidence before terminalizing; do not rerun already-PASS emulator acceptance.
