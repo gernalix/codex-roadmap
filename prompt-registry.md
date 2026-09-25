@@ -6,11 +6,11 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | running | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/302284 prompt-infrastructure-final-runtime-activation-v1\|302284 · Distribuisci gli ultimi fix della prompt infrastructure]] | running | — | — | — | no | no | — | Prompt infrastructure / Fedora runtime | GPT-6 Luna | low |
+| [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1\|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] | running | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-6 Luna | low |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Luna | low |
 | [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1\|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-6 Luna | medium |
-| [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1\|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] | pending | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-6 Luna | low |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-6 Luna | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-6 Luna | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-6 Luna | medium |
