@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 16:12 Europe/Copenhagen
+Updated: 2026-09-25 17:13 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -288,6 +288,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- 2026-09-25 17:13 Europe/Copenhagen mandatory checkpoint refresh: synchronized against the then-current canonical `origin/main`; PH checklist, Completed, Remaining, Blockers and the single Next action remain current. 857906 stays terminal PASS, 707603 stays the already-running next PH task, and C2/175908 remains the active priority lane. No verified PH work was repeated.
 - 2026-09-25 16:12 canonical `origin/main` roadmap readback (detached checkpoint base `638cb85360efeb264c7a8a803f81d8a217516e3f`): 857906=`completed`; 707603=`running`; 840907, 788606 and 913264=`pending`. Supervisor task `CHATGPT-20260924-PERSONALHUB-P0` was explicitly paused while this chat owns C2/175908.
 - 2026-09-25 12:56 user override checkpoint: PH work is saved and parked; no further APK/DB compile/test/install is permitted until the remaining PH task chain is complete. C2 is now the active priority lane. Existing PH source/integration/artifact evidence below remains canonical; do not repeat it.
 - 857906 integration evidence: PR #44 state `MERGED`, merge commit `ba7089770b552f2c4a73c121ba1356862cec38e4`; `git merge-base --is-ancestor a4b9e82a... origin/main` PASS; `git diff --quiet a4b9e82a... origin/main` PASS; remote `task/857906` absent after prune; local branch deleted; `git branch -vv` and `git worktree list` show only `main` at the merge commit.
