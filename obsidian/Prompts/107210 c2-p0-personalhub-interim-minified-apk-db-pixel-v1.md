@@ -26,7 +26,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[175908 checklist2-single-work-item-control-plane-v2|175908]], [[851204 c2-datasette-alerts-radical-hygiene-v1|851204]]
+- **Sblocca:** [[175908 checklist2-single-work-item-control-plane-v2|175908]], [[238170 c2-supervisor-human-milestone-telegram-v1|238170]], [[851204 c2-datasette-alerts-radical-hygiene-v1|851204]]
 - **Padri/precedenti:** [[175908 checklist2-single-work-item-control-plane-v2|175908]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova sessione Codex supervisionata RDC; preempte 707603 parcheggiato

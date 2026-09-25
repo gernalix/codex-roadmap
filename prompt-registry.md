@@ -8,6 +8,7 @@
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | running | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/302284 prompt-infrastructure-final-runtime-activation-v1\|302284 · Distribuisci gli ultimi fix della prompt infrastructure]] | running | — | — | — | no | no | — | Prompt infrastructure / Fedora runtime | GPT-6 Luna | low |
 | [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
+| [[obsidian/Prompts/238170 c2-supervisor-human-milestone-telegram-v1\|238170 · Rendere strutturali le notifiche milestone C2]] | pending | — | — | — | no | no | — | chatgpt-rdc-supervisor | GPT-6 Luna | low |
 | [[obsidian/Prompts/175908 checklist2-single-work-item-control-plane-v2\|175908 · Creare Checklist 2.0 come unico albero di lavoro]] | pending | — | — | — | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Luna | low |

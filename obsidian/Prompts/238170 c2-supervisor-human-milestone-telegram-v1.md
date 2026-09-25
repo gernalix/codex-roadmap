@@ -1,24 +1,23 @@
 ---
-prompt_id: 851204
+prompt_id: 238170
 status: pending
-project_id: 42
-model: GPT-6 Sol
-reasoning: medium
+project_id: 104
+model: GPT-6 Luna
+reasoning: low
 tags:
   - c2
-  - datasette-alerts
-  - notification-hygiene
+  - rdc-supervisor
   - telegram
   - roadmap/prompt
   - roadmap/status/pending
-  - roadmap/project/telegram-insert-bot
+  - roadmap/project/chatgpt-rdc-supervisor
 ---
 
-# 851204 · Bonificare radicalmente Datasette Alerts
+# 238170 · Rendere strutturali le notifiche milestone C2
 
 - **Stato:** pending
-- **Progetto:** [[../Projects/telegram-insert-bot|telegram_insert_bot]]
-- **Prompt:** [[../../prompts/c2-datasette-alerts-radical-hygiene-v1|Apri prompt]]
+- **Progetto:** [[../Projects/chatgpt-rdc-supervisor|chatgpt-rdc-supervisor]]
+- **Prompt:** [[../../prompts/c2-supervisor-human-milestone-telegram-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -29,11 +28,11 @@ tags:
 - **Sblocca:** [[175908 checklist2-single-work-item-control-plane-v2|175908]]
 - **Padri/precedenti:** [[175908 checklist2-single-work-item-control-plane-v2|175908]]
 - **Figli/follow-up:** —
-- **Chat Codex:** Nuova sessione Codex dopo P0 PersonalHub; audit bounded + deploy live
+- **Chat Codex:** Task Codex breve supervisionato RDC; nessun polling modello
 
 ## Spiegazione
 
-Rende le notifiche di Datasette Alerts comprensibili e utili, eliminando duplicati, raffiche e no-op con una policy centralizzata e monitoraggio del volume.
+Integra nel supervisor C2 notifiche Telegram idempotenti e comprensibili solo per milestone significative, usando il bot principale e senza spam di micro-step.
 
 ## Esecuzioni
 
