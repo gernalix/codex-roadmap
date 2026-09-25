@@ -18,7 +18,7 @@ tags:
 - **Primo lancio:** 2026-09-25T09:22:42Z
 - **Ultimo lancio:** 2026-09-25T09:22:42Z
 - **Ultimo esito:** BLOCKED
-- **Analizzato da ChatGPT:** no
+- **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[994029 kuma-620949-final-runtime-cutover-v1|994029]]
@@ -39,7 +39,7 @@ Ritenta e diagnostica una sola volta il provisioning Kuma centrale fallito per C
 
 ## Analisi ChatGPT
 
-- Non ancora analizzato.
+- 2026-09-25T09:30:48Z · colli di bottiglia: sì · fix: — · {"blocker":"sessione/login Kuma; 714263 finalizzato BLOCKED, richiesta terminale in coda.","next_action":"Use the concrete blocker above for the smallest corrective action.","outcome":"BLOCKED","prompt_id":"714263","report_ref":"codex-usage:f734c14607b110cb6cc66873:95043b8d8ac8e793","schema":"codex-roadmap.fix-packet.v1","work_state":{}}
 
 ## Modifiche di codice ChatGPT
 
