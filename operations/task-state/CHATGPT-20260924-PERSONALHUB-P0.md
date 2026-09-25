@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 23:40 Europe/Copenhagen
+Updated: 2026-09-25 23:52 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -97,7 +97,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [x] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-PersonalHub P0 is terminal. PROMPT_ID 913264 is canonical `completed`; the physical Pixel runs the exact frozen v61 APK against the externally migrated schema23 database, and final branch/worktree/integration cleanup is complete. PersonalHub is clean and main-only at `b736ee83724bf53a04ac43495c93af38cd42e67d`. No further APK/DB mutation is authorized by this task.
+PersonalHub P0 remains terminal. PROMPT_ID 913264 is canonical `completed`; the physical Pixel runs the exact frozen v61 APK against the externally migrated schema23 database, and final branch/worktree/integration cleanup is complete. PersonalHub remains clean and main-only. No further APK/DB mutation is authorized by this task.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -219,6 +219,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 2026-09-25 23:52 Europe/Copenhagen: mandatory terminal checkpoint refresh completed against current codex-roadmap main; no PH implementation, QA, DB migration, APK install or already-verified acceptance work was repeated.
 - 2026-09-25 23:40 Europe/Copenhagen: mandatory terminal checkpoint refresh. Current canonical roadmap main keeps 707603, 840907, 788606 and 913264 all `completed`; PersonalHub remote remains main-only at `b736ee83724bf53a04ac43495c93af38cd42e67d` with no open PRs. No implementation, build, DB, APK or device work was repeated.
 - 2026-09-25 23:28 Europe/Copenhagen: final PH cleanup PASS. `gernalix/PersonalHub` has one worktree (`main`), one local branch (`main`), and one remote branch (`origin/main`); open PRs/issues=0; queued/in-progress GitHub Actions=0; active PersonalHub single-writer tasks=0; canonical roadmap has no non-terminal PersonalHub prompts. `c2/107210` was deleted only after stable patch-id equality proved its three unique patches are exactly absorbed by 854a3732/d10c2df9/b273a202. Stale single-writer records 107210/514458/624831 were terminalized operationally after roadmap states proved merged/completed/superseded coverage.
 - 2026-09-25 23:21 Europe/Copenhagen: 913264 cutover acceptance PASS. Source DB SHA `c68bb378...` → target DB SHA `395a9f90...`, schema23 identity `4b9b9639...`, 102 tables preserved; installed v61 APK readback SHA exact `36775917...`; Home + 6/6 module aliases + History/Search PASS on physical Pixel. Host rollback remains read-only.
@@ -287,12 +288,13 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
-- None. PersonalHub P0 implementation, release, Pixel cutover and repository cleanup are complete.
+- None. PersonalHub P0 implementation, release, Pixel cutover and repository cleanup remain complete.
 
 ## Blockers
-- None for PersonalHub P0. The Pixel secure lockscreen was never bypassed; it prevented visual UI-tree inspection only, while Home/module/History process-and-crash gates and the canonical 913264 acceptance already passed. Preserve the verified rollback/release evidence and do not disturb the healthy v61/schema23 state.
+- None for PersonalHub P0. Preserve the verified rollback/release evidence and do not disturb the healthy v61/schema23 state.
 
 ## Evidence
+- 2026-09-25 23:52 Europe/Copenhagen mandatory terminal refresh: synchronized current `origin/main` before edit; canonical checkpoint already records 707603/840907/788606/913264=`completed`, final Pixel v61/schema23 acceptance, rollback preservation, and PersonalHub main-only cleanup. This refresh intentionally performed no duplicate acceptance work.
 - 2026-09-25 23:40 Europe/Copenhagen mandatory terminal readback: codex-roadmap main synchronized before edit; `roadmap.sqlite` reports 707603/840907/788606/913264=`completed`; `git ls-remote --heads gernalix/PersonalHub` returns only `refs/heads/main` at `b736ee83724bf53a04ac43495c93af38cd42e67d`; GitHub open PR list is empty. Existing Pixel v61/schema23 acceptance and rollback evidence remains authoritative.
 - 2026-09-25 23:28 Europe/Copenhagen final Pixel/release preservation gate: installed Pixel v61 base.apk SHA-256 `3677591701b24bf8cc645fa7579c42f0665a48ebb4b522a38fbddcbbe27607b5` equals frozen 788606 release; local rollback `rollback-20260925-225915/SHA256SUMS` verifies DB v22 + v60 APK + manifest; migrated staging DB remains schema23/identity `4b9b96396c8f9e750d13b0e6da70fdd9`, quick/integrity OK, FK empty, target SHA `395a9f90be7924788206da9cafe6ebd191a59f236bca0f2089b11f6fa3139abf`; no further device write was performed during cleanup.
 - 2026-09-25 23:28 Europe/Copenhagen final repository/control-plane gate: PersonalHub main `b736ee83724bf53a04ac43495c93af38cd42e67d` equals origin/main; `git worktree list` shows only `/home/daniele/projects/PersonalHub`; local branches only `main`; remote branches only `origin/main`; GitHub open PRs/issues empty; GitHub queued/in-progress runs empty; single-writer active PH list empty. Roadmap prompts 913264/788606/840907 are completed, 514458 completed, 624831 superseded with residual covered by 920550 completed, and no PersonalHub prompt remains non-terminal.
