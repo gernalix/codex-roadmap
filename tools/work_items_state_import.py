@@ -335,9 +335,9 @@ def import_state_file(
         # running prompts. Operational fields are new C2 state, not lifecycle edits.
         conn.execute(
             """UPDATE work_items
-               SET current_action=?,next_action=?,blocker=?,updated_at=?
+               SET current_action=?,next_action=?,blocker=?
                WHERE work_item_id=?""",
-            (current_step, next_action, blocker, now, owner_id),
+            (current_step, next_action, blocker, owner_id),
         )
     else:
         conn.execute(

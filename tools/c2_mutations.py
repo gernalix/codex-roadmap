@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import c2_intake
 import c2_scheduler
+import c2_cutover_writer
 
 
 def apply(conn, mutation):
@@ -14,6 +15,7 @@ def apply(conn, mutation):
     action = mutation['op'].removeprefix('c2_')
     arguments = dict(mutation.get('arguments') or {})
     operations = {
+        'cutover': c2_cutover_writer.confirm,
         'intake': c2_intake.add_work_item,
         'prepare_codex': c2_intake.prepare_codex,
         'configure': c2_scheduler.configure,

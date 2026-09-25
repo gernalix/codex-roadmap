@@ -63,6 +63,10 @@ jobs:
                 printf '%s\n' "$ISSUE_NUMBER" >> /tmp/processed-issues
               else
                 cat /tmp/apply-output >&2
+                if python3 -c 'import json,sys; d=json.load(open("/tmp/issue-event.json")); sys.exit(0 if any(o.get("op")=="c2_cutover" for o in json.loads(d["issue"]["body"]).get("operations",[])) else 1)'; then
+                  echo "C2 cutover rejected; stop the writer before any database commit" >&2
+                  exit 1
+                fi
                 printf '%s\n' "$ISSUE_NUMBER" >> /tmp/rejected-issues
                 echo "Rejected roadmap mutation Issue #$ISSUE_NUMBER; continuing drain" >&2
               fi

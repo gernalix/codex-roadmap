@@ -104,6 +104,14 @@ def apply_issue(
     issue_number, request_key, actor, document = parse_event(event_path)
     payload_sha256 = hashlib.sha256(canonical_bytes(document)).hexdigest()
 
+    cutover_operations = [op for op in document['operations']
+                          if isinstance(op,dict) and op.get('op')=='c2_cutover']
+    if cutover_operations:
+        if len(cutover_operations)!=1 or len(document['operations'])!=1:
+            raise IssueMutationError('c2_cutover_must_be_exclusive')
+        import c2_cutover_writer
+        c2_cutover_writer.prepare(repo,dict(cutover_operations[0].get('arguments') or {}))
+
     conn = connect(repo)
     operations_applied = 0
     idempotent = False
