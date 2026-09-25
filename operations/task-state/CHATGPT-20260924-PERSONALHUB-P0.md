@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 21:51 Europe/Copenhagen
+Updated: 2026-09-25 22:03 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -71,8 +71,8 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [x] Validate Git Data / Global History / restore only on safe copies/staging; unit/architecture/device gates PASS.
 
 ### Phase 5 — 840907 Datasette Lite offline
-- [ ] Run 840907 after 707603.
-- [ ] Verify true offline runtime, detached validated snapshots and acceptable artifact-size impact.
+- [x] Run 840907 after 707603; implementation and acceptance gates PASS on task branch.
+- [x] Verify true offline runtime, detached validated snapshots and acceptable artifact-size impact; host/browser/AVD offline gates PASS.
 
 ### Phase 6 — 788606 final release preflight
 - [ ] Before release, disposition the three unique commits on `origin/c2/107210` (external DB migrator and startup gate changes) through the protected integration flow; retain only changes still needed.
@@ -97,7 +97,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-PROMPT_ID 840907 is canonical `running` on PersonalHub main `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`. C2 launched a ChatGPT worker on the isolated `task/840907` worktree; that worker is actively modifying the Datasette Lite offline runtime files. This chat must supervise read-only and must not write concurrently into the same worktree. Resume direct edits only after the worker checkpoints/pushes or is confirmed inactive.
+PROMPT_ID 840907 implementation and acceptance are complete on `task/840907@07148cd14282a9f61a8928054197f223b5fd4588`. Datasette Lite is fully vendored/offline, reads only a detached validated snapshot, builds `personalhub_read.db` locally with the existing relational projector, and passed host, browser-with-external-DNS-denied, and Pixel_8a AVD airplane-mode FK/backlink gates. Canonical roadmap still reports 840907=`running`; remaining work is single-writer integration + PASS terminalization, then 788606.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -219,6 +219,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 2026-09-25 22:03 Europe/Copenhagen: 840907 acceptance complete at `07148cd`: host projection/manifest/no-network gate PASS; browser E2E PASS with external DNS forced unavailable; `:app:compileDebugKotlin` PASS; `DataExplorerOfflineQaDeviceTest` PASS 1/1 on canonical Pixel_8a AVD with airplane mode enabled; vendored assets 24.55 MiB raw / 12,251,271 compressed bytes in QA APK; emulator network restored after test.
 - 2026-09-25 21:43 Europe/Copenhagen: 840907 claimed successfully via roadmap Issue #1143; canonical status=`running`, executor policy=`chatgpt`, isolated worktree `/home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/840907` based on PersonalHub main `5cda3ad6`.
 - 2026-09-25 21:15 Europe/Copenhagen: 707603 fully closed: PR #45 merged into PersonalHub main as `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`; roadmap terminal Issue #1140 applied `completed`; canonical roadmap main `50c09ef582f1b61727e99a1a80d764a1e5fc2bfe` confirms 707603=`completed`.
 - 2026-09-25 21:15 Europe/Copenhagen: 707603 terminal PASS completed. PR #45 merged as `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`; roadmap Issue #1141 closed `completed`; canonical `roadmap.sqlite` at `50c09ef582f1b61727e99a1a80d764a1e5fc2bfe` reports 707603=`completed`.
@@ -277,7 +278,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
-- Run/review 840907, including true offline behavior and artifact-size impact.
+- Integrate `task/840907@07148cd` through the repository single-writer, terminalize 840907 PASS, verify canonical `completed`, then start 788606.
 - Disposition `origin/c2/107210` unique changes before release.
 - Run/review 788606 and freeze exact release commit, schema version/identity, APK/AAB hashes/paths and shrink state.
 - Before final migration, inspect the live Pixel DB schema/identity and take immutable backup.
@@ -287,8 +288,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
-- Coordination gate only: an active C2/ChatGPT worker currently owns the 840907 worktree. Do not create overlapping edits; supervise until it checkpoints/pushes or becomes inactive.
-- No blocker for starting 840907. Preserve the artifact gate: do not perform definitive release build/Pixel cutover until 840907 and 788606 are complete.
+- No product/test blocker remains for 840907; only canonical repository integration and roadmap terminalization are outstanding.
 - User-directed artifact gate: do not retry PH APK/DB compilation, testing, installation or cutover until the remaining PH implementation/test tasks have completed and the final schema/release commit is frozen.
 - 857906 has no blocker and is already canonical `completed`; no CI polling or retry remains.
 - Physical Pixel is currently absent from canonical ADB discovery (`pixel_physical_required_but_absent`); this does not block 857906 and matters only for later final cutover 913264.
@@ -298,6 +298,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- 2026-09-25 22:03 Europe/Copenhagen 840907 evidence: branch head `07148cd14282a9f61a8928054197f223b5fd4588`; host gate `test_datasette_lite_offline.py` PASS with 10 envelope rows, 120 presentation tables and cross-module relation targets; browser E2E rendered `contact_fields`/`Ada Example` with external host resolution blocked; AVD XML reports tests=1 failures=0 errors=0 skipped=0 for `DataExplorerOfflineQaDeviceTest` (16.444s) under airplane mode; assets raw=25,743,829 bytes, QA APK compressed contribution=12,251,271 bytes across 52 entries; canonical roadmap main `adc8217d36a8779dd4a3490421dc7bdcf02c4da7` still has 840907=`running` and 788606/913264=`pending`.
 - 2026-09-25 21:51 Europe/Copenhagen: guarded roadmap pull PASS at `654788b`; physical Pixel 8a is online at explicit ADB serial `192.168.1.37:36755` with currently installed PH v60. `c2-personalhub-p0.timer` is disabled/inactive. The obsolete `personalhub-consolidation.timer` was disabled after verifying its service failed every minute because its ExecStart script is absent. `origin/c2/107210` has three commits absent from main (`1990edbe`, `d199f87b`, `0851f6ec`), requiring semantic disposition before final freeze. User reconfirmed that both final minified APK and compatible migrated DB must be installed on Pixel before completion.
 - 2026-09-25 21:43 Europe/Copenhagen 840907 ownership evidence: roadmap prompt 840907=`running` (GPT-6 Sol/medium, executor_policy=chatgpt); worktree HEAD remains `5cda3ad6...` while files under `app/src/main/assets/datasette-lite/` are receiving live writes from the active worker. Concurrent editing was stopped deliberately.
 - 2026-09-25 21:15 Europe/Copenhagen 707603 terminal evidence: all PR #45 checks PASS on head `d3fca2972eb327dfaca79f2c3ff0130b2af72b49`; merge commit `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`; roadmap Issue #1140 closed `completed`; `roadmap.sqlite` reports 707603=`completed`, 840907/788606/913264=`pending`.
@@ -343,4 +344,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Supervise the active 840907 worker without writing to its worktree; after its checkpoint/push and merge, disposition the three unique `c2/107210` commits before the 788606 release freeze, then continue to 913264 and install both exact minified APK and compatible migrated DB on the explicit Pixel serial.
+Invoke canonical `roadmap_finish.py` for 840907 PASS so the repository single-writer integrates `task/840907`; after merge and roadmap `completed` are verified, start PROMPT_ID 788606 without repeating 840907 gates.
