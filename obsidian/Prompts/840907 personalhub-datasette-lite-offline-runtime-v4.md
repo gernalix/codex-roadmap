@@ -1,19 +1,19 @@
 ---
 prompt_id: 840907
-status: pending
+status: running
 project_id: 49
 model: GPT-6 Sol
 reasoning: medium
 tags:
   - priority:p0
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 840907 · Completare Datasette Lite davvero offline
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-datasette-lite-offline-runtime-v4|Apri prompt]]
 - **Primo lancio:** —
