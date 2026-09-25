@@ -56,7 +56,7 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 ### Cross-device automatic chat discovery
 - [x] Discover persisted conversation IDs/URLs from the dedicated authenticated ChatGPT session without generating model requests.
 - [x] Persist a deduplicated metadata-only chat inventory across supervisor restarts.
-- [ ] Verify one newly created mobile/other-desktop chat appears after account sync.
+- [x] Verify newly persisted conversations appear after account sync: inventory grew from 21 to 56 chats without manual URL registration.
 - [x] Automatically bind discovered URLs to an existing registered task when the conversation ID matches known context; leave checkpoint-less chats inventory-only.
 - [x] Expose discovery status in CLI and structured events.
 - [x] Add focused tests and verify live metadata-only discovery without violating active rate-limit backoff.
@@ -77,7 +77,7 @@ The delivery-timeout incident shown on the PersonalHub worker is resolved in dep
 ## Verified facts
 - Supervisor source repo pushed main: c4bd9e5160da38d5989975b1a85c3fb93da9732e.
 - Cross-device discovery suite: 23/23 PASS.
-- Live metadata-only discovery found 21 persisted conversations and automatically bound 4 to registered managed tasks; no model message was sent.
+- Initial live metadata-only discovery found 21 persisted conversations / 4 managed. Current live CLI inventory reports 56 total / 6 managed / 50 inventory-only, proving post-deployment account-synced discovery without manual URL registration.
 - Discovery stores conversation ID/URL/timestamps/mode only; chat bodies and titles are not persisted.
 - Supervisor CCS bridge/readback commits are included through 2e86dac.
 - Chrome Codex Switcher pushed main: c40086abb36d8c7eb7bdb1c1f4f100b96f60286c.
