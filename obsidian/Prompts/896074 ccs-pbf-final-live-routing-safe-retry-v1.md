@@ -24,7 +24,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** [[302284 prompt-infrastructure-final-runtime-activation-v1|302284]]
-- **Sblocca:** —
+- **Sblocca:** [[874695 checklist-2-unified-control-plane-v1|874695]]
 - **Padri/precedenti:** [[641903 ccs-pbf-final-live-retry-v1|641903]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat Codex breve dopo 302284; retry live CCS senza project_id hard-coded.
