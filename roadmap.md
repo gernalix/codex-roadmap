@@ -2,8 +2,8 @@
 
 > Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.
 
-1. [[prompts/prompt-infrastructure-final-runtime-activation-v1|prompt-infrastructure-final-runtime-activation-v1]]
-2. [[prompts/personalhub-git-history-final-validation-v4|personalhub-git-history-final-validation-v4]]
+1. [[prompts/personalhub-git-history-final-validation-v4|personalhub-git-history-final-validation-v4]]
+2. [[prompts/prompt-infrastructure-final-runtime-activation-v1|prompt-infrastructure-final-runtime-activation-v1]]
 3. [[prompts/personalhub-datasette-lite-offline-runtime-v4|personalhub-datasette-lite-offline-runtime-v4]]
 4. [[prompts/personalhub-play-release-local-validation-v4|personalhub-play-release-local-validation-v4]]
 5. [[prompts/personalhub-final-live-db-migration-apk-pixel-v1|personalhub-final-live-db-migration-apk-pixel-v1]]
