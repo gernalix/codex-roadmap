@@ -29,7 +29,9 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - [x] Fix transcript-text false positives in platform-error detection.
 - [x] Detect ChatGPT rate-limit dialogs and back off globally instead of retrying/reloading.
 - [x] Fix explicit "None. ..." blocker parsing.
-- [x] Re-run current test suite: 14/14 PASS.
+- [x] Detect the ChatGPT "Our systems are thinking a bit more..." slow-thinking notice and recover by stopping that generation and sending exactly `continua`.
+- [x] Deduplicate slow-thinking recovery by persisted notice signature so the same notice cannot trigger repeated `continua` messages.
+- [x] Re-run current test suite: 15/15 PASS.
 
 ### Rollover acceptance
 - [x] Create and push isolated synthetic Git-backed worker.
@@ -45,8 +47,8 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 Synthetic acceptance is paused because ChatGPT imposed a global "Too many requests / temporarily limited access" condition. The supervisor global backoff is active through 2026-09-25 09:43:03 CEST. Do not force additional ChatGPT requests before that runtime backoff clears.
 
 ## Verified facts
-- Supervisor source repo current pushed main: b88f8c3ea5856234db9204b0c2ffaf183b3aca21.
-- Current unit suite: 14/14 PASS.
+- Supervisor source repo current pushed main: 32cad56 (slow-thinking recovery).
+- Current unit suite: 15/15 PASS.
 - Rate-limit handling is present in current main: platform dialogs are detected and supervisor-wide backoff state is stored under its local state directory.
 - Current global rate-limit-until epoch: 1790322183.7725668 = 2026-09-25 09:43:03 CEST.
 - Synthetic task is disabled.
@@ -58,6 +60,7 @@ Synthetic acceptance is paused because ChatGPT imposed a global "Too many reques
 - The false synthetic completion state was corrected and pushed on main at b88f8c3.
 - PersonalHub and Grindr remain separate registered workers; the global backoff prevents the supervisor from generating more browser/model requests while the provider limit is active.
 - Raw private chat transcripts are not persisted by the supervisor.
+- Slow-thinking recovery matches the platform/system notice, not ordinary transcript text. A synthetic DOM using the exact screenshot wording verified slow_thinking=true, generation stop PASS, and sent message exactly `continua`.
 
 ## Decisions
 - A chat remains an ephemeral worker; pushed Git state is the recovery authority.
@@ -76,6 +79,7 @@ Synthetic acceptance is paused because ChatGPT imposed a global "Too many reques
 - Transcript false-positive bug fixed.
 - Global rate-limit detection/backoff integrated.
 - Blockers parser regression fixed.
+- Slow-thinking recovery implemented: stop the stuck generation, send exactly `continua`, and suppress duplicate nudges for the same notice signature.
 - Synthetic false completion claims corrected.
 - Current source and corrected fixture pushed.
 
@@ -88,8 +92,9 @@ Synthetic acceptance is paused because ChatGPT imposed a global "Too many reques
 ## Blockers
 - External ChatGPT global rate-limit backoff is active until 2026-09-25 09:43:03 CEST. Additional browser/model requests must not be forced while it is active.
 ## Evidence
-- Source main b88f8c3.
-- Unit suite 14/14 PASS after rate-limit and blocker-parser changes.
+- Source main 32cad56.
+- Unit suite 15/15 PASS after slow-thinking recovery, rate-limit and blocker-parser changes.
+- Isolated DOM acceptance using the screenshot wording returned detected=true, sent='continua', generating_after=false.
 - PersonalHub event history includes request-checkpoint followed by resumed working state.
 - Synthetic attempted-rollover events show safe failure behavior with unchanged registry URL.
 - global.json runtime backoff readback returned active=true and rate_limit_until_epoch=1790322183.7725668.
@@ -103,6 +108,7 @@ Synthetic acceptance is paused because ChatGPT imposed a global "Too many reques
 - [x] Critical-length/age workers select rollover from canonical Git state.
 - [x] Retry and repeated-rollover loops are bounded.
 - [x] Browser/auth/DOM/rate-limit conditions are surfaced and handled safely.
+- [x] Slow-thinking platform notice recovery stops the affected generation and sends exactly `continua` once per notice.
 - [x] Authenticated real-chat checkpoint intervention has been observed.
 - [x] Tests pass, services are deployed and source is pushed.
 - [ ] One real supervisor-owned fresh-chat rollover updates registry/runtime/event evidence end-to-end.
