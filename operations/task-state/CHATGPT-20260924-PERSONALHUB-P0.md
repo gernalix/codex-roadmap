@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 23:52 Europe/Copenhagen
+Updated: 2026-09-26 00:05 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -219,6 +219,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 2026-09-26 00:05 Europe/Copenhagen: mandatory terminal checkpoint refresh completed from current canonical main; no PH build/test/device mutation was repeated because P0 is already terminal.
 - 2026-09-25 23:52 Europe/Copenhagen: mandatory terminal checkpoint refresh completed against current codex-roadmap main; no PH implementation, QA, DB migration, APK install or already-verified acceptance work was repeated.
 - 2026-09-25 23:40 Europe/Copenhagen: mandatory terminal checkpoint refresh. Current canonical roadmap main keeps 707603, 840907, 788606 and 913264 all `completed`; PersonalHub remote remains main-only at `b736ee83724bf53a04ac43495c93af38cd42e67d` with no open PRs. No implementation, build, DB, APK or device work was repeated.
 - 2026-09-25 23:28 Europe/Copenhagen: final PH cleanup PASS. `gernalix/PersonalHub` has one worktree (`main`), one local branch (`main`), and one remote branch (`origin/main`); open PRs/issues=0; queued/in-progress GitHub Actions=0; active PersonalHub single-writer tasks=0; canonical roadmap has no non-terminal PersonalHub prompts. `c2/107210` was deleted only after stable patch-id equality proved its three unique patches are exactly absorbed by 854a3732/d10c2df9/b273a202. Stale single-writer records 107210/514458/624831 were terminalized operationally after roadmap states proved merged/completed/superseded coverage.
@@ -294,6 +295,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - None for PersonalHub P0. Preserve the verified rollback/release evidence and do not disturb the healthy v61/schema23 state.
 
 ## Evidence
+- 2026-09-26 00:05 Europe/Copenhagen terminal readback: codex-roadmap main `5e1cc1692b244ed9a7f1b7a5f93eb4d747ad7d71` reports 707603/840907/788606/913264=`completed`; `gernalix/PersonalHub` exposes only `refs/heads/main` at `b736ee83724bf53a04ac43495c93af38cd42e67d`; open PR list is empty. Existing Pixel v61/schema23 and rollback evidence remains authoritative; no acceptance work was repeated.
 - 2026-09-25 23:52 Europe/Copenhagen mandatory terminal refresh: synchronized current `origin/main` before edit; canonical checkpoint already records 707603/840907/788606/913264=`completed`, final Pixel v61/schema23 acceptance, rollback preservation, and PersonalHub main-only cleanup. This refresh intentionally performed no duplicate acceptance work.
 - 2026-09-25 23:40 Europe/Copenhagen mandatory terminal readback: codex-roadmap main synchronized before edit; `roadmap.sqlite` reports 707603/840907/788606/913264=`completed`; `git ls-remote --heads gernalix/PersonalHub` returns only `refs/heads/main` at `b736ee83724bf53a04ac43495c93af38cd42e67d`; GitHub open PR list is empty. Existing Pixel v61/schema23 acceptance and rollback evidence remains authoritative.
 - 2026-09-25 23:28 Europe/Copenhagen final Pixel/release preservation gate: installed Pixel v61 base.apk SHA-256 `3677591701b24bf8cc645fa7579c42f0665a48ebb4b522a38fbddcbbe27607b5` equals frozen 788606 release; local rollback `rollback-20260925-225915/SHA256SUMS` verifies DB v22 + v60 APK + manifest; migrated staging DB remains schema23/identity `4b9b96396c8f9e750d13b0e6da70fdd9`, quick/integrity OK, FK empty, target SHA `395a9f90be7924788206da9cafe6ebd191a59f236bca0f2089b11f6fa3139abf`; no further device write was performed during cleanup.
