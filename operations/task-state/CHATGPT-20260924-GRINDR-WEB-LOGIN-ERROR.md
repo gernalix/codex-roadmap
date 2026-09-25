@@ -20,13 +20,13 @@ Identify why Grindr Web shows “Something went wrong / Check your internet conn
 - [x] Verify Chrome location permission for Grindr and inspect popup behavior in current Grindr bundle.
 - [x] Build an isolated diagnostic Chrome profile from the existing normal profile without modifying the real profile.
 - [x] Verify an existing authenticated session can fully load Grindr Web, connect its websocket, and render chats in a visible isolated Chrome process.
-- [ ] Capture the exact exception/status from a fresh-login failure path, if still reproducible.
+- [x] Attempt a fresh-login capture in a dedicated visible debug browser and determine whether the failure remains reproducible.
 - [ ] Apply the minimum targeted fix/workaround to the real browser flow.
 - [ ] Verify the real normal browser succeeds after login/reload; retest private/incognito only if still relevant.
 - [ ] Record final evidence and cleanup temporary diagnostic runtime/profile.
 
 ## Current step
-Use the successful session-cookie reauthentication path as a non-destructive workaround candidate, then verify whether the real post-login failure persists on a reload/new navigation.
+Verify the user's real normal Chrome flow now that a clean dedicated fresh-login flow succeeds; only modify the real browser if the generic error still reproduces there.
 
 ## Verified facts
 - User reports the same generic failure immediately after login in Chrome, Firefox, and private/incognito mode.
@@ -42,6 +42,11 @@ Use the successful session-cookie reauthentication path as a non-destructive wor
 - Relaunching the same isolated clone as a normal visible Wayland Chrome established the Grindr websocket, received data, and fully rendered the authenticated chat UI without the generic error.
 - Therefore the account, current session, Fedora network path, TLS, core websocket path, profile data, and normal Chrome renderer are capable of working. The failure is concentrated in the fresh-login/first-post-login path or was transient and has since cleared.
 - The normal-profile Grindr session cookie created before diagnosis was sufficient for the successful later session-cookie reauthentication in the isolated clone. This makes a simple reload/new navigation after the failed first post-login render a high-value workaround candidate.
+- A dedicated visible Chrome profile with DevTools Protocol logging was used for a fresh user-entered login. It reached `https://web.grindr.com/chat` successfully and the original generic error did not reproduce.
+- During an instrumented reload, the Grindr websocket was created. The only observed aborted request was `/api/v3/me/location` during navigation; the same endpoint then returned HTTP 200.
+- In the authenticated debug session, geolocation permission is granted and the recorded Grindr API resource set contained 42 API requests with zero HTTP >=400 responses.
+- Closing and relaunching the dedicated debug Chrome preserved authentication and reopened `/chat`; the subsequent resource set again showed 42 API calls with zero HTTP >=400 responses.
+- The exact fresh-login failure is therefore currently non-reproducible in the clean dedicated browser path.
 
 ## Decisions
 - Do not change DNS, firewall, VPN, geolocation, browser installation, or wipe browser profiles; evidence does not support those as causes.
@@ -56,21 +61,25 @@ Use the successful session-cookie reauthentication path as a non-destructive wor
 - Generic error identified as app-level React exception fallback.
 - Core WebSocket path verified.
 - Existing authenticated account/session successfully loaded end-to-end in an isolated visible Chrome diagnostic process.
+- Fresh user-entered login in the dedicated visible debug browser succeeded without the generic error.
+- Instrumented reload and full diagnostic-browser restart both succeeded with no Grindr API HTTP errors.
 
 ## Remaining
 - Determine whether a new navigation/reload in the real normal Chrome session now succeeds.
-- If it still fails, capture the exact fresh-login exception via a dedicated debug browser session; user credentials must remain user-entered and must not be logged.
+- If it still fails in the real browser, attach logging to a dedicated reproduction path and capture only exception/status metadata; user credentials must remain user-entered and must not be logged.
 - Apply only the smallest fix supported by that evidence.
 - Verify and clean up the temporary diagnostic profile/process.
 
 ## Blockers
-None. Exact fresh-login exception has not yet been captured because the isolated existing-session path now works.
+None. The exact original exception could not be captured because the clean dedicated fresh-login path now succeeds and the failure is currently non-reproducible there.
 
 ## Evidence
 - Initial screenshot supplied in ChatGPT.
 - HTTP/TLS/network baseline and browser-like websocket handshake captured through Remote Desktop Commander.
 - Current production bundle inspected locally from `web.grindr.com`.
 - Isolated visible Chrome diagnostic process logged `WebSocket connection established` and rendered the authenticated chat UI.
+- Dedicated fresh-login diagnostic reached `/chat`; instrumented resource inspection showed geolocation granted, 42 Grindr API requests and zero HTTP >=400 responses.
+- Diagnostic-browser restart preserved the session and again loaded `/chat` with zero failing Grindr API responses.
 - No authentication values or chat contents are stored in this state file.
 
 ## Acceptance criteria
@@ -80,4 +89,4 @@ None. Exact fresh-login exception has not yet been captured because the isolated
 - Temporary diagnostic process/profile removed.
 
 ## Next action
-Verify the user's real normal Chrome session by navigating/reloading `https://web.grindr.com/chat` with the already-valid session. If it still shows the generic error, reproduce one fresh login in a dedicated visible debug browser with logging enabled and capture only exception/status metadata after login.
+Verify the user's real normal Chrome session by navigating/reloading `https://web.grindr.com/chat`. If the generic error still appears there, capture the real-browser-specific difference with the least invasive instrumentation available before changing site data or browser settings.
