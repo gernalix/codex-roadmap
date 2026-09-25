@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 20:15 Europe/Copenhagen
+Updated: 2026-09-25 20:21 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -96,7 +96,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-C2 / PROMPT_ID 175908 is now canonical `completed`. PersonalHub is therefore the immediate priority. PROMPT_ID 707603 is already `running`: resume it strictly from its canonical checkpoint without re-claiming or duplicating work. After 707603, continue serially through 840907 → 788606 → 913264; only then perform the definitive APK/DB build, validation and Pixel cutover.
+PersonalHub is active again after C2 completion. PROMPT_ID 707603 has completed its functional acceptance on the final PH schema with no production-code changes required; PR #45 contains only final validation tests and is waiting for its current CI run before single-writer merge. Do not start 840907 until PR #45 is integrated and 707603 is canonical PASS.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -218,6 +218,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 2026-09-25 20:21 Europe/Copenhagen: 707603 acceptance evidence re-used from canonical checkpoint 19: GitDataFinalValidationTest + GitHubDataTransportTest PASS, architecture boundary PASS, HubHistorySearchQaDeviceTest PASS on Pixel_8a AVD; no rerun performed.
 - 2026-09-25 20:15 Europe/Copenhagen: C2 / 175908 verified canonical `completed` from roadmap SQLite; the PH priority hold is released. No PH implementation/test work was repeated during this checkpoint.
 - Mandatory checkpoint refresh 2026-09-25 20:12 Europe/Copenhagen: synchronized to current codex-roadmap main; no verified PH work was rerun. C2/175908 is still active in finalization, so PH remains parked; 857906 stays terminal PASS and 707603 remains the already-running next PH task.
 - Mandatory checkpoint refresh 2026-09-25 16:12: canonical roadmap readback confirms 857906=`completed`, 707603=`running`, 840907/788606/913264=`pending`; no completed PH work was re-audited or rerun. Old PH supervisor worker was explicitly paused while C2 owns the priority lane.
@@ -269,6 +270,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
+- Merge PersonalHub PR #45 through the single-writer after CI PASS, then terminalize 707603 PASS canonically; only then start 840907.
 - Continue already-running 707603 strictly from its canonical checkpoint after C2 terminalizes; do not claim a duplicate worker.
 - Run/review 707603 on the resulting final-ish schema and close it canonically.
 - Run/review 840907, including true offline behavior and artifact-size impact.
@@ -280,6 +282,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
+- Non-human gate: PersonalHub PR #45 is mergeable but its current Android unit/instrumentation/play-preflight checks are still running; do not force merge or duplicate tests.
 - User-directed artifact gate: do not retry PH APK/DB compilation, testing, installation or cutover until the remaining PH implementation/test tasks have completed and the final schema/release commit is frozen.
 - 857906 has no blocker and is already canonical `completed`; no CI polling or retry remains.
 - Physical Pixel is currently absent from canonical ADB discovery (`pixel_physical_required_but_absent`); this does not block 857906 and matters only for later final cutover 913264.
@@ -289,6 +292,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- 2026-09-25 20:21 Europe/Copenhagen 707603 integration readback: canonical checkpoint 19 has `remaining=[]`; PR #45 head `6c8b91e1b24ca1a83bad469cc38298abaefcde1e` changes only `GitDataRestoreDeviceTest.kt` and `GitDataFinalValidationTest.kt`; architecture/GitGuardian PASS while Android unit/instrumentation/play-preflight remain pending.
 - 2026-09-25 20:15 Europe/Copenhagen C2 terminality readback: canonical `roadmap.sqlite` on current main reports 175908=`completed`, 707603=`running`, 851204=`pending`. PH priority is therefore released to the already-running 707603 task; no duplicate claim is permitted.
 - 2026-09-25 20:12 Europe/Copenhagen mandatory checkpoint readback: codex-roadmap main synchronized before edit; C2 remote task/175908 observed non-terminal and in final live-gate/terminalization work. PH execution therefore remains intentionally held. Existing PH acceptance evidence below remains authoritative and was not repeated.
 - 2026-09-25 17:13 Europe/Copenhagen mandatory checkpoint refresh: synchronized against the then-current canonical `origin/main`; PH checklist, Completed, Remaining, Blockers and the single Next action remain current. 857906 stays terminal PASS, 707603 stays the already-running next PH task, and C2/175908 remains the active priority lane. No verified PH work was repeated.
@@ -326,4 +330,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Re-read the canonical 707603 checkpoint and continue that already-running PersonalHub task from its recorded Next action without re-claiming or repeating verified work; when it is terminal, proceed to 840907 → 788606 → 913264.
+When PR #45 CI is terminal PASS, run the targeted PersonalHub single-writer integration for PR #45, invoke `roadmap_finish.py` for 707603 PASS, verify canonical `completed`, then start 840907 from its existing materialized prompt.
