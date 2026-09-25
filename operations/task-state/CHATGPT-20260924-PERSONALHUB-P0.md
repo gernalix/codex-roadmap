@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 22:56 Europe/Copenhagen
+Updated: 2026-09-25 23:08 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -97,7 +97,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-840907 and 788606 are canonical `completed`. The only remaining release-chain task is 913264: migrate the freshest coherent real PersonalHub DB externally to the frozen final schema, preserve rollback, install the exact immutable v61 APK on the physical Pixel 8a using its explicit serial, validate Home + every module against preserved real data, then complete final branch/PR cleanup. No APK/AAB rebuild is permitted.
+840907 and 788606 are canonical `completed`. PROMPT_ID 913264 is already canonical `running` in isolated worktree `/home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/913264` at PersonalHub main base `b736ee83724bf53a04ac43495c93af38cd42e67d`; do not re-claim it. Physical Pixel 8a is online at explicit serial `192.168.1.37:36755`. Continue 913264 from source inventory/rollback preparation only; no live Pixel DB write or APK replacement until freshest-source selection, immutable backup, migration-copy validation and integrity/FK/data-preservation gates PASS.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -302,6 +302,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 
 - Physical Pixel 8a was last verified online; re-resolve its explicit serial at final cutover rather than assuming continued availability.
 ## Evidence
+- 2026-09-25 23:08 Europe/Copenhagen 913264 ownership readback: canonical roadmap reports 840907=`completed`, 788606=`completed`, 913264=`running`; repo single-writer reports task/913264 active; isolated worktree exists at `/home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/913264` HEAD `b736ee83724bf53a04ac43495c93af38cd42e67d`; ADB shows physical Pixel 8a online at `192.168.1.37:36755`. No claim or Pixel mutation was repeated.
 - 2026-09-25 22:56 Europe/Copenhagen release-chain terminal readback: codex-roadmap main `f26c1cbb4de125f08148e4a002c073a7d277ada3` reports 840907=`completed`, 788606=`completed`, 913264=`pending`; frozen v61 release dir `/home/daniele/Documents/ChatGPT/Personal Hub/releases/61-3916e5d8` remains the only allowed APK/AAB source for final cutover.
 - 2026-09-25 22:35 Europe/Copenhagen immutable 788606 release evidence: persistent dir `/home/daniele/Documents/ChatGPT/Personal Hub/releases/61-3916e5d8`; `release-manifest.json` SHA-256 `ae04d915c579f4d1b20300e867a8451525a1d94e209b302ecab557d9c0fe46e4`; R8 mapping SHA-256 `c3924eb620ecbfdd69a282af9c6a4dd945ed60728eabc4d268d5559f7ca10ed6`; APK signer cert SHA-256 `c8ff58d7cd66babb7d3ad4f4b95e6e558eb2229a0953df073d263795d3e35e73`; `c2/107210` three unique patches are exactly absorbed by 854a3732/d10c2df9/b273a202 via stable patch-id equality. PR #47 head is exact FINAL_HEAD and mergeable.
 - 2026-09-25 22:22 Europe/Copenhagen current lane readback: roadmap reports 840907=`completed`, 788606=`running`, 913264=`pending`; PersonalHub main=`ba61688ef1cc59b29d3400e0c0a16845a0b271f3`. 788606 worktree HEAD `b273a20224a9dd37e9e4a372d8761b0265691e78` is three commits ahead of that main and those three commits are patch-equivalent to the full unique `origin/c2/107210` series. A targeted core DB/app compile/architecture gate is already running there; no duplicate worker should be started.
@@ -354,4 +355,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Claim PROMPT_ID 913264 canonically, then inventory the physical Pixel DB and all viable local/export backups, record provenance/freshness/schema, select the freshest coherent source, and create an immutable rollback backup before any migration or Pixel write.
+Continue already-running PROMPT_ID 913264 from its isolated worktree: inventory the physical Pixel DB and all viable local/export/backup candidates with provenance/freshness/schema, select the freshest coherent source, then create an immutable rollback backup before any migration or Pixel write.
