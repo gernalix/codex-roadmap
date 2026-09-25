@@ -1,20 +1,20 @@
 ---
 prompt_id: 302284
-status: running
+status: blocked
 project_id: —
 model: GPT-6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/prompt-infrastructure-fedora-runtime
 ---
 
 # 302284 · Distribuisci gli ultimi fix della prompt infrastructure
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/prompt-infrastructure-fedora-runtime|Prompt infrastructure / Fedora runtime]]
-- **Prompt:** [[../../prompts/prompt-infrastructure-final-runtime-activation-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/prompt-infrastructure-final-runtime-activation-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
