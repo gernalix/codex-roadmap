@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/175908 checklist2-single-work-item-control-plane-v2\|175908 · Creare Checklist 2.0 come unico albero di lavoro]] | running | — | — | — | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | running | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
@@ -54,6 +53,7 @@
 | [[obsidian/Prompts/672304 workflowy-waiting-runtime-reconcile-v1\|672304 · Riallineare Waiting nel runtime Workflowy]] | completed | 2026-09-22T03:37:42Z | 2026-09-22T03:37:42Z | PASS | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/736284 chatgpt-exporter-live-chrome-first-archive-v1\|736284 · Sbloccare ChatGPTExporter e creare il primo archivio]] | blocked | 2026-09-22T11:16:19Z | 2026-09-22T11:16:19Z | BLOCKED | sì | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/222733 stop-runaway-788315-heartbeat\|222733 · Ferma il heartbeat Codex runaway di 788315]] | completed | — | — | PASS | no | no | — | Fedora / Codex runtime | GPT-6 Luna | low |
+| [[obsidian/Prompts/175908 checklist2-single-work-item-control-plane-v2\|175908 · Creare Checklist 2.0 come unico albero di lavoro]] | completed | — | — | PASS | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/238170 c2-supervisor-human-milestone-telegram-v1\|238170 · Rendere strutturali le notifiche milestone C2]] | superseded | — | — | — | no | no | — | chatgpt-rdc-supervisor | GPT-6 Luna | low |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | completed | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | PASS | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
