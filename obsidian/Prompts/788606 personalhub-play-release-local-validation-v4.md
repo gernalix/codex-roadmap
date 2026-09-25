@@ -1,19 +1,19 @@
 ---
 prompt_id: 788606
-status: pending
+status: running
 project_id: 49
 model: GPT-6 Luna
 reasoning: low
 tags:
   - priority:p0
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 788606 · Preflight finale Google Play con size e shrink
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/personalhub-play-release-local-validation-v4|Apri prompt]]
 - **Primo lancio:** —

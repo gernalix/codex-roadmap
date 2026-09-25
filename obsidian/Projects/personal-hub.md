@@ -5,7 +5,7 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `pending`
+- [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `running`
 - [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]] · `pending`
 - [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] · `superseded`
 - [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844 · Chiudere il residuo del merge capsule]] · `completed`
