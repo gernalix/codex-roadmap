@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 09:15 Europe/Copenhagen
+Updated: 2026-09-25 09:58 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -63,7 +63,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [x] Replace Timer and WordPulse legacy change-history/timeline surfaces; confirm Substances/Soldi retain domain chronology and expose the shared scoped History/Search route.
 - [x] Remove the user-facing Git History/Time Machine settings page and technical Git-history injection from temporal episode search; keep the Git backend for sync/recovery.
 - [x] Add the History/Search architecture guard and pass final consumer gates, touched-module compiles, app compile and `checkArchitectureBoundaries`.
-- [ ] Run canonical `Pixel_8a` emulator QA for global History/Search + at least two fixed-module entry points, including live filters, hidden before/after text search and one safe compensating undo.
+- [x] Run canonical `Pixel_8a` emulator QA for global History/Search + at least two fixed-module entry points, including live filters, hidden before/after text search and one safe compensating undo: `HubHistorySearchQaDeviceTest` PASS 3/3 on `emulator-5554`.
 
 ### Phase 4 — 707603 Git History / restore
 - [ ] Run 707603 on the resulting schema.
@@ -95,9 +95,12 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-857906 is active on `task/857906`. Full source convergence is pushed through `1f94c49e6e7c88dbf337214b5d389a5321832831`; schema remains 23. All six modules now reuse the host-owned scoped History/Search route, legacy People/Places/Timer/WordPulse change-history surfaces are removed, Settings no longer exposes Git History/Time Machine, and temporal episode search no longer injects technical Git events. Current phase is canonical `Pixel_8a` emulator QA only.
+857906 implementation and acceptance are complete. Canonical emulator acceptance PASS 3/3 on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`; the branch then advanced only by the targeted presentation-hardening commit `a4b9e82a8f95d2d24660cf09b393b5b4665d215b`, whose presentation unit test, app compile, architecture gate and diff check all PASS. Schema remains 23. Current phase is canonical integration of `task/857906` into `main`, containment proof, branch cleanup and terminal roadmap PASS.
 
 ## Verified facts
+- 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
+- Final 857906 branch head is `a4b9e82a8f95d2d24660cf09b393b5b4665d215b`, pushed exactly to `origin/task/857906`. The only post-emulator change suppresses UUID values and `_ms` technical fields from human history presentation/search; targeted `HubActivityPresentationTest`, app compile, architecture gate and `git diff --check` PASS.
+- Interim daily-use artifacts were produced without changing the final P0 cutover contract. QA-PASS debug APK SHA-256 `37a3ff6a6d0bbcbff3fe25905cd784d9d8d2ee01711b6deaaf6a17ab6d04d180` was published via the stable development prerelease/Telegram. Corrected schema-23 DB SHA-256 `9d6c73c8319a7f605d4f10d8863b5ff344e3db7444317635d710fd9bec5bc2bc` passed host integrity/FK checks, direct Android `DatabaseVault.validate`, and a PersonalHub cold start on the emulator; corrected ZIP SHA-256 `4dba373995b13fc582dbcac14b6808b04cbfd9dc72c191a538e4f94ff615d87a` was sent on Telegram. The earlier DB delivery is superseded and must not be used. Physical Pixel installation was not performed because the canonical helper reported `pixel_physical_required_but_absent`.
 - 857906 source convergence is pushed through PersonalHub `task/857906@1f94c49e6e7c88dbf337214b5d389a5321832831` (preceded by `0243e2ba5372876a73ef55ec17a1c60686723e3a`). Timer no longer exposes the Timeline screen/dialogs; WordPulse no longer exposes its Timeline tab; Substances preserves editable intake chronology and Soldi preserves transaction/domain chronology while both expose shared module History/Search. Settings Git History/Time Machine UI is removed; `HubTemporalSearchScreen` no longer mixes Git technical events into episode search.
 - Final source gates before emulator QA PASS on the converged branch: consumer-forbid for removed legacy symbols PASS; `:feature:multitimetracker`, `:feature:wordpulse`, `:feature:sostanze`, `:feature:soldi`, `:feature:supercontacts` compile gates PASS; `:app:compileDebugKotlin` PASS; `checkArchitectureBoundaries` PASS; `git diff --check` PASS. The architecture guard now rejects the exact removed legacy History/Timeline surfaces and requires all six feature modules to route History/Search through `HubDeepLinkContract.moduleHistoryUri(...)`.
 - 857906 People/Places checkpoint is pushed at PersonalHub `a1541d99e491228f76f61d792d1fcb396c8cfebd` and matches `origin/task/857906`. People consumer gate forbids `ContactHistoryCapsule`, `ContactHistoryOwner` and `ContactHistoryState`; `:feature:supercontacts:compileDebugKotlin` PASS. Places old package `com.gernalix.luoghi.ui.history` is absent by consumer gate; `:feature:luoghi:compileDebugKotlin` PASS after converting the surface to domain-only Visits and adding shared module History/Search.
@@ -214,6 +217,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 857906 emulator acceptance completed: 3/3 `HubHistorySearchQaDeviceTest` cases PASS on canonical `Pixel_8a` only, after fixing Timer main-thread Choreographer startup and explicit package scoping for shared History/Search deep links. Final branch head additionally hardens technical-value suppression with targeted unit/compile/architecture PASS.
 - 857906 source-side legacy convergence completed and pushed through `1f94c49`: shared host engine remains the only user-facing change History/Search UI; People/Places/Timer/WordPulse duplicate browsers are removed; Substances/Soldi domain chronology is preserved with shared History/Search entry points; Git History/Time Machine user UI and temporal-search Git injection are removed; source/compile/architecture gates PASS.
 - 857906 People + Places legacy-surface sub-goal completed and pushed at `a1541d9`: People parallel history owner/state removed and history buttons route to the host shared engine (entity-scoped for contact detail); initiative/calendar stays domain-owned. Places legacy HistoryScreen/package became Visits, user-facing undo/redo change-history controls were removed, and a separate Places shared History/Search entry was added. Both feature compile gates PASS.
 - New chat ownership checkpoint completed for PersonalHub P0 / 857906: roadmap re-synchronized through the guarded pull, current PH task hash/remote/worktree cleanliness verified, and execution resumes from the existing tested `9d835d8` shared-engine checkpoint rather than repeating discovery.
@@ -260,7 +264,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
-- Finish 857906 with canonical `Pixel_8a` emulator QA on the exact current branch, then record terminal PASS and integrate `task/857906` through the canonical repository writer flow.
+- Integrate `task/857906@a4b9e82a8f95d2d24660cf09b393b5b4665d215b` into PersonalHub `main` through the protected repository flow, prove containment, delete the absorbed task branch/worktree, and record canonical roadmap 857906 terminal PASS.
 - Run/review 707603 on the resulting final-ish schema.
 - Run/review 840907, including true offline behavior and artifact-size impact.
 - Run/review 788606 and freeze exact release commit, schema version/identity, APK/AAB hashes/paths and shrink state.
@@ -271,13 +275,17 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
-- No active blocker for 857906; only canonical emulator acceptance remains, and Fedora/emulator access is available through Remote Desktop Commander.
-- Local Android build/device/real-DB work requires Codex/local Fedora access.
+- No active blocker for 857906 integration/terminalization.
+- Physical Pixel is currently absent from canonical ADB discovery (`pixel_physical_required_but_absent`); this does not block 857906 and matters only for later final cutover 913264.
+- Local Android build/device/real-DB work is available through Remote Desktop Commander on Fedora.
 - The actual live Pixel DB schema/identity is not yet read and must not be guessed.
 - Final DB target cannot be frozen until upstream PH tasks are complete.
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- 857906 acceptance command on isolated canonical emulator: `ANDROID_SERIAL=emulator-5554 ./gradlew -Ppersonalhub.testBuildType=qa :app:connectedQaAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.gernalix.personalhub.HubHistorySearchQaDeviceTest --no-daemon --console=plain` → `BUILD SUCCESSFUL`, 3/3 PASS on `Pixel_8a(AVD) - 16`. Acceptance source commit: `1f6e65f99d8f319213c7469c95ab6e29758022b6`.
+- Post-acceptance presentation hardening commit `a4b9e82a8f95d2d24660cf09b393b5b4665d215b` is pushed to `origin/task/857906`; targeted `HubActivityPresentationTest`, `:app:compileDebugKotlin`, `checkArchitectureBoundaries`, and `git diff --check` PASS.
+- Interim artifact evidence (non-final): APK SHA-256 `37a3ff6a6d0bbcbff3fe25905cd784d9d8d2ee01711b6deaaf6a17ab6d04d180`; corrected DB SHA-256 `9d6c73c8319a7f605d4f10d8863b5ff344e3db7444317635d710fd9bec5bc2bc`; corrected DB ZIP SHA-256 `4dba373995b13fc582dbcac14b6808b04cbfd9dc72c191a538e4f94ff615d87a`; Android validator + cold-start PASS; Telegram delivery completed. Physical Pixel install blocked by device absence and was not attempted via unsafe fallback.
 - PersonalHub source convergence checkpoint: `task/857906@1f94c49e6e7c88dbf337214b5d389a5321832831` pushed to `origin/task/857906`; source block commit `0243e2ba5372876a73ef55ec17a1c60686723e3a`; worktree clean after follow-up push. Final consumer-forbid PASS, touched-feature compiles PASS, app compile PASS, `ARCHITECTURE_BOUNDARIES=PASS`, and `git diff --check` PASS.
 - Mandatory checkpoint refresh 2026-09-25 09:02: guarded roadmap sync PASS; PersonalHub `task/857906` is clean and local/remote HEAD remain exactly `a1541d99e491228f76f61d792d1fcb396c8cfebd`; checklist/current step/remaining/blockers/Next action were re-read from Git and remain authoritative.
 - PersonalHub `task/857906@a1541d99e491228f76f61d792d1fcb396c8cfebd`: remote hash exact; clean worktree after push. People consumer-forbid PASS plus `:feature:supercontacts:compileDebugKotlin` PASS. Places old-package forbid PASS plus `:feature:luoghi:compileDebugKotlin` PASS. `git diff --check` PASS before commit.
@@ -306,4 +314,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-From clean `task/857906@1f94c49e6e7c88dbf337214b5d389a5321832831`, run one focused canonical `Pixel_8a` emulator QA on the exact branch: Home 🔍 opens ALL History/Search; date/module/text filters react live; search finds human text present only in before/after detail; one safe undo creates a compensating entry; open at least two different modules and verify both launch the same screen in immutable MODULE scope without module filter; verify removed legacy History/Timeline/Git-History entry points are not reachable. No physical device, release build or schema bump.
+Integrate `task/857906@a4b9e82a8f95d2d24660cf09b393b5b4665d215b` into current PersonalHub `main` through the protected repository flow using existing PASS evidence; after merge prove containment, delete the absorbed task branch/worktree, record roadmap 857906 terminal PASS through the single writer, then advance the P0 lane to 707603. Do not rerun already-PASS QA unless the merge base changes materially.
