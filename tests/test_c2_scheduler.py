@@ -63,6 +63,15 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual([],scheduler.schedule(self.conn,event_key='migration',now=1))
         self.assertEqual(before,tuple(self.conn.execute("SELECT * FROM work_items WHERE prompt_id='123456'").fetchone()))
 
+    def test_imported_running_state_without_worker_does_not_consume_capacity(self):
+        self.conn.execute("UPDATE work_items SET status='running' WHERE prompt_id='123456'")
+        for n in range(3):
+            orphan=self.add('imported-'+str(n))
+            self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",(orphan,))
+        candidate=self.add('live-gate')
+        runs=scheduler.schedule(self.conn,event_key='capacity',now=1,max_parallel=2)
+        self.assertEqual([candidate],[run['work_item_id'] for run in runs])
+
     def test_dependencies_and_required_gate(self):
         parent=self.add('parent')
         child=self.add('child',parent_id=parent)
