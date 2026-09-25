@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | running | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/302284 prompt-infrastructure-final-runtime-activation-v1\|302284 · Distribuisci gli ultimi fix della prompt infrastructure]] | running | — | — | — | no | no | — | Prompt infrastructure / Fedora runtime | GPT-6 Luna | low |
-| [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1\|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] | running | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-6 Luna | low |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Luna | low |
 | [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1\|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
@@ -127,6 +126,7 @@
 | [[obsidian/Prompts/946238 personalhub-obsidian-archive-foundation-v2\|946238 · Prima versione dell’archivio Obsidian]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/334679 personalhub-play-release-local-validation-v3\|334679 · Controllo finale locale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/542078 fedora-runtime-kuma-closure-v3\|542078 · Chiudere solo il gate Kuma Fedora]] | superseded | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1\|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] | blocked | — | — | BLOCKED | no | no | — | Fedora / fedora-system-monitor | GPT-6 Luna | low |
 | [[obsidian/Prompts/845312 personalhub-obsidian-archive-projections\|845312 · Completare Obsidian per tutti i moduli]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/528163 personalhub-obsidian-archive-incremental-v2\|528163 · Aggiornare Obsidian automaticamente]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/357862 logseq-updates-pat-safety-closure-v2\|357862 · Chiusura sicurezza e attivazione updater Logseq]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Sol | medium |
