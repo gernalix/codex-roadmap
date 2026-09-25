@@ -1,0 +1,9 @@
+[Unit]
+Description=Wake Checklist 2.0 when canonical roadmap changes
+
+[Path]
+PathChanged=/home/daniele/projects/codex-roadmap/roadmap.sqlite
+Unit=c2-runtime.service
+
+[Install]
+WantedBy=default.target

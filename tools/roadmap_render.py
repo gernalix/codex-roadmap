@@ -111,10 +111,18 @@ def reconcile_prompt_file_locations(repo: Path) -> int:
             if dest.exists():
                 raise RoadmapDBError(f"archive_destination_exists:{dest_rel}")
             src.rename(dest)
-            conn.execute(
-                "UPDATE prompts SET current_path=?,updated_at=? WHERE prompt_id=?",
-                (dest_rel,now_utc(),row["prompt_id"]),
-            )
+            if conn.execute(
+                "SELECT type FROM sqlite_master WHERE name='prompts'"
+            ).fetchone()[0] == "view":
+                conn.execute(
+                    "UPDATE prompt_metadata SET current_path=?,updated_at=? WHERE prompt_id=?",
+                    (dest_rel,now_utc(),row["prompt_id"]),
+                )
+            else:
+                conn.execute(
+                    "UPDATE prompts SET current_path=?,updated_at=? WHERE prompt_id=?",
+                    (dest_rel,now_utc(),row["prompt_id"]),
+                )
             moved += 1
         conn.commit()
     except Exception:

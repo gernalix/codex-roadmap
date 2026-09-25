@@ -1,0 +1,11 @@
+[Unit]
+Description=Recover expired Checklist 2.0 worker leases
+
+[Timer]
+OnBootSec=3min
+OnUnitInactiveSec=2min
+Persistent=true
+Unit=c2-runtime.service
+
+[Install]
+WantedBy=timers.target
