@@ -69,10 +69,10 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - [x] Diagnose provisional /c/WEB: behavior and send-button race.
 - [x] Preserve autonomous-worker residue on evidence branch before cleanup.
 - [x] Correct false PASS claims written by the synthetic/manual worker.
-- [ ] Observe one supervisor-owned fresh-chat rollover where registry URL, rollover_count, event log and CCS URL continuity all agree.
-- [ ] Disable synthetic worker after verified PASS.
+- [x] Observe one supervisor-owned fresh-chat rollover where registry URL, rollover_count, event log and CCS URL continuity all agree: real Grindr worker rollover.
+- [x] Keep synthetic worker disabled after verified real-world PASS; no further synthetic model traffic is required.
 ## Current step
-Cross-device discovery acceptance is complete. Final synthetic rollover acceptance is temporarily blocked by a real provider rate-limit condition: live read-only inspection at 2026-09-25 16:09 CEST found visible rate-limit state on three registered worker tabs and runtime backoff through 16:39:06 CEST. The supervisor service has been restarted on source c4bd9e5 so the removed all-tab rate-limit sweep cannot keep extending the condition. Do not force model-generating rollover traffic until the live rate-limit condition clears.
+All supervisor acceptance criteria are now satisfied. A real registered Grindr worker completed the rollover path end-to-end: registry URL changed from 6ab55788... to persisted 6ab68018..., runtime rollover_count=1, event log recorded kind=rollover with checkpoint e67b4669..., and CCS recorded status=replaced on context_id cca0c047... while preserving the note 'grindr web fix'. The synthetic worker remains disabled because further synthetic model traffic would add no acceptance value.
 
 ## Verified facts
 - Supervisor source repo pushed main: c4bd9e5160da38d5989975b1a85c3fb93da9732e.
@@ -95,6 +95,10 @@ Cross-device discovery acceptance is complete. Final synthetic rollover acceptan
 - ADB keeper worker CHATGPT-20260925-ADB-KEEPER-LATENCY is registered against a persistent supervisor-owned clone of the canonical codex-roadmap checkpoint; canonical checkpoint commit is b463dd1.
 - The supervisor's own worker registration now also uses an isolated persistent codex-roadmap checkpoint clone, currently pinned to canonical checkpoint 72f5c1c, so dirty/behind state in the primary codex-roadmap checkout cannot stale its recovery memory.
 - PersonalHub, Grindr, supervisor and ADB keeper are registered workers; synthetic rollover worker remains disabled.
+- Real Grindr rollover acceptance PASS: old URL https://chatgpt.com/g/g-p-6a4d1bb3cfc88191b6d3743f503e6cb6-fedora/c/6ab55788-ffdc-83eb-a58b-6d12c2956c61 was replaced by persisted URL https://chatgpt.com/g/g-p-6a4d1bb3cfc88191b6d3743f503e6cb6-fedora/c/6ab68018-8368-83ed-93ea-581d5e8e20d3.
+- Grindr runtime readback reports rollover_count=1 and rollovers_since_checkpoint=1 on checkpoint e67b466910443d42f58bea18c44cc73e24deb68e.
+- Event log records kind=rollover with the same old/new URL, checkpoint e67b4669..., ccs_status=replaced and ccs_context_id=cca0c047-4a41-4686-b683-17c48e6e8301.
+- CCS live /api/list readback for that context shows the new Grindr URL and preserved note/codex_note 'grindr web fix'.
 - Raw private chat transcripts are not persisted by the supervisor.
 - Delivery-timeout recovery fix was integrated through canonical single-writer PR #2; merge SHA c4bd9e5160da38d5989975b1a85c3fb93da9732e.
 - Live dedicated-browser inspection found no current rate-limit dialogs before clearing the stale global backoff.
@@ -135,13 +139,10 @@ Cross-device discovery acceptance is complete. Final synthetic rollover acceptan
 - systemd deployment verified active; metadata inventory continues refreshing under the daemon.
 
 ## Remaining
-- After the live provider rate-limit condition clears, re-enable only CHATGPT-RDC-SYNTHETIC-ROLLOVER for one controlled forced rollover.
-- Verify new persisted supervisor registry URL, rollover_count increment, matching rollover event and CCS continuity status.
-- Disable synthetic worker after PASS.
-- Update this checkpoint with final acceptance evidence.
+- None for CHATGPT-20260924-RDC-SUPERVISOR. Future worker-specific failures are handled as their own task state, not as unfinished supervisor acceptance.
 
 ## Blockers
-- Real ChatGPT provider rate-limit condition is active on multiple registered tabs; runtime backoff is valid through 2026-09-25 16:39:06 CEST. This is an external transient blocker, not a supervisor-code failure.
+- None for supervisor acceptance. Some individual worker tabs may still show provider rate-limit UI, but that does not invalidate the completed supervisor rollover/CCS acceptance and should be handled per-worker without forcing synthetic traffic.
 
 ## Evidence
 - Supervisor source commits include 32cad56, 5fc87d1, 2e86dac, 3b4fde1 and be7742c.
@@ -151,7 +152,9 @@ Cross-device discovery acceptance is complete. Final synthetic rollover acceptan
 - Live deployed-file SHA-256 pairs matched for extension/background.js and host/store.py.
 - Live CCS services: supervisor=active, ccs=active, pending_ccs=0.
 - Cross-device discovery deployment initially recorded 21 total / 4 managed / 17 inventory-only; current live CLI readback records 56 total / 6 managed / 50 inventory-only.
-- Earlier stale backoff was cleared, but a new real provider rate-limit condition was observed at 16:09 CEST. Current runtime backoff endpoint is 2026-09-25 16:39:06 CEST.
+- A real provider rate-limit condition was observed earlier; its recorded global backoff epoch has now expired. Read-only inspection at 17:43 CEST still showed rate-limit UI on some unrelated workers, so no extra synthetic traffic was generated.
+- Real Grindr rollover event evidence: old_url=.../6ab55788-ffdc-83eb-a58b-6d12c2956c61, new_url=.../6ab68018-8368-83ed-93ea-581d5e8e20d3, checkpoint=e67b466910443d42f58bea18c44cc73e24deb68e, ccs_status=replaced, ccs_context_id=cca0c047-4a41-4686-b683-17c48e6e8301.
+- CCS live readback after rollover preserved context note/codex_note 'grindr web fix' on the new URL.
 - Recent source HEAD c4bd9e5 merges timeout-continua recovery; 298370d introduced delivery-timeout detection and 5c9cb89 changed its action to `NUDGE_CONTINUE`.
 - PersonalHub slow-thinking occurrence was recovered by stopping the generation and sending exactly 'continua' in the PersonalHub tab.
 - Delivery-timeout fix: canonical PR #2 merged at c4bd9e5. Supervisor service was restarted again at 16:10 CEST on source c4bd9e5 after confirming a real provider rate-limit modal was present, preventing the old process from continuing the removed all-tab rate-limit sweep.
@@ -170,7 +173,7 @@ Cross-device discovery acceptance is complete. Final synthetic rollover acceptan
 - [x] Chrome Codex Switcher preserves context/note/PROMPT_ID/twin continuity across URL replacement and blocks stale-URL regression.
 - [x] Supervisor queues CCS URL synchronization durably when CCS is unavailable.
 - [x] Tests pass, services are deployed and source is pushed.
-- [ ] One real supervisor-owned fresh-chat rollover updates registry/runtime/event/CCS evidence end-to-end.
+- [x] One real supervisor-owned fresh-chat rollover updates registry/runtime/event/CCS evidence end-to-end.
 
 ## Next action
-After 2026-09-25 16:39:06 CEST, first verify the rate-limit modal is gone without generating a model request. If clear, run one isolated supervisor-owned synthetic rollover; verify the new persisted chat URL, rollover_count, matching rollover event and CCS URL-continuity result atomically, then disable the synthetic worker and checkpoint final PASS.
+Leave the supervisor and CCS services running with the synthetic worker disabled; treat any future worker-specific incident or requested enhancement as a new task/checkpoint rather than reopening completed supervisor acceptance.
