@@ -4,8 +4,9 @@
 
 ## Lanciabili adesso
 
+- [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]]
 - [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1|851204 · Bonificare radicalmente Datasette Alerts]]
 
 ## In esecuzione
 
-- [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]]
+- Nessuno.

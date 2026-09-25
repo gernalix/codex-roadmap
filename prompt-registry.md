@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | running | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Luna | low |
 | [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
 | [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1\|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
@@ -30,6 +29,7 @@
 | [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1\|418844 · Chiudere il residuo del merge capsule]] | completed | 2026-09-19T00:28:37Z | 2026-09-19T00:28:37Z | PASS | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5\|380812 · Chiudere e integrare tag e alert di Places]] | completed | 2026-09-19T00:49:16Z | 2026-09-19T00:49:16Z | PASS | sì | no | [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1\|521404]] | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1\|521404 · Chiudere e mergiare la PR alert/Places già pronta]] | completed | 2026-09-19T01:11:22Z | 2026-09-19T01:11:22Z | PASS | sì | sì | [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2\|576041]] | Personal Hub | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | completed | — | — | PASS | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/111265 personalhub-shared-alerts-pr15-final-closure-v2\|111265 · Chiudere PR #15 senza rifare il lavoro]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2\|576041 · Chiudere autonomamente la PR alert/Places]] | completed | 2026-09-19T02:06:55Z | 2026-09-19T02:06:55Z | PASS | sì | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/572280 recover-641582-missing-roadmap-registration-v1\|572280 · Recuperare 641582 e correggere il bootstrap roadmap]] | completed | 2026-09-19T01:48:25Z | 2026-09-19T01:48:25Z | PASS | no | no | — | codex-roadmap | GPT-5.6 Terra | medium |

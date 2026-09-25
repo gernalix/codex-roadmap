@@ -5,13 +5,13 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `running`
 - [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `pending`
 - [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]] · `pending`
 - [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] · `superseded`
 - [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844 · Chiudere il residuo del merge capsule]] · `completed`
 - [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5|380812 · Chiudere e integrare tag e alert di Places]] · `completed`
 - [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404 · Chiudere e mergiare la PR alert/Places già pronta]] · `completed`
+- [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `completed`
 - [[obsidian/Prompts/111265 personalhub-shared-alerts-pr15-final-closure-v2|111265 · Chiudere PR #15 senza rifare il lavoro]] · `superseded`
 - [[obsidian/Prompts/576041 personalhub-pr15-autonomous-closure-v2|576041 · Chiudere autonomamente la PR alert/Places]] · `completed`
 - [[obsidian/Prompts/684913 personalhub-pr15-rate-limit-safe-closure-v1|684913 · Chiudere PR #15 senza polling GitHub]] · `completed`
