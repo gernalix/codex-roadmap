@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 23:21 Europe/Copenhagen
+Updated: 2026-09-25 23:28 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -90,14 +90,14 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [x] Verify Home launch/process + six canonical module aliases + History/Search on the migrated real DB with zero FATAL/Room mismatch; rollback retained. Data Explorer remains non-exported by design and its offline acceptance is already terminal PASS in 840907.
 
 ### Phase 8 — Final PH cleanup
-- [ ] Converge every still-relevant non-main PersonalHub branch into `main`: compare against current main for unique semantic work, integrate only valid unabsorbed changes through the canonical single-writer flow, then delete each absorbed/obsolete remote/local branch.
-- [ ] Converge every remaining non-main PH branch: integrate all valid unique work into `main`, prove containment/patch-equivalence, then delete the branch; final remote target is `main` only.
-- [ ] Prove obsolete PH branches/PRs contain no unique unabsorbed work, then remove them.
-- [ ] Verify no relevant PH PBF/integration/action remains pending.
-- [ ] End with clean, operational, main-only PersonalHub.
+- [x] Converge every still-relevant non-main PersonalHub branch into `main`: compare against current main for unique semantic work, integrate only valid unabsorbed changes through the canonical single-writer flow, then delete each absorbed/obsolete remote/local branch.
+- [x] Converge every remaining non-main PH branch: integrate all valid unique work into `main`, prove containment/patch-equivalence, then delete the branch; final remote target is `main` only.
+- [x] Prove obsolete PH branches/PRs contain no unique unabsorbed work, then remove them.
+- [x] Verify no relevant PH PBF/integration/action remains pending.
+- [x] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-913264 acceptance is complete on the physical Pixel. Final evidence is `/home/daniele/Documents/ChatGPT/Personal Hub/final-cutover-913264/final-acceptance.json` (SHA-256 `40323bf23d301b4acee574ad211b0e4f99626f13f11d703b7624f207f8afe764`). The Pixel runs exact v61 with the externally migrated schema23 DB; six user-facing modules and History/Search launch without crash/Room mismatch. Next: terminalize 913264 PASS, then perform final branch/worktree/integration cleanup only—no further APK/DB mutation.
+PersonalHub P0 is terminal. PROMPT_ID 913264 is canonical `completed`; the physical Pixel runs the exact frozen v61 APK against the externally migrated schema23 database, and final branch/worktree/integration cleanup is complete. PersonalHub is clean and main-only at `b736ee83724bf53a04ac43495c93af38cd42e67d`. No further APK/DB mutation is authorized by this task.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -219,6 +219,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 2026-09-25 23:28 Europe/Copenhagen: final PH cleanup PASS. `gernalix/PersonalHub` has one worktree (`main`), one local branch (`main`), and one remote branch (`origin/main`); open PRs/issues=0; queued/in-progress GitHub Actions=0; active PersonalHub single-writer tasks=0; canonical roadmap has no non-terminal PersonalHub prompts. `c2/107210` was deleted only after stable patch-id equality proved its three unique patches are exactly absorbed by 854a3732/d10c2df9/b273a202. Stale single-writer records 107210/514458/624831 were terminalized operationally after roadmap states proved merged/completed/superseded coverage.
 - 2026-09-25 23:21 Europe/Copenhagen: 913264 cutover acceptance PASS. Source DB SHA `c68bb378...` → target DB SHA `395a9f90...`, schema23 identity `4b9b9639...`, 102 tables preserved; installed v61 APK readback SHA exact `36775917...`; Home + 6/6 module aliases + History/Search PASS on physical Pixel. Host rollback remains read-only.
 - 2026-09-25 22:56 Europe/Copenhagen: roadmap readback on canonical main confirms 840907=`completed`, 788606=`completed`, 913264=`pending`. Frozen release artifacts from 788606 are authoritative; no rebuild/re-minify/re-sign is allowed before Pixel cutover.
 - 2026-09-25 22:35 Europe/Copenhagen: 788606 release freeze complete. FINAL_HEAD `3916e5d81200007bda7c939aaf3ed2b4948a8043`, version 61, Room schema 23 identity `4b9b96396c8f9e750d13b0e6da70fdd9`; one final Play build PASS with R8/resource shrink/lintVital/signing. Immutable APK SHA-256 `3677591701b24bf8cc645fa7579c42f0665a48ebb4b522a38fbddcbbe27607b5` (202,937,814 B), AAB SHA-256 `ac2d3665c51fb1b1e27020543054642c88a23932e3a9c9b463920538dacf7831` (99,158,685 B). APK/AAB signing + bundletool validation PASS; exact APK smoke PASS on `emulator-5554`, cold start 501 ms, UI `PersonalHub`. Release manifest SHA-256 `ae04d915c579f4d1b20300e867a8451525a1d94e209b302ecab557d9c0fe46e4`.
@@ -285,18 +286,14 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
-- Terminalize 913264 PASS, then prove containment/absorption and remove all obsolete non-main PersonalHub branches/worktrees/PR residue until repo is clean main-only.
-- Verify no open PH PR/issue/action remains relevant/unprocessed.
-- Ensure PersonalHub repository ends clean and main-only.
+- None. PersonalHub P0 implementation, release, Pixel cutover and repository cleanup are complete.
 
 ## Blockers
-- No product/cutover blocker remains. Secure keyguard was not bypassed; visual UI tree was unavailable, so module verification used canonical activity aliases/process/crash gates plus pre-install data-preservation evidence.
-- Human-only blocker: physical Pixel is on a secure lockscreen. `wm dismiss-keyguard` does not dismiss it; authentication must be performed manually. Do not request/store/bypass the device credential. All non-UI cutover gates are already PASS.
-- 857906 has no blocker and is already canonical `completed`; no CI polling or retry remains.
-- Local Android build/device/real-DB work is available through Remote Desktop Commander on Fedora.
-- Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
+- None for PersonalHub P0. The Pixel secure lockscreen was never bypassed; it prevented visual UI-tree inspection only, while Home/module/History process-and-crash gates and the canonical 913264 acceptance already passed. Preserve the verified rollback/release evidence and do not disturb the healthy v61/schema23 state.
 
 ## Evidence
+- 2026-09-25 23:28 Europe/Copenhagen final Pixel/release preservation gate: installed Pixel v61 base.apk SHA-256 `3677591701b24bf8cc645fa7579c42f0665a48ebb4b522a38fbddcbbe27607b5` equals frozen 788606 release; local rollback `rollback-20260925-225915/SHA256SUMS` verifies DB v22 + v60 APK + manifest; migrated staging DB remains schema23/identity `4b9b96396c8f9e750d13b0e6da70fdd9`, quick/integrity OK, FK empty, target SHA `395a9f90be7924788206da9cafe6ebd191a59f236bca0f2089b11f6fa3139abf`; no further device write was performed during cleanup.
+- 2026-09-25 23:28 Europe/Copenhagen final repository/control-plane gate: PersonalHub main `b736ee83724bf53a04ac43495c93af38cd42e67d` equals origin/main; `git worktree list` shows only `/home/daniele/projects/PersonalHub`; local branches only `main`; remote branches only `origin/main`; GitHub open PRs/issues empty; GitHub queued/in-progress runs empty; single-writer active PH list empty. Roadmap prompts 913264/788606/840907 are completed, 514458 completed, 624831 superseded with residual covered by 920550 completed, and no PersonalHub prompt remains non-terminal.
 - 2026-09-25 23:21 Europe/Copenhagen 913264 final acceptance: evidence SHA `40323bf23d301b4acee574ad211b0e4f99626f13f11d703b7624f207f8afe764`; source DB SHA `c68bb378...` schema22 → target `395a9f90...` schema23 identity `4b9b9639...`; installed v61 APK readback SHA `36775917...`; Home process/resumed activity PASS, six public module aliases PASS, global History/Search PASS, no FATAL/Room mismatch. Data Explorer shell start is correctly denied because activity is `exported=false`; 840907 already holds the offline E2E acceptance.
 - 2026-09-25 23:19 Europe/Copenhagen v61 live readback: Pixel package versionCode/versionName=61; installed base.apk SHA-256 `3677591701b24bf8cc645fa7579c42f0665a48ebb4b522a38fbddcbbe27607b5` exactly matches frozen release; process `com.gernalix.personalhub` observed alive with MainActivity Resumed and no FATAL/Room mismatch. Secure lockscreen prevents final UI inspection.
 - 2026-09-25 23:19 Europe/Copenhagen final staging DB revalidation: `/home/daniele/Documents/ChatGPT/Personal Hub/final-cutover-913264/staging-20260925-2305/personalhub-v23-final.db` user_version=23, Room identity `4b9b96396c8f9e750d13b0e6da70fdd9`, quick_check=ok, integrity_check=ok, foreign_key_check empty, SHA-256 `395a9f90be7924788206da9cafe6ebd191a59f236bca0f2089b11f6fa3139abf`; representative counts contacts=94, places=80, substances=46, sessions=700, word_entries=28918, finance_transactions=2, hub_contexts=4, hub_activity_log=331.
@@ -354,4 +351,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Terminalize PROMPT_ID 913264 PASS without changing artifacts/device state; then audit current PersonalHub branches/worktrees/PRs against main, remove only proven absorbed/obsolete residue, and finish with clean main-only PersonalHub.
+Archive this checkpoint as terminal; do not start further PersonalHub P0 work unless a new explicit task is created.
