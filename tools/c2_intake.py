@@ -83,6 +83,8 @@ def add_work_item(
     conn: sqlite3.Connection,
     *,
     title: str,
+    objective: str | None = None,
+    acceptance: list[str] | None = None,
     kind: str = "task",
     executor_policy: str = "auto",
     project: str | None = None,
@@ -126,17 +128,19 @@ def add_work_item(
     now = c2_identity.utc_now()
     conn.execute(
         """INSERT INTO work_items(
-             work_item_id,parent_id,kind,title,status,executor_policy,sort_order,
+             work_item_id,parent_id,kind,title,objective,acceptance_json,status,executor_policy,sort_order,
              current_action,next_action,blocker,project_id,project_name,repo,
              prompt_id,task_id,required,actionable,source_kind,source_ref,
              created_at,updated_at
-           ) VALUES(?,?,?,?, 'pending', ?, ?, ?, ?, NULL, ?, ?, ?,
+           ) VALUES(?,?,?,?,?,?,'pending', ?, ?, ?, ?, NULL, ?, ?, ?,
                     NULL,NULL,1,1,'c2-intake','c2-intake',?,?)""",
         (
             work_item_id,
             parent_id,
             kind,
             str(title).strip(),
+            objective,
+            json.dumps(acceptance or [],ensure_ascii=False),
             executor_policy,
             sort_order,
             current_action,
@@ -329,6 +333,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     add = sub.add_parser("add")
     add.add_argument("--title", required=True)
+    add.add_argument("--objective")
+    add.add_argument("--acceptance", action="append", default=[])
     add.add_argument("--kind", default="task")
     add.add_argument("--executor-policy", default="auto")
     add.add_argument("--project")
@@ -365,6 +371,8 @@ def main(argv: list[str] | None = None) -> int:
                     payload = add_work_item(
                         conn,
                         title=args.title,
+                        objective=args.objective,
+                        acceptance=args.acceptance,
                         kind=args.kind,
                         executor_policy=args.executor_policy,
                         project=args.project,

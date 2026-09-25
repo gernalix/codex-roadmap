@@ -107,3 +107,29 @@ class SchedulerTests(unittest.TestCase):
         roadmap_db.set_status(self.conn,'123456','completed',actor='test',allow_running_terminal=True)
         self.assertEqual(1,self.conn.execute('''SELECT COUNT(*) FROM c2_notification_outbox
           WHERE event_key='work-item:prompt:123456:completed' AND state='pending' ''').fetchone()[0])
+
+    def test_browser_completion_requires_checkpoint_evidence_and_completed_children(self):
+        item=intake.add_work_item(self.conn,title='Browser acceptance',repo='browser',
+            sort_order=0,kind='goal',executor_policy='chatgpt')
+        work_item_id=item['work_item_id']
+        scheduler.configure(self.conn,work_item_id,activity='semantic',
+            project_url='https://chatgpt.com/g/g-p-fixture')
+        child=intake.add_work_item(self.conn,title='Required child',repo='child',
+            sort_order=1,parent_id=work_item_id)
+        run=scheduler.schedule(self.conn,event_key='browser',now=10)[0]
+        scheduler.acknowledge(self.conn,run['run_id'],worker_ref='c2-run:'+run['run_id'],
+            metadata=run['metadata'],now=11)
+        with self.assertRaisesRegex(scheduler.SchedulingError,'acceptance_checkpoint_incomplete'):
+            scheduler.finish_browser_work_item(self.conn,work_item_id,evidence=['proof'])
+        scheduler.record_checkpoint(self.conn,work_item_id,current_step='Done',
+            next_action='Close',remaining=[],evidence=['proof'])
+        with self.assertRaisesRegex(scheduler.SchedulingError,'required_children_incomplete'):
+            scheduler.finish_browser_work_item(self.conn,work_item_id,evidence=['proof'])
+        self.conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?",
+            (child['work_item_id'],))
+        scheduler.finish_browser_work_item(self.conn,work_item_id,evidence=['proof'])
+        scheduler.finish_browser_work_item(self.conn,work_item_id,evidence=['proof'])
+        self.assertEqual('completed',self.conn.execute('SELECT status FROM work_items WHERE work_item_id=?',
+            (work_item_id,)).fetchone()[0])
+        self.assertEqual(1,self.conn.execute('SELECT COUNT(*) FROM c2_notification_outbox WHERE work_item_id=?',
+            (work_item_id,)).fetchone()[0])

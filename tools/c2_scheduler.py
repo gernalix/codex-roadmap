@@ -6,6 +6,7 @@ an idempotent executor; expiry alone never authorizes a duplicate execution.
 from __future__ import annotations
 
 import json
+import hashlib
 import sqlite3
 import time
 import uuid
@@ -19,7 +20,8 @@ SCHEMA = '''
 CREATE TABLE IF NOT EXISTS work_item_execution_specs (
  work_item_id TEXT PRIMARY KEY REFERENCES work_items(work_item_id),
  activity TEXT NOT NULL CHECK(activity IN ('coding','diagnostic','gui','native','semantic','external','human')),
- model TEXT, reasoning TEXT, worktree TEXT, goal_mode INTEGER NOT NULL DEFAULT 0,
+ model TEXT, reasoning TEXT, worktree TEXT, project_url TEXT,
+ goal_mode INTEGER NOT NULL DEFAULT 0,
  command_json TEXT, resources_json TEXT NOT NULL DEFAULT '[]',
  max_attempts INTEGER NOT NULL DEFAULT 3 CHECK(max_attempts BETWEEN 1 AND 10)
 );
@@ -84,7 +86,8 @@ def _transaction(conn):
 
 
 def configure(conn, work_item_id, *, activity, model=None, reasoning=None,
-              worktree=None, goal_mode=False, command=None, resources=(), max_attempts=3):
+              worktree=None, project_url=None, goal_mode=False, command=None,
+              resources=(), max_attempts=3):
     _transaction(conn)
     item = conn.execute('SELECT * FROM work_items WHERE work_item_id=?', (work_item_id,)).fetchone()
     if not item or item['status'] != 'pending':
@@ -94,12 +97,13 @@ def configure(conn, work_item_id, *, activity, model=None, reasoning=None,
         raise SchedulingError('native_requires_deterministic_argv')
     if not all(isinstance(r,str) and r for r in resources):
         raise SchedulingError('invalid_resource')
-    conn.execute('''INSERT INTO work_item_execution_specs VALUES(?,?,?,?,?,?,?,?,?)
+    conn.execute('''INSERT INTO work_item_execution_specs VALUES(?,?,?,?,?,?,?,?,?,?)
         ON CONFLICT(work_item_id) DO UPDATE SET activity=excluded.activity,
         model=excluded.model,reasoning=excluded.reasoning,worktree=excluded.worktree,
+        project_url=excluded.project_url,
         goal_mode=excluded.goal_mode,command_json=excluded.command_json,
         resources_json=excluded.resources_json,max_attempts=excluded.max_attempts''',
-        (work_item_id, activity, model, reasoning, worktree, int(goal_mode),
+        (work_item_id, activity, model, reasoning, worktree, project_url, int(goal_mode),
          json.dumps(command) if command else None, json.dumps(sorted(set(resources))), max_attempts))
 
 
@@ -119,6 +123,9 @@ def execution_metadata(conn, item, spec, executor):
                 raise SchedulingError('codex_metadata_mismatch:'+key)
         if bool(spec['goal_mode']) != (prompt['prompt_type'] == 'Goal'):
             raise SchedulingError('codex_metadata_mismatch:goal_mode')
+    if executor in ('chatgpt','rdc') and spec['activity'] in ('gui','semantic'):
+        if not spec['project_url'] or not str(spec['project_url']).startswith('https://chatgpt.com/'):
+            raise SchedulingError('chatgpt_project_url_required')
     return result
 
 
@@ -215,6 +222,33 @@ def checkpoint(conn, run_id, commit):
         raise SchedulingError('run_not_active')
 
 
+def record_checkpoint(conn, work_item_id, *, current_step, next_action,
+                      completed=(), remaining=(), evidence=(), blocker=None,
+                      objective=None, source_commit=None):
+    _transaction(conn)
+    row=conn.execute('SELECT status FROM work_items WHERE work_item_id=?',(work_item_id,)).fetchone()
+    if not row or row['status'] not in ('pending','running','waiting','blocked'):
+        raise SchedulingError('checkpoint_work_item_not_active')
+    if not isinstance(completed,(list,tuple)) or not isinstance(remaining,(list,tuple)) or not isinstance(evidence,(list,tuple)):
+        raise SchedulingError('checkpoint_lists_required')
+    if not str(next_action).strip():
+        raise SchedulingError('checkpoint_next_action_required')
+    body={'work_item_id':work_item_id,'current_step':current_step,'next_action':next_action,
+          'completed':list(completed),'remaining':list(remaining),'evidence':list(evidence),
+          'blocker':blocker,'objective':objective,'source_commit':source_commit}
+    digest=hashlib.sha256(json.dumps(body,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
+    conn.execute('''INSERT OR IGNORE INTO work_item_checkpoints
+      (work_item_id,source_file,source_commit,source_sha256,objective,
+       current_step,next_action,blocker,completed_json,remaining_json,
+       evidence_json,captured_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)''',
+      (work_item_id,'c2-writer',source_commit,digest,objective,current_step,next_action,
+       blocker,json.dumps(list(completed)),json.dumps(list(remaining)),
+       json.dumps(list(evidence)),time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())))
+    conn.execute('''UPDATE work_items SET current_action=?,next_action=?,blocker=?
+      WHERE work_item_id=?''',(current_step,next_action,blocker,work_item_id))
+    return digest
+
+
 def recover(conn, *, now=None):
     _transaction(conn)
     now=time.time() if now is None else now
@@ -224,6 +258,61 @@ def recover(conn, *, now=None):
     # Preserve the same run identity and locks; executor must inspect its durable
     # worker receipt before resume. A lost acknowledgement is not a failed run.
     return [dict(r) for r in conn.execute("SELECT * FROM work_item_runs WHERE state='recovering'")]
+
+
+def quarantine_browser_run(conn, run_id, *, reason):
+    _transaction(conn)
+    row=conn.execute('''SELECT r.state,r.executor,w.prompt_id,w.status
+      FROM work_item_runs r JOIN work_items w USING(work_item_id)
+      WHERE r.run_id=?''',(run_id,)).fetchone()
+    if not row or row['executor'] not in ('rdc','chatgpt') or row['prompt_id']:
+        raise SchedulingError('nonprompt_browser_run_required')
+    if row['state']=='failed' and row['status']=='blocked':
+        return
+    if row['state'] not in ('claimed','running','recovering') or row['status']!='running':
+        raise SchedulingError('run_not_active')
+    conn.execute("UPDATE work_item_runs SET state='failed' WHERE run_id=?",(run_id,))
+    conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(run_id,))
+    conn.execute('''UPDATE work_items SET status='blocked',blocker=?
+      WHERE work_item_id=(SELECT work_item_id FROM work_item_runs WHERE run_id=?)''',
+      (str(reason)[:300],run_id))
+
+
+def finish_browser_work_item(conn, work_item_id, *, evidence):
+    _transaction(conn)
+    row=conn.execute('''SELECT r.run_id,r.executor,r.state,w.prompt_id,w.status
+      FROM work_items w JOIN work_item_runs r USING(work_item_id)
+      WHERE w.work_item_id=? ORDER BY r.created_at DESC LIMIT 1''',(work_item_id,)).fetchone()
+    if not row or row['executor'] not in ('rdc','chatgpt') or row['prompt_id']:
+        raise SchedulingError('nonprompt_browser_run_required')
+    if row['state']=='completed' and row['status']=='completed':
+        return
+    if row['state'] not in ('running','recovering') or row['status']!='running':
+        raise SchedulingError('run_not_active')
+    cp=conn.execute('''SELECT remaining_json,blocker,evidence_json
+      FROM work_item_checkpoints WHERE work_item_id=? AND source_file='c2-writer'
+      ORDER BY checkpoint_id DESC LIMIT 1''',(work_item_id,)).fetchone()
+    if not cp or json.loads(cp['remaining_json'] or '[]') or cp['blocker']:
+        raise SchedulingError('acceptance_checkpoint_incomplete')
+    if not isinstance(evidence,list) or not evidence or not all(str(v).strip() for v in evidence):
+        raise SchedulingError('completion_evidence_required')
+    missing=conn.execute('''WITH RECURSIVE children(id) AS (
+      SELECT work_item_id FROM work_items WHERE parent_id=?
+      UNION SELECT w.work_item_id FROM work_items w JOIN children c ON w.parent_id=c.id)
+      SELECT 1 FROM children c JOIN work_items w ON w.work_item_id=c.id
+      WHERE w.required=1 AND w.status NOT IN ('completed','waived') LIMIT 1''',(work_item_id,)).fetchone()
+    if missing:
+        raise SchedulingError('required_children_incomplete')
+    conn.execute("UPDATE work_item_runs SET state='completed' WHERE run_id=?",(row['run_id'],))
+    conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(row['run_id'],))
+    conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?",(work_item_id,))
+    for fact in evidence:
+        payload=json.dumps(str(fact),ensure_ascii=False)
+        conn.execute('''INSERT OR IGNORE INTO work_item_evidence
+           (work_item_id,evidence_kind,label,uri,value_json,created_at)
+           VALUES(?,'completion',?,NULL,?,?)''',
+           (work_item_id,str(fact)[:120],payload,time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())))
+    enqueue_milestone(conn,work_item_id)
 
 
 def complete(conn, run_id, *, succeeded, worker_ref):

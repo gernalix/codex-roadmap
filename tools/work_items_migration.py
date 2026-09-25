@@ -109,6 +109,10 @@ def install_schema(conn: sqlite3.Connection) -> None:
         buffer.clear()
     if "\n".join(buffer).strip():
         raise WorkItemsMigrationError("incomplete_work_items_schema_statement")
+    existing = {row[1] for row in conn.execute("PRAGMA table_info(work_items)")}
+    for column in ("objective", "acceptance_json"):
+        if column not in existing:
+            conn.execute(f"ALTER TABLE work_items ADD COLUMN {column} TEXT")
 
 
 def backfill_from_legacy(conn: sqlite3.Connection) -> dict[str, int]:

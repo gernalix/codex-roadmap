@@ -3,6 +3,8 @@ CREATE TABLE IF NOT EXISTS work_items (
   parent_id TEXT REFERENCES work_items(work_item_id) ON DELETE RESTRICT,
   kind TEXT NOT NULL CHECK (kind IN ('goal','task','phase','step','gate')),
   title TEXT NOT NULL,
+  objective TEXT,
+  acceptance_json TEXT,
   status TEXT NOT NULL CHECK (
     status IN (
       'pending','running','waiting','completed','failed','blocked',

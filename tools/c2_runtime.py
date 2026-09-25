@@ -108,7 +108,7 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         submit('recover',{},key)
         events.append(('recover',str(len(expired))))
     ready=[dict(r) for r in db.execute('''SELECT w.work_item_id,w.status,w.sort_order,w.repo,w.updated_at,
-            s.activity,s.model,s.reasoning,s.worktree,s.resources_json
+            s.activity,s.model,s.reasoning,s.worktree,s.project_url,s.resources_json
           FROM v_work_item_runnable w
           JOIN work_item_execution_specs s USING(work_item_id)
           ORDER BY COALESCE(w.sort_order,2147483647),w.work_item_id''')]

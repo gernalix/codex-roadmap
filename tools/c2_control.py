@@ -10,7 +10,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--request-key',required=True)
     parser.add_argument('--operation',required=True,choices=(
-        'intake','prepare_codex','configure','schedule','acknowledge','checkpoint','recover','complete','reconcile_run','milestone','claim_milestone','mark_milestone'))
+        'intake','prepare_codex','configure','schedule','acknowledge','checkpoint','record_checkpoint','recover','quarantine_browser','finish_work_item','complete','reconcile_run','milestone','claim_milestone','mark_milestone'))
     parser.add_argument('--arguments',type=Path,required=True,help='JSON object with structured arguments')
     args=parser.parse_args()
     arguments=json.loads(args.arguments.read_text())
