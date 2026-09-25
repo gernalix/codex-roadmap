@@ -4,7 +4,7 @@ TASK_ID: CHATGPT-20260924-RDC-SUPERVISOR
 Updated: 2026-09-25 Europe/Copenhagen
 
 ## Objective
-Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT + Remote Desktop Commander work resumable without human babysitting by detecting unhealthy workers, enforcing checkpoint freshness, replacing degraded chats from canonical Git state, and preserving Chrome Codex Switcher context/note continuity across worker rollover.
+Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT + Remote Desktop Commander work resumable without human babysitting by detecting unhealthy workers, enforcing checkpoint freshness, replacing degraded chats from canonical Git state, preserving Chrome Codex Switcher context/note continuity across worker rollover, and automatically discovering ChatGPT conversations created on desktop or mobile through account-synced history.
 
 ## Constraints
 - Git/checkpoint state is canonical; chat memory is disposable.
@@ -16,6 +16,8 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - Normal Chrome/Firefox profiles remain outside supervisor control.
 - Global ChatGPT rate-limit backoff suppresses retry/reload/rollover; during backoff only already-open tabs may receive the narrowly scoped slow-thinking `continua` recovery.
 - A CCS rollover must preserve the same context identity and notes/PROMPT_ID/twin metadata.
+- Auto-discovery must use metadata/URLs only; it must not persist raw chat transcripts.
+- Newly discovered chats without a Git checkpoint are inventory-only and must not receive autonomous recovery/rollover actions until safely bound to canonical task state.
 
 ## Plan / checklist
 ### Core and deployment
@@ -49,6 +51,14 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - [x] Deploy CCS daemon/extension files and verify deployed hashes match repository files.
 - [x] Verify both chrome-codex-switcher.service and chatgpt-rdc-supervisor.service are active; CCS pending queue is empty.
 
+### Cross-device automatic chat discovery
+- [ ] Discover persisted conversation IDs/URLs from the dedicated authenticated ChatGPT session without generating model requests.
+- [ ] Persist a deduplicated metadata-only chat inventory across supervisor restarts.
+- [ ] Detect chats created from mobile/other desktop sessions once they sync to the account.
+- [ ] Automatically bind discovered URLs to an existing registered task when the conversation ID matches known context; leave checkpoint-less chats inventory-only.
+- [ ] Expose discovery status in CLI and structured events.
+- [ ] Add focused tests, deploy, restart service, and verify live discovery without violating active rate-limit backoff.
+
 ### Rollover acceptance
 - [x] Create and push isolated synthetic Git-backed worker.
 - [x] Verify forced context-risk selects rollover from a pushed checkpoint.
@@ -59,7 +69,7 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - [ ] Observe one supervisor-owned fresh-chat rollover where registry URL, rollover_count, event log and CCS URL continuity all agree.
 - [ ] Disable synthetic worker after verified PASS.
 ## Current step
-All non-provider-dependent supervisor and Chrome Codex Switcher work is complete and deployed. Final synthetic rollover acceptance remains intentionally paused because ChatGPT global rate-limit backoff is active through 2026-09-25T10:16:31+02:00. Do not force additional ChatGPT requests before the backoff clears.
+Implement cross-device metadata-only chat auto-discovery while preserving the existing provider-rate-limit backoff and all checkpoint safety rules. The final synthetic rollover acceptance remains queued afterward.
 
 ## Verified facts
 - Supervisor source repo pushed main: 3b4fde1a52fcd6c43a7add7a0f1a69edb89c19e0.
@@ -108,6 +118,7 @@ All non-provider-dependent supervisor and Chrome Codex Switcher work is complete
 - Synthetic false completion claims corrected.
 
 ## Remaining
+- Implement cross-device automatic discovery, durable deduplicated inventory, task binding, CLI visibility, tests and deployment.
 - Wait for global ChatGPT rate-limit backoff to clear.
 - Re-enable only CHATGPT-RDC-SYNTHETIC-ROLLOVER for one controlled forced rollover.
 - Verify new persisted supervisor registry URL, rollover_count increment, matching rollover event and CCS continuity status.
@@ -141,4 +152,4 @@ All non-provider-dependent supervisor and Chrome Codex Switcher work is complete
 - [ ] One real supervisor-owned fresh-chat rollover updates registry/runtime/event/CCS evidence end-to-end.
 
 ## Next action
-After the global ChatGPT rate-limit backoff clears, re-enable only CHATGPT-RDC-SYNTHETIC-ROLLOVER, force context-risk from the corrected pushed checkpoint, verify the new persisted chat URL + rollover_count + rollover event + CCS continuity atomically, then disable the synthetic worker and checkpoint final PASS.
+Implement and test metadata-only conversation discovery against the dedicated authenticated ChatGPT session, then deploy it without generating new ChatGPT requests during global backoff.
