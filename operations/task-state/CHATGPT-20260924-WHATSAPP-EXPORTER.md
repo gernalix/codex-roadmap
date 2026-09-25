@@ -1,7 +1,7 @@
 # Operational task state — WhatsApp exporter
 
 TASK_ID: CHATGPT-20260924-WHATSAPP-EXPORTER
-Updated: 2026-09-25 09:03 Europe/Copenhagen
+Updated: 2026-09-25 09:08 Europe/Copenhagen
 
 ## Objective
 Build a robust incremental WhatsApp exporter starting from WhatsApp Web on Fedora, reusing verified authenticated-browser access and existing whatsapp-watcher DOM discovery, with deduplication, human-readable history, media preservation when accessible, and optional relationship/block-state events for Carlo Visda.
@@ -49,7 +49,7 @@ Build a robust incremental WhatsApp exporter starting from WhatsApp Web on Fedor
 - [ ] Commit/push source and final roadmap checkpoint.
 
 ## Current step
-Restart resilience is verified with enabled systemd user services for the isolated Chrome CDP clone and Carlo-only watcher. The clone is stable with copied-profile extensions disabled; after a controlled browser restart the watcher automatically returns to Carlo after transient startup errors without duplicate growth. Next phase is media preservation verification and remaining history-completeness work.
+Media preservation is verified as far as the current Carlo DOM permits: metadata-only media is retained safely, and the accessible-source download/dedupe path is covered end-to-end by tests. A fresh bounded backfill again reaches a fixed top with no older-history control exposed. Continue with relationship-event verification and selectable-chat generalization while treating the currently observable DOM boundary as the history limit unless a safe read-only mechanism becomes available.
 
 ## Verified facts
 - Existing repo: /home/daniele/projects/whatsapp-watcher, main at b6e3e9f when last inspected.
@@ -77,6 +77,11 @@ Restart resilience is verified with enabled systemd user services for the isolat
 - After disabling extensions, a fresh clone start passed direct Runtime.evaluate and used about 142 tasks instead of the prior runaway ~489-task state.
 - Controlled watcher restart succeeded with a new PID and archive unchanged at 36 Carlo records / one chat.
 - Controlled browser restart succeeded: systemd restarted the dependent watcher; after transient startup errors through 09:01:59 the watcher automatically reopened Carlo. A later snapshot was ok with active_chat=Carlo Visda and 19 rendered records; archive remained 36 records and one chat.
+- Current validated source head is ced3b39. Live media scope is one Carlo image with no exposed src/blob, MIME or filename and needs_download=true; SQLite preserves it as metadata_only and no local media file exists.
+- No WhatsApp media-download control was clicked and no relationship state was changed for media validation.
+- Source commit ced3b39 adds end-to-end synthetic coverage proving metadata_only upgrades to downloaded when a source becomes accessible, writes exactly one local file, and does not redownload on an unchanged rerun; focused tests now pass 12/12.
+- Fresh post-restart bounded backfill again stopped automatically (9 steps, 0 inserted/revised, 164 unchanged) with archive fixed at 36 Carlo records.
+- At the oldest loaded position, scroll_height remained fixed at 2494 and no semantic control for older/earlier/history/sync/phone loading was exposed; the only matching control was the existing media download element.
 
 ## Decisions
 - Start from WhatsApp Web, not Android.
@@ -104,28 +109,30 @@ Restart resilience is verified with enabled systemd user services for the isolat
 - Persistent exporter state created and pushed.
 - README/protocol and Carlo block-tracking checkpoint rehydrated.
 - Existing whatsapp-watcher repo and both untracked relationship drafts preserved without modification.
-- Dedicated private source repo implemented and pushed; current validated source is 6faa3e8.
+- Dedicated private source repo implemented and pushed; current validated source is ced3b39.
 - Carlo-only selector compatibility, canonical system rows, deterministic dedupe, SQLite revisions/events and human-readable Markdown are implemented.
-- Test/syntax gates pass (11/11 tests after runtime-recovery coverage); repeated live scans/backfill are duplicate-free.
+- Test/syntax gates pass (12/12 tests including runtime recovery and media upgrade/download dedupe); repeated live scans/backfill are duplicate-free.
+- Live media preservation is verified as far as currently observable: metadata-only media is retained; accessible-source download/dedupe behavior is verified synthetically without forcing a WhatsApp download.
 - Verified current private archive contains only Carlo Visda.
 - Deployed enabled user services for the isolated browser clone and watcher.
 - Verified controlled watcher restart and controlled browser restart with automatic Carlo recovery and no archive duplication.
 
 ## Remaining
-Media-file verification where downloadable media is already exposed, factual own-block control transition observation, peer-block inference observation over time, older-history strategy if more history is required than WhatsApp currently renders/loads, generalization, docs, focused DOM-fixture coverage, and final checkpoint.
+Factual own-block/control and peer-inference verification from existing/synthetic evidence, selectable-chat generalization without weakening scope gating, focused DOM tests, usage/limitations documentation, final source validation, and final roadmap checkpoint.
 
 ## Blockers
-No confirmed blocker. Current bounded DOM backfill reaches a stable top without exposing older rows; this is a WhatsApp loading limitation to investigate only if required for fuller history. relationship-monitor.js remains unfinished/unvalidated and untouched. Browser restart emits transient connection/conversation-missing errors during WhatsApp startup, but automatic recovery is verified.
+No blocker for incremental export. Older-history completeness is bounded by what WhatsApp Web currently exposes in the authenticated clone: repeated top-scrolls do not load older rows and no read-only older-history control is present. An attempted deeper IndexedDB inventory through the remote runtime was blocked by the remote safety layer, so internal database extraction is not being bypassed. relationship-monitor.js remains unfinished/unvalidated and untouched.
 
 ## Evidence
 - operations/task-state/CHATGPT-20260924-WHATSAPP-CARLO-BLOCK-TRACKING.md
 - /home/daniele/projects/whatsapp-watcher remains b6e3e9f with only the preserved untracked relationship drafts.
-- gernalix/whatsapp-exporter commits ddfebba, 37ee641, 059b07b, 9bd5ff3, 8a030c9, 0cc2991, 6faa3e8.
-- 11/11 unittest PASS; Python compileall PASS; Node syntax PASS for both DOM scripts.
-- Bounded live backfill: 10 steps, 0 inserted/revised, 188 unchanged.
+- gernalix/whatsapp-exporter commits ddfebba, 37ee641, 059b07b, 9bd5ff3, 8a030c9, 0cc2991, 6faa3e8, ced3b39.
+- 12/12 unittest PASS; Python compileall PASS; Node syntax PASS for both DOM scripts.
+- Fresh bounded live backfill: 9 steps, 0 inserted/revised, 164 unchanged; fixed oldest-loaded scroll boundary and no older-history control.
+- Live media: one metadata-only Carlo image with no source; no local file and no forced UI download. Synthetic source-available download/dedupe path PASS.
 - systemd user browser/watcher deployment enabled; controlled watcher restart PASS.
-- Controlled browser restart PASS after extension isolation: direct CDP eval PASS, automatic Carlo reopening observed, no errors after startup recovery.
-- SQLite scope after restart checks: only Carlo Visda, 36 records, no duplicate growth.
+- Controlled browser restart PASS after extension isolation: direct CDP eval PASS, automatic Carlo reopening observed after startup recovery.
+- SQLite scope after restart/media checks: only Carlo Visda, 36 records, no duplicate growth.
 
 ## Acceptance criteria
 - Carlo Visda history can be exported incrementally with no duplicate messages on repeat runs.
@@ -137,4 +144,4 @@ No confirmed blocker. Current bounded DOM backfill reaches a stable top without 
 - Source/tests/checkpoint are pushed; private transcript/media are not committed to public source Git.
 
 ## Next action
-Verify the media-preservation path against the current Carlo archive/live DOM without forcing WhatsApp state changes: inspect the metadata-only media row and any currently exposed semantic media source, download only when already accessible, confirm local file/metadata dedupe, and checkpoint before moving to older-history completeness.
+Verify relationship-event semantics from the existing Carlo archive plus focused synthetic tests: historical own block/unblock must be factual, current control state must not create a transition without a baseline change, and peer block/unblock must remain inferred with raw evidence. Do not change the live block state for testing. Then checkpoint and generalize the CLI/runtime from the Carlo default to explicitly selected chats without persisting any unselected chat.
