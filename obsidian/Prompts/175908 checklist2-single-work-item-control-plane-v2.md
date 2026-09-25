@@ -1,6 +1,6 @@
 ---
 prompt_id: 175908
-status: pending
+status: running
 project_id: 51
 model: GPT-6 Sol
 reasoning: medium
@@ -11,13 +11,13 @@ tags:
   - single-work-item
   - workflowy
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/codex-roadmap
 ---
 
 # 175908 · Creare Checklist 2.0 come unico albero di lavoro
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
 - **Prompt:** [[../../prompts/checklist2-single-work-item-control-plane-v2|Apri prompt]]
 - **Primo lancio:** —
