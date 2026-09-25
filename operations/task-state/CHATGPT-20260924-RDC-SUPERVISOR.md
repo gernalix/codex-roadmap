@@ -7,109 +7,114 @@ Updated: 2026-09-25 Europe/Copenhagen
 Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT + Remote Desktop Commander work resumable without human babysitting by detecting unhealthy workers, enforcing checkpoint freshness, and replacing degraded chats from canonical Git state.
 
 ## Constraints
-- Use a separate repository so active PersonalHub/infrastructure owners are not disturbed.
 - Git/checkpoint state is canonical; chat memory is disposable.
 - Never persist secrets or raw private chat transcripts.
 - Do not blindly replay potentially destructive user prompts.
-- Authentication/MFA/CAPTCHA/provider outage/unknown DOM changes are explicit human-required blockers, not silently bypassed.
-- Recovery must be bounded; no infinite model-driven polling loops.
-- Do not use active PersonalHub/Grindr work as a destructive rollover test; use a synthetic disposable worker.
+- Authentication/MFA/CAPTCHA/provider outage/unknown DOM changes are explicit human-required blockers.
+- Recovery is bounded; no infinite model-driven polling loops.
+- Active PersonalHub/Grindr work must not be used for destructive rollover tests; use a synthetic disposable worker.
+- Normal Chrome/Firefox profiles remain outside supervisor control.
 
 ## Plan / checklist
 ### Phase 1 — Core supervisor
 - [x] Create gernalix/chatgpt-rdc-supervisor and Python package.
 - [x] Implement task registry, health state machine, checkpoint freshness and recovery policy.
-- [x] Implement Playwright/CDP ChatGPT adapter with selector fallbacks and transcript-free structural telemetry.
-- [x] Implement proactive context rollover by size and a hard 20-minute worker lifetime.
-- [x] Implement new-chat handoff prompt generated only from TASK_ID/state-file/checkpoint/Next action protocol.
-- [x] Implement bounded transient retry/reload and terminal human-required states.
-### Phase 2 — Persistence and service
-- [x] Add dedicated Chrome profile launcher on local-only CDP 127.0.0.1:9333.
-- [x] Add systemd user supervisor with Restart=always and WatchdogSec=90.
-- [x] Add independent browser/CDP health timer that restarts an unhealthy worker browser.
-- [x] Add CLI for register/list/status/run-once/pause/resume/doctor.
+- [x] Implement Playwright/CDP adapter with transcript-free structural telemetry.
+- [x] Implement proactive rollover by context size and 20-minute worker lifetime.
+- [x] Implement checkpoint-based replacement-chat handoff.
+- [x] Implement bounded retry/reload/human-required recovery.
+
+### Phase 2 — Persistence and services
+- [x] Deploy dedicated Chrome profile on local-only CDP 127.0.0.1:9333.
+- [x] Deploy systemd supervisor with restart policy and watchdog.
+- [x] Deploy independent browser/CDP health timer.
+- [x] Add CLI register/list/status/run-once/pause/resume/doctor.
 - [x] Add structured local event log and machine-readable runtime state.
 - [x] Add optional ntfy hook without secrets in Git.
 - [x] Add offline detection and bounded rollover-per-checkpoint protection.
 
 ### Phase 3 — Verification
-- [x] Unit-test policy/state transitions/checkpoint handling: 10/10 PASS.
-- [x] Simulate frozen/error/context-risk/logout cases in deterministic policy tests.
-- [x] Deploy user services on Fedora and prove supervisor crash/restart recovery.
-- [x] Prove browser watchdog recovery by stopping the dedicated browser and observing automatic restart/CDP recovery.
-- [x] Complete one-time ChatGPT login in the dedicated browser profile.
-- [x] Register a real PersonalHub worker and observe a real automatic checkpoint request followed by resumed generation.
-- [x] Register a real Grindr worker and validate checkpoint association.
-- [x] Fix transcript-text false positives so phrases such as “Something went wrong” inside conversation content are not treated as ChatGPT platform errors.
-- [x] Re-run core test suite after the health-detector fix: 10/10 PASS.
-- [ ] Verify one complete fresh-chat rollover end-to-end on a synthetic disposable worker, including URL replacement and continuation from pushed checkpoint.
+- [x] Deterministic policy/checkpoint tests.
+- [x] Prove supervisor SIGKILL recovery through systemd.
+- [x] Prove dedicated-browser stop/restart recovery.
+- [x] Complete one-time ChatGPT login in dedicated profile.
+- [x] Register PersonalHub and observe a real automatic checkpoint request followed by resumed generation.
+- [x] Register Grindr against its pushed checkpoint.
+- [x] Fix transcript-text false positives in platform-error detection; source f0ee5ea.
+- [x] Create and push synthetic disposable rollover fixture; source 6a988b5.
+- [x] Reject provisional /c/WEB: URLs as successful rollovers; source 2cedbcf.
+- [x] Fix send-message race by waiting for the real send button; source e3f334c.
+- [x] Increase rollover persistence window and systemd watchdog headroom; current source ea8dc9a.
+- [x] Re-run suite after rollover hardening: 12/12 PASS.
+- [ ] Replace sleep/poll URL persistence detection with Playwright event-driven waiting and verify one real fresh-chat rollover end-to-end.
+- [ ] Disable/remove the synthetic worker after PASS and record final acceptance evidence.
 
 ## Current step
-Core deployment and authenticated real-worker supervision are operational. The only remaining acceptance item is a controlled fresh-chat rollover using a synthetic worker so active PersonalHub and Grindr lanes are not disrupted.
+The synthetic worker is safely isolated and has repeatedly selected the correct proactive rollover action. The remaining defect is limited to detecting when ChatGPT converts the provisional /c/WEB: URL into its persisted UUID: a manual probe showed the UUID immediately after new_chat returned, indicating the current sleep/poll loop can miss the frontend navigation event. Replace that polling with Playwright event-driven waiting, then rerun the same synthetic rollover.
+
 ## Verified facts
-- Source repo: gernalix/chatgpt-rdc-supervisor, pushed main f0ee5ea.
-- Python 3.14, Playwright and Chrome 153 are available.
-- Existing unrelated CDP ports 9222/9223 were not touched; supervisor uses 9333 only on loopback.
-- Core tests: 10/10 PASS after the latest detector fix.
-- chatgpt-rdc-browser.service and chatgpt-rdc-supervisor.service are enabled/active.
-- chatgpt-rdc-browser-health.timer is enabled/active.
-- Supervisor systemd WatchdogSec is 90s.
-- Forced supervisor SIGKILL recovery PASS: PID changed 2948309 -> 2950358, service active, NRestarts=1.
-- Forced browser-stop recovery PASS: PID changed 2895446 -> 2952096 and local CDP returned healthy.
-- Dedicated ChatGPT browser profile is authenticated; composer and CDP access are usable.
-- PersonalHub worker CHATGPT-20260924-PERSONALHUB-P0 is registered against its canonical task-state file. The supervisor emitted a real request-checkpoint event and the worker resumed generation.
-- Grindr worker CHATGPT-20260924-GRINDR-WEB-LOGIN-ERROR is registered against pushed checkpoint f8921b60....
-- Initial Grindr supervision exposed a false-positive bug because the conversation itself contains the phrase “Something went wrong”; the detector incorrectly scanned transcript text as a platform error.
-- Source commit f0ee5ea fixes this by restricting error detection to visible alert/status/error/toast UI plus retry-associated output instead of arbitrary conversation content. Live reinspection then reported authenticated=true, composer=true, generating=true, error=None.
-- Normal Chrome/Firefox profiles are not modified or controlled.
+- Supervisor source repo current pushed main: ea8dc9a.
+- Unit suite: 12/12 PASS.
+- Dedicated ChatGPT profile is authenticated and CDP is usable.
+- PersonalHub worker CHATGPT-20260924-PERSONALHUB-P0 is registered and has already responded to a real supervisor checkpoint request.
+- Grindr worker CHATGPT-20260924-GRINDR-WEB-LOGIN-ERROR is registered against a pushed checkpoint and is healthy after the transcript-error detector fix.
+- The current supervisor chat itself is also registered as CHATGPT-20260924-RDC-SUPERVISOR and is producing checkpoint requests.
+- Synthetic fixture is pushed in chatgpt-rdc-supervisor at commit 6a988b5; its initial persisted chat URL is https://chatgpt.com/c/6ab61996-1c7c-83eb-bf0f-340e4b32767f.
+- Synthetic run-once correctly chose action=rollover, reason=proactive context rollover, from pushed checkpoint 6a988b50b750502b8a46ccb6f21f4d61e5875627.
+- Failed synthetic rollover attempts did not overwrite the registry URL; they stopped safely as human-required.
+- Manual new_chat probe returned provisional https://chatgpt.com/c/WEB:e92896a9-54ef-41cf-a9af-698bc38730fc, and immediately after return the same page reported persisted URL https://chatgpt.com/c/6ab61af3-6f04-83eb-9963-1b5b1b102387 with two turns and title "Continua task worker sostitutivo".
+- That probe proves the handoff message is sent and ChatGPT does create the replacement conversation; the unresolved issue is reliable observation of the final URL transition inside new_chat().
+- systemd watchdog headroom is now 180 seconds; browser health timer remains independent.
+- Browser supervision stores structural metadata only; raw private transcripts are not persisted.
+
 ## Decisions
-- A chat is an ephemeral worker; replacement from Git is the primary recovery path.
-- Default checkpoint freshness budget is 10 minutes; default hard worker lifetime is 20 minutes.
-- A fresh pushed checkpoint is preferred before rollover; retries and rollovers are bounded.
-- Two rollovers on the same unchanged checkpoint exhaust the automatic rollover budget.
-- Local network loss pauses deterministic supervision without consuming model retries.
-- The supervisor itself is watched by systemd; the dedicated browser has an independent non-model watchdog.
-- Error detection must never classify ordinary transcript text as ChatGPT platform health evidence.
-- Authentication secrets/cookies are not copied from the normal browser.
-- Final rollover acceptance will use a synthetic disposable task, not an active user workload.
+- Treat every chat as an ephemeral worker; replacement from pushed Git state is the primary recovery path.
+- Default checkpoint freshness budget remains 10 minutes and default hard worker lifetime 20 minutes.
+- Two rollovers on one unchanged checkpoint exhaust the automatic rollover budget.
+- Error detection must use platform UI surfaces, never arbitrary conversation text.
+- A rollover is successful only after a persisted non-WEB conversation URL is observed.
+- Use Playwright event-driven URL/navigation waiting rather than extending fixed sleeps further.
+- Final rollover acceptance continues on the synthetic worker only.
 
 ## Completed
-- Isolated source repo created, committed and pushed.
-- Core recovery policy, browser adapter, registry, handoff generator, CLI and event store implemented.
-- Persistent systemd services/timer deployed.
-- Self-crash and browser-crash recovery verified.
-- Dedicated ChatGPT login completed.
-- Real PersonalHub checkpoint-request intervention verified.
+- Core supervisor implemented, deployed and pushed.
+- systemd self-recovery and browser recovery verified.
+- Dedicated ChatGPT authentication completed.
+- Real PersonalHub checkpoint intervention verified.
 - Real Grindr worker registration verified.
-- Transcript-text false-positive health bug fixed, tested and pushed.
+- Transcript false-positive detector fixed.
+- Provisional URL handling and send-button race fixed.
+- Synthetic Git-backed worker created and exercised without touching active user workloads.
+- Current source hardening through ea8dc9a deployed.
 
 ## Remaining
-- Create a synthetic disposable Git-backed worker/checkpoint.
-- Register it in the supervisor and force a rollover condition without touching active workloads.
-- Verify a new ChatGPT conversation URL is created, registry points to the new URL, the handoff starts from the pushed checkpoint, and no rollover loop occurs.
-- Remove/disable the synthetic worker and record final acceptance evidence.
+- Replace the new_chat sleep/poll loop with event-driven persisted-URL waiting.
+- Re-run 12-test suite and add/adjust URL-wait regression coverage if practical.
+- Reset only the synthetic worker runtime and rerun one forced rollover.
+- Verify new persisted URL, registry update, rollover_count increment, event-log rollover record, and checkpoint-based handoff.
+- Disable/remove the synthetic worker and checkpoint final PASS.
 
 ## Blockers
-None. The remaining rollover test is intentionally isolated from active user tasks.
+None. The remaining issue is a bounded frontend synchronization defect isolated to synthetic rollover acceptance.
+
 ## Evidence
-- Supervisor source commits: 1409400, 45f5fa0, f0ee5ea.
-- 10 unittest cases PASS after latest health-detector changes.
-- Systemd live readback previously verified supervisor/browser/timer active and watchdog configured.
-- SIGKILL recovery and dedicated-browser stop/restart recovery both PASS.
-- PersonalHub structured event log records action=request-checkpoint followed by status=working.
-- Grindr checkpoint is pushed on codex-roadmap main; live browser inspection after f0ee5ea reports no platform error.
-- All browser telemetry used for supervision is structural; raw private transcripts are not persisted.
+- Supervisor commits: 1409400, 45f5fa0, f0ee5ea, 6a988b5, 2cedbcf, e3f334c, 0644282, ea8dc9a.
+- 12 unittest cases PASS after latest source changes.
+- PersonalHub event log recorded action=request-checkpoint followed by status=working.
+- Synthetic run-once logs recorded action=rollover with pushed checkpoint, then safe human-required because persisted URL was not observed in time.
+- Manual probe proved the replacement chat exists with a persisted UUID immediately after new_chat() returns.
+- systemd/browser watchdog recovery evidence remains PASS from prior checkpoint.
 
 ## Acceptance criteria
 - [x] Supervisor survives its own process crash/restart through systemd.
 - [x] Registered-worker policy exposes healthy/stalled/context-risk/human-required states.
-- [x] Stale workers have a recovery path that does not depend on prior chat memory.
-- [x] Critical-length/age workers have a rollover policy based on canonical Git state.
-- [x] Retry loops and repeated rollover loops are bounded.
+- [x] Stale workers recover without depending on prior chat memory.
+- [x] Critical-length/age workers select rollover from canonical Git state.
+- [x] Retry and repeated-rollover loops are bounded.
 - [x] Browser/auth/DOM blockers are surfaced explicitly.
-- [x] Tests pass, services are active, source is pushed.
-- [x] Authenticated real-chat checkpoint-request intervention has been observed.
-- [ ] A real fresh-chat rollover from a pushed checkpoint has been observed end-to-end.
+- [x] Authenticated real-chat checkpoint intervention has been observed.
+- [x] Tests pass, services are deployed, source is pushed.
+- [ ] One real fresh-chat rollover from a pushed checkpoint updates the registry end-to-end.
 
 ## Next action
-Create a synthetic disposable Git-backed worker, register it, force a context-risk rollover, verify the new conversation URL and checkpoint-based handoff end-to-end, then disable/remove the synthetic worker and checkpoint the final PASS evidence.
+Replace new_chat() fixed sleep/poll URL persistence detection with Playwright event-driven waiting for a non-WEB /c/ conversation URL, rerun the synthetic forced rollover, verify registry/event/runtime updates, then disable the synthetic worker and checkpoint final PASS.
