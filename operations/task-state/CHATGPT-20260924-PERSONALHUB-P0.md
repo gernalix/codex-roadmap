@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-24 19:47 Europe/Copenhagen
+Updated: 2026-09-25 08:35 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -57,6 +57,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 ### Phase 3 — 857906 unified History/Search
 - [x] Resume 857906 from post-Workflowy main and complete the shared host engine: bounded Activity DAO search, live time/module/text/entity filters, humanized/grouped cards, conservative undo, one Home 🔍 entry and Search/Event deep-link routing. Checkpoint `9d835d8`.
 - [x] Pass consumer-preflight, targeted presentation/deep-link/Activity DAO+undo tests, app compile and `checkArchitectureBoundaries` for the shared-engine block.
+- [x] Re-synchronize the P0 operational lane after chat handoff; verify clean `task/857906` HEAD and remote both equal `9d835d8198f7b088f6577cc404306e2a50d5a2aa`, with roadmap guarded pull PASS at `12ef9f8`.
 - [ ] Replace legacy duplicate user-facing History/Log/Timeline browsers module-by-module with the public scoped History/Search deep link while preserving distinct domain chronology/features.
 - [ ] Add/confirm legacy-route architecture guard, run final targeted module tests and canonical `Pixel_8a` emulator QA for global + at least two fixed-module entry points.
 
@@ -90,9 +91,10 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-857906 is active on `task/857906`. Shared host History/Search block is complete, tested and pushed at `9d835d8198f7b088f6577cc404306e2a50d5a2aa`. Schema remains 23. Current phase is targeted replacement of legacy per-module change-history/timeline browsers using `HubDeepLinkContract.moduleHistoryUri(...)`; preserve domain-specific chronological features.
+857906 is active on `task/857906`. Shared host History/Search block is complete, tested and pushed at `9d835d8198f7b088f6577cc404306e2a50d5a2aa`; takeover verification confirms the worktree is clean and the remote task ref is identical. Schema remains 23. Current phase is targeted replacement of legacy per-module change-history/timeline browsers using `HubDeepLinkContract.moduleHistoryUri(...)`; preserve domain-specific chronological features.
 
 ## Verified facts
+- 2026-09-25 takeover checkpoint: guarded roadmap synchronization PASS to `12ef9f89eba6e32f006e280d2f4e715115ca7ff0`; the pre-sync dirty state files were proven byte-identical to `origin/main` before realignment. PersonalHub `task/857906` is clean at local+remote `9d835d8198f7b088f6577cc404306e2a50d5a2aa`; no WIP was lost.
 - 857906 shared-engine checkpoint is safely committed+pushed as `9d835d8198f7b088f6577cc404306e2a50d5a2aa` on `task/857906` (remote hash verified exact). Home now has one 🔍 History/Search destination; Search/Event deep links route to the same `HubHistorySearchScreen`; module scoping is represented by the public `moduleHistoryUri` contract and hidden immutable scope state. No Room schema change; schema remains 23.
 - Shared-engine verification PASS: consumer-forbid reports zero `HubActivityRegisterScreen` consumers; `:app:compileDebugKotlin` PASS; `checkArchitectureBoundaries` PASS; targeted `HubActivityPresentationTest`, `HubDeepLinkContractTest`, and `HubActivityRegisterTest` PASS. DAO coverage verifies time/module/entity/system/limit filters and newest-first ordering; presentation coverage verifies exact `EEE d/M/yy` date display, diacritic-insensitive search, hidden before/after search terms, technical-ID suppression, grouping and conservative grouped undo.
 - 857906 handoff WIP checkpoint is safely committed+pushed as `ed21615445462c51762a633044db4eeaf02d21d4` on `task/857906`. It contains only the first partial block: Search deep-link query/entity parameters, a shared bounded Activity DAO search query, and the beginning of the unified History/Search host signature/imports/constants. This is intentionally incomplete and must be continued, not treated as PASS.
@@ -205,6 +207,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- New chat ownership checkpoint completed for PersonalHub P0 / 857906: roadmap re-synchronized through the guarded pull, current PH task hash/remote/worktree cleanliness verified, and execution resumes from the existing tested `9d835d8` shared-engine checkpoint rather than repeating discovery.
 - 857906 block 1 completed and checkpointed at PersonalHub `9d835d8`: shared bounded Activity-backed History/Search host, semantic humanization/grouping, live filters, Home/deep-link unification, conservative undo refresh, public fixed-module deep-link contract, targeted tests, compile, consumer gate and architecture gate all PASS.
 - Workflowy is fully merged and side branches deleted: PR #43 merged as `b1a7f22ef6f56be60cff47e7d8fec2805b088af1`; all required CI PASS after lint fix `f8e4541`. Both `chatgpt/workflowy-integration` and `task/workflowy-integration` were deleted locally/remotely after containment/tree-equivalence proof.
 - PersonalHub branch set is now exactly `main` + active `task/857906`. The 857906 worktree was proven clean and fast-forwarded from pre-Workflowy `66dbe026...` to post-Workflowy `b1a7f22...` before any 857906 code edit.
@@ -261,12 +264,14 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
+- No active blocker for the current 857906 legacy-surface convergence phase; Fedora access is available through Remote Desktop Commander.
 - Local Android build/device/real-DB work requires Codex/local Fedora access.
 - The actual live Pixel DB schema/identity is not yet read and must not be guessed.
 - Final DB target cannot be frozen until upstream PH tasks are complete.
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- Takeover verification 2026-09-25: guarded roadmap pull PASS at `12ef9f89eba6e32f006e280d2f4e715115ca7ff0`; PersonalHub worktree status clean; local HEAD and `origin/task/857906` both `9d835d8198f7b088f6577cc404306e2a50d5a2aa`.
 - 857906 PersonalHub checkpoint `9d835d8198f7b088f6577cc404306e2a50d5a2aa` on remote `task/857906`; consumer-forbid PASS, `ARCHITECTURE_BOUNDARIES=PASS`, app compile PASS, targeted app/deep-link/presentation tests PASS, targeted core Activity DAO/undo tests PASS.
 - Superseded dirty-worktree rollback evidence has been preserved outside Git at `~/Documents/ChatGPT/Personal Hub/evidence/recovery-20260924-superseded-worktrees/`: tracked binary patches, untracked-source tarballs and status snapshots for 624831 and 728918. Key SHA-256: 624831 patch `14c03f819adcc62af000243cc5f42ccd7b7c149bb5ec412508210bacc2840b00`, untracked archive `8005432ae18d89f42a9a9b5b489327f3c776a611dd3bd0799273d2b071f7b387`; 728918 patch `658514dfa31381b68dc94d9d018ad840569a12cc2013b7e6acbe4f3cdc858f11`, untracked archive `f7b1de3f90e25715f755f25b6b2762619aa0732526d051cf7166a7936f699436`.
 - PersonalHub `origin/main` contains hotfix `41920af` (`Fix tag history no-op write amplification`) and compactor `57883c2` (`Add safe Git no-op history compactor`). Targeted Gradle regression tests and `:app:compileDebugKotlin` PASS; `python3 tools/test_cleanup_hub_git_noop_events.py` PASS on exact `origin/main`.
