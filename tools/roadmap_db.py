@@ -280,6 +280,81 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
     )
     conn.commit()
 
+
+def work_items_cutover_active(conn: sqlite3.Connection) -> bool:
+    row = conn.execute(
+        "SELECT value FROM meta WHERE key='work_items_cutover_version'"
+    ).fetchone()
+    return bool(row and str(row[0]) == "1")
+
+
+def prompt_work_item_id(prompt_id: str) -> str:
+    return f"prompt:{prompt_id}"
+
+
+def _update_prompt_metadata(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    *,
+    fields: dict[str, Any],
+) -> None:
+    if not fields:
+        return
+    allowed = {
+        "materialization_sha256",
+        "model",
+        "reasoning",
+        "explanation",
+        "current_path",
+        "chat_guidance",
+        "updated_at",
+    }
+    unknown = set(fields) - allowed
+    if unknown:
+        raise RoadmapDBError(
+            "invalid_prompt_metadata_columns:" + ",".join(sorted(unknown))
+        )
+    assignments = ", ".join(f"{name}=?" for name in fields)
+    conn.execute(
+        f"UPDATE prompt_metadata SET {assignments} WHERE prompt_id=?",
+        [*fields.values(), prompt_id],
+    )
+
+
+def _update_prompt_work_item(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    *,
+    fields: dict[str, Any],
+) -> None:
+    if not fields:
+        return
+    allowed = {
+        "status",
+        "sort_order",
+        "title",
+        "project_id",
+        "project_name",
+        "repo",
+        "updated_at",
+        "current_action",
+        "next_action",
+        "blocker",
+        "executor_policy",
+        "parent_id",
+    }
+    unknown = set(fields) - allowed
+    if unknown:
+        raise RoadmapDBError(
+            "invalid_prompt_work_item_columns:" + ",".join(sorted(unknown))
+        )
+    assignments = ", ".join(f"{name}=?" for name in fields)
+    conn.execute(
+        f"UPDATE work_items SET {assignments} WHERE prompt_id=?",
+        [*fields.values(), prompt_id],
+    )
+
+
 def materialization_hash(text: str) -> str:
     # Normalize the same superficial escaping used by usage exports; raw text is never stored.
     text = html.unescape(text or "")
@@ -300,10 +375,21 @@ def refresh_materialization_hashes(conn: sqlite3.Connection, repo: Path) -> int:
         ).fetchone()
         if existing:
             if row["materialization_sha256"] != existing["sha256"]:
-                conn.execute(
-                    "UPDATE prompts SET materialization_sha256=?,updated_at=? WHERE prompt_id=?",
-                    (existing["sha256"], now_utc(), row["prompt_id"]),
-                )
+                ts = now_utc()
+                if work_items_cutover_active(conn):
+                    _update_prompt_metadata(
+                        conn,
+                        str(row["prompt_id"]),
+                        fields={
+                            "materialization_sha256": existing["sha256"],
+                            "updated_at": ts,
+                        },
+                    )
+                else:
+                    conn.execute(
+                        "UPDATE prompts SET materialization_sha256=?,updated_at=? WHERE prompt_id=?",
+                        (existing["sha256"], ts, row["prompt_id"]),
+                    )
                 updated += 1
             continue
         path = Path(repo) / row["current_path"]
@@ -316,10 +402,18 @@ def refresh_materialization_hashes(conn: sqlite3.Connection, repo: Path) -> int:
                VALUES(?,?,?,?,?)""",
             (row["prompt_id"], body, sha, now_utc(), "legacy-backfill"),
         )
-        conn.execute(
-            "UPDATE prompts SET materialization_sha256=?,updated_at=? WHERE prompt_id=?",
-            (sha, now_utc(), row["prompt_id"]),
-        )
+        ts = now_utc()
+        if work_items_cutover_active(conn):
+            _update_prompt_metadata(
+                conn,
+                str(row["prompt_id"]),
+                fields={"materialization_sha256": sha, "updated_at": ts},
+            )
+        else:
+            conn.execute(
+                "UPDATE prompts SET materialization_sha256=?,updated_at=? WHERE prompt_id=?",
+                (sha, ts, row["prompt_id"]),
+            )
         updated += 1
     return updated
 
@@ -349,12 +443,39 @@ def ensure_historical_stub(
         return
     ts = now_utc()
     slug = f"prompt-{prompt_id}"
-    conn.execute(
-        """INSERT INTO prompts(
-             prompt_id,slug,title,prompt_type,status,current_path,created_at,updated_at
-           ) VALUES(?,?,?,?,?,?,?,?)""",
-        (prompt_id, slug, title or f"Prompt {prompt_id}", "Prompt", status, "", ts, ts),
-    )
+    if work_items_cutover_active(conn):
+        conn.execute(
+            """INSERT INTO prompt_metadata(
+                 prompt_id,slug,chat_guidance,prompt_type,model,reasoning,
+                 megavault_mode,campaign_id,explanation,current_path,
+                 materialization_sha256,created_at,updated_at
+               ) VALUES(?,?,NULL,'Prompt',NULL,NULL,NULL,NULL,'','',NULL,?,?)""",
+            (prompt_id, slug, ts, ts),
+        )
+        conn.execute(
+            """INSERT INTO work_items(
+                 work_item_id,parent_id,kind,title,status,executor_policy,sort_order,
+                 current_action,next_action,blocker,project_id,project_name,repo,
+                 prompt_id,task_id,required,actionable,source_kind,source_ref,
+                 created_at,updated_at
+               ) VALUES(?,NULL,'task',? ,?,'codex',NULL,NULL,NULL,NULL,NULL,NULL,NULL,
+                        ?,NULL,1,1,'prompt','historical-stub',?,?)""",
+            (
+                prompt_work_item_id(prompt_id),
+                title or f"Prompt {prompt_id}",
+                status,
+                prompt_id,
+                ts,
+                ts,
+            ),
+        )
+    else:
+        conn.execute(
+            """INSERT INTO prompts(
+                 prompt_id,slug,title,prompt_type,status,current_path,created_at,updated_at
+               ) VALUES(?,?,?,?,?,?,?,?)""",
+            (prompt_id, slug, title or f"Prompt {prompt_id}", "Prompt", status, "", ts, ts),
+        )
     conn.execute(
         "INSERT INTO status_history(prompt_id,old_status,new_status,changed_at,actor,note) "
         "VALUES(?,?,?,?,?,?)",
@@ -401,18 +522,65 @@ def register_prompt(
     existing = conn.execute("SELECT status FROM prompts WHERE prompt_id=?", (prompt_id,)).fetchone()
     if existing:
         raise RoadmapDBError(f"prompt_id_exists:{prompt_id}")
-    conn.execute(
-        """INSERT INTO prompts(
-          prompt_id,slug,title,project_id,project_name,repo,chat_guidance,prompt_type,
-          model,reasoning,megavault_mode,campaign_id,explanation,status,queue_position,
-          current_path,materialization_sha256,created_at,updated_at
-        ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
-        (
-            prompt_id, slug, title, project_id, project_name, repo, chat_guidance,
-            prompt_type, model, reasoning, megavault_mode, campaign_id, explanation,
-            status, queue_position, current_path, sha, ts, ts,
-        ),
-    )
+    if work_items_cutover_active(conn):
+        conn.execute(
+            """INSERT INTO prompt_metadata(
+                 prompt_id,slug,chat_guidance,prompt_type,model,reasoning,
+                 megavault_mode,campaign_id,explanation,current_path,
+                 materialization_sha256,created_at,updated_at
+               ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+            (
+                prompt_id,
+                slug,
+                chat_guidance,
+                prompt_type,
+                model,
+                reasoning,
+                megavault_mode,
+                campaign_id,
+                explanation,
+                current_path,
+                sha,
+                ts,
+                ts,
+            ),
+        )
+        conn.execute(
+            """INSERT INTO work_items(
+                 work_item_id,parent_id,kind,title,status,executor_policy,sort_order,
+                 current_action,next_action,blocker,project_id,project_name,repo,
+                 prompt_id,task_id,required,actionable,source_kind,source_ref,
+                 created_at,updated_at
+               ) VALUES(?,NULL,?,?,?,?,?,NULL,NULL,NULL,?,?,?,?,NULL,1,1,'prompt',?,?,?)""",
+            (
+                prompt_work_item_id(prompt_id),
+                "goal" if prompt_type.lower() == "goal" else "task",
+                title,
+                status,
+                "codex",
+                queue_position,
+                project_id,
+                project_name,
+                repo,
+                prompt_id,
+                current_path,
+                ts,
+                ts,
+            ),
+        )
+    else:
+        conn.execute(
+            """INSERT INTO prompts(
+              prompt_id,slug,title,project_id,project_name,repo,chat_guidance,prompt_type,
+              model,reasoning,megavault_mode,campaign_id,explanation,status,queue_position,
+              current_path,materialization_sha256,created_at,updated_at
+            ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+            (
+                prompt_id, slug, title, project_id, project_name, repo, chat_guidance,
+                prompt_type, model, reasoning, megavault_mode, campaign_id, explanation,
+                status, queue_position, current_path, sha, ts, ts,
+            ),
+        )
     if prompt_text is not None:
         conn.execute(
             """INSERT INTO prompt_materializations(prompt_id,body,sha256,created_at,actor)
@@ -476,10 +644,17 @@ def set_status(
         if not (allow_running_terminal and new_status in (TERMINAL_STATUS - {"superseded"})):
             raise RoadmapDBError(f"running_prompt_locked:{prompt_id}:status:{new_status}")
     ts = now_utc()
-    conn.execute(
-        "UPDATE prompts SET status=?, updated_at=? WHERE prompt_id=?",
-        (new_status, ts, prompt_id),
-    )
+    if work_items_cutover_active(conn):
+        _update_prompt_work_item(
+            conn,
+            prompt_id,
+            fields={"status": new_status, "updated_at": ts},
+        )
+    else:
+        conn.execute(
+            "UPDATE prompts SET status=?, updated_at=? WHERE prompt_id=?",
+            (new_status, ts, prompt_id),
+        )
     conn.execute(
         "INSERT INTO status_history(prompt_id,old_status,new_status,changed_at,actor,note) "
         "VALUES(?,?,?,?,?,?)",
@@ -556,10 +731,17 @@ def set_prompt_text(
              actor=excluded.actor""",
         (prompt_id, prompt_text, new_sha, ts, actor),
     )
-    conn.execute(
-        "UPDATE prompts SET materialization_sha256=?,updated_at=? WHERE prompt_id=?",
-        (new_sha, ts, prompt_id),
-    )
+    if work_items_cutover_active(conn):
+        _update_prompt_metadata(
+            conn,
+            prompt_id,
+            fields={"materialization_sha256": new_sha, "updated_at": ts},
+        )
+    else:
+        conn.execute(
+            "UPDATE prompts SET materialization_sha256=?,updated_at=? WHERE prompt_id=?",
+            (new_sha, ts, prompt_id),
+        )
     conn.execute(
         "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
         (
@@ -589,10 +771,17 @@ def set_model(
     if old_model == model:
         return
     ts = now_utc()
-    conn.execute(
-        "UPDATE prompts SET model=?, updated_at=? WHERE prompt_id=?",
-        (model, ts, prompt_id),
-    )
+    if work_items_cutover_active(conn):
+        _update_prompt_metadata(
+            conn,
+            prompt_id,
+            fields={"model": model, "updated_at": ts},
+        )
+    else:
+        conn.execute(
+            "UPDATE prompts SET model=?, updated_at=? WHERE prompt_id=?",
+            (model, ts, prompt_id),
+        )
     conn.execute(
         "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
         (
@@ -621,10 +810,17 @@ def set_reasoning(
     if old_reasoning == reasoning:
         return
     ts = now_utc()
-    conn.execute(
-        "UPDATE prompts SET reasoning=?, updated_at=? WHERE prompt_id=?",
-        (reasoning, ts, prompt_id),
-    )
+    if work_items_cutover_active(conn):
+        _update_prompt_metadata(
+            conn,
+            prompt_id,
+            fields={"reasoning": reasoning, "updated_at": ts},
+        )
+    else:
+        conn.execute(
+            "UPDATE prompts SET reasoning=?, updated_at=? WHERE prompt_id=?",
+            (reasoning, ts, prompt_id),
+        )
     conn.execute(
         "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
         (
@@ -657,10 +853,17 @@ def set_explanation(
     if old_explanation == explanation:
         return
     ts = now_utc()
-    conn.execute(
-        "UPDATE prompts SET explanation=?, updated_at=? WHERE prompt_id=?",
-        (explanation, ts, prompt_id),
-    )
+    if work_items_cutover_active(conn):
+        _update_prompt_metadata(
+            conn,
+            prompt_id,
+            fields={"explanation": explanation, "updated_at": ts},
+        )
+    else:
+        conn.execute(
+            "UPDATE prompts SET explanation=?, updated_at=? WHERE prompt_id=?",
+            (explanation, ts, prompt_id),
+        )
     conn.execute(
         "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
         (
@@ -693,10 +896,17 @@ def reorder_prompt(
     if old_position == queue_position:
         return
     ts = now_utc()
-    conn.execute(
-        "UPDATE prompts SET queue_position=?, updated_at=? WHERE prompt_id=?",
-        (queue_position, ts, prompt_id),
-    )
+    if work_items_cutover_active(conn):
+        _update_prompt_work_item(
+            conn,
+            prompt_id,
+            fields={"sort_order": queue_position, "updated_at": ts},
+        )
+    else:
+        conn.execute(
+            "UPDATE prompts SET queue_position=?, updated_at=? WHERE prompt_id=?",
+            (queue_position, ts, prompt_id),
+        )
     conn.execute(
         "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
         (
@@ -711,10 +921,18 @@ def reorder_prompt(
 def add_dependency(conn: sqlite3.Connection, prompt_id: str, depends_on: str, *, note: str | None = None) -> None:
     assert_prompt_not_running(conn, prompt_id, "dependency")
     prompt_row(conn, depends_on)
-    conn.execute(
-        "INSERT OR IGNORE INTO dependencies(prompt_id,depends_on_prompt_id,note) VALUES(?,?,?)",
-        (prompt_id, depends_on, note),
-    )
+    if work_items_cutover_active(conn):
+        conn.execute(
+            """INSERT OR IGNORE INTO work_item_dependencies(
+                 work_item_id,depends_on_work_item_id,required,note
+               ) VALUES(?,?,1,?)""",
+            (prompt_work_item_id(prompt_id), prompt_work_item_id(depends_on), note),
+        )
+    else:
+        conn.execute(
+            "INSERT OR IGNORE INTO dependencies(prompt_id,depends_on_prompt_id,note) VALUES(?,?,?)",
+            (prompt_id, depends_on, note),
+        )
 
 def remove_dependency(
     conn: sqlite3.Connection,
@@ -732,10 +950,17 @@ def remove_dependency(
     ).fetchone()
     if not existing:
         return
-    conn.execute(
-        "DELETE FROM dependencies WHERE prompt_id=? AND depends_on_prompt_id=?",
-        (prompt_id, depends_on),
-    )
+    if work_items_cutover_active(conn):
+        conn.execute(
+            """DELETE FROM work_item_dependencies
+               WHERE work_item_id=? AND depends_on_work_item_id=?""",
+            (prompt_work_item_id(prompt_id), prompt_work_item_id(depends_on)),
+        )
+    else:
+        conn.execute(
+            "DELETE FROM dependencies WHERE prompt_id=? AND depends_on_prompt_id=?",
+            (prompt_id, depends_on),
+        )
     ts = now_utc()
     conn.execute(
         "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
@@ -779,14 +1004,34 @@ def replace_dependency(
         if already_forwarded:
             return
         raise RoadmapDBError(f"dependency_not_found:{prompt_id}:{old_depends_on}")
-    conn.execute(
-        "INSERT OR IGNORE INTO dependencies(prompt_id,depends_on_prompt_id,note) VALUES(?,?,?)",
-        (prompt_id, new_depends_on, note),
-    )
-    conn.execute(
-        "DELETE FROM dependencies WHERE prompt_id=? AND depends_on_prompt_id=?",
-        (prompt_id, old_depends_on),
-    )
+    if work_items_cutover_active(conn):
+        conn.execute(
+            """INSERT OR IGNORE INTO work_item_dependencies(
+                 work_item_id,depends_on_work_item_id,required,note
+               ) VALUES(?,?,1,?)""",
+            (
+                prompt_work_item_id(prompt_id),
+                prompt_work_item_id(new_depends_on),
+                note,
+            ),
+        )
+        conn.execute(
+            """DELETE FROM work_item_dependencies
+               WHERE work_item_id=? AND depends_on_work_item_id=?""",
+            (
+                prompt_work_item_id(prompt_id),
+                prompt_work_item_id(old_depends_on),
+            ),
+        )
+    else:
+        conn.execute(
+            "INSERT OR IGNORE INTO dependencies(prompt_id,depends_on_prompt_id,note) VALUES(?,?,?)",
+            (prompt_id, new_depends_on, note),
+        )
+        conn.execute(
+            "DELETE FROM dependencies WHERE prompt_id=? AND depends_on_prompt_id=?",
+            (prompt_id, old_depends_on),
+        )
     ts = now_utc()
     conn.execute(
         "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
@@ -817,13 +1062,44 @@ def add_relation(
     if target["status"] == "running":
         raise RoadmapDBError(f"running_prompt_locked:{to_prompt_id}:relation_target:{relation_type}")
     ts = now_utc()
-    conn.execute(
-        """INSERT INTO prompt_relations(
-             from_prompt_id,to_prompt_id,relation_type,created_at,actor,note
-           ) VALUES(?,?,?,?,?,?)
-           ON CONFLICT(from_prompt_id,to_prompt_id,relation_type) DO NOTHING""",
-        (from_prompt_id, to_prompt_id, relation_type, ts, actor, note),
-    )
+    if work_items_cutover_active(conn):
+        conn.execute(
+            """INSERT INTO work_item_relations(
+                 from_work_item_id,to_work_item_id,relation_type,created_at,actor,note
+               ) VALUES(?,?,?,?,?,?)
+               ON CONFLICT(from_work_item_id,to_work_item_id,relation_type) DO NOTHING""",
+            (
+                prompt_work_item_id(from_prompt_id),
+                prompt_work_item_id(to_prompt_id),
+                relation_type,
+                ts,
+                actor,
+                note,
+            ),
+        )
+        if relation_type == "parent":
+            child = conn.execute(
+                "SELECT parent_id FROM work_items WHERE prompt_id=?",
+                (to_prompt_id,),
+            ).fetchone()
+            expected_parent = prompt_work_item_id(from_prompt_id)
+            if child and child["parent_id"] not in (None, expected_parent):
+                raise RoadmapDBError(
+                    f"work_item_parent_conflict:{to_prompt_id}:{child['parent_id']}:{expected_parent}"
+                )
+            _update_prompt_work_item(
+                conn,
+                to_prompt_id,
+                fields={"parent_id": expected_parent, "updated_at": ts},
+            )
+    else:
+        conn.execute(
+            """INSERT INTO prompt_relations(
+                 from_prompt_id,to_prompt_id,relation_type,created_at,actor,note
+               ) VALUES(?,?,?,?,?,?)
+               ON CONFLICT(from_prompt_id,to_prompt_id,relation_type) DO NOTHING""",
+            (from_prompt_id, to_prompt_id, relation_type, ts, actor, note),
+        )
 
     # Fix/replacement/merge relations are dependency successors. Pending children
     # should follow the new prompt automatically so a terminal parent never
@@ -841,18 +1117,38 @@ def add_relation(
             child_id = str(child["prompt_id"])
             if child_id == to_prompt_id:
                 continue
-            conn.execute(
-                "INSERT OR IGNORE INTO dependencies(prompt_id,depends_on_prompt_id,note) VALUES(?,?,?)",
-                (
-                    child_id,
-                    to_prompt_id,
-                    child["note"] or f"auto-forwarded from {from_prompt_id}",
-                ),
-            )
-            conn.execute(
-                "DELETE FROM dependencies WHERE prompt_id=? AND depends_on_prompt_id=?",
-                (child_id, from_prompt_id),
-            )
+            if work_items_cutover_active(conn):
+                conn.execute(
+                    """INSERT OR IGNORE INTO work_item_dependencies(
+                         work_item_id,depends_on_work_item_id,required,note
+                       ) VALUES(?,?,1,?)""",
+                    (
+                        prompt_work_item_id(child_id),
+                        prompt_work_item_id(to_prompt_id),
+                        child["note"] or f"auto-forwarded from {from_prompt_id}",
+                    ),
+                )
+                conn.execute(
+                    """DELETE FROM work_item_dependencies
+                       WHERE work_item_id=? AND depends_on_work_item_id=?""",
+                    (
+                        prompt_work_item_id(child_id),
+                        prompt_work_item_id(from_prompt_id),
+                    ),
+                )
+            else:
+                conn.execute(
+                    "INSERT OR IGNORE INTO dependencies(prompt_id,depends_on_prompt_id,note) VALUES(?,?,?)",
+                    (
+                        child_id,
+                        to_prompt_id,
+                        child["note"] or f"auto-forwarded from {from_prompt_id}",
+                    ),
+                )
+                conn.execute(
+                    "DELETE FROM dependencies WHERE prompt_id=? AND depends_on_prompt_id=?",
+                    (child_id, from_prompt_id),
+                )
             conn.execute(
                 "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
                 (
@@ -882,7 +1178,16 @@ def add_relation(
 
 def add_tag(conn: sqlite3.Connection, prompt_id: str, tag: str) -> None:
     assert_prompt_not_running(conn, prompt_id, "tag")
-    conn.execute("INSERT OR IGNORE INTO prompt_tags(prompt_id,tag) VALUES(?,?)", (prompt_id, tag))
+    if work_items_cutover_active(conn):
+        conn.execute(
+            "INSERT OR IGNORE INTO work_item_tags(work_item_id,tag) VALUES(?,?)",
+            (prompt_work_item_id(prompt_id), tag),
+        )
+    else:
+        conn.execute(
+            "INSERT OR IGNORE INTO prompt_tags(prompt_id,tag) VALUES(?,?)",
+            (prompt_id, tag),
+        )
 
 def remove_tag(
     conn: sqlite3.Connection,
@@ -899,10 +1204,16 @@ def remove_tag(
     ).fetchone()
     if not existing:
         return
-    conn.execute(
-        "DELETE FROM prompt_tags WHERE prompt_id=? AND tag=?",
-        (prompt_id, tag),
-    )
+    if work_items_cutover_active(conn):
+        conn.execute(
+            "DELETE FROM work_item_tags WHERE work_item_id=? AND tag=?",
+            (prompt_work_item_id(prompt_id), tag),
+        )
+    else:
+        conn.execute(
+            "DELETE FROM prompt_tags WHERE prompt_id=? AND tag=?",
+            (prompt_id, tag),
+        )
     conn.execute(
         "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
         (
