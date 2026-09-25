@@ -4,11 +4,9 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1\|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] | running | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | running | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
-| [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
-| [[obsidian/Prompts/238170 c2-supervisor-human-milestone-telegram-v1\|238170 · Rendere strutturali le notifiche milestone C2]] | pending | — | — | — | no | no | — | chatgpt-rdc-supervisor | GPT-6 Luna | low |
 | [[obsidian/Prompts/175908 checklist2-single-work-item-control-plane-v2\|175908 · Creare Checklist 2.0 come unico albero di lavoro]] | pending | — | — | — | no | no | — | codex-roadmap | GPT-6 Sol | medium |
+| [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Luna | low |
 | [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1\|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
@@ -18,7 +16,7 @@
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-6 Luna | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-6 Luna | medium |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-6 Sol | medium |
-| [[obsidian/Prompts/896074 ccs-pbf-final-live-routing-safe-retry-v1\|896074 · Chiudere il leaf CCS con routing progetto sicuro]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-6 Luna | low |
+| [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1\|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] | blocked | — | — | BLOCKED | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | sì | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
@@ -56,6 +54,7 @@
 | [[obsidian/Prompts/672304 workflowy-waiting-runtime-reconcile-v1\|672304 · Riallineare Waiting nel runtime Workflowy]] | completed | 2026-09-22T03:37:42Z | 2026-09-22T03:37:42Z | PASS | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/736284 chatgpt-exporter-live-chrome-first-archive-v1\|736284 · Sbloccare ChatGPTExporter e creare il primo archivio]] | blocked | 2026-09-22T11:16:19Z | 2026-09-22T11:16:19Z | BLOCKED | sì | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/222733 stop-runaway-788315-heartbeat\|222733 · Ferma il heartbeat Codex runaway di 788315]] | completed | — | — | PASS | no | no | — | Fedora / Codex runtime | GPT-6 Luna | low |
+| [[obsidian/Prompts/238170 c2-supervisor-human-milestone-telegram-v1\|238170 · Rendere strutturali le notifiche milestone C2]] | superseded | — | — | — | no | no | — | chatgpt-rdc-supervisor | GPT-6 Luna | low |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | completed | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | PASS | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2\|200725 · PersonalHub 100% capsule isolation — integra main e valida]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
@@ -145,6 +144,7 @@
 | [[obsidian/Prompts/918536 personalhub-datasette-lite-offline-runtime-v2\|918536 · Esploratore dati dentro PersonalHub anche offline]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/243871 personalhub-play-release-local-validation-v2\|243871 · Controllo finale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/690049 fedora-runtime-validation\|690049 · Ultimo controllo del monitoraggio Fedora]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/896074 ccs-pbf-final-live-routing-safe-retry-v1\|896074 · Chiudere il leaf CCS con routing progetto sicuro]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-6 Luna | low |
 | [[obsidian/Prompts/445388 logseq-updates-pat-safety-closure\|445388 · Chiusura sicurezza e attivazione updater Logseq]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/874695 checklist-2-unified-control-plane-v1\|874695 · Unificare roadmap e checkpoint nella Checklist 2.0]] | superseded | — | — | — | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2\|604812 · Fix GNOME global search shortcut on Chrome RPM]] | completed | 2026-09-21T21:50:23Z | 2026-09-21T21:50:23Z | PASS | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |

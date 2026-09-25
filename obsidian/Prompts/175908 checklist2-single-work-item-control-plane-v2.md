@@ -26,9 +26,9 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1|107210]], [[238170 c2-supervisor-human-milestone-telegram-v1|238170]], [[851204 c2-datasette-alerts-radical-hygiene-v1|851204]], [[896074 ccs-pbf-final-live-routing-safe-retry-v1|896074]]
-- **Sblocca:** —
-- **Padri/precedenti:** [[874695 checklist-2-unified-control-plane-v1|874695]]
+- **Dipende da:** —
+- **Sblocca:** [[851204 c2-datasette-alerts-radical-hygiene-v1|851204]]
+- **Padri/precedenti:** [[238170 c2-supervisor-human-milestone-telegram-v1|238170]], [[874695 checklist-2-unified-control-plane-v1|874695]], [[896074 ccs-pbf-final-live-routing-safe-retry-v1|896074]]
 - **Figli/follow-up:** [[107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1|107210]], [[238170 c2-supervisor-human-milestone-telegram-v1|238170]], [[851204 c2-datasette-alerts-radical-hygiene-v1|851204]]
 - **Chat Codex:** Goal Codex supervisionato da RDC; cutover end-to-end con sottotask repo-specifici solo quando necessari
 

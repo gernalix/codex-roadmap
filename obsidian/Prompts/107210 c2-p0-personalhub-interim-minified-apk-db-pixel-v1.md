@@ -1,6 +1,6 @@
 ---
 prompt_id: 107210
-status: running
+status: blocked
 project_id: 49
 model: GPT-6 Sol
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - personalhub
   - pixel
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/personal-hub
 ---
 
 # 107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/c2-p0-personalhub-interim-minified-apk-db-pixel-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/c2-p0-personalhub-interim-minified-apk-db-pixel-v1|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -26,7 +26,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** [[175908 checklist2-single-work-item-control-plane-v2|175908]], [[238170 c2-supervisor-human-milestone-telegram-v1|238170]], [[851204 c2-datasette-alerts-radical-hygiene-v1|851204]]
+- **Sblocca:** [[238170 c2-supervisor-human-milestone-telegram-v1|238170]]
 - **Padri/precedenti:** [[175908 checklist2-single-work-item-control-plane-v2|175908]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova sessione Codex supervisionata RDC; preempte 707603 parcheggiato

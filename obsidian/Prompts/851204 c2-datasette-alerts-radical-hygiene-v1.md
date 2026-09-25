@@ -25,8 +25,8 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1|107210]]
-- **Sblocca:** [[175908 checklist2-single-work-item-control-plane-v2|175908]]
+- **Dipende da:** [[175908 checklist2-single-work-item-control-plane-v2|175908]]
+- **Sblocca:** —
 - **Padri/precedenti:** [[175908 checklist2-single-work-item-control-plane-v2|175908]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova sessione Codex dopo P0 PersonalHub; audit bounded + deploy live
