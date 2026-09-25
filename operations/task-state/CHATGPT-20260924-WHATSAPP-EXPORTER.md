@@ -1,7 +1,7 @@
 # Operational task state — WhatsApp exporter
 
 TASK_ID: CHATGPT-20260924-WHATSAPP-EXPORTER
-Updated: 2026-09-25 09:15 Europe/Copenhagen
+Updated: 2026-09-25 09:37 Europe/Copenhagen
 
 ## Objective
 Build a robust incremental WhatsApp exporter starting from WhatsApp Web on Fedora, reusing verified authenticated-browser access and existing whatsapp-watcher DOM discovery, with deduplication, human-readable history, media preservation when accessible, and optional relationship/block-state events for Carlo Visda.
@@ -49,7 +49,7 @@ Build a robust incremental WhatsApp exporter starting from WhatsApp Web on Fedor
 - [x] Commit/push source and final roadmap checkpoint.
 
 ## Current step
-Acceptance criteria are verified. The Carlo-only deployed watcher is running, incremental scans are duplicate-free, relationship confidence semantics are validated, selectable-chat scope gating and a synthetic DOM fixture pass, usage/limitations are documented, and source is pushed at 1533a55. The only known completeness limitation is older history that WhatsApp Web does not expose in the currently loaded DOM; this does not block the incremental-export acceptance criteria.
+Follow-up request completed: block/unblock events are now rendered directly inside the chronological human-readable chat history. Own historical/system and control-derived events render as factual lock/unlock markers; peer block/unblock renders inline only when the inference threshold is met and remains explicitly labeled inferred. Deployed watcher is running the updated source at 247b227.
 
 ## Verified facts
 - Existing repo: /home/daniele/projects/whatsapp-watcher, main at b6e3e9f when last inspected.
@@ -85,9 +85,10 @@ Acceptance criteria are verified. The Carlo-only deployed watcher is running, in
 - Live relationship audit: 12 my_block and 13 my_unblock events are stored with confidence=factual. Static hidden peer status produced zero peer_block_inferred/peer_unblock_inferred events.
 - Source checkpoint dfa918e adds storage-level proof that a qualifying peer-block transition is persisted only as confidence=inferred with raw before/observation/after evidence and reason.
 - Source checkpoint 640bc1b documents operation/limitations, adds exact selected-chat scope tests, rejects mismatched active chats before persistence, and adds a synthetic Node DOM fixture executing dom_snapshot.js for exact-match/wrong-chat behavior.
-- Final source head 1533a55 adds reply-field and deleted-message revision/event coverage. Final focused suite passes 17/17 plus Python compileall, Node syntax gates, and systemd-analyze verify.
+- Pre-follow-up source checkpoint 1533a55 added reply-field and deleted-message revision/event coverage; the follow-up inline block rendering is pushed at 247b227.
 - Final live audit: browser and watcher services active; Carlo scan seen=19 with inserted=0, revised=0, events=0; archive remains 36 records and exactly one chat.
 - Final privacy audit: primary Markdown contains no technical stable-ID tokens and Git tracks no archive database/history/media artifacts.
+- Inline relationship rendering follow-up: regenerated Carlo history contains 12 factual `🔒 Hai bloccato Carlo Visda` lines and 13 factual `🔓 Hai sbloccato Carlo Visda` lines; zero peer inferred lines are currently present because no qualifying live peer inference exists.
 
 ## Decisions
 - Start from WhatsApp Web, not Android.
@@ -114,14 +115,14 @@ Acceptance criteria are verified. The Carlo-only deployed watcher is running, in
 ## Completed
 - Persistent exporter state and all intermediate/final checkpoints created and pushed.
 - Existing whatsapp-watcher repo and both untracked relationship drafts preserved without modification.
-- Dedicated private source repo implemented and pushed; final source head is 1533a55.
+- Dedicated private source repo implemented and pushed; current source head is 247b227.
 - Incremental exact-chat export, deterministic dedupe, SQLite records/revisions/events/media, human-readable no-ID Markdown, replies, edited/deleted/system/call handling, and media metadata/download behavior are implemented.
 - Own block/unblock is stored only as factual evidence; peer block/unblock remains inferred with raw evidence and a persistence confirmation window.
 - Selectable-chat runtime is verified with exact active-chat gating; mismatched chats persist zero records.
 - Focused synthetic DOM fixture, runtime/store tests, Python/Node syntax gates, and systemd unit validation pass; final unittest count is 17/17.
 - Live Carlo archive remains duplicate-free and scoped to one chat; media remains metadata-only until WhatsApp exposes a source.
 - Enabled user services for the isolated browser clone and watcher survive controlled restart and recover Carlo automatically.
-- README documents commands, storage, relationship semantics, privacy, deployment and known history/media limitations.
+- README documents commands, storage, relationship semantics, privacy, deployment and known history/media limitations, including inline block/unblock markers.
 - Final privacy audit confirms no private archive database/history/media is tracked in source Git.
 
 ## Remaining
@@ -133,8 +134,8 @@ None for the stated acceptance criteria. Known limitation: older-history complet
 ## Evidence
 - operations/task-state/CHATGPT-20260924-WHATSAPP-CARLO-BLOCK-TRACKING.md
 - /home/daniele/projects/whatsapp-watcher remains b6e3e9f with only the preserved untracked relationship drafts.
-- gernalix/whatsapp-exporter final head 1533a55; major checkpoints: ddfebba, 37ee641, 059b07b, 9bd5ff3, 8a030c9, 0cc2991, 6faa3e8, ced3b39, dfa918e, 640bc1b, 1533a55.
-- Final validation: 17/17 unittest PASS; Python compileall PASS; Node syntax PASS for both DOM scripts and synthetic DOM fixture; systemd-analyze verify PASS.
+- gernalix/whatsapp-exporter current head 247b227; major checkpoints: ddfebba, 37ee641, 059b07b, 9bd5ff3, 8a030c9, 0cc2991, 6faa3e8, ced3b39, dfa918e, 640bc1b, 1533a55, 247b227.
+- Follow-up validation: 17/17 unittest PASS; Python compileall PASS; Node syntax PASS for both DOM scripts and synthetic DOM fixture; systemd-analyze verify PASS; deployed watcher restarted active on 247b227.
 - Final live scan: seen=19, inserted=0, revised=0, events=0; archive remains 36 Carlo records and exactly one chat.
 - Relationship audit: 12 my_block + 13 my_unblock factual; zero peer inferred events from static hidden state. Synthetic qualifying peer transition persists as inferred with raw evidence.
 - Media audit: one current metadata-only image with no exposed source and no forced UI download; synthetic source-available download/dedupe path PASS.
