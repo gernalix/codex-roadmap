@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 20:12 Europe/Copenhagen
+Updated: 2026-09-25 20:15 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -96,7 +96,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-C2 / PROMPT_ID 175908 remains the active priority lane and is now in final live-gate/terminalization work. PersonalHub must not start a duplicate worker. 857906 remains canonical completed/PASS; 707603 remains the already-running next PH task and must be resumed only from its checkpoint after C2 is terminal. Then continue 840907 → 788606 → 913264; do not repeat interim/final APK+DB work before the PH chain is complete and the release schema is frozen.
+C2 / PROMPT_ID 175908 is now canonical `completed`. PersonalHub is therefore the immediate priority. PROMPT_ID 707603 is already `running`: resume it strictly from its canonical checkpoint without re-claiming or duplicating work. After 707603, continue serially through 840907 → 788606 → 913264; only then perform the definitive APK/DB build, validation and Pixel cutover.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -218,6 +218,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 2026-09-25 20:15 Europe/Copenhagen: C2 / 175908 verified canonical `completed` from roadmap SQLite; the PH priority hold is released. No PH implementation/test work was repeated during this checkpoint.
 - Mandatory checkpoint refresh 2026-09-25 20:12 Europe/Copenhagen: synchronized to current codex-roadmap main; no verified PH work was rerun. C2/175908 is still active in finalization, so PH remains parked; 857906 stays terminal PASS and 707603 remains the already-running next PH task.
 - Mandatory checkpoint refresh 2026-09-25 16:12: canonical roadmap readback confirms 857906=`completed`, 707603=`running`, 840907/788606/913264=`pending`; no completed PH work was re-audited or rerun. Old PH supervisor worker was explicitly paused while C2 owns the priority lane.
 - 857906 Git integration completed: PR #44 merged as PersonalHub `main@ba7089770b552f2c4a73c121ba1356862cec38e4`; task head `a4b9e82a8f95d2d24660cf09b393b5b4665d215b` is contained and tree-equivalent; remote/local `task/857906` plus 857906 QA/diagnostic worktrees were removed; final PersonalHub branch/worktree inventory is main-only.
@@ -279,7 +280,6 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
-- Priority gate, not a product blocker: C2 / 175908 owns the current execution lane. Do not launch new PH workers until C2 is terminal; 707603 is already running and must not be duplicated.
 - User-directed artifact gate: do not retry PH APK/DB compilation, testing, installation or cutover until the remaining PH implementation/test tasks have completed and the final schema/release commit is frozen.
 - 857906 has no blocker and is already canonical `completed`; no CI polling or retry remains.
 - Physical Pixel is currently absent from canonical ADB discovery (`pixel_physical_required_but_absent`); this does not block 857906 and matters only for later final cutover 913264.
@@ -289,6 +289,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- 2026-09-25 20:15 Europe/Copenhagen C2 terminality readback: canonical `roadmap.sqlite` on current main reports 175908=`completed`, 707603=`running`, 851204=`pending`. PH priority is therefore released to the already-running 707603 task; no duplicate claim is permitted.
 - 2026-09-25 20:12 Europe/Copenhagen mandatory checkpoint readback: codex-roadmap main synchronized before edit; C2 remote task/175908 observed non-terminal and in final live-gate/terminalization work. PH execution therefore remains intentionally held. Existing PH acceptance evidence below remains authoritative and was not repeated.
 - 2026-09-25 17:13 Europe/Copenhagen mandatory checkpoint refresh: synchronized against the then-current canonical `origin/main`; PH checklist, Completed, Remaining, Blockers and the single Next action remain current. 857906 stays terminal PASS, 707603 stays the already-running next PH task, and C2/175908 remains the active priority lane. No verified PH work was repeated.
 - 2026-09-25 16:12 canonical `origin/main` roadmap readback (detached checkpoint base `638cb85360efeb264c7a8a803f81d8a217516e3f`): 857906=`completed`; 707603=`running`; 840907, 788606 and 913264=`pending`. Supervisor task `CHATGPT-20260924-PERSONALHUB-P0` was explicitly paused while this chat owns C2/175908.
@@ -325,4 +326,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-HOLD new PH launches while C2 / 175908 is active. When C2 code/testing/cutover is terminal, immediately re-read the canonical 707603 checkpoint and continue that already-running PH task without duplication; then proceed serially through 840907 → 788606 → 913264. Retry the definitive APK/DB build, validation and Pixel cutover only after the upstream PH task chain has completed and the final schema/release commit is frozen.
+Re-read the canonical 707603 checkpoint and continue that already-running PersonalHub task from its recorded Next action without re-claiming or repeating verified work; when it is terminal, proceed to 840907 → 788606 → 913264.
