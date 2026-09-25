@@ -51,3 +51,10 @@ Repo primario codex-roadmap. Se necessario, modifica workflowy-importer, chatgpt
 PASS solo se: una sola gerarchia work_items è fonte canonica del lavoro; roadmap/checklist non possono divergere; migrazione+rollback+FK+integrity+idempotenza PASS; stato utile legacy preservato; Workflowy mostra fatto/restante/progress/current step/Next action dalla stessa fonte; Obsidian live ha tag/link/backlink coerenti; RDC schedula executor e Codex senza polling a modello; metadata/model/reasoning/Goal mode sono esatti e fail-closed; collisioni same-repo impedite; crash sintetico riprende da checkpoint; prompt già running non vengono mutati; E2E sintetico e cutover live PASS.
 
 Dopo PASS finalizza una volta e STOP.
+
+# P0 e notifiche C2 — steering 2026-09-25
+- PRIORITÀ ASSOLUTA dell’intera C2: work item 107210. Prima di qualunque miglioramento infrastrutturale non indispensabile, produrre un APK PersonalHub temporaneo ma quotidianamente usabile, MINIFICATO, insieme a un DB compatibile, entrambi verificati e installati automaticamente sul Pixel. Preservare backup/rollback e dati reali. Il P0 termina solo dopo smoke reale sul Pixel; usare anche emulatore e TCL quando disponibili e utili.
+- Fino al PASS di 107210, gli altri work item possono avanzare solo se non contendono PersonalHub/device/build e non rallentano il P0.
+- Ogni milestone significativa completata della C2 deve generare UNA notifica Telegram in italiano semplice: cosa è stato completato, risultato utile per l’utente e prossimo passo. Niente dump tecnici, stack trace o spam; accorpare micro-step nello stesso milestone.
+- Aggiungere e tracciare work item 851204: monitoraggio e bonifica radicale del bot Telegram “Datasette Alerts” (@datasette_alerts_bot), proprietario verificato nel repo telegram_insert_bot tramite TELEGRAM_INSERT_BOT_NOISY_BOT_TOKEN. Inventariare tutti i producer, classificare e riscrivere messaggi perché ogni notifica sia comprensibile/azionabile, eliminare rumore/duplicati/raffiche, introdurre severità/dedup/rate-limit e verificare live il risultato. Parte dopo 107210.
+

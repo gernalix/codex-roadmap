@@ -4,7 +4,7 @@
 
 ## Lanciabili adesso
 
-- Nessuno.
+- [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]]
 
 ## In esecuzione
 

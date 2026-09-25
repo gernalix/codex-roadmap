@@ -26,15 +26,15 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[896074 ccs-pbf-final-live-routing-safe-retry-v1|896074]]
+- **Dipende da:** [[107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1|107210]], [[896074 ccs-pbf-final-live-routing-safe-retry-v1|896074]]
 - **Sblocca:** —
 - **Padri/precedenti:** [[874695 checklist-2-unified-control-plane-v1|874695]]
-- **Figli/follow-up:** —
+- **Figli/follow-up:** [[107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1|107210]], [[851204 c2-datasette-alerts-radical-hygiene-v1|851204]]
 - **Chat Codex:** Goal Codex supervisionato da RDC; cutover end-to-end con sottotask repo-specifici solo quando necessari
 
 ## Spiegazione
 
-Sostituisce roadmap+checkpoint separati con un solo albero canonico di work item SQLite. Workflowy mostra a colpo d’occhio fatto, restante, progress e Next action; RDC orchestra deterministicamente e usa Codex solo quando serve.
+C2 usa un solo albero work-item. P0 assoluto: rendere subito PersonalHub usabile sul Pixel con APK minificato + DB compatibile testati/installati; ogni milestone significativa invia Telegram chiaro; dopo P0 bonifica Datasette Alerts, poi prosegue il control plane.
 
 ## Esecuzioni
 
