@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 21:15 Europe/Copenhagen
+Updated: 2026-09-25 21:43 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -96,7 +96,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-PROMPT_ID 707603 is canonical `completed` and merged into PersonalHub main `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`. The active PH priority now advances to 840907 (Datasette Lite truly offline). Start it from the existing materialization and final PH main; do not redo 707603 validation.
+PROMPT_ID 840907 is canonical `running` on PersonalHub main `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`. C2 launched a ChatGPT worker on the isolated `task/840907` worktree; that worker is actively modifying the Datasette Lite offline runtime files. This chat must supervise read-only and must not write concurrently into the same worktree. Resume direct edits only after the worker checkpoints/pushes or is confirmed inactive.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -218,6 +218,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 2026-09-25 21:43 Europe/Copenhagen: 840907 claimed successfully via roadmap Issue #1143; canonical status=`running`, executor policy=`chatgpt`, isolated worktree `/home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/840907` based on PersonalHub main `5cda3ad6`.
 - 2026-09-25 21:15 Europe/Copenhagen: 707603 fully closed: PR #45 merged into PersonalHub main as `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`; roadmap terminal Issue #1140 applied `completed`; canonical roadmap main `50c09ef582f1b61727e99a1a80d764a1e5fc2bfe` confirms 707603=`completed`.
 - 2026-09-25 21:15 Europe/Copenhagen: 707603 terminal PASS completed. PR #45 merged as `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`; roadmap Issue #1141 closed `completed`; canonical `roadmap.sqlite` at `50c09ef582f1b61727e99a1a80d764a1e5fc2bfe` reports 707603=`completed`.
 - 2026-09-25 20:53 Europe/Copenhagen: targeted `:core:database:connectedDebugAndroidTest` for `GitDataRestoreDeviceTest` PASS on explicit `emulator-5554` / Pixel_8a AVD: 1 test, 0 failures, 0 errors; test scaffolding committed as `d3fca297` and pushed to PR #45. github-autosync rollup fix PR #27 merged as `0a194cf`.
@@ -284,6 +285,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
+- Coordination gate only: an active C2/ChatGPT worker currently owns the 840907 worktree. Do not create overlapping edits; supervise until it checkpoints/pushes or becomes inactive.
 - No blocker for starting 840907. Preserve the artifact gate: do not perform definitive release build/Pixel cutover until 840907 and 788606 are complete.
 - User-directed artifact gate: do not retry PH APK/DB compilation, testing, installation or cutover until the remaining PH implementation/test tasks have completed and the final schema/release commit is frozen.
 - 857906 has no blocker and is already canonical `completed`; no CI polling or retry remains.
@@ -294,6 +296,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- 2026-09-25 21:43 Europe/Copenhagen 840907 ownership evidence: roadmap prompt 840907=`running` (GPT-6 Sol/medium, executor_policy=chatgpt); worktree HEAD remains `5cda3ad6...` while files under `app/src/main/assets/datasette-lite/` are receiving live writes from the active worker. Concurrent editing was stopped deliberately.
 - 2026-09-25 21:15 Europe/Copenhagen 707603 terminal evidence: all PR #45 checks PASS on head `d3fca2972eb327dfaca79f2c3ff0130b2af72b49`; merge commit `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`; roadmap Issue #1140 closed `completed`; `roadmap.sqlite` reports 707603=`completed`, 840907/788606/913264=`pending`.
 - 2026-09-25 21:15 Europe/Copenhagen 707603 closure evidence: PR #45 merged; final complete-head CI PASS (instrumentation 18m1s, unit/lint 20m41s, both Play preflight, architecture, GitGuardian); targeted `GitDataRestoreDeviceTest` on explicit Pixel_8a AVD PASS 1/1; terminal request #1141 applied; 707603 canonical `completed`.
 - 2026-09-25 20:53 Europe/Copenhagen leaf-gate evidence: `TEST-Pixel_8a(AVD) - 16.xml` reports `GitDataRestoreDeviceTest` tests=1 failures=0 errors=0 skipped=0, testcase `restoreUsesValidatedStagingBeforeReplacingLiveDatabase` 12.991s. PersonalHub branch local/remote exact head `d3fca2972eb327dfaca79f2c3ff0130b2af72b49`, worktree clean. PR #45 CI restarted on this head.
@@ -337,4 +340,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Start PROMPT_ID 840907 from its existing materialization on current PersonalHub main, then implement only the missing truly-offline Datasette Lite runtime path and its targeted acceptance gates; do not reopen 707603.
+Supervise the active 840907 worker without writing to its worktree. When it checkpoints/pushes or becomes inactive, read the canonical 840907 state/evidence, review only the remaining gaps, and continue from that exact Next action without duplicating its verified work.
