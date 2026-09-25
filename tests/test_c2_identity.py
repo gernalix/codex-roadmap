@@ -171,6 +171,31 @@ class C2IdentityTests(unittest.TestCase):
             finally:
                 conn.close()
 
+    def test_import_preserves_parent_with_larger_random_id(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = self.make_target(root)
+            source = self.make_megavault(root)
+            conn = sqlite3.connect(source)
+            try:
+                conn.execute(
+                    """INSERT INTO prompt_id_registry
+                       VALUES(234567,654321,51,'test','allocated',NULL,
+                              '2026-01-01T00:00:00Z',NULL,NULL,NULL)"""
+                )
+                conn.commit()
+            finally:
+                conn.close()
+            c2_identity.import_megavault_subset(target, source)
+            conn = sqlite3.connect(target)
+            try:
+                self.assertEqual(654321, conn.execute(
+                    'SELECT parent_prompt_id FROM prompt_id_registry WHERE prompt_id=234567'
+                ).fetchone()[0])
+                self.assertEqual([], conn.execute('PRAGMA foreign_key_check').fetchall())
+            finally:
+                conn.close()
+
     def test_prompt_id_lifecycle_and_historical_guard(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

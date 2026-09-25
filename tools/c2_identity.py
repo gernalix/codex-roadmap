@@ -150,6 +150,9 @@ def import_megavault_subset(
             }
 
         target.execute("BEGIN IMMEDIATE")
+        # Random PROMPT_ID order is not parent order. Validate the complete
+        # imported graph before commit rather than rejecting forward edges.
+        target.execute("PRAGMA defer_foreign_keys=ON")
         results: dict[str, dict[str, int]] = {}
         try:
             for table in IMPORT_TABLES:
