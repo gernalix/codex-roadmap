@@ -77,6 +77,7 @@ All non-provider-dependent supervisor and Chrome Codex Switcher work is complete
 - CCS pending replacement queue currently contains zero items.
 - Both supervisor and CCS systemd services are active.
 - ADB keeper worker CHATGPT-20260925-ADB-KEEPER-LATENCY is registered against a persistent supervisor-owned clone of the canonical codex-roadmap checkpoint; canonical checkpoint commit is b463dd1.
+- The supervisor's own worker registration now also uses an isolated persistent codex-roadmap checkpoint clone, currently pinned to canonical checkpoint 72f5c1c, so dirty/behind state in the primary codex-roadmap checkout cannot stale its recovery memory.
 - PersonalHub, Grindr, supervisor and ADB keeper are registered workers; synthetic rollover worker remains disabled.
 - Raw private chat transcripts are not persisted by the supervisor.
 
