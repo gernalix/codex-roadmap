@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 10:06 Europe/Copenhagen
+Updated: 2026-09-25 12:56 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -95,7 +95,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-857906 implementation, acceptance and Git integration are complete. PR #44 merged `task/857906@a4b9e82a8f95d2d24660cf09b393b5b4665d215b` into PersonalHub `main` as `ba7089770b552f2c4a73c121ba1356862cec38e4`; containment and tree equivalence both PASS, the remote/local task branch and all 857906 worktrees are removed, and PersonalHub is main-only. Schema remains 23. The only remaining 857906 gate is readback of the already-running GitHub Actions jobs on the accepted task head before canonical roadmap terminal PASS.
+PersonalHub is intentionally parked by explicit user priority override. 857906 implementation, emulator acceptance and Git integration are already complete: PR #44 merged `task/857906@a4b9e82a8f95d2d24660cf09b393b5b4665d215b` into `main` as `ba7089770b552f2c4a73c121ba1356862cec38e4`; containment/tree equivalence PASS and PH is main-only. Do not rebuild, retest, reinstall or retry interim/final APK/DB work until all remaining PH tasks are complete. Current execution priority moves to C2 (`gernalix/codex-usage-monitor`, project_id=8).
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -276,6 +276,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
+- User-directed hold: no further PH APK/DB compilation, testing, installation or cutover work until all remaining PH tasks are complete; this is a priority pause, not a product blocker.
 - No product/source blocker remains for 857906. Terminal roadmap finalization is waiting only on the already-running post-acceptance GitHub Actions jobs; no retry or duplicate workflow has been launched.
 - Physical Pixel is currently absent from canonical ADB discovery (`pixel_physical_required_but_absent`); this does not block 857906 and matters only for later final cutover 913264.
 - Local Android build/device/real-DB work is available through Remote Desktop Commander on Fedora.
@@ -284,6 +285,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- 2026-09-25 12:56 user override checkpoint: PH work is saved and parked; no further APK/DB compile/test/install is permitted until the remaining PH task chain is complete. C2 is now the active priority lane. Existing PH source/integration/artifact evidence below remains canonical; do not repeat it.
 - 857906 integration evidence: PR #44 state `MERGED`, merge commit `ba7089770b552f2c4a73c121ba1356862cec38e4`; `git merge-base --is-ancestor a4b9e82a... origin/main` PASS; `git diff --quiet a4b9e82a... origin/main` PASS; remote `task/857906` absent after prune; local branch deleted; `git branch -vv` and `git worktree list` show only `main` at the merge commit.
 - 857906 acceptance command on isolated canonical emulator: `ANDROID_SERIAL=emulator-5554 ./gradlew -Ppersonalhub.testBuildType=qa :app:connectedQaAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.gernalix.personalhub.HubHistorySearchQaDeviceTest --no-daemon --console=plain` → `BUILD SUCCESSFUL`, 3/3 PASS on `Pixel_8a(AVD) - 16`. Acceptance source commit: `1f6e65f99d8f319213c7469c95ab6e29758022b6`.
 - Post-acceptance presentation hardening commit `a4b9e82a8f95d2d24660cf09b393b5b4665d215b` is pushed to `origin/task/857906`; targeted `HubActivityPresentationTest`, `:app:compileDebugKotlin`, `checkArchitectureBoundaries`, and `git diff --check` PASS.
@@ -316,4 +318,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Read back the four already-running GitHub Actions runs for accepted head `a4b9e82a8f95d2d24660cf09b393b5b4665d215b`. If all are terminal PASS, run the canonical roadmap finalizer for PROMPT_ID 857906 with result PASS, guarded-pull the applied single-writer state, checkpoint the terminal evidence, then advance the P0 lane to 707603. If any run fails, repair only the concrete failure evidence before terminalizing; do not rerun already-PASS emulator acceptance.
+HOLD PH execution. Do not compile/test/install another PH APK or retry DB/device QA until every remaining PH task (including roadmap terminalization/integration, 707603, 840907, 788606 and final 913264 cutover prerequisites) is complete. When the user returns priority to PH, resume strictly from this checkpoint and the then-current canonical roadmap state without repeating verified 857906 work.

@@ -1,14 +1,14 @@
 # Operational task state — global roadmap recovery
 
 TASK_ID: CHATGPT-20260924-GLOBAL-RECOVERY
-Updated: 2026-09-24 18:24 Europe/Copenhagen
+Updated: 2026-09-25 12:56 Europe/Copenhagen
 
 ## Objective
 Apply the global audit findings, repair the prompt/roadmap workflow, complete all relevant PersonalHub work before the final APK, migrate the live PersonalHub DB externally to the final schema, and leave involved repositories tested, operational, clean and without unmanaged PBFs.
 
 ## Constraints
-- **PersonalHub P0 is the master recovery lane now, and the live-DB migration/cutover is its highest-priority terminal milestone.** No non-PH recovery task may preempt PH while PH is actionable. After 788606 freezes the final commit/schema/artifacts, 913264 must run immediately—before any infrastructure, notification, branch-cleanup, or unrelated recovery work—to take rollback backups, migrate the real DB externally to the exact final schema, install the exact final APK on Pixel, and validate preserved real data. Exception only for a true PH blocker or a data/safety-critical emergency.
-- **PersonalHub remains the master-priority lane, but independent side lanes may run in parallel when they are truly disjoint.** Enforce one active writer per repository/risky runtime resource, not one chat globally. A parallel task is allowed only if it cannot mutate PersonalHub, its DB/schema/branches/devices, or any repo/runtime currently owned by the PH lane; shared resources must be read-only unless ownership is explicit.
+- **User priority override 2026-09-25:** C2 (`gernalix/codex-usage-monitor`, project_id=8) is now the master execution lane. PersonalHub is explicitly parked; no further PH APK/DB compilation, testing, installation or cutover retry is allowed until all remaining PH tasks are complete and priority returns to PH.
+- Enforce one active writer per repository/risky runtime resource. C2 may inspect/read PH state only as needed for context; it must not mutate PersonalHub, its DB/schema/branches/devices while PH is parked. Independent side lanes remain allowed only when their writers/resources are disjoint.
 - This file is operational memory only; canonical lifecycle remains in roadmap.sqlite.
 - Store conclusions/state only, never chain-of-thought, secrets or raw private transcripts.
 - Canonical roadmap mutations go only through the codex-roadmap single writer.
@@ -39,7 +39,7 @@ Apply the global audit findings, repair the prompt/roadmap workflow, complete al
 - [x] Supersede unsafe CCS prompt 641903 with routing-safe successor 896074; never launch 641903.
 - [x] Guard conditional/manual tasks 181259, 582946, 218695 and 588376 with explicit prerequisites.
 
-### Phase 2 — PersonalHub P0 + live DB migration (HIGHEST PRIORITY)
+### Phase 2 — PersonalHub P0 + live DB migration (PARKED BY USER OVERRIDE)
 Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only global gates here.
 - [x] Record the obsolete intermediate PH DB task 383662 as superseded by the specialized final cutover path 913264; never launch 383662.
 - [x] Implement and host-verify the optional PH ↔ Workflowy integration on `chatgpt/workflowy-integration` without a Room schema/version change; detailed checkpoint: `CHATGPT-20260924-PH-WORKFLOWY.md`.
@@ -55,7 +55,7 @@ Detailed execution is owned by `CHATGPT-20260924-PERSONALHUB-P0.md`; keep only g
 - [ ] Before final cutover, converge every still-relevant PH side branch into `main`: prove patch/semantic uniqueness, merge/cherry-pick/squash only valid unabsorbed work through the canonical writer, then delete all absorbed/obsolete non-main PH branches and close stale PRs. End with clean main-only operational state.
 - [ ] Do not resume non-PH recovery lanes until all PH items above are complete, unless PH is truly blocked.
 
-### Phase 3 — Remaining prompt/infrastructure runtime closure (DEFERRED UNTIL PH COMPLETE)
+### Phase 3 — C2 / remaining prompt-infrastructure runtime closure (CURRENT PRIORITY)
 - [x] Stop the runaway 788315 heartbeat/automation with 222733.
 - [x] Verify 788315 produces no new model-driven heartbeat cycles after shutdown.
 - [ ] Resume 302284 from its parked checkpoint and finish the remaining consolidated roadmap/Workflowy/CCS/codex-usage runtime readback.
@@ -97,10 +97,11 @@ Detailed branch evidence is owned by `CHATGPT-20260924-INFRA-BRANCH-CLEANUP.md`.
 - [ ] Mark global recovery complete only when every acceptance criterion below is satisfied.
 
 ## Current step
-PersonalHub P0 is now the sole master lane. 920550 is already merged; finish the verified Workflowy integration, then continue serially through 857906 → 707603 → 840907 → 788606 → 913264. No non-PH task may run while PH is actionable.
-994029 and 966124 are both terminal completed; they no longer own any repository/runtime lane. PersonalHub remains the master recovery lane.
+C2 is now the master lane by explicit user override. PersonalHub is parked at its pushed/merged checkpoints; do not rerun PH APK/DB compilation/testing/install work until the remaining PH chain is complete. Resume C2 directly from canonical `gernalix/codex-usage-monitor` / project_id=8 state, preserving completed 302284 evidence and using new scoped work for the broader C2 architecture rather than reopening a terminal/blocker scope.
+994029 and 966124 are terminal completed and own no active lane.
 
 ## Verified facts
+- 2026-09-25 user override: PH source/acceptance/integration work is saved; PH is parked and C2 (`gernalix/codex-usage-monitor`, project_id=8) has full priority. C2 work may proceed without waiting for PH because the user explicitly changed the master-lane ordering.
 - 857906 WIP is checkpointed and pushed at PersonalHub `task/857906@ed21615445462c51762a633044db4eeaf02d21d4`; new chat handoff can continue directly from Git without replaying discovery.
 - Workflowy integration is complete and PH side branches are converged: PR #43 merged at `b1a7f22...`; PersonalHub now has only `main` + active `task/857906`. The 857906 worktree was synced to the new main before edits.
 - Workflowy PR #43 CI blocker fixed at task head `f8e4541`; only bounded CI/integration remains before 857906 worktree sync and code edits.
@@ -242,4 +243,4 @@ PersonalHub P0 is now the sole master lane. 920550 is already merged; finish the
 - Involved repositories end tested, operational and clean.
 
 ## Next action
-Hand control immediately to `CHATGPT-20260924-PERSONALHUB-P0.md`. 920550 is already merged; finish the verified Workflowy integration, then continue 857906 → 707603 → 840907 → 788606 → 913264 serially. At 913264, select the freshest coherent PH DB available at that moment, preserve immutable rollback, migrate externally to the exact frozen schema, validate integrity/data, install the exact final APK on the Pixel with explicit serial, and complete all-module real-data smoke before returning to any non-PH recovery.
+Hand control to C2 (`gernalix/codex-usage-monitor`, project_id=8). Preserve 302284 as its completed/blocked historical scope; create or resume the minimal current C2 implementation lane for full archive/runtime integration, decide repo-boundary vs shared-data architecture for ChatGPT/Codex exporters and other personal repos, implement the chosen shared-data contracts, and add the C2 Uptime Kuma monitor in both source configuration and the live Kuma database/runtime. Keep PH parked and do not retry PH APK/DB work.
