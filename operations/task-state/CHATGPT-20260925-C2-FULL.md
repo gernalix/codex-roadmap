@@ -25,9 +25,10 @@ Implement Checklist 2.0 as the single canonical work-item control plane: one SQL
 - [ ] Checkpoint this operational task and branch.
 ### Phase 1 — Shared history datasource
 - [x] Extend prompt-history ChatGPTExporter ingestion to accept a parent directory containing multiple ChatGPTExport-* archives.
-- [x] Add targeted idempotency test.
-- [ ] Version/deploy prompt-history systemd sync with stable ChatGPT parent path.
-- [ ] Verify live sync freshness and nonzero ChatGPT/Codex source coverage.
+- [x] Add timestamp normalization, content-hash file checkpoints and bounded PROMPT_ID linking.
+- [x] Stream Session Bandit JSONL rather than materializing the full export list.
+- [x] Version/deploy split prompt-history systemd runtime: lightweight 15m sync + hourly heavy transcript refresh with one SQLite flock.
+- [x] Verify live sync and existing nonzero ChatGPT/Codex source coverage.
 ### Phase 2 — Canonical work_items schema
 - [ ] Add work_items + required evidence/checkpoint/run/lease schema and migration from prompts/task-state.
 - [ ] Preserve PROMPT_ID, dependencies, status history, executions and relations.
@@ -59,7 +60,7 @@ Implement Checklist 2.0 as the single canonical work-item control plane: one SQL
 - [ ] Finalize canonical 175908 only once after acceptance.
 
 ## Current step
-Create the persistent C2 checkpoint, then finish the prompt-history live datasource wiring before touching the canonical work_items migration.
+Shared-history datasource milestone is complete and deployed. Begin Phase 2: introduce the canonical work_items schema and migration/compatibility layer in codex-roadmap without cutting over live writers yet.
 
 ## Verified facts
 - Canonical 175908 prompt explicitly requires one work_items hierarchy, Workflowy + Obsidian projections and RDC scheduler.
@@ -75,7 +76,7 @@ Create the persistent C2 checkpoint, then finish the prompt-history live datasou
 - Keep single-writer lifecycle mutation boundary intact.
 
 ## Completed
-PH parked and checkpointed; priority switched to C2. Shared-history architecture chosen. prompt-history parent-directory ingestion + test implemented on branch chatgpt/c2-shared-history.
+PH parked and checkpointed; priority switched to C2. Shared-history architecture chosen. prompt-history branch `chatgpt/c2-shared-history` is pushed through `ad8dcd3f091b3ca715a01d34bf2da0d7ef348c5e`: parent-directory ingestion, millisecond timestamps, per-file checkpoints, bounded linker, streaming Session Bandit, versioned split systemd units. All 11 tests PASS. Live units are deployed; lightweight sync and hourly transcript timer are active.
 
 ## Remaining
 All unchecked phases above.
@@ -84,10 +85,10 @@ All unchecked phases above.
 No current blocker. PROMPT_ID 175908 itself remains pending due existing roadmap dependencies, so direct ChatGPT implementation proceeds on isolated branches without falsely claiming that prompt.
 
 ## Evidence
-codex-roadmap checkpoint aaff5458f1ad53a1ebfb9ac79f4ad07ddd6b874d parks PH. prompt-history targeted ChatGPTExporter tests PASS 2/2 after parent-directory support. Live prompt_history.sqlite contains both ChatGPT and Codex sources. Kuma DB readback shows no C2 aggregate monitor.
+codex-roadmap checkpoint aaff5458f1ad53a1ebfb9ac79f4ad07ddd6b874d parks PH. prompt-history `ad8dcd3f091b3ca715a01d34bf2da0d7ef348c5e`; 11/11 tests PASS. Live prompt_history.sqlite contains ChatGPT and Codex sources. Deployed lightweight sync PASS; heavy transcript refresh is isolated to hourly timer and both writers share one flock. Kuma DB readback shows no C2 aggregate monitor.
 
 ## Acceptance criteria
 One canonical work_items tree; legacy roadmap/checklist cannot diverge; migration/rollback/FK/integrity/idempotency PASS; Workflowy and Obsidian project the same source; RDC schedules deterministically without model polling; same-repo collision prevention PASS; past-chat context is available through prompt-history; dedicated C2 Kuma monitor is live; running prompts are not mutated; synthetic E2E and live cutover PASS.
 
 ## Next action
-Commit and push this checkpoint on chatgpt/c2-full-control-plane, then complete and deploy prompt-history live ChatGPT ingestion using the stable parent directory.
+Implement work_items schema + migration helpers + legacy compatibility views on the isolated codex-roadmap C2 branch; prove migration/rollback/FK/integrity/idempotency on fixtures before any live cutover.
