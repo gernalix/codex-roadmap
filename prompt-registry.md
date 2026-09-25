@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/857906 personalhub-unified-history-search-v1\|857906 · PersonalHub — History/Search unica cross-module]] | running | — | — | — | no | no | — | PersonalHub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/302284 prompt-infrastructure-final-runtime-activation-v1\|302284 · Distribuisci gli ultimi fix della prompt infrastructure]] | running | — | — | — | no | no | — | Prompt infrastructure / Fedora runtime | GPT-6 Luna | low |
 | [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
@@ -82,6 +81,7 @@
 | [[obsidian/Prompts/865431 recover-731845-roadmap-identity-finalize\|865431 · Finalizzare 731845 senza rieseguire l’audit]] | completed | 2026-09-21T19:07:04Z | 2026-09-21T19:07:04Z | PASS | no | no | — | MegaVault | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2\|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] | failed | 2026-09-22T16:47:40Z | 2026-09-22T18:00:57Z | FAIL | sì | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/989559 codex-desktop-roadmap-launcher\|989559 · Automatizza Avvia verso Codex Desktop]] | superseded | 2026-09-22T01:55:13Z | 2026-09-22T01:55:13Z | BLOCKED | sì | no | [[obsidian/Prompts/403496 codex-desktop-launcher-roadmap-branch-recovery-v1\|403496]] | Facilitatori di prompt | gpt-5.6-terra | medium |
+| [[obsidian/Prompts/857906 personalhub-unified-history-search-v1\|857906 · PersonalHub — History/Search unica cross-module]] | completed | — | — | PASS | no | no | — | PersonalHub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572 · Ultima prova reale dell’importatore Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/418906 workflowy-importer-live-smoke-secret-file-v2\|418906 · Ultima prova reale dell’importatore Workflowy]] | completed | 2026-09-18T22:54:53Z | 2026-09-18T22:54:53Z | PASS | sì | sì | [[obsidian/Prompts/856234 workflowy-live-smoke-remote-fix-closure\|856234]] | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3\|830867 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |

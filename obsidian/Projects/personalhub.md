@@ -5,7 +5,6 @@ tags:
 
 # PersonalHub
 
-- [[obsidian/Prompts/857906 personalhub-unified-history-search-v1|857906 · PersonalHub — History/Search unica cross-module]] · `running`
 - [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] · `completed`
 - [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] · `completed`
 - [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation|886414 · PersonalHub 100% capsule isolation — validazione locale]] · `superseded`
@@ -14,6 +13,7 @@ tags:
 - [[obsidian/Prompts/793678 personalhub-zombie-function-cleanup-closure|793678 · Chiudi residui zombie dei moduli PersonalHub]] · `superseded`
 - [[obsidian/Prompts/825147 personalhub-zombie-function-cleanup-single-writer-v2|825147 · Chiudere i residui zombie PersonalHub sul single writer corrente]] · `completed`
 - [[obsidian/Prompts/914263 personalhub-schema-persistence-all-tables-p0|914263 · P0 — Verificare e correggere il salvataggio di ogni tabella PersonalHub su 3 device]] · `completed`
+- [[obsidian/Prompts/857906 personalhub-unified-history-search-v1|857906 · PersonalHub — History/Search unica cross-module]] · `completed`
 - [[obsidian/Prompts/962109 personalhub-github-ci-closure|962109 · Chiudere definitivamente la CI GitHub di PersonalHub]] · `superseded`
 - [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery|583742 · PersonalHub v53 freeze e dati mancanti]] · `completed`
 - [[obsidian/Prompts/155893 personalhub-v53-freeze-data-recovery-v2|155893 · Riparare freeze v53 e verificare i dati sul Pixel]] · `completed`
