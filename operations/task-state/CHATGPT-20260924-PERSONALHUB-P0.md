@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 12:56 Europe/Copenhagen
+Updated: 2026-09-25 16:12 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -64,6 +64,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [x] Remove the user-facing Git History/Time Machine settings page and technical Git-history injection from temporal episode search; keep the Git backend for sync/recovery.
 - [x] Add the History/Search architecture guard and pass final consumer gates, touched-module compiles, app compile and `checkArchitectureBoundaries`.
 - [x] Run canonical `Pixel_8a` emulator QA for global History/Search + at least two fixed-module entry points, including live filters, hidden before/after text search and one safe compensating undo: `HubHistorySearchQaDeviceTest` PASS 3/3 on `emulator-5554`.
+- [x] Record canonical roadmap 857906 terminal PASS/completed and merge PR #44; 857906 is closed and must not be reopened.
 
 ### Phase 4 — 707603 Git History / restore
 - [ ] Run 707603 on the resulting schema.
@@ -95,7 +96,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-PersonalHub is intentionally parked by explicit user priority override. 857906 implementation, emulator acceptance and Git integration are already complete: PR #44 merged `task/857906@a4b9e82a8f95d2d24660cf09b393b5b4665d215b` into `main` as `ba7089770b552f2c4a73c121ba1356862cec38e4`; containment/tree equivalence PASS and PH is main-only. Do not rebuild, retest, reinstall or retry interim/final APK/DB work until all remaining PH tasks are complete. Current execution priority moves to C2 (`gernalix/codex-usage-monitor`, project_id=8).
+C2 / PROMPT_ID 175908 is the active priority lane in this chat. PersonalHub must not start any new duplicate worker while C2 code/testing/cutover is in progress. 857906 is canonically completed/PASS and must not be reopened. PROMPT_ID 707603 is already `running` in the roadmap and must be continued only from its own checkpoint, never re-claimed or duplicated. Do not retry the final/interim PH APK+DB compilation/testing/install flow until the remaining PH task chain has completed. Once C2 is terminal, PH becomes the immediate next priority: continue 707603 from its checkpoint, then 840907 → 788606 → 913264.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -217,6 +218,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- Mandatory checkpoint refresh 2026-09-25 16:12: canonical roadmap readback confirms 857906=`completed`, 707603=`running`, 840907/788606/913264=`pending`; no completed PH work was re-audited or rerun. Old PH supervisor worker was explicitly paused while C2 owns the priority lane.
 - 857906 Git integration completed: PR #44 merged as PersonalHub `main@ba7089770b552f2c4a73c121ba1356862cec38e4`; task head `a4b9e82a8f95d2d24660cf09b393b5b4665d215b` is contained and tree-equivalent; remote/local `task/857906` plus 857906 QA/diagnostic worktrees were removed; final PersonalHub branch/worktree inventory is main-only.
 - 857906 emulator acceptance completed: 3/3 `HubHistorySearchQaDeviceTest` cases PASS on canonical `Pixel_8a` only, after fixing Timer main-thread Choreographer startup and explicit package scoping for shared History/Search deep links. Final branch head additionally hardens technical-value suppression with targeted unit/compile/architecture PASS.
 - 857906 source-side legacy convergence completed and pushed through `1f94c49`: shared host engine remains the only user-facing change History/Search UI; People/Places/Timer/WordPulse duplicate browsers are removed; Substances/Soldi domain chronology is preserved with shared History/Search entry points; Git History/Time Machine user UI and temporal-search Git injection are removed; source/compile/architecture gates PASS.
@@ -265,8 +267,8 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Established serial-specific ADB rule and primary-PH protection during pre-final testing.
 
 ## Remaining
-- Read back the already-running GitHub Actions jobs for accepted 857906 head `a4b9e82a8f95d2d24660cf09b393b5b4665d215b`; if they are all terminal PASS, record canonical roadmap 857906 terminal PASS through the single writer.
-- Run/review 707603 on the resulting final-ish schema.
+- Continue already-running 707603 strictly from its canonical checkpoint after C2 terminalizes; do not claim a duplicate worker.
+- Run/review 707603 on the resulting final-ish schema and close it canonically.
 - Run/review 840907, including true offline behavior and artifact-size impact.
 - Run/review 788606 and freeze exact release commit, schema version/identity, APK/AAB hashes/paths and shrink state.
 - Before final migration, inspect the live Pixel DB schema/identity and take immutable backup.
@@ -276,8 +278,9 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
-- User-directed hold: no further PH APK/DB compilation, testing, installation or cutover work until all remaining PH tasks are complete; this is a priority pause, not a product blocker.
-- No product/source blocker remains for 857906. Terminal roadmap finalization is waiting only on the already-running post-acceptance GitHub Actions jobs; no retry or duplicate workflow has been launched.
+- Priority gate, not a product blocker: C2 / 175908 owns the current execution lane. Do not launch new PH workers until C2 is terminal; 707603 is already running and must not be duplicated.
+- User-directed artifact gate: do not retry PH APK/DB compilation, testing, installation or cutover until the remaining PH implementation/test tasks have completed and the final schema/release commit is frozen.
+- 857906 has no blocker and is already canonical `completed`; no CI polling or retry remains.
 - Physical Pixel is currently absent from canonical ADB discovery (`pixel_physical_required_but_absent`); this does not block 857906 and matters only for later final cutover 913264.
 - Local Android build/device/real-DB work is available through Remote Desktop Commander on Fedora.
 - The actual live Pixel DB schema/identity is not yet read and must not be guessed.
@@ -285,6 +288,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- 2026-09-25 16:12 canonical `origin/main` roadmap readback (detached checkpoint base `638cb85360efeb264c7a8a803f81d8a217516e3f`): 857906=`completed`; 707603=`running`; 840907, 788606 and 913264=`pending`. Supervisor task `CHATGPT-20260924-PERSONALHUB-P0` was explicitly paused while this chat owns C2/175908.
 - 2026-09-25 12:56 user override checkpoint: PH work is saved and parked; no further APK/DB compile/test/install is permitted until the remaining PH task chain is complete. C2 is now the active priority lane. Existing PH source/integration/artifact evidence below remains canonical; do not repeat it.
 - 857906 integration evidence: PR #44 state `MERGED`, merge commit `ba7089770b552f2c4a73c121ba1356862cec38e4`; `git merge-base --is-ancestor a4b9e82a... origin/main` PASS; `git diff --quiet a4b9e82a... origin/main` PASS; remote `task/857906` absent after prune; local branch deleted; `git branch -vv` and `git worktree list` show only `main` at the merge commit.
 - 857906 acceptance command on isolated canonical emulator: `ANDROID_SERIAL=emulator-5554 ./gradlew -Ppersonalhub.testBuildType=qa :app:connectedQaAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.gernalix.personalhub.HubHistorySearchQaDeviceTest --no-daemon --console=plain` → `BUILD SUCCESSFUL`, 3/3 PASS on `Pixel_8a(AVD) - 16`. Acceptance source commit: `1f6e65f99d8f319213c7469c95ab6e29758022b6`.
@@ -318,4 +322,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-HOLD PH execution. Do not compile/test/install another PH APK or retry DB/device QA until every remaining PH task (including roadmap terminalization/integration, 707603, 840907, 788606 and final 913264 cutover prerequisites) is complete. When the user returns priority to PH, resume strictly from this checkpoint and the then-current canonical roadmap state without repeating verified 857906 work.
+HOLD new PH launches while C2 / 175908 is active. When C2 code/testing/cutover is terminal, immediately re-read the canonical 707603 checkpoint and continue that already-running PH task without duplication; then proceed serially through 840907 → 788606 → 913264. Retry the definitive APK/DB build, validation and Pixel cutover only after the upstream PH task chain has completed and the final schema/release commit is frozen.
