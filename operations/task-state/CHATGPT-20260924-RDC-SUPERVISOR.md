@@ -58,7 +58,7 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - [x] Automatically bind discovered URLs to an existing registered task when the conversation ID matches known context; leave checkpoint-less chats inventory-only.
 - [x] Expose discovery status in CLI and structured events.
 - [x] Add focused tests and verify live metadata-only discovery without violating active rate-limit backoff.
-- [ ] Deploy/restart the daemon and verify automatic periodic discovery under systemd.
+- [x] Deploy/restart the daemon and verify automatic periodic discovery under systemd.
 
 ### Rollover acceptance
 - [x] Create and push isolated synthetic Git-backed worker.
@@ -70,7 +70,7 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - [ ] Observe one supervisor-owned fresh-chat rollover where registry URL, rollover_count, event log and CCS URL continuity all agree.
 - [ ] Disable synthetic worker after verified PASS.
 ## Current step
-Cross-device metadata-only discovery is implemented, tested and pushed in the supervisor repo. Deploy/restart the systemd daemon and verify periodic discovery; then perform one explicit mobile/other-desktop sync acceptance when feasible. The final synthetic rollover acceptance remains queued afterward.
+Cross-device metadata-only discovery is implemented, pushed and live under systemd. The only discovery-specific acceptance still pending is observing one conversation created after deployment on mobile/another desktop and confirming its synced conversation ID is added automatically. The separate synthetic rollover acceptance remains queued behind the current provider backoff.
 
 ## Verified facts
 - Supervisor source repo pushed main: be7742cbc06b36405e7c9d3892002020cec37f4b.
@@ -79,7 +79,7 @@ Cross-device metadata-only discovery is implemented, tested and pushed in the su
 - Discovery stores conversation ID/URL/timestamps/mode only; chat bodies and titles are not persisted.
 - Supervisor CCS bridge/readback commits are included through 2e86dac.
 - Chrome Codex Switcher pushed main: c40086abb36d8c7eb7bdb1c1f4f100b96f60286c.
-- Supervisor current suite: 19/19 PASS.
+- Supervisor current suite: 23/23 PASS.
 - CCS full suite: 68/68 PASS.
 - Slow-thinking DOM acceptance with screenshot wording verified detected=true, stopped generation, and sent exactly `continua`.
 - During a real PersonalHub occurrence, the affected PersonalHub tab was identified, its stuck generation stopped, and `continua` was sent in that PersonalHub chat rather than the supervisor chat.
@@ -122,9 +122,10 @@ Cross-device metadata-only discovery is implemented, tested and pushed in the su
 - Synthetic false completion claims corrected.
 - Metadata-only chat discovery, deduplication, inventory persistence, task binding and CLI visibility implemented and pushed as be7742c.
 - Live discovery acceptance succeeded with 21 chats inventoried and 4 managed bindings.
+- systemd deployment verified active at 2026-09-25 10:11:15 CEST (MainPID 4185307, ExecMainStatus=0); chats.json was automatically refreshed at 10:11:18 CEST.
+- Deployed inventory currently contains 21 chats: 4 managed and 17 inventory-only.
 
 ## Remaining
-- Restart/deploy the supervisor daemon on be7742c and verify automatic periodic discovery under systemd.
 - Verify one chat newly created on mobile/another desktop is discovered after account sync.
 - Wait for global ChatGPT rate-limit backoff to clear.
 - Re-enable only CHATGPT-RDC-SYNTHETIC-ROLLOVER for one controlled forced rollover.
@@ -133,15 +134,17 @@ Cross-device metadata-only discovery is implemented, tested and pushed in the su
 - Update this checkpoint with final acceptance evidence.
 
 ## Blockers
-- External ChatGPT global rate-limit backoff is active until 2026-09-25T10:16:31+02:00. Additional model-generating rollover tests must not be forced before it clears.
+- External ChatGPT global rate-limit backoff was extended by live rate-limit dialogs through 2026-09-25T10:40:34+02:00. Additional model-generating rollover tests must not be forced before it clears.
+- Exact post-deployment mobile/other-desktop discovery acceptance requires a new persisted conversation to be created on another client; the deployed supervisor itself is already active and requires no manual URL registration.
 
 ## Evidence
-- Supervisor source commits include 32cad56, 5fc87d1, 2e86dac and 3b4fde1.
+- Supervisor source commits include 32cad56, 5fc87d1, 2e86dac, 3b4fde1 and be7742c.
 - CCS source main c40086a contains context_url_supersessions, /api/context/replace-url and context_url_replaced extension handling.
-- Supervisor suite 19/19 PASS.
+- Supervisor suite 23/23 PASS.
 - CCS suite 68/68 PASS.
 - Live deployed-file SHA-256 pairs matched for extension/background.js and host/store.py.
 - Live CCS services: supervisor=active, ccs=active, pending_ccs=0.
+- Cross-device discovery deployment: supervisor active since 2026-09-25 10:11:15 CEST; chats.json refreshed automatically at 10:11:18 CEST with 21 total / 4 managed / 17 inventory-only.
 - PersonalHub slow-thinking occurrence was recovered by stopping the generation and sending exactly `continua` in the PersonalHub tab.
 - Canonical ADB keeper checkpoint: codex-roadmap b463dd1; task source ff62956; PR #2 remains externally blocked by GitHub Actions billing/spending limit.
 
@@ -159,4 +162,4 @@ Cross-device metadata-only discovery is implemented, tested and pushed in the su
 - [ ] One real supervisor-owned fresh-chat rollover updates registry/runtime/event/CCS evidence end-to-end.
 
 ## Next action
-Restart the systemd supervisor on be7742c, verify service health plus automatic inventory/event updates, then checkpoint the deployment result.
+When the next persisted chat is created on mobile or another desktop client, verify its conversation ID appears automatically in chats.json/chat-discovered events; otherwise leave the deployed discovery daemon running unchanged.
