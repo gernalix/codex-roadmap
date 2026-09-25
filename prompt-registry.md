@@ -16,7 +16,7 @@
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-6 Luna | medium |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-6 Sol | medium |
 | [[obsidian/Prompts/896074 ccs-pbf-final-live-routing-safe-retry-v1\|896074 · Chiudere il leaf CCS con routing progetto sicuro]] | pending | — | — | — | no | no | — | Facilitatori di prompt | GPT-6 Luna | low |
-| [[obsidian/Prompts/874695 checklist-2-unified-control-plane-v1\|874695 · Unificare roadmap e checkpoint nella Checklist 2.0]] | pending | — | — | — | no | no | — | codex-roadmap | GPT-6 Sol | medium |
+| [[obsidian/Prompts/175908 checklist2-single-work-item-control-plane-v2\|175908 · Creare Checklist 2.0 come unico albero di lavoro]] | pending | — | — | — | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | sì | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
@@ -143,6 +143,7 @@
 | [[obsidian/Prompts/243871 personalhub-play-release-local-validation-v2\|243871 · Controllo finale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/690049 fedora-runtime-validation\|690049 · Ultimo controllo del monitoraggio Fedora]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/445388 logseq-updates-pat-safety-closure\|445388 · Chiusura sicurezza e attivazione updater Logseq]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/874695 checklist-2-unified-control-plane-v1\|874695 · Unificare roadmap e checkpoint nella Checklist 2.0]] | superseded | — | — | — | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2\|604812 · Fix GNOME global search shortcut on Chrome RPM]] | completed | 2026-09-21T21:50:23Z | 2026-09-21T21:50:23Z | PASS | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/255325 prompt-255325\|255325 · Prompt 255325]] | blocked | 2026-09-18T17:42:04Z | 2026-09-18T17:42:04Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/294731 prompt-294731\|294731 · Prompt 294731]] | blocked | 2026-09-16T17:42:10Z | 2026-09-16T17:42:10Z | BLOCKED | sì | no | — | — | — | — |

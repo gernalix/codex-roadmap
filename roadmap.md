@@ -14,4 +14,4 @@
 10. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 11. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 12. [[prompts/ccs-pbf-final-live-routing-safe-retry-v1|ccs-pbf-final-live-routing-safe-retry-v1]]
-13. [[prompts/checklist-2-unified-control-plane-v1|checklist-2-unified-control-plane-v1]]
+13. [[prompts/checklist2-single-work-item-control-plane-v2|checklist2-single-work-item-control-plane-v2]]

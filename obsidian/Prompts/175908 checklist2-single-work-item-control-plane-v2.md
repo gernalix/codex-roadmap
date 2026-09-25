@@ -1,6 +1,6 @@
 ---
-prompt_id: 874695
-status: superseded
+prompt_id: 175908
+status: pending
 project_id: 51
 model: GPT-6 Sol
 reasoning: medium
@@ -8,18 +8,18 @@ tags:
   - checklist-2
   - obsidian
   - rdc-orchestration
-  - sqlite-control-plane
+  - single-work-item
   - workflowy
   - roadmap/prompt
-  - roadmap/status/superseded
+  - roadmap/status/pending
   - roadmap/project/codex-roadmap
 ---
 
-# 874695 · Unificare roadmap e checkpoint nella Checklist 2.0
+# 175908 · Creare Checklist 2.0 come unico albero di lavoro
 
-- **Stato:** superseded
+- **Stato:** pending
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
-- **Prompt:** [[../../falliti/checklist-2-unified-control-plane-v1|Apri prompt]]
+- **Prompt:** [[../../prompts/checklist2-single-work-item-control-plane-v2|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -28,13 +28,13 @@ tags:
 - **Fix:** —
 - **Dipende da:** [[896074 ccs-pbf-final-live-routing-safe-retry-v1|896074]]
 - **Sblocca:** —
-- **Padri/precedenti:** —
-- **Figli/follow-up:** [[175908 checklist2-single-work-item-control-plane-v2|175908]]
-- **Chat Codex:** Nuova chat Codex; eseguire come /goal solo dopo la chiusura del launcher/supervisor corrente.
+- **Padri/precedenti:** [[874695 checklist-2-unified-control-plane-v1|874695]]
+- **Figli/follow-up:** —
+- **Chat Codex:** Goal Codex supervisionato da RDC; cutover end-to-end con sottotask repo-specifici solo quando necessari
 
 ## Spiegazione
 
-Fonde roadmap e checkpoint operativi in un solo control plane SQLite, genera Obsidian e Workflowy dallo stesso stato e rende RDC l’orchestratore che decide quando usare Codex senza polling a modello.
+Sostituisce roadmap+checkpoint separati con un solo albero canonico di work item SQLite. Workflowy mostra a colpo d’occhio fatto, restante, progress e Next action; RDC orchestra deterministicamente e usa Codex solo quando serve.
 
 ## Esecuzioni
 
