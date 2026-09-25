@@ -52,12 +52,13 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - [x] Verify both chrome-codex-switcher.service and chatgpt-rdc-supervisor.service are active; CCS pending queue is empty.
 
 ### Cross-device automatic chat discovery
-- [ ] Discover persisted conversation IDs/URLs from the dedicated authenticated ChatGPT session without generating model requests.
-- [ ] Persist a deduplicated metadata-only chat inventory across supervisor restarts.
-- [ ] Detect chats created from mobile/other desktop sessions once they sync to the account.
-- [ ] Automatically bind discovered URLs to an existing registered task when the conversation ID matches known context; leave checkpoint-less chats inventory-only.
-- [ ] Expose discovery status in CLI and structured events.
-- [ ] Add focused tests, deploy, restart service, and verify live discovery without violating active rate-limit backoff.
+- [x] Discover persisted conversation IDs/URLs from the dedicated authenticated ChatGPT session without generating model requests.
+- [x] Persist a deduplicated metadata-only chat inventory across supervisor restarts.
+- [ ] Verify one newly created mobile/other-desktop chat appears after account sync.
+- [x] Automatically bind discovered URLs to an existing registered task when the conversation ID matches known context; leave checkpoint-less chats inventory-only.
+- [x] Expose discovery status in CLI and structured events.
+- [x] Add focused tests and verify live metadata-only discovery without violating active rate-limit backoff.
+- [ ] Deploy/restart the daemon and verify automatic periodic discovery under systemd.
 
 ### Rollover acceptance
 - [x] Create and push isolated synthetic Git-backed worker.
@@ -69,10 +70,13 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - [ ] Observe one supervisor-owned fresh-chat rollover where registry URL, rollover_count, event log and CCS URL continuity all agree.
 - [ ] Disable synthetic worker after verified PASS.
 ## Current step
-Implement cross-device metadata-only chat auto-discovery while preserving the existing provider-rate-limit backoff and all checkpoint safety rules. The final synthetic rollover acceptance remains queued afterward.
+Cross-device metadata-only discovery is implemented, tested and pushed in the supervisor repo. Deploy/restart the systemd daemon and verify periodic discovery; then perform one explicit mobile/other-desktop sync acceptance when feasible. The final synthetic rollover acceptance remains queued afterward.
 
 ## Verified facts
-- Supervisor source repo pushed main: 3b4fde1a52fcd6c43a7add7a0f1a69edb89c19e0.
+- Supervisor source repo pushed main: be7742cbc06b36405e7c9d3892002020cec37f4b.
+- Cross-device discovery suite: 23/23 PASS.
+- Live metadata-only discovery found 21 persisted conversations and automatically bound 4 to registered managed tasks; no model message was sent.
+- Discovery stores conversation ID/URL/timestamps/mode only; chat bodies and titles are not persisted.
 - Supervisor CCS bridge/readback commits are included through 2e86dac.
 - Chrome Codex Switcher pushed main: c40086abb36d8c7eb7bdb1c1f4f100b96f60286c.
 - Supervisor current suite: 19/19 PASS.
@@ -116,9 +120,12 @@ Implement cross-device metadata-only chat auto-discovery while preserving the ex
 - CCS note/PROMPT_ID/twin continuity tests and full test suite pass.
 - Deployed source hashes and service health verified.
 - Synthetic false completion claims corrected.
+- Metadata-only chat discovery, deduplication, inventory persistence, task binding and CLI visibility implemented and pushed as be7742c.
+- Live discovery acceptance succeeded with 21 chats inventoried and 4 managed bindings.
 
 ## Remaining
-- Implement cross-device automatic discovery, durable deduplicated inventory, task binding, CLI visibility, tests and deployment.
+- Restart/deploy the supervisor daemon on be7742c and verify automatic periodic discovery under systemd.
+- Verify one chat newly created on mobile/another desktop is discovered after account sync.
 - Wait for global ChatGPT rate-limit backoff to clear.
 - Re-enable only CHATGPT-RDC-SYNTHETIC-ROLLOVER for one controlled forced rollover.
 - Verify new persisted supervisor registry URL, rollover_count increment, matching rollover event and CCS continuity status.
@@ -152,4 +159,4 @@ Implement cross-device metadata-only chat auto-discovery while preserving the ex
 - [ ] One real supervisor-owned fresh-chat rollover updates registry/runtime/event/CCS evidence end-to-end.
 
 ## Next action
-Implement and test metadata-only conversation discovery against the dedicated authenticated ChatGPT session, then deploy it without generating new ChatGPT requests during global backoff.
+Restart the systemd supervisor on be7742c, verify service health plus automatic inventory/event updates, then checkpoint the deployment result.
