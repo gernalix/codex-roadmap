@@ -154,6 +154,32 @@ class WorkItemsCutoverTests(unittest.TestCase):
             )
             conn.close()
 
+    def test_executor_policy_mutation_updates_pending_and_rejects_running(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.prepare(Path(tmp))
+            conn = db.connect(repo)
+            db.apply_mutation(conn, {
+                "op": "executor_policy",
+                "prompt_id": "111111",
+                "executor_policy": "chatgpt",
+                "note": "user override",
+            })
+            self.assertEqual("chatgpt", conn.execute("SELECT executor_policy FROM work_items WHERE prompt_id=\'111111\'").fetchone()[0])
+            self.assertEqual(
+                1,
+                conn.execute(
+                    "SELECT COUNT(*) FROM audit_events WHERE event_type='prompt_executor_policy_updated'"
+                ).fetchone()[0],
+            )
+            db.set_status(conn, "111111", "running", actor="chatgpt", note="launch")
+            with self.assertRaisesRegex(db.RoadmapDBError, "running_prompt_locked"):
+                db.apply_mutation(conn, {
+                    "op": "executor_policy",
+                    "prompt_id": "111111",
+                    "executor_policy": "rdc",
+                })
+            conn.close()
+
     def test_register_and_status_transition_work_after_cutover(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = self.prepare(Path(tmp))

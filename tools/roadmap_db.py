@@ -843,6 +843,50 @@ def set_reasoning(
     )
 
 
+def set_executor_policy(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    executor_policy: str,
+    *,
+    actor: str = "chatgpt",
+    note: str | None = None,
+) -> None:
+    if executor_policy not in {"auto", "codex", "rdc", "chatgpt", "human"}:
+        raise RoadmapDBError(f"invalid_executor_policy:{executor_policy}")
+    assert_prompt_not_running(conn, prompt_id, "executor_policy")
+    if not work_items_cutover_active(conn):
+        raise RoadmapDBError("executor_policy_requires_work_items_cutover")
+    row = conn.execute(
+        "SELECT executor_policy FROM work_items WHERE prompt_id=?",
+        (prompt_id,),
+    ).fetchone()
+    if not row:
+        raise RoadmapDBError(f"prompt_not_found:{prompt_id}")
+    old_policy = row["executor_policy"]
+    if old_policy == executor_policy:
+        return
+    ts = now_utc()
+    _update_prompt_work_item(
+        conn,
+        prompt_id,
+        fields={"executor_policy": executor_policy, "updated_at": ts},
+    )
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "prompt_executor_policy_updated",
+            ts,
+            actor,
+            json.dumps(
+                {"old_executor_policy": old_policy, "new_executor_policy": executor_policy, "note": note},
+                ensure_ascii=False,
+                sort_keys=True,
+            ),
+        ),
+    )
+
+
 def set_explanation(
     conn: sqlite3.Connection,
     prompt_id: str,
@@ -1594,6 +1638,14 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
             conn,
             str(mutation["prompt_id"]),
             str(mutation["reasoning"]),
+            actor=actor,
+            note=mutation.get("note"),
+        )
+    elif op=="executor_policy":
+        set_executor_policy(
+            conn,
+            str(mutation["prompt_id"]),
+            str(mutation["executor_policy"]),
             actor=actor,
             note=mutation.get("note"),
         )
