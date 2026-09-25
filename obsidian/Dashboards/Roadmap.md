@@ -8,4 +8,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]]
+- Nessuno.
