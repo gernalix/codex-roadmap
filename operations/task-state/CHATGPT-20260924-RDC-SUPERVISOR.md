@@ -72,7 +72,7 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - [ ] Observe one supervisor-owned fresh-chat rollover where registry URL, rollover_count, event log and CCS URL continuity all agree.
 - [ ] Disable synthetic worker after verified PASS.
 ## Current step
-The delivery-timeout incident shown on the PersonalHub worker is resolved in deployed code. Delivery timeout now maps to exact 'continua' in the affected chat instead of rollover/human-required, and the blind all-tab rate-limit sweep that had been perpetually extending global backoff has been removed. After confirming no visible rate-limit dialog on the dedicated browser, the stale global backoff was reset to zero and a targeted PersonalHub run reported active generation with no recovery action needed. Broader mobile-discovery and synthetic-rollover acceptances remain pending.
+Cross-device discovery acceptance is complete. Final synthetic rollover acceptance is temporarily blocked by a real provider rate-limit condition: live read-only inspection at 2026-09-25 16:09 CEST found visible rate-limit state on three registered worker tabs and runtime backoff through 16:39:06 CEST. The supervisor service has been restarted on source c4bd9e5 so the removed all-tab rate-limit sweep cannot keep extending the condition. Do not force model-generating rollover traffic until the live rate-limit condition clears.
 
 ## Verified facts
 - Supervisor source repo pushed main: c4bd9e5160da38d5989975b1a85c3fb93da9732e.
@@ -135,13 +135,13 @@ The delivery-timeout incident shown on the PersonalHub worker is resolved in dep
 - systemd deployment verified active; metadata inventory continues refreshing under the daemon.
 
 ## Remaining
-- Re-enable only CHATGPT-RDC-SYNTHETIC-ROLLOVER for one controlled forced rollover.
+- After the live provider rate-limit condition clears, re-enable only CHATGPT-RDC-SYNTHETIC-ROLLOVER for one controlled forced rollover.
 - Verify new persisted supervisor registry URL, rollover_count increment, matching rollover event and CCS continuity status.
 - Disable synthetic worker after PASS.
 - Update this checkpoint with final acceptance evidence.
 
 ## Blockers
-None. Provider backoff is cleared and cross-device discovery acceptance is complete.
+- Real ChatGPT provider rate-limit condition is active on multiple registered tabs; runtime backoff is valid through 2026-09-25 16:39:06 CEST. This is an external transient blocker, not a supervisor-code failure.
 
 ## Evidence
 - Supervisor source commits include 32cad56, 5fc87d1, 2e86dac, 3b4fde1 and be7742c.
@@ -151,10 +151,10 @@ None. Provider backoff is cleared and cross-device discovery acceptance is compl
 - Live deployed-file SHA-256 pairs matched for extension/background.js and host/store.py.
 - Live CCS services: supervisor=active, ccs=active, pending_ccs=0.
 - Cross-device discovery deployment initially recorded 21 total / 4 managed / 17 inventory-only; current live CLI readback records 56 total / 6 managed / 50 inventory-only.
-- Current global runtime state: rate_limit_until_epoch=0.
+- Earlier stale backoff was cleared, but a new real provider rate-limit condition was observed at 16:09 CEST. Current runtime backoff endpoint is 2026-09-25 16:39:06 CEST.
 - Recent source HEAD c4bd9e5 merges timeout-continua recovery; 298370d introduced delivery-timeout detection and 5c9cb89 changed its action to `NUDGE_CONTINUE`.
 - PersonalHub slow-thinking occurrence was recovered by stopping the generation and sending exactly 'continua' in the PersonalHub tab.
-- Delivery-timeout fix: canonical PR #2 merged at c4bd9e5; live service restarted active; global.json rate_limit_until_epoch=0.0; targeted PersonalHub run reported generation active.
+- Delivery-timeout fix: canonical PR #2 merged at c4bd9e5. Supervisor service was restarted again at 16:10 CEST on source c4bd9e5 after confirming a real provider rate-limit modal was present, preventing the old process from continuing the removed all-tab rate-limit sweep.
 - Canonical ADB keeper checkpoint: codex-roadmap b463dd1; task source ff62956; PR #2 remains externally blocked by GitHub Actions billing/spending limit.
 
 ## Acceptance criteria
@@ -173,4 +173,4 @@ None. Provider backoff is cleared and cross-device discovery acceptance is compl
 - [ ] One real supervisor-owned fresh-chat rollover updates registry/runtime/event/CCS evidence end-to-end.
 
 ## Next action
-Run one isolated supervisor-owned synthetic rollover now; verify the new persisted chat URL, rollover_count, matching rollover event and CCS URL-continuity result atomically, then disable the synthetic worker and checkpoint final PASS.
+After 2026-09-25 16:39:06 CEST, first verify the rate-limit modal is gone without generating a model request. If clear, run one isolated supervisor-owned synthetic rollover; verify the new persisted chat URL, rollover_count, matching rollover event and CCS URL-continuity result atomically, then disable the synthetic worker and checkpoint final PASS.
