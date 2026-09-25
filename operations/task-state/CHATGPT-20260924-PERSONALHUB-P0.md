@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 22:20 Europe/Copenhagen
+Updated: 2026-09-25 22:21 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -97,7 +97,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-PROMPT_ID 840907 is canonical `completed` and merged into PersonalHub `main@ba61688ef1cc59b29d3400e0c0a16845a0b271f3`. Before freezing/building 788606, disposition the three commits unique to `origin/c2/107210`: integrate only still-required product/safety changes through the protected single-writer, or prove them obsolete/already covered. Then start 788606; do not rerun 840907 gates.
+PROMPT_ID 840907 is integrated and canonical `completed`: PersonalHub PR #46 merged final task head `f8f15feec27f29d5c63ba4764bdd922f23d41b39` as main `ba61688ef1cc59b29d3400e0c0a16845a0b271f3`. C2 has already advanced PROMPT_ID 788606 to `running`; do not re-claim it. Continue 788606 from its canonical checkpoint/worktree, beginning with disposition of the three unique `origin/c2/107210` commits before the final release freeze.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -219,6 +219,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 2026-09-25 22:21 Europe/Copenhagen: 840907 terminal PASS verified. PR #46 merged to PersonalHub main `ba61688ef1cc59b29d3400e0c0a16845a0b271f3`; canonical roadmap main reports 840907=`completed` and 788606=`running`. Final direct AVD gate installed the exact QA app/test APKs, then verified `AIRPLANE=1`, `NETWORK_PROBE=offline`, `OK (1 test)`, `INSTRUMENTATION_CODE: -1`, exit 0 for `DataExplorerOfflineQaDeviceTest`. No 840907 gate needs repeating.
 - 2026-09-25 22:20 Europe/Copenhagen: 840907 fully closed: PR #46 merged into PersonalHub main as `ba61688ef1cc59b29d3400e0c0a16845a0b271f3`; final task head `f8f15feec27f29d5c63ba4764bdd922f23d41b39`; canonical roadmap main reports 840907=`completed`. Offline runtime/product gates already PASS and must not be repeated.
 - 2026-09-25 22:03 Europe/Copenhagen: 840907 acceptance complete at `07148cd`: host projection/manifest/no-network gate PASS; browser E2E PASS with external DNS forced unavailable; `:app:compileDebugKotlin` PASS; `DataExplorerOfflineQaDeviceTest` PASS 1/1 on canonical Pixel_8a AVD with airplane mode enabled; vendored assets 24.55 MiB raw / 12,251,271 compressed bytes in QA APK; emulator network restored after test.
 - 2026-09-25 21:43 Europe/Copenhagen: 840907 claimed successfully via roadmap Issue #1143; canonical status=`running`, executor policy=`chatgpt`, isolated worktree `/home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/840907` based on PersonalHub main `5cda3ad6`.
@@ -288,15 +289,17 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Ensure PersonalHub repository ends clean and main-only.
 
 ## Blockers
+- Release dependency, not a product blocker: before 788606 freezes main, disposition the three commits unique to `origin/c2/107210` through the protected integration flow.
 - User-directed artifact gate: do not retry PH APK/DB compilation, testing, installation or cutover until the remaining PH implementation/test tasks have completed and the final schema/release commit is frozen.
 - 857906 has no blocker and is already canonical `completed`; no CI polling or retry remains.
-- Physical Pixel is currently absent from canonical ADB discovery (`pixel_physical_required_but_absent`); this does not block 857906 and matters only for later final cutover 913264.
 - Local Android build/device/real-DB work is available through Remote Desktop Commander on Fedora.
 - The actual live Pixel DB schema/identity is not yet read and must not be guessed.
 - Final DB target cannot be frozen until upstream PH tasks are complete.
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
+- Physical Pixel 8a was last verified online; re-resolve its explicit serial at final cutover rather than assuming continued availability.
 ## Evidence
+- 2026-09-25 22:21 Europe/Copenhagen 840907 terminal readback: PersonalHub PR #46=`MERGED`, merge `ba61688ef1cc59b29d3400e0c0a16845a0b271f3`, final task head `f8f15feec27f29d5c63ba4764bdd922f23d41b39`; single-writer status=`merged`; canonical codex-roadmap main reports 840907=`completed`, 788606=`running`, 913264=`pending`. Direct offline instrumentation evidence: app install PASS, test APK install PASS, airplane mode 1, IP probe offline, `OK (1 test)`, `INSTRUMENTATION_CODE: -1`, exit 0.
 - 2026-09-25 22:20 Europe/Copenhagen 840907 terminal evidence: PersonalHub PR #46 MERGED; task head `f8f15feec27f29d5c63ba4764bdd922f23d41b39`; merge commit `ba61688ef1cc59b29d3400e0c0a16845a0b271f3`; roadmap main `29a4b596f8d571e3aac0444bef0eabc2d34bb831` reports 840907=`completed`, 788606/913264=`pending`. Final device gate uses host-controlled offline mode and only verifies no validated Internet from instrumentation; product runtime unchanged from already-PASS host/browser/AVD evidence.
 - 2026-09-25 22:03 Europe/Copenhagen 840907 evidence: branch head `07148cd14282a9f61a8928054197f223b5fd4588`; host gate `test_datasette_lite_offline.py` PASS with 10 envelope rows, 120 presentation tables and cross-module relation targets; browser E2E rendered `contact_fields`/`Ada Example` with external host resolution blocked; AVD XML reports tests=1 failures=0 errors=0 skipped=0 for `DataExplorerOfflineQaDeviceTest` (16.444s) under airplane mode; assets raw=25,743,829 bytes, QA APK compressed contribution=12,251,271 bytes across 52 entries; canonical roadmap main `adc8217d36a8779dd4a3490421dc7bdcf02c4da7` still has 840907=`running` and 788606/913264=`pending`.
 - 2026-09-25 21:51 Europe/Copenhagen: guarded roadmap pull PASS at `654788b`; physical Pixel 8a is online at explicit ADB serial `192.168.1.37:36755` with currently installed PH v60. `c2-personalhub-p0.timer` is disabled/inactive. The obsolete `personalhub-consolidation.timer` was disabled after verifying its service failed every minute because its ExecStart script is absent. `origin/c2/107210` has three commits absent from main (`1990edbe`, `d199f87b`, `0851f6ec`), requiring semantic disposition before final freeze. User reconfirmed that both final minified APK and compatible migrated DB must be installed on Pixel before completion.
@@ -344,4 +347,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Disposition the three commits unique to `origin/c2/107210` against current PersonalHub main; integrate only still-required changes through the protected single-writer or prove them obsolete/covered, then start PROMPT_ID 788606 from the resulting clean final-source main.
+Continue the already-running PROMPT_ID 788606 from its canonical C2 checkpoint/worktree without re-claiming it; first disposition the unique `origin/c2/107210` changes, then execute the existing final release preflight/freeze acceptance criteria.
