@@ -716,6 +716,43 @@ def add_dependency(conn: sqlite3.Connection, prompt_id: str, depends_on: str, *,
         (prompt_id, depends_on, note),
     )
 
+def remove_dependency(
+    conn: sqlite3.Connection,
+    prompt_id: str,
+    depends_on: str,
+    *,
+    actor: str = "chatgpt",
+    note: str | None = None,
+) -> None:
+    assert_prompt_not_running(conn, prompt_id, "dependency_remove")
+    prompt_row(conn, depends_on)
+    existing = conn.execute(
+        "SELECT 1 FROM dependencies WHERE prompt_id=? AND depends_on_prompt_id=?",
+        (prompt_id, depends_on),
+    ).fetchone()
+    if not existing:
+        return
+    conn.execute(
+        "DELETE FROM dependencies WHERE prompt_id=? AND depends_on_prompt_id=?",
+        (prompt_id, depends_on),
+    )
+    ts = now_utc()
+    conn.execute(
+        "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
+        (
+            prompt_id,
+            "dependency_removed",
+            ts,
+            actor,
+            json.dumps(
+                {"depends_on": depends_on, "note": note},
+                ensure_ascii=False,
+                sort_keys=True,
+            ),
+        ),
+    )
+
+
 def replace_dependency(
     conn: sqlite3.Connection,
     prompt_id: str,
@@ -1262,6 +1299,14 @@ def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, defaul
         add_relation(conn,str(mutation["from_prompt_id"]),str(mutation["to_prompt_id"]),str(mutation["relation_type"]),actor=actor,note=mutation.get("note"))
     elif op=="dependency":
         add_dependency(conn,str(mutation["prompt_id"]),str(mutation["depends_on_prompt_id"]),note=mutation.get("note"))
+    elif op=="dependency_remove":
+        remove_dependency(
+            conn,
+            str(mutation["prompt_id"]),
+            str(mutation["depends_on_prompt_id"]),
+            actor=actor,
+            note=mutation.get("note"),
+        )
     elif op=="dependency_replace":
         replace_dependency(
             conn,

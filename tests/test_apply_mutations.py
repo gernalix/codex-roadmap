@@ -39,6 +39,37 @@ class MutationTests(unittest.TestCase):
             )
             conn.close()
 
+    def test_dependency_remove_mutation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            conn=db.connect(repo)
+            db.register_prompt(conn,prompt_id="111111",slug="old",title="Old",current_path="prompts/old.md")
+            db.register_prompt(conn,prompt_id="333333",slug="downstream",title="Downstream",current_path="prompts/downstream.md")
+            db.add_dependency(conn,"333333","111111")
+            conn.commit(); conn.close()
+            inbox=repo/"mutations/inbox"; inbox.mkdir(parents=True)
+            (inbox/"remove.json").write_text(json.dumps({
+                "schema":"codex-roadmap.mutation.v1","actor":"chatgpt",
+                "operations":[{
+                    "op":"dependency_remove",
+                    "prompt_id":"333333",
+                    "depends_on_prompt_id":"111111",
+                    "note":"priority override"
+                }]
+            }),encoding="utf-8")
+            out=apply_mutations.apply_inbox(repo, test_only=True)
+            self.assertEqual(1,out["operations"])
+            conn=db.connect(repo,writable=False)
+            self.assertEqual(
+                0,
+                conn.execute("select count(*) from dependencies where prompt_id='333333'").fetchone()[0],
+            )
+            self.assertEqual(
+                1,
+                conn.execute("select count(*) from audit_events where event_type='dependency_removed'").fetchone()[0],
+            )
+            conn.close()
+
     def test_chatgpt_analysis_mutation(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
