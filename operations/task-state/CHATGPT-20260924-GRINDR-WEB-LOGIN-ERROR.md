@@ -26,7 +26,7 @@ Identify why Grindr Web shows “Something went wrong / Check your internet conn
 - [ ] Record final evidence and cleanup temporary diagnostic runtime/profile.
 
 ## Current step
-The user confirmed that the real default-profile Chrome now shows the normal Grindr interface but is logged out. The next verification is a user-entered login in that normal Chrome window; if the original generic error reappears immediately after login, instrument that specific profile with the least disruptive method before changing any site data or browser settings.
+The user completed a fresh login in the real default-profile Chrome. A current copy-on-write clone of that exact default profile was then launched under CDP and loaded authenticated `/chat` without the generic error, with 42 Grindr API requests and zero HTTP >=400 responses. The real default-profile Chrome was reopened to `/chat` to force a clean post-login navigation; obtain one visual confirmation from the user before cleanup/finalization.
 
 ## Verified facts
 - User reports the same generic failure immediately after login in Chrome, Firefox, and private/incognito mode.
@@ -50,7 +50,10 @@ The user confirmed that the real default-profile Chrome now shows the normal Gri
 - Remote Desktop Commander opened `https://web.grindr.com/chat` in the already-running real default-profile Chrome process; AT-SPI confirmed a Grindr Web top-level window in that default-profile Chrome application.
 - The real default-profile Chrome process was not started with remote debugging, and this RDC integration exposes terminal/filesystem operations rather than browser pixels; it cannot safely inspect that already-running window's page body directly.
 - Restarting the real Chrome solely to add remote debugging is not currently justified: the profile reports `restore_on_startup` unset and `exit_type="Crashed"`, so an autonomous restart could risk the user's open-window state.
-- The user visually confirmed that the real default-profile Chrome window currently renders the normal Grindr interface and does not show the generic error, but that profile is logged out.
+- The user visually confirmed that the real default-profile Chrome window rendered the normal Grindr interface while logged out, then completed one fresh login in that same default-profile Chrome.
+- Immediately after that login, a copy-on-write clone of the current default profile was launched in visible Chrome with CDP. The clone was already authenticated at `https://web.grindr.com/chat`, did not contain the generic `Something went wrong` text, did not contain the connection-error text, and was not on the login UI.
+- That post-login current-profile clone recorded 42 Grindr API resource requests with zero HTTP >=400 responses.
+- Because the current persisted state of the real profile is healthy and authenticated, RDC reopened `/chat` in the real default-profile Chrome to trigger a clean navigation using that state.
 
 ## Decisions
 - Do not change DNS, firewall, VPN, geolocation, browser installation, or wipe browser profiles; evidence does not support those as causes.
@@ -70,15 +73,17 @@ The user confirmed that the real default-profile Chrome now shows the normal Gri
 - Instrumented reload and full diagnostic-browser restart both succeeded with no Grindr API HTTP errors.
 - Opened `/chat` in the actual default-profile Chrome process without changing its profile or settings.
 - User confirmed the real default-profile page renders normally while logged out.
+- User completed a fresh login in the real default-profile Chrome.
+- Verified the current post-login default-profile state via a copy-on-write CDP clone: authenticated `/chat`, no generic error text, 42 Grindr API requests, zero HTTP errors.
+- Reopened `/chat` in the real default-profile Chrome to apply the clean-navigation workaround.
 
 ## Remaining
-- Perform one user-entered login in the real default-profile Chrome window and verify whether the generic error returns after authentication.
-- If it returns, choose the least disruptive way to instrument that specific profile before changing site data or browser settings.
-- Apply only the smallest fix supported by that evidence.
-- Verify and clean up the temporary diagnostic profile/process.
+- Get one visual confirmation that the reopened real default-profile Chrome window now shows the authenticated Grindr interface rather than the generic error.
+- If confirmed, treat clean post-login navigation/reload as the minimum workaround and clean up all temporary diagnostic Chrome processes/profiles.
+- If the generic error still appears only in the already-running real renderer, instrument that renderer only after preserving the user's open-window state.
 
 ## Blockers
-One user action is required: enter Grindr credentials in the real default-profile Chrome window. Credentials must remain user-entered and must not be captured or persisted.
+One user-visible confirmation remains: whether the reopened real default-profile Chrome window now shows the authenticated Grindr interface. No credentials or private Grindr content need to be shared.
 
 ## Evidence
 - Initial screenshot supplied in ChatGPT.
@@ -89,6 +94,8 @@ One user action is required: enter Grindr credentials in the real default-profil
 - Diagnostic-browser restart preserved the session and again loaded `/chat` with zero failing Grindr API responses.
 - Real default-profile Chrome navigation was issued successfully; AT-SPI exposed a top-level `Grindr Web ... - Google Chrome` frame in the default-profile Chrome application.
 - User visual confirmation: real default-profile Chrome shows the normal Grindr interface while logged out.
+- Post-login current-profile copy-on-write clone: authenticated `/chat`; targeted DOM checks `hasError=false`, `hasConnectionText=false`, `hasLogin=false`; 42 API resource requests, zero HTTP >=400.
+- RDC then reopened `/chat` in the already-running real default-profile Chrome.
 - No authentication values or chat contents are stored in this state file.
 
 ## Acceptance criteria
@@ -98,4 +105,4 @@ One user action is required: enter Grindr credentials in the real default-profil
 - Temporary diagnostic process/profile removed.
 
 ## Next action
-Have the user log in once in the already-open normal Chrome Grindr window, then immediately determine whether the normal interface remains or the `Something went wrong` error returns.
+Ask the user whether the Grindr window just reopened in normal Chrome now shows the authenticated normal interface or the `Something went wrong` error.
