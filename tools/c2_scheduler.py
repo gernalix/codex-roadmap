@@ -39,6 +39,13 @@ CREATE TABLE IF NOT EXISTS work_item_resource_leases (
 CREATE TABLE IF NOT EXISTS work_item_scheduler_events (
  event_key TEXT PRIMARY KEY, observed_at REAL NOT NULL, result_json TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS c2_notification_outbox (
+ event_key TEXT PRIMARY KEY,
+ work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id),
+ title TEXT NOT NULL, message TEXT NOT NULL,
+ state TEXT NOT NULL CHECK(state IN ('pending','sending','sent','uncertain')),
+ created_at REAL NOT NULL, sent_at REAL, error TEXT
+);
 CREATE TRIGGER IF NOT EXISTS work_item_execution_spec_running_update
 BEFORE UPDATE ON work_item_execution_specs
 WHEN (SELECT status FROM work_items WHERE work_item_id=OLD.work_item_id)='running'
@@ -243,6 +250,8 @@ def complete(conn, run_id, *, succeeded, worker_ref):
     conn.execute('UPDATE work_item_runs SET state=? WHERE run_id=?',(target,run_id))
     conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(run_id,))
     conn.execute('UPDATE work_items SET status=? WHERE work_item_id=?',(target,run['work_item_id']))
+    if succeeded:
+        enqueue_milestone(conn,run['work_item_id'])
 
 
 def reconcile_terminal_run(conn, run_id):
@@ -262,3 +271,53 @@ def reconcile_terminal_run(conn, run_id):
         raise SchedulingError('run_not_active')
     conn.execute('UPDATE work_item_runs SET state=? WHERE run_id=?',(target,run_id))
     conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(run_id,))
+    if target=='completed':
+        work_item_id=conn.execute('SELECT work_item_id FROM work_item_runs WHERE run_id=?',(run_id,)).fetchone()[0]
+        enqueue_milestone(conn,work_item_id)
+
+
+def enqueue_milestone(conn, work_item_id):
+    _transaction(conn)
+    item=conn.execute('''SELECT w.work_item_id,w.title,w.kind,w.status,w.parent_id,
+       parent.next_action AS parent_next_action
+       FROM work_items w LEFT JOIN work_items parent ON parent.work_item_id=w.parent_id
+       WHERE w.work_item_id=?''',(work_item_id,)).fetchone()
+    if not item or item['status']!='completed':
+        raise SchedulingError('completed_work_item_required')
+    tagged=conn.execute("SELECT 1 FROM work_item_tags WHERE work_item_id=? AND tag='milestone'",(work_item_id,)).fetchone()
+    if item['kind'] not in ('goal','phase','gate') and not tagged:
+        return False
+    title='Checklist 2.0'
+    label=(str(item['title']).splitlines() or [''])[0][:120]
+    next_action=(str(item['parent_next_action'] or '').splitlines() or [''])[0][:160]
+    message='Completato: '+label+'.'
+    if next_action:
+        message+=' Prossimo passo: '+next_action+'.'
+    conn.execute('''INSERT OR IGNORE INTO c2_notification_outbox
+       (event_key,work_item_id,title,message,state,created_at)
+       VALUES(?,?,?,?,?,?)''',
+       ('work-item:'+work_item_id+':completed',work_item_id,title,message,'pending',time.time()))
+    return True
+
+
+def claim_milestone(conn, event_key):
+    _transaction(conn)
+    row=conn.execute('SELECT * FROM c2_notification_outbox WHERE event_key=?',(event_key,)).fetchone()
+    if not row:
+        raise SchedulingError('milestone_not_found')
+    if row['state']=='pending':
+        conn.execute("UPDATE c2_notification_outbox SET state='sending' WHERE event_key=?",(event_key,))
+    return dict(conn.execute('SELECT * FROM c2_notification_outbox WHERE event_key=?',(event_key,)).fetchone())
+
+
+def mark_milestone(conn, event_key, *, sent, error=None):
+    _transaction(conn)
+    row=conn.execute('SELECT state FROM c2_notification_outbox WHERE event_key=?',(event_key,)).fetchone()
+    if not row or row['state'] not in ('sending','sent','uncertain'):
+        raise SchedulingError('milestone_not_claimed')
+    if row['state'] in ('sent','uncertain'):
+        return
+    conn.execute('''UPDATE c2_notification_outbox
+      SET state=?,sent_at=?,error=? WHERE event_key=?''',
+      ('sent' if sent else 'uncertain',time.time() if sent else None,
+       None if sent else str(error or 'delivery_unconfirmed')[:200],event_key))

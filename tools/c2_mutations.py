@@ -23,6 +23,9 @@ def apply(conn, mutation):
         'recover': c2_scheduler.recover,
         'complete': c2_scheduler.complete,
         'reconcile_run': c2_scheduler.reconcile_terminal_run,
+        'milestone': c2_scheduler.enqueue_milestone,
+        'claim_milestone': c2_scheduler.claim_milestone,
+        'mark_milestone': c2_scheduler.mark_milestone,
     }
     if action not in operations:
         raise ValueError('unknown_c2_operation:'+action)

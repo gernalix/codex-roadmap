@@ -660,6 +660,12 @@ def set_status(
         "VALUES(?,?,?,?,?,?)",
         (prompt_id, old, new_status, ts, actor, note),
     )
+    if work_items_cutover_active(conn) and new_status == "completed":
+        import c2_scheduler
+        work_item_id = conn.execute(
+            "SELECT work_item_id FROM work_items WHERE prompt_id=?", (prompt_id,)
+        ).fetchone()[0]
+        c2_scheduler.enqueue_milestone(conn, work_item_id)
 
 def reconcile_terminal_requests(
     conn: sqlite3.Connection,

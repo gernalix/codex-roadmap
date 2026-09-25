@@ -298,6 +298,8 @@ def migrate_database(db_path: Path) -> dict[str, Any]:
         try:
             conn.execute("BEGIN IMMEDIATE")
             install_schema(conn)
+            import c2_scheduler
+            c2_scheduler.install_schema(conn)
             result = backfill_from_legacy(conn)
             verification = verify_migration(conn)
             if not verification["ok"]:

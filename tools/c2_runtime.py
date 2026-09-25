@@ -56,10 +56,29 @@ def _launch_worker(run_id: str):
         raise RuntimeErrorC2('worker_launch_failed:'+str(result.returncode))
 
 
+def _launch_notify(event_key: str):
+    run_hash=hashlib.sha256(event_key.encode()).hexdigest()[:24]
+    command=[sys.executable,str(Path(__file__).with_name('c2_notify_worker.py')),
+        '--event-key',event_key]
+    result=subprocess.run(['systemd-run','--user','--collect',
+        '--unit=c2-notify-'+run_hash,*command],capture_output=True,text=True)
+    if result.returncode and 'already exists' not in result.stderr.lower():
+        raise RuntimeErrorC2('notification_launch_failed:'+str(result.returncode))
+
+
 def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_worker,
+            launch_notify=_launch_notify,
             now: float | None=None, max_parallel: int=3) -> dict:
     now=time.time() if now is None else now
     events=[]
+    for notice in db.execute("SELECT event_key,state FROM c2_notification_outbox WHERE state IN ('pending','sending') ORDER BY created_at,event_key"):
+        key=str(notice['event_key'])
+        if notice['state']=='pending':
+            submit('claim_milestone',{'event_key':key},'c2-claim-milestone-'+hashlib.sha256(key.encode()).hexdigest()[:32])
+            events.append(('claim_milestone',key))
+        else:
+            launch_notify(key)
+            events.append(('notify',key))
     active=[dict(r) for r in db.execute("""SELECT r.* FROM work_item_runs r
        JOIN work_items w USING(work_item_id)
        WHERE r.state IN ('claimed','running','recovering')

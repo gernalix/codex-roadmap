@@ -6,6 +6,7 @@ import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import c2_intake as intake
 import c2_scheduler as scheduler
+import roadmap_db
 import test_c2_intake
 
 
@@ -98,3 +99,11 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual('completed',self.conn.execute(
             "SELECT state FROM work_item_runs WHERE run_id='r'").fetchone()[0])
         self.assertEqual(0,self.conn.execute('SELECT COUNT(*) FROM work_item_resource_leases').fetchone()[0])
+
+    def test_canonical_goal_terminal_enqueues_one_milestone(self):
+        self.conn.execute("UPDATE work_items SET kind='goal' WHERE prompt_id='123456'")
+        roadmap_db.set_status(self.conn,'123456','running',actor='test')
+        roadmap_db.set_status(self.conn,'123456','completed',actor='test',allow_running_terminal=True)
+        roadmap_db.set_status(self.conn,'123456','completed',actor='test',allow_running_terminal=True)
+        self.assertEqual(1,self.conn.execute('''SELECT COUNT(*) FROM c2_notification_outbox
+          WHERE event_key='work-item:prompt:123456:completed' AND state='pending' ''').fetchone()[0])
