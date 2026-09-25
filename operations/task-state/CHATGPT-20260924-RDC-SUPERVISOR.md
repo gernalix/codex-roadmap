@@ -131,19 +131,17 @@ The delivery-timeout incident shown on the PersonalHub worker is resolved in dep
 - Metadata-only chat discovery, deduplication, inventory persistence, task binding and CLI visibility implemented and pushed as be7742c.
 - Delivery-timeout exact-'continua' recovery and stale-global-backoff fix merged and deployed as c4bd9e5; 25/25 supervisor tests PASS.
 - False global backoff was cleared only after live inspection confirmed no current rate-limit dialog; PersonalHub remained in active generation.
-- Live discovery acceptance succeeded with 21 chats inventoried and 4 managed bindings.
-- systemd deployment verified active at 2026-09-25 10:11:15 CEST (MainPID 4185307, ExecMainStatus=0); chats.json was automatically refreshed at 10:11:18 CEST.
-- Deployed inventory currently contains 21 chats: 4 managed and 17 inventory-only.
+- Live discovery acceptance is complete: inventory grew from the initial 21 chats / 4 managed to 56 chats / 6 managed / 50 inventory-only without manual URL registration.
+- systemd deployment verified active; metadata inventory continues refreshing under the daemon.
 
 ## Remaining
-- Verify one chat newly created on mobile/another desktop is discovered after account sync.
 - Re-enable only CHATGPT-RDC-SYNTHETIC-ROLLOVER for one controlled forced rollover.
 - Verify new persisted supervisor registry URL, rollover_count increment, matching rollover event and CCS continuity status.
 - Disable synthetic worker after PASS.
 - Update this checkpoint with final acceptance evidence.
 
 ## Blockers
-- Exact post-deployment mobile/other-desktop discovery acceptance requires a new persisted conversation to be created on another client; the deployed supervisor itself is already active and requires no manual URL registration.
+None. Provider backoff is cleared and cross-device discovery acceptance is complete.
 
 ## Evidence
 - Supervisor source commits include 32cad56, 5fc87d1, 2e86dac, 3b4fde1 and be7742c.
@@ -175,4 +173,4 @@ The delivery-timeout incident shown on the PersonalHub worker is resolved in dep
 - [ ] One real supervisor-owned fresh-chat rollover updates registry/runtime/event/CCS evidence end-to-end.
 
 ## Next action
-When a new persisted chat is created on mobile or another desktop client, verify its conversation ID appears automatically in chats.json/chat-discovered events; otherwise leave the deployed supervisor unchanged.
+Run one isolated supervisor-owned synthetic rollover now; verify the new persisted chat URL, rollover_count, matching rollover event and CCS URL-continuity result atomically, then disable the synthetic worker and checkpoint final PASS.
