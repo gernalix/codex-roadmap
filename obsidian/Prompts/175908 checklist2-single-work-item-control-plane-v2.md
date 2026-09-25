@@ -34,7 +34,7 @@ tags:
 
 ## Spiegazione
 
-C2 usa un solo albero work-item. P0 assoluto: rendere subito PersonalHub usabile sul Pixel con APK minificato + DB compatibile testati/installati; ogni milestone significativa invia Telegram chiaro; dopo P0 bonifica Datasette Alerts, poi prosegue il control plane.
+C2 usa un solo albero work-item. P0 107210 è operativo: TCL PASS e watcher Pixel automatico armato; il cutover C2 completo resta in attesa del PASS Pixel. Dopo P0: bonifica Datasette Alerts, poi migrazione al control plane work_items/Workflowy/Obsidian/RDC.
 
 ## Esecuzioni
 

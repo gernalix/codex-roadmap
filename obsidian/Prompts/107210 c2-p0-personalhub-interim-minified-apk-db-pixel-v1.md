@@ -33,7 +33,7 @@ tags:
 
 ## Spiegazione
 
-Priorità assoluta: creare un PersonalHub temporaneo affidabile, minificato, con DB reale compatibile e installare automaticamente APK+DB sul Pixel dopo test e backup.
+✅ APK release minificato + DB schema 23 validati sul TCL: Home ~0,76 s; tutti i 6 moduli 0,20–2,04 s; zero crash/ANR. Watcher Pixel automatico attivo ogni minuto con backup→migrazione→install DB+APK→smoke→auto-stop. ⏳ Attende solo che il Pixel ricompaia via ADB.
 
 ## Esecuzioni
 
