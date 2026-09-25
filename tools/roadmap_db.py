@@ -1555,7 +1555,10 @@ def verify(repo: Path) -> dict[str, Any]:
 def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, default_actor: str = "chatgpt") -> None:
     op=mutation.get("op")
     actor=mutation.get("actor") or default_actor
-    if op=="reconcile_terminals":
+    if isinstance(op, str) and op.startswith("c2_"):
+        import c2_mutations
+        c2_mutations.apply(conn, mutation)
+    elif op=="reconcile_terminals":
         reconcile_terminal_requests(conn, actor=actor)
     elif op=="analysis":
         record_analysis(
