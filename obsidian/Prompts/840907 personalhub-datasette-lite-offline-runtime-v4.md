@@ -5,6 +5,7 @@ project_id: 49
 model: GPT-6 Sol
 reasoning: medium
 tags:
+  - priority:p0
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/personal-hub

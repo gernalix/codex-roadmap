@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Aspetta la nuova History/Search unica di PersonalHub; poi valida Git History e ripristino sullo schema finale. L’archivio Obsidian è ora esterno a PH e non blocca più questa validazione.
+Current PersonalHub gate. User overrode Codex execution; ChatGPT/RDC continues the preserved worktree directly. Running execution metadata is intentionally left immutable.
 
 ## Esecuzioni
 

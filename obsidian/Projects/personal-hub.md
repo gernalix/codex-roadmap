@@ -9,7 +9,7 @@ tags:
 - [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
 - [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `pending`
 - [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]] · `pending`
-- [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] · `blocked`
+- [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] · `superseded`
 - [[obsidian/Prompts/418844 personalhub-capsule-isolation-postmerge-cleanup-v1|418844 · Chiudere il residuo del merge capsule]] · `completed`
 - [[obsidian/Prompts/380812 personalhub-shared-alerts-places-tags-integration-v5|380812 · Chiudere e integrare tag e alert di Places]] · `completed`
 - [[obsidian/Prompts/521404 personalhub-shared-alerts-pr15-integration-closure-v1|521404 · Chiudere e mergiare la PR alert/Places già pronta]] · `completed`
@@ -26,7 +26,7 @@ tags:
 - [[obsidian/Prompts/223103 personalhub-shared-alerts-places-tags-integration-v3|223103 · Chiudere e integrare tag e alert di Places]] · `superseded`
 - [[obsidian/Prompts/404846 personalhub-github-ci-closure-v2|404846 · Chiudere la CI GitHub dopo il passaggio a English-only]] · `superseded`
 - [[obsidian/Prompts/697834 personalhub-epoch-timestamps-migration-v4|697834 · Migrare solo i veri timestamp a epoch ms]] · `completed`
-- [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] · `failed`
+- [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] · `superseded`
 - [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3|830867 · Date e ore coerenti ovunque]] · `superseded`
 - [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `completed`
 - [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3|790233 · Portare Salute nel database canonico]] · `superseded`

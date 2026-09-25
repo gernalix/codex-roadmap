@@ -5,6 +5,7 @@ project_id: 49
 model: GPT-6 Luna
 reasoning: low
 tags:
+  - priority:p0
   - roadmap/prompt
   - roadmap/status/pending
   - roadmap/project/personal-hub

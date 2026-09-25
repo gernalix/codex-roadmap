@@ -1,18 +1,21 @@
 PROMPT_ID=788606 | PARENT_PROMPT_ID=334679 | project_id=49 | MegaVault=FAST
 
 # Goal
-Esegui il preflight locale finale della build PersonalHub destinata a Google Play. Non aggiungere feature.
+Congela una sola revisione finale PersonalHub e produci UNA VOLTA gli artefatti firmati/minificati che 913264 installerà sul Pixel.
 
 # Starting point
-- repo: /home/daniele/projects/PersonalHub, main finale dopo 840907;
-- release ha già isMinifyEnabled=true, isShrinkResources=true e proguard-android-optimize: non creare un task separato di minificazione;
-- usa signing secret canonico e i gate Play già nel repo.
+- repo: /home/daniele/projects/PersonalHub;
+- parte solo dopo 840907 PASS e integrazione su main;
+- release ha già minify/resource shrink/proguard optimize attivi.
 
-# Esecuzione
-1. Richiedi main pulito/sincronizzato; non modificare codice salvo blocker concreto del preflight.
-2. Esegui i gate Play/release mantenuti, signed AAB/APK con config locale, bundletool validation e smoke AVD minimo.
-3. Verifica che R8/resource shrink siano attivi e misura/report size finale APK/AAB; non disabilitare shrink per far passare build.
-4. Controlla signing, manifest/version, policy tecniche e compatibilità solo tramite gate già presenti. Se un gate fallisce, correggi il minimo e riesegui quel gate.
+# Esecuzione ottimizzata
+1. Verifica che main sia pulito/sincronizzato e contenga 707603+840907; nessun altro lavoro PH sorgente rilevante deve essere pendente.
+2. Congela FINAL_HEAD, schema Room/identity, package/version e signing config. Non aggiungere feature.
+3. Riusa l'evidenza dei gate già PASS; riesegui solo i gate release che coprono rischi non già verificati o codice cambiato dopo quei gate.
+4. Costruisci UNA SOLA VOLTA signed minified APK + AAB dal FINAL_HEAD con shrink attivo. Registra path, SHA-256 e size.
+5. Esegui bundletool/manifest/signing validation e un solo smoke AVD minimo sull'APK esatto prodotto.
+6. Salva un release manifest locale verificabile con FINAL_HEAD, schema/identity, package/version, artifact path/hash/size e shrink state. Questi artefatti sono immutabili input di 913264.
+7. Se un gate fallisce, correggi solo il blocker concreto, congela il nuovo FINAL_HEAD e ricostruisci una volta; niente audit extra dopo PASS.
 
 # Acceptance
-PASS con bundle firmato/validato, shrink attivo, size riportata, smoke AVD e preflight esistente PASS. Nessun upload Play Store. Stop immediato.
+PASS con main finale congelato, shrink attivo, APK/AAB firmati e validati, hash/size/schema/identity registrati e smoke AVD PASS. Nessun upload Play Store. 913264 deve poter riusare gli stessi byte senza rebuild.

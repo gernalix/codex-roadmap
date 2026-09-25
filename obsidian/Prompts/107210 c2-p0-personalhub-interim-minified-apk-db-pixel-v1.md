@@ -1,6 +1,6 @@
 ---
 prompt_id: 107210
-status: blocked
+status: superseded
 project_id: 49
 model: GPT-6 Sol
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - personalhub
   - pixel
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/personal-hub
 ---
 
 # 107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../falliti/c2-p0-personalhub-interim-minified-apk-db-pixel-v1|Apri prompt]]
 - **Primo lancio:** —
