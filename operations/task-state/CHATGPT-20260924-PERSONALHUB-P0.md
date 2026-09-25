@@ -96,7 +96,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] End with clean, operational, main-only PersonalHub.
 
 ## Current step
-PROMPT_ID 707603 is fully closed: PersonalHub PR #45 merged as `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`; terminal mutation Issue #1141 applied; canonical roadmap reports 707603=`completed`. Phase 5 / 840907 is now the active PH priority. Start it from the existing materialized prompt; do not repeat 707603 tests.
+PROMPT_ID 707603 is canonical `completed` and merged into PersonalHub main `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`. The active PH priority now advances to 840907 (Datasette Lite truly offline). Start it from the existing materialization and final PH main; do not redo 707603 validation.
 
 ## Verified facts
 - 857906 canonical emulator acceptance PASS on `task/857906@1f6e65f99d8f319213c7469c95ab6e29758022b6`: `ANDROID_SERIAL=emulator-5554 ... :app:connectedQaAndroidTest ... HubHistorySearchQaDeviceTest` completed `BUILD SUCCESSFUL`, 3 tests / 0 failures. It verifies global live filters, before/after-only human text search, safe compensating undo, immutable module scope, and shared Places+Timer entry points with legacy Timeline absent. QA-discovered product fixes are committed in ancestry (`f606a50`, `99165ee`, `f380fc0`); test-order stabilization is `1f6e65f`.
@@ -218,6 +218,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - The definitive Pixel APK must be the exact artifact produced after the entire P0 lane, not an emergency/intermediate build.
 
 ## Completed
+- 2026-09-25 21:15 Europe/Copenhagen: 707603 fully closed: PR #45 merged into PersonalHub main as `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`; roadmap terminal Issue #1140 applied `completed`; canonical roadmap main `50c09ef582f1b61727e99a1a80d764a1e5fc2bfe` confirms 707603=`completed`.
 - 2026-09-25 21:15 Europe/Copenhagen: 707603 terminal PASS completed. PR #45 merged as `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`; roadmap Issue #1141 closed `completed`; canonical `roadmap.sqlite` at `50c09ef582f1b61727e99a1a80d764a1e5fc2bfe` reports 707603=`completed`.
 - 2026-09-25 20:53 Europe/Copenhagen: targeted `:core:database:connectedDebugAndroidTest` for `GitDataRestoreDeviceTest` PASS on explicit `emulator-5554` / Pixel_8a AVD: 1 test, 0 failures, 0 errors; test scaffolding committed as `d3fca297` and pushed to PR #45. github-autosync rollup fix PR #27 merged as `0a194cf`.
 - 2026-09-25 20:49 Europe/Copenhagen: diagnosed 707603 integration blocker: single-writer treated superseded CANCELLED duplicate check runs as current failures. Fix `cf616aa` deduplicates by workflow/check and keeps latest pending/failing runs fail-closed; `tests.test_repo_single_writer` 21/21 PASS; github-autosync PR #27 opened.
@@ -293,6 +294,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- 2026-09-25 21:15 Europe/Copenhagen 707603 terminal evidence: all PR #45 checks PASS on head `d3fca2972eb327dfaca79f2c3ff0130b2af72b49`; merge commit `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`; roadmap Issue #1140 closed `completed`; `roadmap.sqlite` reports 707603=`completed`, 840907/788606/913264=`pending`.
 - 2026-09-25 21:15 Europe/Copenhagen 707603 closure evidence: PR #45 merged; final complete-head CI PASS (instrumentation 18m1s, unit/lint 20m41s, both Play preflight, architecture, GitGuardian); targeted `GitDataRestoreDeviceTest` on explicit Pixel_8a AVD PASS 1/1; terminal request #1141 applied; 707603 canonical `completed`.
 - 2026-09-25 20:53 Europe/Copenhagen leaf-gate evidence: `TEST-Pixel_8a(AVD) - 16.xml` reports `GitDataRestoreDeviceTest` tests=1 failures=0 errors=0 skipped=0, testcase `restoreUsesValidatedStagingBeforeReplacingLiveDatabase` 12.991s. PersonalHub branch local/remote exact head `d3fca2972eb327dfaca79f2c3ff0130b2af72b49`, worktree clean. PR #45 CI restarted on this head.
 - 2026-09-25 20:49 Europe/Copenhagen single-writer regression evidence: `repo_single_writer.integrate_pr(gernalix/PersonalHub,45)` returned `checks-failed` despite all current checks PASS because old CANCELLED duplicates remain in `statusCheckRollup`. Fix branch `task/707603-rollup-fix@cf616aa412663ee6fd05282df0be01d55ecf4f24`; 21/21 unit tests PASS; PR #27 is open and mergeable with CI running.
@@ -335,4 +337,4 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Claim/start PROMPT_ID 840907 from its existing materialization and isolated PersonalHub task worktree; implement only the missing offline Datasette Lite runtime/presentation requirements, then run its targeted host gates and one offline AVD E2E as specified.
+Start PROMPT_ID 840907 from its existing materialization on current PersonalHub main, then implement only the missing truly-offline Datasette Lite runtime path and its targeted acceptance gates; do not reopen 707603.
