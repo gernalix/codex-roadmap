@@ -1,7 +1,7 @@
 # Operational task state — WhatsApp exporter
 
 TASK_ID: CHATGPT-20260924-WHATSAPP-EXPORTER
-Updated: 2026-09-24 19:43 Europe/Copenhagen
+Updated: 2026-09-25 08:40 Europe/Copenhagen
 
 ## Objective
 Build a robust incremental WhatsApp exporter starting from WhatsApp Web on Fedora, reusing verified authenticated-browser access and existing whatsapp-watcher DOM discovery, with deduplication, human-readable history, media preservation when accessible, and optional relationship/block-state events for Carlo Visda.
@@ -49,7 +49,7 @@ Build a robust incremental WhatsApp exporter starting from WhatsApp Web on Fedor
 - [ ] Commit/push source and final roadmap checkpoint.
 
 ## Current step
-Determine why the authenticated CDP clone reaches the top of its currently rendered Carlo history after two bounded scrolls without loading older rows; preserve the verified duplicate-free parser and avoid broad rediscovery.
+All prior WhatsApp discovery and the two untracked relationship drafts have now been inspected and checkpointed. Next, choose the smallest exporter architecture. Strong default: create a dedicated exporter runtime/repo for transcript/media persistence while reusing or extracting only validated DOM/relationship utilities from whatsapp-watcher.
 
 ## Verified facts
 - Existing repo: /home/daniele/projects/whatsapp-watcher, main at b6e3e9f when last inspected.
@@ -63,6 +63,11 @@ Determine why the authenticated CDP clone reaches the top of its currently rende
 - A temporary read-only copy of the Chrome Default profile was previously used with headless CDP on localhost to inspect authenticated WhatsApp Web without modifying the original browser profile/session.
 - Both Firefox and Chrome were running; neither exposed a normal remote-debugging port in the original session.
 - Browser content-script/DOM observation was selected over Android/AT-SPI as the preferred first implementation path.
+- Current `whatsapp-watcher` worktree is clean except for the two pre-existing untracked relationship drafts; do not delete, overwrite or commit them blindly.
+- `relationship-core.js` is a substantial reusable pure-JS relationship-state core. It already implements: own system-event parsing in English/Italian; explicit Block/Unblock control parsing; header-status classification; outgoing delivery-state classification; peer visibility state; inferred peer block after persistent hidden status + single-check delivery; inferred peer unblock when visibility/delivery recovers; Italian human labels and relative-date formatting.
+- `relationship-core.js` currently hardcodes a 5-minute confirmation default for inferred peer block transitions and emits both raw signal events (`peer_visibility_hidden/visible`) and derived inferred events (`peer_block_inferred/peer_unblock_inferred`).
+- `relationship-monitor.js` is only a 50-line unfinished/untracked draft. It targets `Carlo Visda`, defines storage keys/state constants, but the current bytes appear syntactically incomplete/malformed around DOM selectors. Treat it as partial prior work to preserve and inspect, not as validated code.
+- `whatsapp-watcher` main remains at `b6e3e9f` with no tracked modifications from this chat.
 - Safe CDP clone is currently running at 127.0.0.1:9222 with user-data-dir /home/daniele/.cache/whatsapp-cdp-profile.
 - relationship-core.js is complete and reusable as semantic reference; relationship-monitor.js is an incomplete 50-line untracked fragment and must remain untouched.
 
@@ -82,19 +87,16 @@ Determine why the authenticated CDP clone reaches the top of its currently rende
 - Current archive status after compatibility reconciliation: 15 records, 14 events; private contents remain only under ~/.local/share/whatsapp-exporter.
 
 ## Completed
-- Persistent exporter state created from prior WhatsApp discovery.
-- Existing whatsapp-watcher repo and verified Carlo DOM signals identified.
-- Rehydration complete; watcher untracked files preserved.
-- Dedicated CDP exporter architecture selected.
-- Exporter core implemented and pushed at ddfebba; synthetic dedupe/relationship tests PASS 8/8.
-- Current WhatsApp DOM compatibility/backfill-scroll fix implemented, live-validated, and pushed at 37ee641.
-- Live unchanged-scan dedupe verified with 0 inserted / 0 revised on repeated Carlo scans.
+- Persistent exporter state created and pushed.
+- README/protocol and Carlo block-tracking checkpoint rehydrated.
+- Existing whatsapp-watcher repo, tracked baseline and both untracked relationship drafts inspected without modification.
+- Verified Carlo DOM signals and prior authenticated-CDP evidence preserved in Git checkpoint.
 
 ## Remaining
 Older-history loading/backfill beyond the currently rendered 8 Carlo rows, media verification, runtime deployment/restart resilience, generalization, docs, and final checkpoint.
 
 ## Blockers
-Partial runtime blocker: the safe authenticated CDP clone scrolls to the top of its current conversation panel but does not load older Carlo rows. Need determine whether older-history loading requires a different live-browser path or a specific WhatsApp UI/network trigger, without disturbing the normal session.
+No confirmed blocker. The only caution is that `relationship-monitor.js` is unfinished/unvalidated and must not be treated as canonical implementation. The authenticated-browser inspection path remains available from the prior checkpoint if current selectors need reconfirmation.
 
 ## Evidence
 - operations/task-state/CHATGPT-20260924-WHATSAPP-CARLO-BLOCK-TRACKING.md
@@ -114,4 +116,4 @@ Partial runtime blocker: the safe authenticated CDP clone scrolls to the top of 
 - Source/tests/checkpoint are pushed; private transcript/media are not committed to public source Git.
 
 ## Next action
-Inspect only the minimum browser/runtime evidence needed to explain why reaching scrollTop=0 in the CDP clone does not load older Carlo rows. Prefer a safe older-history trigger or a live-browser observer path; do not send messages, change block state, clear storage, or expose unrelated chats. Once older rows load, rerun bounded backfill and verify dedupe/media behavior.
+Create or select the dedicated WhatsApp exporter code location without modifying the two untracked relationship drafts. Define the local SQLite/archive schema and Carlo-only DOM extraction/deduplication path; reuse validated relationship-core logic where useful. Implement the smallest Carlo-only incremental exporter first, then checkpoint code + this state file before live deployment.
