@@ -1,6 +1,6 @@
 ---
 prompt_id: 107210
-status: pending
+status: running
 project_id: 49
 model: GPT-6 Sol
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - personalhub
   - pixel
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personal-hub
 ---
 
 # 107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../prompts/c2-p0-personalhub-interim-minified-apk-db-pixel-v1|Apri prompt]]
 - **Primo lancio:** —
