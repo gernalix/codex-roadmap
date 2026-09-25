@@ -37,7 +37,9 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - [x] Detect the ChatGPT "Our systems are thinking a bit more..." notice and recover by stopping that generation and sending exactly `continua`.
 - [x] Allow that specific `continua` recovery even during global rate-limit backoff, but only for an already-open registered tab and once per notice signature.
 - [x] Harden slow-notice matching to the latest user-request region so stale historical banners cannot trigger duplicate nudges.
-- [x] Current supervisor test suite: 19/19 PASS.
+- [x] Detect ChatGPT "Message delivery timed out" and recover by sending exactly 'continua' in the affected registered chat.
+- [x] Stop blind all-tab rate-limit sweeps from continually extending stale global backoff; only managed-task inspection may establish provider backoff.
+- [x] Current supervisor test suite: 25/25 PASS.
 
 ### Chrome Codex Switcher continuity
 - [x] Add daemon API to replace one context URL while preserving the same context_id.
@@ -70,16 +72,16 @@ Build and deploy a persistent Fedora supervisor that makes long-running ChatGPT 
 - [ ] Observe one supervisor-owned fresh-chat rollover where registry URL, rollover_count, event log and CCS URL continuity all agree.
 - [ ] Disable synthetic worker after verified PASS.
 ## Current step
-Cross-device metadata-only discovery is implemented, pushed and live under systemd. The only discovery-specific acceptance still pending is observing one conversation created after deployment on mobile/another desktop and confirming its synced conversation ID is added automatically. The separate synthetic rollover acceptance remains queued behind the current provider backoff.
+The delivery-timeout incident shown on the PersonalHub worker is resolved in deployed code. Delivery timeout now maps to exact 'continua' in the affected chat instead of rollover/human-required, and the blind all-tab rate-limit sweep that had been perpetually extending global backoff has been removed. After confirming no visible rate-limit dialog on the dedicated browser, the stale global backoff was reset to zero and a targeted PersonalHub run reported active generation with no recovery action needed. Broader mobile-discovery and synthetic-rollover acceptances remain pending.
 
 ## Verified facts
-- Supervisor source repo pushed main: be7742cbc06b36405e7c9d3892002020cec37f4b.
+- Supervisor source repo pushed main: c4bd9e5160da38d5989975b1a85c3fb93da9732e.
 - Cross-device discovery suite: 23/23 PASS.
 - Live metadata-only discovery found 21 persisted conversations and automatically bound 4 to registered managed tasks; no model message was sent.
 - Discovery stores conversation ID/URL/timestamps/mode only; chat bodies and titles are not persisted.
 - Supervisor CCS bridge/readback commits are included through 2e86dac.
 - Chrome Codex Switcher pushed main: c40086abb36d8c7eb7bdb1c1f4f100b96f60286c.
-- Supervisor current suite: 23/23 PASS.
+- Supervisor current suite: 25/25 PASS.
 - CCS full suite: 68/68 PASS.
 - Slow-thinking DOM acceptance with screenshot wording verified detected=true, stopped generation, and sent exactly `continua`.
 - During a real PersonalHub occurrence, the affected PersonalHub tab was identified, its stuck generation stopped, and `continua` was sent in that PersonalHub chat rather than the supervisor chat.
@@ -94,11 +96,17 @@ Cross-device metadata-only discovery is implemented, pushed and live under syste
 - The supervisor's own worker registration now also uses an isolated persistent codex-roadmap checkpoint clone, currently pinned to canonical checkpoint 72f5c1c, so dirty/behind state in the primary codex-roadmap checkout cannot stale its recovery memory.
 - PersonalHub, Grindr, supervisor and ADB keeper are registered workers; synthetic rollover worker remains disabled.
 - Raw private chat transcripts are not persisted by the supervisor.
+- Delivery-timeout recovery fix was integrated through canonical single-writer PR #2; merge SHA c4bd9e5160da38d5989975b1a85c3fb93da9732e.
+- Live dedicated-browser inspection found no current rate-limit dialogs before clearing the stale global backoff.
+- Live global rate-limit state is reset to 0.0; supervisor service is active on the merged code.
+- Targeted PersonalHub post-fix run returned status=working, action=none, reason="generation active"; no duplicate 'continua' was injected into an already-running generation.
 
 ## Decisions
 - A chat remains an ephemeral worker; pushed Git state is recovery authority.
 - Default checkpoint freshness budget is 10 minutes and default hard worker lifetime is 20 minutes.
-- Rate-limit is supervisor-wide: no automatic reload/rollover storm while active.
+- Rate-limit is supervisor-wide when detected on a managed task: no automatic reload/rollover storm while active.
+- Unmanaged/stale browser tabs must not establish or extend global backoff through a blind dialog sweep.
+- Delivery timeout is a same-chat continuation condition: send exactly 'continua'; do not require a pushed checkpoint or immediately roll over.
 - Slow-thinking `continua` is the sole permitted model interaction during rate-limit backoff, and only on an already-open registered tab with a fresh unmatched notice.
 - A manual/unregistered new chat never counts as rollover PASS.
 - A rollover counts only when registered chat_url changes to a persisted non-WEB /c/ UUID, runtime rollover_count increments, event log records the same rollover, and CCS either reports replaced/not-found or records a durable pending replacement.
@@ -121,31 +129,32 @@ Cross-device metadata-only discovery is implemented, pushed and live under syste
 - Deployed source hashes and service health verified.
 - Synthetic false completion claims corrected.
 - Metadata-only chat discovery, deduplication, inventory persistence, task binding and CLI visibility implemented and pushed as be7742c.
+- Delivery-timeout exact-'continua' recovery and stale-global-backoff fix merged and deployed as c4bd9e5; 25/25 supervisor tests PASS.
+- False global backoff was cleared only after live inspection confirmed no current rate-limit dialog; PersonalHub remained in active generation.
 - Live discovery acceptance succeeded with 21 chats inventoried and 4 managed bindings.
 - systemd deployment verified active at 2026-09-25 10:11:15 CEST (MainPID 4185307, ExecMainStatus=0); chats.json was automatically refreshed at 10:11:18 CEST.
 - Deployed inventory currently contains 21 chats: 4 managed and 17 inventory-only.
 
 ## Remaining
 - Verify one chat newly created on mobile/another desktop is discovered after account sync.
-- Wait for global ChatGPT rate-limit backoff to clear.
 - Re-enable only CHATGPT-RDC-SYNTHETIC-ROLLOVER for one controlled forced rollover.
 - Verify new persisted supervisor registry URL, rollover_count increment, matching rollover event and CCS continuity status.
 - Disable synthetic worker after PASS.
 - Update this checkpoint with final acceptance evidence.
 
 ## Blockers
-- External ChatGPT global rate-limit backoff was extended by live rate-limit dialogs through 2026-09-25T10:40:34+02:00. Additional model-generating rollover tests must not be forced before it clears.
 - Exact post-deployment mobile/other-desktop discovery acceptance requires a new persisted conversation to be created on another client; the deployed supervisor itself is already active and requires no manual URL registration.
 
 ## Evidence
 - Supervisor source commits include 32cad56, 5fc87d1, 2e86dac, 3b4fde1 and be7742c.
 - CCS source main c40086a contains context_url_supersessions, /api/context/replace-url and context_url_replaced extension handling.
-- Supervisor suite 23/23 PASS.
+- Supervisor suite 25/25 PASS.
 - CCS suite 68/68 PASS.
 - Live deployed-file SHA-256 pairs matched for extension/background.js and host/store.py.
 - Live CCS services: supervisor=active, ccs=active, pending_ccs=0.
 - Cross-device discovery deployment: supervisor active since 2026-09-25 10:11:15 CEST; chats.json refreshed automatically at 10:11:18 CEST with 21 total / 4 managed / 17 inventory-only.
-- PersonalHub slow-thinking occurrence was recovered by stopping the generation and sending exactly `continua` in the PersonalHub tab.
+- PersonalHub slow-thinking occurrence was recovered by stopping the generation and sending exactly 'continua' in the PersonalHub tab.
+- Delivery-timeout fix: canonical PR #2 merged at c4bd9e5; live service restarted active; global.json rate_limit_until_epoch=0.0; targeted PersonalHub run reported generation active.
 - Canonical ADB keeper checkpoint: codex-roadmap b463dd1; task source ff62956; PR #2 remains externally blocked by GitHub Actions billing/spending limit.
 
 ## Acceptance criteria
@@ -155,11 +164,13 @@ Cross-device metadata-only discovery is implemented, pushed and live under syste
 - [x] Critical-length/age workers select rollover from canonical Git state.
 - [x] Retry and repeated-rollover loops are bounded.
 - [x] Browser/auth/DOM/rate-limit conditions are surfaced and handled safely.
-- [x] Slow-thinking platform notice recovery sends exactly `continua` to the affected registered chat, including during global backoff.
+- [x] Slow-thinking platform notice recovery sends exactly 'continua' to the affected registered chat, including during global backoff.
+- [x] Delivery-timeout recovery sends exactly 'continua' to the affected registered chat without requiring rollover/checkpoint.
+- [x] Stale/unmanaged rate-limit dialogs cannot perpetually extend global backoff through an all-tab sweep.
 - [x] Chrome Codex Switcher preserves context/note/PROMPT_ID/twin continuity across URL replacement and blocks stale-URL regression.
 - [x] Supervisor queues CCS URL synchronization durably when CCS is unavailable.
 - [x] Tests pass, services are deployed and source is pushed.
 - [ ] One real supervisor-owned fresh-chat rollover updates registry/runtime/event/CCS evidence end-to-end.
 
 ## Next action
-When the next persisted chat is created on mobile or another desktop client, verify its conversation ID appears automatically in chats.json/chat-discovered events; otherwise leave the deployed discovery daemon running unchanged.
+When a new persisted chat is created on mobile or another desktop client, verify its conversation ID appears automatically in chats.json/chat-discovered events; otherwise leave the deployed supervisor unchanged.
