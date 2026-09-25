@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 08:35 Europe/Copenhagen
+Updated: 2026-09-25 09:02 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -275,6 +275,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- Mandatory checkpoint refresh 2026-09-25 09:02: guarded roadmap sync PASS; PersonalHub `task/857906` is clean and local/remote HEAD remain exactly `a1541d99e491228f76f61d792d1fcb396c8cfebd`; checklist/current step/remaining/blockers/Next action were re-read from Git and remain authoritative.
 - PersonalHub `task/857906@a1541d99e491228f76f61d792d1fcb396c8cfebd`: remote hash exact; clean worktree after push. People consumer-forbid PASS plus `:feature:supercontacts:compileDebugKotlin` PASS. Places old-package forbid PASS plus `:feature:luoghi:compileDebugKotlin` PASS. `git diff --check` PASS before commit.
 - Takeover verification 2026-09-25: guarded roadmap pull PASS at `12ef9f89eba6e32f006e280d2f4e715115ca7ff0`; PersonalHub worktree status clean; local HEAD and `origin/task/857906` both `9d835d8198f7b088f6577cc404306e2a50d5a2aa`.
 - 857906 PersonalHub checkpoint `9d835d8198f7b088f6577cc404306e2a50d5a2aa` on remote `task/857906`; consumer-forbid PASS, `ARCHITECTURE_BOUNDARIES=PASS`, app compile PASS, targeted app/deep-link/presentation tests PASS, targeted core Activity DAO/undo tests PASS.
