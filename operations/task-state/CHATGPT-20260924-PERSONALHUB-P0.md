@@ -1,7 +1,7 @@
 # Operational task state — PersonalHub P0
 
 TASK_ID: CHATGPT-20260924-PERSONALHUB-P0
-Updated: 2026-09-25 21:43 Europe/Copenhagen
+Updated: 2026-09-25 21:51 Europe/Copenhagen
 Parent state: operations/task-state/CHATGPT-20260924-GLOBAL-RECOVERY.md
 
 ## Objective
@@ -75,6 +75,7 @@ Do not duplicate detailed PH state back into the global file; keep only a concis
 - [ ] Verify true offline runtime, detached validated snapshots and acceptable artifact-size impact.
 
 ### Phase 6 — 788606 final release preflight
+- [ ] Before release, disposition the three unique commits on `origin/c2/107210` (external DB migrator and startup gate changes) through the protected integration flow; retain only changes still needed.
 - [ ] Run 788606 with no new features.
 - [ ] Pass minification/resource shrink, signing, bundletool/Play gates and bounded emulator smoke.
 - [ ] Freeze exact final main commit, schema version/identity and final APK/AAB hashes/paths.
@@ -277,6 +278,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 
 ## Remaining
 - Run/review 840907, including true offline behavior and artifact-size impact.
+- Disposition `origin/c2/107210` unique changes before release.
 - Run/review 788606 and freeze exact release commit, schema version/identity, APK/AAB hashes/paths and shrink state.
 - Before final migration, inspect the live Pixel DB schema/identity and take immutable backup.
 - Execute external live DB migration to the exact frozen final schema; preserve rollback and validate data/integrity/FK.
@@ -296,6 +298,7 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Do not proceed to final Pixel cutover while any relevant PH PBF/integration is unresolved.
 
 ## Evidence
+- 2026-09-25 21:51 Europe/Copenhagen: guarded roadmap pull PASS at `654788b`; physical Pixel 8a is online at explicit ADB serial `192.168.1.37:36755` with currently installed PH v60. `c2-personalhub-p0.timer` is disabled/inactive. The obsolete `personalhub-consolidation.timer` was disabled after verifying its service failed every minute because its ExecStart script is absent. `origin/c2/107210` has three commits absent from main (`1990edbe`, `d199f87b`, `0851f6ec`), requiring semantic disposition before final freeze. User reconfirmed that both final minified APK and compatible migrated DB must be installed on Pixel before completion.
 - 2026-09-25 21:43 Europe/Copenhagen 840907 ownership evidence: roadmap prompt 840907=`running` (GPT-6 Sol/medium, executor_policy=chatgpt); worktree HEAD remains `5cda3ad6...` while files under `app/src/main/assets/datasette-lite/` are receiving live writes from the active worker. Concurrent editing was stopped deliberately.
 - 2026-09-25 21:15 Europe/Copenhagen 707603 terminal evidence: all PR #45 checks PASS on head `d3fca2972eb327dfaca79f2c3ff0130b2af72b49`; merge commit `5cda3ad6aff7b5e3fde2afd52ee9f3c2c54d7223`; roadmap Issue #1140 closed `completed`; `roadmap.sqlite` reports 707603=`completed`, 840907/788606/913264=`pending`.
 - 2026-09-25 21:15 Europe/Copenhagen 707603 closure evidence: PR #45 merged; final complete-head CI PASS (instrumentation 18m1s, unit/lint 20m41s, both Play preflight, architecture, GitGuardian); targeted `GitDataRestoreDeviceTest` on explicit Pixel_8a AVD PASS 1/1; terminal request #1141 applied; 707603 canonical `completed`.
@@ -333,11 +336,11 @@ Read the actual final app schema/Room identity from the final commit. Inspect th
 - Final schema version and Room identity are explicitly recorded from the frozen release commit.
 - Live Pixel DB is backed up before modification and can be restored.
 - External migration preserves user data, passes SQLite quick_check/integrity and FK checks, and produces the exact schema expected by the final app.
-- The exact final APK is installed on the primary Pixel using an explicit serial.
+- Both the exact final minified APK and the externally migrated, compatible real DB are installed on the primary Pixel using its explicit serial; no APK-only completion.
 - Home and every module open without crash against the migrated real DB.
 - Primary data remains present and representative user records survive migration.
 - Obsolete PH branches/PR residue is removed only after work absorption is proved.
 - PersonalHub ends with clean main and no relevant pending integration.
 
 ## Next action
-Supervise the active 840907 worker without writing to its worktree. When it checkpoints/pushes or becomes inactive, read the canonical 840907 state/evidence, review only the remaining gaps, and continue from that exact Next action without duplicating its verified work.
+Supervise the active 840907 worker without writing to its worktree; after its checkpoint/push and merge, disposition the three unique `c2/107210` commits before the 788606 release freeze, then continue to 913264 and install both exact minified APK and compatible migrated DB on the explicit Pixel serial.
