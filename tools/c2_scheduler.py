@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+import time
 import uuid
 
 
@@ -114,8 +115,9 @@ def execution_metadata(conn, item, spec, executor):
     return result
 
 
-def schedule(conn, *, event_key, now, max_parallel=3, lease_seconds=120):
+def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120):
     _transaction(conn)
+    now=time.time() if now is None else now
     if not event_key or max_parallel < 1 or lease_seconds <= 0:
         raise SchedulingError('invalid_scheduler_event')
     prior = conn.execute('SELECT result_json FROM work_item_scheduler_events WHERE event_key=?', (event_key,)).fetchone()
@@ -184,8 +186,9 @@ def schedule(conn, *, event_key, now, max_parallel=3, lease_seconds=120):
     return results
 
 
-def acknowledge(conn, run_id, *, worker_ref, metadata, now, lease_seconds=120):
+def acknowledge(conn, run_id, *, worker_ref, metadata, now=None, lease_seconds=120):
     _transaction(conn)
+    now=time.time() if now is None else now
     run = conn.execute('SELECT * FROM work_item_runs WHERE run_id=?',(run_id,)).fetchone()
     if not run or run['state'] not in ('claimed','running','recovering'):
         raise SchedulingError('run_not_active')
@@ -205,8 +208,9 @@ def checkpoint(conn, run_id, commit):
         raise SchedulingError('run_not_active')
 
 
-def recover(conn, *, now):
+def recover(conn, *, now=None):
     _transaction(conn)
+    now=time.time() if now is None else now
     rows = conn.execute("SELECT * FROM work_item_runs WHERE state IN ('claimed','running') AND lease_until<=?",(now,)).fetchall()
     for row in rows:
         conn.execute("UPDATE work_item_runs SET state='recovering' WHERE run_id=?",(row['run_id'],))
