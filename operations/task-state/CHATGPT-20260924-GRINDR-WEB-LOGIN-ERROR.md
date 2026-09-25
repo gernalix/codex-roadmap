@@ -81,6 +81,7 @@ Task complete. The user confirmed that the real default-profile Chrome shows the
 - Reopened `/chat` in the real default-profile Chrome to apply the clean-navigation workaround.
 - User confirmed the real normal Chrome is authenticated and renders the normal Grindr interface after that navigation.
 - Stopped all task-owned Grindr diagnostic Chrome processes and removed `/home/daniele/.cache/grindr-cdp-profile` and `/home/daniele/.cache/grindr-normal-current-clone`; ports 9224/9225 are no longer listening.
+- 2026-09-25 checkpoint refresh: canonical `codex-roadmap` was synchronized and this terminal task state was re-read; there is no remaining work or blocker to resume.
 
 ## Remaining
 None.
@@ -101,6 +102,7 @@ None.
 - RDC then reopened `/chat` in the already-running real default-profile Chrome.
 - User confirmation after that navigation: normal authenticated Grindr interface; no generic error.
 - Cleanup verification: no task-owned Grindr diagnostic Chrome process remained, temporary diagnostic profile directories were absent, and ports 9224/9225 were not listening.
+- 2026-09-25 checkpoint refresh after guarded roadmap sync confirmed the persisted terminal state is internally complete: checklist complete, `Remaining=None`, `Blockers=None`, and one terminal `Next action`.
 - No authentication values or chat contents are stored in this state file.
 
 ## Acceptance criteria
