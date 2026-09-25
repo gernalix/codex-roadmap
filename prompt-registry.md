@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | running | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4\|840907 · Completare Datasette Lite davvero offline]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4\|788606 · Preflight finale Google Play con size e shrink]] | pending | — | — | — | no | no | — | Personal Hub | GPT-6 Luna | low |
 | [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
@@ -87,6 +86,7 @@
 | [[obsidian/Prompts/418906 workflowy-importer-live-smoke-secret-file-v2\|418906 · Ultima prova reale dell’importatore Workflowy]] | completed | 2026-09-18T22:54:53Z | 2026-09-18T22:54:53Z | PASS | sì | sì | [[obsidian/Prompts/856234 workflowy-live-smoke-remote-fix-closure\|856234]] | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3\|830867 · Date e ore coerenti ovunque]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4\|462279 · Portare Salute nel canonico e collegare la UI esistente]] | completed | — | — | PASS | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4\|707603 · Validare Git History e ripristino sullo schema finale]] | completed | — | — | PASS | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/672841 chrome-codex-switcher-runtime-smoke-closure\|672841 · Completa lo smoke test reale Chrome ↔ Codex Switcher]] | completed | 2026-09-19T15:53:48Z | 2026-09-19T17:52:59Z | PASS | no | no | — | chrome-codex-switcher | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/729462 fedora-libsecret-runtime-cutover\|729462 · Completa il cutover libsecret dei servizi Fedora]] | completed | 2026-09-22T00:35:42Z | 2026-09-22T00:35:42Z | PASS | no | no | — | github-autosync + activity-watch-uploader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/527184 datasette5-personalhub-explorer-security-deploy\|527184 · Versione online dell’esploratore dati PersonalHub]] | superseded | — | — | — | no | no | — | datasette5 / Oracle | GPT-5.6 Terra | medium |

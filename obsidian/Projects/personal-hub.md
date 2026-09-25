@@ -5,7 +5,6 @@ tags:
 
 # Personal Hub
 
-- [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `running`
 - [[obsidian/Prompts/840907 personalhub-datasette-lite-offline-runtime-v4|840907 · Completare Datasette Lite davvero offline]] · `pending`
 - [[obsidian/Prompts/788606 personalhub-play-release-local-validation-v4|788606 · Preflight finale Google Play con size e shrink]] · `pending`
 - [[obsidian/Prompts/913264 personalhub-final-live-db-migration-apk-pixel-v1|913264 · Migra il DB finale e installa l’APK definitivo sul Pixel]] · `pending`
@@ -29,6 +28,7 @@ tags:
 - [[obsidian/Prompts/624831 personalhub-soldi-photo-intelligence-and-owned-items-v2|624831 · Completare intelligence foto e oggetti posseduti in Soldi]] · `superseded`
 - [[obsidian/Prompts/830867 personalhub-epoch-timestamps-migration-v3|830867 · Date e ore coerenti ovunque]] · `superseded`
 - [[obsidian/Prompts/462279 personalhub-health-canonical-e2e-v4|462279 · Portare Salute nel canonico e collegare la UI esistente]] · `completed`
+- [[obsidian/Prompts/707603 personalhub-git-history-final-validation-v4|707603 · Validare Git History e ripristino sullo schema finale]] · `completed`
 - [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3|790233 · Portare Salute nel database canonico]] · `superseded`
 - [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4|728918 · Implementare l’archivio Obsidian opzionale completo]] · `superseded`
 - [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation|617205 · Chiudere i nuovi tag e alert di Places]] · `superseded`

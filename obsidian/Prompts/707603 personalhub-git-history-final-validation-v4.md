@@ -1,20 +1,20 @@
 ---
 prompt_id: 707603
-status: running
+status: completed
 project_id: 49
 model: GPT-6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/personal-hub
 ---
 
 # 707603 · Validare Git History e ripristino sullo schema finale
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
-- **Prompt:** [[../../prompts/personalhub-git-history-final-validation-v4|Apri prompt]]
+- **Prompt:** [[../../completed/personalhub-git-history-final-validation-v4|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
