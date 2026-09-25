@@ -33,7 +33,7 @@ def persist(path: Path, data: dict):
 
 
 def _validate_response(response, metadata):
-    for field, expected in [('model',metadata['model']),('reasoningEffort',metadata['reasoning']),
+    for field, expected in [('model',metadata.get('model_id',metadata['model'])),('reasoningEffort',metadata['reasoning']),
                             ('cwd',metadata['worktree'])]:
         if response.get(field) != expected:
             raise ExecutorError('codex_exact_metadata_mismatch:'+field)
@@ -51,7 +51,7 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path):
         persist(receipt,state)
     if state['phase']=='new':
         response=rpc('thread/start',{
-            'model':metadata['model'],'cwd':metadata['worktree'],
+            'model':metadata.get('model_id',metadata['model']),'cwd':metadata['worktree'],
             'config':{'model_reasoning_effort':metadata['reasoning']},
             'allowProviderModelFallback':False,'ephemeral':False,
             'approvalPolicy':'on-request','sandbox':'workspace-write',
@@ -63,13 +63,19 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path):
         _validate_response(response,metadata)
     else:
         response=rpc('thread/resume',{'threadId':state['thread_id'],
-            'model':metadata['model'],'cwd':metadata['worktree'],
+            'model':metadata.get('model_id',metadata['model']),'cwd':metadata['worktree'],
             'config':{'model_reasoning_effort':metadata['reasoning']}})
         _validate_response(response,metadata)
     thread_id=state['thread_id']
     if state['phase'] in ('starting','started'):
         # Never resubmit an ambiguously acknowledged turn. Inspect the existing
         # thread; the supervisor can reconcile completion or resume that worker.
+        if state['phase']=='started' and metadata.get('goal_mode'):
+            goal=rpc('thread/goal/get',{'threadId':thread_id}).get('goal')
+            if not goal or goal.get('objective')!=prompt:
+                raise ExecutorError('codex_goal_readback_mismatch')
+            if goal['status']=='paused':
+                rpc('thread/goal/set',{'threadId':thread_id,'status':'active'})
         observed=rpc('thread/read',{'threadId':thread_id,'includeTurns':True})
         return {'thread_id':thread_id,'phase':state['phase'],'observed':observed,'resubmitted':False}
     if metadata.get('goal_mode'):
@@ -81,7 +87,7 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path):
     state['phase']='starting'; persist(receipt,state)
     result=rpc('turn/start',{'threadId':thread_id,
         'input':[{'type':'text','text':prompt,'text_elements':[]}],
-        'model':metadata['model'],'effort':metadata['reasoning'],
+        'model':metadata.get('model_id',metadata['model']),'effort':metadata['reasoning'],
         'cwd':metadata['worktree'],'clientUserMessageId':'c2-'+run_id})
     state.update(phase='started',turn_id=result['turn']['id'])
     persist(receipt,state)
