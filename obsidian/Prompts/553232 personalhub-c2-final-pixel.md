@@ -15,9 +15,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../completed/553232-personalhub-c2-final-pixel|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-26T12:36:36Z
+- **Ultimo lancio:** 2026-09-26T12:36:36Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-26T12:36:36Z | 2026-09-26T13:32:45Z | UNKNOWN | 3369.037 | gpt-6-sol | medium | 294 | 151739 |
 
 ## Analisi ChatGPT
 

@@ -402,4 +402,4 @@
 | [[obsidian/Prompts/422308 telegram-notification-history-fedora-collector-v1\|422308 · Archiviare automaticamente le notifiche Telegram per ridurre il rumore]] | blocked | 2026-09-24T10:16:14Z | 2026-09-24T10:33:16Z | BLOCKED | sì | sì | — | Fedora / Telegram notification hygiene | GPT-6 Luna | medium |
 | [[obsidian/Prompts/333860 telegram-history-runtime-closure-v1\|333860 · Chiudere il collector Telegram dopo autorizzazione e collaudo]] | superseded | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/966124 telegram-history-runtime-closure-v2\|966124 · Chiudere il collector Telegram dopo autorizzazione e collaudo]] | completed | — | — | PASS | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/553232 personalhub-c2-final-pixel\|553232 · Completa PersonalHub C2 e consegna finale Pixel]] | completed | — | — | PASS | no | no | — | PersonalHub | — | — |
+| [[obsidian/Prompts/553232 personalhub-c2-final-pixel\|553232 · Completa PersonalHub C2 e consegna finale Pixel]] | completed | 2026-09-26T12:36:36Z | 2026-09-26T12:36:36Z | PASS | no | no | — | PersonalHub | — | — |
