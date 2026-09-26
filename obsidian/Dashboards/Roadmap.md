@@ -9,4 +9,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/653776 fix-c2-successor-supervisor-authority-handoff-cl-653776|653776 · Fix C2 successor supervisor authority handoff (claim vs renew)]]
+- Nessuno.
