@@ -2,9 +2,9 @@
 
 > Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.
 
-1. [[prompts/chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1]]
-2. [[prompts/c2-dashboard-mutation-applicata-ma-invisibile-fi-328371|c2-dashboard-mutation-applicata-ma-invisibile-fi-328371]]
-3. [[prompts/c2-ph-cutover-canonical-temporary-lane-override-528123|c2-ph-cutover-canonical-temporary-lane-override-528123]]
+1. [[prompts/c2-ph-cutover-canonical-temporary-lane-override-528123|c2-ph-cutover-canonical-temporary-lane-override-528123]]
+2. [[prompts/chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1]]
+3. [[prompts/c2-dashboard-mutation-applicata-ma-invisibile-fi-328371|c2-dashboard-mutation-applicata-ma-invisibile-fi-328371]]
 4. [[prompts/rendere-idempotente-il-cli-execution-override-c2-340495|rendere-idempotente-il-cli-execution-override-c2-340495]]
 5. [[prompts/grindr-web-exporter-post-login-resume-v1|grindr-web-exporter-post-login-resume-v1]]
 6. [[prompts/grindr-export-chatgpt-desktop-end-to-end-v1|grindr-export-chatgpt-desktop-end-to-end-v1]]
