@@ -102,6 +102,31 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertEqual(["654321","123456"], [row["prompt_id"] for row in rows[:2]])
             conn.close()
 
+    def test_reconcile_active_prompt_uses_slug_basename_and_adopts_projection(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp)
+            (repo/"prompts").mkdir()
+            body="PROMPT_ID=123456\n"
+            (repo/"prompts/one.md").write_text(body,encoding="utf-8")
+            conn=db.connect(repo)
+            db.register_prompt(
+                conn,prompt_id="123456",slug="one",title="One",
+                current_path="prompts/123456-one.md",prompt_text=body,
+            )
+            conn.commit()
+            conn.close()
+            self.assertEqual(1,db.reconcile_prompt_file_locations(repo))
+            conn=db.connect(repo,writable=False)
+            try:
+                self.assertEqual(
+                    "prompts/one.md",
+                    db.prompt_row(conn,"123456")["current_path"],
+                )
+            finally:
+                conn.close()
+            self.assertTrue((repo/"prompts/one.md").is_file())
+            self.assertFalse((repo/"prompts/123456-one.md").exists())
+
     def test_terminal_request_finalizes_immediately_and_usage_stays_passive(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)

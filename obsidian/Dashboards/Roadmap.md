@@ -8,4 +8,4 @@
 
 ## In esecuzione
 
-- Nessuno.
+- [[obsidian/Prompts/226672 integrare-supervisione-chatgpt-codex-nella-c2-226672|226672 · Integrare supervisione ChatGPT/Codex nella C2]]

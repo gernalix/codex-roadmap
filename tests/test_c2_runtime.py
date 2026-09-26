@@ -66,6 +66,45 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual(1,result['ready'])
             self.assertEqual(['schedule'],submitted)
 
+    def test_schedule_key_changes_when_same_repo_imported_lock_clears(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            conn=c2_intake._connect(path)
+            try:
+                c2_scheduler.install_schema(conn)
+                conn.execute('BEGIN IMMEDIATE')
+                blocker=c2_intake.add_work_item(conn,title='Imported blocker',repo='shared')
+                conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",
+                    (blocker['work_item_id'],))
+                item=c2_intake.add_work_item(conn,title='Ready',repo='shared')
+                c2_scheduler.configure(conn,item['work_item_id'],activity='native',command=['true'])
+                conn.commit()
+                submitted=[]
+                def submit(op,args,key):
+                    submitted.append((op,key))
+                    conn.execute('BEGIN IMMEDIATE')
+                    if op=='schedule':
+                        c2_scheduler.schedule(conn,now=10,**args)
+                    conn.commit()
+                with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                    c2_runtime.advance(snapshot,submit=submit,launch=lambda _:None,now=10,max_parallel=1)
+                self.assertEqual('pending',conn.execute(
+                    'SELECT status FROM work_items WHERE work_item_id=?',(item['work_item_id'],)
+                ).fetchone()[0])
+                conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?",
+                    (blocker['work_item_id'],))
+                conn.commit()
+                with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                    c2_runtime.advance(snapshot,submit=submit,launch=lambda _:None,now=11,max_parallel=1)
+                schedule_keys=[key for op,key in submitted if op=='schedule']
+                self.assertEqual(2,len(schedule_keys))
+                self.assertNotEqual(schedule_keys[0],schedule_keys[1])
+                self.assertEqual('running',conn.execute(
+                    'SELECT status FROM work_items WHERE work_item_id=?',(item['work_item_id'],)
+                ).fetchone()[0])
+            finally:
+                conn.close()
+
     def test_snapshot_to_writer_then_worker_without_duplicate_schedule(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=C2IntakeTests().make_cutover_db(Path(tmp))

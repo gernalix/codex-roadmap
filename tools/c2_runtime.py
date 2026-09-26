@@ -152,11 +152,20 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
          SELECT 1 FROM work_item_runs r WHERE r.work_item_id=w.work_item_id
          AND r.state IN ('claimed','running','recovering')))
        ORDER BY w.work_item_id''')]
+    lock_context=[
+        tuple(r) for r in db.execute('''SELECT w.work_item_id,w.status,w.repo,w.project_name,
+              COALESCE(s.worktree,'') AS worktree
+           FROM work_items w LEFT JOIN work_item_execution_specs s USING(work_item_id)
+           WHERE w.status='running' AND w.repo IS NOT NULL
+           ORDER BY w.work_item_id''')
+        if not external_personalhub(db,r)
+    ]
     dependencies=[tuple(r) for r in db.execute('''SELECT d.work_item_id,d.depends_on_work_item_id,w.status
           FROM work_item_dependencies d JOIN work_items w ON w.work_item_id=d.depends_on_work_item_id
           ORDER BY d.work_item_id,d.depends_on_work_item_id''')]
     if ready and len(statuses)<max_parallel:
-        key=_key('c2-schedule',{'ready':ready,'running':statuses,'dependencies':dependencies,'limit':max_parallel})
+        key=_key('c2-schedule',{'ready':ready,'running':statuses,'lock_context':lock_context,
+                                  'dependencies':dependencies,'limit':max_parallel})
         submit('schedule',{'event_key':key,'max_parallel':max_parallel},key)
         events.append(('schedule',str(len(ready))))
     return {'events':events,'ready':len(ready),'active':len(active)}

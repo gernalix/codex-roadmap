@@ -91,26 +91,39 @@ def reconcile_prompt_file_locations(repo: Path) -> int:
     conn=connect(repo)
     moved=0
     try:
-        rows=conn.execute("SELECT prompt_id,status,current_path FROM prompts WHERE current_path<>''").fetchall()
+        rows=conn.execute(
+            "SELECT prompt_id,slug,status,current_path FROM prompts WHERE current_path<>''"
+        ).fetchall()
         for row in rows:
             current=row["current_path"]
             src=repo/current
             if row["status"]=="completed":
                 target_dir="completed"
+                target_name=src.name
             elif row["status"] in ("failed","blocked","cancelled","superseded","unknown"):
                 target_dir="falliti"
+                target_name=src.name
             else:
                 target_dir="prompts"
-            if current.startswith(target_dir+"/"):
+                target_name=f"{row['slug']}.md"
+            dest_rel=f"{target_dir}/{target_name}"
+            if current==dest_rel:
                 continue
-            if not src.is_file():
-                continue
-            dest_rel=f"{target_dir}/{src.name}"
             dest=repo/dest_rel
             dest.parent.mkdir(parents=True,exist_ok=True)
-            if dest.exists():
-                raise RoadmapDBError(f"archive_destination_exists:{dest_rel}")
-            src.rename(dest)
+            if src.is_file():
+                if dest.exists():
+                    if src.read_bytes()!=dest.read_bytes():
+                        raise RoadmapDBError(f"archive_destination_exists:{dest_rel}")
+                    src.unlink()
+                else:
+                    src.rename(dest)
+            elif dest.is_file():
+                body=canonical_prompt_text(conn,str(row["prompt_id"]))
+                if body is None or dest.read_text(encoding="utf-8")!=body:
+                    raise RoadmapDBError(f"prompt_materialization_conflict:{dest_rel}")
+            else:
+                continue
             if conn.execute(
                 "SELECT type FROM sqlite_master WHERE name='prompts'"
             ).fetchone()[0] == "view":

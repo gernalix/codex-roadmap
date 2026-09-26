@@ -17,16 +17,15 @@ Make this supervisor session recoverable, then implement and operate the non-Per
 - [ ] Execute ready non-PH work to applicable acceptance criteria.
 
 ## Current step
-Successor supervisor recovery is live with local/canonical fencing token 2. Non-PH reconciliation repaired stale terminal roots; PROMPT_ID 226672 is materialized but not scheduled.
+PROMPT_ID 226672 executed once through C2 and reached a terminal interrupted turn after completing its implementation/tests. Integrate the verified executor fixes, then canonicalize the checkpoint/terminal state and reconcile the same C2 run.
 
 ## Verified facts
 - `roadmap.sqlite` in this repository is the canonical task source; the GitHub Actions workflow is its single writer.
 - `c2-runtime.path` and `c2-runtime.timer` are active; `c2-runtime.service` is a successful oneshot. The legacy `chatgpt-rdc-supervisor.service` is active.
-- The local snapshot contains six work items marked running but no active `work_item_runs` or resource leases. Three are C2 phases; three are imported operational task-state roots.
-- The current task id is `01a0ddaf-99f5-7fa1-82c2-6d5a26a84808`.
+- Terminal task-state reconciliation is live: the false-running historical roots and the stale running Phase 2/3 descendants of completed prompt 175908 were repaired through the fenced single writer; Workflowy projection readback no longer places them in IN CORSO.
+- The recovery task id is `01a0ddaf-99f5-7fa1-82c2-6d5a26a84808`.
 - Remote Desktop Commander responds on Fedora.
-- Current supervisor `01a0ddaf-99f5-7fa1-82c2-6d5a26a84808` holds the real local lease with fencing token 1. The watchdog timer is active.
-- Recovery successor `00798a0e-021b-4c66-85ef-8c3eac771b93` acquired a NEW local lease with fencing token 2; canonical writer claim #1198 and renewals #1199/#1200/#1202 were applied.
+- Current supervisor `00798a0e-021b-4c66-85ef-8c3eac771b93` holds the real local lease with fencing token 2; canonical authority matches it and the watchdog remains active.
 - The runtime service now requires the current supervisor ID and fencing token before scheduling, submitting writer requests, or launching a worker.
 - Writer-side fencing merged in PR #1171. Canonical claim Issue #1172 applied with this supervisor ID/token; stale renewal Issue #1173 was rejected as `stale_or_expired_supervisor` by the single writer.
 - The runtime now reads an atomic derived snapshot of the remote-main `roadmap.sqlite` blob from `~/.local/state/c2-supervisor/roadmap.sqlite3`; it does not depend on the shared PH checkout branch.
@@ -42,13 +41,13 @@ Successor supervisor recovery is live with local/canonical fencing token 2. Non-
 - Run C2 code and the systemd services from the isolated worktree while PH uses the shared checkout.
 
 ## Completed
-Minimum Phase 0 inspection, lease/watchdog implementation and activation, isolated end-to-end browser recovery, fencing verification, and local runtime gate.
+Phase 0 recovery/fencing; isolated remote-main snapshot; PH exclusion; writer-only terminal task-state repairs; PR #1209 with prompt-materialization/schedule-replay fixes merged after CI PASS; PROMPT_ID 226672 scheduled exactly once and recovered without resubmitting its Codex turn; ChatGPT stall-threshold and Codex ambiguous-ack fixes implemented and fully tested by the terminal turn.
 
 ## Remaining
-Repair stale 175908 phase descendants; complete ChatGPT/Codex supervision integration and acceptance through PROMPT_ID 226672; then execute only explicitly configured non-PH runnable work.
+Integrate the final executor changes from the 226672 worktree, deploy/read back the merged runtime, record a clear canonical checkpoint, terminalize 226672, reconcile run 2c45668a283840ddad007a7071817399, then let C2 advance only the next explicitly configured non-PH runnable item.
 
 ## Blockers
-No Phase 0 blocker. The browser recovery path was verified through direct CDP because the legacy Playwright handshake stalled.
+No external blocker. The observed Codex app-server user-approval request caused one worker interruption; the final patch routes approvals through `approvalsReviewer=auto_review` while keeping `approvalPolicy=on-request`.
 
 ## Evidence
 - `tools/c2_runtime.py` reads the verified roadmap snapshot and submits mutations to the single writer.
@@ -60,13 +59,13 @@ No Phase 0 blocker. The browser recovery path was verified through direct CDP be
 - All 69 focused C2 tests pass after adding writer-side token validation.
 - The remote-main snapshot has `PRAGMA quick_check=ok`, matching supervisor authority, and zero active C2 runs. The refreshed runtime service exited with `Result=success`, `ExecMainStatus=0`.
 - No additional active local C2 scheduler process was observed after terminating the duplicate TUI. The canonical roadmap writer and PH integration processes were preserved.
-- Recovery reconciliation found zero active canonical C2 runs/resource leases; the only enabled legacy ChatGPT supervisor worker is `CHATGPT-20260924-PERSONALHUB-P0`, left unchanged.
-- Fenced terminal-state reimport Issue #1201 repaired the three historical non-PH task-state roots; only stale 175908 phase descendants remain running.
-- PR #1113 (continuous C2 discovery capture rule) merged with all gates PASS.
-- C2 work item `wi:10974cc59a13437fa273b34d83085631` was materialized by writer Issue #1203 as Goal `PROMPT_ID=226672` with exact execution metadata; it remains pending and unscheduled.
+- PR #1209 merged as bce7495917829bb74f87353cd658c51785d54a14 after CI and Roadmap integrity PASS. Writer Issues #1215/#1216 repaired PROMPT_ID 226672 materialization/path and stale 175908 descendants.
+- C2 run `2c45668a283840ddad007a7071817399` owns Codex thread `01a0de37-af7f-7120-97ee-e116b4213f63` / turn `01a0de37-b089-7e20-870d-b912eb29ebeb`; recovery reused the same identities and never resubmitted the turn. Receipt is terminal with turn_status=interrupted.
+- That turn implemented ChatGPT generation stall thresholds of 40 seconds / 3 recovery attempts and restart-safe Codex ambiguous-turn readback. Targeted C2 tests, full unittest discovery, roadmap verify and diff check passed before interruption.
+- The observed approval failure is addressed locally by routing thread/start, thread/resume and turn/start approvals to Codex `auto_review`; focused executor tests pass 8/8.
 
 ## Acceptance criteria
-Phase 0 local recovery and canonical writer fencing are verified. Later global C2 criteria remain open.
+Recovery/fencing, PH isolation, stale-state repair, one-run/one-turn Codex identity, ~40 second ChatGPT stall detection, bounded recovery, explicit execution specs and lock-sensitive scheduling are verified locally/live. Final executor integration plus canonical checkpoint/terminal reconciliation remain open.
 
 ## Next action
-Create an isolated worktree for PROMPT_ID 226672 from canonical remote-main commit 94f1d9d1ab758486d1bc07f6ddaa184763955bd5, configure its exact C2 execution spec, verify it is the only intended schedulable spec, then schedule max-parallel=1 and supervise it through terminal reconciliation. Preserve PH ownership and all devices.
+Commit and push the final 226672 executor/checkpoint changes, merge them only after CI PASS, then record the canonical completed checkpoint and terminalize/reconcile the existing run without creating another executor.

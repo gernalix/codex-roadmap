@@ -8,6 +8,8 @@ import sys
 from c2_codex_executor import persist
 
 SUPERVISOR_SRC=Path('/home/daniele/projects/chatgpt-rdc-supervisor/src')
+C2_GENERATION_STALL_S=40
+C2_MAX_RECOVERY_ATTEMPTS=3
 
 
 class ChatWorkerError(RuntimeError):
@@ -23,6 +25,20 @@ def _supervisor_types():
     from chatgpt_rdc_supervisor.model import TaskConfig
     from chatgpt_rdc_supervisor.storage import Store
     return ChatGPTBrowser, is_persisted_chat_url, TaskConfig, Store
+
+
+def _task_config(TaskConfig, *, work_item_id: str, db_path: Path,
+                 chat_url: str, project_url: str):
+    task=TaskConfig(task_id=work_item_id,
+        state_file='c2-db:'+str(Path(db_path).resolve())+'#'+work_item_id,
+        repo_root=str(Path(db_path).resolve().parent),
+        chat_url=chat_url,project_url=project_url)
+    thresholds=getattr(task,'thresholds',None)
+    if thresholds is None:
+        raise ChatWorkerError('supervisor_thresholds_unavailable')
+    thresholds.generation_stall_s=C2_GENERATION_STALL_S
+    thresholds.max_recovery_attempts=C2_MAX_RECOVERY_ATTEMPTS
+    return task
 
 
 def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
@@ -57,10 +73,8 @@ def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
                         if own.count():
                             matches.append(page.url)
                 if len(matches)==1:
-                    task=TaskConfig(task_id=work_item_id,
-                        state_file='c2-db:'+str(Path(db_path).resolve())+'#'+work_item_id,
-                        repo_root=str(Path(db_path).resolve().parent),
-                        chat_url=matches[0],project_url=project_url)
+                    task=_task_config(TaskConfig,work_item_id=work_item_id,
+                        db_path=db_path,chat_url=matches[0],project_url=project_url)
                     store.save_task(task)
                     state.update(phase='started',chat_url=matches[0])
                     persist(receipt,state)
@@ -73,9 +87,8 @@ def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
     state={'run_id':run_id,'work_item_id':work_item_id,'project_url':project_url,'phase':'starting'}
     persist(receipt,state)
     ChatGPTBrowser, is_persisted_chat_url, TaskConfig, Store=_supervisor_types()
-    task=TaskConfig(task_id=work_item_id,
-        state_file='c2-db:'+str(Path(db_path).resolve())+'#'+work_item_id,
-        repo_root=str(Path(db_path).resolve().parent),chat_url='',project_url=project_url)
+    task=_task_config(TaskConfig,work_item_id=work_item_id,db_path=db_path,
+        chat_url='',project_url=project_url)
     owned=browser is None
     browser=browser or ChatGPTBrowser()
     store=store or Store()

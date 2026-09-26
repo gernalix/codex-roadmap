@@ -12,7 +12,7 @@ SUPERVISOR_OPERATIONS = frozenset({
     'intake', 'prepare_codex', 'configure', 'auto_configure', 'schedule', 'acknowledge',
     'recover', 'reconcile_run', 'milestone', 'claim_milestone',
     'mark_milestone', 'verify_work_item',
-    'reimport_terminal_state',
+    'reimport_terminal_state', 'repair_prompt_materialization',
 })
 
 
@@ -55,6 +55,7 @@ def apply(conn, mutation):
         'claim_milestone': c2_scheduler.claim_milestone,
         'mark_milestone': c2_scheduler.mark_milestone,
         'reimport_terminal_state': c2_terminal_state_reimport.apply,
+        'repair_prompt_materialization': c2_intake.repair_prompt_materialization,
     }
     if action not in operations:
         raise ValueError('unknown_c2_operation:'+action)
