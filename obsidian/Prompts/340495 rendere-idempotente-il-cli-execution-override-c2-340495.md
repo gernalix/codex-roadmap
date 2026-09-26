@@ -1,26 +1,29 @@
 ---
-prompt_id: 891963
-status: running
+prompt_id: 340495
+status: pending
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
-  - c2-discovery
-  - priority
-  - scheduler
+  - c2
+  - execution-override
+  - followup
+  - idempotency
+  - priority:p0
+  - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/pending
   - roadmap/project/unknown
 ---
 
-# 891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane
+# 340495 · Rendere idempotente il CLI execution override C2
 
-- **Stato:** running
+- **Stato:** pending
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/c2-supervisor-terminal-workers-restano-abilitati-891963|Apri prompt]]
-- **Primo lancio:** 2026-09-26T23:37:08Z
-- **Ultimo lancio:** 2026-09-26T23:37:08Z
-- **Ultimo esito:** PASS
+- **Prompt:** [[../../prompts/rendere-idempotente-il-cli-execution-override-c2-340495|Apri prompt]]
+- **Primo lancio:** —
+- **Ultimo lancio:** —
+- **Ultimo esito:** —
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +41,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| 2026-09-26T23:37:08Z | 2026-09-26T23:40:59Z | PASS | 230.916 | gpt-5.6-terra | medium | 26 | 63865 |
+| — | — | — | — | — | — | — | — |
 
 ## Analisi ChatGPT
 
