@@ -5,6 +5,7 @@ tags:
 
 # Unknown
 
+- [[obsidian/Prompts/582408 completare-bootstrap-e-handoff-del-drain-autonom-582408|582408 · Completare bootstrap e handoff del drain autonomo C2]] · `pending`
 - [[obsidian/Prompts/592418 c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418|592418 · C2 scheduler: due chat RDC possono scrivere contemporaneamente nello stesso worktree/task]] · `pending`
 - [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] · `pending`
 - [[obsidian/Prompts/614593 c2-intake-collisioni-request-key-tra-chat-parall-614593|614593 · C2 intake: collisioni request-key tra chat parallele]] · `pending`
