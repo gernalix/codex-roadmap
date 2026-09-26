@@ -5,6 +5,7 @@ tags:
 
 # PersonalHub
 
+- [[obsidian/Prompts/553232 personalhub-c2-final-pixel|553232 · Completa PersonalHub C2 e consegna finale Pixel]] · `running`
 - [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] · `completed`
 - [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] · `completed`
 - [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation|886414 · PersonalHub 100% capsule isolation — validazione locale]] · `superseded`

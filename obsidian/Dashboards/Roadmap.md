@@ -8,4 +8,4 @@
 
 ## In esecuzione
 
-- Nessuno.
+- [[obsidian/Prompts/553232 personalhub-c2-final-pixel|553232 · Completa PersonalHub C2 e consegna finale Pixel]]
