@@ -4,6 +4,14 @@ from __future__ import annotations
 import c2_intake
 import c2_scheduler
 import c2_cutover_writer
+import c2_supervisor_authority
+
+
+SUPERVISOR_OPERATIONS = frozenset({
+    'intake', 'prepare_codex', 'configure', 'schedule', 'acknowledge',
+    'recover', 'reconcile_run', 'milestone', 'claim_milestone',
+    'mark_milestone',
+})
 
 
 def apply(conn, mutation):
@@ -12,8 +20,18 @@ def apply(conn, mutation):
     if not conn.in_transaction:
         conn.execute('BEGIN IMMEDIATE')
     c2_scheduler.install_schema(conn)
+    c2_supervisor_authority.install_schema(conn)
     action = mutation['op'].removeprefix('c2_')
     arguments = dict(mutation.get('arguments') or {})
+    authority = arguments.pop('supervisor_authority', None)
+    if action == 'claim_supervisor':
+        return c2_supervisor_authority.claim(conn, authority)
+    if action == 'renew_supervisor':
+        return c2_supervisor_authority.renew(conn, authority)
+    if action == 'retire_supervisor':
+        return c2_supervisor_authority.retire(conn, authority)
+    if action in SUPERVISOR_OPERATIONS:
+        c2_supervisor_authority.require(conn, authority)
     operations = {
         'cutover': c2_cutover_writer.confirm,
         'intake': c2_intake.add_work_item,

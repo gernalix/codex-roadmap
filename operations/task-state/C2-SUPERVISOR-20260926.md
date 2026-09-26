@@ -27,6 +27,7 @@ Phase 0 recovery is live; begin non-PH reconciliation from the canonical roadmap
 - Remote Desktop Commander responds on Fedora.
 - Current supervisor `01a0ddaf-99f5-7fa1-82c2-6d5a26a84808` holds the real local lease with fencing token 1. The watchdog timer is active.
 - The runtime service now requires the current supervisor ID and fencing token before scheduling, submitting writer requests, or launching a worker.
+- A queued request could outlive the local lease; writer-side token validation is implemented on branch `codex/c2-supervisor-recovery` and awaits merge/activation. Do not claim global split-brain PASS before canonical writer readback.
 - In a separate expired test lease, the watchdog opened a real ChatGPT browser conversation. That session read a minimal pointer, acquired a new unique supervisor ID with token 2, and did not schedule work. Token 1 was rejected after takeover.
 - The old Playwright CDP handshake stalled on this profile; bounded direct CDP succeeded. The ChatGPT Send button uses `aria-label=Send` on the current UI.
 - A concurrent `codex resume` process opened this same session from a separate C2 bootstrap worktree; it was terminated. The legacy ChatGPT supervisor task `CHATGPT-20260924-RDC-SUPERVISOR` was paused, while its PersonalHub task remained enabled.
@@ -45,7 +46,7 @@ Minimum Phase 0 inspection, lease/watchdog implementation and activation, isolat
 Non-PH roadmap reconciliation, scheduler/control-plane enhancements, and execution of ready non-PH work.
 
 ## Blockers
-No current blocker. The browser recovery path was verified through direct CDP because the legacy Playwright handshake stalled.
+Canonical writer-side fencing is pending PR integration. The browser recovery path was verified through direct CDP because the legacy Playwright handshake stalled.
 
 ## Evidence
 - `tools/c2_runtime.py` reads the verified roadmap snapshot and submits mutations to the single writer.
@@ -54,10 +55,11 @@ No current blocker. The browser recovery path was verified through direct CDP be
 - `c2-supervisor-watchdog.service` exited successfully with `state=healthy` under the real lease.
 - Isolated test DB `/tmp/c2-phase0-recovery-test2.sqlite3`: old token 1 retired, new unique supervisor/token 2 active; stale write rejected.
 - `python3 -m unittest` passes focused runtime, scheduler, and supervisor lease tests.
+- All 68 focused C2 tests pass after adding writer-side token validation.
 - No additional active local C2 scheduler process was observed after terminating the duplicate TUI. The canonical roadmap writer and PH integration processes were preserved.
 
 ## Acceptance criteria
-Phase 0: current and successor identities persist; stale fencing rejects old local mutations; heartbeat and progress differ; a real replacement browser conversation reads minimal state and acquires a higher token; no duplicate scheduler, writer, or PH worker. Later global C2 criteria remain open.
+Phase 0 local recovery is verified. Global split-brain requires the writer-side token gate to merge, then a canonical claim and stale-request rejection readback. Later global C2 criteria remain open.
 
 ## Next action
-Inspect the non-PH ready/blocked/running slice and its DAG in canonical `roadmap.sqlite`, then reconcile only relevant non-PH work with live repo/runtime evidence.
+Merge and activate the writer-side fencing change, claim the current supervisor in canonical C2 state, then verify a queued stale mutation is rejected by the writer.
