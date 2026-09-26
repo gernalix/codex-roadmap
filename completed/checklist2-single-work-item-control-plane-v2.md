@@ -44,9 +44,6 @@ Genera live dal DB note con YAML tag, parent/children, dipendenze, relazioni, pr
 6. Aggiorna RDC supervisor/scheduler; usa sottotask Codex repo-specifici solo se realmente necessari, con modello minimo sufficiente e senza duplicare goal indipendenti.
 7. Fixture sintetica completa prima del cutover live; poi adotta task reali senza mutare/rilanciare prompt già running.
 
-## Continuous discovery capture
-- Ogni collo di bottiglia, bug, gap di affidabilità o miglioria concreta scoperti durante l'esecuzione C2 devono essere registrati immediatamente come work item canonici C2 con evidenza/contesto, scope, priorità/dipendenze e Next action. La registrazione non deve interrompere il task corrente salvo blocker reale o problema di sicurezza/correttezza più prioritario. Nessuna scoperta deve restare solo in chat o checkpoint prose.
-
 # Scope
 Repo primario codex-roadmap. Se necessario, modifica workflowy-importer, chatgpt-rdc-supervisor e chrome-codex-switcher con isolamento/single-writer per repo. Niente refactor laterali.
 
