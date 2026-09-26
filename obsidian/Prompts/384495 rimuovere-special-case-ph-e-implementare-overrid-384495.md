@@ -21,9 +21,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../falliti/rimuovere-special-case-ph-e-implementare-overrid-384495|Apri prompt]]
-- **Primo lancio:** 2026-09-26T23:27:25Z
+- **Primo lancio:** 2026-09-26T23:27:03Z
 - **Ultimo lancio:** 2026-09-26T23:27:25Z
-- **Ultimo esito:** UNKNOWN
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -41,6 +41,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
+| 2026-09-26T23:27:03Z | 2026-09-26T23:39:31Z | BLOCKED | 747.894 | gpt-6-sol | medium | 80 | 107609 |
 | 2026-09-26T23:27:25Z | 2026-09-26T23:27:30Z | UNKNOWN | 4.529 | codex-auto-review | low | 0 | 14484 |
 
 ## Analisi ChatGPT
