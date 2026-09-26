@@ -88,10 +88,37 @@ def _launch_notify(event_key: str):
 def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_worker,
             launch_notify=_launch_notify,
             now: float | None=None, max_parallel: int=3,
-            supervisor_expiry: float | None=None) -> dict:
+            supervisor_expiry: float | None=None,
+            supervisor_authority: dict | None=None) -> dict:
     now=time.time() if now is None else now
     events=[]
-    if supervisor_expiry is not None and db.execute("SELECT 1 FROM sqlite_master WHERE name='c2_supervisor_authority'").fetchone():
+    if supervisor_authority is not None and db.execute("SELECT 1 FROM sqlite_master WHERE name='c2_supervisor_authority'").fetchone():
+        current_id=str(supervisor_authority['supervisor_id'])
+        current_token=int(supervisor_authority['fencing_token'])
+        current_expiry=float(supervisor_authority['lease_expires_at'])
+        authority=db.execute(
+            'SELECT supervisor_id,fencing_token,lease_expires_at FROM c2_supervisor_authority WHERE singleton=1'
+        ).fetchone()
+        same=bool(authority and str(authority['supervisor_id'])==current_id
+                  and int(authority['fencing_token'])==current_token)
+        if not same:
+            if authority and float(authority['lease_expires_at'])>now:
+                return {'events':[('supervisor_fenced',str(authority['fencing_token']))],
+                        'ready':0,'active':0}
+            key=_key('c2-claim-supervisor',{'supervisor_id':current_id,
+                                            'token':current_token,
+                                            'expires':current_expiry})
+            submit('claim_supervisor',{},key)
+            return {'events':[('claim_supervisor',str(current_token))],
+                    'ready':0,'active':0}
+        if (float(authority['lease_expires_at']) <= now+300 and
+                current_expiry > float(authority['lease_expires_at'])+1):
+            key=_key('c2-renew-supervisor',{'token':current_token,
+                                           'expires':current_expiry})
+            submit('renew_supervisor',{},key)
+            return {'events':[('renew_supervisor',str(current_token))],
+                    'ready':0,'active':0}
+    elif supervisor_expiry is not None and db.execute("SELECT 1 FROM sqlite_master WHERE name='c2_supervisor_authority'").fetchone():
         authority=db.execute('SELECT fencing_token,lease_expires_at FROM c2_supervisor_authority WHERE singleton=1').fetchone()
         if (authority and authority['lease_expires_at'] <= now+300 and
                 supervisor_expiry > authority['lease_expires_at']+1):
@@ -194,7 +221,11 @@ def main():
         with closing(_open_snapshot(args.db)) as db:
             result=advance(db,submit=guarded_submit,launch=guarded_launch,
                            launch_notify=guarded_notify,max_parallel=args.max_parallel,
-                           supervisor_expiry=current['lease_expires_at'])
+                           supervisor_authority={
+                               'supervisor_id':current['supervisor_id'],
+                               'fencing_token':current['fencing_token'],
+                               'lease_expires_at':current['lease_expires_at'],
+                           })
     print(json.dumps(result,sort_keys=True))
     return 0
 

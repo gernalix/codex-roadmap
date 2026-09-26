@@ -17,7 +17,7 @@ Make this supervisor session recoverable, then implement and operate the non-Per
 - [ ] Execute ready non-PH work to applicable acceptance criteria.
 
 ## Current step
-PROMPT_ID 226672 is merged, canonically completed and its original C2 run is reconciled without duplication. Resume the fenced runtime under supervisor token 3, capture the successor-authority handoff defect discovered during recovery, then advance only explicitly configured non-PH work.
+PROMPT_ID 226672 is merged, canonically completed and its original C2 run is reconciled without duplication. The successor-authority claim-vs-renew defect is now fixed locally with focused regression coverage; checkpoint/push/PR this fix, deploy it after CI PASS, then apply the verified backlog cleanup/priority batch and resume only explicit non-PH work.
 
 ## Verified facts
 - `roadmap.sqlite` in this repository is the canonical task source; the GitHub Actions workflow is its single writer.
@@ -44,12 +44,18 @@ PROMPT_ID 226672 is merged, canonically completed and its original C2 run is rec
 Phase 0 recovery/fencing; isolated remote-main snapshot; PH exclusion; writer-only terminal task-state repairs; PR #1209 with prompt-materialization/schedule-replay fixes merged after CI PASS; PROMPT_ID 226672 scheduled exactly once and recovered without resubmitting its Codex turn; final executor/approval recovery merged in PR #1225 with all gates PASS; canonical checkpoint Issue #1239 applied; terminal PASS Issue #1240 applied; original run `2c45668a283840ddad007a7071817399` reconciled by Issue #1241 with its resource leases released.
 
 ## Remaining
-Resume `c2-runtime` under token 3 and verify it does not create a duplicate executor. Capture/fix the discovered handoff defect where a successor local token can cause runtime renewal of the expired canonical token instead of a successor claim. Then advance only explicitly configured non-PH runnable work; do not infer execution specs and do not touch PH.
+Commit and push the successor-authority fix, merge only after CI PASS, deploy/read back under token 3, then apply the backlog cleanup/priority mutation: historical placeholders, superseded blocked chains, obsolete 812553 dependency, pending prompt order/model metadata. Finally re-sync the canonical snapshot and advance only explicit non-PH runnable work; do not infer execution specs and do not touch PH.
 
 ## Blockers
 No external blocker. The observed Codex app-server user-approval request caused one worker interruption; the final patch routes approvals through `approvalsReviewer=auto_review` while keeping `approvalPolicy=on-request`.
 
 ## Evidence
+- `226672` canonical work item and run are both `completed`; original run `2c45668a283840ddad007a7071817399` has no active worker/lease.
+- Backlog audit found 317 non-terminal rows before cleanup: 77 `unknown`, 65 `blocked`, 175 `pending`; 92 root prompt placeholders have no canonical prompt materialization and are historical noise rather than executable work.
+- First optimization batch was atomically rejected before application because 653776 had already become terminal `blocked`; no partial roadmap mutation occurred.
+- 653776 Codex run `994868eb88d24b5384de2f513351bf24` performed no code/test work; its only blocker was a missing remote branch during `roadmap_start`.
+- Local claim-vs-renew fix in `tools/c2_runtime.py` now claims an expired/missing different canonical authority, renews only an exact matching authority, and fences an unexpired different authority before scheduling.
+- `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test_c2_*.py' -v`: 121 tests PASS; `roadmap_db.py verify` PASS; `git diff --check` PASS.
 - `tools/c2_runtime.py` reads the verified roadmap snapshot and submits mutations to the single writer.
 - `tools/c2_scheduler.py` stores worker leases but has no supervisor lease.
 - `systemctl --user` confirms active path/timer and legacy supervisor service.
@@ -70,4 +76,4 @@ No external blocker. The observed Codex app-server user-approval request caused 
 Recovery/fencing, PH isolation, stale-state repair, one-run/one-turn Codex identity, ~40 second ChatGPT stall detection, bounded recovery, explicit execution specs, lock-sensitive scheduling, final executor integration, canonical checkpoint, terminalization and run reconciliation are verified. Runtime restart under token 3 plus capture of the successor-claim handoff defect remain operational follow-up.
 
 ## Next action
-Restart the fenced C2 runtime under supervisor token 3, verify `active=0`/no duplicate 226672 launch and inspect explicit non-PH runnable specs. Add the successor-authority claim-vs-renew handoff defect to C2, then continue only the next explicitly configured non-PH item.
+Commit and push the tested successor-authority fix plus this checkpoint on `codex/c2-live-runtime`; open/merge its PR only after required CI PASS, deploy/read back the merged runtime under fencing token 3, then submit the corrected atomic backlog-optimization mutation and verify the resulting canonical queue.
