@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import sqlite3
 import subprocess
@@ -108,13 +109,30 @@ def _untracked_paths(repo: Path) -> set[str]:
     return _nul_paths(_git_ok(repo, "ls-files", "--others", "--exclude-standard", "-z"))
 
 
+def _safe_c2_scratch(repo: Path, relative: str) -> bool:
+    """Recognize only bounded, root-level C2 argument documents; preserve them."""
+    if not re.fullmatch(r"\.c2-[a-z0-9][a-z0-9-]*-args\.json", relative):
+        return False
+    path = repo / relative
+    if path.is_symlink() or not path.is_file() or path.stat().st_size > 1024 * 1024:
+        return False
+    try:
+        return isinstance(json.loads(path.read_text(encoding="utf-8")), dict)
+    except (OSError, UnicodeError, ValueError):
+        return False
+
+
+def _unsafe_untracked_paths(repo: Path) -> set[str]:
+    return {path for path in _untracked_paths(repo) if not _safe_c2_scratch(repo, path)}
+
+
 def _is_generated_view(path: str) -> bool:
     return path in GENERATED_VIEW_ROOTS or path.startswith("obsidian/")
 
 
 def _restore_generated_view_dirt(repo: Path) -> list[str]:
     tracked = _tracked_dirty_paths(repo)
-    untracked = _untracked_paths(repo)
+    untracked = _unsafe_untracked_paths(repo)
     non_generated = sorted(path for path in tracked if not _is_generated_view(path))
     if non_generated or untracked:
         details = non_generated + sorted(untracked)
@@ -133,8 +151,7 @@ def _require_clean_main(repo: Path, branch: str) -> tuple[str, list[str]]:
     if current != branch:
         raise RoadmapPullBlocked(f"branch_mismatch:expected={branch}:actual={current or 'DETACHED'}")
     restored = _restore_generated_view_dirt(repo)
-    dirty = _git_ok(repo, "status", "--porcelain")
-    if dirty:
+    if _tracked_dirty_paths(repo) or _unsafe_untracked_paths(repo):
         raise RoadmapPullBlocked("local_worktree_dirty_after_generated_restore")
     return _git_ok(repo, "rev-parse", "HEAD"), restored
 
@@ -146,7 +163,7 @@ def _recover_interrupted_fast_forward(repo: Path, before: str, remote_head: str)
     still points at `before`. A later worktree-only restore of roadmap.sqlite
     produces MM. Never discard an independent local DB edit or untracked file.
     """
-    if _untracked_paths(repo):
+    if _unsafe_untracked_paths(repo):
         return None
     if _git(repo, "merge-base", "--is-ancestor", before, remote_head).returncode:
         return None
@@ -484,7 +501,7 @@ def guarded_pull(
         after = _git_ok(repo, "rev-parse", "HEAD")
         if after != remote_head:
             raise RoadmapPullBlocked(f"post_pull_head_mismatch:{after}:{remote_head}")
-        if _git_ok(repo, "status", "--porcelain"):
+        if _tracked_dirty_paths(repo) or _unsafe_untracked_paths(repo):
             raise RoadmapPullBlocked("post_pull_worktree_dirty")
 
         # Keep the non-worktree hook copy synchronized if the tracked hook changed.
