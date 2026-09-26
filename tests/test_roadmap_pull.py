@@ -240,6 +240,27 @@ class RoadmapPullTests(unittest.TestCase):
         ):
             roadmap_pull.guarded_pull(self.local)
 
+    def test_c2_scratch_arguments_survive_guarded_pull(self) -> None:
+        scratch = self.local / ".c2-checkpoint-args.json"
+        contents = '{"work_item_id":"wi:test"}\n'
+        scratch.write_text(contents, encoding="utf-8")
+        (self.seed / "README.md").write_text("remote change\n", encoding="utf-8")
+        remote_head = self.push_seed("remote change")
+
+        result = roadmap_pull.guarded_pull(self.local)
+
+        self.assertEqual("PASS", result["status"])
+        self.assertEqual(remote_head, git(self.local, "rev-parse", "HEAD").stdout.strip())
+        self.assertEqual(contents, scratch.read_text(encoding="utf-8"))
+
+    def test_unrecognized_c2_scratch_still_blocks(self) -> None:
+        scratch = self.local / ".c2-checkpoint-args.json"
+        scratch.write_text("not JSON", encoding="utf-8")
+
+        with self.assertRaisesRegex(roadmap_pull.RoadmapPullBlocked, "local_worktree_dirty_non_generated"):
+            roadmap_pull.guarded_pull(self.local)
+        self.assertEqual("not JSON", scratch.read_text(encoding="utf-8"))
+
     def test_bootstrap_guard_installs_hook_before_merge(self) -> None:
         hooks_path = Path(git(self.local, "config", "--get", "core.hooksPath").stdout.strip())
         git(self.local, "config", "--unset", "core.hooksPath")
