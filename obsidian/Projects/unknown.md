@@ -5,7 +5,6 @@ tags:
 
 # Unknown
 
-- [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] · `running`
 - [[obsidian/Prompts/328371 c2-dashboard-mutation-applicata-ma-invisibile-fi-328371|328371 · C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]] · `running`
 - [[obsidian/Prompts/340495 rendere-idempotente-il-cli-execution-override-c2-340495|340495 · Rendere idempotente il CLI execution override C2]] · `pending`
 - [[obsidian/Prompts/682297 c2-supervisor-rollover-fallito-degrada-a-human-r-682297|682297 · C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]] · `pending`
@@ -18,6 +17,7 @@ tags:
 - [[obsidian/Prompts/507648 rimuovere-special-case-ph-e-aggiungere-execution-507648|507648 · Rimuovere special-case PH e aggiungere execution override C2]] · `superseded`
 - [[obsidian/Prompts/592418 c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418|592418 · C2 scheduler: due chat RDC possono scrivere contemporaneamente nello stesso worktree/task]] · `completed`
 - [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] · `blocked`
+- [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] · `blocked`
 - [[obsidian/Prompts/614593 c2-intake-collisioni-request-key-tra-chat-parall-614593|614593 · C2 intake: collisioni request-key tra chat parallele]] · `completed`
 - [[obsidian/Prompts/255325 prompt-255325|255325 · Prompt 255325]] · `cancelled`
 - [[obsidian/Prompts/294731 prompt-294731|294731 · Prompt 294731]] · `cancelled`
