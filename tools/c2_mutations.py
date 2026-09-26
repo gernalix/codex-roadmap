@@ -6,13 +6,14 @@ import c2_scheduler
 import c2_cutover_writer
 import c2_supervisor_authority
 import c2_terminal_state_reimport
+import c2_work_item_admin
 
 
 SUPERVISOR_OPERATIONS = frozenset({
     'intake', 'prepare_codex', 'configure', 'auto_configure', 'schedule', 'acknowledge',
     'recover', 'reconcile_run', 'milestone', 'claim_milestone',
     'mark_milestone', 'verify_work_item',
-    'reimport_terminal_state', 'repair_prompt_materialization',
+    'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item',
 })
 
 
@@ -56,6 +57,7 @@ def apply(conn, mutation):
         'mark_milestone': c2_scheduler.mark_milestone,
         'reimport_terminal_state': c2_terminal_state_reimport.apply,
         'repair_prompt_materialization': c2_intake.repair_prompt_materialization,
+        'reconcile_item': c2_work_item_admin.reconcile,
     }
     if action not in operations:
         raise ValueError('unknown_c2_operation:'+action)
