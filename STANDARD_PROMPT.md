@@ -2,6 +2,8 @@
 
 > `roadmap.sqlite` è la source of truth. Le viste Markdown sono generate.
 
+Le regole comuni per ogni executor C2 sono in [[C2_EXECUTOR_CONTRACT|C2 executor contract]]. Questo documento aggiunge solo istruzioni specifiche per Codex.
+
 ## Percorso normale
 
 Per una sessione Codex Desktop:
@@ -94,6 +96,8 @@ Regole di default:
 Per task localizzati l'obiettivo è ridurre soprattutto i round-trip modello↔tool. Un budget di tool-call è un obiettivo, **mai un limite di autonomia**: se emerge nuova evidenza concreta, Codex può superarlo per risolvere lo stesso goal invece di terminare prematuramente.
 
 ## Git
+
+Per ownership del worktree e del task branch applica prima il [[C2_EXECUTOR_CONTRACT|contratto executor C2]].
 
 Per ogni task Git diverso da `codex-roadmap`, `roadmap_start.py` alloca automaticamente un worktree isolato e restituisce `worktree_path` + `task_branch`. **Quel worktree sostituisce il checkout canonico indicato nel testo storico del prompt**: dopo il claim lavorare esclusivamente nel path restituito.
 

@@ -100,16 +100,11 @@ Esempio minimo:
  "readiness_evidence":["Scope verificato e prerequisiti soddisfatti."]}
 ```
 
-**C2 executor start:** `claimed/assigned` indica soltanto che il control plane ha assegnato lavoro; `executor_started` conferma che l'executor lo ha realmente preso in carico. I worker C2 emettono automaticamente la receipt prima del lavoro sostanziale. Un executor manuale usa `python3 tools/c2_executor_start.py` con l'identità disponibile: `--work-item-id` per task C2 non-prompt (la stessa mutation fa claim+start se il task pending è runnable), oppure `--prompt-id` dopo `roadmap_start.py` per task prompt-backed. PROMPT_ID non è richiesto per i work item non-prompt. Non procedere se la submission fallisce; il binding chat/thread arricchisce la stessa receipt.
-
-**C2 issue inbox:** se un executor incontra un problema o miglioramento collaterale,
-lo registra subito con `python3 tools/c2_issue_capture.py "descrizione"` usando
-`C2_TASK_ID`/`C2_RUN_ID` del runtime (oppure gli stessi ID come opzioni CLI),
-senza ricerca, deduplica o triage, poi riprende il task originale. Il control
-plane associa run, executor e link della chat; la capture è unfenced e passa
-dal writer unico. Il triage C2 è fenced: dispone ogni riga pending con
-`promote_issue` o `discard_issue`; un match completed è regressione attiva,
-un match attivo riceve evidence sul work item esistente.
+**Contratto executor C2:** applica [[C2_EXECUTOR_CONTRACT|il contratto comune]].
+Per l'avvio manuale usa `tools/c2_executor_start.py` con l'identità disponibile;
+per una discovery usa `tools/c2_issue_capture.py "descrizione"` con il contesto
+del run. Il control plane associa run, executor e chat; il triage decide
+`promote_issue` o `discard_issue`.
 
 
 ### Checklist obbligatoria quando ChatGPT deve “mettere un prompt nella roadmap”
