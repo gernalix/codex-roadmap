@@ -10,3 +10,4 @@
 6. [[prompts/eboks-full-export-resume-after-mitid-v1|eboks-full-export-resume-after-mitid-v1]]
 7. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 8. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
+9. [[prompts/personalhub-workflowy-home-audit-resume|personalhub-workflowy-home-audit-resume]]

@@ -12,6 +12,7 @@
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/669941 personalhub-workflowy-home-audit-resume\|669941 · Completa jump Workflowy, tile Home e Audit log PersonalHub]] | pending | — | — | — | no | no | — | PersonalHub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1\|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
