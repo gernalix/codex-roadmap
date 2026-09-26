@@ -20,10 +20,10 @@ Add an append-only, low-cost C2 issue inbox for incidental bugs, bottlenecks, ob
 - [x] Preserve history by creating/linking a successor when a terminal item cannot be reopened in place.
 - [x] Add tests for capture, dedup-free behavior, promotion, discard and regression invariant.
 - [x] Document executor/C2 protocol.
-- [ ] Commit, push and integrate through the repository workflow.
+- [x] Commit and push the verified implementation; open the repository integration PR.
 
 ## Current step
-Finalize the tested implementation and integrate it.
+Merge PR #1300 after its required checks pass, then stop.
 
 ## Completed
 - Repository/state inspected; existing canonical write boundary and supervisor fencing verified.
@@ -36,7 +36,7 @@ Finalize the tested implementation and integrate it.
 - C2 worker injects compact incidental capture instructions; README records the canonical rule.
 
 ## Remaining
-- Final commit, push and repository integration.
+- Merge PR #1300; no implementation work remains.
 
 ## Blockers
 None.
@@ -46,9 +46,10 @@ None.
 - `c2_mutations.py` already separates supervisor-fenced operations from other C2 mutations.
 - At checkpoint update, branch `chatgpt/c2-issue-inbox` has nine task files changed/untracked and is 18 commits behind `origin/main`; no unrelated dirty files appear in `git status --short`.
 - Post-rebase C2 test suite: 153 PASS. `roadmap verify` reports `ok=true`, no problems. `PRAGMA quick_check=ok`, `foreign_key_check=0` on the branch snapshot.
+- Final pushed branch SHA `43c0fdcdac9388ba66a02762908b90d1d43e6561`; PR #1300 opened. CI `test`, Roadmap integrity `test`, and GitGuardian checks all PASS.
 
 ## Acceptance criteria
 Every incidental observation can be captured in one command with no C2 scan; each inbox row has one terminal disposition (`promoted` or `discarded`); exact matches to completed fixes are forced back into active work as regressions; tests and DB verification pass.
 
 ## Next action
-Commit and push the verified changes; use the repository integration path and stop after acceptance evidence is confirmed.
+Merge PR #1300 after this checkpoint commit is green; stop once the merged SHA is confirmed.
