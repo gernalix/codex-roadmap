@@ -10,4 +10,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]]
+- Nessuno.

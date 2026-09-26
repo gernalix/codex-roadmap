@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998\|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] | running | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/992303 c2-executor-chat-reference-history\|992303 · Traccia executor e chat di ogni task C2]] | pending | — | — | — | no | no | — | codex-roadmap / C2 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
@@ -144,6 +143,7 @@
 | [[obsidian/Prompts/357214 personalhub-git-history-data-sync-validation-v2\|357214 · Cronologia, backup e ripristino dei dati PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/311947 personalhub-play-release-local-validation\|311947 · Controllo finale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/918536 personalhub-datasette-lite-offline-runtime-v2\|918536 · Esploratore dati dentro PersonalHub anche offline]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998\|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] | blocked | — | — | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/243871 personalhub-play-release-local-validation-v2\|243871 · Controllo finale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/690049 fedora-runtime-validation\|690049 · Ultimo controllo del monitoraggio Fedora]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/896074 ccs-pbf-final-live-routing-safe-retry-v1\|896074 · Chiudere il leaf CCS con routing progetto sicuro]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-6 Luna | low |
