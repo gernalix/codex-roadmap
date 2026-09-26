@@ -72,7 +72,8 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path):
             'model':metadata.get('model_id',metadata['model']),'cwd':metadata['worktree'],
             'config':{'model_reasoning_effort':metadata['reasoning']},
             'allowProviderModelFallback':False,'ephemeral':False,
-            'approvalPolicy':'on-request','sandbox':'workspace-write',
+            'approvalPolicy':'on-request','approvalsReviewer':'auto_review',
+            'sandbox':'workspace-write',
         })
         # A lost thread/start acknowledgement may leave an empty thread, but no
         # work starts until its verified identity is durably recorded here.
@@ -82,19 +83,30 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path):
     else:
         response=rpc('thread/resume',{'threadId':state['thread_id'],
             'model':metadata.get('model_id',metadata['model']),'cwd':metadata['worktree'],
-            'config':{'model_reasoning_effort':metadata['reasoning']}})
+            'config':{'model_reasoning_effort':metadata['reasoning']},
+            'approvalPolicy':'on-request','approvalsReviewer':'auto_review'})
         _validate_response(response,metadata)
     thread_id=state['thread_id']
     if state['phase'] in ('starting','started'):
         # Never resubmit an ambiguously acknowledged turn. Inspect the existing
         # thread; the supervisor can reconcile completion or resume that worker.
+        observed=rpc('thread/read',{'threadId':thread_id,'includeTurns':True})
+        if state['phase']=='starting':
+            turns=(observed.get('thread') or {}).get('turns') or []
+            if len(turns)>1:
+                raise ExecutorError('ambiguous_turn_history')
+            if len(turns)==1:
+                turn_id=turns[0].get('id')
+                if not turn_id:
+                    raise ExecutorError('observed_turn_identity_missing')
+                state.update(phase='started',turn_id=turn_id)
+                persist(receipt,state)
         if state['phase']=='started' and metadata.get('goal_mode'):
             goal=rpc('thread/goal/get',{'threadId':thread_id}).get('goal')
             if not goal or goal.get('objective')!=prompt:
                 raise ExecutorError('codex_goal_readback_mismatch')
             if goal['status']=='paused':
                 rpc('thread/goal/set',{'threadId':thread_id,'status':'active'})
-        observed=rpc('thread/read',{'threadId':thread_id,'includeTurns':True})
         return {'thread_id':thread_id,'turn_id':state.get('turn_id'),
                 'phase':state['phase'],'observed':observed,'resubmitted':False}
     if metadata.get('goal_mode'):
@@ -107,7 +119,8 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path):
     result=rpc('turn/start',{'threadId':thread_id,
         'input':[{'type':'text','text':prompt,'text_elements':[]}],
         'model':metadata.get('model_id',metadata['model']),'effort':metadata['reasoning'],
-        'cwd':metadata['worktree'],'clientUserMessageId':'c2-'+run_id})
+        'cwd':metadata['worktree'],'approvalPolicy':'on-request',
+        'approvalsReviewer':'auto_review','clientUserMessageId':'c2-'+run_id})
     state.update(phase='started',turn_id=result['turn']['id'])
     persist(receipt,state)
     if metadata.get('goal_mode'):

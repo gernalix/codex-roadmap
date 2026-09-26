@@ -31,7 +31,10 @@ class CodexExecutorTests(unittest.TestCase):
             self.assertEqual('started',result['phase'])
             self.assertEqual('Canonical body',rpc.goal['objective'])
             self.assertFalse(rpc.calls[0][1]['allowProviderModelFallback'])
-            self.assertEqual('Canonical body',next(p for m,p in rpc.calls if m=='turn/start')['input'][0]['text'])
+            self.assertEqual('auto_review',rpc.calls[0][1]['approvalsReviewer'])
+            turn_params=next(p for m,p in rpc.calls if m=='turn/start')
+            self.assertEqual('Canonical body',turn_params['input'][0]['text'])
+            self.assertEqual('auto_review',turn_params['approvalsReviewer'])
 
     def test_mismatch_does_not_start_turn(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -43,13 +46,39 @@ class CodexExecutorTests(unittest.TestCase):
     def test_lost_ack_restart_never_duplicates_execution(self):
         with tempfile.TemporaryDirectory() as tmp:
             receipt=Path(tmp)/'receipt.json'
-            rpc=RPC(lose_ack=True); metadata={'model':'exact','reasoning':'medium','worktree':'/tmp/worktree'}
+            rpc=RPC(lose_ack=True); metadata={'model':'exact','reasoning':'medium',
+                'worktree':'/tmp/worktree','goal_mode':True}
             with self.assertRaises(TimeoutError):
                 dispatch(rpc,run_id='run-1',metadata=metadata,prompt='Canonical body',receipt=receipt)
             resumed=RPC()
+            resumed.goal=rpc.goal
             result=dispatch(resumed,run_id='run-1',metadata=metadata,prompt='Canonical body',receipt=receipt)
             self.assertFalse(result['resubmitted'])
+            self.assertEqual('started',result['phase'])
+            self.assertEqual('turn-1',result['turn_id'])
+            self.assertEqual('active',resumed.goal['status'])
+            resume_params=next(p for m,p in resumed.calls if m=='thread/resume')
+            self.assertEqual('auto_review',resume_params['approvalsReviewer'])
             self.assertNotIn('turn/start',[method for method,_ in resumed.calls])
+
+    def test_lost_ack_without_observed_turn_stays_ambiguous_without_resubmit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            receipt=Path(tmp)/'receipt.json'
+            metadata={'model':'exact','reasoning':'medium','worktree':'/tmp/worktree'}
+            rpc=RPC(lose_ack=True)
+            with self.assertRaises(TimeoutError):
+                dispatch(rpc,run_id='run-1',metadata=metadata,prompt='Canonical body',receipt=receipt)
+            class EmptyRPC(RPC):
+                def __call__(self,method,params):
+                    if method=='thread/read':
+                        self.calls.append((method,params))
+                        return {'thread':{'id':'thread-1','turns':[]}}
+                    return super().__call__(method,params)
+            empty=EmptyRPC()
+            result=dispatch(empty,run_id='run-1',metadata=metadata,prompt='Canonical body',receipt=receipt)
+            self.assertEqual('starting',result['phase'])
+            self.assertIsNone(result['turn_id'])
+            self.assertNotIn('turn/start',[method for method,_ in empty.calls])
 
     def test_terminal_receipt_prevents_turn_resubmission(self):
         with tempfile.TemporaryDirectory() as tmp:
