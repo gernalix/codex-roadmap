@@ -1,6 +1,7 @@
 # Da controllare
 
 - [[obsidian/Prompts/384495 rimuovere-special-case-ph-e-implementare-overrid-384495|384495 · Rimuovere special-case PH e implementare override execution canonico]] · `blocked` · analizzato=no · fix=—
+- [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1|851204 · Bonificare radicalmente Datasette Alerts]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/875575 conservare-e-confrontare-lo-storico-dei-test-adb-875575|875575 · Conservare e confrontare lo storico dei test ADB]] · `blocked` · analizzato=no · fix=—
