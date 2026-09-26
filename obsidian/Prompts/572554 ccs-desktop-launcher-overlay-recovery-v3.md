@@ -1,18 +1,18 @@
 ---
 prompt_id: 572554
-status: blocked
+status: superseded
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 572554 · Completare launcher e overlay Codex Desktop con progetto corretto
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../falliti/ccs-desktop-launcher-overlay-recovery-v3|Apri prompt]]
 - **Primo lancio:** 2026-09-22T23:58:52Z
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[613408 ccs-desktop-launcher-overlay-recovery-v2|613408]]
-- **Figli/follow-up:** [[996591 ccs-pbf-live-final-closure-v1|996591]]
+- **Figli/follow-up:** [[175908 checklist2-single-work-item-control-plane-v2|175908]], [[996591 ccs-pbf-live-final-closure-v1|996591]]
 - **Chat Codex:** Continua nella stessa chat Codex di 613408; riusa il fatto già verificato che Desktop è visibile via AT-SPI.
 
 ## Spiegazione

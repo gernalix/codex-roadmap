@@ -2,7 +2,7 @@
 prompt_id: 181259
 status: pending
 project_id: —
-model: GPT-6 Luna
+model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - manual-prerequisite:grindr-login

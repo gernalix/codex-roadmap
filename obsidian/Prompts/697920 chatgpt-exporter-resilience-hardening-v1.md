@@ -1,18 +1,18 @@
 ---
 prompt_id: 697920
-status: blocked
+status: superseded
 project_id: 92
 model: GPT-6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/prompt-infrastructure
 ---
 
 # 697920 · Rendere ChatGPTExporter resiliente e affidabile
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../falliti/chatgpt-exporter-resilience-hardening-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-24T02:12:33Z

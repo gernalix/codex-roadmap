@@ -1,18 +1,18 @@
 ---
 prompt_id: 641582
-status: blocked
+status: superseded
 project_id: —
 model: —
 reasoning: —
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/workflowy-importer
 ---
 
 # 641582 · Trasformare Workflowy nel control surface della roadmap Codex
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/workflowy-importer|Workflowy importer]]
 - **Prompt:** [[../../falliti/workflowy-roadmap-control-surface-historical|Apri prompt]]
 - **Primo lancio:** —

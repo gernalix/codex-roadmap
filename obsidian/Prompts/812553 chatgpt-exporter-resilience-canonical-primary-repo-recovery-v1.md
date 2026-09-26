@@ -2,7 +2,7 @@
 prompt_id: 812553
 status: pending
 project_id: —
-model: GPT-6 Luna
+model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
@@ -21,9 +21,9 @@ tags:
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
-- **Dipende da:** [[222733 stop-runaway-788315-heartbeat|222733]], [[302284 prompt-infrastructure-final-runtime-activation-v1|302284]]
+- **Dipende da:** [[222733 stop-runaway-788315-heartbeat|222733]]
 - **Sblocca:** —
-- **Padri/precedenti:** [[254859 chatgpt-exporter-archive-validation-v1|254859]], [[697920 chatgpt-exporter-resilience-hardening-v1|697920]]
+- **Padri/precedenti:** [[254859 chatgpt-exporter-archive-validation-v1|254859]], [[697920 chatgpt-exporter-resilience-hardening-v1|697920]], [[736284 chatgpt-exporter-live-chrome-first-archive-v1|736284]], [[788315 chatgpt-exporter-live-recovery-after-736284-v1|788315]]
 - **Figli/follow-up:** —
 - **Chat Codex:** Nuova chat Codex; riusa il parent 697920 e i report 199166, senza nuova discovery generale.
 

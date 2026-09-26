@@ -1,18 +1,18 @@
 ---
 prompt_id: 788315
-status: blocked
+status: superseded
 project_id: 92
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/prompt-infrastructure
 ---
 
 # 788315 · Riparare ChatGPTExporter e completare il primo archivio
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../falliti/chatgpt-exporter-live-recovery-after-736284-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-24T01:47:25Z
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[736284 chatgpt-exporter-live-chrome-first-archive-v1|736284]]
-- **Figli/follow-up:** [[222733 stop-runaway-788315-heartbeat|222733]], [[254859 chatgpt-exporter-archive-validation-v1|254859]], [[515185 chatgpt-exporter-find-tab-runtime-recovery-v2|515185]]
+- **Figli/follow-up:** [[222733 stop-runaway-788315-heartbeat|222733]], [[254859 chatgpt-exporter-archive-validation-v1|254859]], [[515185 chatgpt-exporter-find-tab-runtime-recovery-v2|515185]], [[812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553]]
 - **Chat Codex:** Continua nella stessa chat Codex di 736284; riusa il contesto runtime già raccolto.
 
 ## Spiegazione

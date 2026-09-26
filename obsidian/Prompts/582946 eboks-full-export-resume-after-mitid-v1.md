@@ -2,7 +2,7 @@
 prompt_id: 582946
 status: pending
 project_id: 23
-model: GPT-6 Luna
+model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - manual-prerequisite:login-mitid-eboks

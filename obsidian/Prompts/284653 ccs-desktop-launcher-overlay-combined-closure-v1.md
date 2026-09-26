@@ -1,18 +1,18 @@
 ---
 prompt_id: 284653
-status: blocked
+status: superseded
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../falliti/ccs-desktop-launcher-overlay-combined-closure-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-22T21:23:01Z
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[764529 codex-desktop-launcher-atspi-consumer-closure-v2|764529]], [[784216 ccs-overlay-live-retry-after-desktop-v1|784216]]
-- **Figli/follow-up:** [[613408 ccs-desktop-launcher-overlay-recovery-v2|613408]], [[996591 ccs-pbf-live-final-closure-v1|996591]]
+- **Figli/follow-up:** [[175908 checklist2-single-work-item-control-plane-v2|175908]], [[613408 ccs-desktop-launcher-overlay-recovery-v2|613408]], [[996591 ccs-pbf-live-final-closure-v1|996591]]
 - **Chat Codex:** Continua preferibilmente nella chat Codex di 403496; riusa anche l’evidenza di 125435. Un solo task dopo aver aperto ChatGPT/Codex Desktop.
 
 ## Spiegazione
