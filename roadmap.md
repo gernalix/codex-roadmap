@@ -4,9 +4,9 @@
 
 1. [[prompts/completare-bootstrap-e-handoff-del-drain-autonom-582408|completare-bootstrap-e-handoff-del-drain-autonom-582408]]
 2. [[prompts/c2-executor-chat-reference-history|c2-executor-chat-reference-history]]
-3. [[prompts/completare-preparazione-e-drain-autonomo-c2-fino-232898|completare-preparazione-e-drain-autonomo-c2-fino-232898]]
-4. [[prompts/implementare-struttura-minima-del-contratto-c2-233366|implementare-struttura-minima-del-contratto-c2-233366]]
-5. [[prompts/chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1]]
+3. [[prompts/chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1]]
+4. [[prompts/completare-preparazione-e-drain-autonomo-c2-fino-232898|completare-preparazione-e-drain-autonomo-c2-fino-232898]]
+5. [[prompts/implementare-struttura-minima-del-contratto-c2-233366|implementare-struttura-minima-del-contratto-c2-233366]]
 6. [[prompts/c2-datasette-alerts-radical-hygiene-v1|c2-datasette-alerts-radical-hygiene-v1]]
 7. [[prompts/grindr-web-exporter-post-login-resume-v1|grindr-web-exporter-post-login-resume-v1]]
 8. [[prompts/grindr-export-chatgpt-desktop-end-to-end-v1|grindr-export-chatgpt-desktop-end-to-end-v1]]
