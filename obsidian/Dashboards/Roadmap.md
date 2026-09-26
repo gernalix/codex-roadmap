@@ -20,4 +20,3 @@
 ## In esecuzione
 
 - [[obsidian/Prompts/582408 completare-bootstrap-e-handoff-del-drain-autonom-582408|582408 · Completare bootstrap e handoff del drain autonomo C2]]
-- [[obsidian/Prompts/875575 conservare-e-confrontare-lo-storico-dei-test-adb-875575|875575 · Conservare e confrontare lo storico dei test ADB]]

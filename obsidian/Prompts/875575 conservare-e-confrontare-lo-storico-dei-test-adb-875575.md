@@ -1,6 +1,6 @@
 ---
 prompt_id: 875575
-status: running
+status: blocked
 project_id: 51
 model: GPT-5.6 Sol
 reasoning: medium
@@ -12,15 +12,15 @@ tags:
   - priority:p0
   - test-evidence
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/codex-roadmap
 ---
 
 # 875575 · Conservare e confrontare lo storico dei test ADB
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
-- **Prompt:** [[../../prompts/conservare-e-confrontare-lo-storico-dei-test-adb-875575|Apri prompt]]
+- **Prompt:** [[../../falliti/conservare-e-confrontare-lo-storico-dei-test-adb-875575|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
