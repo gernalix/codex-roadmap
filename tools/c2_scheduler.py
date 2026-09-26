@@ -361,6 +361,46 @@ def verify_work_item(conn, work_item_id, *, evidence):
     enqueue_milestone(conn,work_item_id)
 
 
+def complete_verified(conn, work_item_id, *, source_commit, evidence):
+    """Close work completed outside C2 scheduling only after its writer checkpoint is clear."""
+    _transaction(conn)
+    item=conn.execute('SELECT status,prompt_id FROM work_items WHERE work_item_id=?',
+        (work_item_id,)).fetchone()
+    if not item or item['prompt_id'] or item['status'] not in ('pending','completed'):
+        raise SchedulingError('nonprompt_pending_work_item_required')
+    if item['status']=='completed':
+        return
+    if not isinstance(evidence,list) or not evidence or not all(str(v).strip() for v in evidence):
+        raise SchedulingError('completion_evidence_required')
+    if conn.execute('''SELECT 1 FROM work_item_runs WHERE work_item_id=?
+      AND state IN ('claimed','running','recovering')''',(work_item_id,)).fetchone():
+        raise SchedulingError('active_run_requires_normal_completion')
+    cp=conn.execute('''SELECT source_commit,remaining_json,blocker,evidence_json
+      FROM work_item_checkpoints WHERE work_item_id=? AND source_file='c2-writer'
+      ORDER BY checkpoint_id DESC LIMIT 1''',(work_item_id,)).fetchone()
+    if (not cp or cp['source_commit']!=source_commit or
+        json.loads(cp['remaining_json'] or '[]') or cp['blocker'] or
+        not json.loads(cp['evidence_json'] or '[]')):
+        raise SchedulingError('acceptance_checkpoint_incomplete')
+    missing=conn.execute('''WITH RECURSIVE children(id) AS (
+      SELECT work_item_id FROM work_items WHERE parent_id=?
+      UNION SELECT w.work_item_id FROM work_items w JOIN children c ON w.parent_id=c.id)
+      SELECT 1 FROM children c JOIN work_items w ON w.work_item_id=c.id
+      WHERE w.required=1 AND w.status NOT IN ('completed','waived') LIMIT 1''',
+      (work_item_id,)).fetchone()
+    if missing:
+        raise SchedulingError('required_children_incomplete')
+    conn.execute("UPDATE work_items SET status='completed',blocker=NULL WHERE work_item_id=?",
+        (work_item_id,))
+    for fact in evidence:
+        conn.execute('''INSERT OR IGNORE INTO work_item_evidence
+           (work_item_id,evidence_kind,label,uri,value_json,created_at)
+           VALUES(?,'completion',?,NULL,?,?)''',
+           (work_item_id,str(fact)[:120],json.dumps(str(fact),ensure_ascii=False),
+            time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())))
+    enqueue_milestone(conn,work_item_id)
+
+
 def complete(conn, run_id, *, succeeded, worker_ref):
     _transaction(conn)
     run=conn.execute('SELECT * FROM work_item_runs WHERE run_id=?',(run_id,)).fetchone()
