@@ -52,6 +52,7 @@ applies accepted mutations atomically/idempotently, records evidence/audit and r
 It never invents semantic decisions or silently repairs an invalid AI proposal.
 
 ## Semantic reorganization flow
+0. Ensure this executor has an `executor_started` receipt before semantic work. C2-managed runs do this automatically; a manual executor uses `tools/c2_executor_start.py` with the existing task identity.
 1. Let deterministic C2 mechanisms reconcile factual state first; do not reproduce that work with model reasoning.
 2. Read canonical active work and existing structured evidence.
 3. For each item needing semantic judgment, inspect only the minimum relevant repo/context.

@@ -49,6 +49,19 @@ CREATE TABLE IF NOT EXISTS work_item_executor_bindings (
 );
 CREATE INDEX IF NOT EXISTS idx_work_item_executor_bindings_item
  ON work_item_executor_bindings(work_item_id,bound_at);
+CREATE TABLE IF NOT EXISTS work_item_executor_starts (
+ receipt_id TEXT PRIMARY KEY,
+ work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
+ run_id TEXT REFERENCES work_item_runs(run_id) ON DELETE SET NULL,
+ prompt_id TEXT,
+ executor TEXT NOT NULL,
+ executor_ref TEXT,
+ chat_url TEXT,
+ started_at REAL NOT NULL,
+ UNIQUE(run_id)
+);
+CREATE INDEX IF NOT EXISTS idx_work_item_executor_starts_item
+ ON work_item_executor_starts(work_item_id,started_at);
 CREATE TABLE IF NOT EXISTS work_item_result_receipts (
  receipt_id TEXT PRIMARY KEY,
  work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
@@ -353,6 +366,7 @@ def bind_executor(conn, run_id, *, executor_ref, chat_url, now=None):
     if not executor_ref or not chat_url:
         raise SchedulingError('executor_binding_identity_required')
     executor=str(run['executor'])
+    item_status=conn.execute('SELECT status FROM work_items WHERE work_item_id=?',(run['work_item_id'],)).fetchone()[0]
     if executor=='codex':
         expected='codex://threads/'+executor_ref
         if chat_url != expected:
@@ -368,6 +382,8 @@ def bind_executor(conn, run_id, *, executor_ref, chat_url, now=None):
                 or str(prior['chat_url'])!=chat_url
                 or str(prior['work_item_id'])!=str(run['work_item_id'])):
             raise SchedulingError('executor_binding_conflict')
+        if run['state'] in ('running','recovering') and item_status=='running':
+            executor_started(conn,run_id=run_id,executor_ref=executor_ref,chat_url=chat_url,now=now)
         return dict(prior)
     if run['state'] not in ('claimed','running','recovering'):
         raise SchedulingError('run_not_active')
@@ -389,7 +405,87 @@ def bind_executor(conn, run_id, *, executor_ref, chat_url, now=None):
         conn.execute('''UPDATE issue_inbox SET executor=?,executor_ref=?,chat_url=?
           WHERE origin_run_id=? AND chat_url IS NULL''',
           (executor,executor_ref,chat_url,run_id))
+    if run['state'] in ('running','recovering') and item_status=='running':
+        executor_started(conn,run_id=run_id,executor_ref=executor_ref,chat_url=chat_url,now=now)
     return dict(conn.execute('SELECT * FROM work_item_executor_bindings WHERE run_id=?',(run_id,)).fetchone())
+
+
+def executor_started(conn, *, run_id=None, work_item_id=None, prompt_id=None,
+                     executor=None, executor_ref=None, chat_url=None, now=None):
+    """Record that an executor has actually begun handling an already-running C2 item."""
+    _transaction(conn)
+    install_schema(conn)
+    now=time.time() if now is None else now
+    run=None
+    if run_id:
+        run=conn.execute('SELECT * FROM work_item_runs WHERE run_id=?',(run_id,)).fetchone()
+        if not run:
+            raise SchedulingError('executor_start_run_not_found')
+        if run['state'] not in ('running','recovering'):
+            raise SchedulingError('executor_start_run_not_active')
+        if work_item_id and work_item_id!=run['work_item_id']:
+            raise SchedulingError('executor_start_work_item_mismatch')
+        work_item_id=run['work_item_id']
+        if executor and executor!=run['executor']:
+            raise SchedulingError('executor_start_executor_mismatch')
+        executor=run['executor']
+    if prompt_id and not work_item_id:
+        row=conn.execute('SELECT work_item_id FROM work_items WHERE prompt_id=?',(prompt_id,)).fetchone()
+        if not row:
+            raise SchedulingError('executor_start_prompt_not_found')
+        work_item_id=row['work_item_id']
+    if not work_item_id:
+        raise SchedulingError('executor_start_identity_required')
+    item=conn.execute('SELECT status,prompt_id FROM work_items WHERE work_item_id=?',(work_item_id,)).fetchone()
+    if not item:
+        raise SchedulingError('executor_start_work_item_not_found')
+    if item['status']=='pending' and run is None:
+        if item['prompt_id']:
+            raise SchedulingError('executor_start_prompt_requires_roadmap_start')
+        runnable=conn.execute('SELECT 1 FROM v_work_item_runnable WHERE work_item_id=?',(work_item_id,)).fetchone()
+        if not runnable:
+            raise SchedulingError('executor_start_work_item_not_runnable')
+        repo=conn.execute('SELECT repo FROM work_items WHERE work_item_id=?',(work_item_id,)).fetchone()[0]
+        if repo and conn.execute('''SELECT 1 FROM work_items WHERE repo=? AND work_item_id<>?
+          AND status='running' LIMIT 1''',(repo,work_item_id)).fetchone():
+            raise SchedulingError('executor_start_repo_conflict')
+        conn.execute("UPDATE work_items SET status='running',current_action='Executor started',blocker=NULL WHERE work_item_id=?",
+                     (work_item_id,))
+        item=conn.execute('SELECT status,prompt_id FROM work_items WHERE work_item_id=?',(work_item_id,)).fetchone()
+    if item['status']!='running':
+        raise SchedulingError('executor_start_requires_running_item')
+    if prompt_id and item['prompt_id']!=prompt_id:
+        raise SchedulingError('executor_start_prompt_mismatch')
+    prompt_id=item['prompt_id']
+    executor=str(executor or '').strip()
+    if not executor:
+        raise SchedulingError('executor_start_executor_required')
+    executor_ref=str(executor_ref or '').strip() or None
+    chat_url=str(chat_url or '').strip() or None
+    receipt_id='run:'+str(run_id) if run_id else 'work-item:'+work_item_id+':'+executor
+    existing=conn.execute('SELECT * FROM work_item_executor_starts WHERE receipt_id=?',(receipt_id,)).fetchone()
+    if existing:
+        if (existing['work_item_id']!=work_item_id or existing['prompt_id']!=prompt_id
+                or existing['executor']!=executor):
+            raise SchedulingError('executor_start_receipt_conflict')
+        updates=[]; values=[]
+        for field,value in (('executor_ref',executor_ref),('chat_url',chat_url)):
+            prior=existing[field]
+            if prior and value and prior!=value:
+                raise SchedulingError('executor_start_binding_conflict')
+            if not prior and value:
+                updates.append(field+'=?'); values.append(value)
+        if updates:
+            conn.execute('UPDATE work_item_executor_starts SET '+','.join(updates)+' WHERE receipt_id=?',
+                         (*values,receipt_id))
+        return dict(conn.execute('SELECT * FROM work_item_executor_starts WHERE receipt_id=?',
+                                 (receipt_id,)).fetchone())
+    conn.execute("""INSERT INTO work_item_executor_starts(
+      receipt_id,work_item_id,run_id,prompt_id,executor,executor_ref,chat_url,started_at
+      ) VALUES(?,?,?,?,?,?,?,?)""",
+      (receipt_id,work_item_id,run_id,prompt_id,executor,executor_ref,chat_url,now))
+    return dict(conn.execute('SELECT * FROM work_item_executor_starts WHERE receipt_id=?',
+                             (receipt_id,)).fetchone())
 
 
 def checkpoint(conn, run_id, commit):

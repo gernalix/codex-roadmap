@@ -86,6 +86,21 @@ class C2WriterTests(unittest.TestCase):
                     "SELECT state FROM work_item_runs WHERE run_id='run-blocked'").fetchone()[0])
 
 
+    def test_executor_started_mutation_records_canonical_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=test_c2_intake.C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as conn:
+                c2_scheduler.install_schema(conn)
+                conn.execute('BEGIN IMMEDIATE')
+                roadmap_db.set_status(conn,'123456','running',actor='test')
+                roadmap_db.apply_mutation(conn,{'op':'c2_executor_started','arguments':{
+                    'prompt_id':'123456','executor':'codex',
+                    'executor_ref':'thread-1','chat_url':'codex://threads/thread-1'}})
+                row=conn.execute(
+                    "SELECT * FROM work_item_executor_starts WHERE prompt_id='123456'").fetchone()
+                self.assertEqual('codex',row['executor'])
+                self.assertEqual('thread-1',row['executor_ref'])
+
     def test_issue_replay_does_not_duplicate_intake(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=test_c2_intake.C2IntakeTests().make_cutover_db(Path(tmp))

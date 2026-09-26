@@ -130,9 +130,14 @@ def _origin_context(
             ).fetchone()
 
     binding = None
+    start = None
     if run is not None:
         binding = conn.execute(
             "SELECT * FROM work_item_executor_bindings WHERE run_id=?",
+            (run["run_id"],),
+        ).fetchone()
+        start = conn.execute(
+            "SELECT * FROM work_item_executor_starts WHERE run_id=?",
             (run["run_id"],),
         ).fetchone()
     elif item is not None:
@@ -150,13 +155,31 @@ def _origin_context(
                 "SELECT * FROM work_item_runs WHERE run_id=?",
                 (binding["run_id"],),
             ).fetchone()
+        start = conn.execute(
+            """SELECT * FROM work_item_executor_starts
+               WHERE work_item_id=?
+               ORDER BY started_at DESC LIMIT 1""",
+            (item["work_item_id"],),
+        ).fetchone()
+        if run is None and start and start["run_id"]:
+            run = conn.execute(
+                "SELECT * FROM work_item_runs WHERE run_id=?",
+                (start["run_id"],),
+            ).fetchone()
 
+    executor = str(run["executor"]) if run else (str(start["executor"]) if start else None)
+    executor_ref = str(binding["executor_ref"]) if binding else (
+        str(start["executor_ref"]) if start and start["executor_ref"] else None
+    )
+    chat_url = str(binding["chat_url"]) if binding else (
+        str(start["chat_url"]) if start and start["chat_url"] else None
+    )
     return (
         str(item["work_item_id"]) if item else None,
         str(run["run_id"]) if run else None,
-        str(run["executor"]) if run else None,
-        str(binding["executor_ref"]) if binding else None,
-        str(binding["chat_url"]) if binding else None,
+        executor,
+        executor_ref,
+        chat_url,
     )
 
 

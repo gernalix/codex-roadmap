@@ -82,6 +82,21 @@ CREATE TABLE IF NOT EXISTS work_item_evidence (
   UNIQUE(work_item_id, evidence_kind, uri, label)
 );
 
+CREATE TABLE IF NOT EXISTS work_item_executor_starts (
+  receipt_id TEXT PRIMARY KEY,
+  work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
+  run_id TEXT,
+  prompt_id TEXT,
+  executor TEXT NOT NULL,
+  executor_ref TEXT,
+  chat_url TEXT,
+  started_at REAL NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_work_item_executor_starts_run
+  ON work_item_executor_starts(run_id) WHERE run_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_work_item_executor_starts_item
+  ON work_item_executor_starts(work_item_id, started_at);
+
 CREATE TABLE IF NOT EXISTS work_item_result_receipts (
   receipt_id TEXT PRIMARY KEY,
   work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,

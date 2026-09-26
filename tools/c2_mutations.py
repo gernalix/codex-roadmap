@@ -57,6 +57,7 @@ def apply(conn, mutation):
         'auto_configure': c2_scheduler.configure_auto,
         'schedule': c2_scheduler.schedule,
         'acknowledge': c2_scheduler.acknowledge,
+        'executor_started': c2_scheduler.executor_started,
         'bind_executor': c2_scheduler.bind_executor,
         'checkpoint': c2_scheduler.checkpoint,
         'record_checkpoint': c2_scheduler.record_checkpoint,

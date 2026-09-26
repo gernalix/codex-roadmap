@@ -81,6 +81,8 @@ il contesto con `c2_auto_configure` tramite la stessa mutation Issue. Il
 runtime e lo scheduler escludono gli item PersonalHub gestiti dal worker
 esterno, anche se hanno già una spec.
 
+**C2 executor start:** `claimed/assigned` indica soltanto che il control plane ha assegnato lavoro; `executor_started` conferma che l'executor lo ha realmente preso in carico. I worker C2 emettono automaticamente la receipt prima del lavoro sostanziale. Un executor manuale usa `python3 tools/c2_executor_start.py` con l'identità disponibile: `--work-item-id` per task C2 non-prompt (la stessa mutation fa claim+start se il task pending è runnable), oppure `--prompt-id` dopo `roadmap_start.py` per task prompt-backed. PROMPT_ID non è richiesto per i work item non-prompt. Non procedere se la submission fallisce; il binding chat/thread arricchisce la stessa receipt.
+
 **C2 issue inbox:** se un executor incontra un problema o miglioramento collaterale,
 lo registra subito con `python3 tools/c2_issue_capture.py "descrizione"` usando
 `C2_TASK_ID`/`C2_RUN_ID` del runtime (oppure gli stessi ID come opzioni CLI),

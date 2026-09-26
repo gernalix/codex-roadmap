@@ -38,6 +38,7 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             raise WorkerError('worker_identity_mismatch')
         metadata=json.loads(run['metadata_json'])
         executor=run['executor']
+        submit('executor_started',{'run_id':run_id},'c2-executor-start-'+run_id)
         if executor=='rdc' and metadata.get('activity')=='native':
             receipt=Path(state_root)/f'{run_id}.native.json'
             result=execute_native(run_id=run_id,metadata=metadata,receipt=receipt)

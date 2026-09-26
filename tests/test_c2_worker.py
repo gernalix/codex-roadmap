@@ -54,6 +54,7 @@ class WorkerTests(unittest.TestCase):
                     result=c2_worker.run_once(path,'auto-result',
                         state_root=root/'receipts',submit=submit,rpc_factory=RPC)
                 self.assertEqual('completed',result['phase'])
+                self.assertEqual('executor_started',calls[0][0])
                 result_calls=[c for c in calls if c[0]=='executor_result']
                 self.assertEqual(2,len(result_calls))
                 self.assertFalse(result_calls[0][1]['integration_ready'])
@@ -62,6 +63,31 @@ class WorkerTests(unittest.TestCase):
             finally:
                 conn.close()
 
+
+    def test_worker_does_not_execute_if_start_notification_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); path=C2IntakeTests().make_cutover_db(root)
+            conn=c2_intake._connect(path)
+            try:
+                c2_scheduler.install_schema(conn)
+                conn.execute('BEGIN IMMEDIATE')
+                marker=root/'must-not-exist'
+                item=c2_intake.add_work_item(conn,title='Start fail closed',repo='fixture')
+                c2_scheduler.configure(conn,item['work_item_id'],activity='native',
+                    command=[sys.executable,'-c',f"from pathlib import Path; Path({str(marker)!r}).write_text('bad')"])
+                run=c2_scheduler.schedule(conn,event_key='start-fail',now=10)[0]
+                c2_scheduler.acknowledge(conn,run['run_id'],worker_ref='c2-run:'+run['run_id'],
+                    metadata=run['metadata'],now=11)
+                conn.commit()
+                def submit(op,args,key):
+                    if op=='executor_started':
+                        raise RuntimeError('writer unavailable')
+                    raise AssertionError(op)
+                with self.assertRaisesRegex(RuntimeError,'writer unavailable'):
+                    c2_worker.run_once(path,run['run_id'],state_root=root/'receipts',submit=submit)
+                self.assertFalse(marker.exists())
+            finally:
+                conn.close()
 
     def test_native_end_to_end_single_run_and_replay(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -82,7 +108,12 @@ class WorkerTests(unittest.TestCase):
                 def submit(op,args,key):
                     calls.append((op,key))
                     conn.execute('BEGIN IMMEDIATE')
-                    c2_scheduler.complete(conn,**args)
+                    if op=='executor_started':
+                        c2_scheduler.executor_started(conn,**args)
+                    elif op=='complete':
+                        c2_scheduler.complete(conn,**args)
+                    else:
+                        raise AssertionError(op)
                     conn.commit()
                 result=c2_worker.run_once(path,run['run_id'],state_root=root/'receipts',submit=submit)
                 self.assertEqual('completed',result['state'])
@@ -90,6 +121,6 @@ class WorkerTests(unittest.TestCase):
                 self.assertEqual('completed',conn.execute('SELECT status FROM work_items WHERE work_item_id=?',(item['work_item_id'],)).fetchone()[0])
                 with self.assertRaisesRegex(c2_worker.WorkerError,'run_not_claimed'):
                     c2_worker.run_once(path,run['run_id'],state_root=root/'receipts',submit=submit)
-                self.assertEqual(1,len(calls))
+                self.assertEqual(['executor_started','complete'],[op for op,_ in calls])
             finally:
                 conn.close()
