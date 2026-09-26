@@ -37,8 +37,10 @@ def _queue_repo_integration(prompt_id: str) -> tuple[str, bool]:
     except json.JSONDecodeError as exc:
         raise RoadmapResultError("repo_integration_queue_invalid_response") from exc
     status = str(payload.get("status") or "")
-    if status in {"no-task-record", "merged"}:
+    if status == "merged":
         return status, True
+    if status == "no-task-record":
+        raise RoadmapResultError("repo_integration_task_record_missing")
     if status in {"queued", "ready"}:
         return "queued", False
     raise RoadmapResultError(f"repo_integration_queue_unexpected_status:{status or 'missing'}")

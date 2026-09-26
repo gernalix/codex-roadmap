@@ -50,6 +50,18 @@ class FinishWrapperTests(unittest.TestCase):
         self.assertFalse(integrated)
         self.assertIn("finish-any",run.call_args.args[0])
 
+    @patch("roadmap_finish.subprocess.run")
+    @patch.object(Path, "is_file", return_value=True)
+    def test_queue_helper_fails_closed_without_task_record(self, _is_file, run):
+        run.return_value=subprocess.CompletedProcess(
+            [],0,stdout=json.dumps({"status":"no-task-record"}),stderr=""
+        )
+        with self.assertRaisesRegex(
+            roadmap_finish.RoadmapResultError,
+            "repo_integration_task_record_missing",
+        ):
+            roadmap_finish._queue_repo_integration("123456")
+
     @patch("roadmap_finish._queue_repo_integration")
     def test_non_pass_terminalizes_without_repo_integration(self, queue):
         original=roadmap_finish.finish_result
