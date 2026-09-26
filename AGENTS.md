@@ -2,6 +2,9 @@
 
 ## C2 repository/worktree contract
 
+- C2 is the sole PersonalHub orchestrator. A PersonalHub adapter, if used, is a C2 executor under its run and resource leases. Declare shared Pixel/TCL/ADB/release/install surfaces as explicit resources on execution specs.
+- A temporary `drain_first` execution override changes dispatch order only. Use `tools/c2_execution_override.py` and the fenced single writer; never rewrite semantic `priority:p0/p1/p2` or `sort_order` to express a temporary drain.
+
 - `~/projects/codex-roadmap` is the canonical C2 Git repository. Its `main` history plus writer-controlled roadmap state are authoritative.
 - `~/.local/share/c2-supervisor/worktree` is a runtime-only worktree of that same repository, never a second source of truth. It must use branch `c2/supervisor-runtime` tracking local `main`; do not edit or commit there. Use isolated task worktrees for development/checkpoints.
 - C2 runtime/watchdog startup must pass `tools/c2_worktree_guard.py`, which rejects a foreign repo, dirty tree, wrong branch/upstream/origin, commits ahead of `main`, or runtime-code drift from `main`.

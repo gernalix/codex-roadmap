@@ -17,6 +17,7 @@ SUPERVISOR_OPERATIONS = frozenset({
     'mark_milestone', 'verify_work_item',
     'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item', 'bind_executor',
     'promote_issue', 'discard_issue', 'ensure_issue_triage',
+    'set_execution_override', 'clear_execution_override',
 })
 
 
@@ -56,6 +57,8 @@ def apply(conn, mutation):
         'configure': c2_scheduler.configure,
         'auto_configure': c2_scheduler.configure_auto,
         'schedule': c2_scheduler.schedule,
+        'set_execution_override': c2_scheduler.set_override,
+        'clear_execution_override': c2_scheduler.clear_override,
         'acknowledge': c2_scheduler.acknowledge,
         'executor_started': c2_scheduler.executor_started,
         'bind_executor': c2_scheduler.bind_executor,

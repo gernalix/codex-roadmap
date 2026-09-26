@@ -162,18 +162,6 @@ def _submit_phase(operation: str, arguments: dict[str, Any], phase: str,
     },request_key=key)
     _wait_issue_applied(DEFAULT_REPOSITORY,result["issue_number"],timeout)
     return result
-def _compact(value: object) -> str:
-    return "".join(c for c in str(value or "").lower() if c.isalnum())
-
-
-def _is_external_personalhub(state: dict[str, Any]) -> bool:
-    item=state["item"]
-    repo_tail=str(item.get("repo") or "").rstrip("/").rsplit("/",1)[-1].removesuffix(".git")
-    return (_compact(item.get("project_name"))=="personalhub"
-            or _compact(repo_tail)=="personalhub"
-            or any(str(tag).lower()=="personalhub" for tag in state["tags"]))
-
-
 def _expected_prompt_body(prompt_id: str, text: str) -> str:
     match=re.search(r"(?m)^PROMPT_ID\s*[:=]\s*(\d{6})\s*$",text)
     if match:
@@ -344,8 +332,6 @@ def prepare(spec: dict[str, Any], *, timeout: float=120.0,
             operation,arguments,phase,wid,authority,timeout)
     allocate_worktree=allocate_worktree or _allocate_worktree
     state=refresh(wid)
-    if _is_external_personalhub(state):
-        raise PrepareCodexError("external_personalhub_worker")
     if state["active_runs"]:
         raise PrepareCodexError("active_run_conflict")
     status=str(state["item"].get("status") or "")

@@ -350,8 +350,6 @@ def repair_prompt_materialization(
     ).fetchone()
     if not item or item["status"] != "pending" or not item["prompt_id"]:
         raise C2IntakeError("pending_prompt_backed_work_item_required")
-    if c2_scheduler.external_personalhub(conn, item):
-        raise C2IntakeError("external_personalhub_workload")
     prompt_id = str(item["prompt_id"])
     if not re.search(
         rf"(?m)^PROMPT_ID\s*[:=]\s*{re.escape(prompt_id)}\s*$",

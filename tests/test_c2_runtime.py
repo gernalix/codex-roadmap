@@ -140,14 +140,12 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual([('supervisor_fenced','4')],result['events'])
             self.assertEqual([],launched)
 
-    def test_external_personalhub_spec_is_not_scheduled(self):
+    def test_personalhub_spec_is_scheduled(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=C2IntakeTests().make_cutover_db(Path(tmp))
             with closing(c2_intake._connect(path)) as writer:
                 writer.execute('BEGIN IMMEDIATE')
                 item=c2_intake.add_work_item(writer,title='External PH',repo='gernalix/PersonalHub')
-                # An existing spec from before the PH ownership split must
-                # still be ignored by both runtime and canonical scheduler.
                 writer.execute("INSERT INTO work_item_execution_specs(work_item_id,activity,command_json) VALUES(?,'native','[\"true\"]')",
                                (item['work_item_id'],))
                 writer.commit()
@@ -155,8 +153,24 @@ class RuntimeTests(unittest.TestCase):
             with closing(c2_runtime._open_snapshot(path)) as snapshot:
                 result=c2_runtime.advance(snapshot,submit=lambda op,args,key:submitted.append(op),
                     launch=lambda _:None,launch_notify=lambda _:None,now=1)
-            self.assertEqual(0,result['ready'])
-            self.assertEqual([],submitted)
+            self.assertEqual(1,result['ready'])
+            self.assertEqual(['schedule'],submitted)
+
+    def test_override_readback_and_fallback_event(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                c2_scheduler.set_override(writer,selector='tag',value='focus:ph',now=1)
+                item=c2_intake.add_work_item(writer,title='Normal',repo='other')
+                c2_scheduler.configure(writer,item['work_item_id'],activity='native',command=['true'])
+                writer.commit()
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                result=c2_runtime.advance(snapshot,submit=lambda *_:None,
+                    launch=lambda _:None,launch_notify=lambda _:None,now=2)
+            self.assertEqual('focus:ph',result['execution_override']['value'])
+            self.assertFalse(result['override_draining'])
+            self.assertIn(('execution_override','tag:focus:ph:fallback'),result['events'])
 
     def test_existing_live_worker_unit_is_not_relaunched(self):
         failed_launch=subprocess.CompletedProcess([],1,stderr='Unit already loaded')

@@ -78,8 +78,18 @@ reasoning esatti e un worktree esplicito determina `coding`. Per `gui` e
 `semantic` servono attività esplicita, URL progetto ChatGPT, obiettivo e
 acceptance. Gli item incompleti rimangono in attesa senza spec; si integra
 il contesto con `c2_auto_configure` tramite la stessa mutation Issue. Il
-runtime e lo scheduler escludono gli item PersonalHub gestiti dal worker
-esterno, anche se hanno già una spec.
+runtime e scheduler usano le stesse spec anche per PersonalHub. C2 e' l'unico
+orchestratore PH; un eventuale adapter PH opera solo come executor subordinato
+a C2. Le superfici condivise Pixel/TCL/ADB/release/install vanno dichiarate
+nelle `resources` della spec, usando la stessa chiave per ogni lavoro in
+conflitto; C2 acquisisce lease esclusivi per queste risorse.
+
+**Override temporaneo di esecuzione:** `python3 tools/c2_execution_override.py
+set --selector project|repo|tag --value VALORE`, `read`, `clear`. Set e clear
+passano dal single writer con fencing del supervisor; read usa lo snapshot
+canonico. `drain_first` ammette nuovi dispatch solo nello scope finche' vi e'
+almeno un item scoped runnable con spec eseguibile; poi torna all'ordine
+normale. L'override non cambia `priority:p0/p1/p2` o `sort_order`.
 
 **Preparazione Codex di un intake verificato:** usa unicamente
 `python3 tools/c2_prepare_codex.py --spec <file.json>`. Il file deve fornire
