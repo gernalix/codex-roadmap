@@ -79,6 +79,15 @@ il contesto con `c2_auto_configure` tramite la stessa mutation Issue. Il
 runtime e lo scheduler escludono gli item PersonalHub gestiti dal worker
 esterno, anche se hanno già una spec.
 
+**C2 issue inbox:** se un executor incontra un problema o miglioramento collaterale,
+lo registra subito con `python3 tools/c2_issue_capture.py "descrizione"` usando
+`C2_TASK_ID`/`C2_RUN_ID` del runtime (oppure gli stessi ID come opzioni CLI),
+senza ricerca, deduplica o triage, poi riprende il task originale. Il control
+plane associa run, executor e link della chat; la capture è unfenced e passa
+dal writer unico. Il triage C2 è fenced: dispone ogni riga pending con
+`promote_issue` o `discard_issue`; un match completed è regressione attiva,
+un match attivo riceve evidence sul work item esistente.
+
 
 ### Checklist obbligatoria quando ChatGPT deve “mettere un prompt nella roadmap”
 

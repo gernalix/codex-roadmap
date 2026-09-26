@@ -7,13 +7,15 @@ import c2_cutover_writer
 import c2_supervisor_authority
 import c2_terminal_state_reimport
 import c2_work_item_admin
+import c2_issue_inbox
 
 
 SUPERVISOR_OPERATIONS = frozenset({
     'intake', 'prepare_codex', 'configure', 'auto_configure', 'schedule', 'acknowledge',
     'recover', 'reconcile_run', 'milestone', 'claim_milestone',
     'mark_milestone', 'verify_work_item',
-    'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item',
+    'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item', 'bind_executor',
+    'promote_issue', 'discard_issue', 'ensure_issue_triage',
 })
 
 
@@ -43,6 +45,7 @@ def apply(conn, mutation):
         'auto_configure': c2_scheduler.configure_auto,
         'schedule': c2_scheduler.schedule,
         'acknowledge': c2_scheduler.acknowledge,
+        'bind_executor': c2_scheduler.bind_executor,
         'checkpoint': c2_scheduler.checkpoint,
         'record_checkpoint': c2_scheduler.record_checkpoint,
         'recover': c2_scheduler.recover,
@@ -58,6 +61,10 @@ def apply(conn, mutation):
         'reimport_terminal_state': c2_terminal_state_reimport.apply,
         'repair_prompt_materialization': c2_intake.repair_prompt_materialization,
         'reconcile_item': c2_work_item_admin.reconcile,
+        'capture_issue': c2_issue_inbox.capture,
+        'promote_issue': c2_issue_inbox.promote,
+        'discard_issue': c2_issue_inbox.discard,
+        'ensure_issue_triage': c2_issue_inbox.ensure_triage,
     }
     if action not in operations:
         raise ValueError('unknown_c2_operation:'+action)

@@ -70,10 +70,20 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             prompt=body['body']
         else:
             raise WorkerError('executor_adapter_unavailable:'+executor)
+    prompt += ('\nC2_RUN_ID='+run_id+'\nC2_WORK_ITEM_ID='+str(run['work_item_id'])+
+        '\nIncidental issue: immediately submit only its description with '
+        'python3 tools/c2_issue_capture.py "description". Use C2_TASK_ID/C2_RUN_ID '
+        'from this run context if shell environment is available; otherwise pass '
+        '--task-id and --run-id shown here. Do not investigate or triage it; '
+        'continue the original task immediately.')
     if executor in ('rdc','chatgpt'):
         result=dispatch_browser(run_id=run_id,work_item_id=work_item_id,
             metadata=metadata,prompt=prompt,db_path=db_path,
             receipt=Path(state_root)/f'{run_id}.chatgpt.json')
+        if result.get('chat_url'):
+            submit('bind_executor',{
+                'run_id':run_id,'executor_ref':result['chat_url'],
+                'chat_url':result['chat_url']},'c2-bind-'+run_id)
         if result['phase']=='starting':
             submit('quarantine_browser',{'run_id':run_id,
                 'reason':'Browser delivery uncertain; inspect the existing session before recovery'},
@@ -83,8 +93,11 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
         model_id=resolve_model(rpc,metadata['model'],metadata['reasoning'])
         exact_metadata={**metadata,'model_id':model_id}
         receipt=Path(state_root)/f'{run_id}.codex.json'
+        def bind_thread(thread_id):
+            submit('bind_executor',{'run_id':run_id,'executor_ref':thread_id,
+                'chat_url':'codex://threads/'+thread_id},'c2-bind-'+run_id)
         result=dispatch_codex(rpc,run_id=run_id,metadata=exact_metadata,
-            prompt=prompt,receipt=receipt)
+            prompt=prompt,receipt=receipt,on_thread_created=bind_thread)
         if result['phase']=='terminal':
             result['phase']=result['turn_status']
         if result['phase']=='started':

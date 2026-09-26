@@ -53,7 +53,8 @@ def record_terminal(receipt: Path, *, run_id: str, thread_id: str,
     persist(receipt,state)
 
 
-def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path):
+def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path,
+             on_thread_created=None):
     if not run_id or not prompt or not all(metadata.get(k) for k in ('model','reasoning','worktree')):
         raise ExecutorError('canonical_execution_metadata_required')
     if receipt.exists():
@@ -87,6 +88,8 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path):
             'approvalPolicy':'on-request','approvalsReviewer':'auto_review'})
         _validate_response(response,metadata)
     thread_id=state['thread_id']
+    if on_thread_created is not None:
+        on_thread_created(thread_id)
     if state['phase'] in ('starting','started'):
         # Never resubmit an ambiguously acknowledged turn. Inspect the existing
         # thread; the supervisor can reconcile completion or resume that worker.
