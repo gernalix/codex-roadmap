@@ -19,7 +19,7 @@ import time
 from submit_mutation import submit_document
 from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot
 from c2_mutations import SUPERVISOR_OPERATIONS
-from c2_scheduler import read_override, override_matches
+from c2_scheduler import read_override, override_matches, dispatchable
 
 C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
 REPO_SINGLE_WRITER = Path.home()/'projects/github-autosync/repo_single_writer.py'
@@ -233,7 +233,7 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         key=_key('c2-recover',sorted((r['run_id'],r['lease_until']) for r in expired))
         submit('recover',{},key)
         events.append(('recover',str(len(expired))))
-    ready=[dict(r) for r in db.execute('''SELECT w.work_item_id,w.status,w.sort_order,w.repo,w.project_id,w.project_name,w.updated_at,
+    ready=[dict(r) for r in db.execute('''SELECT w.*,
             s.activity,s.model,s.reasoning,s.worktree,s.project_url,s.resources_json
           FROM v_work_item_runnable w
           JOIN work_item_execution_specs s USING(work_item_id)
@@ -244,7 +244,8 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             ELSE 3 END,
             COALESCE(w.sort_order,2147483647),w.work_item_id''')]
     override=read_override(db)
-    scoped_ready=[r for r in ready if override and override_matches(db,r,override)]
+    scoped_ready=[r for r in ready if override and override_matches(db,r,override)
+                  and dispatchable(db,r)]
     if scoped_ready:
         ready=scoped_ready
     if override:

@@ -172,6 +172,26 @@ class RuntimeTests(unittest.TestCase):
             self.assertFalse(result['override_draining'])
             self.assertIn(('execution_override','tag:focus:ph:fallback'),result['events'])
 
+    def test_override_readback_falls_back_for_leased_device(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                holder=c2_intake.add_work_item(writer,title='Device holder',repo='holder')
+                c2_scheduler.configure(writer,holder['work_item_id'],activity='native',command=['true'],resources=['device:pixel'])
+                c2_scheduler.schedule(writer,event_key='holder',now=1,max_parallel=1)
+                scoped=c2_intake.add_work_item(writer,title='PH',repo='gernalix/PersonalHub')
+                c2_scheduler.configure(writer,scoped['work_item_id'],activity='native',command=['true'],resources=['device:pixel'])
+                other=c2_intake.add_work_item(writer,title='Other',repo='other')
+                c2_scheduler.configure(writer,other['work_item_id'],activity='native',command=['true'])
+                c2_scheduler.set_override(writer,selector='repo',value='gernalix/PersonalHub',now=2)
+                writer.commit()
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                result=c2_runtime.advance(snapshot,submit=lambda *_:None,
+                    launch=lambda _:None,launch_notify=lambda _:None,now=3)
+            self.assertFalse(result['override_draining'])
+            self.assertIn(('execution_override','repo:gernalix/PersonalHub:fallback'),result['events'])
+
     def test_existing_live_worker_unit_is_not_relaunched(self):
         failed_launch=subprocess.CompletedProcess([],1,stderr='Unit already loaded')
         active_unit=subprocess.CompletedProcess([],0)
