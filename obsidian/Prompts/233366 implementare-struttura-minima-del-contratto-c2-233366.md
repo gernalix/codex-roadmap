@@ -1,6 +1,6 @@
 ---
 prompt_id: 233366
-status: pending
+status: running
 project_id: 51
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - executor-contract
   - spec
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/codex-roadmap
 ---
 
 # 233366 · Implementare struttura minima del contratto C2
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
 - **Prompt:** [[../../prompts/implementare-struttura-minima-del-contratto-c2-233366|Apri prompt]]
 - **Primo lancio:** —
