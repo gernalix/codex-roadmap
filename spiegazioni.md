@@ -19,3 +19,4 @@
 | 12 | [[prompts/c2-intake-collisioni-request-key-tra-chat-parall-614593\|C2 intake: collisioni request-key tra chat parallele]] | 614593 | pending | — | — | — | ✅ Sì | — | GPT-5.6 Terra | medium | Prompt |
 | 13 | [[prompts/c2-supervisor-rollover-fallito-degrada-a-human-r-682297\|C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]] | 682297 | pending | — | — | — | ✅ Sì | — | GPT-5.6 Sol | medium | Prompt |
 | 14 | [[prompts/c2-supervisor-backoff-rate-limit-globale-blocca--718501\|C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]] | 718501 | pending | — | — | — | ✅ Sì | — | GPT-5.6 Terra | medium | Prompt |
+| 15 | [[prompts/c2-dashboard-mutation-applicata-ma-invisibile-fi-328371\|C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]] | 328371 | pending | — | — | — | ✅ Sì | — | GPT-5.6 Terra | medium | Prompt |

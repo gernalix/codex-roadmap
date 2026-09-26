@@ -16,3 +16,4 @@
 12. [[prompts/c2-intake-collisioni-request-key-tra-chat-parall-614593|c2-intake-collisioni-request-key-tra-chat-parall-614593]]
 13. [[prompts/c2-supervisor-rollover-fallito-degrada-a-human-r-682297|c2-supervisor-rollover-fallito-degrada-a-human-r-682297]]
 14. [[prompts/c2-supervisor-backoff-rate-limit-globale-blocca--718501|c2-supervisor-backoff-rate-limit-globale-blocca--718501]]
+15. [[prompts/c2-dashboard-mutation-applicata-ma-invisibile-fi-328371|c2-dashboard-mutation-applicata-ma-invisibile-fi-328371]]
