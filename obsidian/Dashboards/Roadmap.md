@@ -4,6 +4,7 @@
 
 ## Lanciabili adesso
 
+- [[obsidian/Prompts/588982 c2-ph-cutover-temporary-execution-override-588982|588982 · C2 PH cutover + temporary execution override]]
 - [[obsidian/Prompts/507648 rimuovere-special-case-ph-e-aggiungere-execution-507648|507648 · Rimuovere special-case PH e aggiungere execution override C2]]
 - [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]]
 - [[obsidian/Prompts/682297 c2-supervisor-rollover-fallito-degrada-a-human-r-682297|682297 · C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]]
