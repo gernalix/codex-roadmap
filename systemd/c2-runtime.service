@@ -1,12 +1,13 @@
 [Unit]
 Description=Advance Checklist 2.0 from the accepted roadmap snapshot
 After=codex-roadmap-sync.service
-ConditionPathExists=/home/daniele/projects/codex-roadmap/roadmap.sqlite
+ConditionPathExists=/home/daniele/.local/share/c2-supervisor/worktree/tools/c2_snapshot_sync.py
 
 [Service]
 Type=oneshot
 EnvironmentFile=%h/.config/c2-supervisor/runtime.env
-ExecStart=/usr/bin/python3 /home/daniele/.local/share/c2-supervisor/worktree/tools/c2_runtime.py --supervisor-id ${C2_SUPERVISOR_ID} --fencing-token ${C2_FENCING_TOKEN}
+ExecStartPre=/usr/bin/python3 /home/daniele/.local/share/c2-supervisor/worktree/tools/c2_snapshot_sync.py
+ExecStart=/usr/bin/python3 /home/daniele/.local/share/c2-supervisor/worktree/tools/c2_runtime.py --db %h/.local/state/c2-supervisor/roadmap.sqlite3 --supervisor-id ${C2_SUPERVISOR_ID} --fencing-token ${C2_FENCING_TOKEN}
 TimeoutStartSec=90
 Nice=5
 
