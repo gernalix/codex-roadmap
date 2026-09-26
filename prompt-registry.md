@@ -4,10 +4,8 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/384495 rimuovere-special-case-ph-e-implementare-overrid-384495\|384495 · Rimuovere special-case PH e implementare override execution canonico]] | running | — | — | — | no | no | — | — | GPT-6 Sol | medium |
+| [[obsidian/Prompts/384495 rimuovere-special-case-ph-e-implementare-overrid-384495\|384495 · Rimuovere special-case PH e implementare override execution canonico]] | running | 2026-09-26T23:27:25Z | 2026-09-26T23:27:25Z | UNKNOWN | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | running | 2026-09-26T22:52:04Z | 2026-09-26T22:52:21Z | UNKNOWN | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/588982 c2-ph-cutover-temporary-execution-override-588982\|588982 · C2 PH cutover + temporary execution override]] | pending | — | — | — | no | no | — | — | GPT-6 Sol | medium |
-| [[obsidian/Prompts/507648 rimuovere-special-case-ph-e-aggiungere-execution-507648\|507648 · Rimuovere special-case PH e aggiungere execution override C2]] | pending | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
@@ -18,9 +16,11 @@
 | [[obsidian/Prompts/718501 c2-supervisor-backoff-rate-limit-globale-blocca--718501\|718501 · C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]] | pending | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/328371 c2-dashboard-mutation-applicata-ma-invisibile-fi-328371\|328371 · C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]] | pending | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/158995 c2-dashboard-rendere-immediatamente-visibili-i-n-158995\|158995 · C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati]] | pending | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/588982 c2-ph-cutover-temporary-execution-override-588982\|588982 · C2 PH cutover + temporary execution override]] | superseded | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1\|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/582408 completare-bootstrap-e-handoff-del-drain-autonom-582408\|582408 · Completare bootstrap e handoff del drain autonomo C2]] | completed | 2026-09-26T22:43:47Z | 2026-09-26T22:45:20Z | PASS | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/232898 completare-preparazione-e-drain-autonomo-c2-fino-232898\|232898 · Completare preparazione e drain autonomo C2 fino a quiescenza]] | superseded | — | — | — | no | no | — | — | GPT-6 Sol | medium |
+| [[obsidian/Prompts/507648 rimuovere-special-case-ph-e-aggiungere-execution-507648\|507648 · Rimuovere special-case PH e aggiungere execution override C2]] | superseded | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | sì | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
