@@ -20,9 +20,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
 - **Prompt:** [[../../completed/checklist2-single-work-item-control-plane-v2|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-25T15:00:35Z
+- **Ultimo lancio:** 2026-09-25T15:00:35Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -40,7 +40,7 @@ C2 usa un solo albero work-item. P0 107210 è operativo: TCL PASS e watcher Pixe
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-25T15:00:35Z | 2026-09-25T15:17:24Z | UNKNOWN | 1009.391 | gpt-6-astra | medium | 51 | 151941 |
 
 ## Analisi ChatGPT
 
