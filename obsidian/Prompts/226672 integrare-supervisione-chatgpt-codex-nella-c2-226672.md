@@ -1,6 +1,6 @@
 ---
 prompt_id: 226672
-status: running
+status: completed
 project_id: 51
 model: GPT-5.6 Sol
 reasoning: medium
@@ -9,15 +9,15 @@ tags:
   - priority:p1
   - supervision
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/codex-roadmap
 ---
 
 # 226672 · Integrare supervisione ChatGPT/Codex nella C2
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
-- **Prompt:** [[../../prompts/integrare-supervisione-chatgpt-codex-nella-c2-226672|Apri prompt]]
+- **Prompt:** [[../../completed/integrare-supervisione-chatgpt-codex-nella-c2-226672|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
