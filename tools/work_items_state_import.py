@@ -22,6 +22,12 @@ TASK_ID_RE = re.compile(r"(?m)^TASK_ID\s*[:=]\s*([^\s]+)\s*$")
 HEADING_RE = re.compile(r"^(#{2,3})\s+(.+?)\s*$")
 CHECK_RE = re.compile(r"^\s*[-*]\s*\[([ xX])\]\s+(.+?)\s*$")
 BULLET_RE = re.compile(r"^\s*[-*]\s+(.+?)\s*$")
+NO_REMAINING_PREFIX_RE = re.compile(
+    r"^(?:none(?:\s+for\s+[\w:-]+|\s+within\s+the\s+stated\s+acceptance\s+criteria)?"
+    r"|no\s+(?:[\w:-]+\s+)?work\s+remains"
+    r"|completed)\s*(?:[.!?]\s*|$)",
+    re.IGNORECASE,
+)
 
 
 @dataclass
@@ -126,6 +132,27 @@ def _section_items(text: str) -> list[str]:
         items.append(_norm(" ".join(paragraph)))
     return [item for item in items if item]
 
+
+def _remaining_items(text: str) -> list[str]:
+    actionable: list[str] = []
+    for item in _section_items(text):
+        # A checkpoint can put a terminal declaration and a genuine handoff in
+        # the same paragraph. Keep the handoff, never the declaration itself.
+        while match := NO_REMAINING_PREFIX_RE.match(item):
+            item = item[match.end():].strip()
+        if not item or re.search(r"\bremains? complete\.?$", item, re.IGNORECASE):
+            continue
+        if re.match(
+            r"^(?:optional future work\b|future worker-specific failures\b|"
+            r"no further action in this task\b|no .+ action required\b)",
+            item,
+            re.IGNORECASE,
+        ):
+            continue
+        if item:
+            actionable.append(item)
+    return actionable
+
 def _none_blocker(text: str) -> bool:
     value = _norm(text).lower().strip(" .—-")
     return (
@@ -140,7 +167,7 @@ def _derive_task_status(parsed: ParsedState) -> str:
     blockers = parsed.sections.get("Blockers", "")
     if blockers and not _none_blocker(blockers):
         return "blocked"
-    remaining = _section_items(parsed.sections.get("Remaining", ""))
+    remaining = _remaining_items(parsed.sections.get("Remaining", ""))
     if remaining:
         return "running"
     completed = _section_items(parsed.sections.get("Completed", ""))
@@ -309,6 +336,71 @@ def import_state_file(
         (owner_id, source_file, source_sha),
     ).fetchone()
     if existing:
+        # Older imports may have rendered terminal prose as runnable children.
+        # Correct that projection without adding a second checkpoint for the
+        # same immutable source file.
+        remaining_items = _remaining_items(parsed.sections.get("Remaining", ""))
+        valid_ids = {
+            _stable_id(owner_id, "step", "Remaining", text)
+            for text in remaining_items
+        }
+        rows = conn.execute(
+            """SELECT work_item_id FROM work_items
+               WHERE parent_id=? AND source_kind='task_state'
+                 AND source_ref=? AND status='pending'""",
+            (owner_id, f"{source_file}#remaining"),
+        ).fetchall()
+        stale_ids = [str(row[0]) for row in rows if str(row[0]) not in valid_ids]
+        owner = conn.execute(
+            "SELECT * FROM work_items WHERE work_item_id=?", (owner_id,)
+        ).fetchone()
+        assert owner is not None
+        plan_texts = {
+            _norm(text).lower()
+            for _, phase_items in parsed.plan_phases
+            for _, text in phase_items
+        }
+        for index, item in enumerate(remaining_items):
+            if _norm(item).lower() in plan_texts:
+                continue
+            step_id = _stable_id(owner_id, "step", "Remaining", item)
+            if conn.execute(
+                "SELECT 1 FROM work_items WHERE work_item_id=?", (step_id,)
+            ).fetchone():
+                continue
+            _upsert_child(
+                conn,
+                work_item_id=step_id,
+                parent_id=owner_id,
+                kind="step",
+                title=item,
+                status="pending",
+                sort_order=100000 + index,
+                source_ref=f"{source_file}#remaining",
+                inherited=owner,
+                actionable=True,
+            )
+        for stale_id in stale_ids:
+            conn.execute(
+                "UPDATE work_items SET status='superseded',updated_at=? WHERE work_item_id=?",
+                (_utc_now(), stale_id),
+            )
+        previous_remaining = conn.execute(
+            "SELECT remaining_json FROM work_item_checkpoints WHERE checkpoint_id=?",
+            (existing[0],),
+        ).fetchone()[0]
+        if json.loads(previous_remaining or "[]") != remaining_items:
+            conn.execute(
+                """UPDATE work_item_checkpoints SET remaining_json=?
+                   WHERE checkpoint_id=?""",
+                (json.dumps(remaining_items, ensure_ascii=False), existing[0]),
+            )
+        if (stale_ids or json.loads(previous_remaining or "[]") != remaining_items) and not parsed.prompt_id:
+            conn.execute(
+                """UPDATE work_items SET status=?,updated_at=?
+                   WHERE work_item_id=? AND source_kind='task_state'""",
+                (_derive_task_status(parsed), _utc_now(), owner_id),
+            )
         return {
             "status": "ok",
             "idempotent": True,
@@ -361,7 +453,7 @@ def import_state_file(
     assert owner is not None
 
     completed_items = _section_items(parsed.sections.get("Completed", ""))
-    remaining_items = _section_items(parsed.sections.get("Remaining", ""))
+    remaining_items = _remaining_items(parsed.sections.get("Remaining", ""))
     evidence_items = _section_items(parsed.sections.get("Evidence", ""))
     conn.execute(
         """INSERT INTO work_item_checkpoints(
