@@ -21,3 +21,4 @@
 | 14 | [[prompts/c2-supervisor-backoff-rate-limit-globale-blocca--718501\|C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]] | 718501 | pending | — | — | — | ✅ Sì | — | GPT-5.6 Terra | medium | Prompt |
 | 15 | [[prompts/c2-dashboard-mutation-applicata-ma-invisibile-fi-328371\|C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]] | 328371 | pending | — | — | — | ✅ Sì | — | GPT-5.6 Terra | medium | Prompt |
 | 16 | [[prompts/c2-dashboard-rendere-immediatamente-visibili-i-n-158995\|C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati]] | 158995 | pending | — | — | — | ✅ Sì | — | GPT-5.6 Terra | medium | Prompt |
+| 17 | [[prompts/conservare-e-confrontare-lo-storico-dei-test-adb-875575\|Conservare e confrontare lo storico dei test ADB]] | 875575 | pending | codex-roadmap | — | — | ✅ Sì | — | GPT-5.6 Sol | medium | Prompt |
