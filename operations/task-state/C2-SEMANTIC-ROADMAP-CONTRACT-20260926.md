@@ -14,5 +14,5 @@ Current step: complete.
 Verified facts: C2_SEMANTIC_REORGANIZATION.md is the sole detailed contract and contains the reusable prompt; README and AGENTS only point to it. Task-state discovery capture now routes to Inbox rather than forcing executor-side triage.
 Blocker: none.
 Acceptance: a user can paste one standard prompt that forces mechanical facts to scripts, semantic judgments to AI, all canonical mutations to writer, and stops after roadmap reorganization rather than task execution.
-Evidence: git diff --check PASS; commit 26295637 pushed to origin/feature/c2-executor-result-contract; protocol drift captured as Inbox #1322; guard pack-refs noise captured as Inbox #1324.
-Next action: none.
+Evidence: git diff --check PASS; implementation commit 26295637 and checkpoint de2e6c5f pushed; PR #1325 opened to main; protocol drift captured as Inbox #1322; guard pack-refs noise captured as Inbox #1324.
+Next action: repository CI/integrator owns PR #1325; no model polling.
