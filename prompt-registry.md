@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/553232 personalhub-c2-final-pixel\|553232 · Completa PersonalHub C2 e consegna finale Pixel]] | running | — | — | — | no | no | — | PersonalHub | — | — |
 | [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-6 Luna | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-6 Luna | medium |
@@ -403,3 +402,4 @@
 | [[obsidian/Prompts/422308 telegram-notification-history-fedora-collector-v1\|422308 · Archiviare automaticamente le notifiche Telegram per ridurre il rumore]] | blocked | 2026-09-24T10:16:14Z | 2026-09-24T10:33:16Z | BLOCKED | sì | sì | — | Fedora / Telegram notification hygiene | GPT-6 Luna | medium |
 | [[obsidian/Prompts/333860 telegram-history-runtime-closure-v1\|333860 · Chiudere il collector Telegram dopo autorizzazione e collaudo]] | superseded | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/966124 telegram-history-runtime-closure-v2\|966124 · Chiudere il collector Telegram dopo autorizzazione e collaudo]] | completed | — | — | PASS | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/553232 personalhub-c2-final-pixel\|553232 · Completa PersonalHub C2 e consegna finale Pixel]] | completed | — | — | PASS | no | no | — | PersonalHub | — | — |

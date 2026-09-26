@@ -1,20 +1,20 @@
 ---
 prompt_id: 553232
-status: running
+status: completed
 project_id: —
 model: —
 reasoning: —
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/personalhub
 ---
 
 # 553232 · Completa PersonalHub C2 e consegna finale Pixel
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
-- **Prompt:** [[../../prompts/553232-personalhub-c2-final-pixel|Apri prompt]]
+- **Prompt:** [[../../completed/553232-personalhub-c2-final-pixel|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

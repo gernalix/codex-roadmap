@@ -5,7 +5,6 @@ tags:
 
 # PersonalHub
 
-- [[obsidian/Prompts/553232 personalhub-c2-final-pixel|553232 · Completa PersonalHub C2 e consegna finale Pixel]] · `running`
 - [[obsidian/Prompts/518420 personalhub-v55-full-stabilization-data-runtime-qa|518420 · Stabilizzare v55: runtime, dati, Settings e QA reale]] · `completed`
 - [[obsidian/Prompts/514458 personalhub-pr24-pr23-final-release|514458 · Integra PR 24 e 23 e crea release finale PersonalHub]] · `completed`
 - [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation|886414 · PersonalHub 100% capsule isolation — validazione locale]] · `superseded`
@@ -22,3 +21,4 @@ tags:
 - [[obsidian/Prompts/637985 personalhub-single-canonical-db-export|637985 · Mantenere un solo DB auto-esportato PersonalHub]] · `completed`
 - [[obsidian/Prompts/491628 personalhub-android17-restricted-overlay-finalize|491628 · Finalizzare permesso overlay Android 17 di PersonalHub]] · `completed`
 - [[obsidian/Prompts/532918 personalhub-v53-historical-blocked-reconcile-v1|532918 · Riconciliare 583742 con il retry 155893 già PASS]] · `superseded`
+- [[obsidian/Prompts/553232 personalhub-c2-final-pixel|553232 · Completa PersonalHub C2 e consegna finale Pixel]] · `completed`
