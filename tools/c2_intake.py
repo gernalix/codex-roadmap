@@ -240,10 +240,18 @@ def prepare_codex(
         project_id=project_id,
         parent_prompt_id=parent_prompt_id,
     )
+    prompt_id_match = re.search(
+        r"(?m)^PROMPT_ID\s*[:=]\s*(\d{6})\s*$",
+        prompt_text,
+    )
+    if prompt_id_match and prompt_id_match.group(1) != str(prompt_id):
+        raise C2IntakeError("prompt_text_prompt_id_mismatch")
+    if not prompt_id_match:
+        prompt_text = f"PROMPT_ID={prompt_id}\n\n{prompt_text.lstrip()}"
     digest = roadmap_db.materialization_hash(prompt_text)
     prompt_type = "Goal" if item["kind"] == "goal" else "Prompt"
     slug = f"{_slug(str(item['title']))}-{prompt_id}"
-    current_path = f"prompts/{prompt_id}-{_slug(str(item['title']))}.md"
+    current_path = f"prompts/{slug}.md"
     now = c2_identity.utc_now()
     prompt_surface = conn.execute(
         "SELECT type FROM sqlite_master WHERE name='prompts'"
@@ -326,6 +334,58 @@ def prepare_codex(
         "prompt_type": prompt_type,
         **({"execution_readiness": execution_readiness} if execution_readiness else {}),
     }
+
+
+def repair_prompt_materialization(
+    conn: sqlite3.Connection,
+    work_item_id: str,
+    *,
+    expected_sha256: str,
+    prompt_text: str,
+) -> dict[str, str]:
+    """Fenced repair for a pending C2 prompt whose canonical body is malformed."""
+    _require_c2_schema(conn)
+    item = conn.execute(
+        "SELECT * FROM work_items WHERE work_item_id=?", (work_item_id,)
+    ).fetchone()
+    if not item or item["status"] != "pending" or not item["prompt_id"]:
+        raise C2IntakeError("pending_prompt_backed_work_item_required")
+    if c2_scheduler.external_personalhub(conn, item):
+        raise C2IntakeError("external_personalhub_workload")
+    prompt_id = str(item["prompt_id"])
+    if not re.search(
+        rf"(?m)^PROMPT_ID\s*[:=]\s*{re.escape(prompt_id)}\s*$",
+        prompt_text,
+    ):
+        raise C2IntakeError("canonical_prompt_id_header_required")
+    c2_scheduler.install_schema(conn)
+    if conn.execute(
+        """SELECT 1 FROM work_item_runs
+           WHERE work_item_id=? AND state IN ('claimed','running','recovering')""",
+        (work_item_id,),
+    ).fetchone():
+        raise C2IntakeError("active_run_blocks_materialization_repair")
+    row = conn.execute(
+        "SELECT materialization_sha256 FROM prompts WHERE prompt_id=?", (prompt_id,)
+    ).fetchone()
+    if not row or str(row["materialization_sha256"] or "") != str(expected_sha256):
+        raise C2IntakeError("materialization_sha256_mismatch")
+    roadmap_db.set_prompt_text(
+        conn,
+        prompt_id,
+        prompt_text,
+        actor="c2-control",
+        note="fenced C2 materialization repair",
+    )
+    updated = conn.execute(
+        "SELECT materialization_sha256 FROM prompts WHERE prompt_id=?", (prompt_id,)
+    ).fetchone()
+    return {
+        "work_item_id": work_item_id,
+        "prompt_id": prompt_id,
+        "materialization_sha256": str(updated["materialization_sha256"]),
+    }
+
 
 def show_work_item(conn: sqlite3.Connection, work_item_id: str) -> dict[str, Any]:
     row = conn.execute(

@@ -9,4 +9,4 @@
 5. [[prompts/eboks-full-export-resume-after-mitid-v1|eboks-full-export-resume-after-mitid-v1]]
 6. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 7. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
-8. [[prompts/226672-integrare-supervisione-chatgpt-codex-nella-c2|integrare-supervisione-chatgpt-codex-nella-c2-226672]]
+8. [[prompts/integrare-supervisione-chatgpt-codex-nella-c2-226672|integrare-supervisione-chatgpt-codex-nella-c2-226672]]
