@@ -24,6 +24,19 @@ class RPC:
 
 
 class CodexExecutorTests(unittest.TestCase):
+    def test_thread_binding_precedes_first_turn_and_failure_blocks_turn(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            rpc=RPC()
+            metadata={'model':'exact','reasoning':'medium','worktree':'/tmp/worktree'}
+            def bind(thread_id):
+                self.assertEqual('thread-1',thread_id)
+                self.assertNotIn('turn/start',[method for method,_ in rpc.calls])
+                raise RuntimeError('binding unavailable')
+            with self.assertRaisesRegex(RuntimeError,'binding unavailable'):
+                dispatch(rpc,run_id='run-1',metadata=metadata,prompt='Canonical body',
+                    receipt=Path(tmp)/'receipt.json',on_thread_created=bind)
+            self.assertNotIn('turn/start',[method for method,_ in rpc.calls])
+
     def test_goal_and_metadata_are_structured_and_exact(self):
         with tempfile.TemporaryDirectory() as tmp:
             rpc=RPC(); metadata={'model':'exact','reasoning':'medium','worktree':'/tmp/worktree','goal_mode':True}

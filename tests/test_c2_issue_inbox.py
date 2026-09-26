@@ -4,12 +4,15 @@ import sys
 import tempfile
 import time
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
 import c2_intake
 import c2_issue_inbox
 import c2_scheduler
+import c2_issue_capture
+import c2_runtime
 import c2_supervisor_authority
 import roadmap_db
 from test_c2_intake import C2IntakeTests
@@ -235,6 +238,114 @@ class IssueInboxTests(unittest.TestCase):
                         (issue_id,),
                     ).fetchone()[0],
                 )
+            finally:
+                conn.close()
+
+    def test_capture_cli_uses_only_description_and_run_environment(self):
+        submitted = []
+        with patch.dict('os.environ', {'C2_TASK_ID': 'wi:known', 'C2_RUN_ID': 'run-known'}, clear=True), \
+             patch('sys.argv', ['c2_issue_capture.py', 'Incidental failure']), \
+             patch.object(c2_issue_capture, 'submit_document',
+                          side_effect=lambda doc, **kw: submitted.append((doc, kw)) or {'status': 'queued'}):
+            self.assertEqual(0, c2_issue_capture.main())
+        args = submitted[0][0]['operations'][0]['arguments']
+        self.assertEqual('Incidental failure', args['description'])
+        self.assertEqual('wi:known', args['task_id'])
+        self.assertEqual('run-known', args['run_id'])
+        self.assertNotIn('repo', args)
+        self.assertNotIn('code_location', args)
+
+    def test_codex_binding_is_idempotent_and_conflicts_fail_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute('BEGIN IMMEDIATE')
+                item = c2_intake.add_work_item(conn, title='Codex source')
+                conn.execute('''INSERT INTO work_item_runs
+                  (run_id,work_item_id,event_key,attempt,executor,state,lease_until,
+                   worker_ref,checkpoint_commit,metadata_json,created_at)
+                  VALUES(?,?,?,1,'codex','running',1000,NULL,NULL,'{}',1)''',
+                  ('run-codex', item['work_item_id'], 'test'))
+                issue = c2_issue_inbox.capture(conn, description='Found in thread', run_id='run-codex')
+                self.assertIsNone(issue['chat_url'])
+                first = c2_scheduler.bind_executor(conn, 'run-codex',
+                    executor_ref='thread-123', chat_url='codex://threads/thread-123', now=2)
+                self.assertEqual(first, c2_scheduler.bind_executor(conn, 'run-codex',
+                    executor_ref='thread-123', chat_url='codex://threads/thread-123', now=3))
+                self.assertEqual('codex://threads/thread-123', conn.execute(
+                    'SELECT chat_url FROM issue_inbox WHERE issue_id=?', (issue['issue_id'],)).fetchone()[0])
+                with self.assertRaisesRegex(c2_scheduler.SchedulingError, 'executor_binding_conflict'):
+                    c2_scheduler.bind_executor(conn, 'run-codex', executor_ref='other',
+                                               chat_url='codex://threads/other')
+            finally:
+                conn.close()
+
+    def test_one_triage_and_new_batch_after_terminal(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute('BEGIN IMMEDIATE')
+                c2_issue_inbox.capture(conn, description='First')
+                url = c2_runtime.C2_TRIAGE_PROJECT_URL
+                first = c2_issue_inbox.ensure_triage(conn, project_url=url)
+                self.assertEqual('created', first['state'])
+                self.assertEqual(first['work_item_id'], c2_issue_inbox.ensure_triage(
+                    conn, project_url=url)['work_item_id'])
+                conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?",
+                             (first['work_item_id'],))
+                second = c2_issue_inbox.ensure_triage(conn, project_url=url)
+                self.assertEqual('created', second['state'])
+                self.assertNotEqual(first['work_item_id'], second['work_item_id'])
+                self.assertEqual('semantic', conn.execute(
+                    'SELECT activity FROM work_item_execution_specs WHERE work_item_id=?',
+                    (second['work_item_id'],)).fetchone()[0])
+            finally:
+                conn.close()
+
+    def test_runtime_requests_atomic_triage_once_per_nonterminal_item(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute('BEGIN IMMEDIATE')
+                c2_issue_inbox.capture(conn, description='Needs triage')
+                calls = []
+                def submit(op, arguments, key):
+                    calls.append((op, arguments, key))
+                    if op == 'ensure_issue_triage':
+                        c2_issue_inbox.ensure_triage(conn, **arguments)
+                c2_runtime.advance(conn, submit=submit, launch=lambda _: None,
+                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
+                self.assertEqual('ensure_issue_triage', calls[0][0])
+                c2_runtime.advance(conn, submit=submit, launch=lambda _: None,
+                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
+                self.assertEqual(1, sum(op == 'ensure_issue_triage' for op, _, _ in calls))
+                first_key = calls[0][2]
+                triage_id = conn.execute("""SELECT w.work_item_id FROM work_items w
+                    JOIN work_item_tags t USING(work_item_id)
+                    WHERE t.tag='c2:issue-triage'""").fetchone()[0]
+                conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?", (triage_id,))
+                c2_runtime.advance(conn, submit=submit, launch=lambda _: None,
+                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
+                triage_calls = [entry for entry in calls if entry[0] == 'ensure_issue_triage']
+                self.assertEqual(2, len(triage_calls))
+                self.assertNotEqual(first_key, triage_calls[1][2])
+            finally:
+                conn.close()
+
+    def test_triage_cannot_finish_while_pending_rows_remain(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute('BEGIN IMMEDIATE')
+                c2_issue_inbox.capture(conn, description='Unresolved')
+                item = c2_issue_inbox.ensure_triage(
+                    conn, project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
+                run = c2_scheduler.schedule(conn, event_key='triage-schedule', now=10)[0]
+                c2_scheduler.acknowledge(conn, run['run_id'], worker_ref='c2-run:'+run['run_id'],
+                    metadata=run['metadata'], now=11)
+                with self.assertRaisesRegex(c2_scheduler.SchedulingError, 'issue_triage_pending_rows'):
+                    c2_scheduler.finish_browser_work_item(conn, item['work_item_id'],
+                        evidence=['claimed complete'])
             finally:
                 conn.close()
 

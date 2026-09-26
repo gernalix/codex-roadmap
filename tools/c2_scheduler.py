@@ -333,8 +333,8 @@ def bind_executor(conn, run_id, *, executor_ref, chat_url, now=None):
     install_schema(conn)
     now=time.time() if now is None else now
     run=conn.execute('SELECT * FROM work_item_runs WHERE run_id=?',(run_id,)).fetchone()
-    if not run or run['state'] not in ('claimed','running','recovering'):
-        raise SchedulingError('run_not_active')
+    if not run:
+        raise SchedulingError('run_not_found')
     executor_ref=str(executor_ref or '').strip()
     chat_url=str(chat_url or '').strip()
     if not executor_ref or not chat_url:
@@ -356,10 +356,26 @@ def bind_executor(conn, run_id, *, executor_ref, chat_url, now=None):
                 or str(prior['work_item_id'])!=str(run['work_item_id'])):
             raise SchedulingError('executor_binding_conflict')
         return dict(prior)
-    conn.execute('''INSERT INTO work_item_executor_bindings(
+    if run['state'] not in ('claimed','running','recovering'):
+        raise SchedulingError('run_not_active')
+    if conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='issue_inbox'").fetchone():
+        conflict=conn.execute('''SELECT 1 FROM issue_inbox WHERE origin_run_id=?
+          AND ((chat_url IS NOT NULL AND chat_url<>?) OR
+               (executor_ref IS NOT NULL AND executor_ref<>?)) LIMIT 1''',
+          (run_id,chat_url,executor_ref)).fetchone()
+        if conflict:
+            raise SchedulingError('executor_binding_conflict')
+    try:
+        conn.execute('''INSERT INTO work_item_executor_bindings(
           run_id,work_item_id,executor,executor_ref,chat_url,bound_at
         ) VALUES(?,?,?,?,?,?)''',
         (run_id,run['work_item_id'],executor,executor_ref,chat_url,now))
+    except sqlite3.IntegrityError as exc:
+        raise SchedulingError('executor_binding_conflict') from exc
+    if conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='issue_inbox'").fetchone():
+        conn.execute('''UPDATE issue_inbox SET executor=?,executor_ref=?,chat_url=?
+          WHERE origin_run_id=? AND chat_url IS NULL''',
+          (executor,executor_ref,chat_url,run_id))
     return dict(conn.execute('SELECT * FROM work_item_executor_bindings WHERE run_id=?',(run_id,)).fetchone())
 
 
@@ -439,6 +455,9 @@ def finish_browser_work_item(conn, work_item_id, *, evidence):
         return
     if row['state'] not in ('running','recovering') or row['status']!='running':
         raise SchedulingError('run_not_active')
+    if conn.execute("SELECT 1 FROM work_item_tags WHERE work_item_id=? AND tag='c2:issue-triage'", (work_item_id,)).fetchone():
+        if conn.execute("SELECT 1 FROM issue_inbox WHERE state='pending' LIMIT 1").fetchone():
+            raise SchedulingError('issue_triage_pending_rows')
     cp=conn.execute('''SELECT remaining_json,blocker,evidence_json
       FROM work_item_checkpoints WHERE work_item_id=? AND source_file='c2-writer'
       ORDER BY checkpoint_id DESC LIMIT 1''',(work_item_id,)).fetchone()

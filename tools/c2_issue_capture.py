@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import getpass
 import json
 import os
 import uuid
@@ -36,8 +35,6 @@ def _context(args) -> dict[str, str]:
     ):
         if value:
             result[key] = value
-    if not result and not task_id and not run_id:
-        result["executor_ref"] = "local:" + getpass.getuser()
     return result
 
 

@@ -21,6 +21,8 @@ from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_
 from c2_mutations import SUPERVISOR_OPERATIONS
 from c2_scheduler import external_personalhub
 
+C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
+
 
 class RuntimeErrorC2(RuntimeError):
     pass
@@ -138,46 +140,18 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             return {'events':[('renew_supervisor',str(authority['fencing_token']))],
                     'ready':0,'active':0}
     if pending_issue_inbox and triage_project_url:
-        triage = db.execute(
-            """SELECT w.work_item_id,w.status
-               FROM work_items w
-               JOIN work_item_tags t USING(work_item_id)
-               WHERE t.tag='c2:issue-triage'
-                 AND w.status NOT IN ('completed','failed','cancelled','superseded','waived')
-               ORDER BY w.created_at,w.work_item_id
-               LIMIT 1"""
-        ).fetchone()
-        if triage is None:
+        triage = db.execute("""SELECT w.work_item_id,w.status FROM work_items w
+            JOIN work_item_tags t USING(work_item_id) WHERE t.tag='c2:issue-triage'
+            ORDER BY w.created_at DESC,w.work_item_id DESC LIMIT 1""").fetchone()
+        if triage is None or triage['status'] in ('completed','failed','cancelled','superseded','waived'):
             pending_ids = [
                 str(row[0]) for row in db.execute(
                     "SELECT issue_id FROM issue_inbox WHERE state='pending' ORDER BY observed_at_ms,issue_id"
                 )
             ]
-            key=_key('c2-issue-triage-intake',pending_ids)
-            submit('intake',{
-                'title':'Triage C2 issue inbox',
-                'objective':(
-                    'Process every pending C2 issue-inbox observation. For each row, inspect only '
-                    'the roadmap/repository evidence needed to decide whether it is still relevant. '
-                    'Promote relevant observations into the logically correct active work item or a '
-                    'new task; discard only genuinely irrelevant or obsolete observations. A fresh '
-                    'observation matching completed/fixed work is a regression/reopen and must be '
-                    'promoted, never discarded as already fixed. Continue until no pending rows remain.'
-                ),
-                'acceptance':[
-                    'Every pending issue-inbox row observed at task start is promoted or discarded with a reason.',
-                    'Relevant duplicates attach to existing active work instead of creating duplicate tasks.',
-                    'Fresh reproductions of completed fixes return to active work as regressions.',
-                ],
-                'tags':['c2:issue-triage','priority:p0'],
-                'next_action':'Read pending issue_inbox rows from the canonical snapshot and triage them one by one.',
-                'execution':{
-                    'activity':'semantic',
-                    'project_url':triage_project_url,
-                    'resources':['c2:issue-triage'],
-                    'max_attempts':3,
-                },
-            },key)
+            key=_key('c2-issue-triage-intake',{'pending':pending_ids,
+                'previous':str(triage['work_item_id']) if triage else None})
+            submit('ensure_issue_triage',{'project_url':triage_project_url},key)
             events.append(('issue_triage_intake',str(pending_issue_inbox)))
             return {'events':events,'ready':0,'active':0,
                     'issue_inbox_pending':pending_issue_inbox}
@@ -280,6 +254,7 @@ def main():
         with closing(_open_snapshot(args.db)) as db:
             result=advance(db,submit=guarded_submit,launch=guarded_launch,
                            launch_notify=guarded_notify,max_parallel=args.max_parallel,
+                           triage_project_url=C2_TRIAGE_PROJECT_URL,
                            supervisor_authority={
                                'supervisor_id':current['supervisor_id'],
                                'fencing_token':current['fencing_token'],

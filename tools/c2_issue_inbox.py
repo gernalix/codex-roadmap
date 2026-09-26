@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS issue_inbox (
   description TEXT NOT NULL,
   repo TEXT,
   code_location TEXT,
+  executor TEXT,
   executor_ref TEXT,
   chat_url TEXT,
   origin_work_item_id TEXT REFERENCES work_items(work_item_id) ON DELETE RESTRICT,
@@ -58,6 +59,7 @@ def install_schema(conn: sqlite3.Connection) -> None:
     columns = {str(row[1]) for row in conn.execute("PRAGMA table_info(issue_inbox)")}
     for column, ddl in (
         ("chat_url", "TEXT"),
+        ("executor", "TEXT"),
         ("origin_work_item_id", "TEXT REFERENCES work_items(work_item_id) ON DELETE RESTRICT"),
         ("origin_run_id", "TEXT REFERENCES work_item_runs(run_id) ON DELETE RESTRICT"),
     ):
@@ -112,7 +114,7 @@ def _origin_context(
     *,
     task_id: str | None,
     run_id: str | None,
-) -> tuple[str | None, str | None, str | None, str | None]:
+) -> tuple[str | None, str | None, str | None, str | None, str | None]:
     item = _work_item_for_task_id(conn, task_id)
     run = None
     if run_id:
@@ -152,6 +154,7 @@ def _origin_context(
     return (
         str(item["work_item_id"]) if item else None,
         str(run["run_id"]) if run else None,
+        str(run["executor"]) if run else None,
         str(binding["executor_ref"]) if binding else None,
         str(binding["chat_url"]) if binding else None,
     )
@@ -173,9 +176,13 @@ def capture(
     """Capture observed facts plus O(1) execution identity; never semantically scan or deduplicate."""
     _transaction(conn)
     install_schema(conn)
-    origin_item, origin_run, bound_executor, bound_url = _origin_context(
+    origin_item, origin_run, executor, bound_executor, bound_url = _origin_context(
         conn, task_id=task_id, run_id=run_id
     )
+    if bound_executor and _optional_text(executor_ref) not in (None, bound_executor):
+        raise IssueInboxError("executor_ref_binding_conflict")
+    if bound_url and _optional_text(chat_url) not in (None, bound_url):
+        raise IssueInboxError("chat_url_binding_conflict")
     executor_ref = _optional_text(executor_ref) or bound_executor
     chat_url = _optional_text(chat_url) or bound_url
     observed = int(time.time() * 1000) if observed_at_ms is None else int(observed_at_ms)
@@ -184,14 +191,15 @@ def capture(
     identity = _issue_id(issue_id)
     conn.execute(
         """INSERT INTO issue_inbox(
-             issue_id,description,repo,code_location,executor_ref,chat_url,
+             issue_id,description,repo,code_location,executor,executor_ref,chat_url,
              origin_work_item_id,origin_run_id,observed_at_ms,state,created_at
-           ) VALUES(?,?,?,?,?,?,?,?,?,'pending',?)""",
+           ) VALUES(?,?,?,?,?,?,?,?,?,?,'pending',?)""",
         (
             identity,
             _required_text(description, "description"),
             _optional_text(repo),
             _optional_text(code_location),
+            executor,
             _optional_text(executor_ref),
             _optional_text(chat_url),
             origin_item,
@@ -228,6 +236,7 @@ def _record_evidence(conn: sqlite3.Connection, work_item_id: str, issue: sqlite3
         "description": issue["description"],
         "repo": issue["repo"],
         "code_location": issue["code_location"],
+        "executor": issue["executor"],
         "executor_ref": issue["executor_ref"],
         "chat_url": issue["chat_url"],
         "origin_work_item_id": issue["origin_work_item_id"],
@@ -373,3 +382,39 @@ def discard(
         (matched_work_item_id, reason, triaged_by, triaged_at, issue_id),
     )
     return {"issue_id": issue_id, "state": "discarded", "matched_work_item_id": matched_work_item_id}
+
+
+def ensure_triage(conn: sqlite3.Connection, *, project_url: str) -> dict:
+    """Atomically create one runnable triage item for the current pending batch."""
+    _transaction(conn)
+    install_schema(conn)
+    if not re.fullmatch(r"https://chatgpt\.com/g/g-p-[a-z0-9]+/project/?", project_url):
+        raise IssueInboxError("explicit_c2_project_url_required")
+    pending = conn.execute("SELECT COUNT(*) FROM issue_inbox WHERE state='pending'").fetchone()[0]
+    if not pending:
+        return {"state": "empty"}
+    active = conn.execute("""SELECT w.work_item_id FROM work_items w
+        JOIN work_item_tags t USING(work_item_id)
+        WHERE t.tag='c2:issue-triage'
+          AND w.status NOT IN ('completed','failed','cancelled','superseded','waived')
+        ORDER BY w.created_at,w.work_item_id LIMIT 1""").fetchone()
+    if active:
+        return {"state": "existing", "work_item_id": active[0]}
+    item = c2_intake.add_work_item(
+        conn, title="Triage C2 issue inbox",
+        objective=(
+            "Process every pending issue_inbox row. Use the canonical snapshot to identify "
+            "related roadmap/repository work. Submit c2_promote_issue or c2_discard_issue "
+            "through tools/c2_control.py with the current supervisor ID and fencing token. "
+            "For active matches, promote into the existing work item with evidence. "
+            "For completed matches, promote a regression successor; never discard as fixed. "
+            "For irrelevant or obsolete issues, discard with a concrete reason. "
+            "Read pending rows again before completion and finish only when none remain."
+        ),
+        acceptance=["No pending issue_inbox rows remain at completion"],
+        next_action="Read issue_inbox pending rows; apply one fenced disposition per row.",
+        tags=["c2:issue-triage", "priority:p0"],
+        execution={"activity": "semantic", "project_url": project_url,
+                   "resources": ["c2:issue-triage"], "max_attempts": 3},
+    )
+    return {"state": "created", "work_item_id": item["work_item_id"], "pending": pending}

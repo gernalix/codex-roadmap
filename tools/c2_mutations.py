@@ -15,7 +15,7 @@ SUPERVISOR_OPERATIONS = frozenset({
     'recover', 'reconcile_run', 'milestone', 'claim_milestone',
     'mark_milestone', 'verify_work_item',
     'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item', 'bind_executor',
-    'promote_issue', 'discard_issue',
+    'promote_issue', 'discard_issue', 'ensure_issue_triage',
 })
 
 
@@ -64,6 +64,7 @@ def apply(conn, mutation):
         'capture_issue': c2_issue_inbox.capture,
         'promote_issue': c2_issue_inbox.promote,
         'discard_issue': c2_issue_inbox.discard,
+        'ensure_issue_triage': c2_issue_inbox.ensure_triage,
     }
     if action not in operations:
         raise ValueError('unknown_c2_operation:'+action)
