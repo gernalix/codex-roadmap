@@ -244,3 +244,6 @@ C2 is now the master lane by explicit user override. PersonalHub is parked at it
 
 ## Next action
 Hand control to C2 (`gernalix/codex-usage-monitor`, project_id=8). Preserve 302284 as its completed/blocked historical scope; create or resume the minimal current C2 implementation lane for full archive/runtime integration, decide repo-boundary vs shared-data architecture for ChatGPT/Codex exporters and other personal repos, implement the chosen shared-data contracts, and add the C2 Uptime Kuma monitor in both source configuration and the live Kuma database/runtime. Keep PH parked and do not retry PH APK/DB work.
+
+## Independent device probe — 2026-09-26
+- `CHATGPT-20260926-ANDROID-FAVORITES-PROBE.md`: RDC/ADB identity preflight complete; UI inspection blocked by tool safety validation before execution. No profile data collected, no monitoring installed, and no PH/C2 ownership changed. Recovery entry point is that file’s `Next action`.
