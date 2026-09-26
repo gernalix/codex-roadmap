@@ -1,7 +1,6 @@
 # Da controllare
 
 - [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1|851204 · Bonificare radicalmente Datasette Alerts]] · `blocked` · analizzato=no · fix=—
-- [[obsidian/Prompts/592418 c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418|592418 · C2 scheduler: due chat RDC possono scrivere contemporaneamente nello stesso worktree/task]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/875575 conservare-e-confrontare-lo-storico-dei-test-adb-875575|875575 · Conservare e confrontare lo storico dei test ADB]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] · `blocked` · analizzato=no · fix=—

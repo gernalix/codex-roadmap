@@ -1,6 +1,6 @@
 ---
 prompt_id: 592418
-status: running
+status: completed
 project_id: —
 model: GPT-5.6 Sol
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - rdc
   - single-writer
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/unknown
 ---
 
 # 592418 · C2 scheduler: due chat RDC possono scrivere contemporaneamente nello stesso worktree/task
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418|Apri prompt]]
+- **Prompt:** [[../../completed/c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418|Apri prompt]]
 - **Primo lancio:** 2026-09-26T23:07:34Z
 - **Ultimo lancio:** 2026-09-26T23:07:34Z
 - **Ultimo esito:** UNKNOWN

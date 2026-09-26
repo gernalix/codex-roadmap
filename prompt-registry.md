@@ -5,7 +5,6 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | running | 2026-09-26T22:52:04Z | 2026-09-26T22:52:21Z | UNKNOWN | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/592418 c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418\|592418 · C2 scheduler: due chat RDC possono scrivere contemporaneamente nello stesso worktree/task]] | running | 2026-09-26T23:07:34Z | 2026-09-26T23:07:34Z | UNKNOWN | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/614593 c2-intake-collisioni-request-key-tra-chat-parall-614593\|614593 · C2 intake: collisioni request-key tra chat parallele]] | running | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
@@ -136,6 +135,7 @@
 | [[obsidian/Prompts/652361 livinggaul-hourly-systemd-local-install\|652361 · LivingGaul hourly systemd local install]] | completed | 2026-09-19T11:21:12Z | 2026-09-19T11:21:12Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/482761 eboks-native-bulk-download-browser-control-fix-v1\|482761 · Sbloccare l’esplorazione e-Boks senza intervento manuale]] | superseded | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/413258 eboks-native-bulk-download-ondemand-probe-v2\|413258 · Esplorare e-Boks con probe on-demand non invasiva]] | completed | 2026-09-22T00:57:15Z | 2026-09-22T01:08:44Z | PASS | sì | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/592418 c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418\|592418 · C2 scheduler: due chat RDC possono scrivere contemporaneamente nello stesso worktree/task]] | completed | 2026-09-26T23:07:34Z | 2026-09-26T23:07:34Z | PASS | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/671904 personalhub-obsidian-archive-incremental\|671904 · Aggiornare Obsidian automaticamente]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/946238 personalhub-obsidian-archive-foundation-v2\|946238 · Prima versione dell’archivio Obsidian]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/334679 personalhub-play-release-local-validation-v3\|334679 · Controllo finale locale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
