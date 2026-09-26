@@ -39,6 +39,20 @@ def _validate_response(response, metadata):
             raise ExecutorError('codex_exact_metadata_mismatch:'+field)
 
 
+def record_terminal(receipt: Path, *, run_id: str, thread_id: str,
+                    turn_id: str, status: str):
+    if status not in ('completed','interrupted','failed'):
+        raise ExecutorError('invalid_terminal_turn_status')
+    state=json.loads(receipt.read_text())
+    if (state.get('run_id')!=run_id or state.get('thread_id')!=thread_id or
+            state.get('turn_id')!=turn_id or state.get('phase') not in ('started','terminal')):
+        raise ExecutorError('terminal_turn_identity_mismatch')
+    if state['phase']=='terminal' and state.get('turn_status')!=status:
+        raise ExecutorError('terminal_turn_status_conflict')
+    state.update(phase='terminal',turn_status=status)
+    persist(receipt,state)
+
+
 def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path):
     if not run_id or not prompt or not all(metadata.get(k) for k in ('model','reasoning','worktree')):
         raise ExecutorError('canonical_execution_metadata_required')
@@ -46,6 +60,10 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path):
         state=json.loads(receipt.read_text())
         if state['run_id']!=run_id or state['metadata']!=metadata:
             raise ExecutorError('dispatch_identity_conflict')
+        if state['phase']=='terminal':
+            return {'thread_id':state['thread_id'],'turn_id':state['turn_id'],
+                    'phase':'terminal','turn_status':state['turn_status'],
+                    'resubmitted':False}
     else:
         state={'run_id':run_id,'metadata':metadata,'phase':'new'}
         persist(receipt,state)
@@ -77,7 +95,8 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path):
             if goal['status']=='paused':
                 rpc('thread/goal/set',{'threadId':thread_id,'status':'active'})
         observed=rpc('thread/read',{'threadId':thread_id,'includeTurns':True})
-        return {'thread_id':thread_id,'phase':state['phase'],'observed':observed,'resubmitted':False}
+        return {'thread_id':thread_id,'turn_id':state.get('turn_id'),
+                'phase':state['phase'],'observed':observed,'resubmitted':False}
     if metadata.get('goal_mode'):
         # Set the objective paused so it cannot race the explicit first turn.
         rpc('thread/goal/set',{'threadId':thread_id,'objective':prompt,'status':'paused'})
