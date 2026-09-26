@@ -16,8 +16,8 @@ tags:
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../falliti/chatgpt-exporter-resilience-hardening-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-24T02:12:33Z
-- **Ultimo lancio:** 2026-09-24T02:12:33Z
-- **Ultimo esito:** BLOCKED
+- **Ultimo lancio:** 2026-09-26T22:53:27Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -36,6 +36,7 @@ Rende il collector ChatGPT Web capace di ritentare e riprendere automaticamente 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-24T02:12:33Z | 2026-09-24T02:14:11Z | BLOCKED | 97.768 | gpt-6-sol | medium | 6 | 47974 |
+| 2026-09-26T22:53:27Z | 2026-09-26T22:53:32Z | UNKNOWN | 4.89 | codex-auto-review | low | 0 | 16106 |
 
 ## Analisi ChatGPT
 
