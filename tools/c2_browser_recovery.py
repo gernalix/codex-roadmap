@@ -10,9 +10,6 @@ import json
 import time
 from urllib.request import urlopen
 
-import websocket
-
-
 ENDPOINT = 'http://127.0.0.1:9333'
 
 
@@ -22,6 +19,10 @@ class BrowserRecoveryError(RuntimeError):
 
 class CDP:
     def __init__(self, url):
+        try:
+            import websocket
+        except ImportError as exc:
+            raise BrowserRecoveryError('python_websocket_client_missing') from exc
         self.socket = websocket.create_connection(url, timeout=5, suppress_origin=True)
         self.sequence = 0
 
