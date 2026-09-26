@@ -44,6 +44,7 @@ def apply(conn, mutation):
         'recover': c2_scheduler.recover,
         'quarantine_browser': c2_scheduler.quarantine_browser_run,
         'finish_work_item': c2_scheduler.finish_browser_work_item,
+        'complete_verified': c2_scheduler.complete_verified,
         'verify_work_item': c2_scheduler.verify_work_item,
         'complete': c2_scheduler.complete,
         'reconcile_run': c2_scheduler.reconcile_terminal_run,

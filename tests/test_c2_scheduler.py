@@ -27,6 +27,25 @@ class SchedulerTests(unittest.TestCase):
         scheduler.configure(self.conn,row['work_item_id'],activity='native',command=['true'])
         return row['work_item_id']
 
+    def test_verified_external_completion_requires_clear_checkpoint(self):
+        item=self.add()
+        commit='a'*40
+        with self.assertRaisesRegex(scheduler.SchedulingError,'acceptance_checkpoint_incomplete'):
+            scheduler.complete_verified(self.conn,item,source_commit=commit,evidence=['proof'])
+        scheduler.record_checkpoint(self.conn,item,current_step='Done',next_action='Close',
+            remaining=['pending'],evidence=['proof'],source_commit=commit)
+        with self.assertRaisesRegex(scheduler.SchedulingError,'acceptance_checkpoint_incomplete'):
+            scheduler.complete_verified(self.conn,item,source_commit=commit,evidence=['proof'])
+        scheduler.record_checkpoint(self.conn,item,current_step='Done',next_action='Close',
+            remaining=[],evidence=['proof'],source_commit=commit)
+        scheduler.complete_verified(self.conn,item,source_commit=commit,evidence=['proof'])
+        scheduler.complete_verified(self.conn,item,source_commit=commit,evidence=['proof'])
+        self.assertEqual('completed',self.conn.execute(
+            'SELECT status FROM work_items WHERE work_item_id=?',(item,)).fetchone()[0])
+        self.assertEqual(1,self.conn.execute(
+            "SELECT COUNT(*) FROM work_item_evidence WHERE work_item_id=? AND evidence_kind='completion'",
+            (item,)).fetchone()[0])
+
     def test_parallelism_and_same_repo_collision(self):
         a=self.add(); b=self.add(); c=self.add('repo-b')
         runs=scheduler.schedule(self.conn,event_key='intake-1',now=10,max_parallel=3)
