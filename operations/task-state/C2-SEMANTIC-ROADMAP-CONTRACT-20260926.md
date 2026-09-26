@@ -9,10 +9,10 @@ Checklist:
 - [x] Add one reusable standard prompt for semantic roadmap reorganization.
 - [x] Link contract from README/AGENTS and align task-state Inbox rule.
 - [x] Verify docs; git diff --check PASS.
-- [ ] Commit and push.
-Current step: commit and push the canonical contract.
+- [x] Commit and push.
+Current step: complete.
 Verified facts: C2_SEMANTIC_REORGANIZATION.md is the sole detailed contract and contains the reusable prompt; README and AGENTS only point to it. Task-state discovery capture now routes to Inbox rather than forcing executor-side triage.
 Blocker: none.
 Acceptance: a user can paste one standard prompt that forces mechanical facts to scripts, semantic judgments to AI, all canonical mutations to writer, and stops after roadmap reorganization rather than task execution.
-Evidence: canonical links present in README/AGENTS; obsolete direct-work-item discovery rule absent; git diff --check PASS.
-Next action: git add/commit/push this documentation checkpoint.
+Evidence: git diff --check PASS; commit 26295637 pushed to origin/feature/c2-executor-result-contract; protocol drift captured as Inbox #1322; guard pack-refs noise captured as Inbox #1324.
+Next action: none.
