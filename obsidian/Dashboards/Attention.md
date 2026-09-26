@@ -1,6 +1,6 @@
 # Da controllare
 
-- [[obsidian/Prompts/528123 c2-ph-cutover-canonical-temporary-lane-override-528123|528123 · C2 PH cutover + canonical temporary lane override]] · `running` · analizzato=no · fix=—
+- [[obsidian/Prompts/528123 c2-ph-cutover-canonical-temporary-lane-override-528123|528123 · C2 PH cutover + canonical temporary lane override]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/384495 rimuovere-special-case-ph-e-implementare-overrid-384495|384495 · Rimuovere special-case PH e implementare override execution canonico]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1|851204 · Bonificare radicalmente Datasette Alerts]] · `blocked` · analizzato=no · fix=—
