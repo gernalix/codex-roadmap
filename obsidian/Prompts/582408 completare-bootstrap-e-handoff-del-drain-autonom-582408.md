@@ -20,9 +20,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/completare-bootstrap-e-handoff-del-drain-autonom-582408|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-26T22:45:20Z
+- **Ultimo lancio:** 2026-09-26T22:45:20Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -40,7 +40,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-26T22:45:20Z | 2026-09-26T22:45:31Z | UNKNOWN | 10.397 | codex-auto-review | low | 0 | 20648 |
 
 ## Analisi ChatGPT
 

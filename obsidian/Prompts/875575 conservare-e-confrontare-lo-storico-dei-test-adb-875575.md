@@ -21,9 +21,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
 - **Prompt:** [[../../falliti/conservare-e-confrontare-lo-storico-dei-test-adb-875575|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-26T22:45:54Z
+- **Ultimo lancio:** 2026-09-26T22:45:54Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -41,7 +41,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-26T22:45:54Z | 2026-09-26T22:45:58Z | UNKNOWN | 3.783 | codex-auto-review | low | 0 | 22295 |
 
 ## Analisi ChatGPT
 
