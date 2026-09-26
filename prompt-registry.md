@@ -196,7 +196,7 @@
 | [[obsidian/Prompts/468205 prompt-468205\|468205 · Historical prompt 468205]] | completed | 2026-09-18T16:47:27Z | 2026-09-18T16:47:27Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/472816 prompt-472816\|472816 · Historical prompt 472816]] | cancelled | 2026-08-08T04:31:51Z | 2026-08-08T04:31:51Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/472913 prompt-472913\|472913 · Historical prompt 472913]] | completed | 2026-09-16T01:02:03Z | 2026-09-16T01:02:03Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/482731 prompt-482731\|482731 · Historical prompt 482731]] | failed | 2026-09-03T04:11:04Z | 2026-09-12T05:28:16Z | FAIL | sì | no | — | — | — | — |
+| [[obsidian/Prompts/482731 prompt-482731\|482731 · Historical prompt 482731]] | failed | 2026-08-04T18:35:49Z | 2026-09-12T05:28:16Z | FAIL | sì | no | — | — | — | — |
 | [[obsidian/Prompts/482736 prompt-482736\|482736 · Historical prompt 482736]] | cancelled | 2026-08-05T00:51:30Z | 2026-08-05T00:51:30Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/483210 prompt-483210\|483210 · Historical prompt 483210]] | completed | 2026-09-11T17:46:03Z | 2026-09-11T17:46:03Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/483217 prompt-483217\|483217 · Historical prompt 483217]] | completed | 2026-09-13T17:26:43Z | 2026-09-13T17:26:43Z | PASS | no | no | — | — | — | — |
