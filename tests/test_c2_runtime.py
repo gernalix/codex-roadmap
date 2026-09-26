@@ -9,10 +9,76 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import c2_intake
 import c2_scheduler
 import c2_runtime
+import c2_supervisor_authority
 from test_c2_intake import C2IntakeTests
 
 
 class RuntimeTests(unittest.TestCase):
+    def _authority_db(self, tmp, supervisor_id, token, expiry):
+        path=C2IntakeTests().make_cutover_db(Path(tmp))
+        with closing(c2_intake._connect(path)) as writer:
+            c2_supervisor_authority.install_schema(writer)
+            writer.execute(
+                "INSERT INTO c2_supervisor_authority VALUES(1,?,?,?,?,?)",
+                (supervisor_id,token,expiry,1,1),
+            )
+            writer.commit()
+        return path
+
+    def test_expired_different_authority_claims_successor_before_scheduling(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=self._authority_db(tmp,'old',1,90)
+            submitted=[]; launched=[]
+            current={'supervisor_id':'new','fencing_token':2,'lease_expires_at':500}
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                result=c2_runtime.advance(
+                    snapshot,
+                    submit=lambda op,args,key:submitted.append((op,args,key)),
+                    launch=launched.append,
+                    launch_notify=lambda _:None,
+                    now=100,
+                    supervisor_authority=current,
+                )
+            self.assertEqual(['claim_supervisor'],[op for op,_,_ in submitted])
+            self.assertEqual([('claim_supervisor','2')],result['events'])
+            self.assertEqual([],launched)
+
+    def test_matching_authority_renews_before_scheduling(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=self._authority_db(tmp,'same',3,150)
+            submitted=[]; launched=[]
+            current={'supervisor_id':'same','fencing_token':3,'lease_expires_at':500}
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                result=c2_runtime.advance(
+                    snapshot,
+                    submit=lambda op,args,key:submitted.append((op,args,key)),
+                    launch=launched.append,
+                    launch_notify=lambda _:None,
+                    now=100,
+                    supervisor_authority=current,
+                )
+            self.assertEqual(['renew_supervisor'],[op for op,_,_ in submitted])
+            self.assertEqual([('renew_supervisor','3')],result['events'])
+            self.assertEqual([],launched)
+
+    def test_unexpired_different_authority_fences_without_scheduling(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=self._authority_db(tmp,'other',4,500)
+            submitted=[]; launched=[]
+            current={'supervisor_id':'new','fencing_token':5,'lease_expires_at':600}
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                result=c2_runtime.advance(
+                    snapshot,
+                    submit=lambda op,args,key:submitted.append((op,args,key)),
+                    launch=launched.append,
+                    launch_notify=lambda _:None,
+                    now=100,
+                    supervisor_authority=current,
+                )
+            self.assertEqual([],submitted)
+            self.assertEqual([('supervisor_fenced','4')],result['events'])
+            self.assertEqual([],launched)
+
     def test_external_personalhub_spec_is_not_scheduled(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=C2IntakeTests().make_cutover_db(Path(tmp))
