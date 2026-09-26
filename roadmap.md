@@ -17,3 +17,4 @@
 13. [[prompts/c2-supervisor-rollover-fallito-degrada-a-human-r-682297|c2-supervisor-rollover-fallito-degrada-a-human-r-682297]]
 14. [[prompts/c2-supervisor-backoff-rate-limit-globale-blocca--718501|c2-supervisor-backoff-rate-limit-globale-blocca--718501]]
 15. [[prompts/c2-dashboard-mutation-applicata-ma-invisibile-fi-328371|c2-dashboard-mutation-applicata-ma-invisibile-fi-328371]]
+16. [[prompts/c2-dashboard-rendere-immediatamente-visibili-i-n-158995|c2-dashboard-rendere-immediatamente-visibili-i-n-158995]]

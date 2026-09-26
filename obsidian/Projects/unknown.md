@@ -11,6 +11,7 @@ tags:
 - [[obsidian/Prompts/682297 c2-supervisor-rollover-fallito-degrada-a-human-r-682297|682297 · C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]] · `pending`
 - [[obsidian/Prompts/718501 c2-supervisor-backoff-rate-limit-globale-blocca--718501|718501 · C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]] · `pending`
 - [[obsidian/Prompts/328371 c2-dashboard-mutation-applicata-ma-invisibile-fi-328371|328371 · C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]] · `pending`
+- [[obsidian/Prompts/158995 c2-dashboard-rendere-immediatamente-visibili-i-n-158995|158995 · C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati]] · `pending`
 - [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] · `blocked`
 - [[obsidian/Prompts/255325 prompt-255325|255325 · Prompt 255325]] · `cancelled`
 - [[obsidian/Prompts/294731 prompt-294731|294731 · Prompt 294731]] · `cancelled`
