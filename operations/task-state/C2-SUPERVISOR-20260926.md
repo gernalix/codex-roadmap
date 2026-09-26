@@ -14,11 +14,11 @@ Make this supervisor session recoverable, then implement and operate the non-Per
 - [x] Add an external deterministic watchdog and a minimal recovery pointer.
 - [x] Verify expiry, fencing, successor acquisition, and real browser session preparation in an isolated live recovery test without touching PH.
 - [x] Reconcile non-PH roadmap and executors; implement and activate the improved C2 runtime.
-- [ ] Re-audit every non-terminal root C2 task from repository/runtime evidence and apply one verified canonical optimization batch.
+- [x] Re-audit every non-terminal root C2 task from repository/runtime evidence and apply one verified canonical optimization batch.
 - [ ] Execute only explicit ready non-PH work to applicable acceptance criteria.
 
 ## Current step
-The successor-authority fix is merged in PR #1256 and deployed/read back under supervisor `52de96bb-02a9-4c51-ab18-704382a497a9` with fencing token 5. The verified backlog optimization was already applied atomically by Issue #1260. Canonical authority matches token 5, there are zero active C2 runs/resource leases/running work items, and the runtime reports `ready=0` because no runnable non-PH item has an explicit `work_item_execution_specs` row. Runtime timer/path are re-enabled. Persist this takeover checkpoint, then perform the repository-backed root-task audit now recorded in `Next action`; do not dispatch anything without an explicit non-PH execution spec.
+The user-directed takeover retired supervisor token 5 and acquired supervisor `245fc2d9-037a-41cb-9747-ce5b428051c0`, fencing token 6, via Issue #1264. The 34-root repository/runtime audit is recorded in `C2-ROOT-AUDIT-20260926.md`; PR #1270 added the fenced reconciliation operation. Issues #1271/#1272 applied the classification and explicit readiness-blocker batches. Workflowy and C2 runtime readback pass: `active=0`, `ready=0`; path/timer/watchdog are active. No C2 work was dispatched; PersonalHub prompt 669941 remains externally owned and running. Push this checkpoint and stop.
 
 ## Verified facts
 - `roadmap.sqlite` in this repository is the canonical task source; the GitHub Actions workflow is its single writer.
@@ -26,7 +26,7 @@ The successor-authority fix is merged in PR #1256 and deployed/read back under s
 - Terminal task-state reconciliation is live: the false-running historical roots and the stale running Phase 2/3 descendants of completed prompt 175908 were repaired through the fenced single writer; Workflowy projection readback no longer places them in IN CORSO.
 - The recovery task id is `01a0ddaf-99f5-7fa1-82c2-6d5a26a84808`.
 - Remote Desktop Commander responds on Fedora.
-- Current supervisor `52de96bb-02a9-4c51-ab18-704382a497a9` holds the real local lease with fencing token 5; canonical authority matches it via single-writer Issue #1261.
+- Current supervisor `245fc2d9-037a-41cb-9747-ce5b428051c0` holds the real local lease with fencing token 6; canonical authority matches it via single-writer Issues #1264 and #1269.
 - The runtime service now requires the current supervisor ID and fencing token before scheduling, submitting writer requests, or launching a worker.
 - Writer-side fencing merged in PR #1171. Canonical claim Issue #1172 applied with this supervisor ID/token; stale renewal Issue #1173 was rejected as `stale_or_expired_supervisor` by the single writer.
 - The runtime now reads an atomic derived snapshot of the remote-main `roadmap.sqlite` blob from `~/.local/state/c2-supervisor/roadmap.sqlite3`; it does not depend on the shared PH checkout branch.
@@ -45,10 +45,10 @@ The successor-authority fix is merged in PR #1256 and deployed/read back under s
 Phase 0 recovery/fencing; isolated remote-main snapshot; PH exclusion; writer-only terminal task-state repairs; PR #1209 with prompt-materialization/schedule-replay fixes merged after CI PASS; PROMPT_ID 226672 scheduled exactly once and recovered without resubmitting its Codex turn; final executor/approval recovery merged in PR #1225 with all gates PASS; canonical checkpoint Issue #1239 applied; terminal PASS Issue #1240 applied; original run `2c45668a283840ddad007a7071817399` reconciled by Issue #1241 with its resource leases released.
 
 ## Remaining
-The successor-authority fix, deploy/readback and first backlog cleanup are complete. Re-audit every non-terminal root C2 task against repository/runtime evidence, apply one verified canonical optimization batch, then advance only work with an explicit non-PH execution spec. Do not infer execution specs or touch PH.
+Root audit and canonical optimization are complete. Ten current code/incident intakes are now waiting with precise execution-context or human/RDC blockers; none remains falsely pending without a spec. Future C2 implementation work must be separately dispatched only after an explicit non-PH execution spec is prepared. Preserve the current PH worker and the waiting/manual lanes.
 
 ## Blockers
-No external blocker. Scheduling is intentionally idle: canonical runnable items currently have no explicit `work_item_execution_specs` rows. The observed Codex app-server user-approval request caused one earlier worker interruption; the final patch routes approvals through `approvalsReviewer=auto_review` while keeping `approvalPolicy=on-request`.
+No blocker to this audit. Scheduling remains intentionally idle: pending non-PH code intakes have no explicit `work_item_execution_specs` rows. Waiting/manual and PH-owned work retain their own blockers and ownership. The observed Codex app-server user-approval request caused one earlier worker interruption; the final patch routes approvals through `approvalsReviewer=auto_review` while keeping `approvalPolicy=on-request`.
 
 ## Evidence
 - `226672` canonical work item and run are both `completed`; original run `2c45668a283840ddad007a7071817399` has no active worker/lease.
@@ -76,9 +76,16 @@ No external blocker. Scheduling is intentionally idle: canonical runnable items 
 - Backlog optimization receipt `c2-backlog-optimize-20260926-v3` / Issue #1260 is applied: `unknown=0`, `blocked=36`, `pending=175`, and no non-terminal unmaterialized root prompts remain.
 - Reconciliation under token 5 found zero active runs, zero resource leases and zero `running` work items; PersonalHub workers/devices were not touched.
 - Runtime readback at 18:31 CEST used canonical snapshot `0672242c4b0ece20971dca86d85cbff3b5860b2c`, exited successfully with `active=0`, `ready=0`; timer/path are active again.
+- User-directed takeover: legacy C2 workers were already disabled; the PH worker and legacy daemon were preserved. Only C2 runtime path/timer/watchdog were paused. Issue #1264 retired token 5 and claimed token 6; Issue #1269 renewed token 6. Before Issue #1271 there were zero active C2 runs/resource leases and zero running non-PH work items.
+- PR #1270 merged with 125 focused C2 tests, roadmap verify and GitGuardian PASS. Its `c2_reconcile_item` operation requires the fenced supervisor authority, non-prompt root, repository evidence and no active run.
+- Root audit Issue #1271 closed/applied at 2026-09-26T17:12:41Z: 24 root classifications plus prompt 812553 explanation correction. Local preflight on a copy of the canonical snapshot passed 25/25 operations and foreign-key check. Issue #1272 closed/applied at 2026-09-26T17:18:41Z: ten intake readiness corrections, preflight 10/10. Snapshot `fa92d20c59ef201834fc863612a0c52c140af371` has zero unconfigured pending intake roots; roadmap verify PASS.
+- Pending prompt model/reasoning metadata was reviewed: existing GPT-5.6 Terra/Sol selections are appropriate for the unresolved browser/code scopes; blocked GPT-6 Luna and running PH metadata were preserved. Prompt text was not changed.
+- Workflowy roadmap sync finished with `Result=success`, `ExecMainStatus=0`, zero warnings. API cache readback places PH prompt 669941 in IN CORSO, PH Workflowy and implemented auto-spec intake in COMPLETATI RECENTEMENTE, ntfy and the unconfigured cross-chat lease intake in IN ATTESA.
+- After Issue #1272, the periodic Workflowy sync finished with `Result=success`, `ExecMainStatus=0`, `warnings=0`; fresh API cache readback places PH 669941 in IN CORSO, PH Workflowy in COMPLETATI RECENTEMENTE, and current unconfigured C2 intakes 84f3/f2d5/ff254 in IN ATTESA.
+- C2 runtime path/timer/watchdog were restarted after canonical `configured_runnable=0` and `active_runs=0` checks. The first triggered service used snapshot `fa92d20c59ef201834fc863612a0c52c140af371`, exited `Result=success`, `ExecMainStatus=0`, and reported `active=0`, `ready=0`, `events=[]`.
 
 ## Acceptance criteria
-Recovery/fencing, PH isolation, stale-state repair, one-run/one-turn Codex identity, ~40 second ChatGPT stall detection, bounded recovery, explicit execution specs, lock-sensitive scheduling, final executor integration, canonical checkpoint, terminalization and run reconciliation are verified. Successor-authority handoff is merged and runtime restart/readback under token 5 is PASS.
+Recovery/fencing, PH isolation, stale-state repair, one-run/one-turn Codex identity, ~40 second ChatGPT stall detection, bounded recovery, explicit execution specs, lock-sensitive scheduling, final executor integration, canonical checkpoint, terminalization and run reconciliation are verified. Successor-authority handoff is merged. The 34-root repository audit, writer receipts, roadmap verification, Workflowy projection and idle runtime readback under token 6 are PASS.
 
 ## Next action
-Re-audit every non-terminal root C2 task against every repository it actually involves (canonical main, relevant branches/PRs, task-identifying code/evidence and runtime where applicable). Only from that repository-backed evidence classify each task as current, obsolete/absorbed, duplicate/merge candidate, blocked/waiting, or ready; then apply one verified canonical optimization batch. Do not use stale roadmap metadata alone.
+After this checkpoint is pushed, stop this audit without dispatching a new queue item. The next C2 implementation turn should choose one current non-PH intake from `C2-ROOT-AUDIT-20260926.md`, prepare its explicit deterministic execution spec, and respect token 6 fencing and current ownership.
