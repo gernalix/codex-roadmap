@@ -4,20 +4,20 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
 | [[obsidian/Prompts/992303 c2-executor-chat-reference-history\|992303 · Traccia executor e chat di ogni task C2]] | pending | — | — | — | no | no | — | codex-roadmap / C2 | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-6 Luna | medium |
-| [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-6 Luna | medium |
-| [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-6 Luna | medium |
-| [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-6 Luna | medium |
-| [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-6 Luna | medium |
-| [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-6 Sol | medium |
+| [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
+| [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1\|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | sì | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237 · Completa il fix del salvataggio Codex sul PC]] | completed | 2026-09-18T21:32:25Z | 2026-09-18T21:32:25Z | PASS | sì | sì | [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure\|642815]] | Fedora | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure\|642815 · Chiudere il fix del publisher Codex sul PC]] | blocked | 2026-09-18T21:58:59Z | 2026-09-18T21:58:59Z | BLOCKED | sì | sì | [[obsidian/Prompts/817264 codex-usage-publisher-autonomous-runtime-closure\|817264]] | Fedora | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure\|642815 · Chiudere il fix del publisher Codex sul PC]] | superseded | 2026-09-18T21:58:59Z | 2026-09-18T21:58:59Z | BLOCKED | sì | sì | [[obsidian/Prompts/817264 codex-usage-publisher-autonomous-runtime-closure\|817264]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/817264 codex-usage-publisher-autonomous-runtime-closure\|817264 · Chiudere autonomamente il publisher Codex sul PC]] | completed | 2026-09-18T22:18:56Z | 2026-09-18T22:18:56Z | PASS | sì | sì | [[obsidian/Prompts/519247 codex-usage-publisher-append-fastpath-runtime\|519247]] | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/519247 codex-usage-publisher-append-fastpath-runtime\|519247 · Attivare il fast-path del publisher Codex]] | completed | 2026-09-18T22:45:09Z | 2026-09-18T22:45:09Z | PASS | sì | sì | — | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/856234 workflowy-live-smoke-remote-fix-closure\|856234 · Confermare il live smoke Workflowy dopo il fix remoto]] | completed | 2026-09-18T23:16:51Z | 2026-09-18T23:16:51Z | PASS | sì | no | — | Fedora | GPT-5.6 Terra | medium |
@@ -42,14 +42,14 @@
 | [[obsidian/Prompts/741928 chrome-codex-switcher-full-runtime-reliability-v1\|741928 · Stabilizzare e collaudare tutto Chrome ↔ Codex Switcher]] | completed | 2026-09-21T22:35:09Z | 2026-09-21T23:25:26Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/318764 chrome-codex-switcher-shortcut-wayland-proof-reconcile-v1\|318764 · Chiudere il blocker di prova della shortcut GNOME]] | completed | 2026-09-19T06:11:24Z | 2026-09-19T06:11:24Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/472615 chrome-codex-switcher-notes-reboot-persistence-fix-v1\|472615 · Ripristinare le note dopo reboot]] | completed | 2026-09-21T23:49:07Z | 2026-09-22T00:00:14Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | blocked | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | BLOCKED | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/354882 grindr-web-exporter-single-browser-end-to-end-v1\|354882 · Elimina loop login Grindr e completa export]] | superseded | 2026-09-22T00:27:32Z | 2026-09-22T00:27:32Z | UNKNOWN | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/936284 megavault-local-repo-registration-fedora-external-updater-v1\|936284 · Aggiungere il contratto MegaVault per repo local-only e chiudere 417592]] | completed | 2026-09-22T00:53:13Z | 2026-09-22T00:53:13Z | PASS | no | no | — | MegaVault | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/738242 eboks-full-inbox-native-batch-export\|738242 · Scaricare tutta la posta e-Boks via Browser Use]] | superseded | 2026-09-22T01:38:01Z | 2026-09-22T11:57:34Z | BLOCKED | sì | no | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946]] | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/946527 workflowy-needs-fix-live-deploy-v1\|946527 · Distribuire la pulizia Needs fix di Workflowy]] | superseded | 2026-09-22T01:54:41Z | 2026-09-22T02:00:06Z | BLOCKED | sì | no | [[obsidian/Prompts/946821 workflowy-needs-fix-live-closure-v2\|946821]] | Fedora / Workflowy | GPT-5.5 | low |
 | [[obsidian/Prompts/946821 workflowy-needs-fix-live-closure-v2\|946821 · Verificare la pulizia live di Needs fix]] | superseded | 2026-09-22T03:01:41Z | 2026-09-22T03:01:41Z | BLOCKED | sì | no | [[obsidian/Prompts/672304 workflowy-waiting-runtime-reconcile-v1\|672304]] | Fedora / Workflowy | GPT-5.5 | low |
 | [[obsidian/Prompts/327684 minsp-export-initial-repo-bootstrap-v1\|327684 · Creare la prima baseline Git di minsp-export]] | superseded | — | — | — | no | no | — | minsp-export | GPT-5.5 | medium |
 | [[obsidian/Prompts/672304 workflowy-waiting-runtime-reconcile-v1\|672304 · Riallineare Waiting nel runtime Workflowy]] | completed | 2026-09-22T03:37:42Z | 2026-09-22T03:37:42Z | PASS | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/736284 chatgpt-exporter-live-chrome-first-archive-v1\|736284 · Sbloccare ChatGPTExporter e creare il primo archivio]] | blocked | 2026-09-22T11:16:19Z | 2026-09-22T11:16:19Z | BLOCKED | sì | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/736284 chatgpt-exporter-live-chrome-first-archive-v1\|736284 · Sbloccare ChatGPTExporter e creare il primo archivio]] | superseded | 2026-09-22T11:16:19Z | 2026-09-22T11:16:19Z | BLOCKED | sì | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/222733 stop-runaway-788315-heartbeat\|222733 · Ferma il heartbeat Codex runaway di 788315]] | completed | — | — | PASS | no | no | — | Fedora / Codex runtime | GPT-6 Luna | low |
 | [[obsidian/Prompts/175908 checklist2-single-work-item-control-plane-v2\|175908 · Creare Checklist 2.0 come unico albero di lavoro]] | completed | 2026-09-25T15:00:35Z | 2026-09-25T15:00:35Z | PASS | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/238170 c2-supervisor-human-milestone-telegram-v1\|238170 · Rendere strutturali le notifiche milestone C2]] | superseded | — | — | — | no | no | — | chatgpt-rdc-supervisor | GPT-6 Luna | low |
@@ -69,7 +69,7 @@
 | [[obsidian/Prompts/815274 fedora-systemd-kuma-runtime-closure-v2\|815274 · Chiudere il residuo Kuma dei servizi Fedora]] | completed | 2026-09-22T02:38:48Z | 2026-09-22T02:38:48Z | PASS | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/764529 codex-desktop-launcher-atspi-consumer-closure-v2\|764529 · Completare il launcher Codex Desktop con AT-SPI]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/781426 minsp-export-live-authenticated-coverage-v2\|781426 · Completare export Min Sundhedsplatform dopo bootstrap e MitID]] | superseded | — | — | — | no | no | — | minsp-export | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/284653 ccs-desktop-launcher-overlay-combined-closure-v1\|284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio]] | blocked | 2026-09-22T21:23:01Z | 2026-09-22T21:23:01Z | BLOCKED | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/284653 ccs-desktop-launcher-overlay-combined-closure-v1\|284653 · Chiudere launcher e overlay Codex Desktop in un solo passaggio]] | superseded | 2026-09-22T21:23:01Z | 2026-09-22T21:23:01Z | BLOCKED | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/920550 personalhub-soldi-semantic-photo-owned-items-residual-v1\|920550 · Completa ricerca foto semantica e oggetti posseduti in Soldi]] | completed | — | — | PASS | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/746193 workflowy-importer-local-live-validation\|746193 · Provare davvero l’importatore Workflowy]] | completed | 2026-09-18T19:11:43Z | 2026-09-18T19:11:43Z | PASS | sì | no | [[obsidian/Prompts/693572 workflowy-importer-live-smoke-secret-file\|693572]] | Fedora / Workflowy | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/219473 oracle-backup-notification-antiflap-runtime\|219473 · Ferma le notifiche backup Oracle transitorie]] | superseded | — | — | — | no | no | — | Oracle VM | GPT-5.6 Terra | medium |
@@ -95,7 +95,7 @@
 | [[obsidian/Prompts/790233 personalhub-salute-canonical-integration-v3\|790233 · Portare Salute nel database canonico]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/728918 personalhub-obsidian-archive-complete-v4\|728918 · Implementare l’archivio Obsidian opzionale completo]] | superseded | 2026-09-19T16:56:36Z | 2026-09-19T17:08:40Z | BLOCKED | sì | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/621471 post-404936-runtime-validation\|621471 · Distribuire e validare l'hardening post-404936]] | completed | 2026-09-22T01:41:09Z | 2026-09-22T01:57:03Z | PASS | sì | no | — | GitHub Autosync / Fedora runtime | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/788315 chatgpt-exporter-live-recovery-after-736284-v1\|788315 · Riparare ChatGPTExporter e completare il primo archivio]] | blocked | 2026-09-24T01:47:25Z | 2026-09-24T11:17:26Z | BLOCKED | sì | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/788315 chatgpt-exporter-live-recovery-after-736284-v1\|788315 · Riparare ChatGPTExporter e completare il primo archivio]] | superseded | 2026-09-24T01:47:25Z | 2026-09-24T11:17:26Z | UNKNOWN | sì | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/617205 personalhub-shared-alerts-places-tags-validation\|617205 · Chiudere i nuovi tag e alert di Places]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/775412 workflowy-automation-local-activation-v2\|775412 · Attivare le automazioni locali di Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/416826 personalhub-salute-ui-hub-v3\|416826 · Collegare Salute all’app e all’Hub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
@@ -149,183 +149,183 @@
 | [[obsidian/Prompts/445388 logseq-updates-pat-safety-closure\|445388 · Chiusura sicurezza e attivazione updater Logseq]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/874695 checklist-2-unified-control-plane-v1\|874695 · Unificare roadmap e checkpoint nella Checklist 2.0]] | superseded | — | — | — | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2\|604812 · Fix GNOME global search shortcut on Chrome RPM]] | completed | 2026-09-21T21:50:23Z | 2026-09-21T21:50:23Z | PASS | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/255325 prompt-255325\|255325 · Prompt 255325]] | blocked | 2026-09-18T17:42:04Z | 2026-09-18T17:42:04Z | BLOCKED | sì | no | — | — | — | — |
-| [[obsidian/Prompts/294731 prompt-294731\|294731 · Prompt 294731]] | blocked | 2026-09-16T17:42:10Z | 2026-09-16T17:42:10Z | BLOCKED | sì | no | — | — | — | — |
-| [[obsidian/Prompts/319311 prompt-319311\|319311 · Prompt 319311]] | blocked | 2026-09-18T17:40:55Z | 2026-09-18T17:40:55Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/255325 prompt-255325\|255325 · Prompt 255325]] | cancelled | 2026-09-18T17:42:04Z | 2026-09-18T17:42:04Z | CANCELLED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/294731 prompt-294731\|294731 · Prompt 294731]] | cancelled | 2026-09-16T17:42:10Z | 2026-09-16T17:42:10Z | CANCELLED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/319311 prompt-319311\|319311 · Prompt 319311]] | cancelled | 2026-09-18T17:40:55Z | 2026-09-18T17:40:55Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/809537 roadmap-sqlite-state-migration\|809537 · Vecchia migrazione SQLite della roadmap]] | superseded | — | — | — | no | no | — | codex-roadmap | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/151583 prompt-151583\|151583 · Historical prompt 151583]] | unknown | 2026-08-05T22:50:59Z | 2026-08-05T22:50:59Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/151583 prompt-151583\|151583 · Historical prompt 151583]] | cancelled | 2026-08-05T22:50:59Z | 2026-08-05T22:50:59Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/157771 prompt-157771\|157771 · Historical prompt 157771]] | completed | 2026-09-16T02:38:14Z | 2026-09-16T02:38:14Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/184627 prompt-184627\|184627 · Historical prompt 184627]] | unknown | 2026-09-03T03:30:22Z | 2026-09-03T03:30:22Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/184627 prompt-184627\|184627 · Historical prompt 184627]] | cancelled | 2026-09-03T03:30:22Z | 2026-09-03T03:30:22Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/184639 prompt-184639\|184639 · Historical prompt 184639]] | completed | 2026-09-12T17:52:14Z | 2026-09-12T17:52:14Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/264913 prompt-264913\|264913 · Historical prompt 264913]] | completed | 2026-09-09T08:16:11Z | 2026-09-09T08:16:11Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/272975 prompt-272975\|272975 · Historical prompt 272975]] | unknown | 2026-08-09T00:50:15Z | 2026-08-09T00:50:15Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/274638 prompt-274638\|274638 · Historical prompt 274638]] | unknown | 2026-09-05T11:53:44Z | 2026-09-05T11:53:44Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/276431 prompt-276431\|276431 · Historical prompt 276431]] | unknown | 2026-08-04T20:38:44Z | 2026-08-04T20:38:44Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/272975 prompt-272975\|272975 · Historical prompt 272975]] | cancelled | 2026-08-09T00:50:15Z | 2026-08-09T00:50:15Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/274638 prompt-274638\|274638 · Historical prompt 274638]] | cancelled | 2026-09-05T11:53:44Z | 2026-09-05T11:53:44Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/276431 prompt-276431\|276431 · Historical prompt 276431]] | cancelled | 2026-08-04T20:38:44Z | 2026-08-04T20:38:44Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/284731 prompt-284731\|284731 · Historical prompt 284731]] | completed | 2026-09-13T12:45:15Z | 2026-09-13T12:45:15Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/286419 prompt-286419\|286419 · Historical prompt 286419]] | unknown | 2026-09-18T17:35:06Z | 2026-09-18T17:35:06Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/294681 prompt-294681\|294681 · Historical prompt 294681]] | unknown | 2026-08-05T00:21:44Z | 2026-09-03T20:17:59Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/286419 prompt-286419\|286419 · Historical prompt 286419]] | cancelled | 2026-09-18T17:35:06Z | 2026-09-18T17:35:06Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/294681 prompt-294681\|294681 · Historical prompt 294681]] | cancelled | 2026-08-05T00:21:44Z | 2026-09-03T20:17:59Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/314719 prompt-314719\|314719 · Historical prompt 314719]] | completed | 2026-09-16T05:49:05Z | 2026-09-16T05:49:05Z | PASS | sì | no | — | — | — | — |
-| [[obsidian/Prompts/314857 prompt-314857\|314857 · Historical prompt 314857]] | unknown | 2026-09-07T09:51:18Z | 2026-09-07T09:51:18Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/315804 prompt-315804\|315804 · Historical prompt 315804]] | unknown | 2026-08-05T03:14:20Z | 2026-08-05T03:14:20Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/347921 prompt-347921\|347921 · Historical prompt 347921]] | unknown | 2026-08-05T09:02:52Z | 2026-08-05T10:49:04Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/314857 prompt-314857\|314857 · Historical prompt 314857]] | cancelled | 2026-09-07T09:51:18Z | 2026-09-07T09:51:18Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/315804 prompt-315804\|315804 · Historical prompt 315804]] | cancelled | 2026-08-05T03:14:20Z | 2026-08-05T03:14:20Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/347921 prompt-347921\|347921 · Historical prompt 347921]] | cancelled | 2026-08-05T09:02:52Z | 2026-08-05T10:49:04Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/348271 prompt-348271\|348271 · Historical prompt 348271]] | completed | 2026-09-05T12:03:07Z | 2026-09-05T12:03:07Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/348615 prompt-348615\|348615 · Historical prompt 348615]] | completed | 2026-09-05T13:06:09Z | 2026-09-05T13:06:09Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/362714 prompt-362714\|362714 · Historical prompt 362714]] | blocked | 2026-09-16T14:34:54Z | 2026-09-16T14:34:54Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/362714 prompt-362714\|362714 · Historical prompt 362714]] | cancelled | 2026-09-16T14:34:54Z | 2026-09-16T14:34:54Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/364208 prompt-364208\|364208 · Historical prompt 364208]] | completed | 2026-09-16T03:51:24Z | 2026-09-16T03:51:24Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/374862 prompt-374862\|374862 · Historical prompt 374862]] | completed | 2026-09-16T10:19:52Z | 2026-09-16T10:19:52Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/375344 prompt-375344\|375344 · Historical prompt 375344]] | completed | 2026-09-12T01:52:28Z | 2026-09-12T01:52:28Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/381527 prompt-381527\|381527 · Historical prompt 381527]] | unknown | 2026-09-13T14:26:55Z | 2026-09-13T14:26:55Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/381527 prompt-381527\|381527 · Historical prompt 381527]] | cancelled | 2026-09-13T14:26:55Z | 2026-09-13T14:26:55Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/412907 prompt-412907\|412907 · Historical prompt 412907]] | completed | 2026-09-05T10:27:24Z | 2026-09-05T10:27:24Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/416738 prompt-416738\|416738 · Historical prompt 416738]] | completed | 2026-09-05T16:35:58Z | 2026-09-05T16:35:58Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/417263 prompt-417263\|417263 · Historical prompt 417263]] | unknown | 2026-08-05T01:38:57Z | 2026-08-05T01:38:57Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/417263 prompt-417263\|417263 · Historical prompt 417263]] | cancelled | 2026-08-05T01:38:57Z | 2026-08-05T01:38:57Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/417806 prompt-417806\|417806 · Historical prompt 417806]] | completed | 2026-09-11T22:13:05Z | 2026-09-11T22:13:05Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/417826 prompt-417826\|417826 · Historical prompt 417826]] | completed | 2026-09-11T19:12:00Z | 2026-09-11T19:12:00Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/418527 prompt-418527\|418527 · Historical prompt 418527]] | unknown | 2026-08-04T17:09:10Z | 2026-08-04T17:09:10Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/418527 prompt-418527\|418527 · Historical prompt 418527]] | cancelled | 2026-08-04T17:09:10Z | 2026-08-04T17:09:10Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/418562 prompt-418562\|418562 · Historical prompt 418562]] | completed | 2026-09-11T20:57:22Z | 2026-09-11T20:57:22Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/418627 prompt-418627\|418627 · Historical prompt 418627]] | completed | 2026-09-15T23:27:55Z | 2026-09-15T23:27:55Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/418637 prompt-418637\|418637 · Historical prompt 418637]] | unknown | 2026-08-09T03:02:37Z | 2026-08-09T03:02:37Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/418672 prompt-418672\|418672 · Historical prompt 418672]] | unknown | 2026-08-05T08:28:07Z | 2026-08-05T08:28:07Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/418637 prompt-418637\|418637 · Historical prompt 418637]] | cancelled | 2026-08-09T03:02:37Z | 2026-08-09T03:02:37Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/418672 prompt-418672\|418672 · Historical prompt 418672]] | cancelled | 2026-08-05T08:28:07Z | 2026-08-05T08:28:07Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/424261 prompt-424261\|424261 · Historical prompt 424261]] | completed | 2026-09-18T18:38:59Z | 2026-09-18T18:38:59Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/427805 prompt-427805\|427805 · Historical prompt 427805]] | completed | 2026-09-16T08:48:36Z | 2026-09-16T08:48:36Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/427913 prompt-427913\|427913 · Historical prompt 427913]] | unknown | 2026-09-16T09:22:05Z | 2026-09-16T09:22:05Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/428619 prompt-428619\|428619 · Historical prompt 428619]] | unknown | 2026-09-03T18:15:38Z | 2026-09-03T18:15:38Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/427913 prompt-427913\|427913 · Historical prompt 427913]] | cancelled | 2026-09-16T09:22:05Z | 2026-09-16T09:22:05Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/428619 prompt-428619\|428619 · Historical prompt 428619]] | cancelled | 2026-09-03T18:15:38Z | 2026-09-03T18:15:38Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/437862 prompt-437862\|437862 · Historical prompt 437862]] | completed | 2026-09-16T09:35:02Z | 2026-09-16T09:35:02Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/463218 prompt-463218\|463218 · Historical prompt 463218]] | completed | 2026-09-13T12:35:07Z | 2026-09-13T12:35:07Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/467281 prompt-467281\|467281 · Historical prompt 467281]] | completed | 2026-09-16T03:57:59Z | 2026-09-16T03:57:59Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/468205 prompt-468205\|468205 · Historical prompt 468205]] | completed | 2026-09-18T16:47:27Z | 2026-09-18T16:47:27Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/472816 prompt-472816\|472816 · Historical prompt 472816]] | unknown | 2026-08-08T04:31:51Z | 2026-08-08T04:31:51Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/472816 prompt-472816\|472816 · Historical prompt 472816]] | cancelled | 2026-08-08T04:31:51Z | 2026-08-08T04:31:51Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/472913 prompt-472913\|472913 · Historical prompt 472913]] | completed | 2026-09-16T01:02:03Z | 2026-09-16T01:02:03Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/482731 prompt-482731\|482731 · Historical prompt 482731]] | failed | 2026-09-03T04:11:04Z | 2026-09-12T05:28:16Z | FAIL | sì | no | — | — | — | — |
-| [[obsidian/Prompts/482736 prompt-482736\|482736 · Historical prompt 482736]] | unknown | 2026-08-05T00:51:30Z | 2026-08-05T00:51:30Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/482736 prompt-482736\|482736 · Historical prompt 482736]] | cancelled | 2026-08-05T00:51:30Z | 2026-08-05T00:51:30Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/483210 prompt-483210\|483210 · Historical prompt 483210]] | completed | 2026-09-11T17:46:03Z | 2026-09-11T17:46:03Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/483217 prompt-483217\|483217 · Historical prompt 483217]] | completed | 2026-09-13T17:26:43Z | 2026-09-13T17:26:43Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/483271 prompt-483271\|483271 · Historical prompt 483271]] | unknown | 2026-08-04T17:57:38Z | 2026-08-04T17:57:38Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/483716 prompt-483716\|483716 · Historical prompt 483716]] | unknown | 2026-08-07T00:19:15Z | 2026-08-07T00:19:15Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/483271 prompt-483271\|483271 · Historical prompt 483271]] | cancelled | 2026-08-04T17:57:38Z | 2026-08-04T17:57:38Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/483716 prompt-483716\|483716 · Historical prompt 483716]] | cancelled | 2026-08-07T00:19:15Z | 2026-08-07T00:19:15Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/491736 prompt-491736\|491736 · Historical prompt 491736]] | completed | 2026-09-16T04:44:24Z | 2026-09-16T04:44:24Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/506932 prompt-506932\|506932 · Historical prompt 506932]] | completed | 2026-09-05T19:10:58Z | 2026-09-05T19:10:58Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/517308 prompt-517308\|517308 · Historical prompt 517308]] | completed | 2026-09-16T16:29:13Z | 2026-09-16T16:29:13Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/517842 prompt-517842\|517842 · Historical prompt 517842]] | unknown | 2026-08-02T07:25:32Z | 2026-08-02T07:25:32Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/518264 prompt-518264\|518264 · Historical prompt 518264]] | blocked | 2026-09-16T14:32:52Z | 2026-09-16T14:32:52Z | BLOCKED | sì | no | — | — | — | — |
-| [[obsidian/Prompts/518304 prompt-518304\|518304 · Historical prompt 518304]] | unknown | 2026-08-30T02:35:49Z | 2026-08-30T04:35:00Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/519684 prompt-519684\|519684 · Historical prompt 519684]] | unknown | 2026-09-03T18:01:01Z | 2026-09-03T18:01:01Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/517842 prompt-517842\|517842 · Historical prompt 517842]] | cancelled | 2026-08-02T07:25:32Z | 2026-08-02T07:25:32Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/518264 prompt-518264\|518264 · Historical prompt 518264]] | cancelled | 2026-09-16T14:32:52Z | 2026-09-16T14:32:52Z | CANCELLED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/518304 prompt-518304\|518304 · Historical prompt 518304]] | cancelled | 2026-08-30T02:35:49Z | 2026-08-30T04:35:00Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/519684 prompt-519684\|519684 · Historical prompt 519684]] | cancelled | 2026-09-03T18:01:01Z | 2026-09-03T18:01:01Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/526841 prompt-526841\|526841 · Historical prompt 526841]] | completed | 2026-09-11T22:38:57Z | 2026-09-11T22:38:57Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/527418 prompt-527418\|527418 · Historical prompt 527418]] | unknown | 2026-09-11T16:46:12Z | 2026-09-11T16:46:12Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/527841 prompt-527841\|527841 · Historical prompt 527841]] | unknown | 2026-09-18T18:42:23Z | 2026-09-18T18:42:23Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/527418 prompt-527418\|527418 · Historical prompt 527418]] | cancelled | 2026-09-11T16:46:12Z | 2026-09-11T16:46:12Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/527841 prompt-527841\|527841 · Historical prompt 527841]] | cancelled | 2026-09-18T18:42:23Z | 2026-09-18T18:42:23Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/529184 prompt-529184\|529184 · Historical prompt 529184]] | completed | 2026-09-16T08:01:02Z | 2026-09-16T08:01:02Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/548921 prompt-548921\|548921 · Historical prompt 548921]] | completed | 2026-08-05T04:44:54Z | 2026-08-05T04:44:54Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/573842 prompt-573842\|573842 · Historical prompt 573842]] | completed | 2026-09-07T10:01:15Z | 2026-09-07T10:01:15Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/582164 prompt-582164\|582164 · Historical prompt 582164]] | unknown | 2026-08-05T11:09:38Z | 2026-08-05T11:09:38Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/582413 prompt-582413\|582413 · Historical prompt 582413]] | unknown | 2026-08-09T02:55:18Z | 2026-08-09T02:55:18Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/582164 prompt-582164\|582164 · Historical prompt 582164]] | cancelled | 2026-08-05T11:09:38Z | 2026-08-05T11:09:38Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/582413 prompt-582413\|582413 · Historical prompt 582413]] | cancelled | 2026-08-09T02:55:18Z | 2026-08-09T02:55:18Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/582731 prompt-582731\|582731 · Historical prompt 582731]] | completed | 2026-09-07T08:46:47Z | 2026-09-07T08:46:47Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/583142 prompt-583142\|583142 · Historical prompt 583142]] | completed | 2026-09-03T19:59:52Z | 2026-09-03T19:59:52Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/583214 prompt-583214\|583214 · Historical prompt 583214]] | completed | 2026-09-03T17:23:31Z | 2026-09-16T09:48:14Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/583216 prompt-583216\|583216 · Historical prompt 583216]] | completed | 2026-09-06T10:01:04Z | 2026-09-06T10:01:04Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/583241 prompt-583241\|583241 · Historical prompt 583241]] | unknown | 2026-08-30T14:50:20Z | 2026-08-30T14:50:20Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/583241 prompt-583241\|583241 · Historical prompt 583241]] | cancelled | 2026-08-30T14:50:20Z | 2026-08-30T14:50:20Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/583417 prompt-583417\|583417 · Historical prompt 583417]] | completed | 2026-09-05T11:22:56Z | 2026-09-05T11:22:56Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/583714 prompt-583714\|583714 · Historical prompt 583714]] | completed | 2026-09-15T20:49:12Z | 2026-09-15T20:49:12Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/583914 prompt-583914\|583914 · Historical prompt 583914]] | unknown | 2026-08-05T01:51:35Z | 2026-08-05T01:51:35Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/583914 prompt-583914\|583914 · Historical prompt 583914]] | cancelled | 2026-08-05T01:51:35Z | 2026-08-05T01:51:35Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/583921 prompt-583921\|583921 · Historical prompt 583921]] | completed | 2026-09-15T20:46:00Z | 2026-09-15T20:46:00Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/584203 prompt-584203\|584203 · Historical prompt 584203]] | unknown | 2026-08-07T01:36:31Z | 2026-08-07T01:36:31Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/593214 prompt-593214\|593214 · Historical prompt 593214]] | blocked | 2026-09-07T10:35:45Z | 2026-09-07T10:35:45Z | BLOCKED | no | no | — | — | — | — |
+| [[obsidian/Prompts/584203 prompt-584203\|584203 · Historical prompt 584203]] | cancelled | 2026-08-07T01:36:31Z | 2026-08-07T01:36:31Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/593214 prompt-593214\|593214 · Historical prompt 593214]] | cancelled | 2026-09-07T10:35:45Z | 2026-09-07T10:35:45Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/593406 prompt-593406\|593406 · Historical prompt 593406]] | completed | 2026-09-12T04:01:58Z | 2026-09-12T04:01:58Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/593841 prompt-593841\|593841 · Historical prompt 593841]] | unknown | 2026-08-09T13:45:23Z | 2026-08-09T13:45:23Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/594217 prompt-594217\|594217 · Historical prompt 594217]] | unknown | 2026-09-15T21:13:02Z | 2026-09-15T21:13:02Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/604183 prompt-604183\|604183 · Historical prompt 604183]] | unknown | 2026-08-10T00:15:46Z | 2026-08-10T00:15:46Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/593841 prompt-593841\|593841 · Historical prompt 593841]] | cancelled | 2026-08-09T13:45:23Z | 2026-08-09T13:45:23Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/594217 prompt-594217\|594217 · Historical prompt 594217]] | cancelled | 2026-09-15T21:13:02Z | 2026-09-15T21:13:02Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/604183 prompt-604183\|604183 · Historical prompt 604183]] | cancelled | 2026-08-10T00:15:46Z | 2026-08-10T00:15:46Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/614927 prompt-614927\|614927 · Historical prompt 614927]] | completed | 2026-09-03T04:49:56Z | 2026-09-03T04:49:56Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/615842 prompt-615842\|615842 · Historical prompt 615842]] | unknown | 2026-08-04T20:22:48Z | 2026-08-04T20:22:48Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/615842 prompt-615842\|615842 · Historical prompt 615842]] | cancelled | 2026-08-04T20:22:48Z | 2026-08-04T20:22:48Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/618305 prompt-618305\|618305 · Historical prompt 618305]] | completed | 2026-09-13T13:18:26Z | 2026-09-13T13:18:26Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/618427 prompt-618427\|618427 · Historical prompt 618427]] | blocked | 2026-09-16T08:48:01Z | 2026-09-16T08:48:01Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/618427 prompt-618427\|618427 · Historical prompt 618427]] | cancelled | 2026-09-16T08:48:01Z | 2026-09-16T08:48:01Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/618472 prompt-618472\|618472 · Historical prompt 618472]] | superseded | 2026-09-12T02:22:37Z | 2026-09-12T02:22:37Z | BLOCKED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/628431 prompt-628431\|628431 · Historical prompt 628431]] | completed | 2026-09-07T18:42:22Z | 2026-09-07T18:42:22Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/632683 prompt-632683\|632683 · Historical prompt 632683]] | completed | 2026-09-18T17:38:09Z | 2026-09-18T17:38:09Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/635814 prompt-635814\|635814 · Historical prompt 635814]] | completed | 2026-09-16T14:33:59Z | 2026-09-16T14:33:59Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/638214 prompt-638214\|638214 · Historical prompt 638214]] | unknown | 2026-08-04T23:00:23Z | 2026-08-04T23:00:23Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/639482 prompt-639482\|639482 · Historical prompt 639482]] | unknown | 2026-09-13T13:09:31Z | 2026-09-13T13:09:31Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/641208 prompt-641208\|641208 · Historical prompt 641208]] | unknown | 2026-08-05T11:13:46Z | 2026-08-05T11:13:46Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/641837 prompt-641837\|641837 · Historical prompt 641837]] | unknown | 2026-08-09T02:52:26Z | 2026-08-09T02:52:26Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/643817 prompt-643817\|643817 · Historical prompt 643817]] | blocked | 2026-09-18T16:53:50Z | 2026-09-18T16:53:50Z | BLOCKED | sì | no | — | — | — | — |
-| [[obsidian/Prompts/643918 prompt-643918\|643918 · Historical prompt 643918]] | blocked | 2026-09-16T09:42:19Z | 2026-09-16T09:42:19Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/638214 prompt-638214\|638214 · Historical prompt 638214]] | cancelled | 2026-08-04T23:00:23Z | 2026-08-04T23:00:23Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/639482 prompt-639482\|639482 · Historical prompt 639482]] | cancelled | 2026-09-13T13:09:31Z | 2026-09-13T13:09:31Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/641208 prompt-641208\|641208 · Historical prompt 641208]] | cancelled | 2026-08-05T11:13:46Z | 2026-08-05T11:13:46Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/641837 prompt-641837\|641837 · Historical prompt 641837]] | cancelled | 2026-08-09T02:52:26Z | 2026-08-09T02:52:26Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/643817 prompt-643817\|643817 · Historical prompt 643817]] | cancelled | 2026-09-18T16:53:50Z | 2026-09-18T16:53:50Z | CANCELLED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/643918 prompt-643918\|643918 · Historical prompt 643918]] | cancelled | 2026-09-16T09:42:19Z | 2026-09-16T09:42:19Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/657823 prompt-657823\|657823 · Historical prompt 657823]] | completed | 2026-09-05T19:28:23Z | 2026-09-05T19:28:23Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/672491 prompt-672491\|672491 · Historical prompt 672491]] | unknown | 2026-09-16T08:43:59Z | 2026-09-16T08:43:59Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/672541 prompt-672541\|672541 · Historical prompt 672541]] | unknown | 2026-09-11T20:47:04Z | 2026-09-11T20:47:04Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/673914 prompt-673914\|673914 · Historical prompt 673914]] | blocked | 2026-09-16T06:00:06Z | 2026-09-16T06:00:06Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/672491 prompt-672491\|672491 · Historical prompt 672491]] | cancelled | 2026-09-16T08:43:59Z | 2026-09-16T08:43:59Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/672541 prompt-672541\|672541 · Historical prompt 672541]] | cancelled | 2026-09-11T20:47:04Z | 2026-09-11T20:47:04Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/673914 prompt-673914\|673914 · Historical prompt 673914]] | cancelled | 2026-09-16T06:00:06Z | 2026-09-16T06:00:06Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/681247 prompt-681247\|681247 · Historical prompt 681247]] | completed | 2026-09-16T14:21:02Z | 2026-09-16T14:21:02Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/681395 prompt-681395\|681395 · Historical prompt 681395]] | unknown | 2026-09-07T10:36:31Z | 2026-09-07T10:37:15Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/681395 prompt-681395\|681395 · Historical prompt 681395]] | cancelled | 2026-09-07T10:36:31Z | 2026-09-07T10:37:15Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/681427 prompt-681427\|681427 · Historical prompt 681427]] | completed | 2026-09-12T07:08:04Z | 2026-09-12T07:08:04Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/682417 prompt-682417\|682417 · Historical prompt 682417]] | unknown | 2026-08-05T07:08:56Z | 2026-08-05T07:08:56Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/683214 prompt-683214\|683214 · Historical prompt 683214]] | unknown | 2026-08-11T16:45:56Z | 2026-08-11T16:45:56Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/684193 prompt-684193\|684193 · Historical prompt 684193]] | unknown | 2026-08-02T16:00:55Z | 2026-09-15T21:45:20Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/682417 prompt-682417\|682417 · Historical prompt 682417]] | cancelled | 2026-08-05T07:08:56Z | 2026-08-05T07:08:56Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/683214 prompt-683214\|683214 · Historical prompt 683214]] | cancelled | 2026-08-11T16:45:56Z | 2026-08-11T16:45:56Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/684193 prompt-684193\|684193 · Historical prompt 684193]] | cancelled | 2026-08-02T16:00:55Z | 2026-09-15T21:45:20Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/684215 prompt-684215\|684215 · Historical prompt 684215]] | completed | 2026-09-11T18:30:21Z | 2026-09-11T18:30:21Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/684217 prompt-684217\|684217 · Historical prompt 684217]] | completed | 2026-09-04T00:36:15Z | 2026-09-19T08:38:24Z | PASS | sì | no | — | — | — | — |
-| [[obsidian/Prompts/684271 prompt-684271\|684271 · Historical prompt 684271]] | unknown | 2026-08-04T15:48:23Z | 2026-08-04T15:48:23Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/684271 prompt-684271\|684271 · Historical prompt 684271]] | cancelled | 2026-08-04T15:48:23Z | 2026-08-04T15:48:23Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/684731 prompt-684731\|684731 · Historical prompt 684731]] | completed | 2026-09-16T09:55:30Z | 2026-09-16T09:55:30Z | PASS | sì | no | — | — | — | — |
-| [[obsidian/Prompts/704216 prompt-704216\|704216 · Historical prompt 704216]] | unknown | 2026-08-05T05:14:37Z | 2026-08-05T05:14:37Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/704216 prompt-704216\|704216 · Historical prompt 704216]] | cancelled | 2026-08-05T05:14:37Z | 2026-08-05T05:14:37Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/706214 prompt-706214\|706214 · Historical prompt 706214]] | completed | 2026-09-13T13:01:03Z | 2026-09-13T13:01:03Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/726105 prompt-726105\|726105 · Historical prompt 726105]] | unknown | 2026-08-05T02:21:03Z | 2026-08-05T02:21:03Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/731284 prompt-731284\|731284 · Historical prompt 731284]] | unknown | 2026-09-03T03:07:59Z | 2026-09-03T03:07:59Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/731462 prompt-731462\|731462 · Historical prompt 731462]] | unknown | 2026-09-03T20:54:39Z | 2026-09-03T20:54:39Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/731468 prompt-731468\|731468 · Historical prompt 731468]] | blocked | 2026-09-08T13:21:19Z | 2026-09-08T13:21:19Z | BLOCKED | no | no | — | — | — | — |
-| [[obsidian/Prompts/731604 prompt-731604\|731604 · Historical prompt 731604]] | unknown | 2026-08-04T17:47:31Z | 2026-08-04T17:47:31Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/726105 prompt-726105\|726105 · Historical prompt 726105]] | cancelled | 2026-08-05T02:21:03Z | 2026-08-05T02:21:03Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/731284 prompt-731284\|731284 · Historical prompt 731284]] | cancelled | 2026-09-03T03:07:59Z | 2026-09-03T03:07:59Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/731462 prompt-731462\|731462 · Historical prompt 731462]] | cancelled | 2026-09-03T20:54:39Z | 2026-09-03T20:54:39Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/731468 prompt-731468\|731468 · Historical prompt 731468]] | cancelled | 2026-09-08T13:21:19Z | 2026-09-08T13:21:19Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/731604 prompt-731604\|731604 · Historical prompt 731604]] | cancelled | 2026-08-04T17:47:31Z | 2026-08-04T17:47:31Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/731608 prompt-731608\|731608 · Historical prompt 731608]] | completed | 2026-09-13T13:44:36Z | 2026-09-13T13:44:36Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/731842 prompt-731842\|731842 · Historical prompt 731842]] | unknown | 2026-08-04T16:50:57Z | 2026-08-04T16:50:57Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/731842 prompt-731842\|731842 · Historical prompt 731842]] | cancelled | 2026-08-04T16:50:57Z | 2026-08-04T16:50:57Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/731845 prompt-731845\|731845 · Historical prompt 731845]] | completed | 2026-09-16T08:02:39Z | 2026-09-16T08:02:39Z | PASS | sì | no | — | — | — | — |
-| [[obsidian/Prompts/731846 prompt-731846\|731846 · Historical prompt 731846]] | unknown | 2026-08-30T16:27:53Z | 2026-09-19T06:53:19Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/731904 prompt-731904\|731904 · Historical prompt 731904]] | blocked | 2026-09-12T05:45:51Z | 2026-09-12T05:45:51Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/731846 prompt-731846\|731846 · Historical prompt 731846]] | cancelled | 2026-08-30T16:27:53Z | 2026-09-19T06:53:19Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/731904 prompt-731904\|731904 · Historical prompt 731904]] | cancelled | 2026-09-12T05:45:51Z | 2026-09-12T05:45:51Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/734581 prompt-734581\|734581 · Historical prompt 734581]] | completed | 2026-09-16T00:16:27Z | 2026-09-16T00:16:27Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/736205 prompt-736205\|736205 · Historical prompt 736205]] | unknown | 2026-09-03T18:40:14Z | 2026-09-03T18:40:14Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/738415 prompt-738415\|738415 · Historical prompt 738415]] | unknown | 2026-08-05T00:00:29Z | 2026-08-05T00:00:29Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/736205 prompt-736205\|736205 · Historical prompt 736205]] | cancelled | 2026-09-03T18:40:14Z | 2026-09-03T18:40:14Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/738415 prompt-738415\|738415 · Historical prompt 738415]] | cancelled | 2026-08-05T00:00:29Z | 2026-08-05T00:00:29Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/739214 prompt-739214\|739214 · Historical prompt 739214]] | cancelled | 2026-09-11T21:40:58Z | 2026-09-11T21:40:58Z | CANCELLED | no | no | — | — | — | — |
-| [[obsidian/Prompts/741906 prompt-741906\|741906 · Historical prompt 741906]] | unknown | 2026-08-04T23:25:41Z | 2026-08-04T23:25:41Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/741926 prompt-741926\|741926 · Historical prompt 741926]] | unknown | 2026-08-29T16:57:17Z | 2026-09-16T06:16:59Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/741906 prompt-741906\|741906 · Historical prompt 741906]] | cancelled | 2026-08-04T23:25:41Z | 2026-08-04T23:25:41Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/741926 prompt-741926\|741926 · Historical prompt 741926]] | cancelled | 2026-08-29T16:57:17Z | 2026-09-16T06:16:59Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/742591 prompt-742591\|742591 · Historical prompt 742591]] | completed | 2026-09-18T11:03:33Z | 2026-09-18T11:03:33Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/742615 prompt-742615\|742615 · Historical prompt 742615]] | unknown | 2026-09-16T10:15:22Z | 2026-09-16T10:15:22Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/742615 prompt-742615\|742615 · Historical prompt 742615]] | cancelled | 2026-09-16T10:15:22Z | 2026-09-16T10:15:22Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/742618 prompt-742618\|742618 · Historical prompt 742618]] | completed | 2026-09-12T04:06:13Z | 2026-09-12T04:06:13Z | PASS | sì | no | — | — | — | — |
-| [[obsidian/Prompts/742913 prompt-742913\|742913 · Historical prompt 742913]] | unknown | 2026-09-13T15:48:35Z | 2026-09-13T15:48:35Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/742913 prompt-742913\|742913 · Historical prompt 742913]] | cancelled | 2026-09-13T15:48:35Z | 2026-09-13T15:48:35Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/746323 prompt-746323\|746323 · Historical prompt 746323]] | completed | 2026-09-16T17:37:00Z | 2026-09-16T17:37:00Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/748219 prompt-748219\|748219 · Historical prompt 748219]] | unknown | 2026-08-06T15:19:27Z | 2026-08-06T15:19:27Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/748219 prompt-748219\|748219 · Historical prompt 748219]] | cancelled | 2026-08-06T15:19:27Z | 2026-08-06T15:19:27Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/751306 prompt-751306\|751306 · Historical prompt 751306]] | completed | 2026-09-18T17:12:02Z | 2026-09-18T17:12:02Z | PASS | sì | no | — | — | — | — |
-| [[obsidian/Prompts/754406 prompt-754406\|754406 · Historical prompt 754406]] | blocked | 2026-09-18T17:08:39Z | 2026-09-18T17:08:39Z | BLOCKED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/754406 prompt-754406\|754406 · Historical prompt 754406]] | cancelled | 2026-09-18T17:08:39Z | 2026-09-18T17:08:39Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/761284 prompt-761284\|761284 · Historical prompt 761284]] | completed | 2026-09-05T12:24:28Z | 2026-09-05T12:24:28Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/762451 prompt-762451\|762451 · Historical prompt 762451]] | blocked | 2026-09-11T17:36:07Z | 2026-09-11T17:36:07Z | BLOCKED | no | no | — | — | — | — |
+| [[obsidian/Prompts/762451 prompt-762451\|762451 · Historical prompt 762451]] | cancelled | 2026-09-11T17:36:07Z | 2026-09-11T17:36:07Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/781264 prompt-781264\|781264 · Historical prompt 781264]] | completed | 2026-09-07T19:35:13Z | 2026-09-07T19:35:13Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/805417 prompt-805417\|805417 · Historical prompt 805417]] | completed | 2026-09-16T17:18:50Z | 2026-09-16T17:18:50Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/812604 prompt-812604\|812604 · Historical prompt 812604]] | completed | 2026-09-16T04:36:32Z | 2026-09-16T04:36:32Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/814627 prompt-814627\|814627 · Historical prompt 814627]] | unknown | 2026-09-16T03:43:21Z | 2026-09-16T03:43:21Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/814627 prompt-814627\|814627 · Historical prompt 814627]] | cancelled | 2026-09-16T03:43:21Z | 2026-09-16T03:43:21Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/815306 prompt-815306\|815306 · Historical prompt 815306]] | completed | 2026-09-16T05:00:53Z | 2026-09-16T05:00:53Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/816427 prompt-816427\|816427 · Historical prompt 816427]] | unknown | 2026-08-01T13:10:58Z | 2026-08-01T13:10:58Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/816427 prompt-816427\|816427 · Historical prompt 816427]] | cancelled | 2026-08-01T13:10:58Z | 2026-08-01T13:10:58Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/816428 prompt-816428\|816428 · Historical prompt 816428]] | completed | 2026-08-01T14:03:35Z | 2026-08-01T14:03:35Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/819427 prompt-819427\|819427 · Historical prompt 819427]] | unknown | 2026-09-05T11:55:40Z | 2026-09-05T11:55:40Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/819427 prompt-819427\|819427 · Historical prompt 819427]] | cancelled | 2026-09-05T11:55:40Z | 2026-09-05T11:55:40Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/824613 prompt-824613\|824613 · Historical prompt 824613]] | completed | 2026-09-15T23:57:50Z | 2026-09-15T23:57:50Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/826451 prompt-826451\|826451 · Historical prompt 826451]] | failed | 2026-09-06T07:28:48Z | 2026-09-06T07:28:48Z | FAIL | sì | no | — | — | — | — |
 | [[obsidian/Prompts/827614 prompt-827614\|827614 · Historical prompt 827614]] | completed | 2026-09-16T03:45:18Z | 2026-09-16T03:45:18Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/835204 prompt-835204\|835204 · Historical prompt 835204]] | unknown | 2026-09-12T00:59:36Z | 2026-09-12T00:59:36Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/835204 prompt-835204\|835204 · Historical prompt 835204]] | cancelled | 2026-09-12T00:59:36Z | 2026-09-12T00:59:36Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/835917 prompt-835917\|835917 · Historical prompt 835917]] | completed | 2026-09-13T13:30:37Z | 2026-09-13T13:30:37Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/838979 prompt-838979\|838979 · Historical prompt 838979]] | unknown | 2026-09-16T05:04:48Z | 2026-09-16T05:04:48Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/842617 prompt-842617\|842617 · Historical prompt 842617]] | unknown | 2026-08-04T18:39:12Z | 2026-08-04T18:39:12Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/838979 prompt-838979\|838979 · Historical prompt 838979]] | cancelled | 2026-09-16T05:04:48Z | 2026-09-16T05:04:48Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/842617 prompt-842617\|842617 · Historical prompt 842617]] | cancelled | 2026-08-04T18:39:12Z | 2026-08-04T18:39:12Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/842731 prompt-842731\|842731 · Historical prompt 842731]] | completed | 2026-09-09T09:08:03Z | 2026-09-19T17:07:11Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/845217 prompt-845217\|845217 · Historical prompt 845217]] | unknown | 2026-09-03T17:28:38Z | 2026-09-03T17:28:38Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/846215 prompt-846215\|846215 · Historical prompt 846215]] | unknown | 2026-09-03T05:16:32Z | 2026-09-03T05:16:32Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/845217 prompt-845217\|845217 · Historical prompt 845217]] | cancelled | 2026-09-03T17:28:38Z | 2026-09-03T17:28:38Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/846215 prompt-846215\|846215 · Historical prompt 846215]] | cancelled | 2026-09-03T05:16:32Z | 2026-09-03T05:16:32Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/847392 prompt-847392\|847392 · Historical prompt 847392]] | completed | 2026-09-16T09:54:41Z | 2026-09-16T09:54:41Z | PASS | sì | no | — | — | — | — |
-| [[obsidian/Prompts/861927 prompt-861927\|861927 · Historical prompt 861927]] | unknown | 2026-08-05T01:02:46Z | 2026-08-05T01:02:46Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/863241 prompt-863241\|863241 · Historical prompt 863241]] | unknown | 2026-08-05T05:36:35Z | 2026-08-05T05:36:35Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/861927 prompt-861927\|861927 · Historical prompt 861927]] | cancelled | 2026-08-05T01:02:46Z | 2026-08-05T01:02:46Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/863241 prompt-863241\|863241 · Historical prompt 863241]] | cancelled | 2026-08-05T05:36:35Z | 2026-08-05T05:36:35Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/864219 prompt-864219\|864219 · Historical prompt 864219]] | completed | 2026-09-12T17:00:33Z | 2026-09-12T17:00:33Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/872451 prompt-872451\|872451 · Historical prompt 872451]] | completed | 2026-09-06T06:32:21Z | 2026-09-06T06:32:21Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/892067 prompt-892067\|892067 · Historical prompt 892067]] | unknown | 2026-09-16T01:03:55Z | 2026-09-16T01:03:55Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/892067 prompt-892067\|892067 · Historical prompt 892067]] | cancelled | 2026-09-16T01:03:55Z | 2026-09-16T01:03:55Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/893806 prompt-893806\|893806 · Historical prompt 893806]] | completed | 2026-09-16T06:22:46Z | 2026-09-16T06:22:46Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/904217 prompt-904217\|904217 · Historical prompt 904217]] | unknown | 2026-08-04T22:22:46Z | 2026-08-04T22:22:46Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/906314 prompt-906314\|906314 · Historical prompt 906314]] | unknown | 2026-08-05T08:36:21Z | 2026-08-05T08:36:21Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/904217 prompt-904217\|904217 · Historical prompt 904217]] | cancelled | 2026-08-04T22:22:46Z | 2026-08-04T22:22:46Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/906314 prompt-906314\|906314 · Historical prompt 906314]] | cancelled | 2026-08-05T08:36:21Z | 2026-08-05T08:36:21Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/913284 prompt-913284\|913284 · Historical prompt 913284]] | completed | 2026-09-12T06:43:21Z | 2026-09-12T06:43:21Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/917364 prompt-917364\|917364 · Historical prompt 917364]] | completed | 2026-09-06T10:24:37Z | 2026-09-13T12:14:19Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/917462 prompt-917462\|917462 · Historical prompt 917462]] | unknown | 2026-08-04T19:14:28Z | 2026-08-04T19:14:28Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/934572 prompt-934572\|934572 · Historical prompt 934572]] | unknown | 2026-08-05T02:53:45Z | 2026-08-05T02:53:45Z | UNKNOWN | no | no | — | — | — | — |
-| [[obsidian/Prompts/936251 prompt-936251\|936251 · Historical prompt 936251]] | blocked | 2026-09-16T07:35:32Z | 2026-09-16T07:35:32Z | BLOCKED | sì | no | — | — | — | — |
-| [[obsidian/Prompts/940316 prompt-940316\|940316 · Historical prompt 940316]] | unknown | 2026-09-16T07:38:54Z | 2026-09-16T07:38:54Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/917462 prompt-917462\|917462 · Historical prompt 917462]] | cancelled | 2026-08-04T19:14:28Z | 2026-08-04T19:14:28Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/934572 prompt-934572\|934572 · Historical prompt 934572]] | cancelled | 2026-08-05T02:53:45Z | 2026-08-05T02:53:45Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/936251 prompt-936251\|936251 · Historical prompt 936251]] | cancelled | 2026-09-16T07:35:32Z | 2026-09-16T07:35:32Z | CANCELLED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/940316 prompt-940316\|940316 · Historical prompt 940316]] | cancelled | 2026-09-16T07:38:54Z | 2026-09-16T07:38:54Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/947261 prompt-947261\|947261 · Historical prompt 947261]] | completed | 2026-09-07T20:19:15Z | 2026-09-07T20:19:15Z | PASS | no | no | — | — | — | — |
-| [[obsidian/Prompts/953204 prompt-953204\|953204 · Historical prompt 953204]] | unknown | 2026-08-05T01:29:48Z | 2026-08-05T01:29:48Z | UNKNOWN | no | no | — | — | — | — |
+| [[obsidian/Prompts/953204 prompt-953204\|953204 · Historical prompt 953204]] | cancelled | 2026-08-05T01:29:48Z | 2026-08-05T01:29:48Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/978216 prompt-978216\|978216 · Historical prompt 978216]] | completed | 2026-09-16T09:17:02Z | 2026-09-16T09:17:02Z | PASS | sì | no | — | — | — | — |
 | [[obsidian/Prompts/962109 personalhub-github-ci-closure\|962109 · Chiudere definitivamente la CI GitHub di PersonalHub]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/578439 workflowy-roadmap-control-local-activation\|578439 · Attivare il controllo roadmap da Workflowy]] | superseded | — | — | — | no | no | — | Fedora / Workflowy | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical\|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] | blocked | — | — | BLOCKED | no | no | — | Workflowy importer | — | — |
+| [[obsidian/Prompts/641582 workflowy-roadmap-control-surface-historical\|641582 · Trasformare Workflowy nel control surface della roadmap Codex]] | superseded | — | — | — | no | no | — | Workflowy importer | — | — |
 | [[obsidian/Prompts/240438 livinggaul-content-dedupe-local-activation\|240438 · LivingGaul content dedupe local activation]] | completed | 2026-09-19T03:56:36Z | 2026-09-19T03:56:36Z | PASS | no | no | — | livinggaul-x-downloader | GPT-5.5 | low |
 | [[obsidian/Prompts/996524 livinggaul-metadata-v3-local-activation\|996524 · LivingGaul metadata v3 local activation]] | superseded | — | — | — | no | no | — | livinggaul-x-downloader | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/583742 personalhub-v53-freeze-data-recovery\|583742 · PersonalHub v53 freeze e dati mancanti]] | completed | 2026-09-19T05:42:17Z | 2026-09-19T05:54:52Z | PASS | sì | no | — | PersonalHub | GPT-5.6 Sol | medium |
@@ -383,26 +383,26 @@
 | [[obsidian/Prompts/522084 personalhub-shared-tags-facets-backlinks-v1\|522084 · Unificare tag, facet e backlink cross-module in PersonalHub]] | completed | 2026-09-22T18:00:12Z | 2026-09-22T18:00:12Z | PASS | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/613102 personalhub-global-photo-engine-people-legacy-removal-v3\|613102 · Completare motore foto globale e rimuovere pipeline legacy People]] | completed | — | — | PASS | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/515185 chatgpt-exporter-find-tab-runtime-recovery-v2\|515185 · Sbloccare Find ChatGPT tab e completare il primo archivio]] | cancelled | — | — | CANCELLED | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/613408 ccs-desktop-launcher-overlay-recovery-v2\|613408 · Completare launcher e overlay Codex Desktop]] | blocked | 2026-09-22T23:51:48Z | 2026-09-22T23:51:48Z | BLOCKED | sì | no | [[obsidian/Prompts/572554 ccs-desktop-launcher-overlay-recovery-v3\|572554]] | Facilitatori di prompt | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/613408 ccs-desktop-launcher-overlay-recovery-v2\|613408 · Completare launcher e overlay Codex Desktop]] | superseded | 2026-09-22T23:51:48Z | 2026-09-22T23:51:48Z | BLOCKED | sì | no | [[obsidian/Prompts/572554 ccs-desktop-launcher-overlay-recovery-v3\|572554]] | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/329968 workflowy-integrator-progress-live-v1\|329968 · Distribuire la dashboard di avanzamento dell’integratore]] | completed | 2026-09-22T23:52:46Z | 2026-09-22T23:52:46Z | PASS | no | no | — | Facilitatori di prompt | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/572554 ccs-desktop-launcher-overlay-recovery-v3\|572554 · Completare launcher e overlay Codex Desktop con progetto corretto]] | blocked | 2026-09-22T23:58:52Z | 2026-09-22T23:58:52Z | BLOCKED | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/254859 chatgpt-exporter-archive-validation-v1\|254859 · Verificare completezza e correttezza dell’export ChatGPT]] | blocked | — | — | BLOCKED | no | no | — | Prompt infrastructure | GPT-5.6 Luna | low |
+| [[obsidian/Prompts/572554 ccs-desktop-launcher-overlay-recovery-v3\|572554 · Completare launcher e overlay Codex Desktop con progetto corretto]] | superseded | 2026-09-22T23:58:52Z | 2026-09-22T23:58:52Z | BLOCKED | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/254859 chatgpt-exporter-archive-validation-v1\|254859 · Verificare completezza e correttezza dell’export ChatGPT]] | superseded | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/817056 duplicate-photos-detector-fedora-local-finalize-v1\|817056 · Rendere operativo duplicate-photos-detector su Fedora]] | completed | 2026-09-24T00:03:52Z | 2026-09-24T00:03:52Z | PASS | sì | no | — | Fedora | GPT-5.5 | medium |
 | [[obsidian/Prompts/140263 personalhub-universal-since-when-creation-ui-v1\|140263 · Estendere Create Since When a entità e moduli PH]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/199166 openai-vs-chatgpt-exporter-data-completeness-v1\|199166 · Confrontare export OpenAI e ChatGPTExporter]] | completed | 2026-09-23T23:34:45Z | 2026-09-23T23:34:45Z | PASS | no | no | — | Prompt infrastructure | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/822595 personalhub-global-since-when-v2\|822595 · Promuovere Since When a funzione globale PersonalHub]] | completed | 2026-09-24T00:37:09Z | 2026-09-24T04:18:33Z | PASS | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/570349 codex-usage-live-publisher-single-writer-runtime-recovery-v1\|570349 · Ripristinare il monitoraggio live Codex remoto]] | completed | 2026-09-24T02:06:50Z | 2026-09-24T02:06:50Z | PASS | no | no | — | GitHub Autosync / Fedora runtime | GPT-6 Luna | medium |
-| [[obsidian/Prompts/620949 unified-kuma-cross-repo-control-plane-v1\|620949 · Unificare Uptime Kuma per tutti i repository]] | blocked | 2026-09-24T02:07:34Z | 2026-09-24T03:12:24Z | BLOCKED | sì | sì | — | Fedora / fedora-system-monitor | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/620949 unified-kuma-cross-repo-control-plane-v1\|620949 · Unificare Uptime Kuma per tutti i repository]] | superseded | 2026-09-24T02:07:34Z | 2026-09-24T03:12:24Z | BLOCKED | sì | sì | — | Fedora / fedora-system-monitor | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/970051 duplicate-photos-detector-fedora-timer-migration-v1\|970051 · Migrare duplicate-photos-detector al timer periodico Fedora]] | completed | 2026-09-24T02:07:58Z | 2026-09-24T02:07:58Z | PASS | no | no | — | duplicate-photos-detector | GPT-5.6 Luna | low |
-| [[obsidian/Prompts/996591 ccs-pbf-live-final-closure-v1\|996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop]] | blocked | 2026-09-24T02:11:43Z | 2026-09-24T02:11:43Z | BLOCKED | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/893025 sqlite-to-obsidian-fedora-bootstrap-v1\|893025 · Creare il projector Fedora condiviso SQLite → Obsidian]] | blocked | 2026-09-24T02:13:28Z | 2026-09-24T02:13:28Z | BLOCKED | sì | sì | — | MegaVault | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/996591 ccs-pbf-live-final-closure-v1\|996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop]] | superseded | 2026-09-24T02:11:43Z | 2026-09-24T02:11:43Z | BLOCKED | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/893025 sqlite-to-obsidian-fedora-bootstrap-v1\|893025 · Creare il projector Fedora condiviso SQLite → Obsidian]] | superseded | 2026-09-24T02:13:28Z | 2026-09-24T02:13:28Z | BLOCKED | sì | sì | — | MegaVault | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/105883 personalhub-global-since-when-v3\|105883 · Promuovere Since When a funzione globale PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1\|697920 · Rendere ChatGPTExporter resiliente e affidabile]] | blocked | 2026-09-24T02:12:33Z | 2026-09-24T02:12:33Z | BLOCKED | sì | no | — | Prompt infrastructure | GPT-6 Sol | medium |
+| [[obsidian/Prompts/697920 chatgpt-exporter-resilience-hardening-v1\|697920 · Rendere ChatGPTExporter resiliente e affidabile]] | superseded | 2026-09-24T02:12:33Z | 2026-09-24T02:12:33Z | BLOCKED | sì | no | — | Prompt infrastructure | GPT-6 Sol | medium |
 | [[obsidian/Prompts/383662 personalhub-v60-live-db-20-21-migration-v1\|383662 · Migrare il DB reale 20→21 e validare PersonalHub v60]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/641903 ccs-pbf-final-live-retry-v1\|641903 · Chiudere il leaf PBF finale di Codex Desktop]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-6 Luna | low |
-| [[obsidian/Prompts/422308 telegram-notification-history-fedora-collector-v1\|422308 · Archiviare automaticamente le notifiche Telegram per ridurre il rumore]] | blocked | 2026-09-24T10:16:14Z | 2026-09-24T10:33:16Z | BLOCKED | sì | sì | — | Fedora / Telegram notification hygiene | GPT-6 Luna | medium |
+| [[obsidian/Prompts/422308 telegram-notification-history-fedora-collector-v1\|422308 · Archiviare automaticamente le notifiche Telegram per ridurre il rumore]] | superseded | 2026-09-24T10:16:14Z | 2026-09-24T10:33:16Z | BLOCKED | sì | sì | — | Fedora / Telegram notification hygiene | GPT-6 Luna | medium |
 | [[obsidian/Prompts/333860 telegram-history-runtime-closure-v1\|333860 · Chiudere il collector Telegram dopo autorizzazione e collaudo]] | superseded | — | — | — | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/966124 telegram-history-runtime-closure-v2\|966124 · Chiudere il collector Telegram dopo autorizzazione e collaudo]] | completed | — | — | PASS | no | no | — | Fedora / fedora-system-monitor | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/553232 personalhub-c2-final-pixel\|553232 · Completa PersonalHub C2 e consegna finale Pixel]] | completed | 2026-09-26T12:36:36Z | 2026-09-26T12:36:36Z | PASS | no | no | — | PersonalHub | — | — |
 | [[obsidian/Prompts/226672 integrare-supervisione-chatgpt-codex-nella-c2-226672\|226672 · Integrare supervisione ChatGPT/Codex nella C2]] | completed | — | — | PASS | no | no | — | codex-roadmap | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/653776 fix-c2-successor-supervisor-authority-handoff-cl-653776\|653776 · Fix C2 successor supervisor authority handoff (claim vs renew)]] | blocked | 2026-09-26T15:51:47Z | 2026-09-26T15:51:47Z | BLOCKED | no | no | — | codex-roadmap | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/653776 fix-c2-successor-supervisor-authority-handoff-cl-653776\|653776 · Fix C2 successor supervisor authority handoff (claim vs renew)]] | completed | 2026-09-26T15:51:47Z | 2026-09-26T15:51:47Z | PASS | sì | sì | — | codex-roadmap | GPT-5.6 Terra | medium |

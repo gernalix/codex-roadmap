@@ -2,7 +2,7 @@
 prompt_id: 588376
 status: pending
 project_id: —
-model: GPT-6 Sol
+model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - manual-prerequisite:revoke-old-github-pat

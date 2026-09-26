@@ -1,6 +1,6 @@
 ---
 prompt_id: 893025
-status: blocked
+status: superseded
 project_id: 23
 model: GPT-5.6 Terra
 reasoning: medium
@@ -11,13 +11,13 @@ tags:
   - personalhub-data
   - sqlite-to-obsidian
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/megavault
 ---
 
 # 893025 · Creare il projector Fedora condiviso SQLite → Obsidian
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/megavault|MegaVault]]
 - **Prompt:** [[../../falliti/sqlite-to-obsidian-fedora-bootstrap-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-24T02:13:28Z

@@ -1,6 +1,6 @@
 ---
 prompt_id: 354882
-status: blocked
+status: superseded
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - grindr
   - priority
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/grindr-web-exporter
 ---
 
 # 354882 · Elimina loop login Grindr e completa export
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../falliti/grindr-web-exporter-single-browser-end-to-end-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-22T00:27:32Z

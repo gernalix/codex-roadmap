@@ -2,7 +2,7 @@
 prompt_id: 556372
 status: pending
 project_id: —
-model: GPT-6 Luna
+model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - browser

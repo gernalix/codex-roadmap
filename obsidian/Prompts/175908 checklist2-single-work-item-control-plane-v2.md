@@ -28,7 +28,7 @@ tags:
 - **Fix:** —
 - **Dipende da:** —
 - **Sblocca:** [[851204 c2-datasette-alerts-radical-hygiene-v1|851204]]
-- **Padri/precedenti:** [[238170 c2-supervisor-human-milestone-telegram-v1|238170]], [[874695 checklist-2-unified-control-plane-v1|874695]], [[896074 ccs-pbf-final-live-routing-safe-retry-v1|896074]]
+- **Padri/precedenti:** [[238170 c2-supervisor-human-milestone-telegram-v1|238170]], [[284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653]], [[572554 ccs-desktop-launcher-overlay-recovery-v3|572554]], [[613408 ccs-desktop-launcher-overlay-recovery-v2|613408]], [[874695 checklist-2-unified-control-plane-v1|874695]], [[896074 ccs-pbf-final-live-routing-safe-retry-v1|896074]], [[996591 ccs-pbf-live-final-closure-v1|996591]]
 - **Figli/follow-up:** [[107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1|107210]], [[238170 c2-supervisor-human-milestone-telegram-v1|238170]], [[851204 c2-datasette-alerts-radical-hygiene-v1|851204]]
 - **Chat Codex:** Goal Codex supervisionato da RDC; cutover end-to-end con sottotask repo-specifici solo quando necessari
 

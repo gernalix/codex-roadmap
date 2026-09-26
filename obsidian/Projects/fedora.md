@@ -7,7 +7,7 @@ tags:
 
 - [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill|813383 · Attivare il tracciamento SQLite della roadmap]] · `completed`
 - [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix|371237 · Completa il fix del salvataggio Codex sul PC]] · `completed`
-- [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `blocked`
+- [[obsidian/Prompts/642815 codex-usage-publisher-lock-runtime-closure|642815 · Chiudere il fix del publisher Codex sul PC]] · `superseded`
 - [[obsidian/Prompts/817264 codex-usage-publisher-autonomous-runtime-closure|817264 · Chiudere autonomamente il publisher Codex sul PC]] · `completed`
 - [[obsidian/Prompts/519247 codex-usage-publisher-append-fastpath-runtime|519247 · Attivare il fast-path del publisher Codex]] · `completed`
 - [[obsidian/Prompts/856234 workflowy-live-smoke-remote-fix-closure|856234 · Confermare il live smoke Workflowy dopo il fix remoto]] · `completed`

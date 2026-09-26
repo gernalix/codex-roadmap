@@ -1,18 +1,18 @@
 ---
 prompt_id: 254859
-status: blocked
+status: superseded
 project_id: 92
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/prompt-infrastructure
 ---
 
 # 254859 · Verificare completezza e correttezza dell’export ChatGPT
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../falliti/chatgpt-exporter-archive-validation-v1|Apri prompt]]
 - **Primo lancio:** —

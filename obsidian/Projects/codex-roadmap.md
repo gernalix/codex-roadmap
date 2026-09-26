@@ -11,4 +11,4 @@ tags:
 - [[obsidian/Prompts/874695 checklist-2-unified-control-plane-v1|874695 · Unificare roadmap e checkpoint nella Checklist 2.0]] · `superseded`
 - [[obsidian/Prompts/809537 roadmap-sqlite-state-migration|809537 · Vecchia migrazione SQLite della roadmap]] · `superseded`
 - [[obsidian/Prompts/226672 integrare-supervisione-chatgpt-codex-nella-c2-226672|226672 · Integrare supervisione ChatGPT/Codex nella C2]] · `completed`
-- [[obsidian/Prompts/653776 fix-c2-successor-supervisor-authority-handoff-cl-653776|653776 · Fix C2 successor supervisor authority handoff (claim vs renew)]] · `blocked`
+- [[obsidian/Prompts/653776 fix-c2-successor-supervisor-authority-handoff-cl-653776|653776 · Fix C2 successor supervisor authority handoff (claim vs renew)]] · `completed`

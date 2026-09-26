@@ -1,18 +1,18 @@
 ---
 prompt_id: 620949
-status: blocked
+status: superseded
 project_id: 15
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/fedora-fedora-system-monitor
 ---
 
 # 620949 · Unificare Uptime Kuma per tutti i repository
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora-fedora-system-monitor|Fedora / fedora-system-monitor]]
 - **Prompt:** [[../../falliti/unified-kuma-cross-repo-control-plane-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-24T02:07:34Z

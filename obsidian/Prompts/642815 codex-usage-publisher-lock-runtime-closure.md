@@ -1,19 +1,19 @@
 ---
 prompt_id: 642815
-status: blocked
+status: superseded
 project_id: 8
 model: GPT-5.6 Luna
 reasoning: low
 tags:
   - issue-writer-e2e
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/fedora
 ---
 
 # 642815 · Chiudere il fix del publisher Codex sul PC
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/fedora|Fedora]]
 - **Prompt:** [[../../falliti/codex-usage-publisher-lock-runtime-closure|Apri prompt]]
 - **Primo lancio:** 2026-09-18T21:58:59Z

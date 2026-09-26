@@ -1,6 +1,6 @@
 ---
 prompt_id: 736284
-status: blocked
+status: superseded
 project_id: 92
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - prompt-history
   - runtime-fix
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/prompt-infrastructure
 ---
 
 # 736284 · Sbloccare ChatGPTExporter e creare il primo archivio
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../falliti/chatgpt-exporter-live-chrome-first-archive-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-22T11:16:19Z
@@ -28,7 +28,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[571364 prompt-history-upstream-web-desktop-runtime-v1|571364]]
-- **Figli/follow-up:** [[788315 chatgpt-exporter-live-recovery-after-736284-v1|788315]]
+- **Figli/follow-up:** [[788315 chatgpt-exporter-live-recovery-after-736284-v1|788315]], [[812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553]]
 - **Chat Codex:** Stessa chat Codex di 571364; riusa il contesto runtime e controlla direttamente il Chrome reale.
 
 ## Spiegazione

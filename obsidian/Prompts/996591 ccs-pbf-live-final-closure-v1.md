@@ -1,18 +1,18 @@
 ---
 prompt_id: 996591
-status: blocked
+status: superseded
 project_id: 96
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/facilitatori-di-prompt
 ---
 
 # 996591 · Chiudere i PBF residui del launcher e overlay Codex Desktop
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/facilitatori-di-prompt|Facilitatori di prompt]]
 - **Prompt:** [[../../falliti/ccs-pbf-live-final-closure-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-24T02:11:43Z
@@ -24,7 +24,7 @@ tags:
 - **Dipende da:** —
 - **Sblocca:** —
 - **Padri/precedenti:** [[284653 ccs-desktop-launcher-overlay-combined-closure-v1|284653]], [[572554 ccs-desktop-launcher-overlay-recovery-v3|572554]], [[613408 ccs-desktop-launcher-overlay-recovery-v2|613408]]
-- **Figli/follow-up:** [[641903 ccs-pbf-final-live-retry-v1|641903]]
+- **Figli/follow-up:** [[175908 checklist2-single-work-item-control-plane-v2|175908]], [[641903 ccs-pbf-final-live-retry-v1|641903]]
 - **Chat Codex:** Nuova chat Codex; continuazione finale della catena 284653 → 613408 → 572554.
 
 ## Spiegazione
