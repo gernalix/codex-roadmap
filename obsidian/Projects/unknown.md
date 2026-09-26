@@ -5,7 +5,6 @@ tags:
 
 # Unknown
 
-- [[obsidian/Prompts/614593 c2-intake-collisioni-request-key-tra-chat-parall-614593|614593 · C2 intake: collisioni request-key tra chat parallele]] · `running`
 - [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] · `pending`
 - [[obsidian/Prompts/682297 c2-supervisor-rollover-fallito-degrada-a-human-r-682297|682297 · C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]] · `pending`
 - [[obsidian/Prompts/718501 c2-supervisor-backoff-rate-limit-globale-blocca--718501|718501 · C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]] · `pending`
@@ -15,6 +14,7 @@ tags:
 - [[obsidian/Prompts/232898 completare-preparazione-e-drain-autonomo-c2-fino-232898|232898 · Completare preparazione e drain autonomo C2 fino a quiescenza]] · `superseded`
 - [[obsidian/Prompts/592418 c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418|592418 · C2 scheduler: due chat RDC possono scrivere contemporaneamente nello stesso worktree/task]] · `completed`
 - [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] · `blocked`
+- [[obsidian/Prompts/614593 c2-intake-collisioni-request-key-tra-chat-parall-614593|614593 · C2 intake: collisioni request-key tra chat parallele]] · `completed`
 - [[obsidian/Prompts/255325 prompt-255325|255325 · Prompt 255325]] · `cancelled`
 - [[obsidian/Prompts/294731 prompt-294731|294731 · Prompt 294731]] · `cancelled`
 - [[obsidian/Prompts/319311 prompt-319311|319311 · Prompt 319311]] · `cancelled`

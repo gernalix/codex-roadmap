@@ -1,6 +1,6 @@
 ---
 prompt_id: 614593
-status: running
+status: completed
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,15 +9,15 @@ tags:
   - concurrency
   - intake
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/unknown
 ---
 
 # 614593 · C2 intake: collisioni request-key tra chat parallele
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/c2-intake-collisioni-request-key-tra-chat-parall-614593|Apri prompt]]
+- **Prompt:** [[../../completed/c2-intake-collisioni-request-key-tra-chat-parall-614593|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

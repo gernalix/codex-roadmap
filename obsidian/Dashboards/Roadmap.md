@@ -13,4 +13,3 @@
 ## In esecuzione
 
 - [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]]
-- [[obsidian/Prompts/614593 c2-intake-collisioni-request-key-tra-chat-parall-614593|614593 · C2 intake: collisioni request-key tra chat parallele]]
