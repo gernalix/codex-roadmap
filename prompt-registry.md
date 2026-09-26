@@ -5,8 +5,8 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/582408 completare-bootstrap-e-handoff-del-drain-autonom-582408\|582408 · Completare bootstrap e handoff del drain autonomo C2]] | running | — | — | — | no | no | — | — | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/992303 c2-executor-chat-reference-history\|992303 · Traccia executor e chat di ogni task C2]] | running | — | — | — | no | no | — | codex-roadmap / C2 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/232898 completare-preparazione-e-drain-autonomo-c2-fino-232898\|232898 · Completare preparazione e drain autonomo C2 fino a quiescenza]] | pending | — | — | — | no | no | — | — | GPT-6 Sol | medium |
-| [[obsidian/Prompts/992303 c2-executor-chat-reference-history\|992303 · Traccia executor e chat di ogni task C2]] | pending | — | — | — | no | no | — | codex-roadmap / C2 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/233366 implementare-struttura-minima-del-contratto-c2-233366\|233366 · Implementare struttura minima del contratto C2]] | pending | — | — | — | no | no | — | codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |

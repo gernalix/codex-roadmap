@@ -3,8 +3,8 @@
 > Vista di compatibilità generata da `roadmap.sqlite`. La centralina operativa è Workflowy; non modificare manualmente.
 
 1. [[prompts/completare-bootstrap-e-handoff-del-drain-autonom-582408|completare-bootstrap-e-handoff-del-drain-autonom-582408]]
-2. [[prompts/completare-preparazione-e-drain-autonomo-c2-fino-232898|completare-preparazione-e-drain-autonomo-c2-fino-232898]]
-3. [[prompts/c2-executor-chat-reference-history|c2-executor-chat-reference-history]]
+2. [[prompts/c2-executor-chat-reference-history|c2-executor-chat-reference-history]]
+3. [[prompts/completare-preparazione-e-drain-autonomo-c2-fino-232898|completare-preparazione-e-drain-autonomo-c2-fino-232898]]
 4. [[prompts/implementare-struttura-minima-del-contratto-c2-233366|implementare-struttura-minima-del-contratto-c2-233366]]
 5. [[prompts/chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1]]
 6. [[prompts/c2-datasette-alerts-radical-hygiene-v1|c2-datasette-alerts-radical-hygiene-v1]]
