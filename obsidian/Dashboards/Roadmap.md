@@ -4,7 +4,6 @@
 
 ## Lanciabili adesso
 
-- [[obsidian/Prompts/232898 completare-preparazione-e-drain-autonomo-c2-fino-232898|232898 · Completare preparazione e drain autonomo C2 fino a quiescenza]]
 - [[obsidian/Prompts/233366 implementare-struttura-minima-del-contratto-c2-233366|233366 · Implementare struttura minima del contratto C2]]
 - [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1|851204 · Bonificare radicalmente Datasette Alerts]]
 - [[obsidian/Prompts/592418 c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418|592418 · C2 scheduler: due chat RDC possono scrivere contemporaneamente nello stesso worktree/task]]

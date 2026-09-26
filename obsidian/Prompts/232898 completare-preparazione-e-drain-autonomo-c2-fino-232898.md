@@ -1,6 +1,6 @@
 ---
 prompt_id: 232898
-status: pending
+status: superseded
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - handoff
   - priority:p0
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/unknown
 ---
 
 # 232898 · Completare preparazione e drain autonomo C2 fino a quiescenza
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/completare-preparazione-e-drain-autonomo-c2-fino-232898|Apri prompt]]
+- **Prompt:** [[../../falliti/completare-preparazione-e-drain-autonomo-c2-fino-232898|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
