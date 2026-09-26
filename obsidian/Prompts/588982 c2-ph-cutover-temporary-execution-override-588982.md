@@ -1,6 +1,6 @@
 ---
 prompt_id: 588982
-status: pending
+status: superseded
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -13,15 +13,15 @@ tags:
   - scheduler
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/unknown
 ---
 
 # 588982 · C2 PH cutover + temporary execution override
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/c2-ph-cutover-temporary-execution-override-588982|Apri prompt]]
+- **Prompt:** [[../../falliti/c2-ph-cutover-temporary-execution-override-588982|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
