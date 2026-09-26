@@ -17,7 +17,7 @@ Make this supervisor session recoverable, then implement and operate the non-Per
 - [ ] Execute ready non-PH work to applicable acceptance criteria.
 
 ## Current step
-Phase 0 recovery and global writer fencing are live. Use the isolated remote-main snapshot for non-PH reconciliation.
+Successor supervisor recovery is live with local/canonical fencing token 2. Non-PH reconciliation repaired stale terminal roots; PROMPT_ID 226672 is materialized but not scheduled.
 
 ## Verified facts
 - `roadmap.sqlite` in this repository is the canonical task source; the GitHub Actions workflow is its single writer.
@@ -26,6 +26,7 @@ Phase 0 recovery and global writer fencing are live. Use the isolated remote-mai
 - The current task id is `01a0ddaf-99f5-7fa1-82c2-6d5a26a84808`.
 - Remote Desktop Commander responds on Fedora.
 - Current supervisor `01a0ddaf-99f5-7fa1-82c2-6d5a26a84808` holds the real local lease with fencing token 1. The watchdog timer is active.
+- Recovery successor `00798a0e-021b-4c66-85ef-8c3eac771b93` acquired a NEW local lease with fencing token 2; canonical writer claim #1198 and renewals #1199/#1200/#1202 were applied.
 - The runtime service now requires the current supervisor ID and fencing token before scheduling, submitting writer requests, or launching a worker.
 - Writer-side fencing merged in PR #1171. Canonical claim Issue #1172 applied with this supervisor ID/token; stale renewal Issue #1173 was rejected as `stale_or_expired_supervisor` by the single writer.
 - The runtime now reads an atomic derived snapshot of the remote-main `roadmap.sqlite` blob from `~/.local/state/c2-supervisor/roadmap.sqlite3`; it does not depend on the shared PH checkout branch.
@@ -44,7 +45,7 @@ Phase 0 recovery and global writer fencing are live. Use the isolated remote-mai
 Minimum Phase 0 inspection, lease/watchdog implementation and activation, isolated end-to-end browser recovery, fencing verification, and local runtime gate.
 
 ## Remaining
-Non-PH roadmap reconciliation, scheduler/control-plane enhancements, and execution of ready non-PH work.
+Repair stale 175908 phase descendants; complete ChatGPT/Codex supervision integration and acceptance through PROMPT_ID 226672; then execute only explicitly configured non-PH runnable work.
 
 ## Blockers
 No Phase 0 blocker. The browser recovery path was verified through direct CDP because the legacy Playwright handshake stalled.
@@ -59,9 +60,13 @@ No Phase 0 blocker. The browser recovery path was verified through direct CDP be
 - All 69 focused C2 tests pass after adding writer-side token validation.
 - The remote-main snapshot has `PRAGMA quick_check=ok`, matching supervisor authority, and zero active C2 runs. The refreshed runtime service exited with `Result=success`, `ExecMainStatus=0`.
 - No additional active local C2 scheduler process was observed after terminating the duplicate TUI. The canonical roadmap writer and PH integration processes were preserved.
+- Recovery reconciliation found zero active canonical C2 runs/resource leases; the only enabled legacy ChatGPT supervisor worker is `CHATGPT-20260924-PERSONALHUB-P0`, left unchanged.
+- Fenced terminal-state reimport Issue #1201 repaired the three historical non-PH task-state roots; only stale 175908 phase descendants remain running.
+- PR #1113 (continuous C2 discovery capture rule) merged with all gates PASS.
+- C2 work item `wi:10974cc59a13437fa273b34d83085631` was materialized by writer Issue #1203 as Goal `PROMPT_ID=226672` with exact execution metadata; it remains pending and unscheduled.
 
 ## Acceptance criteria
 Phase 0 local recovery and canonical writer fencing are verified. Later global C2 criteria remain open.
 
 ## Next action
-Finish non-PH reconciliation, prepare execution specs for genuinely runnable items, and schedule them through the canonical writer. Preserve PH ownership.
+Create an isolated worktree for PROMPT_ID 226672 from canonical remote-main commit 94f1d9d1ab758486d1bc07f6ddaa184763955bd5, configure its exact C2 execution spec, verify it is the only intended schedulable spec, then schedule max-parallel=1 and supervise it through terminal reconciliation. Preserve PH ownership and all devices.
