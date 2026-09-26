@@ -1,4 +1,5 @@
 from pathlib import Path
+from types import SimpleNamespace
 import sys
 import tempfile
 import unittest
@@ -9,6 +10,7 @@ from c2_chatgpt_executor import dispatch
 class FakeTaskConfig:
     def __init__(self,**kwargs):
         self.__dict__.update(kwargs)
+        self.thresholds=SimpleNamespace(generation_stall_s=600,max_recovery_attempts=9)
 
 def fake_supervisor_types():
     return FakeBrowser,lambda url:url.startswith('https://chatgpt.com/c/'),FakeTaskConfig,FakeStore
@@ -40,6 +42,8 @@ class BrowserExecutorTests(unittest.TestCase):
             self.assertEqual('TASK_ID=wi:fixture\nUse the GUI',browser.calls[0][1])
             self.assertEqual(1,len(store.tasks))
             self.assertTrue(store.tasks[0].state_file.startswith('c2-db:'))
+            self.assertEqual(40,store.tasks[0].thresholds.generation_stall_s)
+            self.assertEqual(3,store.tasks[0].thresholds.max_recovery_attempts)
     def test_ambiguous_start_does_not_send_again(self):
         with tempfile.TemporaryDirectory() as tmp:
             class Broken(FakeBrowser):
@@ -86,3 +90,4 @@ class BrowserExecutorTests(unittest.TestCase):
             self.assertEqual('started',result['phase'])
             self.assertEqual(0,len(browser.calls))
             self.assertEqual(1,len(store.tasks))
+            self.assertEqual(40,store.tasks[0].thresholds.generation_stall_s)
