@@ -1,18 +1,18 @@
 ---
 prompt_id: 669941
-status: pending
+status: running
 project_id: 49
 model: GPT-6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personalhub
 ---
 
 # 669941 · Completa jump Workflowy, tile Home e Audit log PersonalHub
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../prompts/personalhub-workflowy-home-audit-resume|Apri prompt]]
 - **Primo lancio:** —
