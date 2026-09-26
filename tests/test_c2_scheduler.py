@@ -175,6 +175,18 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual([one],[r['work_item_id'] for r in runs])
         self.assertEqual('pending',self.conn.execute('SELECT status FROM work_items WHERE work_item_id=?',(other,)).fetchone()[0])
 
+    def test_override_falls_back_when_scoped_device_is_leased(self):
+        holder=self.add('holder')
+        self.conn.execute("UPDATE work_item_execution_specs SET resources_json='[\"device:pixel\"]' WHERE work_item_id=?",(holder,))
+        scheduler.schedule(self.conn,event_key='holder',now=1,max_parallel=1)
+        scoped=self.add('gernalix/PersonalHub')
+        other=self.add('other')
+        self.conn.execute("UPDATE work_item_execution_specs SET resources_json='[\"device:pixel\"]' WHERE work_item_id=?",(scoped,))
+        scheduler.set_override(self.conn,selector='repo',value='gernalix/PersonalHub',now=2)
+        runs=scheduler.schedule(self.conn,event_key='locked-fallback',now=3,max_parallel=3)
+        self.assertEqual([other],[r['work_item_id'] for r in runs])
+        self.assertEqual('pending',self.conn.execute('SELECT status FROM work_items WHERE work_item_id=?',(scoped,)).fetchone()[0])
+
     def test_crash_recovery_reuses_identity_and_locks(self):
         a=self.add(); self.add()
         run=scheduler.schedule(self.conn,event_key='first',now=10)[0]

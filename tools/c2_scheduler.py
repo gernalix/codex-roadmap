@@ -287,6 +287,44 @@ def execution_metadata(conn, item, spec, executor):
     return result
 
 
+def dispatchable(conn, item):
+    """Whether an item could acquire a new C2 run with current shared locks."""
+    ancestor = item['parent_id']
+    seen = set()
+    while ancestor:
+        if ancestor in seen:
+            raise SchedulingError('hierarchy_cycle')
+        seen.add(ancestor)
+        row = conn.execute('SELECT parent_id,status FROM work_items WHERE work_item_id=?', (ancestor,)).fetchone()
+        if row['status'] == 'running':
+            return False
+        ancestor = row['parent_id']
+    spec = conn.execute('SELECT * FROM work_item_execution_specs WHERE work_item_id=?',
+                        (item['work_item_id'],)).fetchone()
+    if not spec:
+        return False
+    executor = choose_executor(item['executor_policy'], spec['activity'])
+    if executor in (None, 'human'):
+        return False
+    resources = set(json.loads(spec['resources_json']))
+    if item['repo']:
+        resources.add('worktree:'+spec['worktree'] if spec['worktree'] else 'repo:'+item['repo'])
+        peers = conn.execute("SELECT s.worktree FROM work_items w LEFT JOIN work_item_execution_specs s USING(work_item_id) WHERE w.repo=? AND w.status='running'", (item['repo'],)).fetchall()
+        if any(not spec['worktree'] or not peer['worktree'] or spec['worktree']==peer['worktree'] for peer in peers):
+            return False
+    if any(conn.execute('SELECT 1 FROM work_item_resource_leases WHERE resource=?',(r,)).fetchone() for r in resources):
+        return False
+    attempt = 1 + conn.execute('SELECT COUNT(*) FROM work_item_runs WHERE work_item_id=?',
+                               (item['work_item_id'],)).fetchone()[0]
+    if attempt > spec['max_attempts']:
+        return False
+    try:
+        execution_metadata(conn, item, spec, executor)
+    except SchedulingError:
+        return False
+    return True
+
+
 def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120):
     _transaction(conn)
     now=time.time() if now is None else now
@@ -315,9 +353,7 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120):
         for item in candidates:
             if not override_matches(conn,item,override):
                 continue
-            spec = conn.execute('SELECT activity FROM work_item_execution_specs WHERE work_item_id=?',
-                                (item['work_item_id'],)).fetchone()
-            if spec and choose_executor(item['executor_policy'],spec['activity']) not in (None,'human'):
+            if dispatchable(conn,item):
                 scoped.append(item)
     if scoped:
         candidates = scoped
