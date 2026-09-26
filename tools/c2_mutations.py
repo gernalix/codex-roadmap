@@ -8,6 +8,7 @@ import c2_supervisor_authority
 import c2_terminal_state_reimport
 import c2_work_item_admin
 import c2_issue_inbox
+import roadmap_db
 
 
 SUPERVISOR_OPERATIONS = frozenset({
@@ -37,6 +38,17 @@ def apply(conn, mutation):
         return c2_supervisor_authority.retire(conn, authority)
     if action in SUPERVISOR_OPERATIONS:
         c2_supervisor_authority.require(conn, authority)
+    if action == 'executor_result':
+        integration_ready = bool(arguments.pop('integration_ready', False))
+        result = c2_scheduler.executor_result(conn, **arguments)
+        may_finalize = result['target_status'] != 'completed' or integration_ready
+        if result['prompt_id'] and may_finalize:
+            roadmap_db.request_terminal(
+                conn, result['prompt_id'], result['target_status'],
+                actor='c2-executor-result', note='executor_result:'+result['receipt_id'])
+            if result['run_id']:
+                c2_scheduler.reconcile_terminal_run(conn, result['run_id'])
+        return result
     operations = {
         'cutover': c2_cutover_writer.confirm,
         'intake': c2_intake.add_work_item,
@@ -45,6 +57,7 @@ def apply(conn, mutation):
         'auto_configure': c2_scheduler.configure_auto,
         'schedule': c2_scheduler.schedule,
         'acknowledge': c2_scheduler.acknowledge,
+        'executor_started': c2_scheduler.executor_started,
         'bind_executor': c2_scheduler.bind_executor,
         'checkpoint': c2_scheduler.checkpoint,
         'record_checkpoint': c2_scheduler.record_checkpoint,

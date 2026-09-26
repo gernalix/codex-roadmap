@@ -46,6 +46,84 @@ class SchedulerTests(unittest.TestCase):
             "SELECT COUNT(*) FROM work_item_evidence WHERE work_item_id=? AND evidence_kind='completion'",
             (item,)).fetchone()[0])
 
+
+    def test_executor_result_receipt_is_idempotent_and_pass_fails_closed(self):
+        self.conn.execute("UPDATE work_items SET status='running', acceptance_json=? WHERE prompt_id='123456'", ('["A"]',))
+        self.conn.execute("""INSERT INTO work_item_runs VALUES(
+            'result-run','prompt:123456','event',1,'codex','running',100,
+            'c2-run:result-run',NULL,'{}',1)""")
+        with self.assertRaisesRegex(scheduler.SchedulingError,'pass_requires_no_remaining'):
+            scheduler.executor_result(self.conn,run_id='result-run',prompt_id='123456',
+                outcome='PASS',completed=['A'],remaining=['B'],evidence=['proof'],
+                strict_contract=True)
+        receipt=scheduler.executor_result(self.conn,run_id='result-run',prompt_id='123456',
+            outcome='PASS',completed=['A'],remaining=[],evidence=['proof'],
+            strict_contract=True)
+        replay=scheduler.executor_result(self.conn,run_id='result-run',prompt_id='123456',
+            outcome='PASS',completed=['A'],remaining=[],evidence=['proof'],
+            strict_contract=True)
+        self.assertFalse(receipt['idempotent']); self.assertTrue(replay['idempotent'])
+        self.assertEqual('running',self.conn.execute(
+            "SELECT status FROM work_items WHERE prompt_id='123456'").fetchone()[0])
+        self.assertEqual(1,self.conn.execute(
+            "SELECT COUNT(*) FROM work_item_result_receipts WHERE run_id='result-run'").fetchone()[0])
+
+    def test_manual_nonprompt_start_claims_runnable_pending_item(self):
+        item=intake.add_work_item(self.conn,title='Manual runnable',repo='manual',
+            executor_policy='auto')
+        wid=item['work_item_id']
+        receipt=scheduler.executor_started(self.conn,work_item_id=wid,executor='codex',
+            executor_ref='thread-1',chat_url='codex://threads/thread-1',now=12)
+        self.assertEqual('running',self.conn.execute(
+            'SELECT status FROM work_items WHERE work_item_id=?',(wid,)).fetchone()[0])
+        self.assertEqual(wid,receipt['work_item_id'])
+
+    def test_manual_prompt_start_cannot_bypass_roadmap_start(self):
+        with self.assertRaisesRegex(scheduler.SchedulingError,'prompt_requires_roadmap_start'):
+            scheduler.executor_started(self.conn,prompt_id='123456',executor='codex',
+                executor_ref='thread-1',chat_url='codex://threads/thread-1')
+
+    def test_executor_started_is_distinct_idempotent_and_binding_enriches_it(self):
+        item=intake.add_work_item(self.conn,title='Start receipt',repo='browser',
+            executor_policy='chatgpt')
+        wid=item['work_item_id']
+        scheduler.configure(self.conn,wid,activity='semantic',
+            project_url='https://chatgpt.com/g/g-p-fixture')
+        run=scheduler.schedule(self.conn,event_key='start-receipt',now=10)[0]
+        with self.assertRaisesRegex(scheduler.SchedulingError,'executor_start_run_not_active'):
+            scheduler.executor_started(self.conn,run_id=run['run_id'])
+        scheduler.acknowledge(self.conn,run['run_id'],worker_ref='c2-run:'+run['run_id'],
+            metadata=run['metadata'],now=11)
+        first=scheduler.executor_started(self.conn,run_id=run['run_id'],now=12)
+        replay=scheduler.executor_started(self.conn,run_id=run['run_id'],now=13)
+        self.assertEqual(first['receipt_id'],replay['receipt_id'])
+        self.assertIsNone(first['chat_url'])
+        scheduler.bind_executor(self.conn,run['run_id'],
+            executor_ref='https://chatgpt.com/c/test',chat_url='https://chatgpt.com/c/test',now=14)
+        enriched=self.conn.execute(
+            'SELECT * FROM work_item_executor_starts WHERE run_id=?',(run['run_id'],)).fetchone()
+        self.assertEqual('https://chatgpt.com/c/test',enriched['chat_url'])
+        self.assertEqual('chatgpt',enriched['executor'])
+        self.assertEqual(1,self.conn.execute(
+            'SELECT COUNT(*) FROM work_item_executor_starts WHERE run_id=?',(run['run_id'],)).fetchone()[0])
+
+    def test_structured_nonprompt_result_replaces_two_step_terminal_sequence(self):
+        item=intake.add_work_item(self.conn,title='One result call',repo='browser',
+            acceptance=['A'],executor_policy='chatgpt')
+        wid=item['work_item_id']
+        scheduler.configure(self.conn,wid,activity='semantic',
+            project_url='https://chatgpt.com/g/g-p-fixture')
+        run=scheduler.schedule(self.conn,event_key='one-result',now=10)[0]
+        scheduler.acknowledge(self.conn,run['run_id'],worker_ref='c2-run:'+run['run_id'],
+            metadata=run['metadata'],now=11)
+        scheduler.executor_result(self.conn,run_id=run['run_id'],outcome='PASS',
+            completed=['A'],remaining=[],evidence=['verified'],strict_contract=True)
+        self.assertEqual('completed',self.conn.execute(
+            'SELECT status FROM work_items WHERE work_item_id=?',(wid,)).fetchone()[0])
+        self.assertEqual('completed',self.conn.execute(
+            'SELECT state FROM work_item_runs WHERE run_id=?',(run['run_id'],)).fetchone()[0])
+
+
     def test_parallelism_and_same_repo_collision(self):
         a=self.add(); b=self.add(); c=self.add('repo-b')
         runs=scheduler.schedule(self.conn,event_key='intake-1',now=10,max_parallel=3)

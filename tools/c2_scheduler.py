@@ -49,6 +49,32 @@ CREATE TABLE IF NOT EXISTS work_item_executor_bindings (
 );
 CREATE INDEX IF NOT EXISTS idx_work_item_executor_bindings_item
  ON work_item_executor_bindings(work_item_id,bound_at);
+CREATE TABLE IF NOT EXISTS work_item_executor_starts (
+ receipt_id TEXT PRIMARY KEY,
+ work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
+ run_id TEXT REFERENCES work_item_runs(run_id) ON DELETE SET NULL,
+ prompt_id TEXT,
+ executor TEXT NOT NULL,
+ executor_ref TEXT,
+ chat_url TEXT,
+ started_at REAL NOT NULL,
+ UNIQUE(run_id)
+);
+CREATE INDEX IF NOT EXISTS idx_work_item_executor_starts_item
+ ON work_item_executor_starts(work_item_id,started_at);
+CREATE TABLE IF NOT EXISTS work_item_result_receipts (
+ receipt_id TEXT PRIMARY KEY,
+ work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
+ run_id TEXT REFERENCES work_item_runs(run_id) ON DELETE SET NULL,
+ prompt_id TEXT,
+ outcome TEXT NOT NULL CHECK(outcome IN ('PASS','BLOCKED','FAIL','CANCELLED')),
+ summary TEXT, completed_json TEXT NOT NULL, remaining_json TEXT NOT NULL,
+ evidence_json TEXT NOT NULL, blocker TEXT, next_action TEXT,
+ strict_contract INTEGER NOT NULL DEFAULT 0 CHECK(strict_contract IN (0,1)),
+ payload_sha256 TEXT NOT NULL, captured_at REAL NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS work_item_result_receipts_run
+ ON work_item_result_receipts(run_id) WHERE run_id IS NOT NULL;
 CREATE TABLE IF NOT EXISTS work_item_scheduler_events (
  event_key TEXT PRIMARY KEY, observed_at REAL NOT NULL, result_json TEXT NOT NULL
 );
@@ -340,6 +366,7 @@ def bind_executor(conn, run_id, *, executor_ref, chat_url, now=None):
     if not executor_ref or not chat_url:
         raise SchedulingError('executor_binding_identity_required')
     executor=str(run['executor'])
+    item_status=conn.execute('SELECT status FROM work_items WHERE work_item_id=?',(run['work_item_id'],)).fetchone()[0]
     if executor=='codex':
         expected='codex://threads/'+executor_ref
         if chat_url != expected:
@@ -355,6 +382,8 @@ def bind_executor(conn, run_id, *, executor_ref, chat_url, now=None):
                 or str(prior['chat_url'])!=chat_url
                 or str(prior['work_item_id'])!=str(run['work_item_id'])):
             raise SchedulingError('executor_binding_conflict')
+        if run['state'] in ('running','recovering') and item_status=='running':
+            executor_started(conn,run_id=run_id,executor_ref=executor_ref,chat_url=chat_url,now=now)
         return dict(prior)
     if run['state'] not in ('claimed','running','recovering'):
         raise SchedulingError('run_not_active')
@@ -376,7 +405,87 @@ def bind_executor(conn, run_id, *, executor_ref, chat_url, now=None):
         conn.execute('''UPDATE issue_inbox SET executor=?,executor_ref=?,chat_url=?
           WHERE origin_run_id=? AND chat_url IS NULL''',
           (executor,executor_ref,chat_url,run_id))
+    if run['state'] in ('running','recovering') and item_status=='running':
+        executor_started(conn,run_id=run_id,executor_ref=executor_ref,chat_url=chat_url,now=now)
     return dict(conn.execute('SELECT * FROM work_item_executor_bindings WHERE run_id=?',(run_id,)).fetchone())
+
+
+def executor_started(conn, *, run_id=None, work_item_id=None, prompt_id=None,
+                     executor=None, executor_ref=None, chat_url=None, now=None):
+    """Record that an executor has actually begun handling an already-running C2 item."""
+    _transaction(conn)
+    install_schema(conn)
+    now=time.time() if now is None else now
+    run=None
+    if run_id:
+        run=conn.execute('SELECT * FROM work_item_runs WHERE run_id=?',(run_id,)).fetchone()
+        if not run:
+            raise SchedulingError('executor_start_run_not_found')
+        if run['state'] not in ('running','recovering'):
+            raise SchedulingError('executor_start_run_not_active')
+        if work_item_id and work_item_id!=run['work_item_id']:
+            raise SchedulingError('executor_start_work_item_mismatch')
+        work_item_id=run['work_item_id']
+        if executor and executor!=run['executor']:
+            raise SchedulingError('executor_start_executor_mismatch')
+        executor=run['executor']
+    if prompt_id and not work_item_id:
+        row=conn.execute('SELECT work_item_id FROM work_items WHERE prompt_id=?',(prompt_id,)).fetchone()
+        if not row:
+            raise SchedulingError('executor_start_prompt_not_found')
+        work_item_id=row['work_item_id']
+    if not work_item_id:
+        raise SchedulingError('executor_start_identity_required')
+    item=conn.execute('SELECT status,prompt_id FROM work_items WHERE work_item_id=?',(work_item_id,)).fetchone()
+    if not item:
+        raise SchedulingError('executor_start_work_item_not_found')
+    if item['status']=='pending' and run is None:
+        if item['prompt_id']:
+            raise SchedulingError('executor_start_prompt_requires_roadmap_start')
+        runnable=conn.execute('SELECT 1 FROM v_work_item_runnable WHERE work_item_id=?',(work_item_id,)).fetchone()
+        if not runnable:
+            raise SchedulingError('executor_start_work_item_not_runnable')
+        repo=conn.execute('SELECT repo FROM work_items WHERE work_item_id=?',(work_item_id,)).fetchone()[0]
+        if repo and conn.execute('''SELECT 1 FROM work_items WHERE repo=? AND work_item_id<>?
+          AND status='running' LIMIT 1''',(repo,work_item_id)).fetchone():
+            raise SchedulingError('executor_start_repo_conflict')
+        conn.execute("UPDATE work_items SET status='running',current_action='Executor started',blocker=NULL WHERE work_item_id=?",
+                     (work_item_id,))
+        item=conn.execute('SELECT status,prompt_id FROM work_items WHERE work_item_id=?',(work_item_id,)).fetchone()
+    if item['status']!='running':
+        raise SchedulingError('executor_start_requires_running_item')
+    if prompt_id and item['prompt_id']!=prompt_id:
+        raise SchedulingError('executor_start_prompt_mismatch')
+    prompt_id=item['prompt_id']
+    executor=str(executor or '').strip()
+    if not executor:
+        raise SchedulingError('executor_start_executor_required')
+    executor_ref=str(executor_ref or '').strip() or None
+    chat_url=str(chat_url or '').strip() or None
+    receipt_id='run:'+str(run_id) if run_id else 'work-item:'+work_item_id+':'+executor
+    existing=conn.execute('SELECT * FROM work_item_executor_starts WHERE receipt_id=?',(receipt_id,)).fetchone()
+    if existing:
+        if (existing['work_item_id']!=work_item_id or existing['prompt_id']!=prompt_id
+                or existing['executor']!=executor):
+            raise SchedulingError('executor_start_receipt_conflict')
+        updates=[]; values=[]
+        for field,value in (('executor_ref',executor_ref),('chat_url',chat_url)):
+            prior=existing[field]
+            if prior and value and prior!=value:
+                raise SchedulingError('executor_start_binding_conflict')
+            if not prior and value:
+                updates.append(field+'=?'); values.append(value)
+        if updates:
+            conn.execute('UPDATE work_item_executor_starts SET '+','.join(updates)+' WHERE receipt_id=?',
+                         (*values,receipt_id))
+        return dict(conn.execute('SELECT * FROM work_item_executor_starts WHERE receipt_id=?',
+                                 (receipt_id,)).fetchone())
+    conn.execute("""INSERT INTO work_item_executor_starts(
+      receipt_id,work_item_id,run_id,prompt_id,executor,executor_ref,chat_url,started_at
+      ) VALUES(?,?,?,?,?,?,?,?)""",
+      (receipt_id,work_item_id,run_id,prompt_id,executor,executor_ref,chat_url,now))
+    return dict(conn.execute('SELECT * FROM work_item_executor_starts WHERE receipt_id=?',
+                             (receipt_id,)).fetchone())
 
 
 def checkpoint(conn, run_id, commit):
@@ -413,6 +522,124 @@ def record_checkpoint(conn, work_item_id, *, current_step, next_action,
     conn.execute('''UPDATE work_items SET current_action=?,next_action=?,blocker=?
       WHERE work_item_id=?''',(current_step,next_action,blocker,work_item_id))
     return digest
+
+
+
+RESULT_STATUS = {'PASS':'completed','BLOCKED':'blocked','FAIL':'failed','CANCELLED':'cancelled'}
+
+def executor_result(conn, *, outcome, work_item_id=None, prompt_id=None, run_id=None,
+                    summary=None, completed=(), remaining=(), evidence=(), blocker=None,
+                    next_action=None, strict_contract=False):
+    """Record one idempotent executor receipt; prompt lifecycle is finalized by c2_mutations."""
+    _transaction(conn)
+    if outcome not in RESULT_STATUS:
+        raise SchedulingError('invalid_executor_outcome')
+    for name,value in (('completed',completed),('remaining',remaining),('evidence',evidence)):
+        if not isinstance(value,(list,tuple)):
+            raise SchedulingError('executor_result_'+name+'_list_required')
+    run=None
+    if run_id:
+        run=conn.execute('SELECT * FROM work_item_runs WHERE run_id=?',(run_id,)).fetchone()
+        if not run:
+            raise SchedulingError('executor_result_run_not_found')
+        if work_item_id and work_item_id!=run['work_item_id']:
+            raise SchedulingError('executor_result_work_item_mismatch')
+        work_item_id=run['work_item_id']
+    if prompt_id and not work_item_id:
+        row=conn.execute('SELECT work_item_id FROM work_items WHERE prompt_id=?',(prompt_id,)).fetchone()
+        if not row:
+            raise SchedulingError('executor_result_prompt_not_found')
+        work_item_id=row['work_item_id']
+    if not work_item_id:
+        raise SchedulingError('executor_result_identity_required')
+    item=conn.execute('SELECT * FROM work_items WHERE work_item_id=?',(work_item_id,)).fetchone()
+    if not item:
+        raise SchedulingError('executor_result_work_item_not_found')
+    if prompt_id and item['prompt_id']!=prompt_id:
+        raise SchedulingError('executor_result_prompt_mismatch')
+    prompt_id=item['prompt_id']
+    if run is None:
+        run=conn.execute("""SELECT * FROM work_item_runs WHERE work_item_id=?
+          ORDER BY created_at DESC LIMIT 1""",(work_item_id,)).fetchone()
+        if run:
+            run_id=run['run_id']
+    completed=[str(v).strip() for v in completed if str(v).strip()]
+    remaining=[str(v).strip() for v in remaining if str(v).strip()]
+    evidence=[str(v).strip() for v in evidence if str(v).strip()]
+    blocker=str(blocker).strip() if blocker is not None and str(blocker).strip() else None
+    next_action=str(next_action).strip() if next_action is not None and str(next_action).strip() else None
+    summary=str(summary).strip() if summary is not None and str(summary).strip() else None
+    if outcome=='PASS':
+        if remaining or blocker:
+            raise SchedulingError('pass_requires_no_remaining_or_blocker')
+        if not evidence:
+            raise SchedulingError('completion_evidence_required')
+        if strict_contract:
+            acceptance=set(json.loads(item['acceptance_json'] or '[]'))
+            if acceptance and not acceptance.issubset(set(completed)):
+                raise SchedulingError('acceptance_criteria_not_verified')
+    elif outcome in ('BLOCKED','FAIL') and strict_contract:
+        if not blocker:
+            raise SchedulingError(outcome.lower()+'_requires_blocker')
+        if outcome=='BLOCKED' and not next_action:
+            raise SchedulingError('blocked_requires_next_action')
+    payload={'outcome':outcome,'work_item_id':work_item_id,'run_id':run_id,
+             'prompt_id':prompt_id,'summary':summary,'completed':completed,
+             'remaining':remaining,'evidence':evidence,'blocker':blocker,
+             'next_action':next_action,'strict_contract':bool(strict_contract)}
+    digest=hashlib.sha256(json.dumps(payload,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
+    receipt_id='run:'+str(run_id) if run_id else ('prompt:'+str(prompt_id) if prompt_id else 'work-item:'+work_item_id)
+    existing=conn.execute('SELECT payload_sha256,outcome FROM work_item_result_receipts WHERE receipt_id=?',
+                          (receipt_id,)).fetchone()
+    if existing:
+        if existing['payload_sha256']!=digest or existing['outcome']!=outcome:
+            raise SchedulingError('executor_result_receipt_conflict')
+        return {'receipt_id':receipt_id,'work_item_id':work_item_id,'run_id':run_id,
+                'prompt_id':prompt_id,'outcome':outcome,'target_status':RESULT_STATUS[outcome],
+                'idempotent':True}
+    conn.execute("""INSERT INTO work_item_result_receipts(
+      receipt_id,work_item_id,run_id,prompt_id,outcome,summary,completed_json,remaining_json,
+      evidence_json,blocker,next_action,strict_contract,payload_sha256,captured_at)
+      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+      (receipt_id,work_item_id,run_id,prompt_id,outcome,summary,json.dumps(completed),
+       json.dumps(remaining),json.dumps(evidence),blocker,next_action,int(bool(strict_contract)),
+       digest,time.time()))
+    for fact in evidence:
+        conn.execute("""INSERT OR IGNORE INTO work_item_evidence
+          (work_item_id,evidence_kind,label,uri,value_json,created_at)
+          VALUES(?,'executor_result',?,NULL,?,?)""",
+          (work_item_id,fact[:120],json.dumps(fact,ensure_ascii=False),
+           time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())))
+    if item['status'] in ('pending','running','waiting','blocked'):
+        conn.execute("""UPDATE work_items SET current_action=?,next_action=?,blocker=?
+          WHERE work_item_id=?""",(summary or ('Completed' if outcome=='PASS' else outcome),
+                                  next_action,blocker,work_item_id))
+    if outcome=='PASS':
+        missing=conn.execute('''WITH RECURSIVE children(id) AS (
+          SELECT work_item_id FROM work_items WHERE parent_id=?
+          UNION SELECT w.work_item_id FROM work_items w JOIN children c ON w.parent_id=c.id)
+          SELECT 1 FROM children c JOIN work_items w ON w.work_item_id=c.id
+          WHERE w.required=1 AND w.status NOT IN ('completed','waived') LIMIT 1''',
+          (work_item_id,)).fetchone()
+        if missing:
+            raise SchedulingError('required_children_incomplete')
+    if not prompt_id:
+        target=RESULT_STATUS[outcome]
+        if run:
+            run_target='completed' if outcome=='PASS' else 'failed'
+            if run['state'] not in (run_target,'running','recovering','claimed'):
+                raise SchedulingError('executor_result_run_state_conflict')
+            conn.execute('UPDATE work_item_runs SET state=? WHERE run_id=?',(run_target,run_id))
+            conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(run_id,))
+        if item['status'] not in (target,'pending','running','waiting','blocked'):
+            raise SchedulingError('executor_result_item_state_conflict')
+        conn.execute('UPDATE work_items SET status=?,blocker=? WHERE work_item_id=?',
+                     (target,blocker,work_item_id))
+        if outcome=='PASS':
+            enqueue_milestone(conn,work_item_id)
+    return {'receipt_id':receipt_id,'work_item_id':work_item_id,'run_id':run_id,
+            'prompt_id':prompt_id,'outcome':outcome,'target_status':RESULT_STATUS[outcome],
+            'idempotent':False}
 
 
 def recover(conn, *, now=None):

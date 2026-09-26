@@ -22,6 +22,7 @@ from c2_mutations import SUPERVISOR_OPERATIONS
 from c2_scheduler import external_personalhub
 
 C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
+REPO_SINGLE_WRITER = Path.home()/'projects/github-autosync/repo_single_writer.py'
 
 
 class RuntimeErrorC2(RuntimeError):
@@ -87,8 +88,20 @@ def _launch_notify(event_key: str):
         raise RuntimeErrorC2('notification_launch_failed:'+str(result.returncode))
 
 
+def _repo_task_status(prompt_id: str) -> dict:
+    result=subprocess.run([sys.executable,str(REPO_SINGLE_WRITER),'status-any',
+        '--task-id',prompt_id],capture_output=True,text=True)
+    if result.returncode:
+        raise RuntimeErrorC2('repo_task_status_failed:'+str(result.returncode))
+    try:
+        return json.loads(result.stdout)
+    except (TypeError,ValueError) as exc:
+        raise RuntimeErrorC2('repo_task_status_invalid_json') from exc
+
+
 def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_worker,
             launch_notify=_launch_notify,
+            repo_task_status=_repo_task_status,
             now: float | None=None, max_parallel: int=3,
             supervisor_expiry: float | None=None,
             supervisor_authority: dict | None=None,
@@ -158,6 +171,31 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         events.append(('issue_triage_active',str(triage['work_item_id'])))
     elif pending_issue_inbox:
         events.append(('issue_triage_unconfigured',str(pending_issue_inbox)))
+
+    # Recover missed terminal delivery natively; a PASS receipt and canonical
+    # repository merge are both required before the writer replays finalization.
+    pass_receipts=db.execute('''SELECT rr.* FROM work_item_result_receipts rr
+        JOIN work_items w USING(work_item_id)
+        WHERE rr.outcome='PASS' AND rr.prompt_id IS NOT NULL AND w.status='running'
+        ORDER BY rr.captured_at,rr.receipt_id''').fetchall()
+    for receipt in pass_receipts:
+        prompt_id=str(receipt['prompt_id'])
+        integration=repo_task_status(prompt_id)
+        if integration.get('status')!='merged' or integration.get('integration_state')!='merged':
+            continue
+        arguments={
+            'prompt_id':prompt_id,'run_id':receipt['run_id'],'outcome':'PASS',
+            'summary':receipt['summary'],'completed':json.loads(receipt['completed_json']),
+            'remaining':json.loads(receipt['remaining_json']),
+            'evidence':json.loads(receipt['evidence_json']),'blocker':receipt['blocker'],
+            'next_action':receipt['next_action'],'strict_contract':bool(receipt['strict_contract']),
+            'integration_ready':True,
+        }
+        key='c2-replay-executor-result-'+hashlib.sha256(
+            (str(receipt['receipt_id'])+':'+str(receipt['payload_sha256'])+':'+
+             str(integration.get('merge_sha') or '')).encode()).hexdigest()[:32]
+        submit('executor_result',arguments,key)
+        events.append(('reconcile_executor_result',prompt_id))
 
     for notice in db.execute("SELECT event_key,state FROM c2_notification_outbox WHERE state IN ('pending','sending') ORDER BY created_at,event_key"):
         key=str(notice['event_key'])

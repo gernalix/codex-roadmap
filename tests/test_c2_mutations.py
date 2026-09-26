@@ -9,6 +9,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import apply_issue_mutation
 import c2_intake
 import c2_supervisor_authority
+import c2_scheduler
 import roadmap_db
 import test_c2_intake
 
@@ -35,6 +36,70 @@ class C2WriterTests(unittest.TestCase):
                 self.assertEqual('native',conn.execute(
                     'SELECT activity FROM work_item_execution_specs WHERE work_item_id=?',
                     (work_item_id,)).fetchone()[0])
+
+
+    def test_prompt_result_receipt_waits_for_pass_integration_then_reconciles_atomically(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=test_c2_intake.C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as conn:
+                c2_scheduler.install_schema(conn)
+                conn.execute('BEGIN IMMEDIATE')
+                roadmap_db.set_status(conn,'123456','running',actor='test')
+                conn.execute("""INSERT INTO work_item_runs VALUES(
+                    'run-result','prompt:123456','event',1,'codex','running',100,
+                    'c2-run:run-result',NULL,'{}',1)""")
+                base={'op':'c2_executor_result','arguments':{
+                    'run_id':'run-result','prompt_id':'123456','outcome':'PASS',
+                    'completed':[],'remaining':[],'evidence':['legacy final report'],
+                    'strict_contract':False,'integration_ready':False}}
+                roadmap_db.apply_mutation(conn,base)
+                self.assertEqual('running',conn.execute(
+                    "SELECT status FROM work_items WHERE prompt_id='123456'").fetchone()[0])
+                final={'op':'c2_executor_result','arguments':{
+                    **base['arguments'],'integration_ready':True}}
+                roadmap_db.apply_mutation(conn,final)
+                self.assertEqual('completed',conn.execute(
+                    "SELECT status FROM work_items WHERE prompt_id='123456'").fetchone()[0])
+                self.assertEqual('completed',conn.execute(
+                    "SELECT state FROM work_item_runs WHERE run_id='run-result'").fetchone()[0])
+                self.assertEqual(1,conn.execute(
+                    "SELECT COUNT(*) FROM work_item_result_receipts WHERE run_id='run-result'").fetchone()[0])
+
+    def test_nonpass_prompt_result_terminalizes_without_integration_gate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=test_c2_intake.C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as conn:
+                c2_scheduler.install_schema(conn)
+                conn.execute('BEGIN IMMEDIATE')
+                roadmap_db.set_status(conn,'123456','running',actor='test')
+                conn.execute("""INSERT INTO work_item_runs VALUES(
+                    'run-blocked','prompt:123456','event',1,'codex','running',100,
+                    'c2-run:run-blocked',NULL,'{}',1)""")
+                roadmap_db.apply_mutation(conn,{'op':'c2_executor_result','arguments':{
+                    'run_id':'run-blocked','prompt_id':'123456','outcome':'BLOCKED',
+                    'completed':[],'remaining':['retry'],'evidence':['final report'],
+                    'blocker':'external blocker','next_action':'retry later',
+                    'strict_contract':True,'integration_ready':False}})
+                self.assertEqual('blocked',conn.execute(
+                    "SELECT status FROM work_items WHERE prompt_id='123456'").fetchone()[0])
+                self.assertEqual('failed',conn.execute(
+                    "SELECT state FROM work_item_runs WHERE run_id='run-blocked'").fetchone()[0])
+
+
+    def test_executor_started_mutation_records_canonical_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=test_c2_intake.C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as conn:
+                c2_scheduler.install_schema(conn)
+                conn.execute('BEGIN IMMEDIATE')
+                roadmap_db.set_status(conn,'123456','running',actor='test')
+                roadmap_db.apply_mutation(conn,{'op':'c2_executor_started','arguments':{
+                    'prompt_id':'123456','executor':'codex',
+                    'executor_ref':'thread-1','chat_url':'codex://threads/thread-1'}})
+                row=conn.execute(
+                    "SELECT * FROM work_item_executor_starts WHERE prompt_id='123456'").fetchone()
+                self.assertEqual('codex',row['executor'])
+                self.assertEqual('thread-1',row['executor_ref'])
 
     def test_issue_replay_does_not_duplicate_intake(self):
         with tempfile.TemporaryDirectory() as tmp:

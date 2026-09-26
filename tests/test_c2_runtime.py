@@ -14,6 +14,67 @@ from test_c2_intake import C2IntakeTests
 
 
 class RuntimeTests(unittest.TestCase):
+    def _pass_receipt_snapshot(self, root):
+        path=C2IntakeTests().make_cutover_db(root)
+        with closing(c2_intake._connect(path)) as writer:
+            c2_scheduler.install_schema(writer)
+            writer.execute('BEGIN IMMEDIATE')
+            writer.execute("UPDATE work_items SET status='running' WHERE prompt_id='123456'")
+            writer.execute("""INSERT INTO work_item_runs VALUES(
+                'pass-run','prompt:123456','event',1,'codex','running',999,
+                'c2-run:pass-run',NULL,'{}',1)""")
+            c2_scheduler.executor_result(writer,run_id='pass-run',prompt_id='123456',
+                outcome='PASS',completed=['acceptance'],evidence=['verified'],strict_contract=True)
+            writer.commit()
+        return path
+
+    def test_merged_repo_reconciles_only_valid_pass_receipt_and_replay_is_idempotent(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=self._pass_receipt_snapshot(Path(tmp))
+            calls=[]
+            merged={'status':'merged','integration_state':'merged','merge_sha':'abc123'}
+            for _ in range(2):
+                with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                    c2_runtime.advance(snapshot,submit=lambda op,args,key:calls.append((op,args,key)),
+                        repo_task_status=lambda _:merged,
+                        launch=lambda _:None,launch_notify=lambda _:None,now=1)
+            self.assertEqual(2,len(calls))
+            self.assertEqual(calls[0][2],calls[1][2])
+            from c2_mutations import apply
+            with closing(c2_intake._connect(path)) as db:
+                for op,args,_ in calls:
+                    db.execute('BEGIN IMMEDIATE')
+                    apply(db,{'op':'c2_'+op,'arguments':args})
+                    db.commit()
+                self.assertEqual('completed',db.execute(
+                    "SELECT status FROM work_items WHERE prompt_id='123456'").fetchone()[0])
+                self.assertEqual(1,db.execute('SELECT COUNT(*) FROM work_item_result_receipts').fetchone()[0])
+
+    def test_unmerged_pass_receipt_is_not_finalized(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=self._pass_receipt_snapshot(Path(tmp))
+            calls=[]
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                c2_runtime.advance(snapshot,submit=lambda *args:calls.append(args),
+                    repo_task_status=lambda _: {'status':'queued','integration_state':'queued'},
+                    launch=lambda _:None,launch_notify=lambda _:None,now=1)
+            self.assertFalse(any(call[0]=='executor_result' for call in calls))
+
+    def test_missing_receipt_never_infers_completion_from_merged_repo(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute("UPDATE work_items SET status='running' WHERE prompt_id='123456'")
+                writer.commit()
+            calls=[]; statuses=[]
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                c2_runtime.advance(snapshot,submit=lambda *args:calls.append(args),
+                    repo_task_status=lambda prompt:(statuses.append(prompt) or
+                        {'status':'merged','integration_state':'merged'}),
+                    launch=lambda _:None,launch_notify=lambda _:None,now=1)
+            self.assertFalse(statuses)
+            self.assertFalse(any(call[0]=='executor_result' for call in calls))
+
     def _authority_db(self, tmp, supervisor_id, token, expiry):
         path=C2IntakeTests().make_cutover_db(Path(tmp))
         with closing(c2_intake._connect(path)) as writer:

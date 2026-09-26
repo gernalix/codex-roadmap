@@ -1,6 +1,6 @@
 # codex-roadmap
 
-[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]] · [[prompt-registry|Registro prompt]] · [[obsidian/Dashboards/Roadmap|Dashboard Obsidian]] · [[STANDARD_PROMPT|Esecuzione Codex]] · [[SQLITE_ROADMAP|SQLite]]
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]] · [[prompt-registry|Registro prompt]] · [[obsidian/Dashboards/Roadmap|Dashboard Obsidian]] · [[STANDARD_PROMPT|Esecuzione Codex]] · [[C2_SEMANTIC_REORGANIZATION|Riorganizzazione semantica C2]] · [[SQLITE_ROADMAP|SQLite]]
 
 Coda minima di lavoro **solo per attività che richiedono davvero Codex**: filesystem/toolchain locale, device/emulatore, VM, segreti/config runtime, servizi locali o altre risorse non disponibili nella normale chat. Se ChatGPT può completare il lavoro direttamente sui repository remoti, va fatto subito e non inserito in roadmap.
 
@@ -12,6 +12,8 @@ Coda minima di lavoro **solo per attività che richiedono davvero Codex**: files
 4. **Workflowy**: unica centralina operativa visibile; proietta roadmap + pipeline reale di `github-autosync` + link Chrome/Codex.
 5. **Markdown/Obsidian**: output di compatibilità/audit, non interfaccia operativa e non fonte di stato.
 6. **codex-usage-monitor**: telemetria automatica di esiti/costi; non deve creare lavoro meta salvo eccezioni reali.
+
+La separazione canonica tra automazione deterministica, giudizio AI e single writer è in [[C2_SEMANTIC_REORGANIZATION|C2 semantic roadmap contract]]. Usarla per qualunque richiesta di aggiornare/ottimizzare/riorganizzare la roadmap.
 
 Non aggiungere altri strati senza un beneficio operativo misurabile.
 
@@ -78,6 +80,8 @@ acceptance. Gli item incompleti rimangono in attesa senza spec; si integra
 il contesto con `c2_auto_configure` tramite la stessa mutation Issue. Il
 runtime e lo scheduler escludono gli item PersonalHub gestiti dal worker
 esterno, anche se hanno già una spec.
+
+**C2 executor start:** `claimed/assigned` indica soltanto che il control plane ha assegnato lavoro; `executor_started` conferma che l'executor lo ha realmente preso in carico. I worker C2 emettono automaticamente la receipt prima del lavoro sostanziale. Un executor manuale usa `python3 tools/c2_executor_start.py` con l'identità disponibile: `--work-item-id` per task C2 non-prompt (la stessa mutation fa claim+start se il task pending è runnable), oppure `--prompt-id` dopo `roadmap_start.py` per task prompt-backed. PROMPT_ID non è richiesto per i work item non-prompt. Non procedere se la submission fallisce; il binding chat/thread arricchisce la stessa receipt.
 
 **C2 issue inbox:** se un executor incontra un problema o miglioramento collaterale,
 lo registra subito con `python3 tools/c2_issue_capture.py "descrizione"` usando

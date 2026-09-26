@@ -255,6 +255,24 @@ class IssueInboxTests(unittest.TestCase):
         self.assertNotIn('repo', args)
         self.assertNotIn('code_location', args)
 
+    def test_manual_start_receipt_resolves_executor_without_run_binding(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute('BEGIN IMMEDIATE')
+                item = c2_intake.add_work_item(conn, title='Manual source')
+                c2_scheduler.executor_started(conn, work_item_id=item['work_item_id'],
+                    executor='codex', executor_ref='thread-manual',
+                    chat_url='codex://threads/thread-manual', now=2)
+                issue = c2_issue_inbox.capture(conn, description='Manual incidental',
+                    task_id=item['work_item_id'])
+                self.assertEqual('codex', issue['executor'])
+                self.assertEqual('thread-manual', issue['executor_ref'])
+                self.assertEqual('codex://threads/thread-manual', issue['chat_url'])
+                self.assertIsNone(issue['origin_run_id'])
+            finally:
+                conn.close()
+
     def test_codex_binding_is_idempotent_and_conflicts_fail_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, conn = self.make_conn(Path(tmp))
