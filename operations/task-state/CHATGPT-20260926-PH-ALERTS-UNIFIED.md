@@ -15,21 +15,21 @@ Unify PersonalHub alert management in one Home-level Alerts surface covering Tim
 ## Plan / checklist
 - [x] Verify current Timer/Places alert UIs and Home architecture.
 - [x] Create isolated PH and task-state worktrees.
-- [ ] Define shared alert management contract/model in the existing alerts core.
-- [ ] Add Timer adapter/API for list/create/update/delete/enable and tag lookup.
-- [ ] Add Places adapter/API for list/create/update/delete/enable plus place/tag lookup.
-- [ ] Implement one Home Alerts screen with unified list/filter and shared editor.
-- [ ] Add Home Alerts tile and navigation.
-- [ ] Make legacy Timer/Places alert entry points route to the unified surface or remain thin compatibility entry points without duplicated CRUD UI.
+- [x] Define shared alert management contract/model in the existing alerts core.
+- [x] Add Timer adapter/API for list/create/update/delete/enable and tag lookup.
+- [x] Add Places adapter/API for list/create/update/delete/enable plus place/tag lookup.
+- [x] Implement one Home Alerts screen with unified list/filter and shared editor.
+- [x] Add Home Alerts tile and navigation.
+- [x] Make legacy Timer/Places alert entry points route to the unified surface or remain thin compatibility entry points without duplicated CRUD UI.
 - [ ] Add/update focused tests.
-- [ ] Run consumer preflight before Gradle for changed public APIs.
+- [x] Run consumer preflight before Gradle for changed public APIs.
 - [ ] Run compile/unit/architecture gates.
 - [ ] Perform focused UI QA if a safe emulator/device path is available without interfering with active PH workers.
 - [ ] Commit + push PersonalHub branch.
 - [ ] Update this state with evidence and terminal result; commit + push.
 
 ## Current step
-Inspect Timer and Places alert persistence/controller APIs and determine the minimal shared adapter boundary.
+Run the first :app compile gate from the isolated PersonalHub worktree; fix only compiler-reported leaf issues.
 
 ## Verified facts
 - Places engine already supports exact-place or tag-set targets with ALL/ANY and check-in/check-out/both.
@@ -45,10 +45,10 @@ Inspect Timer and Places alert persistence/controller APIs and determine the min
 - Avoid importing feature-private implementation packages into app.
 
 ## Completed
-Initial architecture/UI verification; isolated worktrees created.
+Initial architecture/UI verification; isolated worktrees created; shared contract, Timer/Places providers, unified Home Activity, Home tile, and legacy redirects implemented; consumer preflight PASS.
 
 ## Remaining
-Implementation, tests, QA, commit/push, final C2/state update.
+Compile fixes if any, targeted tests/architecture gate, focused UI QA if safe, final PH checkpoint and state update.
 
 ## Blockers
 None for implementation. C2 executor_started helper is absent from current canonical tooling; do not mutate supervisor authority solely for this PH task.
@@ -56,6 +56,7 @@ None for implementation. C2 executor_started helper is absent from current canon
 ## Evidence
 - C2 issue #1329 captures the duplicate/inconsistent alert-management problem.
 - PersonalHub isolated branch: `chatgpt/unified-alerts-home`.
+- Consumer preflight found only intended consumers for ManagedAlertProvider/Rule/Draft/Catalog, TimerAlertsApi, PlacesAlertsApi, HubAlertsActivity; obsolete PlaceAlertsDialog gate PASS.
 
 ## Acceptance criteria
 - Home has a dedicated Alerts tile.
@@ -67,4 +68,4 @@ None for implementation. C2 executor_started helper is absent from current canon
 - Focused tests + compile + architecture boundary checks pass.
 
 ## Next action
-Read Timer AlertsCapsuleViewModel/model APIs and Places alert repository/container wiring; design the minimal shared adapter API before editing.
+Run `./gradlew :app:compileDebugKotlin --quiet --console=plain`; use compiler evidence for leaf corrections only.
