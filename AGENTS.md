@@ -1,5 +1,11 @@
 # Codex instructions — codex-roadmap
 
+## C2 repository/worktree contract
+
+- `~/projects/codex-roadmap` is the canonical C2 Git repository. Its `main` history plus writer-controlled roadmap state are authoritative.
+- `~/.local/share/c2-supervisor/worktree` is a runtime-only worktree of that same repository, never a second source of truth. It must use branch `c2/supervisor-runtime` tracking local `main`; do not edit or commit there. Use isolated task worktrees for development/checkpoints.
+- C2 runtime/watchdog startup must pass `tools/c2_worktree_guard.py`, which rejects a foreign repo, dirty tree, wrong branch/upstream/origin, commits ahead of `main`, or runtime-code drift from `main`.
+
 ## Canonical write boundary
 
 For any roadmap data mutation, use the single writer. This rule is automatic and does not require the user to repeat it.

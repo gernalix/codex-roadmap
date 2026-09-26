@@ -4,5 +4,6 @@ ConditionPathExists=%h/.local/state/c2-supervisor/lease.sqlite3
 
 [Service]
 Type=oneshot
+ExecStartPre=/usr/bin/python3 /home/daniele/.local/share/c2-supervisor/worktree/tools/c2_worktree_guard.py
 ExecStart=/usr/bin/python3 /home/daniele/.local/share/c2-supervisor/worktree/tools/c2_supervisor_watchdog.py
 TimeoutStartSec=120
