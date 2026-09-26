@@ -21,9 +21,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../falliti/c2-ph-cutover-canonical-temporary-lane-override-528123|Apri prompt]]
-- **Primo lancio:** 2026-09-26T23:51:04Z
+- **Primo lancio:** 2026-09-26T23:47:46Z
 - **Ultimo lancio:** 2026-09-26T23:51:04Z
-- **Ultimo esito:** UNKNOWN
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -41,6 +41,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
+| 2026-09-26T23:47:46Z | 2026-09-26T23:53:14Z | BLOCKED | 327.965 | gpt-6-sol | medium | 38 | 81842 |
 | 2026-09-26T23:51:04Z | 2026-09-26T23:51:08Z | UNKNOWN | 3.426 | codex-auto-review | low | 0 | 25470 |
 
 ## Analisi ChatGPT
