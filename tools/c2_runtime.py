@@ -89,9 +89,19 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             launch_notify=_launch_notify,
             now: float | None=None, max_parallel: int=3,
             supervisor_expiry: float | None=None,
-            supervisor_authority: dict | None=None) -> dict:
+            supervisor_authority: dict | None=None,
+            triage_project_url: str | None=None) -> dict:
     now=time.time() if now is None else now
     events=[]
+    has_issue_inbox = bool(db.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='issue_inbox'"
+    ).fetchone())
+    pending_issue_inbox = (
+        int(db.execute("SELECT COUNT(*) FROM issue_inbox WHERE state='pending'").fetchone()[0])
+        if has_issue_inbox else 0
+    )
+    if pending_issue_inbox:
+        events.append(('issue_inbox_pending', str(pending_issue_inbox)))
     if supervisor_authority is not None and db.execute("SELECT 1 FROM sqlite_master WHERE name='c2_supervisor_authority'").fetchone():
         current_id=str(supervisor_authority['supervisor_id'])
         current_token=int(supervisor_authority['fencing_token'])
@@ -127,6 +137,54 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             submit('renew_supervisor',{},key)
             return {'events':[('renew_supervisor',str(authority['fencing_token']))],
                     'ready':0,'active':0}
+    if pending_issue_inbox and triage_project_url:
+        triage = db.execute(
+            """SELECT w.work_item_id,w.status
+               FROM work_items w
+               JOIN work_item_tags t USING(work_item_id)
+               WHERE t.tag='c2:issue-triage'
+                 AND w.status NOT IN ('completed','failed','cancelled','superseded','waived')
+               ORDER BY w.created_at,w.work_item_id
+               LIMIT 1"""
+        ).fetchone()
+        if triage is None:
+            pending_ids = [
+                str(row[0]) for row in db.execute(
+                    "SELECT issue_id FROM issue_inbox WHERE state='pending' ORDER BY observed_at_ms,issue_id"
+                )
+            ]
+            key=_key('c2-issue-triage-intake',pending_ids)
+            submit('intake',{
+                'title':'Triage C2 issue inbox',
+                'objective':(
+                    'Process every pending C2 issue-inbox observation. For each row, inspect only '
+                    'the roadmap/repository evidence needed to decide whether it is still relevant. '
+                    'Promote relevant observations into the logically correct active work item or a '
+                    'new task; discard only genuinely irrelevant or obsolete observations. A fresh '
+                    'observation matching completed/fixed work is a regression/reopen and must be '
+                    'promoted, never discarded as already fixed. Continue until no pending rows remain.'
+                ),
+                'acceptance':[
+                    'Every pending issue-inbox row observed at task start is promoted or discarded with a reason.',
+                    'Relevant duplicates attach to existing active work instead of creating duplicate tasks.',
+                    'Fresh reproductions of completed fixes return to active work as regressions.',
+                ],
+                'tags':['c2:issue-triage','priority:p0'],
+                'next_action':'Read pending issue_inbox rows from the canonical snapshot and triage them one by one.',
+                'execution':{
+                    'activity':'semantic',
+                    'project_url':triage_project_url,
+                    'resources':['c2:issue-triage'],
+                    'max_attempts':3,
+                },
+            },key)
+            events.append(('issue_triage_intake',str(pending_issue_inbox)))
+            return {'events':events,'ready':0,'active':0,
+                    'issue_inbox_pending':pending_issue_inbox}
+        events.append(('issue_triage_active',str(triage['work_item_id'])))
+    elif pending_issue_inbox:
+        events.append(('issue_triage_unconfigured',str(pending_issue_inbox)))
+
     for notice in db.execute("SELECT event_key,state FROM c2_notification_outbox WHERE state IN ('pending','sending') ORDER BY created_at,event_key"):
         key=str(notice['event_key'])
         if notice['state']=='pending':
@@ -195,7 +253,8 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
                                   'dependencies':dependencies,'limit':max_parallel})
         submit('schedule',{'event_key':key,'max_parallel':max_parallel},key)
         events.append(('schedule',str(len(ready))))
-    return {'events':events,'ready':len(ready),'active':len(active)}
+    return {'events':events,'ready':len(ready),'active':len(active),
+            'issue_inbox_pending':pending_issue_inbox}
 
 
 def main():

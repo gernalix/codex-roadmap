@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 from contextlib import closing
 import json
+import os
 from pathlib import Path
 import sqlite3
 import sys
@@ -74,17 +75,26 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
         result=dispatch_browser(run_id=run_id,work_item_id=work_item_id,
             metadata=metadata,prompt=prompt,db_path=db_path,
             receipt=Path(state_root)/f'{run_id}.chatgpt.json')
+        if result.get('chat_url'):
+            submit('bind_executor',{
+                'run_id':run_id,'executor_ref':result['chat_url'],
+                'chat_url':result['chat_url']},'c2-bind-'+run_id)
         if result['phase']=='starting':
             submit('quarantine_browser',{'run_id':run_id,
                 'reason':'Browser delivery uncertain; inspect the existing session before recovery'},
                 'c2-quarantine-'+run_id)
         return {'run_id':run_id,'executor':executor,'phase':result['phase']}
+    os.environ['C2_RUN_ID']=run_id
+    os.environ['C2_WORK_ITEM_ID']=str(run['work_item_id'])
+    os.environ['C2_TASK_ID']=str(run['work_item_id'])
     with rpc_factory() as rpc:
         model_id=resolve_model(rpc,metadata['model'],metadata['reasoning'])
         exact_metadata={**metadata,'model_id':model_id}
         receipt=Path(state_root)/f'{run_id}.codex.json'
         result=dispatch_codex(rpc,run_id=run_id,metadata=exact_metadata,
             prompt=prompt,receipt=receipt)
+        if result.get('thread_id'):
+            submit('bind_executor',{'run_id':run_id,'executor_ref':result['thread_id'],'chat_url':'codex://threads/'+result['thread_id']},'c2-bind-'+run_id)
         if result['phase']=='terminal':
             result['phase']=result['turn_status']
         if result['phase']=='started':

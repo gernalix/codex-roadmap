@@ -38,6 +38,17 @@ CREATE UNIQUE INDEX IF NOT EXISTS work_item_one_active_run ON work_item_runs(wor
 CREATE TABLE IF NOT EXISTS work_item_resource_leases (
  resource TEXT PRIMARY KEY, run_id TEXT NOT NULL REFERENCES work_item_runs(run_id)
 );
+CREATE TABLE IF NOT EXISTS work_item_executor_bindings (
+ run_id TEXT PRIMARY KEY REFERENCES work_item_runs(run_id) ON DELETE CASCADE,
+ work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
+ executor TEXT NOT NULL,
+ executor_ref TEXT NOT NULL,
+ chat_url TEXT NOT NULL,
+ bound_at REAL NOT NULL,
+ UNIQUE(executor, executor_ref)
+);
+CREATE INDEX IF NOT EXISTS idx_work_item_executor_bindings_item
+ ON work_item_executor_bindings(work_item_id,bound_at);
 CREATE TABLE IF NOT EXISTS work_item_scheduler_events (
  event_key TEXT PRIMARY KEY, observed_at REAL NOT NULL, result_json TEXT NOT NULL
 );
@@ -314,6 +325,42 @@ def acknowledge(conn, run_id, *, worker_ref, metadata, now=None, lease_seconds=1
     if run['worker_ref'] and worker_ref != run['worker_ref']:
         raise SchedulingError('worker_identity_mismatch')
     conn.execute("UPDATE work_item_runs SET state='running',worker_ref=?,lease_until=? WHERE run_id=?",(worker_ref,now+lease_seconds,run_id))
+
+
+def bind_executor(conn, run_id, *, executor_ref, chat_url, now=None):
+    """Bind an active C2 run to its concrete ChatGPT/Codex conversation."""
+    _transaction(conn)
+    install_schema(conn)
+    now=time.time() if now is None else now
+    run=conn.execute('SELECT * FROM work_item_runs WHERE run_id=?',(run_id,)).fetchone()
+    if not run or run['state'] not in ('claimed','running','recovering'):
+        raise SchedulingError('run_not_active')
+    executor_ref=str(executor_ref or '').strip()
+    chat_url=str(chat_url or '').strip()
+    if not executor_ref or not chat_url:
+        raise SchedulingError('executor_binding_identity_required')
+    executor=str(run['executor'])
+    if executor=='codex':
+        expected='codex://threads/'+executor_ref
+        if chat_url != expected:
+            raise SchedulingError('codex_deep_link_mismatch')
+    elif executor in ('chatgpt','rdc'):
+        if not chat_url.startswith('https://chatgpt.com/'):
+            raise SchedulingError('chatgpt_chat_url_required')
+    else:
+        raise SchedulingError('executor_binding_unsupported:'+executor)
+    prior=conn.execute('SELECT * FROM work_item_executor_bindings WHERE run_id=?',(run_id,)).fetchone()
+    if prior:
+        if (str(prior['executor'])!=executor or str(prior['executor_ref'])!=executor_ref
+                or str(prior['chat_url'])!=chat_url
+                or str(prior['work_item_id'])!=str(run['work_item_id'])):
+            raise SchedulingError('executor_binding_conflict')
+        return dict(prior)
+    conn.execute('''INSERT INTO work_item_executor_bindings(
+          run_id,work_item_id,executor,executor_ref,chat_url,bound_at
+        ) VALUES(?,?,?,?,?,?)''',
+        (run_id,run['work_item_id'],executor,executor_ref,chat_url,now))
+    return dict(conn.execute('SELECT * FROM work_item_executor_bindings WHERE run_id=?',(run_id,)).fetchone())
 
 
 def checkpoint(conn, run_id, commit):
