@@ -17,6 +17,7 @@ import sys
 import time
 
 from submit_mutation import submit_document
+from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor
 
 
 class RuntimeErrorC2(RuntimeError):
@@ -136,9 +137,25 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db',type=Path,default=Path.home()/'projects/codex-roadmap/roadmap.sqlite')
     parser.add_argument('--max-parallel',type=int,default=3)
+    parser.add_argument('--supervisor-id',required=True)
+    parser.add_argument('--fencing-token',type=int,required=True)
     args=parser.parse_args()
-    with closing(_open_snapshot(args.db)) as db:
-        result=advance(db,max_parallel=args.max_parallel)
+    with closing(connect_supervisor(SUPERVISOR_DB)) as supervisor:
+        def guard():
+            require_supervisor(supervisor,args.supervisor_id,args.fencing_token,time.time())
+        def guarded_submit(*values):
+            guard()
+            return _writer_submit(*values)
+        def guarded_launch(*values):
+            guard()
+            return _launch_worker(*values)
+        def guarded_notify(*values):
+            guard()
+            return _launch_notify(*values)
+        guard()
+        with closing(_open_snapshot(args.db)) as db:
+            result=advance(db,submit=guarded_submit,launch=guarded_launch,
+                           launch_notify=guarded_notify,max_parallel=args.max_parallel)
     print(json.dumps(result,sort_keys=True))
     return 0
 
