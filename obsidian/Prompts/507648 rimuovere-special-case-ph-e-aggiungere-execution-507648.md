@@ -1,26 +1,26 @@
 ---
-prompt_id: 384495
-status: running
+prompt_id: 507648
+status: pending
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
 tags:
   - c2
   - execution-override
-  - handoff
+  - ph-cutover
   - priority:p0
   - scheduler
-  - source:issue-inbox
+  - source:issue-inbox-successor
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/pending
   - roadmap/project/unknown
 ---
 
-# 384495 · Rimuovere special-case PH e implementare override execution canonico
+# 507648 · Rimuovere special-case PH e aggiungere execution override C2
 
-- **Stato:** running
+- **Stato:** pending
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/rimuovere-special-case-ph-e-implementare-overrid-384495|Apri prompt]]
+- **Prompt:** [[../../prompts/rimuovere-special-case-ph-e-aggiungere-execution-507648|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
