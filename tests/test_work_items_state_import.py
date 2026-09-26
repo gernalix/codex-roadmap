@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import json
 import sqlite3
 import sys
 import tempfile
@@ -240,6 +241,162 @@ Wait for login.
                     (item["work_item_id"],),
                 ).fetchone()[0],
                 2,
+            )
+            conn.close()
+
+    def test_terminal_remaining_prose_is_not_runnable_and_keeps_real_handoff(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            db_path, state_root = self.make_migrated_repo(Path(tmp))
+            cases = {
+                "NONE": ("None for 994029.", []),
+                "DONE": ("Completed.", []),
+                "MIXED": (
+                    "No 966124 work remains. Mark the parent phase complete.\n"
+                    "- Run the next genuine step.",
+                    ["Mark the parent phase complete.", "Run the next genuine step."],
+                ),
+            }
+            for task_id, (remaining, _) in cases.items():
+                (state_root / f"{task_id}.md").write_text(
+                    f"# {task_id}\n\nTASK_ID: {task_id}\n\n"
+                    f"## Completed\n- Verified result\n\n## Remaining\n{remaining}\n",
+                    encoding="utf-8",
+                )
+            conn = sqlite3.connect(db_path)
+            conn.row_factory = sqlite3.Row
+            conn.execute("PRAGMA foreign_keys=ON")
+            state_import.import_state_tree(conn, state_root, source_commit="terminal")
+            conn.commit()
+            for task_id, (_, expected) in cases.items():
+                owner = conn.execute(
+                    "SELECT work_item_id,status FROM work_items WHERE task_id=?", (task_id,)
+                ).fetchone()
+                self.assertEqual("running" if expected else "completed", owner["status"])
+                steps = [row[0] for row in conn.execute(
+                    """SELECT title FROM work_items
+                       WHERE parent_id=? AND source_ref=? AND status='pending'
+                       ORDER BY sort_order""",
+                    (owner["work_item_id"], f"{task_id}.md#remaining"),
+                )]
+                self.assertEqual(expected, steps)
+                checkpoint = conn.execute(
+                    "SELECT remaining_json FROM work_item_checkpoints WHERE work_item_id=?",
+                    (owner["work_item_id"],),
+                ).fetchone()
+                self.assertEqual(expected, json.loads(checkpoint[0]))
+            conn.close()
+
+    def test_same_hash_repairs_previously_imported_terminal_step(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            db_path, state_root = self.make_migrated_repo(Path(tmp))
+            path = state_root / "DONE.md"
+            path.write_text(
+                "# Done\n\nTASK_ID: DONE\n\n## Completed\n- Verified\n\n"
+                "## Remaining\nNone for DONE.\n",
+                encoding="utf-8",
+            )
+            conn = sqlite3.connect(db_path)
+            conn.row_factory = sqlite3.Row
+            conn.execute("PRAGMA foreign_keys=ON")
+            state_import.import_state_file(conn, path, state_root=state_root)
+            owner = conn.execute(
+                "SELECT work_item_id FROM work_items WHERE task_id='DONE'"
+            ).fetchone()[0]
+            stale_id = state_import._stable_id(owner, "step", "Remaining", "None for DONE.")
+            conn.execute(
+                """INSERT INTO work_items(
+                     work_item_id,parent_id,kind,title,status,executor_policy,
+                     required,actionable,source_kind,source_ref,created_at,updated_at
+                   ) VALUES(?,?,'step','None for DONE.','pending','auto',
+                            1,1,'task_state','DONE.md#remaining','x','x')""",
+                (stale_id, owner),
+            )
+            conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?", (owner,))
+            conn.execute(
+                "UPDATE work_item_checkpoints SET remaining_json='[\"None for DONE.\"]' WHERE work_item_id=?",
+                (owner,),
+            )
+            before = conn.execute("SELECT COUNT(*) FROM work_item_checkpoints").fetchone()[0]
+            result = state_import.import_state_file(conn, path, state_root=state_root)
+            self.assertTrue(result["idempotent"])
+            self.assertEqual(
+                ("superseded", "completed"),
+                (
+                    conn.execute("SELECT status FROM work_items WHERE work_item_id=?", (stale_id,)).fetchone()[0],
+                    conn.execute("SELECT status FROM work_items WHERE work_item_id=?", (owner,)).fetchone()[0],
+                ),
+            )
+            self.assertEqual(before, conn.execute("SELECT COUNT(*) FROM work_item_checkpoints").fetchone()[0])
+            self.assertEqual(
+                [], json.loads(conn.execute(
+                    "SELECT remaining_json FROM work_item_checkpoints WHERE work_item_id=?", (owner,)
+                ).fetchone()[0]),
+            )
+            conn.close()
+
+    def test_terminal_source_checkpoints_have_no_remaining_work(self) -> None:
+        root = Path(__file__).resolve().parents[1] / "operations/task-state"
+        for name in (
+            "994029.md",
+            "CHATGPT-20260924-CSS-PROMPT-INDEX.md",
+            "CHATGPT-20260924-WHATSAPP-EXPORTER.md",
+            "CHATGPT-20260924-RDC-SUPERVISOR.md",
+        ):
+            parsed = state_import.parse_state_file(root / name)
+            self.assertTrue(parsed.plan_phases)
+            self.assertTrue(all(done for _, items in parsed.plan_phases for done, _ in items))
+            self.assertEqual([], state_import._remaining_items(parsed.sections["Remaining"]))
+            self.assertEqual("completed", state_import._derive_task_status(parsed))
+        parsed = state_import.parse_state_file(root / "966124.md")
+        self.assertEqual(
+            ["Global/specialized orchestration files may mark the Phase-4 source-closure item complete."],
+            state_import._remaining_items(parsed.sections["Remaining"]),
+        )
+
+    def test_same_hash_keeps_handoff_after_terminal_prefix(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            db_path, state_root = self.make_migrated_repo(Path(tmp))
+            path = state_root / "MIXED.md"
+            source = "No 966124 work remains. Mark the parent phase complete."
+            handoff = "Mark the parent phase complete."
+            path.write_text(
+                f"# Mixed\n\nTASK_ID: MIXED\n\n## Completed\n- Verified\n\n"
+                f"## Remaining\n{source}\n",
+                encoding="utf-8",
+            )
+            conn = sqlite3.connect(db_path)
+            conn.row_factory = sqlite3.Row
+            conn.execute("PRAGMA foreign_keys=ON")
+            state_import.import_state_file(conn, path, state_root=state_root)
+            owner = conn.execute(
+                "SELECT work_item_id FROM work_items WHERE task_id='MIXED'"
+            ).fetchone()[0]
+            conn.execute(
+                "DELETE FROM work_items WHERE work_item_id=?",
+                (state_import._stable_id(owner, "step", "Remaining", handoff),),
+            )
+            old_id = state_import._stable_id(owner, "step", "Remaining", source)
+            conn.execute(
+                """INSERT INTO work_items(
+                     work_item_id,parent_id,kind,title,status,executor_policy,
+                     required,actionable,source_kind,source_ref,created_at,updated_at
+                   ) VALUES(?,?,'step',?,'pending','auto',
+                            1,1,'task_state','MIXED.md#remaining','x','x')""",
+                (old_id, owner, source),
+            )
+            conn.execute(
+                "UPDATE work_item_checkpoints SET remaining_json=? WHERE work_item_id=?",
+                (json.dumps([source]), owner),
+            )
+            state_import.import_state_file(conn, path, state_root=state_root)
+            self.assertEqual(
+                [(handoff, "pending"), (source, "superseded")],
+                [tuple(row) for row in conn.execute(
+                    """SELECT title,status FROM work_items
+                       WHERE parent_id=? AND source_ref='MIXED.md#remaining'
+                       ORDER BY title""",
+                    (owner,),
+                )],
             )
             conn.close()
 
