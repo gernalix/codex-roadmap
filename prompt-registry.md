@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/528123 c2-ph-cutover-canonical-temporary-lane-override-528123\|528123 · C2 PH cutover + canonical temporary lane override]] | running | — | — | — | no | no | — | — | GPT-6 Sol | medium |
+| [[obsidian/Prompts/528123 c2-ph-cutover-canonical-temporary-lane-override-528123\|528123 · C2 PH cutover + canonical temporary lane override]] | running | 2026-09-26T23:51:04Z | 2026-09-26T23:51:04Z | UNKNOWN | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | running | 2026-09-26T22:52:04Z | 2026-09-26T22:52:21Z | UNKNOWN | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/328371 c2-dashboard-mutation-applicata-ma-invisibile-fi-328371\|328371 · C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]] | running | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/340495 rendere-idempotente-il-cli-execution-override-c2-340495\|340495 · Rendere idempotente il CLI execution override C2]] | pending | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |

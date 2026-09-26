@@ -21,9 +21,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/c2-ph-cutover-canonical-temporary-lane-override-528123|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-26T23:51:04Z
+- **Ultimo lancio:** 2026-09-26T23:51:04Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -41,7 +41,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-26T23:51:04Z | 2026-09-26T23:51:08Z | UNKNOWN | 3.426 | codex-auto-review | low | 0 | 25470 |
 
 ## Analisi ChatGPT
 
