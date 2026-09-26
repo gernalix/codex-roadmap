@@ -14,3 +14,4 @@
 10. [[prompts/c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418|c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418]]
 11. [[prompts/c2-supervisor-terminal-workers-restano-abilitati-891963|c2-supervisor-terminal-workers-restano-abilitati-891963]]
 12. [[prompts/c2-intake-collisioni-request-key-tra-chat-parall-614593|c2-intake-collisioni-request-key-tra-chat-parall-614593]]
+13. [[prompts/c2-supervisor-rollover-fallito-degrada-a-human-r-682297|c2-supervisor-rollover-fallito-degrada-a-human-r-682297]]

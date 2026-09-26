@@ -17,3 +17,4 @@
 | 10 | [[prompts/c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418\|C2 scheduler: due chat RDC possono scrivere contemporaneamente nello stesso worktree/task]] | 592418 | pending | — | — | — | ✅ Sì | — | GPT-5.6 Sol | medium | Prompt |
 | 11 | [[prompts/c2-supervisor-terminal-workers-restano-abilitati-891963\|C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] | 891963 | pending | — | — | — | ✅ Sì | — | GPT-5.6 Terra | medium | Prompt |
 | 12 | [[prompts/c2-intake-collisioni-request-key-tra-chat-parall-614593\|C2 intake: collisioni request-key tra chat parallele]] | 614593 | pending | — | — | — | ✅ Sì | — | GPT-5.6 Terra | medium | Prompt |
+| 13 | [[prompts/c2-supervisor-rollover-fallito-degrada-a-human-r-682297\|C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]] | 682297 | pending | — | — | — | ✅ Sì | — | GPT-5.6 Sol | medium | Prompt |
