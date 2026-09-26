@@ -10,4 +10,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/669941 personalhub-workflowy-home-audit-resume|669941 · Completa jump Workflowy, tile Home e Audit log PersonalHub]]
+- Nessuno.

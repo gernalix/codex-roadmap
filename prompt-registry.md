@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/669941 personalhub-workflowy-home-audit-resume\|669941 · Completa jump Workflowy, tile Home e Audit log PersonalHub]] | running | — | — | — | no | no | — | PersonalHub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/992303 c2-executor-chat-reference-history\|992303 · Traccia executor e chat di ogni task C2]] | pending | — | — | — | no | no | — | codex-roadmap / C2 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | pending | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
@@ -407,3 +406,4 @@
 | [[obsidian/Prompts/553232 personalhub-c2-final-pixel\|553232 · Completa PersonalHub C2 e consegna finale Pixel]] | completed | 2026-09-26T12:36:36Z | 2026-09-26T12:36:36Z | PASS | no | no | — | PersonalHub | — | — |
 | [[obsidian/Prompts/226672 integrare-supervisione-chatgpt-codex-nella-c2-226672\|226672 · Integrare supervisione ChatGPT/Codex nella C2]] | completed | — | — | PASS | no | no | — | codex-roadmap | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/653776 fix-c2-successor-supervisor-authority-handoff-cl-653776\|653776 · Fix C2 successor supervisor authority handoff (claim vs renew)]] | completed | 2026-09-26T15:51:47Z | 2026-09-26T15:51:47Z | PASS | sì | sì | — | codex-roadmap | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/669941 personalhub-workflowy-home-audit-resume\|669941 · Completa jump Workflowy, tile Home e Audit log PersonalHub]] | completed | — | — | PASS | no | no | — | PersonalHub | GPT-6 Sol | medium |
