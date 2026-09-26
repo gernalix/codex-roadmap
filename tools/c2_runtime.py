@@ -61,9 +61,9 @@ def _writer_submit(operation: str, arguments: dict, key: str):
         'operations':[{'op':'c2_'+operation,'arguments':arguments}]},request_key=key)
 
 
-def _launch_worker(run_id: str):
+def _launch_worker(run_id: str, db_path: Path):
     command=[sys.executable,str(Path(__file__).with_name('c2_worker.py')),
-        '--run-id',run_id]
+        '--run-id',run_id,'--db',str(db_path)]
     result=subprocess.run(['systemd-run','--user','--collect',
         '--unit=c2-run-'+run_id,*command],capture_output=True,text=True)
     if result.returncode and 'already exists' not in result.stderr.lower():
@@ -171,7 +171,7 @@ def main():
             return _writer_submit(*values)
         def guarded_launch(*values):
             guard()
-            return _launch_worker(*values)
+            return _launch_worker(*values,args.db)
         def guarded_notify(*values):
             guard()
             return _launch_notify(*values)
