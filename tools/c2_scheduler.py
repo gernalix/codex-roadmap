@@ -62,6 +62,36 @@ CREATE TABLE IF NOT EXISTS work_item_executor_starts (
 );
 CREATE INDEX IF NOT EXISTS idx_work_item_executor_starts_item
  ON work_item_executor_starts(work_item_id,started_at);
+CREATE TABLE IF NOT EXISTS work_item_executions (
+ execution_id TEXT PRIMARY KEY,
+ run_id TEXT UNIQUE,
+ work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
+ executor TEXT NOT NULL,
+ worker_ref TEXT,
+ executor_ref TEXT,
+ status TEXT NOT NULL CHECK(status IN ('claimed','running','recovering','completed','failed')),
+ conversation_ref_type TEXT NOT NULL DEFAULT 'none',
+ conversation_ref_uri TEXT,
+ claimed_at REAL NOT NULL,
+ started_at REAL,
+ updated_at REAL NOT NULL,
+ ended_at REAL,
+ CHECK ((conversation_ref_type='none' AND conversation_ref_uri IS NULL) OR
+        (conversation_ref_type<>'none' AND conversation_ref_uri IS NOT NULL))
+);
+CREATE INDEX IF NOT EXISTS idx_work_item_executions_item
+ ON work_item_executions(work_item_id,claimed_at,execution_id);
+CREATE INDEX IF NOT EXISTS idx_work_item_executions_current
+ ON work_item_executions(work_item_id,status,updated_at);
+DROP VIEW IF EXISTS v_work_item_execution_current;
+CREATE VIEW v_work_item_execution_current AS
+SELECT execution.* FROM work_item_executions execution
+WHERE NOT EXISTS (SELECT 1 FROM work_item_executions newer
+   WHERE newer.work_item_id=execution.work_item_id
+    AND (newer.claimed_at>execution.claimed_at OR
+         (newer.claimed_at=execution.claimed_at AND newer.execution_id>execution.execution_id)));
+DROP VIEW IF EXISTS v_work_item_execution_history;
+CREATE VIEW v_work_item_execution_history AS SELECT * FROM work_item_executions;
 CREATE TABLE IF NOT EXISTS work_item_result_receipts (
  receipt_id TEXT PRIMARY KEY,
  work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
@@ -104,6 +134,7 @@ def install_schema(conn):
         if sqlite3.complete_statement(statement):
             conn.execute(statement)
             statement = ''
+    _backfill_execution_ledger(conn)
 
 
 def choose_executor(policy: str, activity: str) -> str | None:
@@ -120,6 +151,138 @@ def choose_executor(policy: str, activity: str) -> str | None:
 def _transaction(conn):
     if not conn.in_transaction:
         raise SchedulingError('canonical_writer_transaction_required')
+
+
+def _conversation_reference(executor, executor_ref=None, uri=None, ref_type=None):
+    """Normalize only persisted transport evidence; never synthesize a URI."""
+    executor=str(executor or '').strip()
+    executor_ref=str(executor_ref or '').strip() or None
+    uri=str(uri or '').strip() or None
+    ref_type=str(ref_type or '').strip() or None
+    if uri is None:
+        if ref_type not in (None,'none'):
+            raise SchedulingError('conversation_reference_uri_required')
+        return executor_ref,'none',None
+    if ref_type is None:
+        if uri.startswith('https://chatgpt.com/'):
+            ref_type='chatgpt_web'
+        elif uri.startswith('codex://threads/'):
+            ref_type='codex_thread'
+        else:
+            raise SchedulingError('conversation_reference_type_required')
+    if ref_type=='none':
+        raise SchedulingError('conversation_reference_type_required')
+    if (not ref_type.replace('_','').replace('-','').replace('.','').isalnum()
+            or not ref_type[0].isalpha()):
+        raise SchedulingError('invalid_conversation_reference_type')
+    if ref_type=='chatgpt_web' and not uri.startswith('https://chatgpt.com/'):
+        raise SchedulingError('chatgpt_chat_url_required')
+    if ref_type=='codex_thread':
+        if not uri.startswith('codex://threads/') or uri=='codex://threads/':
+            raise SchedulingError('codex_deep_link_required')
+        thread_id=uri.removeprefix('codex://threads/')
+        if executor_ref and executor_ref!=thread_id:
+            raise SchedulingError('codex_deep_link_mismatch')
+        executor_ref=executor_ref or thread_id
+    if '://' not in uri:
+        raise SchedulingError('conversation_reference_uri_invalid')
+    return executor_ref,ref_type,uri
+
+
+def _upsert_execution(conn, *, execution_id, work_item_id, executor, status,
+                      claimed_at, run_id=None, worker_ref=None, executor_ref=None,
+                      conversation_ref_type='none', conversation_ref_uri=None,
+                      started_at=None, updated_at=None, ended_at=None):
+    updated_at=claimed_at if updated_at is None else updated_at
+    executor_ref,conversation_ref_type,conversation_ref_uri=_conversation_reference(
+        executor,executor_ref,conversation_ref_uri,conversation_ref_type)
+    conn.execute('''INSERT INTO work_item_executions(
+      execution_id,run_id,work_item_id,executor,worker_ref,executor_ref,status,
+      conversation_ref_type,conversation_ref_uri,claimed_at,started_at,updated_at,ended_at
+    ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
+    ON CONFLICT(execution_id) DO UPDATE SET
+      worker_ref=COALESCE(excluded.worker_ref,work_item_executions.worker_ref),
+      executor_ref=COALESCE(excluded.executor_ref,work_item_executions.executor_ref),
+      status=excluded.status,
+      conversation_ref_type=CASE WHEN excluded.conversation_ref_uri IS NOT NULL
+        THEN excluded.conversation_ref_type ELSE work_item_executions.conversation_ref_type END,
+      conversation_ref_uri=COALESCE(excluded.conversation_ref_uri,work_item_executions.conversation_ref_uri),
+      started_at=COALESCE(excluded.started_at,work_item_executions.started_at),
+      updated_at=MAX(excluded.updated_at,work_item_executions.updated_at),
+      ended_at=COALESCE(excluded.ended_at,work_item_executions.ended_at)''',
+      (execution_id,run_id,work_item_id,executor,worker_ref,executor_ref,status,
+       conversation_ref_type,conversation_ref_uri,claimed_at,started_at,updated_at,ended_at))
+
+
+def _backfill_execution_ledger(conn):
+    """Best-effort migration from real persisted run/start/binding evidence."""
+    tables={row[0] for row in conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table'")}
+    if 'work_item_runs' not in tables:
+        return
+    bindings={row['run_id']:row for row in conn.execute(
+        'SELECT * FROM work_item_executor_bindings')} if 'work_item_executor_bindings' in tables else {}
+    starts={row['run_id']:row for row in conn.execute(
+        'SELECT * FROM work_item_executor_starts WHERE run_id IS NOT NULL')} if 'work_item_executor_starts' in tables else {}
+    for run in conn.execute('SELECT * FROM work_item_runs ORDER BY created_at,run_id'):
+        binding=bindings.get(run['run_id'])
+        start=starts.get(run['run_id'])
+        uri=(binding['chat_url'] if binding else
+             start['chat_url'] if start and start['chat_url'] else None)
+        ref=(binding['executor_ref'] if binding else
+             start['executor_ref'] if start and start['executor_ref'] else None)
+        try:
+            ref,ref_type,uri=_conversation_reference(run['executor'],ref,uri)
+        except SchedulingError:
+            # Unknown legacy strings are not verified conversation references.
+            ref_type,uri='none',None
+        _upsert_execution(conn,execution_id='run:'+run['run_id'],run_id=run['run_id'],
+            work_item_id=run['work_item_id'],executor=run['executor'],
+            worker_ref=run['worker_ref'],executor_ref=ref,status=run['state'],
+            conversation_ref_type=ref_type,conversation_ref_uri=uri,
+            claimed_at=run['created_at'],started_at=start['started_at'] if start else None,
+            updated_at=max(run['created_at'],start['started_at'] if start else run['created_at']),
+            ended_at=None)
+    if 'work_item_executor_starts' not in tables:
+        return
+    for start in conn.execute('SELECT * FROM work_item_executor_starts WHERE run_id IS NULL'):
+        try:
+            ref,ref_type,uri=_conversation_reference(start['executor'],
+                start['executor_ref'],start['chat_url'])
+        except SchedulingError:
+            ref,ref_type,uri=start['executor_ref'],'none',None
+        _upsert_execution(conn,execution_id='start:'+start['receipt_id'],run_id=None,
+            work_item_id=start['work_item_id'],executor=start['executor'],
+            executor_ref=ref,status='running',conversation_ref_type=ref_type,
+            conversation_ref_uri=uri,claimed_at=start['started_at'],
+            started_at=start['started_at'],updated_at=start['started_at'])
+
+
+def execution_metadata_for_item(conn, work_item_id):
+    """Return one compact current execution plus the append-preserved history."""
+    current=conn.execute('SELECT * FROM v_work_item_execution_current WHERE work_item_id=?',
+                         (work_item_id,)).fetchone()
+    history=conn.execute('''SELECT * FROM v_work_item_execution_history
+      WHERE work_item_id=? ORDER BY claimed_at DESC,execution_id DESC''',(work_item_id,)).fetchall()
+    return {'current':dict(current) if current else None,
+            'history':[dict(row) for row in history]}
+
+
+def _set_run_execution_state(conn, run_id, status, *, now=None, worker_ref=None):
+    now=time.time() if now is None else now
+    row=conn.execute('SELECT * FROM work_item_runs WHERE run_id=?',(run_id,)).fetchone()
+    if not row:
+        raise SchedulingError('run_not_found')
+    execution=conn.execute('SELECT * FROM work_item_executions WHERE run_id=?',(run_id,)).fetchone()
+    _upsert_execution(conn,execution_id='run:'+run_id,run_id=run_id,
+        work_item_id=row['work_item_id'],executor=row['executor'],
+        worker_ref=worker_ref or row['worker_ref'],
+        executor_ref=execution['executor_ref'] if execution else None,status=status,
+        conversation_ref_type=execution['conversation_ref_type'] if execution else 'none',
+        conversation_ref_uri=execution['conversation_ref_uri'] if execution else None,
+        claimed_at=execution['claimed_at'] if execution else row['created_at'],
+        started_at=execution['started_at'] if execution else None,updated_at=now,
+        ended_at=now if status in ('completed','failed') else None)
 
 
 def external_personalhub(conn, item):
@@ -327,6 +490,9 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120):
         run_id = uuid.uuid4().hex
         conn.execute('INSERT INTO work_item_runs VALUES(?,?,?,?,?,?,?,?,?,?,?)',
             (run_id,item['work_item_id'],event_key,attempt,executor,'claimed',now+lease_seconds,None,None,json.dumps(metadata,sort_keys=True),now))
+        _upsert_execution(conn,execution_id='run:'+run_id,run_id=run_id,
+            work_item_id=item['work_item_id'],executor=executor,status='claimed',
+            claimed_at=now,updated_at=now)
         for resource in sorted(resources):
             conn.execute('INSERT INTO work_item_resource_leases VALUES(?,?)',(resource,run_id))
         if item['prompt_id']:
@@ -351,9 +517,10 @@ def acknowledge(conn, run_id, *, worker_ref, metadata, now=None, lease_seconds=1
     if run['worker_ref'] and worker_ref != run['worker_ref']:
         raise SchedulingError('worker_identity_mismatch')
     conn.execute("UPDATE work_item_runs SET state='running',worker_ref=?,lease_until=? WHERE run_id=?",(worker_ref,now+lease_seconds,run_id))
+    _set_run_execution_state(conn,run_id,'running',now=now,worker_ref=worker_ref)
 
 
-def bind_executor(conn, run_id, *, executor_ref, chat_url, now=None):
+def bind_executor(conn, run_id, *, executor_ref, chat_url, reference_type=None, now=None):
     """Bind an active C2 run to its concrete ChatGPT/Codex conversation."""
     _transaction(conn)
     install_schema(conn)
@@ -366,16 +533,16 @@ def bind_executor(conn, run_id, *, executor_ref, chat_url, now=None):
     if not executor_ref or not chat_url:
         raise SchedulingError('executor_binding_identity_required')
     executor=str(run['executor'])
+    executor_ref,reference_type,chat_url=_conversation_reference(
+        executor,executor_ref,chat_url,reference_type)
     item_status=conn.execute('SELECT status FROM work_items WHERE work_item_id=?',(run['work_item_id'],)).fetchone()[0]
     if executor=='codex':
         expected='codex://threads/'+executor_ref
-        if chat_url != expected:
+        if reference_type!='codex_thread' or chat_url != expected:
             raise SchedulingError('codex_deep_link_mismatch')
     elif executor in ('chatgpt','rdc'):
-        if not chat_url.startswith('https://chatgpt.com/'):
+        if reference_type=='chatgpt_web' and not chat_url.startswith('https://chatgpt.com/'):
             raise SchedulingError('chatgpt_chat_url_required')
-    else:
-        raise SchedulingError('executor_binding_unsupported:'+executor)
     prior=conn.execute('SELECT * FROM work_item_executor_bindings WHERE run_id=?',(run_id,)).fetchone()
     if prior:
         if (str(prior['executor'])!=executor or str(prior['executor_ref'])!=executor_ref
@@ -407,6 +574,12 @@ def bind_executor(conn, run_id, *, executor_ref, chat_url, now=None):
           (executor,executor_ref,chat_url,run_id))
     if run['state'] in ('running','recovering') and item_status=='running':
         executor_started(conn,run_id=run_id,executor_ref=executor_ref,chat_url=chat_url,now=now)
+    execution=conn.execute('SELECT * FROM work_item_executions WHERE run_id=?',(run_id,)).fetchone()
+    _upsert_execution(conn,execution_id='run:'+run_id,run_id=run_id,
+        work_item_id=run['work_item_id'],executor=executor,worker_ref=run['worker_ref'],
+        executor_ref=executor_ref,status=run['state'],conversation_ref_type=reference_type,
+        conversation_ref_uri=chat_url,claimed_at=execution['claimed_at'] if execution else run['created_at'],
+        started_at=execution['started_at'] if execution else None,updated_at=now)
     return dict(conn.execute('SELECT * FROM work_item_executor_bindings WHERE run_id=?',(run_id,)).fetchone())
 
 
@@ -478,14 +651,27 @@ def executor_started(conn, *, run_id=None, work_item_id=None, prompt_id=None,
         if updates:
             conn.execute('UPDATE work_item_executor_starts SET '+','.join(updates)+' WHERE receipt_id=?',
                          (*values,receipt_id))
-        return dict(conn.execute('SELECT * FROM work_item_executor_starts WHERE receipt_id=?',
-                                 (receipt_id,)).fetchone())
-    conn.execute("""INSERT INTO work_item_executor_starts(
-      receipt_id,work_item_id,run_id,prompt_id,executor,executor_ref,chat_url,started_at
-      ) VALUES(?,?,?,?,?,?,?,?)""",
-      (receipt_id,work_item_id,run_id,prompt_id,executor,executor_ref,chat_url,now))
-    return dict(conn.execute('SELECT * FROM work_item_executor_starts WHERE receipt_id=?',
-                             (receipt_id,)).fetchone())
+    else:
+        conn.execute("""INSERT INTO work_item_executor_starts(
+          receipt_id,work_item_id,run_id,prompt_id,executor,executor_ref,chat_url,started_at
+          ) VALUES(?,?,?,?,?,?,?,?)""",
+          (receipt_id,work_item_id,run_id,prompt_id,executor,executor_ref,chat_url,now))
+    start=conn.execute('SELECT * FROM work_item_executor_starts WHERE receipt_id=?',
+                       (receipt_id,)).fetchone()
+    ref,ref_type,uri=_conversation_reference(executor,start['executor_ref'],start['chat_url'])
+    if run:
+        execution=conn.execute('SELECT * FROM work_item_executions WHERE run_id=?',(run_id,)).fetchone()
+        _upsert_execution(conn,execution_id='run:'+run_id,run_id=run_id,
+            work_item_id=work_item_id,executor=executor,worker_ref=run['worker_ref'],
+            executor_ref=ref,status=run['state'],conversation_ref_type=ref_type,
+            conversation_ref_uri=uri,claimed_at=execution['claimed_at'] if execution else run['created_at'],
+            started_at=start['started_at'],updated_at=now)
+    else:
+        _upsert_execution(conn,execution_id='start:'+receipt_id,run_id=None,
+            work_item_id=work_item_id,executor=executor,executor_ref=ref,status='running',
+            conversation_ref_type=ref_type,conversation_ref_uri=uri,
+            claimed_at=start['started_at'],started_at=start['started_at'],updated_at=now)
+    return dict(start)
 
 
 def checkpoint(conn, run_id, commit):
@@ -630,6 +816,7 @@ def executor_result(conn, *, outcome, work_item_id=None, prompt_id=None, run_id=
             if run['state'] not in (run_target,'running','recovering','claimed'):
                 raise SchedulingError('executor_result_run_state_conflict')
             conn.execute('UPDATE work_item_runs SET state=? WHERE run_id=?',(run_target,run_id))
+            _set_run_execution_state(conn,run_id,run_target)
             conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(run_id,))
         if item['status'] not in (target,'pending','running','waiting','blocked'):
             raise SchedulingError('executor_result_item_state_conflict')
@@ -648,6 +835,7 @@ def recover(conn, *, now=None):
     rows = conn.execute("SELECT * FROM work_item_runs WHERE state IN ('claimed','running') AND lease_until<=?",(now,)).fetchall()
     for row in rows:
         conn.execute("UPDATE work_item_runs SET state='recovering' WHERE run_id=?",(row['run_id'],))
+        _set_run_execution_state(conn,row['run_id'],'recovering',now=now)
     # Preserve the same run identity and locks; executor must inspect its durable
     # worker receipt before resume. A lost acknowledgement is not a failed run.
     return [dict(r) for r in conn.execute("SELECT * FROM work_item_runs WHERE state='recovering'")]
@@ -665,6 +853,7 @@ def quarantine_browser_run(conn, run_id, *, reason):
     if row['state'] not in ('claimed','running','recovering') or row['status']!='running':
         raise SchedulingError('run_not_active')
     conn.execute("UPDATE work_item_runs SET state='failed' WHERE run_id=?",(run_id,))
+    _set_run_execution_state(conn,run_id,'failed')
     conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(run_id,))
     conn.execute('''UPDATE work_items SET status='blocked',blocker=?
       WHERE work_item_id=(SELECT work_item_id FROM work_item_runs WHERE run_id=?)''',
@@ -700,6 +889,7 @@ def finish_browser_work_item(conn, work_item_id, *, evidence):
     if missing:
         raise SchedulingError('required_children_incomplete')
     conn.execute("UPDATE work_item_runs SET state='completed' WHERE run_id=?",(row['run_id'],))
+    _set_run_execution_state(conn,row['run_id'],'completed')
     conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(row['run_id'],))
     conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?",(work_item_id,))
     for fact in evidence:
@@ -809,6 +999,7 @@ def complete(conn, run_id, *, succeeded, worker_ref):
     if item['prompt_id'] and item['status'] != target:
         raise SchedulingError('prompt_terminal_requires_roadmap_finish')
     conn.execute('UPDATE work_item_runs SET state=? WHERE run_id=?',(target,run_id))
+    _set_run_execution_state(conn,run_id,target)
     conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(run_id,))
     conn.execute('UPDATE work_items SET status=? WHERE work_item_id=?',(target,run['work_item_id']))
     if succeeded:
@@ -831,6 +1022,7 @@ def reconcile_terminal_run(conn, run_id):
     if row['state'] not in ('claimed','running','recovering'):
         raise SchedulingError('run_not_active')
     conn.execute('UPDATE work_item_runs SET state=? WHERE run_id=?',(target,run_id))
+    _set_run_execution_state(conn,run_id,target)
     conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(run_id,))
     if target=='completed':
         work_item_id=conn.execute('SELECT work_item_id FROM work_item_runs WHERE run_id=?',(run_id,)).fetchone()[0]

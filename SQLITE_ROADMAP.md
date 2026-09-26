@@ -13,6 +13,7 @@ Per ogni `PROMPT_ID`:
 - dipendenze e relazioni (`parent`, `fix`, `followup`, `replacement`, `split`, `merge`, `related`);
 - tag e artefatti;
 - ogni esecuzione Codex con start/end, outcome, durata, modello, reasoning, tool-call e token quando disponibili;
+- ogni esecuzione C2 in `work_item_executions`, con executor concreto, worker stabile quando disponibile, lifecycle e riferimento conversazione tipizzato/verificato oppure `none` esplicito;
 - le analisi ChatGPT **solo quando esiste un'eccezione reale** (failure, anomalia, retry, bug infrastrutturale o richiesta esplicita), inclusi eventuali colli di bottiglia e PROMPT_ID del fix;
 - le eventuali modifiche di codice fatte da ChatGPT dopo un'analisi eccezionale, separate per repository/tipo/commit;
 - cronologia dei cambi di stato e audit degli aggiornamenti;
@@ -120,7 +121,14 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 
 `PRAGMA foreign_key_check` deve restare vuoto.
 
+### Executor e conversazioni C2
+
+`work_item_executions` è un ledger append-preserving interno a `roadmap.sqlite`. Una riga nasce al claim, viene arricchita all'ack/start e dal binding automatico del transport, passa a `recovering` senza cambiare identità e riceve lo stato terminale con `ended_at`. Le riallocazioni hanno un nuovo `execution_id`; le righe precedenti restano consultabili.
+
+Il backfill copia soltanto evidenza già persistita in `work_item_runs`, `work_item_executor_starts` e `work_item_executor_bindings`. Sono accettati automaticamente solo URL ChatGPT e deep link Codex riconoscibili; un altro riferimento richiede un tipo esplicito dal transport. Stringhe legacy non verificabili diventano `conversation_ref_type='none'` con URI nullo.
+
+Workflowy legge `v_work_item_execution_current` per la riga compatta principale e `v_work_item_execution_history` per lo storico separato. Non deduce executor, stato o link da titoli, branch o Markdown.
+
 ## Inserimento remoto di un nuovo prompt
 
 ChatGPT non crea più il file prompt con un commit separato. La Issue `register` contiene `current_path` e `prompt_text`; il single writer crea `prompts/<slug>.md`, registra la fingerprint nel DB e rigenera tutte le viste nello stesso commit autorevole.
-
