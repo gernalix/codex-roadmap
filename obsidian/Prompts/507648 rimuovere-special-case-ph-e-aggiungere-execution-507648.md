@@ -1,6 +1,6 @@
 ---
 prompt_id: 507648
-status: pending
+status: superseded
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -12,15 +12,15 @@ tags:
   - scheduler
   - source:issue-inbox-successor
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/superseded
   - roadmap/project/unknown
 ---
 
 # 507648 · Rimuovere special-case PH e aggiungere execution override C2
 
-- **Stato:** pending
+- **Stato:** superseded
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/rimuovere-special-case-ph-e-aggiungere-execution-507648|Apri prompt]]
+- **Prompt:** [[../../falliti/rimuovere-special-case-ph-e-aggiungere-execution-507648|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
