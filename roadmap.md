@@ -11,3 +11,4 @@
 7. [[prompts/eboks-full-export-resume-after-mitid-v1|eboks-full-export-resume-after-mitid-v1]]
 8. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 9. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
+10. [[prompts/c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418|c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418]]
