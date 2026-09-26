@@ -5,7 +5,7 @@
 
 | # | Prompt | PROMPT_ID | Stato | Progetto | Chat Codex | Dipendenze | Eseguibile ora? | Spiegazione | Modello | Reasoning | Tipo |
 | --: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | [[prompts/completare-bootstrap-e-handoff-del-drain-autonom-582408\|Completare bootstrap e handoff del drain autonomo C2]] | 582408 | pending | — | — | — | ✅ Sì | — | GPT-5.6 Sol | medium | Prompt |
+| 1 | [[prompts/completare-bootstrap-e-handoff-del-drain-autonom-582408\|Completare bootstrap e handoff del drain autonomo C2]] | 582408 | running | — | — | — | ▶ In corso | — | GPT-5.6 Sol | medium | Prompt |
 | 2 | [[prompts/completare-preparazione-e-drain-autonomo-c2-fino-232898\|Completare preparazione e drain autonomo C2 fino a quiescenza]] | 232898 | pending | — | — | — | ✅ Sì | — | GPT-6 Sol | medium | Goal |
 | 3 | [[prompts/c2-executor-chat-reference-history\|Traccia executor e chat di ogni task C2]] | 992303 | pending | codex-roadmap / C2 | Nuova chat Codex | — | ✅ Sì | Rende visibile per ogni task C2 chi lo sta eseguendo e quale chat/thread lo possiede, conservando anche lo storico dei passaggi tra executor senza inventare link mancanti. | GPT-5.6 Sol | medium | Goal |
 | 4 | [[prompts/implementare-struttura-minima-del-contratto-c2-233366\|Implementare struttura minima del contratto C2]] | 233366 | pending | codex-roadmap | — | — | ✅ Sì | — | GPT-5.6 Terra | medium | Prompt |

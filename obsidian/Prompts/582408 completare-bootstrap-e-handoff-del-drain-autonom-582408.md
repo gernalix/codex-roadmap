@@ -1,6 +1,6 @@
 ---
 prompt_id: 582408
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Sol
 reasoning: medium
@@ -11,13 +11,13 @@ tags:
   - recovery
   - scheduler
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 582408 · Completare bootstrap e handoff del drain autonomo C2
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/completare-bootstrap-e-handoff-del-drain-autonom-582408|Apri prompt]]
 - **Primo lancio:** —
