@@ -13,7 +13,7 @@ def main():
     parser.add_argument('--request-key',required=True)
     parser.add_argument('--operation',required=True,choices=(
         'claim_supervisor','renew_supervisor','retire_supervisor',
-        'intake','prepare_codex','configure','schedule','acknowledge','checkpoint','record_checkpoint','recover','quarantine_browser','finish_work_item','complete','reconcile_run','milestone','claim_milestone','mark_milestone'))
+        'intake','prepare_codex','configure','schedule','acknowledge','checkpoint','record_checkpoint','recover','quarantine_browser','finish_work_item','verify_work_item','complete','reconcile_run','milestone','claim_milestone','mark_milestone'))
     parser.add_argument('--arguments',type=Path,required=True,help='JSON object with structured arguments')
     parser.add_argument('--supervisor-id',required=True)
     parser.add_argument('--fencing-token',type=int,required=True)

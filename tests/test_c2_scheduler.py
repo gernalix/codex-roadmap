@@ -148,3 +148,20 @@ class SchedulerTests(unittest.TestCase):
             (work_item_id,)).fetchone()[0])
         self.assertEqual(1,self.conn.execute('SELECT COUNT(*) FROM c2_notification_outbox WHERE work_item_id=?',
             (work_item_id,)).fetchone()[0])
+
+    def test_verified_nonprompt_closure_requires_every_acceptance_criterion(self):
+        item=intake.add_work_item(self.conn,title='Verified repair',repo='roadmap',
+            acceptance=['A','B'])
+        work_item_id=item['work_item_id']
+        scheduler.record_checkpoint(self.conn,work_item_id,current_step='Partial',
+            next_action='Verify B',completed=['A'],remaining=[])
+        with self.assertRaisesRegex(scheduler.SchedulingError,'acceptance_criteria_not_verified'):
+            scheduler.verify_work_item(self.conn,work_item_id,evidence=['proof'])
+        scheduler.record_checkpoint(self.conn,work_item_id,current_step='Verified',
+            next_action='Close item',completed=['A','B'],remaining=[],evidence=['proof'])
+        scheduler.verify_work_item(self.conn,work_item_id,evidence=['proof'])
+        self.assertEqual('completed',self.conn.execute(
+            'SELECT status FROM work_items WHERE work_item_id=?',(work_item_id,)).fetchone()[0])
+        self.assertEqual(1,self.conn.execute(
+            "SELECT COUNT(*) FROM work_item_evidence WHERE work_item_id=? AND evidence_kind='completion'",
+            (work_item_id,)).fetchone()[0])

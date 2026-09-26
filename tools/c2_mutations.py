@@ -10,7 +10,7 @@ import c2_supervisor_authority
 SUPERVISOR_OPERATIONS = frozenset({
     'intake', 'prepare_codex', 'configure', 'schedule', 'acknowledge',
     'recover', 'reconcile_run', 'milestone', 'claim_milestone',
-    'mark_milestone',
+    'mark_milestone', 'verify_work_item',
 })
 
 
@@ -44,6 +44,7 @@ def apply(conn, mutation):
         'recover': c2_scheduler.recover,
         'quarantine_browser': c2_scheduler.quarantine_browser_run,
         'finish_work_item': c2_scheduler.finish_browser_work_item,
+        'verify_work_item': c2_scheduler.verify_work_item,
         'complete': c2_scheduler.complete,
         'reconcile_run': c2_scheduler.reconcile_terminal_run,
         'milestone': c2_scheduler.enqueue_milestone,
