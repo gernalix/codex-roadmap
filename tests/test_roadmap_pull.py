@@ -261,6 +261,15 @@ class RoadmapPullTests(unittest.TestCase):
             roadmap_pull.guarded_pull(self.local)
         self.assertEqual("not JSON", scratch.read_text(encoding="utf-8"))
 
+    def test_c2_scratch_does_not_relax_main_branch_requirement(self) -> None:
+        scratch = self.local / ".c2-checkpoint-args.json"
+        scratch.write_text("{}", encoding="utf-8")
+        git(self.local, "switch", "-c", "scratch-work")
+
+        with self.assertRaisesRegex(roadmap_pull.RoadmapPullBlocked, "branch_mismatch"):
+            roadmap_pull.guarded_pull(self.local)
+        self.assertEqual("{}", scratch.read_text(encoding="utf-8"))
+
     def test_bootstrap_guard_installs_hook_before_merge(self) -> None:
         hooks_path = Path(git(self.local, "config", "--get", "core.hooksPath").stdout.strip())
         git(self.local, "config", "--unset", "core.hooksPath")
