@@ -102,6 +102,8 @@ Esempio minimo:
 
 **C2 executor start:** `claimed/assigned` indica soltanto che il control plane ha assegnato lavoro; `executor_started` conferma che l'executor lo ha realmente preso in carico. I worker C2 emettono automaticamente la receipt prima del lavoro sostanziale. Un executor manuale usa `python3 tools/c2_executor_start.py` con l'identità disponibile: `--work-item-id` per task C2 non-prompt (la stessa mutation fa claim+start se il task pending è runnable), oppure `--prompt-id` dopo `roadmap_start.py` per task prompt-backed. PROMPT_ID non è richiesto per i work item non-prompt. Non procedere se la submission fallisce; il binding chat/thread arricchisce la stessa receipt.
 
+Ogni run deve inoltre avere metadati operativi canonici in `work_item_executions`: tipo executor, `worker_ref` stabile quando disponibile, stato e timestamp, più `conversation_ref_type` e URI verificato. ChatGPT usa `chatgpt_web`, Codex usa `codex_thread`; transport nativi possono dichiarare il proprio tipo. Se non esiste una chat il tipo obbligatorio è `none` e l'URI resta `NULL`. Claim, start, binding, recovery e terminalizzazione aggiornano la stessa riga; una riallocazione crea una nuova riga e non sovrascrive lo storico. Le viste `v_work_item_execution_current` e `v_work_item_execution_history` sono l'unica fonte della proiezione Workflowy per executor e conversazione.
+
 **C2 issue inbox:** se un executor incontra un problema o miglioramento collaterale,
 lo registra subito con `python3 tools/c2_issue_capture.py "descrizione"` usando
 `C2_TASK_ID`/`C2_RUN_ID` del runtime (oppure gli stessi ID come opzioni CLI),

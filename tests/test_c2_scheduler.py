@@ -107,6 +107,82 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(1,self.conn.execute(
             'SELECT COUNT(*) FROM work_item_executor_starts WHERE run_id=?',(run['run_id'],)).fetchone()[0])
 
+    def test_execution_ledger_exposes_current_verified_chat_reference(self):
+        item=intake.add_work_item(self.conn,title='Current executor',repo='browser',
+            executor_policy='chatgpt')
+        wid=item['work_item_id']
+        scheduler.configure(self.conn,wid,activity='semantic',
+            project_url='https://chatgpt.com/g/g-p-fixture')
+        run=scheduler.schedule(self.conn,event_key='ledger-current',now=10)[0]
+        claimed=scheduler.execution_metadata_for_item(self.conn,wid)['current']
+        self.assertEqual(('chatgpt','claimed','none',None),(
+            claimed['executor'],claimed['status'],claimed['conversation_ref_type'],
+            claimed['conversation_ref_uri']))
+        scheduler.acknowledge(self.conn,run['run_id'],worker_ref='worker-stable',
+            metadata=run['metadata'],now=11)
+        scheduler.executor_started(self.conn,run_id=run['run_id'],now=12)
+        scheduler.bind_executor(self.conn,run['run_id'],
+            executor_ref='https://chatgpt.com/c/verified',
+            chat_url='https://chatgpt.com/c/verified',now=13)
+        current=scheduler.execution_metadata_for_item(self.conn,wid)['current']
+        self.assertEqual('worker-stable',current['worker_ref'])
+        self.assertEqual('chatgpt_web',current['conversation_ref_type'])
+        self.assertEqual('https://chatgpt.com/c/verified',current['conversation_ref_uri'])
+        self.assertEqual(12,current['started_at'])
+
+    def test_reallocation_preserves_history_and_no_chat_is_explicit_none(self):
+        item=intake.add_work_item(self.conn,title='Handoff',repo=None,
+            executor_policy='chatgpt')
+        wid=item['work_item_id']
+        scheduler.configure(self.conn,wid,activity='semantic',
+            project_url='https://chatgpt.com/g/g-p-fixture')
+        first=scheduler.schedule(self.conn,event_key='handoff-one',now=10)[0]
+        scheduler.acknowledge(self.conn,first['run_id'],worker_ref='chat-worker',
+            metadata=first['metadata'],now=11)
+        scheduler.executor_started(self.conn,run_id=first['run_id'],now=12)
+        scheduler.bind_executor(self.conn,first['run_id'],
+            executor_ref='https://chatgpt.com/c/old',chat_url='https://chatgpt.com/c/old',now=13)
+        scheduler.complete(self.conn,first['run_id'],succeeded=False,worker_ref='chat-worker')
+        self.conn.execute("UPDATE work_items SET status='pending',executor_policy='auto' WHERE work_item_id=?",(wid,))
+        scheduler.configure(self.conn,wid,activity='native',command=['true'])
+        second=scheduler.schedule(self.conn,event_key='handoff-two',now=20)[0]
+        metadata=scheduler.execution_metadata_for_item(self.conn,wid)
+        self.assertEqual(second['run_id'],metadata['current']['run_id'])
+        self.assertEqual(('rdc','none',None),(
+            metadata['current']['executor'],metadata['current']['conversation_ref_type'],
+            metadata['current']['conversation_ref_uri']))
+        self.assertEqual(2,len(metadata['history']))
+        previous=next(row for row in metadata['history'] if row['run_id']==first['run_id'])
+        self.assertEqual(('failed','chatgpt_web','https://chatgpt.com/c/old'),(
+            previous['status'],previous['conversation_ref_type'],previous['conversation_ref_uri']))
+
+    def test_backfill_uses_only_verified_persisted_references(self):
+        item=intake.add_work_item(self.conn,title='Backfill',repo=None,
+            executor_policy='chatgpt')
+        wid=item['work_item_id']
+        self.conn.execute('''INSERT INTO work_item_runs VALUES(
+          'legacy-run',?,'legacy',1,'chatgpt','running',100,'legacy-worker',NULL,'{}',5)''',(wid,))
+        self.conn.execute('''INSERT INTO work_item_executor_starts
+          (receipt_id,work_item_id,run_id,prompt_id,executor,executor_ref,chat_url,started_at)
+          VALUES('run:legacy-run',?,'legacy-run',NULL,'chatgpt','unverified','not-a-uri',6)''',(wid,))
+        scheduler.install_schema(self.conn)
+        row=self.conn.execute(
+            "SELECT * FROM work_item_executions WHERE run_id='legacy-run'").fetchone()
+        self.assertEqual(('legacy-worker','none',None),(
+            row['worker_ref'],row['conversation_ref_type'],row['conversation_ref_uri']))
+
+    def test_explicit_native_transport_reference_is_supported(self):
+        item=intake.add_work_item(self.conn,title='Native ref',repo=None,
+            executor_policy='rdc')
+        wid=item['work_item_id']
+        scheduler.configure(self.conn,wid,activity='native',command=['true'])
+        run=scheduler.schedule(self.conn,event_key='native-ref',now=1)[0]
+        scheduler.bind_executor(self.conn,run['run_id'],executor_ref='job-7',
+            chat_url='rdc://jobs/job-7',reference_type='rdc_job',now=2)
+        current=scheduler.execution_metadata_for_item(self.conn,wid)['current']
+        self.assertEqual(('rdc_job','rdc://jobs/job-7'),(
+            current['conversation_ref_type'],current['conversation_ref_uri']))
+
     def test_structured_nonprompt_result_replaces_two_step_terminal_sequence(self):
         item=intake.add_work_item(self.conn,title='One result call',repo='browser',
             acceptance=['A'],executor_policy='chatgpt')

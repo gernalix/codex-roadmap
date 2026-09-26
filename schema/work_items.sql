@@ -97,6 +97,51 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_work_item_executor_starts_run
 CREATE INDEX IF NOT EXISTS idx_work_item_executor_starts_item
   ON work_item_executor_starts(work_item_id, started_at);
 
+-- Canonical operational ledger.  Legacy starts/bindings remain accepted writer
+-- inputs, while this table preserves every run/handoff and its verified native
+-- conversation reference without making the projection a second control plane.
+CREATE TABLE IF NOT EXISTS work_item_executions (
+  execution_id TEXT PRIMARY KEY,
+  run_id TEXT UNIQUE,
+  work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
+  executor TEXT NOT NULL,
+  worker_ref TEXT,
+  executor_ref TEXT,
+  status TEXT NOT NULL CHECK(status IN (
+    'claimed','running','recovering','completed','failed'
+  )),
+  conversation_ref_type TEXT NOT NULL DEFAULT 'none',
+  conversation_ref_uri TEXT,
+  claimed_at REAL NOT NULL,
+  started_at REAL,
+  updated_at REAL NOT NULL,
+  ended_at REAL,
+  CHECK (
+    (conversation_ref_type='none' AND conversation_ref_uri IS NULL) OR
+    (conversation_ref_type<>'none' AND conversation_ref_uri IS NOT NULL)
+  )
+);
+CREATE INDEX IF NOT EXISTS idx_work_item_executions_item
+  ON work_item_executions(work_item_id, claimed_at, execution_id);
+CREATE INDEX IF NOT EXISTS idx_work_item_executions_current
+  ON work_item_executions(work_item_id, status, updated_at);
+
+DROP VIEW IF EXISTS v_work_item_execution_current;
+CREATE VIEW v_work_item_execution_current AS
+SELECT execution.*
+FROM work_item_executions execution
+WHERE NOT EXISTS (
+    SELECT 1 FROM work_item_executions newer
+    WHERE newer.work_item_id=execution.work_item_id
+      AND (newer.claimed_at>execution.claimed_at OR
+           (newer.claimed_at=execution.claimed_at AND
+            newer.execution_id>execution.execution_id))
+  );
+
+DROP VIEW IF EXISTS v_work_item_execution_history;
+CREATE VIEW v_work_item_execution_history AS
+SELECT * FROM work_item_executions;
+
 CREATE TABLE IF NOT EXISTS work_item_result_receipts (
   receipt_id TEXT PRIMARY KEY,
   work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
