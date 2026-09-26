@@ -63,12 +63,16 @@ def _writer_submit(operation: str, arguments: dict, key: str):
 
 
 def _launch_worker(run_id: str, db_path: Path):
+    unit='c2-run-'+run_id
     command=[sys.executable,str(Path(__file__).with_name('c2_worker.py')),
         '--run-id',run_id,'--db',str(db_path)]
     result=subprocess.run(['systemd-run','--user','--collect',
-        '--unit=c2-run-'+run_id,*command],capture_output=True,text=True)
-    if result.returncode and 'already exists' not in result.stderr.lower():
-        raise RuntimeErrorC2('worker_launch_failed:'+str(result.returncode))
+        '--unit='+unit,*command],capture_output=True,text=True)
+    if result.returncode:
+        active=subprocess.run(['systemctl','--user','is-active','--quiet',unit],
+            capture_output=True)
+        if active.returncode:
+            raise RuntimeErrorC2('worker_launch_failed:'+str(result.returncode))
 
 
 def _launch_notify(event_key: str):

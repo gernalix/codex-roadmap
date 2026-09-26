@@ -77,7 +77,8 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path):
             if goal['status']=='paused':
                 rpc('thread/goal/set',{'threadId':thread_id,'status':'active'})
         observed=rpc('thread/read',{'threadId':thread_id,'includeTurns':True})
-        return {'thread_id':thread_id,'phase':state['phase'],'observed':observed,'resubmitted':False}
+        return {'thread_id':thread_id,'turn_id':state.get('turn_id'),
+                'phase':state['phase'],'observed':observed,'resubmitted':False}
     if metadata.get('goal_mode'):
         # Set the objective paused so it cannot race the explicit first turn.
         rpc('thread/goal/set',{'threadId':thread_id,'objective':prompt,'status':'paused'})

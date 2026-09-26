@@ -9,9 +9,9 @@ from pathlib import Path
 import sqlite3
 import sys
 
-from c2_appserver_rpc import AppServerRPC, resolve_model
+from c2_appserver_rpc import AppServerRPC, AppServerError, resolve_model
 from c2_chatgpt_executor import dispatch as dispatch_browser
-from c2_codex_executor import dispatch as dispatch_codex
+from c2_codex_executor import dispatch as dispatch_codex, ExecutorError
 from c2_native_executor import execute as execute_native
 from c2_runtime import _open_snapshot, _writer_submit
 
@@ -84,6 +84,12 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
         exact_metadata={**metadata,'model_id':model_id}
         result=dispatch_codex(rpc,run_id=run_id,metadata=exact_metadata,
             prompt=prompt,receipt=Path(state_root)/f'{run_id}.codex.json')
+        if result['phase']=='started':
+            turn_id=result.get('turn_id')
+            if not turn_id:
+                raise WorkerError('codex_started_turn_identity_missing')
+            terminal=rpc.wait_for_turn(result['thread_id'],turn_id)
+            result['phase']=terminal['status']
     return {'run_id':run_id,'executor':'codex','thread_id':result['thread_id'],'phase':result['phase']}
 
 
@@ -94,7 +100,7 @@ def main():
     args=parser.parse_args()
     try:
         result=run_once(args.db,args.run_id)
-    except (OSError,sqlite3.Error,WorkerError,ValueError,KeyError) as exc:
+    except (OSError,sqlite3.Error,WorkerError,AppServerError,ExecutorError,ValueError,KeyError) as exc:
         print(json.dumps({'status':'blocked','error':str(exc)},sort_keys=True))
         return 2
     print(json.dumps({'status':'ok','result':result},sort_keys=True))

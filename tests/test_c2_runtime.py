@@ -3,6 +3,8 @@ from contextlib import closing
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
+import subprocess
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import c2_intake
 import c2_scheduler
@@ -28,6 +30,21 @@ class RuntimeTests(unittest.TestCase):
                     launch=lambda _:None,launch_notify=lambda _:None,now=1)
             self.assertEqual(0,result['ready'])
             self.assertEqual([],submitted)
+
+    def test_existing_live_worker_unit_is_not_relaunched(self):
+        failed_launch=subprocess.CompletedProcess([],1,stderr='Unit already loaded')
+        active_unit=subprocess.CompletedProcess([],0)
+        with patch.object(c2_runtime.subprocess,'run',side_effect=[failed_launch,active_unit]) as run:
+            c2_runtime._launch_worker('same-run',Path('/tmp/snapshot.sqlite3'))
+        self.assertEqual(2,run.call_count)
+        self.assertEqual(['systemctl','--user','is-active','--quiet','c2-run-same-run'],
+            run.call_args.args[0])
+
+    def test_failed_inactive_worker_launch_is_reported(self):
+        failed=subprocess.CompletedProcess([],1,stderr='Unit conflict')
+        with patch.object(c2_runtime.subprocess,'run',side_effect=[failed,failed]):
+            with self.assertRaisesRegex(c2_runtime.RuntimeErrorC2,'worker_launch_failed'):
+                c2_runtime._launch_worker('same-run',Path('/tmp/snapshot.sqlite3'))
 
     def test_imported_running_state_does_not_block_event(self):
         with tempfile.TemporaryDirectory() as tmp:
