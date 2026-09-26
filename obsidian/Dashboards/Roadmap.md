@@ -12,6 +12,7 @@
 - [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]]
 - [[obsidian/Prompts/614593 c2-intake-collisioni-request-key-tra-chat-parall-614593|614593 · C2 intake: collisioni request-key tra chat parallele]]
 - [[obsidian/Prompts/682297 c2-supervisor-rollover-fallito-degrada-a-human-r-682297|682297 · C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]]
+- [[obsidian/Prompts/718501 c2-supervisor-backoff-rate-limit-globale-blocca--718501|718501 · C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]]
 
 ## In esecuzione
 
