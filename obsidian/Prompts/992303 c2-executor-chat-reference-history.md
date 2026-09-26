@@ -1,23 +1,20 @@
 ---
-prompt_id: 226672
-status: completed
+prompt_id: 992303
+status: pending
 project_id: 51
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
-  - c2
-  - priority:p1
-  - supervision
   - roadmap/prompt
-  - roadmap/status/completed
-  - roadmap/project/codex-roadmap
+  - roadmap/status/pending
+  - roadmap/project/codex-roadmap-c2
 ---
 
-# 226672 · Integrare supervisione ChatGPT/Codex nella C2
+# 992303 · Traccia executor e chat di ogni task C2
 
-- **Stato:** completed
-- **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
-- **Prompt:** [[../../completed/integrare-supervisione-chatgpt-codex-nella-c2-226672|Apri prompt]]
+- **Stato:** pending
+- **Progetto:** [[../Projects/codex-roadmap-c2|codex-roadmap / C2]]
+- **Prompt:** [[../../prompts/c2-executor-chat-reference-history|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
@@ -28,11 +25,11 @@ tags:
 - **Sblocca:** —
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
-- **Chat Codex:** —
+- **Chat Codex:** Nuova chat Codex
 
 ## Spiegazione
 
-—
+Rende visibile per ogni task C2 chi lo sta eseguendo e quale chat/thread lo possiede, conservando anche lo storico dei passaggi tra executor senza inventare link mancanti.
 
 ## Esecuzioni
 
