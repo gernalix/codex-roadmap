@@ -28,6 +28,8 @@ All terminal Codex results must use `tools/roadmap_finish.py --result PASS|BLOCK
 
 C2 executors share one terminal contract: submit a structured result receipt through the single writer (`C2_RESULT` is the Codex text fallback; legacy `PROMPT_ID`/`RESULT` remains recoverable). The writer receipt is authoritative. PASS requires evidence and validated acceptance; repository-backed PASS finalizes only after `repo_single_writer.py status-any --task-id <PROMPT_ID>` reports merged. Native C2 runtime reconciliation replays an existing PASS receipt after merge; never infer completion from a turn ending, and never wait on integration in a model turn. BLOCKED/FAIL/CANCELLED finalize without the merge gate.
 
+For requests to update/optimize/reorganize the C2 roadmap, follow `C2_SEMANTIC_REORGANIZATION.md`: deterministic scripts own factual sync/lifecycle/reconciliation; AI performs only semantic judgments; all canonical changes still go through the single writer. Do not execute roadmap tasks during a roadmap-only semantic reorganization.
+
 
 ## Persistent operational task memory
 

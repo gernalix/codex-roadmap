@@ -1,6 +1,6 @@
 # codex-roadmap
 
-[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]] · [[prompt-registry|Registro prompt]] · [[obsidian/Dashboards/Roadmap|Dashboard Obsidian]] · [[STANDARD_PROMPT|Esecuzione Codex]] · [[SQLITE_ROADMAP|SQLite]]
+[[roadmap|Roadmap]] · [[spiegazioni|Spiegazioni]] · [[prompt-registry|Registro prompt]] · [[obsidian/Dashboards/Roadmap|Dashboard Obsidian]] · [[STANDARD_PROMPT|Esecuzione Codex]] · [[C2_SEMANTIC_REORGANIZATION|Riorganizzazione semantica C2]] · [[SQLITE_ROADMAP|SQLite]]
 
 Coda minima di lavoro **solo per attività che richiedono davvero Codex**: filesystem/toolchain locale, device/emulatore, VM, segreti/config runtime, servizi locali o altre risorse non disponibili nella normale chat. Se ChatGPT può completare il lavoro direttamente sui repository remoti, va fatto subito e non inserito in roadmap.
 
@@ -12,6 +12,8 @@ Coda minima di lavoro **solo per attività che richiedono davvero Codex**: files
 4. **Workflowy**: unica centralina operativa visibile; proietta roadmap + pipeline reale di `github-autosync` + link Chrome/Codex.
 5. **Markdown/Obsidian**: output di compatibilità/audit, non interfaccia operativa e non fonte di stato.
 6. **codex-usage-monitor**: telemetria automatica di esiti/costi; non deve creare lavoro meta salvo eccezioni reali.
+
+La separazione canonica tra automazione deterministica, giudizio AI e single writer è in [[C2_SEMANTIC_REORGANIZATION|C2 semantic roadmap contract]]. Usarla per qualunque richiesta di aggiornare/ottimizzare/riorganizzare la roadmap.
 
 Non aggiungere altri strati senza un beneficio operativo misurabile.
 
