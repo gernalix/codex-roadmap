@@ -18,7 +18,7 @@ Make this supervisor session recoverable, then implement and operate the non-Per
 - [ ] Execute only explicit ready non-PH work to applicable acceptance criteria.
 
 ## Current step
-The user-directed takeover retired supervisor token 5 and acquired supervisor `245fc2d9-037a-41cb-9747-ce5b428051c0`, fencing token 6, via Issue #1264. The 34-root repository/runtime audit is recorded in `C2-ROOT-AUDIT-20260926.md`; PR #1270 added the fenced reconciliation operation. Issues #1271/#1272 applied the classification and explicit readiness-blocker batches. Workflowy and C2 runtime readback pass: `active=0`, `ready=0`; path/timer/watchdog are active. No C2 work was dispatched; PersonalHub prompt 669941 remains externally owned and running. Push this checkpoint and stop.
+The user-directed takeover retired supervisor token 5 and acquired supervisor `245fc2d9-037a-41cb-9747-ce5b428051c0`, fencing token 6, via Issue #1264. The 34-root repository/runtime audit is recorded in `C2-ROOT-AUDIT-20260926.md`; PR #1270 added the fenced reconciliation operation. Issues #1271/#1272 applied classification and readiness-blocker batches. Three distinct newly observed C2 weaknesses were captured through Issue #1273, with readiness blockers submitted in Issue #1274. Workflowy and C2 runtime readback pass: `active=0`, `ready=0`; path/timer/watchdog are active. No C2 work was dispatched; PersonalHub prompt 669941 remains externally owned and running. Push this checkpoint and stop.
 
 ## Verified facts
 - `roadmap.sqlite` in this repository is the canonical task source; the GitHub Actions workflow is its single writer.
@@ -83,9 +83,10 @@ No blocker to this audit. Scheduling remains intentionally idle: pending non-PH 
 - Workflowy roadmap sync finished with `Result=success`, `ExecMainStatus=0`, zero warnings. API cache readback places PH prompt 669941 in IN CORSO, PH Workflowy and implemented auto-spec intake in COMPLETATI RECENTEMENTE, ntfy and the unconfigured cross-chat lease intake in IN ATTESA.
 - After Issue #1272, the periodic Workflowy sync finished with `Result=success`, `ExecMainStatus=0`, `warnings=0`; fresh API cache readback places PH 669941 in IN CORSO, PH Workflowy in COMPLETATI RECENTEMENTE, and current unconfigured C2 intakes 84f3/f2d5/ff254 in IN ATTESA.
 - C2 runtime path/timer/watchdog were restarted after canonical `configured_runnable=0` and `active_runs=0` checks. The first triggered service used snapshot `fa92d20c59ef201834fc863612a0c52c140af371`, exited `Result=success`, `ExecMainStatus=0`, and reported `active=0`, `ready=0`, `events=[]`.
+- User-requested obstacle capture: existing f2d5 Git hook, cdab Workflowy sync-lag and e2dd intake-visibility tasks were reused. Issue #1273 registered only three distinct gaps: selective imported-descendant reconciliation, pending-prompt repo-routing mutation, and deterministic Codex intake preparation. Issue #1274 provided explicit waiting blockers for these new roots; no task was dispatched.
 
 ## Acceptance criteria
 Recovery/fencing, PH isolation, stale-state repair, one-run/one-turn Codex identity, ~40 second ChatGPT stall detection, bounded recovery, explicit execution specs, lock-sensitive scheduling, final executor integration, canonical checkpoint, terminalization and run reconciliation are verified. Successor-authority handoff is merged. The 34-root repository audit, writer receipts, roadmap verification, Workflowy projection and idle runtime readback under token 6 are PASS.
 
 ## Next action
-After this checkpoint is pushed, stop this audit without dispatching a new queue item. The next C2 implementation turn should choose one current non-PH intake from `C2-ROOT-AUDIT-20260926.md`, prepare its explicit deterministic execution spec, and respect token 6 fencing and current ownership.
+After this checkpoint is pushed, stop this audit without dispatching a new queue item. In the next C2 turn, capture any new unique obstacle in the roadmap after checking for an existing intake; then choose one current non-PH intake from `C2-ROOT-AUDIT-20260926.md`, prepare its explicit deterministic execution spec, and respect current fencing and ownership.

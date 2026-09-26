@@ -77,4 +77,12 @@ The audit reused one bounded source/runtime pass for related roots:
 
 C2 code intakes with current source evidence are ordered by control-plane risk and marked waiting because no prompt, exact model/reasoning and isolated worktree execution context is registered. The human/RDC memory incident is waiting for its dedicated investigation. No `work_item_execution_specs` were guessed from prose. Waiting task-state roots have explicit blockers and are not C2-dispatchable. Prompt 669941 is running under the separate PersonalHub worker. The imported global recovery and PH P0 trees retain their pending descendants because their broad acceptance has not been proven; do not treat those prose descendants as fresh runnable work.
 
-Next: verify Issues #1271/#1272 applied, refresh the canonical snapshot, run roadmap integrity and Workflowy projection readback, update the supervisor checkpoint, then restore the C2 timers without dispatching a new queue item.
+## Obstacles captured during the audit
+
+Existing C2 intakes already cover the branch `reference-transaction`/`pack-refs` warning (`f2d5`), writer-to-Workflowy projection delay (`cdab`), and missing recent-intake visibility (`e2dd`); they were reconciled rather than duplicated. Three distinct residual weaknesses were submitted through the single writer as Issue #1273. Issue #1274 added explicit waiting blockers rather than leaving them falsely pending without specs:
+
+1. `wi:b45503242af34c10ba32832d0645dbc6`: imported global recovery and PH P0 trees retain stale pending descendants even though the corresponding prompt chain is terminal; the current root-only reconciliation cannot close selected children safely while preserving the still-open root.
+2. `wi:0fa0c1ccfc3d4d269d28225ee81161bc`: prompt 218695 still routes to `/home/daniele/MegaVault`; the conditional public `eboks-scraper` repo now exists, but there is no fenced pending-prompt repo-routing mutation. The task must remain behind MitID and the post-export need decision.
+3. `wi:68ff0f7e2f00474094fb6dc54a4a9b05`: ten verified C2 intakes need separate prompt/materialization, exact metadata and isolated worktree preparation before `configure_auto` can make a safe spec. The preparatory path should be idempotent and separate from dispatch.
+
+Next: verify the Issue #1273 followups and their waiting blockers, refresh roadmap integrity and Workflowy readback, then push the final checkpoint without dispatching a queue item.
