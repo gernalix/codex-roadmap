@@ -4,9 +4,10 @@ from pathlib import Path
 import sqlite3
 import sys
 import tempfile
+import time
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-import c2_identity,c2_intake,c2_runtime,c2_worker,c2_notify_worker
+import c2_identity,c2_intake,c2_runtime,c2_worker,c2_notify_worker,c2_mutations
 import roadmap_db as db
 import work_items_migration as migration
 import work_items_state_import as state_import
@@ -68,10 +69,17 @@ Continue.
                 import c2_scheduler
                 c2_scheduler.configure(writer,item['work_item_id'],activity='native',
                     command=[sys.executable,'-c',f"from pathlib import Path; Path({str(marker)!r}).write_text('once')"])
+                authority={'supervisor_id':'fixture-supervisor','fencing_token':1,
+                           'lease_expires_at':time.time()+120}
+                db.apply_mutation(writer,{'op':'c2_claim_supervisor',
+                                          'arguments':{'supervisor_authority':authority}})
                 writer.commit()
                 def submit(operation,args,key):
                     writer.execute('BEGIN IMMEDIATE')
                     try:
+                        args=dict(args)
+                        if operation in c2_mutations.SUPERVISOR_OPERATIONS:
+                            args['supervisor_authority']=authority
                         db.apply_mutation(writer,{'op':'c2_'+operation,'arguments':args})
                         writer.commit()
                     except Exception:

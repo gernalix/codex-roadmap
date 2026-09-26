@@ -1,0 +1,11 @@
+[Unit]
+Description=Check the C2 supervisor lease without model polling
+
+[Timer]
+OnBootSec=1min
+OnUnitInactiveSec=1min
+Persistent=true
+Unit=c2-supervisor-watchdog.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,8 @@
+[Unit]
+Description=Fence an expired C2 supervisor and prepare a successor
+ConditionPathExists=%h/.local/state/c2-supervisor/lease.sqlite3
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /home/daniele/.local/share/c2-supervisor/worktree/tools/c2_supervisor_watchdog.py
+TimeoutStartSec=120

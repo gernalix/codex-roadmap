@@ -5,7 +5,8 @@ ConditionPathExists=/home/daniele/projects/codex-roadmap/roadmap.sqlite
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/python3 /home/daniele/projects/codex-roadmap/tools/c2_runtime.py
+EnvironmentFile=%h/.config/c2-supervisor/runtime.env
+ExecStart=/usr/bin/python3 /home/daniele/.local/share/c2-supervisor/worktree/tools/c2_runtime.py --supervisor-id ${C2_SUPERVISOR_ID} --fencing-token ${C2_FENCING_TOKEN}
 TimeoutStartSec=90
 Nice=5
 

@@ -17,6 +17,8 @@ import sys
 import time
 
 from submit_mutation import submit_document
+from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot
+from c2_mutations import SUPERVISOR_OPERATIONS
 
 
 class RuntimeErrorC2(RuntimeError):
@@ -43,6 +45,18 @@ def _key(prefix: str, data) -> str:
 
 
 def _writer_submit(operation: str, arguments: dict, key: str):
+    arguments=dict(arguments)
+    if operation in SUPERVISOR_OPERATIONS or operation in ('claim_supervisor','renew_supervisor','retire_supervisor'):
+        with closing(connect_supervisor(SUPERVISOR_DB)) as lease:
+            row=supervisor_snapshot(lease)
+            if not row:
+                raise RuntimeErrorC2('supervisor_lease_missing')
+            require_supervisor(lease,row['supervisor_id'],row['fencing_token'],time.time())
+            arguments['supervisor_authority']={
+                'supervisor_id':row['supervisor_id'],
+                'fencing_token':row['fencing_token'],
+                'lease_expires_at':row['lease_expires_at'],
+            }
     return submit_document({'schema':'codex-roadmap.mutation.v1','actor':'c2-runtime',
         'operations':[{'op':'c2_'+operation,'arguments':arguments}]},request_key=key)
 
@@ -68,9 +82,19 @@ def _launch_notify(event_key: str):
 
 def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_worker,
             launch_notify=_launch_notify,
-            now: float | None=None, max_parallel: int=3) -> dict:
+            now: float | None=None, max_parallel: int=3,
+            supervisor_expiry: float | None=None) -> dict:
     now=time.time() if now is None else now
     events=[]
+    if supervisor_expiry is not None and db.execute("SELECT 1 FROM sqlite_master WHERE name='c2_supervisor_authority'").fetchone():
+        authority=db.execute('SELECT fencing_token,lease_expires_at FROM c2_supervisor_authority WHERE singleton=1').fetchone()
+        if (authority and authority['lease_expires_at'] <= now+300 and
+                supervisor_expiry > authority['lease_expires_at']+1):
+            key=_key('c2-renew-supervisor',{'token':authority['fencing_token'],
+                                           'expires':supervisor_expiry})
+            submit('renew_supervisor',{},key)
+            return {'events':[('renew_supervisor',str(authority['fencing_token']))],
+                    'ready':0,'active':0}
     for notice in db.execute("SELECT event_key,state FROM c2_notification_outbox WHERE state IN ('pending','sending') ORDER BY created_at,event_key"):
         key=str(notice['event_key'])
         if notice['state']=='pending':
@@ -136,9 +160,26 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db',type=Path,default=Path.home()/'projects/codex-roadmap/roadmap.sqlite')
     parser.add_argument('--max-parallel',type=int,default=3)
+    parser.add_argument('--supervisor-id',required=True)
+    parser.add_argument('--fencing-token',type=int,required=True)
     args=parser.parse_args()
-    with closing(_open_snapshot(args.db)) as db:
-        result=advance(db,max_parallel=args.max_parallel)
+    with closing(connect_supervisor(SUPERVISOR_DB)) as supervisor:
+        def guard():
+            return require_supervisor(supervisor,args.supervisor_id,args.fencing_token,time.time())
+        def guarded_submit(*values):
+            guard()
+            return _writer_submit(*values)
+        def guarded_launch(*values):
+            guard()
+            return _launch_worker(*values)
+        def guarded_notify(*values):
+            guard()
+            return _launch_notify(*values)
+        current=guard()
+        with closing(_open_snapshot(args.db)) as db:
+            result=advance(db,submit=guarded_submit,launch=guarded_launch,
+                           launch_notify=guarded_notify,max_parallel=args.max_parallel,
+                           supervisor_expiry=current['lease_expires_at'])
     print(json.dumps(result,sort_keys=True))
     return 0
 
