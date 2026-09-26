@@ -46,7 +46,7 @@ class PrepareCodexTests(unittest.TestCase):
             prompt_text="# Goal\nImplement the bounded change.\n"
             prompt_file.write_text(prompt_text,encoding="utf-8")
             spec=self._spec(prompt_file,evidence=["Verified intake is ready."])
-            state=self._state()
+            state=self._state(project_name="PersonalHub")
             calls=[]
 
             def refresh(_):
@@ -117,20 +117,6 @@ class PrepareCodexTests(unittest.TestCase):
                     allocate_worktree=lambda *_args: self.fail("must not allocate"),
                 )
             self.assertEqual(original,state)
-
-    def test_personalhub_is_rejected_before_materialization(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            prompt_file=Path(tmp)/"prompt.md"
-            prompt_file.write_text("# Goal\nX\n",encoding="utf-8")
-            spec=self._spec(prompt_file)
-            state=self._state(status="pending",actionable=1,project_name="PersonalHub")
-            with self.assertRaisesRegex(prep.PrepareCodexError,"external_personalhub_worker"):
-                prep.prepare(
-                    spec,authority={"fencing_token":1},
-                    refresh=lambda _wid: copy.deepcopy(state),
-                    submit_phase=lambda *_args: self.fail("must not submit"),
-                    allocate_worktree=lambda *_args: self.fail("must not allocate"),
-                )
 
     def test_existing_execution_spec_conflict_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -15,6 +15,28 @@ import test_c2_intake
 
 
 class C2WriterTests(unittest.TestCase):
+    def test_override_set_replay_clear_requires_current_fence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=test_c2_intake.C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as conn:
+                conn.execute('BEGIN IMMEDIATE')
+                current={'supervisor_id':'test-supervisor','fencing_token':1,
+                         'lease_expires_at':time.time()+120}
+                roadmap_db.apply_mutation(conn,{'op':'c2_claim_supervisor',
+                    'arguments':{'supervisor_authority':current}})
+                op={'op':'c2_set_execution_override','arguments':{
+                    'selector':'tag','value':'focus:ph','supervisor_authority':current}}
+                roadmap_db.apply_mutation(conn,op)
+                first=c2_scheduler.read_override(conn)
+                roadmap_db.apply_mutation(conn,op)
+                self.assertEqual(first,c2_scheduler.read_override(conn))
+                self.assertEqual('focus:ph',c2_scheduler.read_override(conn)['value'])
+                with self.assertRaisesRegex(c2_supervisor_authority.AuthorityError,'supervisor_authority_required'):
+                    roadmap_db.apply_mutation(conn,{'op':'c2_clear_execution_override','arguments':{}})
+                roadmap_db.apply_mutation(conn,{'op':'c2_clear_execution_override',
+                    'arguments':{'supervisor_authority':current}})
+                self.assertIsNone(c2_scheduler.read_override(conn))
+
     def test_auto_configure_existing_item_through_fenced_writer(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=test_c2_intake.C2IntakeTests().make_cutover_db(Path(tmp))

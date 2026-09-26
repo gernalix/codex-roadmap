@@ -19,7 +19,7 @@ import time
 from submit_mutation import submit_document
 from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot
 from c2_mutations import SUPERVISOR_OPERATIONS
-from c2_scheduler import external_personalhub
+from c2_scheduler import read_override, override_matches
 
 C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
 REPO_SINGLE_WRITER = Path.home()/'projects/github-autosync/repo_single_writer.py'
@@ -233,7 +233,7 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         key=_key('c2-recover',sorted((r['run_id'],r['lease_until']) for r in expired))
         submit('recover',{},key)
         events.append(('recover',str(len(expired))))
-    ready=[dict(r) for r in db.execute('''SELECT w.work_item_id,w.status,w.sort_order,w.repo,w.project_name,w.updated_at,
+    ready=[dict(r) for r in db.execute('''SELECT w.work_item_id,w.status,w.sort_order,w.repo,w.project_id,w.project_name,w.updated_at,
             s.activity,s.model,s.reasoning,s.worktree,s.project_url,s.resources_json
           FROM v_work_item_runnable w
           JOIN work_item_execution_specs s USING(work_item_id)
@@ -242,8 +242,14 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p1') THEN 1
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
             ELSE 3 END,
-            COALESCE(w.sort_order,2147483647),w.work_item_id''')
-           if not external_personalhub(db,r)]
+            COALESCE(w.sort_order,2147483647),w.work_item_id''')]
+    override=read_override(db)
+    scoped_ready=[r for r in ready if override and override_matches(db,r,override)]
+    if scoped_ready:
+        ready=scoped_ready
+    if override:
+        events.append(('execution_override',override['selector']+':'+override['value']+':'+
+                       ('draining' if scoped_ready else 'fallback')))
     statuses=[tuple(r) for r in db.execute('''SELECT w.work_item_id,w.status FROM work_items w
        WHERE w.status='running' AND (w.prompt_id IS NOT NULL OR EXISTS(
          SELECT 1 FROM work_item_runs r WHERE r.work_item_id=w.work_item_id
@@ -255,17 +261,17 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
            FROM work_items w LEFT JOIN work_item_execution_specs s USING(work_item_id)
            WHERE w.status='running' AND w.repo IS NOT NULL
            ORDER BY w.work_item_id''')
-        if not external_personalhub(db,r)
     ]
     dependencies=[tuple(r) for r in db.execute('''SELECT d.work_item_id,d.depends_on_work_item_id,w.status
           FROM work_item_dependencies d JOIN work_items w ON w.work_item_id=d.depends_on_work_item_id
           ORDER BY d.work_item_id,d.depends_on_work_item_id''')]
     if ready and len(statuses)<max_parallel:
         key=_key('c2-schedule',{'ready':ready,'running':statuses,'lock_context':lock_context,
-                                  'dependencies':dependencies,'limit':max_parallel})
+                                  'dependencies':dependencies,'override':override,'limit':max_parallel})
         submit('schedule',{'event_key':key,'max_parallel':max_parallel},key)
         events.append(('schedule',str(len(ready))))
     return {'events':events,'ready':len(ready),'active':len(active),
+            'execution_override':override,'override_draining':bool(scoped_ready),
             'issue_inbox_pending':pending_issue_inbox}
 
 

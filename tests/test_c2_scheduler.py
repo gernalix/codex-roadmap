@@ -137,6 +137,44 @@ class SchedulerTests(unittest.TestCase):
         self.conn.execute("INSERT INTO work_item_tags(work_item_id,tag) VALUES(?,'priority:p0')",(urgent,))
         self.assertEqual(urgent,scheduler.schedule(self.conn,event_key='priority',now=1,max_parallel=1)[0]['work_item_id'])
 
+    def test_override_selectors_replay_clear_and_semantic_order(self):
+        normal=self.add('normal')
+        scoped=self.add('gernalix/PersonalHub')
+        self.conn.execute("UPDATE work_items SET project_name='PersonalHub' WHERE work_item_id=?",(scoped,))
+        self.conn.execute("INSERT INTO work_item_tags(work_item_id,tag) VALUES(?,'focus:ph')",(scoped,))
+        self.conn.execute("INSERT INTO work_item_tags(work_item_id,tag) VALUES(?,'priority:p0')",(normal,))
+        before=[tuple(r) for r in self.conn.execute('SELECT work_item_id,sort_order FROM work_items WHERE work_item_id IN (?,?)',(normal,scoped))]
+        for selector,value in [('project','PersonalHub'),('repo','gernalix/PersonalHub'),('tag','focus:ph')]:
+            first=scheduler.set_override(self.conn,selector=selector,value=value,now=1)
+            self.assertEqual(first,scheduler.set_override(self.conn,selector=selector,value=value,now=1))
+            self.assertEqual(scoped,scheduler.schedule(self.conn,event_key='scope-'+selector,now=2,max_parallel=1)[0]['work_item_id'])
+            self.conn.execute("UPDATE work_items SET status='pending' WHERE work_item_id=?",(scoped,))
+            self.conn.execute('DELETE FROM work_item_resource_leases')
+            self.conn.execute('DELETE FROM work_item_runs')
+            scheduler.clear_override(self.conn)
+            self.assertIsNone(scheduler.read_override(self.conn))
+        self.assertEqual(before,[tuple(r) for r in self.conn.execute('SELECT work_item_id,sort_order FROM work_items WHERE work_item_id IN (?,?)',(normal,scoped))])
+        self.assertEqual(normal,scheduler.schedule(self.conn,event_key='cleared',now=3,max_parallel=1)[0]['work_item_id'])
+
+    def test_override_falls_back_for_nonrunnable_or_empty_scope(self):
+        normal=self.add('normal')
+        blocked=self.add('target',depends_on=[normal])
+        scheduler.set_override(self.conn,selector='repo',value='target',now=1)
+        self.assertEqual(normal,scheduler.schedule(self.conn,event_key='dependency-fallback',now=2,max_parallel=1)[0]['work_item_id'])
+        self.assertEqual('pending',self.conn.execute('SELECT status FROM work_items WHERE work_item_id=?',(blocked,)).fetchone()[0])
+
+    def test_override_honors_parallelism_and_device_lock(self):
+        one=self.add('ph-one')
+        two=self.add('ph-two')
+        other=self.add('other')
+        self.conn.execute("UPDATE work_items SET project_name='PersonalHub' WHERE work_item_id IN (?,?)",(one,two))
+        for wid in (one,two):
+            self.conn.execute("UPDATE work_item_execution_specs SET resources_json='[\"device:pixel\"]' WHERE work_item_id=?",(wid,))
+        scheduler.set_override(self.conn,selector='project',value='PersonalHub',now=1)
+        runs=scheduler.schedule(self.conn,event_key='device',now=2,max_parallel=3)
+        self.assertEqual([one],[r['work_item_id'] for r in runs])
+        self.assertEqual('pending',self.conn.execute('SELECT status FROM work_items WHERE work_item_id=?',(other,)).fetchone()[0])
+
     def test_crash_recovery_reuses_identity_and_locks(self):
         a=self.add(); self.add()
         run=scheduler.schedule(self.conn,event_key='first',now=10)[0]

@@ -38,6 +38,13 @@ CREATE UNIQUE INDEX IF NOT EXISTS work_item_one_active_run ON work_item_runs(wor
 CREATE TABLE IF NOT EXISTS work_item_resource_leases (
  resource TEXT PRIMARY KEY, run_id TEXT NOT NULL REFERENCES work_item_runs(run_id)
 );
+CREATE TABLE IF NOT EXISTS c2_execution_override (
+ singleton INTEGER PRIMARY KEY CHECK(singleton=1),
+ mode TEXT NOT NULL CHECK(mode='drain_first'),
+ selector TEXT NOT NULL CHECK(selector IN ('project','repo','tag')),
+ value TEXT NOT NULL CHECK(length(value)>0),
+ updated_at REAL NOT NULL
+);
 CREATE TABLE IF NOT EXISTS work_item_executor_bindings (
  run_id TEXT PRIMARY KEY REFERENCES work_item_runs(run_id) ON DELETE CASCADE,
  work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
@@ -122,14 +129,41 @@ def _transaction(conn):
         raise SchedulingError('canonical_writer_transaction_required')
 
 
-def external_personalhub(conn, item):
-    """PersonalHub is owned by its separate worker, even when C2 can see it."""
-    compact = lambda value: ''.join(c for c in str(value or '').lower() if c.isalnum())
-    repo_tail = str(item['repo'] or '').rstrip('/').rsplit('/',1)[-1].removesuffix('.git')
-    if compact(item['project_name']) == 'personalhub' or compact(repo_tail) == 'personalhub':
-        return True
-    return bool(conn.execute("SELECT 1 FROM work_item_tags WHERE work_item_id=? AND lower(tag)='personalhub'",
-                             (item['work_item_id'],)).fetchone())
+def read_override(conn):
+    if not conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='c2_execution_override'").fetchone():
+        return None
+    row = conn.execute('SELECT mode,selector,value,updated_at FROM c2_execution_override WHERE singleton=1').fetchone()
+    return dict(row) if row else None
+
+
+def set_override(conn, *, selector, value, mode='drain_first', now=None):
+    _transaction(conn)
+    if mode != 'drain_first' or selector not in ('project','repo','tag') or not isinstance(value,str) or not value.strip() or value != value.strip():
+        raise SchedulingError('invalid_execution_override')
+    conn.execute('''INSERT INTO c2_execution_override VALUES(1,?,?,?,?)
+      ON CONFLICT(singleton) DO UPDATE SET mode=excluded.mode,selector=excluded.selector,
+      value=excluded.value,updated_at=excluded.updated_at
+      WHERE c2_execution_override.mode!=excluded.mode OR
+            c2_execution_override.selector!=excluded.selector OR
+            c2_execution_override.value!=excluded.value''',
+      (mode,selector,value,time.time() if now is None else now))
+    return read_override(conn)
+
+
+def clear_override(conn):
+    _transaction(conn)
+    conn.execute('DELETE FROM c2_execution_override WHERE singleton=1')
+    return None
+
+
+def override_matches(conn, item, override):
+    selector, value = override['selector'], override['value']
+    if selector == 'project':
+        return item['project_name'] == value or item['project_id'] == value
+    if selector == 'repo':
+        return item['repo'] == value
+    return bool(conn.execute('SELECT 1 FROM work_item_tags WHERE work_item_id=? AND tag=?',
+                             (item['work_item_id'],value)).fetchone())
 
 
 def configure(conn, work_item_id, *, activity, model=None, reasoning=None,
@@ -139,8 +173,6 @@ def configure(conn, work_item_id, *, activity, model=None, reasoning=None,
     item = conn.execute('SELECT * FROM work_items WHERE work_item_id=?', (work_item_id,)).fetchone()
     if not item or item['status'] != 'pending':
         raise SchedulingError('only_pending_items_can_be_configured')
-    if external_personalhub(conn,item):
-        raise SchedulingError('external_personalhub_workload')
     if activity == 'native' and (not command or not isinstance(command, list)
                                 or not all(isinstance(x,str) and x for x in command)):
         raise SchedulingError('native_requires_deterministic_argv')
@@ -168,8 +200,6 @@ def configure_auto(conn, work_item_id, *, execution=None):
             item['executor_policy'] not in ('auto','codex') or
             (item['executor_policy']=='codex' and not item['prompt_id'])):
         raise SchedulingError('auto_spec_requires_pending_auto_or_materialized_codex_item')
-    if external_personalhub(conn,item):
-        return {'state':'waiting','reason':'external_personalhub_worker'}
     if conn.execute('SELECT 1 FROM work_item_execution_specs WHERE work_item_id=?',
                     (work_item_id,)).fetchone():
         return {'state':'ready'}
@@ -279,11 +309,21 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120):
         WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
         ELSE 3 END,
         COALESCE(w.sort_order,2147483647),w.created_at,w.work_item_id''').fetchall()
+    override = read_override(conn)
+    scoped = []
+    if override:
+        for item in candidates:
+            if not override_matches(conn,item,override):
+                continue
+            spec = conn.execute('SELECT activity FROM work_item_execution_specs WHERE work_item_id=?',
+                                (item['work_item_id'],)).fetchone()
+            if spec and choose_executor(item['executor_policy'],spec['activity']) not in (None,'human'):
+                scoped.append(item)
+    if scoped:
+        candidates = scoped
     for item in candidates:
         if active >= max_parallel:
             break
-        if external_personalhub(conn,item):
-            continue
         # A parent owns an execution branch: never launch imported checklist
         # steps as independent workers underneath an active ancestor.
         ancestor = item['parent_id']

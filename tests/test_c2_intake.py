@@ -65,18 +65,18 @@ class C2IntakeTests(unittest.TestCase):
             finally:
                 conn.close()
 
-    def test_personalhub_auto_item_stays_with_external_worker(self) -> None:
+    def test_personalhub_auto_item_uses_c2_spec(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = self.make_cutover_db(Path(tmp))
             conn = c2_intake._connect(path)
             try:
                 item = c2_intake.add_work_item(conn,title="PH work",repo="https://github.com/gernalix/PersonalHub.git",
                     executor_policy="auto",execution={"command":["/usr/bin/true"],"worktree":"/tmp/ph"})
-                self.assertEqual({"state":"waiting","reason":"external_personalhub_worker"},
+                self.assertEqual({"state":"ready"},
                                  item["execution_readiness"])
-                self.assertEqual(0,conn.execute("SELECT COUNT(*) FROM work_item_execution_specs WHERE work_item_id=?",
+                self.assertEqual(1,conn.execute("SELECT COUNT(*) FROM work_item_execution_specs WHERE work_item_id=?",
                     (item["work_item_id"],)).fetchone()[0])
-                self.assertEqual([],c2_scheduler.schedule(conn,event_key="ph-external",now=1))
+                self.assertEqual(item['work_item_id'],c2_scheduler.schedule(conn,event_key="ph-c2",now=1)[0]['work_item_id'])
             finally:
                 conn.close()
 
