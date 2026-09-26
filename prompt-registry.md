@@ -143,7 +143,7 @@
 | [[obsidian/Prompts/357214 personalhub-git-history-data-sync-validation-v2\|357214 · Cronologia, backup e ripristino dei dati PersonalHub]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/311947 personalhub-play-release-local-validation\|311947 · Controllo finale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/918536 personalhub-datasette-lite-offline-runtime-v2\|918536 · Esploratore dati dentro PersonalHub anche offline]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998\|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] | blocked | — | — | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998\|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] | blocked | 2026-09-26T18:22:00Z | 2026-09-26T18:22:00Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/243871 personalhub-play-release-local-validation-v2\|243871 · Controllo finale prima di Google Play]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/690049 fedora-runtime-validation\|690049 · Ultimo controllo del monitoraggio Fedora]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/896074 ccs-pbf-final-live-routing-safe-retry-v1\|896074 · Chiudere il leaf CCS con routing progetto sicuro]] | superseded | — | — | — | no | no | — | Facilitatori di prompt | GPT-6 Luna | low |
