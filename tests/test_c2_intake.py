@@ -12,6 +12,7 @@ sys.path.insert(0, str(TOOLS))
 import c2_intake
 import c2_scheduler
 import roadmap_db as db
+import roadmap_render
 import work_items_cutover as cutover
 import work_items_migration as migration
 
@@ -191,6 +192,10 @@ class C2IntakeTests(unittest.TestCase):
                 conn.commit()
 
                 prompt_id = result["prompt_id"]
+                self.assertEqual(
+                    f"prompts/implement-scheduler-{prompt_id}.md",
+                    result["current_path"],
+                )
                 row = conn.execute(
                     "SELECT * FROM work_items WHERE work_item_id=?",
                     (item["work_item_id"],),
@@ -202,10 +207,12 @@ class C2IntakeTests(unittest.TestCase):
                                   (item["work_item_id"],)).fetchone()
                 self.assertEqual(("coding","GPT-5.6 Sol","medium","/tmp/isolated-codex-worktree"),tuple(spec))
                 meta = conn.execute(
-                    "SELECT model,reasoning,prompt_type FROM prompt_metadata WHERE prompt_id=?",
+                    "SELECT slug,current_path,model,reasoning,prompt_type FROM prompt_metadata WHERE prompt_id=?",
                     (prompt_id,),
                 ).fetchone()
-                self.assertEqual(("GPT-5.6 Sol", "medium", "Goal"), tuple(meta))
+                self.assertEqual(f"implement-scheduler-{prompt_id}", meta["slug"])
+                self.assertEqual(f"prompts/{meta['slug']}.md", meta["current_path"])
+                self.assertEqual(("GPT-5.6 Sol", "medium", "Goal"), tuple(meta)[2:])
                 registry = conn.execute(
                     "SELECT status,project_id FROM prompt_id_registry WHERE prompt_id=?",
                     (int(prompt_id),),
@@ -218,7 +225,125 @@ class C2IntakeTests(unittest.TestCase):
                         (prompt_id,),
                     ).fetchone()[0],
                 )
+                body = conn.execute(
+                    "SELECT body FROM prompt_materializations WHERE prompt_id=?",
+                    (prompt_id,),
+                ).fetchone()[0]
+                self.assertTrue(body.startswith(f"PROMPT_ID={prompt_id}\n\n"))
             finally:
+                conn.close()
+
+    def test_reconcile_prompt_file_locations_repairs_legacy_active_name(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path = self.make_cutover_db(root)
+            repo = path.parent
+            conn = c2_intake._connect(path)
+            try:
+                item = c2_intake.add_work_item(
+                    conn,
+                    title="Canonical prompt path",
+                    project="51",
+                )
+                result = c2_intake.prepare_codex(
+                    conn,
+                    item["work_item_id"],
+                    prompt_text="# Goal\nPath repair.\n",
+                    source="c2-intake:path-repair",
+                    model="GPT-5.6 Sol",
+                    reasoning="medium",
+                )
+                prompt_id = result["prompt_id"]
+                canonical = result["current_path"]
+                legacy = f"prompts/{prompt_id}-canonical-prompt-path.md"
+                conn.execute(
+                    "UPDATE prompt_metadata SET current_path=? WHERE prompt_id=?",
+                    (legacy, prompt_id),
+                )
+                conn.commit()
+                legacy_path = repo / legacy
+                legacy_path.parent.mkdir(parents=True, exist_ok=True)
+                legacy_path.write_text(
+                    f"PROMPT_ID={prompt_id}\n\n# Goal\nPath repair.\n",
+                    encoding="utf-8",
+                )
+            finally:
+                conn.close()
+
+            self.assertEqual(1, roadmap_render.reconcile_prompt_file_locations(repo))
+            self.assertFalse((repo / legacy).exists())
+            self.assertTrue((repo / canonical).is_file())
+            verify = c2_intake._connect(path)
+            try:
+                self.assertEqual(
+                    canonical,
+                    verify.execute(
+                        "SELECT current_path FROM prompts WHERE prompt_id=?",
+                        (prompt_id,),
+                    ).fetchone()[0],
+                )
+            finally:
+                verify.close()
+
+    def test_repair_prompt_materialization_is_sha_guarded(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self.make_cutover_db(Path(tmp))
+            conn = c2_intake._connect(path)
+            try:
+                item = c2_intake.add_work_item(
+                    conn,
+                    title="Repair body",
+                    project="51",
+                )
+                result = c2_intake.prepare_codex(
+                    conn,
+                    item["work_item_id"],
+                    prompt_text="# Goal\nRepair me.\n",
+                    source="c2-intake:repair-body",
+                    model="GPT-5.6 Sol",
+                    reasoning="medium",
+                )
+                prompt_id = result["prompt_id"]
+                malformed = "C2_WORK_ITEM_ID=" + item["work_item_id"] + "\n\n# Goal\nRepair me.\n"
+                db.set_prompt_text(
+                    conn,
+                    prompt_id,
+                    malformed,
+                    actor="test",
+                    note="legacy malformed C2 prompt",
+                )
+                old_sha = conn.execute(
+                    "SELECT materialization_sha256 FROM prompts WHERE prompt_id=?",
+                    (prompt_id,),
+                ).fetchone()[0]
+                repaired_text = f"PROMPT_ID={prompt_id}\n\n{malformed}"
+                repaired = c2_intake.repair_prompt_materialization(
+                    conn,
+                    item["work_item_id"],
+                    expected_sha256=old_sha,
+                    prompt_text=repaired_text,
+                )
+                conn.commit()
+                self.assertEqual(prompt_id, repaired["prompt_id"])
+                self.assertEqual(
+                    repaired_text,
+                    conn.execute(
+                        "SELECT body FROM prompt_materializations WHERE prompt_id=?",
+                        (prompt_id,),
+                    ).fetchone()[0],
+                )
+                with self.assertRaisesRegex(
+                    c2_intake.C2IntakeError,
+                    "materialization_sha256_mismatch",
+                ):
+                    c2_intake.repair_prompt_materialization(
+                        conn,
+                        item["work_item_id"],
+                        expected_sha256=old_sha,
+                        prompt_text=repaired_text,
+                    )
+            finally:
+                conn.rollback()
                 conn.close()
 
     def test_prepare_codex_rejects_execution_metadata_in_prompt_text(self) -> None:

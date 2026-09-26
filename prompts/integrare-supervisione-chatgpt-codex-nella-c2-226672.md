@@ -1,3 +1,4 @@
+PROMPT_ID=226672
 C2_WORK_ITEM_ID=wi:10974cc59a13437fa273b34d83085631
 
 Complete only the remaining non-PersonalHub C2 supervision/control-plane gaps. Start from the current repository state and read operations/task-state/C2-SUPERVISOR-20260926.md plus the canonical work item. Do not request any prior transcript.

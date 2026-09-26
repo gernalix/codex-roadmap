@@ -17,7 +17,7 @@ tags:
 
 - **Stato:** pending
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
-- **Prompt:** [[../../prompts/226672-integrare-supervisione-chatgpt-codex-nella-c2|Apri prompt]]
+- **Prompt:** [[../../prompts/integrare-supervisione-chatgpt-codex-nella-c2-226672|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
