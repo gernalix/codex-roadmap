@@ -3,7 +3,7 @@ import sys
 import tempfile
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from c2_codex_executor import dispatch, record_terminal, ExecutorError
+from c2_codex_executor import dispatch, record_terminal, parse_terminal_result, ExecutorError
 
 
 class RPC:
@@ -24,6 +24,29 @@ class RPC:
 
 
 class CodexExecutorTests(unittest.TestCase):
+
+    def test_strict_terminal_contract_parses_structured_receipt(self):
+        text='PROMPT_ID=123456\nRESULT=PASS\nC2_RESULT={"completed":["A"],"remaining":[],"evidence":["pytest PASS"],"blocker":null,"next_action":null}'
+        turn={'items':[{'type':'agentMessage','phase':'final_answer','text':text}]}
+        result=parse_terminal_result(turn,'123456')
+        self.assertTrue(result['strict_contract'])
+        self.assertEqual('PASS',result['outcome'])
+        self.assertEqual(['pytest PASS'],result['evidence'])
+
+    def test_legacy_terminal_report_is_recoverable(self):
+        text='PROMPT_ID=123456\nRESULT=PASS\n\nTests PASS; commit abc.'
+        turn={'items':[{'type':'agentMessage','phase':'final_answer','text':text}]}
+        result=parse_terminal_result(turn,'123456')
+        self.assertFalse(result['strict_contract'])
+        self.assertEqual([text],result['evidence'])
+
+    def test_malformed_structured_terminal_contract_fails_closed(self):
+        text='PROMPT_ID=123456\nRESULT=PASS\nC2_RESULT={"completed":[]}'
+        turn={'items':[{'type':'agentMessage','phase':'final_answer','text':text}]}
+        with self.assertRaisesRegex(ExecutorError,'invalid_c2_result_remaining'):
+            parse_terminal_result(turn,'123456')
+
+
     def test_thread_binding_precedes_first_turn_and_failure_blocks_turn(self):
         with tempfile.TemporaryDirectory() as tmp:
             rpc=RPC()

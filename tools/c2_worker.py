@@ -11,7 +11,9 @@ import sys
 
 from c2_appserver_rpc import AppServerRPC, AppServerError, resolve_model
 from c2_chatgpt_executor import dispatch as dispatch_browser
-from c2_codex_executor import dispatch as dispatch_codex, record_terminal, ExecutorError
+from c2_codex_executor import dispatch as dispatch_codex, record_terminal, parse_terminal_result, ExecutorError
+from roadmap_finish import _queue_repo_integration
+from roadmap_result import RoadmapResultError
 from c2_native_executor import execute as execute_native
 from c2_runtime import _open_snapshot, _writer_submit
 
@@ -51,11 +53,12 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             if run['next_action']:
                 lines += ['Next action: '+str(run['next_action'])]
             lines += [
-                'C2 control: record progress and evidence through the canonical roadmap writer',
-                'using tools/c2_control.py --operation record_checkpoint with this TASK_ID.',
-                'Before claiming completion, record a checkpoint with remaining=[] and no blocker.',
-                'Then submit --operation finish_work_item with the TASK_ID and nonempty acceptance evidence.',
-                'Use a unique --request-key and a JSON --arguments file for each operation.',
+                'C2 control: progress checkpoints are optional and only for recovery while work is ongoing.',
+                'For the terminal outcome use exactly one structured call to tools/c2_executor_result.py.',
+                'Write a small JSON payload with completed, remaining, evidence, blocker, next_action',
+                'and call it with --result PASS|BLOCKED|FAIL|CANCELLED --run-id '+run_id+
+                ' --work-item-id '+str(run['work_item_id'])+'.',
+                'Do not separately mutate C2 status; the writer validates and applies the receipt.',
             ]
             prompt='\n'.join(lines)
             work_item_id=str(run['work_item_id'])
@@ -76,6 +79,16 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
         'from this run context if shell environment is available; otherwise pass '
         '--task-id and --run-id shown here. Do not investigate or triage it; '
         'continue the original task immediately.')
+    if executor=='codex':
+        prompt += (
+            '\nC2 terminal contract: the final response must have line 1 PROMPT_ID=<id>, '
+            'line 2 RESULT=PASS|BLOCKED|FAIL|CANCELLED, and line 3 exactly '
+            'C2_RESULT=<one-line JSON>. JSON keys: completed(list of exact acceptance '
+            'criteria satisfied), remaining(list), evidence(list of concise concrete '
+            'proof such as tests/commit/PR/device verification), blocker(string|null), '
+            'next_action(string|null); optional summary. PASS requires remaining=[], '
+            'blocker=null and nonempty evidence. Do not repeat run/task/chat IDs in JSON.'
+        )
     if executor in ('rdc','chatgpt'):
         result=dispatch_browser(run_id=run_id,work_item_id=work_item_id,
             metadata=metadata,prompt=prompt,db_path=db_path,
@@ -98,9 +111,15 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
                 'chat_url':'codex://threads/'+thread_id},'c2-bind-'+run_id)
         result=dispatch_codex(rpc,run_id=run_id,metadata=exact_metadata,
             prompt=prompt,receipt=receipt,on_thread_created=bind_thread)
+        terminal=None
         if result['phase']=='terminal':
+            observed=rpc('thread/read',{'threadId':result['thread_id'],'includeTurns':True})
+            terminal=next((turn for turn in (observed.get('thread') or {}).get('turns',[])
+                           if turn.get('id')==result.get('turn_id')),None)
+            if terminal is None:
+                raise WorkerError('codex_terminal_turn_missing')
             result['phase']=result['turn_status']
-        if result['phase']=='started':
+        elif result['phase']=='started':
             turn_id=result.get('turn_id')
             if not turn_id:
                 raise WorkerError('codex_started_turn_identity_missing')
@@ -108,6 +127,23 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             record_terminal(receipt,run_id=run_id,thread_id=result['thread_id'],
                 turn_id=turn_id,status=terminal['status'])
             result['phase']=terminal['status']
+        if terminal is not None:
+            parsed=parse_terminal_result(terminal,prompt_id)
+            if parsed is None and terminal.get('status')=='completed':
+                raise WorkerError('codex_terminal_contract_missing')
+            if parsed is not None:
+                base_args={'run_id':run_id,'prompt_id':prompt_id,**parsed,
+                           'integration_ready':False}
+                submit('executor_result',base_args,'c2-executor-result-'+run_id)
+                if parsed['outcome']=='PASS':
+                    try:
+                        _,integrated=_queue_repo_integration(prompt_id)
+                    except RoadmapResultError as exc:
+                        raise WorkerError(str(exc)) from exc
+                    if integrated:
+                        final_args={**base_args,'integration_ready':True}
+                        submit('executor_result',final_args,
+                               'c2-executor-result-final-'+run_id)
     return {'run_id':run_id,'executor':'codex','thread_id':result['thread_id'],'phase':result['phase']}
 
 

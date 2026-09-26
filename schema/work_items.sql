@@ -82,6 +82,25 @@ CREATE TABLE IF NOT EXISTS work_item_evidence (
   UNIQUE(work_item_id, evidence_kind, uri, label)
 );
 
+CREATE TABLE IF NOT EXISTS work_item_result_receipts (
+  receipt_id TEXT PRIMARY KEY,
+  work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
+  run_id TEXT,
+  prompt_id TEXT,
+  outcome TEXT NOT NULL CHECK(outcome IN ('PASS','BLOCKED','FAIL','CANCELLED')),
+  summary TEXT,
+  completed_json TEXT NOT NULL,
+  remaining_json TEXT NOT NULL,
+  evidence_json TEXT NOT NULL,
+  blocker TEXT,
+  next_action TEXT,
+  strict_contract INTEGER NOT NULL DEFAULT 0 CHECK(strict_contract IN (0,1)),
+  payload_sha256 TEXT NOT NULL,
+  captured_at REAL NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_work_item_result_receipts_run
+  ON work_item_result_receipts(run_id) WHERE run_id IS NOT NULL;
+
 CREATE INDEX IF NOT EXISTS idx_work_items_parent_order
   ON work_items(parent_id, sort_order, work_item_id);
 CREATE INDEX IF NOT EXISTS idx_work_items_status_order

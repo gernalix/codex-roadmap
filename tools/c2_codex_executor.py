@@ -6,6 +6,7 @@ identity; work status remains in the C2 writer database.
 from __future__ import annotations
 
 import json
+import re
 import os
 from pathlib import Path
 import tempfile
@@ -51,6 +52,50 @@ def record_terminal(receipt: Path, *, run_id: str, thread_id: str,
         raise ExecutorError('terminal_turn_status_conflict')
     state.update(phase='terminal',turn_status=status)
     persist(receipt,state)
+
+
+
+def parse_terminal_result(turn: dict, expected_prompt_id: str) -> dict | None:
+    """Parse the compact C2 terminal contract; legacy RESULT reports remain recoverable."""
+    finals=[item.get('text','') for item in (turn.get('items') or [])
+            if item.get('type')=='agentMessage' and item.get('phase')=='final_answer']
+    if not finals:
+        return None
+    text=str(finals[-1]).strip()
+    lines=text.splitlines()
+    if len(lines)<2 or lines[0].strip()!=f'PROMPT_ID={expected_prompt_id}':
+        return None
+    match=re.fullmatch(r'RESULT=(PASS|BLOCKED|FAIL|CANCELLED)',lines[1].strip())
+    if not match:
+        return None
+    outcome=match.group(1)
+    contract_line=next((line.strip() for line in lines[2:] if line.strip().startswith('C2_RESULT=')),None)
+    if contract_line:
+        try:
+            payload=json.loads(contract_line.removeprefix('C2_RESULT='))
+        except json.JSONDecodeError as exc:
+            raise ExecutorError('invalid_c2_result_json') from exc
+        if not isinstance(payload,dict):
+            raise ExecutorError('invalid_c2_result_payload')
+        allowed={'completed','remaining','evidence','blocker','next_action','summary'}
+        if set(payload)-allowed:
+            raise ExecutorError('invalid_c2_result_keys')
+        for key in ('completed','remaining','evidence'):
+            if key not in payload or not isinstance(payload[key],list):
+                raise ExecutorError('invalid_c2_result_'+key)
+        return {'outcome':outcome,'summary':payload.get('summary'),
+                'completed':payload['completed'],'remaining':payload['remaining'],
+                'evidence':payload['evidence'],'blocker':payload.get('blocker'),
+                'next_action':payload.get('next_action'),'strict_contract':True}
+    # Backward-compatible recovery: an explicit legacy RESULT line is still
+    # authoritative enough to prevent "work done, C2 still running" drift.
+    blocker=None; next_action=None
+    if outcome=='BLOCKED':
+        blocker='Executor reported BLOCKED; see final report evidence.'
+        next_action='Resolve the reported blocker and resume or create a follow-up.'
+    return {'outcome':outcome,'summary':None,'completed':[],'remaining':[],
+            'evidence':[text],'blocker':blocker,'next_action':next_action,
+            'strict_contract':False}
 
 
 def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path,

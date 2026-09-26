@@ -26,6 +26,8 @@ Instead, submit one immutable `codex-roadmap.mutation.v1` request as a GitHub Is
 
 All terminal Codex results must use `tools/roadmap_finish.py --result PASS|BLOCKED|FAIL|CANCELLED`. `roadmap_result.py` is an internal compatibility helper only and must not be used as a second operational entry point.
 
+C2 executors share one terminal contract: submit a structured result receipt through the single writer (`C2_RESULT` is the Codex text fallback; legacy `PROMPT_ID`/`RESULT` remains recoverable). The writer receipt is authoritative. PASS requires evidence and validated acceptance; repository-backed PASS finalizes only after `repo_single_writer.py status-any --task-id <PROMPT_ID>` reports merged. Native C2 runtime reconciliation replays an existing PASS receipt after merge; never infer completion from a turn ending, and never wait on integration in a model turn. BLOCKED/FAIL/CANCELLED finalize without the merge gate.
+
 
 ## Persistent operational task memory
 
