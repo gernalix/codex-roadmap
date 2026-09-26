@@ -15,9 +15,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/codex-roadmap-c2|codex-roadmap / C2]]
 - **Prompt:** [[../../prompts/c2-executor-chat-reference-history|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-26T22:55:45Z
+- **Ultimo lancio:** 2026-09-26T22:55:45Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -35,7 +35,7 @@ Rende visibile per ogni task C2 chi lo sta eseguendo e quale chat/thread lo poss
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-26T22:55:45Z | 2026-09-26T22:55:50Z | UNKNOWN | 4.969 | codex-auto-review | low | 0 | 21108 |
 
 ## Analisi ChatGPT
 

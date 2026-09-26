@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/992303 c2-executor-chat-reference-history\|992303 · Traccia executor e chat di ogni task C2]] | running | — | — | — | no | no | — | codex-roadmap / C2 | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/992303 c2-executor-chat-reference-history\|992303 · Traccia executor e chat di ogni task C2]] | running | 2026-09-26T22:55:45Z | 2026-09-26T22:55:45Z | UNKNOWN | no | no | — | codex-roadmap / C2 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/233366 implementare-struttura-minima-del-contratto-c2-233366\|233366 · Implementare struttura minima del contratto C2]] | running | — | — | — | no | no | — | codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | running | 2026-09-26T22:52:21Z | 2026-09-26T22:52:21Z | UNKNOWN | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | pending | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
