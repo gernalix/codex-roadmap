@@ -16,12 +16,12 @@ Semantically reorganize active C2 work under C2_SEMANTIC_REORGANIZATION.md witho
 - [x] Review every active root and minimum relevant repo/context.
 - [x] Identify semantic obsolete/duplicate work.
 - [x] Capture incidental C2 architecture gaps to Inbox.
-- [ ] Apply semantic mutations through writer.
-- [ ] Verify writer receipts in canonical snapshot.
-- [ ] Confirm remaining roots are still semantically valid and stop.
+- [x] Apply semantic mutations through writer.
+- [x] Verify writer receipts in canonical snapshot.
+- [x] Confirm remaining roots are still semantically valid and stop.
 
 ## Current step
-Submit two PersonalHub supersessions through the C2 writer.
+Semantic reorganization complete; retire the temporary supervisor authority and stop.
 
 ## Verified facts
 - Snapshot refreshed from canonical remote state; the writer has since applied Inbox Issues #1330 and #1331.
@@ -45,10 +45,10 @@ Submit two PersonalHub supersessions through the C2 writer.
 Canonical snapshot refresh, semantic root audit, minimum repo checks, Inbox capture of discovered C2 gaps.
 
 ## Remaining
-Writer submission and receipt verification for the two PH supersessions.
+Only deterministic cleanup of the temporary supervisor lease/authority.
 
 ## Blockers
-None for the two intended semantic mutations. The current writer cannot express acceptance-json edits or additive dependency/tag edits; captured to Inbox for future capability work.
+No blocker to this reorganization. The current writer cannot express acceptance-json edits or additive dependency/tag edits; captured to Inbox for future capability work.
 ## Evidence
 - PersonalHub PR #54 includes History/Search shared UI/instrumentation tests and uses the shared QA gate.
 - PersonalHub origin/main QA ABI filters include armeabi-v7a, arm64-v8a, x86_64; commit history identifies 1d9e2c68.
@@ -59,5 +59,10 @@ None for the two intended semantic mutations. The current writer cannot express 
 - Writer receipts are present and canonical snapshot reflects the mutations.
 - No application task is executed and no valid active root is semantically removed.
 
+## Final applied state
+- Receipt #1335 / c2-semantic-reorg-ph-history-20260926 applied: wi:7009a02364364a099d815911afbe6d19 and descendants wi:d5267ba35a4a47baa2df62b43e4fef7e + wi:76ac049ad7b4424587e5bcfb9aa013d3 are superseded by wi:02cab3c0c0324d0bbda572b81cfc71c3.
+- Receipt #1336 / c2-semantic-reorg-ph-abi-20260926 applied: wi:7b5eb79a939d4b0eb6c96ad5c0c7b25b is superseded by wi:02cab3c0c0324d0bbda572b81cfc71c3.
+- Canonical snapshot source commit after receipts: 7e6ab0d47501fb190de7a7d340d04c7f636428e7.
+
 ## Next action
-Acquire non-published semantic-writer supervisor authority, submit the two c2_reconcile_item mutations, then refresh the snapshot once and verify receipts/status/relations.
+Retire the temporary semantic supervisor authority, expire the local lease, then report only semantic changes, valid unchanged work, and real blockers.
