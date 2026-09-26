@@ -21,20 +21,20 @@ Complete all currently pending C2 work items for gernalix/PersonalHub using Remo
 - [x] Verify PersonalHub main clean and Pixel connected.
 - [x] Create isolated single-writer worktree.
 - [x] Reproduce Kotlin nullability and KT-71420 warnings.
-- [ ] Fix DatabasePreferences nullability and production KT-71420 warnings.
-- [ ] Fix KT-71420 warnings in HubActivityRegisterTest and GitDataFinalValidationTest.
-- [ ] Add targeted CODE_MAP Git Data/History route.
-- [ ] Add INTERNET + cleartext allowance only to core:database androidTest manifest.
-- [ ] Fix GitDataRestoreDeviceTest so it validates restored DB without reopening frozen Room graph.
-- [ ] Make instrumentation gate fail-closed when runner reports INSTRUMENTATION_FAILED/uninstall failure.
-- [ ] Run targeted host/unit/compile gates and prove warnings removed.
-- [ ] Run required physical Pixel instrumentation/device tests with explicit serial.
-- [ ] Commit and push protected task branch.
-- [ ] Finish/integrate through repo_single_writer and verify main containment.
+- [x] Fix DatabasePreferences nullability and production KT-71420 warnings.
+- [x] Fix KT-71420 warnings in HubActivityRegisterTest and GitDataFinalValidationTest.
+- [x] Add targeted CODE_MAP Git Data/History route.
+- [x] Verify INTERNET + cleartext allowance already exists only in core:database androidTest manifest.
+- [x] Verify GitDataRestoreDeviceTest already validates the restored DB via raw read-only SQLite without reopening frozen Room.
+- [x] Make instrumentation gate fail-closed when runner reports INSTRUMENTATION_FAILED/uninstall failure.
+- [x] Run targeted host/unit/compile gates and prove warnings removed.
+- [x] Run physical Pixel instrumentation with explicit serial; official JUnit report PASS 1/1.
+- [x] Commit and push protected task branch at fb6ee0cc76207e4f3cc45a1e931746031dc40320.
+- [ ] PR #48 queued through repo_single_writer; verify main containment only after integrator event.
 - [ ] Update/terminalize the eight C2 work items with evidence.
 
 ## Current step
-Baseline reproduction is complete; inspect only the exact affected source/test/manifests and apply minimal fixes.
+Implementation and targeted acceptance are complete. PR #48 is queued to the asynchronous repository integrator; no CI/merge polling is permitted.
 
 ## Verified facts
 - PersonalHub main and origin/main were both `b736ee83724bf53a04ac43495c93af38cd42e67d` and clean at task start.
@@ -52,17 +52,22 @@ Baseline reproduction is complete; inspect only the exact affected source/test/m
 - C2 discovery, Pixel discovery, protected worktree creation, warning reproduction.
 
 ## Remaining
-- Source/test/manifest fixes, targeted host gates, Pixel instrumentation/device acceptance, integration, C2 terminalization.
+- Repository integration/main containment and C2 terminalization after the integrator produces new evidence.
 
 ## Blockers
-- None currently.
+- PR #48 integration is external/asynchronous. Protocol forbids model-driven polling; resume only on a concrete integrator state transition.
 
 ## Evidence
 - Baseline log: `/tmp/ph-c2-baseline.log`.
+- Targeted host gate: HubActivityRegisterTest + GitDataFinalValidationTest BUILD SUCCESSFUL; /tmp/ph-c2-targeted-host.log contains no KT-71420 or Java type mismatch.
+- Fail-closed wrapper regression: 4/4 PASS for normal success, INSTRUMENTATION_FAILED, DELETE_FAILED_INTERNAL_ERROR and nonzero child status.
+- Physical Pixel report: core/database/build/outputs/androidTest-results/connected/debug/TEST-Pixel 8a - 17.xml = tests=1 failures=0 errors=0; device 192.168.1.37_34375.
+- Gradle reported a post-test task failure despite the generated Pixel report being 100% successful; this remains explicit evidence and is not hidden.
+- PersonalHub task commit fb6ee0cc76207e4f3cc45a1e931746031dc40320 pushed; repo_single_writer queued PR #48.
 - Eight C2 IDs: wi:5c4748d2131a46a3b1ecb41cacd16206, wi:61d05a0b3e7f4651b17be8c3f5ea5257, wi:754f0b89b1b3427e93b97d85219d4914, wi:a75becd338ea44138e78281f3d5af267, wi:a99670bf017e4962822b9c8765ebd178, wi:b3c7c89500754d8c929a3a7076a200a1, wi:cad05c039f464596aafa11ea15283496, wi:e7e578ba356a475e89857d53cd04b673.
 
 ## Acceptance criteria
 All eight work-item acceptance lists pass, Pixel-required tests use the explicit Pixel serial, the task branch integrates cleanly to main, and C2 contains terminal evidence for every item.
 
 ## Next action
-Read the exact affected code/manifests around the reproduced warning/test locations and implement the minimal grouped fixes.
+On the next concrete repo-integrator state transition for PR #48, verify PersonalHub main contains fb6ee0cc76207e4f3cc45a1e931746031dc40320, then terminalize all eight C2 work items with merged evidence.
