@@ -67,8 +67,11 @@ def require(conn, authority, *, now=None):
 
 def renew(conn, authority, *, now=None):
     now = time.time() if now is None else now
-    row = require(conn, authority, now=now)
-    _, _, expires = _fields(authority)
+    supervisor_id, token, expires = _fields(authority)
+    row = conn.execute('SELECT * FROM c2_supervisor_authority WHERE singleton=1').fetchone()
+    if (not row or row['supervisor_id'] != supervisor_id or
+            row['fencing_token'] != token or expires <= now):
+        raise AuthorityError('stale_or_expired_supervisor')
     if expires < row['lease_expires_at']:
         raise AuthorityError('lease_cannot_shorten')
     conn.execute('UPDATE c2_supervisor_authority SET lease_expires_at=?,renewed_at=? WHERE singleton=1',
