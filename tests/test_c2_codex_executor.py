@@ -3,7 +3,7 @@ import sys
 import tempfile
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from c2_codex_executor import dispatch, ExecutorError
+from c2_codex_executor import dispatch, record_terminal, ExecutorError
 
 
 class RPC:
@@ -50,3 +50,16 @@ class CodexExecutorTests(unittest.TestCase):
             result=dispatch(resumed,run_id='run-1',metadata=metadata,prompt='Canonical body',receipt=receipt)
             self.assertFalse(result['resubmitted'])
             self.assertNotIn('turn/start',[method for method,_ in resumed.calls])
+
+    def test_terminal_receipt_prevents_turn_resubmission(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            receipt=Path(tmp)/'receipt.json'
+            metadata={'model':'exact','reasoning':'medium','worktree':'/tmp/worktree'}
+            started=dispatch(RPC(),run_id='run-1',metadata=metadata,prompt='Canonical body',receipt=receipt)
+            record_terminal(receipt,run_id='run-1',thread_id=started['thread_id'],
+                turn_id=started['turn_id'],status='completed')
+            resumed=RPC()
+            result=dispatch(resumed,run_id='run-1',metadata=metadata,prompt='Canonical body',receipt=receipt)
+            self.assertEqual('terminal',result['phase'])
+            self.assertEqual('completed',result['turn_status'])
+            self.assertEqual([],resumed.calls)

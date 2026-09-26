@@ -11,7 +11,7 @@ import sys
 
 from c2_appserver_rpc import AppServerRPC, AppServerError, resolve_model
 from c2_chatgpt_executor import dispatch as dispatch_browser
-from c2_codex_executor import dispatch as dispatch_codex, ExecutorError
+from c2_codex_executor import dispatch as dispatch_codex, record_terminal, ExecutorError
 from c2_native_executor import execute as execute_native
 from c2_runtime import _open_snapshot, _writer_submit
 
@@ -82,13 +82,18 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
     with rpc_factory() as rpc:
         model_id=resolve_model(rpc,metadata['model'],metadata['reasoning'])
         exact_metadata={**metadata,'model_id':model_id}
+        receipt=Path(state_root)/f'{run_id}.codex.json'
         result=dispatch_codex(rpc,run_id=run_id,metadata=exact_metadata,
-            prompt=prompt,receipt=Path(state_root)/f'{run_id}.codex.json')
+            prompt=prompt,receipt=receipt)
+        if result['phase']=='terminal':
+            result['phase']=result['turn_status']
         if result['phase']=='started':
             turn_id=result.get('turn_id')
             if not turn_id:
                 raise WorkerError('codex_started_turn_identity_missing')
             terminal=rpc.wait_for_turn(result['thread_id'],turn_id)
+            record_terminal(receipt,run_id=run_id,thread_id=result['thread_id'],
+                turn_id=turn_id,status=terminal['status'])
             result['phase']=terminal['status']
     return {'run_id':run_id,'executor':'codex','thread_id':result['thread_id'],'phase':result['phase']}
 
