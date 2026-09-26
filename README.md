@@ -81,6 +81,25 @@ il contesto con `c2_auto_configure` tramite la stessa mutation Issue. Il
 runtime e lo scheduler escludono gli item PersonalHub gestiti dal worker
 esterno, anche se hanno già una spec.
 
+**Preparazione Codex di un intake verificato:** usa unicamente
+`python3 tools/c2_prepare_codex.py --spec <file.json>`. Il file deve fornire
+esplicitamente `work_item_id`, `prompt_file`, `source`, `model`,
+`reasoning` e `activity=coding|diagnostic`; può aggiungere
+`megavault_mode`, `parent_prompt_id`, `resources`, `max_attempts` e
+`readiness_evidence`. Il comando non deduce metadata da titolo/prosa:
+se l'item è waiting/blocked richiede `readiness_evidence`, materializza il
+prompt tramite il writer, alloca/reusa un worktree isolato, applica
+`c2_auto_configure`, verifica il readback e lascia l'item `pending` senza
+run. Replay identici riusano prompt/worktree/spec; conflitti falliscono chiusi.
+Il vecchio CLI diretto `c2_intake.py prepare-codex` è disabilitato.
+
+Esempio minimo:
+```json
+{"work_item_id":"wi:...","prompt_file":"prompt.md","source":"c2-review",
+ "model":"GPT-5.6 Terra","reasoning":"medium","activity":"coding",
+ "readiness_evidence":["Scope verificato e prerequisiti soddisfatti."]}
+```
+
 **C2 executor start:** `claimed/assigned` indica soltanto che il control plane ha assegnato lavoro; `executor_started` conferma che l'executor lo ha realmente preso in carico. I worker C2 emettono automaticamente la receipt prima del lavoro sostanziale. Un executor manuale usa `python3 tools/c2_executor_start.py` con l'identità disponibile: `--work-item-id` per task C2 non-prompt (la stessa mutation fa claim+start se il task pending è runnable), oppure `--prompt-id` dopo `roadmap_start.py` per task prompt-backed. PROMPT_ID non è richiesto per i work item non-prompt. Non procedere se la submission fallisce; il binding chat/thread arricchisce la stessa receipt.
 
 **C2 issue inbox:** se un executor incontra un problema o miglioramento collaterale,

@@ -488,18 +488,8 @@ def main(argv: list[str] | None = None) -> int:
                         if args.execution_json else None,
                     )
                 elif args.command == "prepare-codex":
-                    prompt_text = args.prompt_file.read_text(encoding="utf-8")
-                    payload = prepare_codex(
-                        conn,
-                        args.work_item_id,
-                        prompt_text=prompt_text,
-                        source=args.source,
-                        model=args.model,
-                        reasoning=args.reasoning,
-                        megavault_mode=args.megavault_mode,
-                        parent_prompt_id=args.parent_prompt_id,
-                        execution=json.loads(args.execution_json.read_text(encoding="utf-8"))
-                        if args.execution_json else None,
+                    raise C2IntakeError(
+                        "direct_prepare_codex_disabled:use_tools/c2_prepare_codex.py"
                     )
                 elif args.command == "show":
                     payload = show_work_item(conn, args.work_item_id)
