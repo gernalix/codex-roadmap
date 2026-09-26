@@ -106,7 +106,7 @@ def _require(db, supervisor_id, token, now):
 
 
 def update(db, *, supervisor_id, token, action=None, step=None, progress=False,
-           ttl=180, executor=None, stall_reason=None, now=None):
+           ttl=180, executor=None, stall_reason=None, pointer=None, now=None):
     now = time.time() if now is None else now
     if ttl <= 0:
         raise LeaseError('invalid_ttl')
@@ -115,11 +115,12 @@ def update(db, *, supervisor_id, token, action=None, step=None, progress=False,
         row = _require(db, supervisor_id, token, now)
         db.execute('''UPDATE supervisor SET lease_expires_at=?,last_heartbeat=?,
             last_renewed_at=?,last_progress_at=?,current_action=?,current_step=?,
-            progress_counter=?,executor=?,stall_reason=? WHERE singleton=1''',
+            progress_counter=?,executor=?,stall_reason=?,recovery_pointer=? WHERE singleton=1''',
             (now + ttl, now, now, now if progress else row['last_progress_at'],
              action if action is not None else row['current_action'],
              step if step is not None else row['current_step'],
-             row['progress_counter'] + int(progress), executor, stall_reason))
+             row['progress_counter'] + int(progress), executor, stall_reason,
+             pointer if pointer is not None else row['recovery_pointer']))
         result = snapshot(db)
         _event(db, result, 'progress' if progress else 'heartbeat', now=now)
         db.commit()
@@ -178,6 +179,7 @@ def main():
             command.add_argument('--action')
             command.add_argument('--step')
             command.add_argument('--ttl', type=int, default=180)
+            command.add_argument('--pointer')
     sub.add_parser('watch')
     sub.add_parser('status')
     args = parser.parse_args()
@@ -190,7 +192,7 @@ def main():
         elif args.command in ('heartbeat', 'progress'):
             row = update(db, supervisor_id=args.supervisor_id, token=args.token,
                          action=args.action, step=args.step, ttl=args.ttl,
-                         progress=args.command == 'progress')
+                         progress=args.command == 'progress', pointer=args.pointer)
         elif args.command == 'verify':
             row = _require(db, args.supervisor_id, args.token, time.time())
         elif args.command == 'watch':

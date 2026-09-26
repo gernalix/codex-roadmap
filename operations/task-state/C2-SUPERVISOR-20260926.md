@@ -29,11 +29,14 @@ Phase 0 recovery is live; begin non-PH reconciliation from the canonical roadmap
 - The runtime service now requires the current supervisor ID and fencing token before scheduling, submitting writer requests, or launching a worker.
 - In a separate expired test lease, the watchdog opened a real ChatGPT browser conversation. That session read a minimal pointer, acquired a new unique supervisor ID with token 2, and did not schedule work. Token 1 was rejected after takeover.
 - The old Playwright CDP handshake stalled on this profile; bounded direct CDP succeeded. The ChatGPT Send button uses `aria-label=Send` on the current UI.
+- A concurrent `codex resume` process opened this same session from a separate C2 bootstrap worktree; it was terminated. The legacy ChatGPT supervisor task `CHATGPT-20260924-RDC-SUPERVISOR` was paused, while its PersonalHub task remained enabled.
+- The shared canonical checkout changed to a PH checkpoint branch during the first C2 commit. The C2 change was cherry-picked onto dedicated branch/worktree `codex/c2-supervisor-recovery` at `/home/daniele/.local/share/c2-supervisor/worktree`; the PH branch and worker were left untouched after discovery.
 
 ## Decisions
 - Keep supervisor liveness state outside the canonical roadmap DB; never write `roadmap.sqlite` directly.
 - Treat PH as externally owned and do not use its devices or repositories.
 - A local expiry test with a real browser successor is the Phase 0 end-to-end proof. Do not deliberately retire the live supervisor merely to repeat it.
+- Run C2 code and the systemd services from the isolated worktree while PH uses the shared checkout.
 
 ## Completed
 Minimum Phase 0 inspection, lease/watchdog implementation and activation, isolated end-to-end browser recovery, fencing verification, and local runtime gate.
@@ -51,6 +54,7 @@ No current blocker. The browser recovery path was verified through direct CDP be
 - `c2-supervisor-watchdog.service` exited successfully with `state=healthy` under the real lease.
 - Isolated test DB `/tmp/c2-phase0-recovery-test2.sqlite3`: old token 1 retired, new unique supervisor/token 2 active; stale write rejected.
 - `python3 -m unittest` passes focused runtime, scheduler, and supervisor lease tests.
+- No additional active local C2 scheduler process was observed after terminating the duplicate TUI. The canonical roadmap writer and PH integration processes were preserved.
 
 ## Acceptance criteria
 Phase 0: current and successor identities persist; stale fencing rejects old local mutations; heartbeat and progress differ; a real replacement browser conversation reads minimal state and acquires a higher token; no duplicate scheduler, writer, or PH worker. Later global C2 criteria remain open.
