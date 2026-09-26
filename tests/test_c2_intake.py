@@ -10,12 +10,75 @@ TOOLS = Path(__file__).resolve().parents[1] / "tools"
 sys.path.insert(0, str(TOOLS))
 
 import c2_intake
+import c2_scheduler
 import roadmap_db as db
 import work_items_cutover as cutover
 import work_items_migration as migration
 
 
 class C2IntakeTests(unittest.TestCase):
+    def test_auto_intake_creates_native_spec_from_complete_structured_context(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self.make_cutover_db(Path(tmp))
+            conn = c2_intake._connect(path)
+            try:
+                item = c2_intake.add_work_item(
+                    conn,title="Run exact helper",executor_policy="auto",
+                    execution={"command":["/usr/bin/true"]},
+                )
+                self.assertEqual({"state":"ready"},item["execution_readiness"])
+                spec = conn.execute("SELECT activity,command_json FROM work_item_execution_specs WHERE work_item_id=?",
+                                    (item["work_item_id"],)).fetchone()
+                self.assertEqual(("native",'["/usr/bin/true"]'),tuple(spec))
+                self.assertEqual("rdc",c2_scheduler.schedule(conn,event_key="auto-native",now=1)[0]["executor"])
+            finally:
+                conn.close()
+
+    def test_incomplete_auto_intake_waits_without_spec(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self.make_cutover_db(Path(tmp))
+            conn = c2_intake._connect(path)
+            try:
+                item = c2_intake.add_work_item(conn,title="Needs context",executor_policy="auto")
+                self.assertEqual({"state":"waiting","reason":"execution_context_missing"},
+                                 item["execution_readiness"])
+                partial = c2_intake.add_work_item(conn,title="Needs exact argv",executor_policy="auto",
+                                                  execution={"activity":"native"})
+                self.assertEqual("native_command_missing",partial["execution_readiness"]["reason"])
+                self.assertEqual(0,conn.execute("SELECT COUNT(*) FROM work_item_execution_specs WHERE work_item_id IN (?,?)",
+                    (item["work_item_id"],partial["work_item_id"])).fetchone()[0])
+                self.assertEqual([],c2_scheduler.schedule(conn,event_key="incomplete",now=1))
+            finally:
+                conn.close()
+
+    def test_auto_intake_never_guesses_from_title_or_repo(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self.make_cutover_db(Path(tmp))
+            conn = c2_intake._connect(path)
+            try:
+                item = c2_intake.add_work_item(conn,title="Run tests",repo="fixture",executor_policy="auto",
+                                                  execution={"command":["/usr/bin/true"]})
+                self.assertEqual("execution_worktree_missing",item["execution_readiness"]["reason"])
+                self.assertEqual(0,conn.execute("SELECT COUNT(*) FROM work_item_execution_specs WHERE work_item_id=?",
+                    (item["work_item_id"],)).fetchone()[0])
+            finally:
+                conn.close()
+
+    def test_personalhub_auto_item_stays_with_external_worker(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self.make_cutover_db(Path(tmp))
+            conn = c2_intake._connect(path)
+            try:
+                item = c2_intake.add_work_item(conn,title="PH work",repo="https://github.com/gernalix/PersonalHub.git",
+                    executor_policy="auto",execution={"command":["/usr/bin/true"],"worktree":"/tmp/ph"})
+                self.assertEqual({"state":"waiting","reason":"external_personalhub_worker"},
+                                 item["execution_readiness"])
+                self.assertEqual(0,conn.execute("SELECT COUNT(*) FROM work_item_execution_specs WHERE work_item_id=?",
+                    (item["work_item_id"],)).fetchone()[0])
+                self.assertEqual([],c2_scheduler.schedule(conn,event_key="ph-external",now=1))
+            finally:
+                conn.close()
+
     def test_prepare_codex_reuses_only_unique_proven_model_pair(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path=self.make_cutover_db(Path(tmp))
@@ -123,6 +186,7 @@ class C2IntakeTests(unittest.TestCase):
                     model="GPT-5.6 Sol",
                     reasoning="medium",
                     megavault_mode="STANDARD",
+                    execution={"worktree":"/tmp/isolated-codex-worktree"},
                 )
                 conn.commit()
 
@@ -133,6 +197,10 @@ class C2IntakeTests(unittest.TestCase):
                 ).fetchone()
                 self.assertEqual(prompt_id, row["prompt_id"])
                 self.assertEqual("codex", row["executor_policy"])
+                self.assertEqual({"state":"ready"},result["execution_readiness"])
+                spec=conn.execute("SELECT activity,model,reasoning,worktree FROM work_item_execution_specs WHERE work_item_id=?",
+                                  (item["work_item_id"],)).fetchone()
+                self.assertEqual(("coding","GPT-5.6 Sol","medium","/tmp/isolated-codex-worktree"),tuple(spec))
                 meta = conn.execute(
                     "SELECT model,reasoning,prompt_type FROM prompt_metadata WHERE prompt_id=?",
                     (prompt_id,),

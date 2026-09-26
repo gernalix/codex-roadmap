@@ -19,6 +19,7 @@ import time
 from submit_mutation import submit_document
 from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot
 from c2_mutations import SUPERVISOR_OPERATIONS
+from c2_scheduler import external_personalhub
 
 
 class RuntimeErrorC2(RuntimeError):
@@ -131,7 +132,7 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         key=_key('c2-recover',sorted((r['run_id'],r['lease_until']) for r in expired))
         submit('recover',{},key)
         events.append(('recover',str(len(expired))))
-    ready=[dict(r) for r in db.execute('''SELECT w.work_item_id,w.status,w.sort_order,w.repo,w.updated_at,
+    ready=[dict(r) for r in db.execute('''SELECT w.work_item_id,w.status,w.sort_order,w.repo,w.project_name,w.updated_at,
             s.activity,s.model,s.reasoning,s.worktree,s.project_url,s.resources_json
           FROM v_work_item_runnable w
           JOIN work_item_execution_specs s USING(work_item_id)
@@ -140,7 +141,8 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p1') THEN 1
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
             ELSE 3 END,
-            COALESCE(w.sort_order,2147483647),w.work_item_id''')]
+            COALESCE(w.sort_order,2147483647),w.work_item_id''')
+           if not external_personalhub(db,r)]
     statuses=[tuple(r) for r in db.execute('''SELECT w.work_item_id,w.status FROM work_items w
        WHERE w.status='running' AND (w.prompt_id IS NOT NULL OR EXISTS(
          SELECT 1 FROM work_item_runs r WHERE r.work_item_id=w.work_item_id

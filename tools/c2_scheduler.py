@@ -85,6 +85,16 @@ def _transaction(conn):
         raise SchedulingError('canonical_writer_transaction_required')
 
 
+def external_personalhub(conn, item):
+    """PersonalHub is owned by its separate worker, even when C2 can see it."""
+    compact = lambda value: ''.join(c for c in str(value or '').lower() if c.isalnum())
+    repo_tail = str(item['repo'] or '').rstrip('/').rsplit('/',1)[-1].removesuffix('.git')
+    if compact(item['project_name']) == 'personalhub' or compact(repo_tail) == 'personalhub':
+        return True
+    return bool(conn.execute("SELECT 1 FROM work_item_tags WHERE work_item_id=? AND lower(tag)='personalhub'",
+                             (item['work_item_id'],)).fetchone())
+
+
 def configure(conn, work_item_id, *, activity, model=None, reasoning=None,
               worktree=None, project_url=None, goal_mode=False, command=None,
               resources=(), max_attempts=3):
@@ -92,6 +102,8 @@ def configure(conn, work_item_id, *, activity, model=None, reasoning=None,
     item = conn.execute('SELECT * FROM work_items WHERE work_item_id=?', (work_item_id,)).fetchone()
     if not item or item['status'] != 'pending':
         raise SchedulingError('only_pending_items_can_be_configured')
+    if external_personalhub(conn,item):
+        raise SchedulingError('external_personalhub_workload')
     if activity == 'native' and (not command or not isinstance(command, list)
                                 or not all(isinstance(x,str) and x for x in command)):
         raise SchedulingError('native_requires_deterministic_argv')
@@ -105,6 +117,85 @@ def configure(conn, work_item_id, *, activity, model=None, reasoning=None,
         resources_json=excluded.resources_json,max_attempts=excluded.max_attempts''',
         (work_item_id, activity, model, reasoning, worktree, project_url, int(goal_mode),
          json.dumps(command) if command else None, json.dumps(sorted(set(resources))), max_attempts))
+
+
+def configure_auto(conn, work_item_id, *, execution=None):
+    """Create an auto-policy spec only from unambiguous structured input.
+
+    Missing input is a normal waiting state. It must never be filled by guessing
+    from a title, next action, repository name, or imported task-state text.
+    """
+    _transaction(conn)
+    item = conn.execute('SELECT * FROM work_items WHERE work_item_id=?', (work_item_id,)).fetchone()
+    if (not item or item['status'] != 'pending' or
+            item['executor_policy'] not in ('auto','codex') or
+            (item['executor_policy']=='codex' and not item['prompt_id'])):
+        raise SchedulingError('auto_spec_requires_pending_auto_or_materialized_codex_item')
+    if external_personalhub(conn,item):
+        return {'state':'waiting','reason':'external_personalhub_worker'}
+    if conn.execute('SELECT 1 FROM work_item_execution_specs WHERE work_item_id=?',
+                    (work_item_id,)).fetchone():
+        return {'state':'ready'}
+    if execution is None:
+        return {'state':'waiting','reason':'execution_context_missing'}
+    if not isinstance(execution, dict):
+        raise SchedulingError('execution_context_must_be_object')
+    permitted = {'activity','command','worktree','project_url','model','reasoning',
+                 'resources','max_attempts'}
+    unknown = set(execution) - permitted
+    if unknown:
+        raise SchedulingError('unknown_execution_context_fields:'+','.join(sorted(unknown)))
+    activity = execution.get('activity')
+    if activity is None:
+        # A command means native execution; a materialized prompt with an
+        # isolated worktree means Codex. Browser routing needs an explicit
+        # activity because GUI and semantic work have different executors.
+        if execution.get('command') is not None:
+            activity = 'native'
+        elif item['prompt_id'] and execution.get('worktree'):
+            activity = 'coding'
+    if activity not in ('coding','diagnostic','gui','native','semantic'):
+        return {'state':'waiting','reason':'activity_missing'}
+    if item['executor_policy']=='codex' and activity not in ('coding','diagnostic'):
+        raise SchedulingError('codex_activity_required')
+    if activity != 'native' and execution.get('command') is not None:
+        raise SchedulingError('execution_context_activity_conflict')
+    if activity not in ('gui','semantic') and execution.get('project_url') is not None:
+        raise SchedulingError('execution_context_activity_conflict')
+    prompt = None
+    if activity == 'native':
+        command = execution.get('command')
+        if not isinstance(command,list) or not command or not all(isinstance(v,str) and v for v in command):
+            return {'state':'waiting','reason':'native_command_missing'}
+        if item['repo'] and not execution.get('worktree'):
+            return {'state':'waiting','reason':'execution_worktree_missing'}
+    elif activity in ('coding','diagnostic'):
+        if not item['prompt_id']:
+            return {'state':'waiting','reason':'codex_prompt_materialization_required'}
+        if not execution.get('worktree'):
+            return {'state':'waiting','reason':'execution_worktree_missing'}
+        prompt = conn.execute('SELECT model,reasoning,prompt_type FROM prompts WHERE prompt_id=?',
+                              (item['prompt_id'],)).fetchone()
+        if not prompt or not prompt['model'] or not prompt['reasoning']:
+            return {'state':'waiting','reason':'codex_exact_metadata_missing'}
+        if execution.get('model') not in (None,prompt['model']) or execution.get('reasoning') not in (None,prompt['reasoning']):
+            raise SchedulingError('codex_metadata_mismatch')
+    else:
+        url = execution.get('project_url')
+        if not isinstance(url,str) or not url.startswith('https://chatgpt.com/'):
+            return {'state':'waiting','reason':'chatgpt_project_url_missing'}
+        if not item['objective'] or not json.loads(item['acceptance_json'] or '[]'):
+            return {'state':'waiting','reason':'browser_objective_or_acceptance_missing'}
+    if execution.get('resources') is not None and not isinstance(execution['resources'],list):
+        raise SchedulingError('invalid_resources')
+    configure(conn,work_item_id,activity=activity,
+              model=prompt['model'] if activity in ('coding','diagnostic') else None,
+              reasoning=prompt['reasoning'] if activity in ('coding','diagnostic') else None,
+              worktree=execution.get('worktree'),project_url=execution.get('project_url'),
+              goal_mode=bool(prompt['prompt_type']=='Goal') if activity in ('coding','diagnostic') else False,
+              command=execution.get('command'),resources=execution.get('resources') or (),
+              max_attempts=execution.get('max_attempts',3))
+    return {'state':'ready'}
 
 
 def execution_metadata(conn, item, spec, executor):
@@ -154,6 +245,8 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120):
     for item in candidates:
         if active >= max_parallel:
             break
+        if external_personalhub(conn,item):
+            continue
         # A parent owns an execution branch: never launch imported checklist
         # steps as independent workers underneath an active ancestor.
         ancestor = item['parent_id']

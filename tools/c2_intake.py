@@ -12,6 +12,7 @@ import uuid
 from typing import Any
 
 import c2_identity
+import c2_scheduler
 import roadmap_db
 
 
@@ -113,6 +114,7 @@ def add_work_item(
     next_action: str | None = None,
     current_action: str | None = None,
     sort_order: int | None = None,
+    execution: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     _require_c2_schema(conn)
     kind = str(kind)
@@ -120,6 +122,8 @@ def add_work_item(
         raise C2IntakeError(f"invalid_kind:{kind}")
     if executor_policy not in {"auto", "codex", "rdc", "chatgpt", "human"}:
         raise C2IntakeError(f"invalid_executor_policy:{executor_policy}")
+    if execution is not None and executor_policy != "auto":
+        raise C2IntakeError("execution_context_requires_auto_policy")
     if not str(title).strip():
         raise C2IntakeError("title_required")
     project_id, project_name, resolved_repo = _project_and_repo(conn, project, repo)
@@ -184,12 +188,16 @@ def add_work_item(
                 "INSERT OR IGNORE INTO work_item_tags(work_item_id,tag) VALUES(?,?)",
                 (work_item_id, value),
             )
+    readiness = None
+    if executor_policy == "auto":
+        c2_scheduler.install_schema(conn)
+        readiness = c2_scheduler.configure_auto(conn,work_item_id,execution=execution)
     return dict(
         conn.execute(
             "SELECT * FROM work_items WHERE work_item_id=?",
             (work_item_id,),
         ).fetchone()
-    )
+    ) | ({"execution_readiness": readiness} if readiness else {})
 
 def prepare_codex(
     conn: sqlite3.Connection,
@@ -201,6 +209,7 @@ def prepare_codex(
     reasoning: str | None = None,
     megavault_mode: str | None = None,
     parent_prompt_id: int | None = None,
+    execution: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     _require_c2_schema(conn)
     item = conn.execute(
@@ -302,6 +311,10 @@ def prepare_codex(
         prompt_id,
         content_sha256=raw_digest,
     )
+    execution_readiness = None
+    if execution is not None:
+        c2_scheduler.install_schema(conn)
+        execution_readiness = c2_scheduler.configure_auto(conn,work_item_id,execution=execution)
     return {
         "work_item_id": work_item_id,
         "prompt_id": str(prompt_id),
@@ -311,6 +324,7 @@ def prepare_codex(
         "model": model,
         "reasoning": reasoning,
         "prompt_type": prompt_type,
+        **({"execution_readiness": execution_readiness} if execution_readiness else {}),
     }
 
 def show_work_item(conn: sqlite3.Connection, work_item_id: str) -> dict[str, Any]:
@@ -368,6 +382,8 @@ def build_parser() -> argparse.ArgumentParser:
     add.add_argument("--next-action")
     add.add_argument("--current-action")
     add.add_argument("--sort-order", type=int)
+    add.add_argument("--execution-json", type=Path,
+                     help="Structured execution context; auto policy creates a spec only when complete")
 
     prepare = sub.add_parser("prepare-codex")
     prepare.add_argument("work_item_id")
@@ -377,6 +393,8 @@ def build_parser() -> argparse.ArgumentParser:
     prepare.add_argument("--reasoning")
     prepare.add_argument("--megavault-mode")
     prepare.add_argument("--parent-prompt-id", type=int)
+    prepare.add_argument("--execution-json", type=Path,
+                         help="Structured worktree and other exact execution context")
 
     show = sub.add_parser("show")
     show.add_argument("work_item_id")
@@ -406,6 +424,8 @@ def main(argv: list[str] | None = None) -> int:
                         next_action=args.next_action,
                         current_action=args.current_action,
                         sort_order=args.sort_order,
+                        execution=json.loads(args.execution_json.read_text(encoding="utf-8"))
+                        if args.execution_json else None,
                     )
                 elif args.command == "prepare-codex":
                     prompt_text = args.prompt_file.read_text(encoding="utf-8")
@@ -418,6 +438,8 @@ def main(argv: list[str] | None = None) -> int:
                         reasoning=args.reasoning,
                         megavault_mode=args.megavault_mode,
                         parent_prompt_id=args.parent_prompt_id,
+                        execution=json.loads(args.execution_json.read_text(encoding="utf-8"))
+                        if args.execution_json else None,
                     )
                 elif args.command == "show":
                     payload = show_work_item(conn, args.work_item_id)
