@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/384495 rimuovere-special-case-ph-e-implementare-overrid-384495\|384495 · Rimuovere special-case PH e implementare override execution canonico]] | running | 2026-09-26T23:27:25Z | 2026-09-26T23:27:25Z | UNKNOWN | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | running | 2026-09-26T22:52:04Z | 2026-09-26T22:52:21Z | UNKNOWN | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963\|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] | running | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
@@ -20,6 +19,7 @@
 | [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1\|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/582408 completare-bootstrap-e-handoff-del-drain-autonom-582408\|582408 · Completare bootstrap e handoff del drain autonomo C2]] | completed | 2026-09-26T22:43:47Z | 2026-09-26T22:45:20Z | PASS | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/232898 completare-preparazione-e-drain-autonomo-c2-fino-232898\|232898 · Completare preparazione e drain autonomo C2 fino a quiescenza]] | superseded | — | — | — | no | no | — | — | GPT-6 Sol | medium |
+| [[obsidian/Prompts/384495 rimuovere-special-case-ph-e-implementare-overrid-384495\|384495 · Rimuovere special-case PH e implementare override execution canonico]] | blocked | 2026-09-26T23:27:25Z | 2026-09-26T23:27:25Z | BLOCKED | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/507648 rimuovere-special-case-ph-e-aggiungere-execution-507648\|507648 · Rimuovere special-case PH e aggiungere execution override C2]] | superseded | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |

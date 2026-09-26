@@ -1,6 +1,6 @@
 ---
 prompt_id: 384495
-status: running
+status: blocked
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -12,15 +12,15 @@ tags:
   - scheduler
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/unknown
 ---
 
 # 384495 · Rimuovere special-case PH e implementare override execution canonico
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/rimuovere-special-case-ph-e-implementare-overrid-384495|Apri prompt]]
+- **Prompt:** [[../../falliti/rimuovere-special-case-ph-e-implementare-overrid-384495|Apri prompt]]
 - **Primo lancio:** 2026-09-26T23:27:25Z
 - **Ultimo lancio:** 2026-09-26T23:27:25Z
 - **Ultimo esito:** UNKNOWN

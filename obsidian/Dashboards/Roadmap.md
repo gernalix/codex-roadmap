@@ -11,6 +11,5 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/384495 rimuovere-special-case-ph-e-implementare-overrid-384495|384495 · Rimuovere special-case PH e implementare override execution canonico]]
 - [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]]
 - [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]]
