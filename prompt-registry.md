@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/582408 completare-bootstrap-e-handoff-del-drain-autonom-582408\|582408 · Completare bootstrap e handoff del drain autonomo C2]] | running | 2026-09-26T22:45:20Z | 2026-09-26T22:45:20Z | UNKNOWN | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/992303 c2-executor-chat-reference-history\|992303 · Traccia executor e chat di ogni task C2]] | running | — | — | — | no | no | — | codex-roadmap / C2 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | running | — | — | — | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/233366 implementare-struttura-minima-del-contratto-c2-233366\|233366 · Implementare struttura minima del contratto C2]] | pending | — | — | — | no | no | — | codex-roadmap | GPT-5.6 Terra | medium |
@@ -22,6 +21,7 @@
 | [[obsidian/Prompts/328371 c2-dashboard-mutation-applicata-ma-invisibile-fi-328371\|328371 · C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]] | pending | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/158995 c2-dashboard-rendere-immediatamente-visibili-i-n-158995\|158995 · C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati]] | pending | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1\|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
+| [[obsidian/Prompts/582408 completare-bootstrap-e-handoff-del-drain-autonom-582408\|582408 · Completare bootstrap e handoff del drain autonomo C2]] | completed | 2026-09-26T22:45:20Z | 2026-09-26T22:45:20Z | PASS | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/232898 completare-preparazione-e-drain-autonomo-c2-fino-232898\|232898 · Completare preparazione e drain autonomo C2 fino a quiescenza]] | superseded | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
@@ -160,7 +160,7 @@
 | [[obsidian/Prompts/445388 logseq-updates-pat-safety-closure\|445388 · Chiusura sicurezza e attivazione updater Logseq]] | superseded | — | — | — | no | no | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/874695 checklist-2-unified-control-plane-v1\|874695 · Unificare roadmap e checkpoint nella Checklist 2.0]] | superseded | — | — | — | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2\|604812 · Fix GNOME global search shortcut on Chrome RPM]] | completed | 2026-09-21T21:50:23Z | 2026-09-21T21:50:23Z | PASS | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/875575 conservare-e-confrontare-lo-storico-dei-test-adb-875575\|875575 · Conservare e confrontare lo storico dei test ADB]] | blocked | 2026-09-26T22:45:54Z | 2026-09-26T22:45:54Z | BLOCKED | no | no | — | codex-roadmap | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/875575 conservare-e-confrontare-lo-storico-dei-test-adb-875575\|875575 · Conservare e confrontare lo storico dei test ADB]] | blocked | 2026-09-26T22:45:54Z | 2026-09-26T22:49:45Z | BLOCKED | no | no | — | codex-roadmap | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/255325 prompt-255325\|255325 · Prompt 255325]] | cancelled | 2026-09-18T17:42:04Z | 2026-09-18T17:42:04Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/294731 prompt-294731\|294731 · Prompt 294731]] | cancelled | 2026-09-16T17:42:10Z | 2026-09-16T17:42:10Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/319311 prompt-319311\|319311 · Prompt 319311]] | cancelled | 2026-09-18T17:40:55Z | 2026-09-18T17:40:55Z | CANCELLED | sì | no | — | — | — | — |
