@@ -13,3 +13,4 @@
 9. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 10. [[prompts/c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418|c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418]]
 11. [[prompts/c2-supervisor-terminal-workers-restano-abilitati-891963|c2-supervisor-terminal-workers-restano-abilitati-891963]]
+12. [[prompts/c2-intake-collisioni-request-key-tra-chat-parall-614593|c2-intake-collisioni-request-key-tra-chat-parall-614593]]
