@@ -68,6 +68,17 @@ I client non committano più file di inbox, prompt, DB o viste. Le directory `mu
 
 Dettagli tecnici: [[SQLITE_ROADMAP|Roadmap SQLite]].
 
+Per gli intake C2 con `executor_policy=auto`, il writer crea una
+`work_item_execution_spec` nello stesso batch solo quando riceve un contesto
+`execution` strutturato e completo. Un `command` come array argv determina
+un'esecuzione `native`; un prompt Codex già materializzato con modello e
+reasoning esatti e un worktree esplicito determina `coding`. Per `gui` e
+`semantic` servono attività esplicita, URL progetto ChatGPT, obiettivo e
+acceptance. Gli item incompleti rimangono in attesa senza spec; si integra
+il contesto con `c2_auto_configure` tramite la stessa mutation Issue. Il
+runtime e lo scheduler escludono gli item PersonalHub gestiti dal worker
+esterno, anche se hanno già una spec.
+
 
 ### Checklist obbligatoria quando ChatGPT deve “mettere un prompt nella roadmap”
 

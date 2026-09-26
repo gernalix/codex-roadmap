@@ -11,6 +11,24 @@ from test_c2_intake import C2IntakeTests
 
 
 class RuntimeTests(unittest.TestCase):
+    def test_external_personalhub_spec_is_not_scheduled(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                item=c2_intake.add_work_item(writer,title='External PH',repo='gernalix/PersonalHub')
+                # An existing spec from before the PH ownership split must
+                # still be ignored by both runtime and canonical scheduler.
+                writer.execute("INSERT INTO work_item_execution_specs(work_item_id,activity,command_json) VALUES(?,'native','[\"true\"]')",
+                               (item['work_item_id'],))
+                writer.commit()
+            submitted=[]
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                result=c2_runtime.advance(snapshot,submit=lambda op,args,key:submitted.append(op),
+                    launch=lambda _:None,launch_notify=lambda _:None,now=1)
+            self.assertEqual(0,result['ready'])
+            self.assertEqual([],submitted)
+
     def test_imported_running_state_does_not_block_event(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=C2IntakeTests().make_cutover_db(Path(tmp))

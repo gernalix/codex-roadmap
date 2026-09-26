@@ -14,6 +14,28 @@ import test_c2_intake
 
 
 class C2WriterTests(unittest.TestCase):
+    def test_auto_configure_existing_item_through_fenced_writer(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=test_c2_intake.C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as conn:
+                conn.execute('BEGIN IMMEDIATE')
+                authority={'supervisor_id':'test-supervisor','fencing_token':1,
+                           'lease_expires_at':time.time()+120}
+                roadmap_db.apply_mutation(conn,{'op':'c2_claim_supervisor',
+                    'arguments':{'supervisor_authority':authority}})
+                roadmap_db.apply_mutation(conn,{'op':'c2_intake','arguments':{
+                    'title':'Needs context','supervisor_authority':authority}})
+                work_item_id=conn.execute("SELECT work_item_id FROM work_items WHERE title='Needs context'").fetchone()[0]
+                self.assertEqual(0,conn.execute('SELECT COUNT(*) FROM work_item_execution_specs WHERE work_item_id=?',
+                                                (work_item_id,)).fetchone()[0])
+                roadmap_db.apply_mutation(conn,{'op':'c2_auto_configure','arguments':{
+                    'work_item_id':work_item_id,
+                    'execution':{'command':['/usr/bin/true']},
+                    'supervisor_authority':authority}})
+                self.assertEqual('native',conn.execute(
+                    'SELECT activity FROM work_item_execution_specs WHERE work_item_id=?',
+                    (work_item_id,)).fetchone()[0])
+
     def test_issue_replay_does_not_duplicate_intake(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=test_c2_intake.C2IntakeTests().make_cutover_db(Path(tmp))

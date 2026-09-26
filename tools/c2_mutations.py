@@ -8,7 +8,7 @@ import c2_supervisor_authority
 
 
 SUPERVISOR_OPERATIONS = frozenset({
-    'intake', 'prepare_codex', 'configure', 'schedule', 'acknowledge',
+    'intake', 'prepare_codex', 'configure', 'auto_configure', 'schedule', 'acknowledge',
     'recover', 'reconcile_run', 'milestone', 'claim_milestone',
     'mark_milestone', 'verify_work_item',
 })
@@ -37,6 +37,7 @@ def apply(conn, mutation):
         'intake': c2_intake.add_work_item,
         'prepare_codex': c2_intake.prepare_codex,
         'configure': c2_scheduler.configure,
+        'auto_configure': c2_scheduler.configure_auto,
         'schedule': c2_scheduler.schedule,
         'acknowledge': c2_scheduler.acknowledge,
         'checkpoint': c2_scheduler.checkpoint,
