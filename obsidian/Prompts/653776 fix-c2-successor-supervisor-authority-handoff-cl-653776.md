@@ -1,6 +1,6 @@
 ---
 prompt_id: 653776
-status: pending
+status: running
 project_id: 51
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - priority:p1
   - supervisor
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/codex-roadmap
 ---
 
 # 653776 · Fix C2 successor supervisor authority handoff (claim vs renew)
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
 - **Prompt:** [[../../prompts/fix-c2-successor-supervisor-authority-handoff-cl-653776|Apri prompt]]
 - **Primo lancio:** —
