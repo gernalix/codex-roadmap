@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Aspetta prima il deploy infrastrutturale 302284, così prompt-history legge la telemetria Codex già corretta; poi riprende l’hardening ChatGPTExporter sul main corrente di prompt-history.
+Hardening ChatGPTExporter nel repository primario gernalix/prompt-history, dopo verifica del routing canonico: il fork gernalix/ChatGPTExporter non esiste. Il prerequisito formale 222733 è già completato. Il task può procedere indipendentemente dal blocco cost-source di 302284; conservare il checkpoint e verificare retry, failure handling e salute runtime prima della chiusura.
 
 ## Esecuzioni
 
