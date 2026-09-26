@@ -19,9 +19,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/telegram-insert-bot|telegram_insert_bot]]
 - **Prompt:** [[../../falliti/c2-datasette-alerts-radical-hygiene-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-26T23:06:30Z
+- **Ultimo lancio:** 2026-09-26T23:06:30Z
+- **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -39,7 +39,7 @@ Rende le notifiche di Datasette Alerts comprensibili e utili, eliminando duplica
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-26T23:06:30Z | 2026-09-26T23:07:46Z | BLOCKED | 76.716 | gpt-6-sol | medium | 10 | 59241 |
 
 ## Analisi ChatGPT
 
