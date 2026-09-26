@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | running | 2026-09-26T22:52:21Z | 2026-09-26T22:52:21Z | UNKNOWN | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | running | 2026-09-26T22:52:04Z | 2026-09-26T22:52:21Z | UNKNOWN | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/851204 c2-datasette-alerts-radical-hygiene-v1\|851204 · Bonificare radicalmente Datasette Alerts]] | running | — | — | — | no | no | — | telegram_insert_bot | GPT-6 Sol | medium |
 | [[obsidian/Prompts/592418 c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418\|592418 · C2 scheduler: due chat RDC possono scrivere contemporaneamente nello stesso worktree/task]] | running | — | — | — | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
@@ -61,7 +61,7 @@
 | [[obsidian/Prompts/222733 stop-runaway-788315-heartbeat\|222733 · Ferma il heartbeat Codex runaway di 788315]] | completed | — | — | PASS | no | no | — | Fedora / Codex runtime | GPT-6 Luna | low |
 | [[obsidian/Prompts/175908 checklist2-single-work-item-control-plane-v2\|175908 · Creare Checklist 2.0 come unico albero di lavoro]] | completed | 2026-09-25T15:00:35Z | 2026-09-25T15:00:35Z | PASS | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/238170 c2-supervisor-human-milestone-telegram-v1\|238170 · Rendere strutturali le notifiche milestone C2]] | superseded | — | — | — | no | no | — | chatgpt-rdc-supervisor | GPT-6 Luna | low |
-| [[obsidian/Prompts/992303 c2-executor-chat-reference-history\|992303 · Traccia executor e chat di ogni task C2]] | completed | 2026-09-26T22:55:45Z | 2026-09-26T22:55:45Z | PASS | no | no | — | codex-roadmap / C2 | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/992303 c2-executor-chat-reference-history\|992303 · Traccia executor e chat di ogni task C2]] | completed | 2026-09-26T22:49:58Z | 2026-09-26T22:55:45Z | PASS | no | no | — | codex-roadmap / C2 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/233366 implementare-struttura-minima-del-contratto-c2-233366\|233366 · Implementare struttura minima del contratto C2]] | completed | 2026-09-26T22:58:15Z | 2026-09-26T22:58:15Z | PASS | no | no | — | codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | completed | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | PASS | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |

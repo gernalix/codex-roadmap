@@ -15,7 +15,7 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
 - **Prompt:** [[../../prompts/chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|Apri prompt]]
-- **Primo lancio:** 2026-09-26T22:52:21Z
+- **Primo lancio:** 2026-09-26T22:52:04Z
 - **Ultimo lancio:** 2026-09-26T22:52:21Z
 - **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
@@ -35,6 +35,7 @@ Hardening ChatGPTExporter nel repository primario gernalix/prompt-history, dopo 
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
+| 2026-09-26T22:52:04Z | 2026-09-26T23:01:50Z | UNKNOWN | 586.345 | gpt-5.6-sol | medium | 47 | 120223 |
 | 2026-09-26T22:52:21Z | 2026-09-26T22:52:25Z | UNKNOWN | 3.83 | codex-auto-review | low | 0 | 11131 |
 
 ## Analisi ChatGPT
