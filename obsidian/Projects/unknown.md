@@ -5,6 +5,7 @@ tags:
 
 # Unknown
 
+- [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] · `pending`
 - [[obsidian/Prompts/255325 prompt-255325|255325 · Prompt 255325]] · `cancelled`
 - [[obsidian/Prompts/294731 prompt-294731|294731 · Prompt 294731]] · `cancelled`
 - [[obsidian/Prompts/319311 prompt-319311|319311 · Prompt 319311]] · `cancelled`
