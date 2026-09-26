@@ -1,20 +1,20 @@
 ---
 prompt_id: 992303
-status: running
+status: completed
 project_id: 51
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/codex-roadmap-c2
 ---
 
 # 992303 · Traccia executor e chat di ogni task C2
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/codex-roadmap-c2|codex-roadmap / C2]]
-- **Prompt:** [[../../prompts/c2-executor-chat-reference-history|Apri prompt]]
+- **Prompt:** [[../../completed/c2-executor-chat-reference-history|Apri prompt]]
 - **Primo lancio:** 2026-09-26T22:55:45Z
 - **Ultimo lancio:** 2026-09-26T22:55:45Z
 - **Ultimo esito:** UNKNOWN

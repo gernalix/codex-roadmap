@@ -15,5 +15,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/992303 c2-executor-chat-reference-history|992303 · Traccia executor e chat di ogni task C2]]
 - [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]]
