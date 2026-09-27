@@ -114,6 +114,69 @@ class RoadmapPullTests(unittest.TestCase):
         conn.close()
         self.assertIn("| 123456 | running |", (self.local / "spiegazioni.md").read_text(encoding="utf-8"))
 
+    def test_guarded_pull_allows_waiting_prompt_claimed_running_remotely(self) -> None:
+        # A reconciled BLOCKED prompt can be WAITING locally when its new
+        # launch claim changes the canonical remote to RUNNING. This legacy
+        # test fixture predates WAITING, so allow that value in the temp DB.
+        conn = sqlite3.connect(self.seed / "roadmap.sqlite")
+        conn.execute("PRAGMA ignore_check_constraints=ON")
+        conn.execute("UPDATE prompts SET status='waiting' WHERE prompt_id='123456'")
+        conn.commit()
+        conn.close()
+        self.push_seed("evidence-reconciled waiting prompt")
+        shutil.rmtree(self.local)
+        subprocess.run(
+            ["git", "clone", "-b", "main", str(self.remote), str(self.local)],
+            check=True, stdout=subprocess.DEVNULL,
+        )
+        install(self.local)
+
+        conn = db.connect(self.seed)
+        db.set_status(conn, "123456", "running", actor="codex", note="new launch claim")
+        conn.commit()
+        conn.close()
+        db.render(self.seed)
+        remote_head = self.push_seed("claim waiting prompt")
+
+        result = roadmap_pull.guarded_pull(self.local)
+
+        self.assertEqual("PASS", result["status"])
+        self.assertEqual(remote_head, result["head"])
+        self.assertEqual(["123456"], result["remote_running"])
+        conn = sqlite3.connect(self.local / "roadmap.sqlite")
+        try:
+            self.assertEqual(
+                "running",
+                conn.execute("SELECT status FROM prompts WHERE prompt_id='123456'").fetchone()[0],
+            )
+        finally:
+            conn.close()
+
+    def test_guarded_pull_still_rejects_blocked_prompt_reactivation(self) -> None:
+        conn = sqlite3.connect(self.seed / "roadmap.sqlite")
+        conn.execute("UPDATE prompts SET status='blocked' WHERE prompt_id='123456'")
+        conn.commit()
+        conn.close()
+        self.push_seed("blocked prompt")
+        shutil.rmtree(self.local)
+        subprocess.run(
+            ["git", "clone", "-b", "main", str(self.remote), str(self.local)],
+            check=True, stdout=subprocess.DEVNULL,
+        )
+        install(self.local)
+
+        conn = sqlite3.connect(self.seed / "roadmap.sqlite")
+        conn.execute("UPDATE prompts SET status='running' WHERE prompt_id='123456'")
+        conn.commit()
+        conn.close()
+        self.push_seed("invalid reactivation")
+
+        with self.assertRaisesRegex(
+            roadmap_pull.RoadmapPullBlocked,
+            "terminal_prompt_reactivated_remote:123456:blocked",
+        ):
+            roadmap_pull.guarded_pull(self.local)
+
     def test_guarded_pull_does_not_depend_on_markdown_dashboard_state(self) -> None:
         (self.seed / "spiegazioni.md").write_text(
             "# intentionally stale compatibility view\n",
