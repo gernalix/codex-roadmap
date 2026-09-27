@@ -4,7 +4,7 @@
 
 ## Lanciabili adesso
 
-- Nessuno.
+- [[obsidian/Prompts/999198 correggere-mapping-prompt-id-work-item-id-nel-cu-999198|999198 · Correggere mapping prompt_id→work_item_id nel cutover C2]]
 
 ## In esecuzione
 
