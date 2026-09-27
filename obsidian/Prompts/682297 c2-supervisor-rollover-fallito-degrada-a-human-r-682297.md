@@ -1,6 +1,6 @@
 ---
 prompt_id: 682297
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Sol
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - recovery
   - rollover
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 682297 · C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/c2-supervisor-rollover-fallito-degrada-a-human-r-682297|Apri prompt]]
 - **Primo lancio:** —
