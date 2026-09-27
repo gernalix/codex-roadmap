@@ -156,6 +156,65 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual(1,result['ready'])
             self.assertEqual(['schedule'],submitted)
 
+    def test_degraded_chatgpt_lane_keeps_codex_and_native_running(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                chat=c2_intake.add_work_item(writer,title='Chat',repo='chat-repo')
+                c2_scheduler.configure(writer,chat['work_item_id'],activity='semantic',
+                    project_url='https://chatgpt.com/g/g-p-fixture')
+                native=c2_intake.add_work_item(writer,title='Native',repo='native-repo')
+                c2_scheduler.configure(writer,native['work_item_id'],activity='native',command=['true'])
+                writer.execute("UPDATE work_items SET status='running' WHERE prompt_id='123456'")
+                writer.execute("""INSERT INTO work_item_runs VALUES(
+                    'codex-live','prompt:123456','event',1,'codex','running',999,
+                    'c2-run:codex-live',NULL,'{}',1)""")
+                writer.commit()
+            submitted=[]; launched=[]
+            with patch('c2_runtime.lane_degraded',return_value=True):
+                with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                    result=c2_runtime.advance(snapshot,
+                        submit=lambda op,args,key:submitted.append((op,args)),
+                        launch=launched.append,launch_notify=lambda _:None,now=1)
+            self.assertEqual(['codex-live'],launched)
+            self.assertEqual(1,result['ready'])
+            schedule_args=[args for op,args in submitted if op=='schedule']
+            self.assertEqual(1,len(schedule_args))
+            self.assertTrue(schedule_args[0]['chatgpt_lane_degraded'])
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                runs=c2_scheduler.schedule(writer,now=1,**schedule_args[0])
+                self.assertEqual([native['work_item_id']],[r['work_item_id'] for r in runs])
+                self.assertEqual('pending',writer.execute(
+                    'SELECT status FROM work_items WHERE work_item_id=?',
+                    (chat['work_item_id'],)).fetchone()[0])
+
+    def test_existing_chatgpt_run_is_held_then_launched_after_recovery(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as writer:
+                c2_scheduler.install_schema(writer)
+                writer.execute('BEGIN IMMEDIATE')
+                chat=c2_intake.add_work_item(writer,title='Chat',repo='chat-repo')
+                c2_scheduler.configure(writer,chat['work_item_id'],activity='semantic',
+                    project_url='https://chatgpt.com/g/g-p-fixture')
+                run=c2_scheduler.schedule(writer,event_key='chat-start',now=1)[0]
+                c2_scheduler.acknowledge(writer,run['run_id'],
+                    worker_ref='c2-run:'+run['run_id'],metadata=run['metadata'],now=2)
+                writer.commit()
+            for degraded, expected in ((True, []), (False, [run['run_id']])):
+                launched=[]
+                with patch('c2_runtime.lane_degraded',return_value=degraded):
+                    with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                        c2_runtime.advance(snapshot,submit=lambda *_:None,
+                            launch=launched.append,launch_notify=lambda _:None,now=3)
+                self.assertEqual(expected,launched)
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                state=snapshot.execute('SELECT state FROM work_item_runs WHERE run_id=?',
+                                       (run['run_id'],)).fetchone()[0]
+                self.assertEqual('running',state)
+
     def test_override_readback_and_fallback_event(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=C2IntakeTests().make_cutover_db(Path(tmp))

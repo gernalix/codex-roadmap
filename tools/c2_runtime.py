@@ -20,6 +20,7 @@ from submit_mutation import submit_document
 from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot
 from c2_mutations import SUPERVISOR_OPERATIONS
 from c2_scheduler import read_override, override_matches, dispatchable
+from c2_chatgpt_executor import lane_degraded
 
 C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
 REPO_SINGLE_WRITER = Path.home()/'projects/github-autosync/repo_single_writer.py'
@@ -205,6 +206,7 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         else:
             launch_notify(key)
             events.append(('notify',key))
+    chatgpt_suspended=lane_degraded()
     active=[dict(r) for r in db.execute("""SELECT r.* FROM work_item_runs r
        JOIN work_items w USING(work_item_id)
        WHERE r.state IN ('claimed','running','recovering')
@@ -218,8 +220,10 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         submit('reconcile_run',{'run_id':run_id},'c2-reconcile-'+run_id)
         events.append(('reconcile_run',run_id))
     for run in active:
+        metadata=json.loads(run['metadata_json'])
+        if chatgpt_suspended and metadata.get('activity') in ('gui','semantic'):
+            continue
         if run['state'] in ('claimed','recovering'):
-            metadata=json.loads(run['metadata_json'])
             key=_key('c2-ack',{'run_id':run['run_id'],'metadata':metadata,
                                'state':run['state'],'lease_until':run['lease_until']})
             submit('acknowledge',{'run_id':run['run_id'],'worker_ref':'c2-run:'+run['run_id'],
@@ -243,6 +247,8 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
             ELSE 3 END,
             COALESCE(w.sort_order,2147483647),w.work_item_id''')]
+    if chatgpt_suspended:
+        ready=[r for r in ready if r['activity'] not in ('gui','semantic')]
     override=read_override(db)
     scoped_ready=[r for r in ready if override and override_matches(db,r,override)
                   and dispatchable(db,r)]
@@ -267,9 +273,11 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
           FROM work_item_dependencies d JOIN work_items w ON w.work_item_id=d.depends_on_work_item_id
           ORDER BY d.work_item_id,d.depends_on_work_item_id''')]
     if ready and len(statuses)<max_parallel:
-        key=_key('c2-schedule',{'ready':ready,'running':statuses,'lock_context':lock_context,
+        key=_key('c2-schedule',{'ready':ready,'chatgpt_lane_degraded':chatgpt_suspended,
+                                  'running':statuses,'lock_context':lock_context,
                                   'dependencies':dependencies,'override':override,'limit':max_parallel})
-        submit('schedule',{'event_key':key,'max_parallel':max_parallel},key)
+        submit('schedule',{'event_key':key,'max_parallel':max_parallel,
+                           'chatgpt_lane_degraded':chatgpt_suspended},key)
         events.append(('schedule',str(len(ready))))
     return {'events':events,'ready':len(ready),'active':len(active),
             'execution_override':override,'override_draining':bool(scoped_ready),
