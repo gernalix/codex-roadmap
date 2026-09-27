@@ -536,6 +536,48 @@ class IssueInboxTests(unittest.TestCase):
             finally:
                 conn.close()
 
+    def test_inbox_drain_blocks_new_work_until_triage_reconciliation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute('BEGIN IMMEDIATE')
+                normal = c2_intake.add_work_item(conn, title='Normal', repo='normal')
+                urgent = c2_intake.add_work_item(conn, title='P0 incident', repo='urgent',
+                    tags=['priority:p0'])
+                c2_scheduler.configure(conn, normal['work_item_id'], activity='native', command=['true'])
+                c2_scheduler.configure(conn, urgent['work_item_id'], activity='native', command=['true'])
+                issue = c2_issue_inbox.capture(conn, description='Needs triage')
+                triage = c2_issue_inbox.ensure_triage(
+                    conn, project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
+                objective = conn.execute('SELECT objective FROM work_items WHERE work_item_id=?',
+                    (triage['work_item_id'],)).fetchone()[0]
+                self.assertIn('After the full Inbox drain', objective)
+                submitted = []
+                state = c2_runtime.advance(conn, submit=lambda op,args,key: submitted.append(op),
+                    launch=lambda _: None, launch_notify=lambda _: None,
+                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
+                self.assertEqual(2, state['ready'])
+                self.assertIn(('issue_inbox_drain', 'pending'), state['events'])
+                runs = c2_scheduler.schedule(conn, event_key='during-drain', now=10)
+                self.assertEqual({triage['work_item_id'], urgent['work_item_id']},
+                    {run['work_item_id'] for run in runs})
+                c2_issue_inbox.discard(conn, issue_id=issue['issue_id'],
+                    reason='Handled', triaged_by='test')
+                reconciling = c2_runtime.advance(conn,
+                    submit=lambda op,args,key: submitted.append(op),
+                    launch=lambda _: None, launch_notify=lambda _: None,
+                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
+                self.assertEqual(0, reconciling['ready'])
+                self.assertIn(('issue_inbox_drain', 'reconciling'), reconciling['events'])
+                self.assertEqual([], c2_scheduler.schedule(conn,
+                    event_key='before-reconciliation', now=11))
+                conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?",
+                    (triage['work_item_id'],))
+                self.assertEqual(normal['work_item_id'], c2_scheduler.schedule(conn,
+                    event_key='after-reconciliation', now=12)[0]['work_item_id'])
+            finally:
+                conn.close()
+
     def test_triage_cannot_finish_while_pending_rows_remain(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, conn = self.make_conn(Path(tmp))

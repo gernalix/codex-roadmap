@@ -20,7 +20,7 @@ import time
 from submit_mutation import submit_document
 from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot, record_activity
 from c2_mutations import SUPERVISOR_OPERATIONS
-from c2_scheduler import read_override, override_matches, dispatchable
+from c2_scheduler import read_override, override_matches, dispatchable, inbox_drain_state, inbox_gate_exempt
 from c2_chatgpt_executor import lane_degraded
 from c2_repository_integration import integration_status, prompt_repository
 
@@ -286,6 +286,10 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             ELSE 3 END,
             COALESCE(w.sort_order,2147483647),w.created_at,w.work_item_id'''
     ready=[dict(r) for r in db.execute(ready_query)]
+    inbox_gate=inbox_drain_state(db)
+    if inbox_gate:
+        ready=[r for r in ready if inbox_gate_exempt(db,r)]
+        events.append(('issue_inbox_drain',inbox_gate))
     if chatgpt_suspended:
         ready=[r for r in ready if r['activity'] not in ('gui','semantic')]
     override=read_override(db)
