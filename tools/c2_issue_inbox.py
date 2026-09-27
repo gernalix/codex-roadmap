@@ -599,12 +599,15 @@ def ensure_triage(conn: sqlite3.Connection, *, project_url: str) -> dict:
             "same human_title, ai_title, human_summary and copy_status so the roadmap item inherits "
             "the copy. For active matches, promote into the existing work item with evidence. "
             "For completed matches, promote a regression successor; never discard as fixed. "
-            "Before every promotion, review relative priority and dependencies in both "
-            "directions against the current queue; encode verified changes explicitly. "
+            "For each promotion, record any known priority or dependency consequence without "
+            "reprioritizing the whole queue. After the full Inbox drain, reconcile relative priority "
+            "and dependencies in both directions, duplicates, obsolete work, and incomplete items "
+            "against the resulting queue once; encode verified changes explicitly before finishing. "
             "For irrelevant or obsolete issues, discard with a concrete reason. "
             "Read pending rows again before completion and finish only when none remain."
         ),
-        acceptance=["No pending issue_inbox rows remain at completion"],
+        acceptance=["No pending issue_inbox rows remain at completion",
+                    "Post-drain roadmap reconciliation is recorded before completion"],
         next_action=(
             "Read v_issue_inbox_pending_ordered; apply one fenced disposition per row in order."
         ),
