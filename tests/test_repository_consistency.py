@@ -87,7 +87,18 @@ class RepositoryConsistencyTests(unittest.TestCase):
         self.assertEqual(expected_slugs, [name for _, name, *_ in explanations])
 
         prompt_files = {path.stem for path in (ROOT / "prompts").glob("*.md")}
-        self.assertEqual(set(expected_slugs), prompt_files)
+        # WAITING prompts remain materialized after a BLOCKED reconciliation,
+        # while only runnable pending/running prompts appear in roadmap.md.
+        conn = sqlite3.connect(ROOT / "roadmap.sqlite")
+        try:
+            waiting_slugs = {
+                row[0] for row in conn.execute(
+                    "SELECT slug FROM prompts WHERE status='waiting'"
+                )
+            }
+        finally:
+            conn.close()
+        self.assertEqual(set(expected_slugs) | waiting_slugs, prompt_files)
 
     def test_explanation_intro_has_no_numbered_task_narrative(self):
         text = (ROOT / "spiegazioni.md").read_text(encoding="utf-8")
