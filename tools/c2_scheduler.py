@@ -689,9 +689,15 @@ def executor_result(conn, *, outcome, work_item_id=None, prompt_id=None, run_id=
         raise SchedulingError('executor_result_prompt_mismatch')
     prompt_id=item['prompt_id']
     if run is None:
-        run=conn.execute("""SELECT * FROM work_item_runs WHERE work_item_id=?
+        latest_run=conn.execute("""SELECT * FROM work_item_runs WHERE work_item_id=?
           ORDER BY created_at DESC LIMIT 1""",(work_item_id,)).fetchone()
-        if run:
+        manual_start=conn.execute("""SELECT started_at FROM work_item_executor_starts
+          WHERE work_item_id=? AND run_id IS NULL
+          ORDER BY started_at DESC LIMIT 1""",(work_item_id,)).fetchone()
+        # A fenced manual takeover after a failed scheduled run owns the next
+        # result. Keep the old run failed and record a runless receipt.
+        if latest_run and not (manual_start and manual_start['started_at'] > latest_run['created_at']):
+            run=latest_run
             run_id=run['run_id']
     completed=[str(v).strip() for v in completed if str(v).strip()]
     remaining=[str(v).strip() for v in remaining if str(v).strip()]

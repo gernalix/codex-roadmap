@@ -84,6 +84,30 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(2,self.conn.execute(
             'SELECT COUNT(*) FROM work_item_result_receipts WHERE work_item_id=?',(wid,)).fetchone()[0])
 
+    def test_manual_takeover_result_preserves_failed_scheduled_run(self):
+        item=intake.add_work_item(self.conn,title='Recovered triage',repo='manual-recovery',
+            acceptance=['drained'])
+        wid=item['work_item_id']
+        self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",(wid,))
+        self.conn.execute("""INSERT INTO work_item_runs(
+            run_id,work_item_id,event_key,attempt,executor,state,lease_until,
+            worker_ref,checkpoint_commit,metadata_json,created_at)
+            VALUES('failed-run',?,'event',1,'chatgpt','failed',100,
+                   'c2-run:failed-run',NULL,'{}',10)""",(wid,))
+        self.conn.execute("""INSERT INTO work_item_executor_starts(
+            receipt_id,work_item_id,run_id,prompt_id,executor,executor_ref,chat_url,started_at)
+            VALUES('manual-start',?,NULL,NULL,'codex','thread','codex://threads/thread',20)""",(wid,))
+
+        result=scheduler.executor_result(self.conn,work_item_id=wid,outcome='PASS',
+            completed=['drained'],remaining=[],evidence=['canonical Inbox zero'],
+            strict_contract=True)
+
+        self.assertIsNone(result['run_id'])
+        self.assertEqual('failed',self.conn.execute(
+            "SELECT state FROM work_item_runs WHERE run_id='failed-run'").fetchone()[0])
+        self.assertEqual('completed',self.conn.execute(
+            'SELECT status FROM work_items WHERE work_item_id=?',(wid,)).fetchone()[0])
+
     def test_new_manual_result_cannot_bypass_terminal_lifecycle(self):
         item=intake.add_work_item(self.conn,title='Terminal result',repo='terminal-result')
         wid=item['work_item_id']
