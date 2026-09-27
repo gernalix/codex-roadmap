@@ -6,6 +6,7 @@ import unittest
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 from c2_codex_executor import dispatch, record_terminal, parse_terminal_result, ExecutorError
+from c2_goal_objective import compact_goal_objective
 from c2_codex_sandbox import git_metadata_writable_roots
 
 
@@ -107,9 +108,10 @@ class CodexExecutorTests(unittest.TestCase):
     def test_goal_and_metadata_are_structured_and_exact(self):
         with tempfile.TemporaryDirectory() as tmp:
             rpc=RPC(); metadata={'model':'exact','reasoning':'medium','worktree':'/tmp/worktree','goal_mode':True}
-            result=dispatch(rpc,run_id='run-1',metadata=metadata,prompt='Canonical body',receipt=Path(tmp)/'receipt.json')
+            result=dispatch(rpc,run_id='run-1',metadata=metadata,prompt='Canonical body',
+                goal_objective='Compact goal',receipt=Path(tmp)/'receipt.json')
             self.assertEqual('started',result['phase'])
-            self.assertEqual('Canonical body',rpc.goal['objective'])
+            self.assertEqual('Compact goal',rpc.goal['objective'])
             self.assertFalse(rpc.calls[0][1]['allowProviderModelFallback'])
             self.assertEqual('auto_review',rpc.calls[0][1]['approvalsReviewer'])
             turn_params=next(p for m,p in rpc.calls if m=='turn/start')
@@ -129,10 +131,12 @@ class CodexExecutorTests(unittest.TestCase):
             rpc=RPC(lose_ack=True); metadata={'model':'exact','reasoning':'medium',
                 'worktree':'/tmp/worktree','goal_mode':True}
             with self.assertRaises(TimeoutError):
-                dispatch(rpc,run_id='run-1',metadata=metadata,prompt='Canonical body',receipt=receipt)
+                dispatch(rpc,run_id='run-1',metadata=metadata,prompt='Canonical body',
+                    goal_objective='Compact goal',receipt=receipt)
             resumed=RPC()
             resumed.goal=rpc.goal
-            result=dispatch(resumed,run_id='run-1',metadata=metadata,prompt='Canonical body',receipt=receipt)
+            result=dispatch(resumed,run_id='run-1',metadata=metadata,prompt='Canonical body',
+                goal_objective='Compact goal',receipt=receipt)
             self.assertFalse(result['resubmitted'])
             self.assertEqual('started',result['phase'])
             self.assertEqual('turn-1',result['turn_id'])
@@ -140,6 +144,40 @@ class CodexExecutorTests(unittest.TestCase):
             resume_params=next(p for m,p in resumed.calls if m=='thread/resume')
             self.assertEqual('auto_review',resume_params['approvalsReviewer'])
             self.assertNotIn('turn/start',[method for method,_ in resumed.calls])
+
+    def test_goal_contract_preserves_scope_and_invariants_without_history(self):
+        body='Pasted metadata and long history\n# Goal\nFinish the release.\n# Scope\nOnly service A.\n# Invariants\nKeep existing data.\n# Starting point\nOld history to avoid.\n# Acceptance\nLive check passes.'
+        objective=compact_goal_objective(prompt_id='123456',title='Release',prompt=body)
+        self.assertIn('Only service A.',objective)
+        self.assertIn('Keep existing data.',objective)
+        self.assertIn('Live check passes.',objective)
+        self.assertIn('operations/task-state/123456.md',objective)
+        self.assertNotIn('Old history to avoid.',objective)
+
+    def test_goal_dispatch_requires_compact_objective(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(ExecutorError,'compact_goal_objective_required'):
+                dispatch(RPC(),run_id='run-1',metadata={'model':'exact','reasoning':'medium',
+                    'worktree':'/tmp/worktree','goal_mode':True},prompt='Canonical body',
+                    receipt=Path(tmp)/'receipt.json')
+
+    def test_plain_text_goal_contract_and_legacy_goal_upgrade(self):
+        body='PROMPT_ID=123456\n\nFinish the release.\n\nHard constraints:\n- Keep data.\n\nAcceptance:\n- Live check passes.'
+        objective=compact_goal_objective(prompt_id='123456',title='Release',prompt=body)
+        self.assertIn('Finish the release.',objective)
+        self.assertIn('Keep data.',objective)
+        self.assertIn('Live check passes.',objective)
+        with tempfile.TemporaryDirectory() as tmp:
+            receipt=Path(tmp)/'receipt.json'
+            metadata={'model':'exact','reasoning':'medium','worktree':'/tmp/worktree','goal_mode':True}
+            rpc=RPC()
+            dispatch(rpc,run_id='run-1',metadata=metadata,prompt=body,
+                goal_objective=objective,receipt=receipt)
+            rpc.goal['objective']=body  # Existing thread from the older full-prompt implementation.
+            resumed=dispatch(rpc,run_id='run-1',metadata=metadata,prompt=body,
+                goal_objective=objective,receipt=receipt)
+            self.assertFalse(resumed['resubmitted'])
+            self.assertEqual(objective,rpc.goal['objective'])
 
     def test_lost_ack_without_observed_turn_stays_ambiguous_without_resubmit(self):
         with tempfile.TemporaryDirectory() as tmp:

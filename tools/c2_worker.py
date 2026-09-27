@@ -12,6 +12,7 @@ import sys
 from c2_appserver_rpc import AppServerRPC, AppServerError, resolve_model
 from c2_chatgpt_executor import dispatch as dispatch_browser, lane_degraded
 from c2_codex_executor import dispatch as dispatch_codex, record_terminal, parse_terminal_result, ExecutorError
+from c2_goal_objective import compact_goal_objective
 from roadmap_finish import _queue_repo_integration
 from roadmap_result import RoadmapResultError
 from c2_native_executor import execute as execute_native
@@ -74,6 +75,9 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             if not body:
                 raise WorkerError('canonical_prompt_body_missing')
             prompt=body['body']
+            goal_objective=(compact_goal_objective(prompt_id=prompt_id,
+                title=str(run['item_title']),prompt=prompt)
+                if metadata.get('goal_mode') else None)
         else:
             raise WorkerError('executor_adapter_unavailable:'+executor)
     prompt += ('\nC2_RUN_ID='+run_id+'\nC2_WORK_ITEM_ID='+str(run['work_item_id'])+
@@ -83,6 +87,13 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
         '--task-id and --run-id shown here. Do not investigate or triage it; '
         'continue the original task immediately.')
     if executor=='codex':
+        if goal_objective:
+            prompt += ('\nC2 Goal recovery: before substantive work, create or update '
+                f'operations/task-state/{prompt_id}.md with a compact, self-contained '
+                'objective, mandatory scope and invariants, verified progress, remaining '
+                'work, and exactly one next action. Keep it current at meaningful '
+                'milestones. On resumption read that checkpoint first, then current '
+                'canonical C2 state; do not replay this full prompt or chat history.')
         prompt += (
             '\nC2 terminal contract: the final response must have line 1 PROMPT_ID=<id>, '
             'line 2 RESULT=PASS|BLOCKED|FAIL|CANCELLED, and line 3 exactly '
@@ -113,7 +124,8 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             submit('bind_executor',{'run_id':run_id,'executor_ref':thread_id,
                 'chat_url':'codex://threads/'+thread_id},'c2-bind-'+run_id)
         result=dispatch_codex(rpc,run_id=run_id,metadata=exact_metadata,
-            prompt=prompt,receipt=receipt,on_thread_created=bind_thread)
+            prompt=prompt,goal_objective=goal_objective,receipt=receipt,
+            on_thread_created=bind_thread)
         terminal=None
         if result['phase']=='terminal':
             observed=rpc('thread/read',{'threadId':result['thread_id'],'includeTurns':True})
