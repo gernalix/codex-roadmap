@@ -84,9 +84,11 @@ class PrepareCodexTests(unittest.TestCase):
             result=prep.prepare(
                 spec,authority={"fencing_token":1},refresh=refresh,
                 submit_phase=submit,allocate_worktree=allocate,
+                sandbox_roots=lambda _worktree:["/tmp/repo/.git"],
             )
             self.assertEqual("prepared",result["status"])
             self.assertFalse(result["dispatched"])
+            self.assertEqual(["/tmp/repo/.git"],result["sandbox_writable_roots"])
             self.assertEqual(
                 [("reconcile_item","ready"),("prepare_codex","prompt"),
                  ("auto_configure","execution")],calls)
@@ -97,6 +99,7 @@ class PrepareCodexTests(unittest.TestCase):
             replay=prep.prepare(
                 spec,authority={"fencing_token":2},refresh=refresh,
                 submit_phase=submit,allocate_worktree=allocate,
+                sandbox_roots=lambda _worktree:["/tmp/repo/.git"],
             )
             self.assertEqual("prepared",replay["status"])
             self.assertEqual(before,calls)
@@ -115,6 +118,7 @@ class PrepareCodexTests(unittest.TestCase):
                     refresh=lambda _wid: copy.deepcopy(state),
                     submit_phase=lambda *_args: self.fail("must not submit"),
                     allocate_worktree=lambda *_args: self.fail("must not allocate"),
+                    sandbox_roots=lambda _worktree:[],
                 )
             self.assertEqual(original,state)
 
@@ -144,6 +148,7 @@ class PrepareCodexTests(unittest.TestCase):
                     refresh=lambda _wid: copy.deepcopy(state),
                     submit_phase=lambda *_args: self.fail("must not submit"),
                     allocate_worktree=lambda *_args:"/tmp/c2-test-worktree",
+                    sandbox_roots=lambda _worktree:[],
                 )
 
     def test_spec_requires_explicit_model_reasoning_and_activity(self):

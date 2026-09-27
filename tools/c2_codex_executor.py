@@ -11,6 +11,8 @@ import os
 from pathlib import Path
 import tempfile
 
+from c2_codex_sandbox import workspace_write_policy
+
 
 class ExecutorError(RuntimeError):
     pass
@@ -113,13 +115,14 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path,
     else:
         state={'run_id':run_id,'metadata':metadata,'phase':'new'}
         persist(receipt,state)
+    sandbox=workspace_write_policy(metadata['worktree'])
     if state['phase']=='new':
         response=rpc('thread/start',{
             'model':metadata.get('model_id',metadata['model']),'cwd':metadata['worktree'],
             'config':{'model_reasoning_effort':metadata['reasoning']},
             'allowProviderModelFallback':False,'ephemeral':False,
             'approvalPolicy':'on-request','approvalsReviewer':'auto_review',
-            'sandbox':'workspace-write',
+            'sandbox':sandbox,
         })
         # A lost thread/start acknowledgement may leave an empty thread, but no
         # work starts until its verified identity is durably recorded here.
@@ -130,7 +133,8 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path,
         response=rpc('thread/resume',{'threadId':state['thread_id'],
             'model':metadata.get('model_id',metadata['model']),'cwd':metadata['worktree'],
             'config':{'model_reasoning_effort':metadata['reasoning']},
-            'approvalPolicy':'on-request','approvalsReviewer':'auto_review'})
+            'approvalPolicy':'on-request','approvalsReviewer':'auto_review',
+            'sandbox':sandbox})
         _validate_response(response,metadata)
     thread_id=state['thread_id']
     if on_thread_created is not None:
@@ -168,7 +172,8 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path,
         'input':[{'type':'text','text':prompt,'text_elements':[]}],
         'model':metadata.get('model_id',metadata['model']),'effort':metadata['reasoning'],
         'cwd':metadata['worktree'],'approvalPolicy':'on-request',
-        'approvalsReviewer':'auto_review','clientUserMessageId':'c2-'+run_id})
+        'approvalsReviewer':'auto_review','sandbox':sandbox,
+        'clientUserMessageId':'c2-'+run_id})
     state.update(phase='started',turn_id=result['turn']['id'])
     persist(receipt,state)
     if metadata.get('goal_mode'):

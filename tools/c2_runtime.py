@@ -17,7 +17,7 @@ import sys
 import time
 
 from submit_mutation import submit_document
-from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot
+from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot, record_activity
 from c2_mutations import SUPERVISOR_OPERATIONS
 from c2_scheduler import read_override, override_matches, dispatchable
 from c2_chatgpt_executor import lane_degraded
@@ -55,6 +55,9 @@ def _writer_submit(operation: str, arguments: dict, key: str):
             if not row:
                 raise RuntimeErrorC2('supervisor_lease_missing')
             require_supervisor(lease,row['supervisor_id'],row['fencing_token'],time.time())
+            row=record_activity(lease,supervisor_id=row['supervisor_id'],
+                                token=row['fencing_token'],
+                                operation='writer:'+operation)
             arguments['supervisor_authority']={
                 'supervisor_id':row['supervisor_id'],
                 'fencing_token':row['fencing_token'],
@@ -293,11 +296,19 @@ def main():
             guard()
             return _writer_submit(*values)
         def guarded_launch(*values):
-            guard()
-            return _launch_worker(*values,args.db)
+            current=guard()
+            result=_launch_worker(*values,args.db)
+            record_activity(supervisor,supervisor_id=current['supervisor_id'],
+                            token=current['fencing_token'],
+                            operation='executor:launch',step=str(values[0]))
+            return result
         def guarded_notify(*values):
-            guard()
-            return _launch_notify(*values)
+            current=guard()
+            result=_launch_notify(*values)
+            record_activity(supervisor,supervisor_id=current['supervisor_id'],
+                            token=current['fencing_token'],
+                            operation='notification:launch',step=str(values[0]))
+            return result
         current=guard()
         with closing(_open_snapshot(args.db)) as db:
             result=advance(db,submit=guarded_submit,launch=guarded_launch,

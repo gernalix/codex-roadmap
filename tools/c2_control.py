@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 from submit_mutation import submit_document
-from c2_supervisor_lease import DEFAULT_DB, connect, _require
+from c2_supervisor_lease import DEFAULT_DB, connect, _require, record_activity
 import time
 
 
@@ -23,6 +23,9 @@ def main():
         parser.error('arguments must be an object')
     with connect(DEFAULT_DB) as lease:
         row=_require(lease,args.supervisor_id,args.fencing_token,time.time())
+        row=record_activity(lease,supervisor_id=row['supervisor_id'],
+                            token=row['fencing_token'],
+                            operation='control:'+args.operation)
         arguments['supervisor_authority']={
             'supervisor_id':row['supervisor_id'],
             'fencing_token':row['fencing_token'],

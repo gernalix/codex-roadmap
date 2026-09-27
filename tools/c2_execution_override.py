@@ -41,7 +41,7 @@ def main(argv=None) -> int:
         with closing(_open_snapshot(Path(args.db) if args.db else DEFAULT_OUTPUT)) as db:
             print(json.dumps({'execution_override': read_override(db)}, sort_keys=True))
         return 0
-    authority = _current_authority()
+    authority = _current_authority('execution_override:'+args.action)
     arguments = {'supervisor_authority': authority}
     if args.action == 'set':
         arguments.update(selector=args.selector, value=args.value, mode='drain_first')
