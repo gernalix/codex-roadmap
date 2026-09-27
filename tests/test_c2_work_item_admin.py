@@ -41,6 +41,22 @@ class WorkItemAdminTests(unittest.TestCase):
         self.assertEqual(1, self.conn.execute("SELECT count(*) FROM work_item_relations WHERE from_work_item_id=? AND to_work_item_id=? AND relation_type='superseded_by'", (self.root_id, successor["work_item_id"])).fetchone()[0])
         self.assertEqual(1, self.conn.execute("SELECT count(*) FROM work_item_evidence WHERE work_item_id=? AND evidence_kind='classification'", (self.root_id,)).fetchone()[0])
 
+    def test_supersede_tree_rejects_unfinished_required_nested_gate(self):
+        child = c2_intake.add_work_item(self.conn, title="Implementation", parent_id=self.root_id)
+        gate = c2_intake.add_work_item(self.conn, title="Physical QA gate",
+                                      kind="gate", parent_id=child["work_item_id"],
+                                      acceptance=["QA01", "QA02"])
+        successor = c2_intake.add_work_item(self.conn, title="Active successor")
+        with self.assertRaisesRegex(ValueError, "required_descendant_gate_requires_separate_resolution"):
+            admin.reconcile(self.conn, self.root_id, classification="DUPLICATE_MERGE",
+                            status="superseded", evidence=["Successor covers implementation"],
+                            superseded_by=successor["work_item_id"], include_descendants=True)
+        states = dict(self.conn.execute("SELECT work_item_id,status FROM work_items"))
+        self.assertEqual("pending", states[self.root_id])
+        self.assertEqual("pending", states[child["work_item_id"]])
+        self.assertEqual("pending", states[gate["work_item_id"]])
+        self.assertEqual(0, self.conn.execute("SELECT count(*) FROM work_item_relations").fetchone()[0])
+
     def test_waiting_requires_blocker_and_removes_only_named_dependency(self):
         dep = c2_intake.add_work_item(self.conn, title="Old dependency")
         self.conn.execute("INSERT INTO work_item_dependencies(work_item_id,depends_on_work_item_id,required) VALUES(?,?,1)", (self.root_id, dep["work_item_id"]))

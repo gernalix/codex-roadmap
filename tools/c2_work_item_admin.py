@@ -103,6 +103,14 @@ def reconcile(
         SELECT work_item_id FROM work_items WHERE parent_id=?
         UNION ALL SELECT w.work_item_id FROM work_items w JOIN subtree s ON w.parent_id=s.id
     ) SELECT id FROM subtree""", (work_item_id,))] if include_descendants else []
+    for target in descendants:
+        descendant = conn.execute(
+            "SELECT kind,required,status FROM work_items WHERE work_item_id=?", (target,)
+        ).fetchone()
+        if (descendant["kind"] == "gate" and descendant["required"]
+                and descendant["status"] not in
+                ("completed", "cancelled", "superseded", "waived", "failed")):
+            raise ValueError("required_descendant_gate_requires_separate_resolution")
     targets = [work_item_id, *descendants]
     for target in targets:
         row = conn.execute("SELECT prompt_id FROM work_items WHERE work_item_id=?", (target,)).fetchone()
