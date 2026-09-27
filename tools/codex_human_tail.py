@@ -5,10 +5,13 @@ import argparse
 import json
 import os
 import re
+import select
 import shutil
 import sys
+import termios
 import textwrap
 import time
+import tty
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -21,6 +24,10 @@ ANSI_GREEN = "\033[32m"
 ANSI_CYAN = "\033[36m"
 ANSI_DIM = "\033[2m"
 ANSI_BOLD = "\033[1m"
+ANSI_AMBER = "\033[38;5;214m"
+ANSI_FOCUS_ON = "\033[?1004h"
+ANSI_FOCUS_OFF = "\033[?1004l"
+ANSI_CLEAR = "\033[2J\033[H"
 INLINE_CODE_RE = re.compile(r"`([^`]+)`")
 ROOT_PATH_RE = re.compile(r"(?<![\w`])(/root/[A-Za-z0-9_./-]+)")
 URL_RE = re.compile(r"(?<![\w`])(https?://\S+)")
@@ -30,6 +37,58 @@ URL_RE = re.compile(r"(?<![\w`])(https?://\S+)")
 class HumanMessage:
     timestamp: datetime
     text: str
+
+    @property
+    def key(self) -> tuple[str, str]:
+        return (self.timestamp.isoformat(), self.text)
+
+
+@dataclass
+class UnreadState:
+    focused: bool = True
+    unread_mode: bool = False
+    focus_since: float | None = None
+    last_unread_at: float | None = None
+    unread: set[tuple[str, str]] | None = None
+
+    def __post_init__(self) -> None:
+        if self.unread is None:
+            self.unread = set()
+
+    def focus_out(self) -> None:
+        self.focused = False
+        self.focus_since = None
+        self.unread_mode = True
+
+    def focus_in(self, now: float) -> None:
+        self.focused = True
+        self.focus_since = now
+
+    def mark_message(self, message: HumanMessage, now: float | None = None) -> None:
+        if self.unread_mode:
+            self.unread.add(message.key)
+            self.last_unread_at = time.monotonic() if now is None else now
+
+    def maybe_clear_after_dwell(self, now: float, threshold: float) -> bool:
+        if not self.focused or not self.unread_mode or self.focus_since is None:
+            return False
+        dwell_start = self.focus_since
+        if self.last_unread_at is not None:
+            dwell_start = max(dwell_start, self.last_unread_at)
+        if now - dwell_start < threshold:
+            return False
+        self.unread.clear()
+        self.unread_mode = False
+        self.focus_since = now
+        self.last_unread_at = None
+        return True
+
+    def mark_all_read(self) -> None:
+        self.unread.clear()
+        self.unread_mode = not self.focused
+        self.last_unread_at = None
+        if self.focused:
+            self.focus_since = time.monotonic()
 
 
 def parse_timestamp(value: str) -> datetime:
@@ -176,12 +235,23 @@ def render(
     *,
     width: int | None = None,
     color: bool = True,
+    unread: bool = False,
 ) -> str:
     label = relative_age(message.timestamp, now=now)
-    prefix = f"{label:>12} │ "
-    continuation = " " * len(prefix)
+    plain_prefix = f"{'●  ' if unread else ''}{label:>12} │ "
+    prefix = plain_prefix
+    if unread and color:
+        prefix = f"{ANSI_AMBER}{ANSI_BOLD}●  {label:>12} │{ANSI_RESET} "
+    if unread:
+        gutter_plain = " " * (len(plain_prefix) - 2) + "┃ "
+        continuation = (
+            " " * (len(plain_prefix) - 2) + f"{ANSI_AMBER}{ANSI_BOLD}┃{ANSI_RESET} "
+            if color else gutter_plain
+        )
+    else:
+        continuation = " " * len(plain_prefix)
     terminal_width = width or shutil.get_terminal_size(fallback=(120, 24)).columns
-    content_width = max(20, terminal_width - len(prefix) - 1)
+    content_width = max(20, terminal_width - len(plain_prefix) - 1)
     lines = wrap_text(message.text, content_width)
     if color:
         lines = [colorize(line) for line in lines]
@@ -191,18 +261,107 @@ def render(
     )
 
 
-def follow(path: Path, history: int, poll: float, *, color: bool = True) -> None:
-    messages = list(iter_messages(path))
-    for message in messages[-history:]:
-        print(render(message, color=color))
+def _read_input(fd: int, buffer: bytes) -> tuple[list[str], bytes]:
+    events: list[str] = []
+    try:
+        chunk = os.read(fd, 1024)
+    except BlockingIOError:
+        return events, buffer
+    buffer += chunk
+    while buffer:
+        if buffer.startswith(b"\x1b[I"):
+            events.append("focus_in")
+            buffer = buffer[3:]
+        elif buffer.startswith(b"\x1b[O"):
+            events.append("focus_out")
+            buffer = buffer[3:]
+        elif buffer[:1] in {b"r", b"R"}:
+            events.append("mark_read")
+            buffer = buffer[1:]
+        elif buffer[:1] in {b"q", b"Q", b"\x03"}:
+            events.append("quit")
+            buffer = buffer[1:]
+        elif buffer.startswith(b"\x1b") and len(buffer) < 3:
+            break
+        else:
+            buffer = buffer[1:]
+    return events, buffer
+
+
+def _status_line(state: UnreadState, read_after: float, color: bool, now: float | None = None) -> str:
+    count = len(state.unread or ())
+    if count:
+        if state.focused and state.focus_since is not None:
+            now = time.monotonic() if now is None else now
+            dwell_start = state.focus_since
+            if state.last_unread_at is not None:
+                dwell_start = max(dwell_start, state.last_unread_at)
+            remaining = max(0, int(read_after - (now - dwell_start) + 0.999))
+            focus = f"letti tra {remaining}s se resti qui"
+        else:
+            focus = "fuori focus"
+        text = f"● {count} non lett{'o' if count == 1 else 'i'} · {focus} · r segna letti · q esci"
+        return f"{ANSI_AMBER}{ANSI_BOLD}{text}{ANSI_RESET}" if color else text
+    return "r segna letti · q esci"
+
+
+def _redraw(path: Path, messages: list[HumanMessage], state: UnreadState, read_after: float, color: bool, *, now_mono: float | None = None) -> None:
+    print(ANSI_CLEAR, end="")
+    header = f"Codex human view · {path.stem}"
+    print(f"{ANSI_DIM}{header}{ANSI_RESET}" if color else header)
+    print(_status_line(state, read_after, color, now=now_mono))
+    print()
+    for message in messages:
+        print(render(message, color=color, unread=message.key in (state.unread or set())))
         print()
     sys.stdout.flush()
 
+
+def follow(path: Path, history: int, poll: float, *, color: bool = True, read_after: float = 20.0) -> None:
+    messages = list(iter_messages(path))[-history:]
+    state = UnreadState(focused=True, focus_since=time.monotonic())
+    interactive = sys.stdin.isatty() and sys.stdout.isatty()
+    fd = sys.stdin.fileno() if interactive else -1
+    old_termios = termios.tcgetattr(fd) if interactive else None
+    input_buffer = b""
+
+    if interactive:
+        tty.setcbreak(fd)
+        os.set_blocking(fd, False)
+        print(ANSI_FOCUS_ON, end="")
+    _redraw(path, messages, state, read_after, color)
+    age_signature = tuple(relative_age(message.timestamp) for message in messages)
+    last_status_tick = int(time.monotonic()) if state.unread else None
+
     offset = path.stat().st_size
     pending = ""
-    while True:
-        try:
-            size = path.stat().st_size
+    try:
+        while True:
+            now_mono = time.monotonic()
+            redraw = False
+            if interactive:
+                ready, _, _ = select.select([fd], [], [], 0)
+                if ready:
+                    events, input_buffer = _read_input(fd, input_buffer)
+                    for event in events:
+                        if event == "focus_out":
+                            state.focus_out()
+                        elif event == "focus_in":
+                            state.focus_in(now_mono)
+                        elif event == "mark_read":
+                            state.mark_all_read()
+                        elif event == "quit":
+                            return
+                        redraw = True
+
+            if state.maybe_clear_after_dwell(now_mono, read_after):
+                redraw = True
+
+            try:
+                size = path.stat().st_size
+            except FileNotFoundError:
+                time.sleep(poll)
+                continue
             if size < offset:
                 offset = 0
                 pending = ""
@@ -221,14 +380,29 @@ def follow(path: Path, history: int, poll: float, *, color: bool = True) -> None
                         continue
                     message = extract_human_message(obj)
                     if message:
-                        print(render(message, color=color))
-                        print()
-                        sys.stdout.flush()
+                        state.mark_message(message, now=now_mono)
+                        messages.append(message)
+                        messages = messages[-200:]
+                        redraw = True
+            current_age_signature = tuple(relative_age(message.timestamp) for message in messages)
+            if current_age_signature != age_signature:
+                age_signature = current_age_signature
+                redraw = True
+
+            status_tick = int(now_mono) if state.focused and state.unread else None
+            if status_tick != last_status_tick:
+                last_status_tick = status_tick
+                redraw = True
+            if redraw:
+                _redraw(path, messages, state, read_after, color, now_mono=now_mono)
             time.sleep(poll)
-        except KeyboardInterrupt:
-            return
-        except FileNotFoundError:
-            time.sleep(poll)
+    except KeyboardInterrupt:
+        return
+    finally:
+        if interactive:
+            print(ANSI_FOCUS_OFF, end="", flush=True)
+            if old_termios is not None:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old_termios)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -239,6 +413,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--session", help="Path o UUID/parziale della sessione da seguire.")
     parser.add_argument("--history", type=int, default=8, help="Messaggi precedenti da mostrare.")
     parser.add_argument("--poll", type=float, default=0.25, help="Intervallo di polling in secondi.")
+    parser.add_argument("--read-after", type=float, default=20.0, metavar="SECONDS", help="Secondi continui in focus prima di segnare i non letti come letti (default: 20).")
     parser.add_argument("--once", action="store_true", help="Stampa lo storico e termina.")
     args = parser.parse_args(argv)
 
@@ -253,7 +428,7 @@ def main(argv: list[str] | None = None) -> int:
             print(render(message, color=use_color))
             print()
         return 0
-    follow(path, max(0, args.history), max(0.05, args.poll), color=use_color)
+    follow(path, max(0, args.history), max(0.05, args.poll), color=use_color, read_after=max(0.0, args.read_after))
     return 0
 
 

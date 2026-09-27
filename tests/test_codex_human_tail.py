@@ -7,7 +7,22 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
-from codex_human_tail import colorize, extract_human_message, relative_age, render, select_session, wrap_text, HumanMessage
+from codex_human_tail import UnreadState, _read_input, colorize, extract_human_message, relative_age, render, select_session, wrap_text, HumanMessage
+
+
+def _read_input_bytes_for_test(data: bytes):
+    import os
+    read_fd, write_fd = os.pipe()
+    try:
+        os.write(write_fd, data)
+        os.close(write_fd)
+        write_fd = -1
+        return _read_input(read_fd, b"")
+    finally:
+        os.close(read_fd)
+        if write_fd >= 0:
+            os.close(write_fd)
+
 
 
 class CodexHumanTailTests(unittest.TestCase):
@@ -65,6 +80,61 @@ class CodexHumanTailTests(unittest.TestCase):
         self.assertIn("\x1b[32m`roadmap_start.py`\x1b[0m", styled)
         self.assertIn("\x1b[36m/root/worker\x1b[0m", styled)
         self.assertIn("\x1b[36mhttps://example.test/x\x1b[0m", styled)
+
+    def test_unread_state_requires_continuous_focus_dwell(self):
+        state = UnreadState(focused=True, focus_since=0.0)
+        message = HumanMessage(datetime(2026, 9, 28, 0, 30, tzinfo=timezone.utc), "nuovo")
+        state.focus_out()
+        state.mark_message(message, now=0.0)
+        self.assertIn(message.key, state.unread)
+        state.focus_in(10.0)
+        self.assertFalse(state.maybe_clear_after_dwell(29.9, 20.0))
+        state.focus_out()
+        state.focus_in(40.0)
+        self.assertFalse(state.maybe_clear_after_dwell(59.9, 20.0))
+        self.assertTrue(state.maybe_clear_after_dwell(60.0, 20.0))
+        self.assertFalse(state.unread_mode)
+        self.assertEqual(set(), state.unread)
+
+    def test_late_unread_message_restarts_read_dwell(self):
+        state = UnreadState(focused=True, focus_since=10.0)
+        state.unread_mode = True
+        message = HumanMessage(datetime(2026, 9, 28, 0, 30, tzinfo=timezone.utc), "arriva tardi")
+        state.mark_message(message, now=29.5)
+        self.assertFalse(state.maybe_clear_after_dwell(30.0, 20.0))
+        self.assertFalse(state.maybe_clear_after_dwell(49.4, 20.0))
+        self.assertTrue(state.maybe_clear_after_dwell(49.5, 20.0))
+
+    def test_messages_arriving_during_short_focus_remain_unread(self):
+        state = UnreadState(focused=True, focus_since=0.0)
+        first = HumanMessage(datetime(2026, 9, 28, 0, 30, tzinfo=timezone.utc), "primo")
+        second = HumanMessage(datetime(2026, 9, 28, 0, 31, tzinfo=timezone.utc), "secondo")
+        state.focus_out()
+        state.mark_message(first)
+        state.focus_in(10.0)
+        state.mark_message(second)
+        self.assertEqual({first.key, second.key}, state.unread)
+
+    def test_manual_mark_read_and_future_unfocused_message(self):
+        state = UnreadState(focused=False, unread_mode=True)
+        first = HumanMessage(datetime(2026, 9, 28, 0, 30, tzinfo=timezone.utc), "primo")
+        second = HumanMessage(datetime(2026, 9, 28, 0, 31, tzinfo=timezone.utc), "secondo")
+        state.mark_message(first)
+        state.mark_all_read()
+        self.assertEqual(set(), state.unread)
+        self.assertTrue(state.unread_mode)
+        state.mark_message(second)
+        self.assertIn(second.key, state.unread)
+
+    def test_focus_input_parser_and_manual_shortcut(self):
+        events, pending = _read_input_bytes_for_test(b"\x1b[Or\x1b[Iq")
+        self.assertEqual(["focus_out", "mark_read", "focus_in", "quit"], events)
+        self.assertEqual(b"", pending)
+
+    def test_unread_render_has_evident_marker(self):
+        message = HumanMessage(datetime(2026, 9, 28, 0, 27, tzinfo=timezone.utc), "testo")
+        rendered = render(message, now=datetime(2026, 9, 28, 0, 30, tzinfo=timezone.utc), width=80, color=False, unread=True)
+        self.assertTrue(rendered.startswith("●      3 min fa │ "))
 
     def test_auto_selection_prefers_latest_root_tui(self):
         with tempfile.TemporaryDirectory() as tmp:
