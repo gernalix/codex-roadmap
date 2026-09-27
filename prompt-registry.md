@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/999198 correggere-mapping-prompt-id-work-item-id-nel-cu-999198\|999198 · Correggere mapping prompt_id→work_item_id nel cutover C2]] | running | 2026-09-27T07:38:32Z | 2026-09-27T07:38:32Z | UNKNOWN | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence\|660629 · Orchestrare C2 fino a quiescenza]] | running | 2026-09-27T06:00:21Z | 2026-09-27T08:05:56Z | UNKNOWN | no | no | — | codex-roadmap | GPT-6 Luna | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
@@ -14,6 +13,7 @@
 | [[obsidian/Prompts/856999 aggiungere-gate-c2-per-acceptance-post-merge-856999\|856999 · Aggiungere gate C2 per acceptance post-merge]] | completed | — | — | PASS | no | no | — | — | GPT-6 Luna | medium |
 | [[obsidian/Prompts/742579 rendere-il-db-grindr-favorites-frictionless-da-e-742579\|742579 · Rendere il DB Grindr Favorites frictionless da esplorare]] | completed | 2026-09-27T08:31:27Z | 2026-09-27T08:31:27Z | PASS | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/366587 regression-rendere-le-view-grindr-compatibili-co-366587\|366587 · Regression: rendere le view Grindr compatibili con DB Browser SQLite]] | completed | — | — | PASS | no | no | — | — | GPT-6 Luna | medium |
+| [[obsidian/Prompts/999198 correggere-mapping-prompt-id-work-item-id-nel-cu-999198\|999198 · Correggere mapping prompt_id→work_item_id nel cutover C2]] | completed | 2026-09-27T07:38:32Z | 2026-09-27T07:38:32Z | PASS | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/886300 riparare-il-finalizer-c2-per-task-su-codex-roadm-886300\|886300 · Riparare il finalizer C2 per task su codex-roadmap]] | completed | 2026-09-27T07:10:07Z | 2026-09-27T07:10:07Z | PASS | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/528123 c2-ph-cutover-canonical-temporary-lane-override-528123\|528123 · C2 PH cutover + canonical temporary lane override]] | blocked | 2026-09-26T23:47:46Z | 2026-09-26T23:51:04Z | BLOCKED | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/340495 rendere-idempotente-il-cli-execution-override-c2-340495\|340495 · Rendere idempotente il CLI execution override C2]] | blocked | 2026-09-27T05:11:56Z | 2026-09-27T05:15:23Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |

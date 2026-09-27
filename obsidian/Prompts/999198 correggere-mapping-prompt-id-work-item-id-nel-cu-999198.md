@@ -1,6 +1,6 @@
 ---
 prompt_id: 999198
-status: running
+status: completed
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - priority:p0
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/unknown
 ---
 
 # 999198 · Correggere mapping prompt_id→work_item_id nel cutover C2
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/correggere-mapping-prompt-id-work-item-id-nel-cu-999198|Apri prompt]]
+- **Prompt:** [[../../completed/correggere-mapping-prompt-id-work-item-id-nel-cu-999198|Apri prompt]]
 - **Primo lancio:** 2026-09-27T07:38:32Z
 - **Ultimo lancio:** 2026-09-27T07:38:32Z
 - **Ultimo esito:** UNKNOWN

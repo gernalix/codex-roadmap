@@ -1,6 +1,5 @@
 # Da controllare
 
-- [[obsidian/Prompts/999198 correggere-mapping-prompt-id-work-item-id-nel-cu-999198|999198 · Correggere mapping prompt_id→work_item_id nel cutover C2]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence|660629 · Orchestrare C2 fino a quiescenza]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] · `failed` · analizzato=no · fix=—
 - [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] · `blocked` · analizzato=no · fix=—
