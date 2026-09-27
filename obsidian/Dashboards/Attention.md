@@ -1,6 +1,6 @@
 # Da controllare
 
-- [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] · `running` · analizzato=sì · fix=—
+- [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/384495 rimuovere-special-case-ph-e-implementare-overrid-384495|384495 · Rimuovere special-case PH e implementare override execution canonico]] · `waiting` · analizzato=no · fix=—
 - [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]] · `waiting` · analizzato=no · fix=—
 - [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] · `waiting` · analizzato=no · fix=—
