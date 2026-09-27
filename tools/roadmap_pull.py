@@ -482,9 +482,10 @@ def guarded_pull(
                 )
 
         # A locally terminal prompt must never reappear as running remotely.
+        # WAITING is a recoverable state after evidence-gated BLOCKED review.
         for prompt_id in sorted(remote_running - local_running):
             local_row = _row(local_conn, prompt_id)
-            if local_row is not None and local_row["status"] not in ("pending", "running"):
+            if local_row is not None and local_row["status"] not in ("pending", "waiting", "running"):
                 raise RoadmapPullBlocked(
                     f"terminal_prompt_reactivated_remote:{prompt_id}:{local_row['status']}"
                 )
