@@ -122,7 +122,7 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path,
             'config':{'model_reasoning_effort':metadata['reasoning']},
             'allowProviderModelFallback':False,'ephemeral':False,
             'approvalPolicy':'on-request','approvalsReviewer':'auto_review',
-            'sandbox':sandbox,
+            'sandbox':'workspace-write',
         })
         # A lost thread/start acknowledgement may leave an empty thread, but no
         # work starts until its verified identity is durably recorded here.
@@ -134,7 +134,7 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path,
             'model':metadata.get('model_id',metadata['model']),'cwd':metadata['worktree'],
             'config':{'model_reasoning_effort':metadata['reasoning']},
             'approvalPolicy':'on-request','approvalsReviewer':'auto_review',
-            'sandbox':sandbox})
+            'sandbox':'workspace-write'})
         _validate_response(response,metadata)
     thread_id=state['thread_id']
     if on_thread_created is not None:
@@ -172,7 +172,7 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path,
         'input':[{'type':'text','text':prompt,'text_elements':[]}],
         'model':metadata.get('model_id',metadata['model']),'effort':metadata['reasoning'],
         'cwd':metadata['worktree'],'approvalPolicy':'on-request',
-        'approvalsReviewer':'auto_review','sandbox':sandbox,
+        'approvalsReviewer':'auto_review','sandboxPolicy':sandbox,
         'clientUserMessageId':'c2-'+run_id})
     state.update(phase='started',turn_id=result['turn']['id'])
     persist(receipt,state)

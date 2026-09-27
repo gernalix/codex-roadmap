@@ -56,10 +56,10 @@ class CodexExecutorTests(unittest.TestCase):
                 'model':'exact','reasoning':'medium','worktree':str(worktree)},
                 prompt='Commit and finish.',receipt=root/'receipt.json')
             start=next(params for method,params in rpc.calls if method=='thread/start')
+            self.assertEqual('workspace-write',start['sandbox'])
             self.assertEqual({'type':'workspaceWrite','writableRoots':roots,
-                              'networkAccess':False},start['sandbox'])
-            self.assertEqual(start['sandbox'],next(
-                params for method,params in rpc.calls if method=='turn/start')['sandbox'])
+                              'networkAccess':False},next(
+                params for method,params in rpc.calls if method=='turn/start')['sandboxPolicy'])
             (worktree/'change.txt').write_text('change\n')
             subprocess.run(['git','-C',str(worktree),'add','change.txt'],check=True)
             subprocess.run(['git','-C',str(worktree),'-c','user.name=C2 Test',
