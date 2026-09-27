@@ -325,7 +325,8 @@ def dispatchable(conn, item):
     return True
 
 
-def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120):
+def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120,
+             chatgpt_lane_degraded=False):
     _transaction(conn)
     now=time.time() if now is None else now
     if not event_key or max_parallel < 1 or lease_seconds <= 0:
@@ -381,6 +382,8 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120):
             continue  # No guessed semantic classification or implicit launch.
         executor = choose_executor(item['executor_policy'], spec['activity'])
         if executor in (None, 'human'):
+            continue
+        if chatgpt_lane_degraded and spec['activity'] in ('gui','semantic'):
             continue
         resources = set(json.loads(spec['resources_json']))
         if item['repo']:

@@ -276,6 +276,20 @@ class SchedulerTests(unittest.TestCase):
         for activity,executor in expected.items():
             self.assertEqual(executor,scheduler.choose_executor('auto',activity))
 
+    def test_degraded_lane_suspends_chatgpt_but_keeps_native_dispatchable(self):
+        chat=intake.add_work_item(self.conn,title='Chat',repo='chat-repo',executor_policy='auto')['work_item_id']
+        scheduler.configure(self.conn,chat,activity='semantic',
+                            project_url='https://chatgpt.com/g/g-p-fixture')
+        native=self.add('native-repo')
+        runs=scheduler.schedule(self.conn,event_key='degraded',now=10,max_parallel=2,
+                                chatgpt_lane_degraded=True)
+        self.assertEqual([native],[r['work_item_id'] for r in runs])
+        self.assertEqual('pending',self.conn.execute(
+            'SELECT status FROM work_items WHERE work_item_id=?',(chat,)).fetchone()[0])
+        resumed=scheduler.schedule(self.conn,event_key='recovered',now=11,max_parallel=2,
+                                   chatgpt_lane_degraded=False)
+        self.assertEqual([chat],[r['work_item_id'] for r in resumed])
+
     def test_codex_run_reconciles_only_after_canonical_terminal(self):
         self.conn.execute("UPDATE work_items SET status='running' WHERE prompt_id='123456'")
         self.conn.execute("""INSERT INTO work_item_runs VALUES(

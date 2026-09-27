@@ -42,7 +42,9 @@ class BrowserExecutorTests(unittest.TestCase):
             self.assertEqual('TASK_ID=wi:fixture\nUse the GUI',browser.calls[0][1])
             self.assertEqual(1,len(store.tasks))
             self.assertTrue(store.tasks[0].state_file.startswith('c2-db:'))
-            self.assertEqual(40,store.tasks[0].thresholds.generation_stall_s)
+            self.assertEqual(40,store.tasks[0].thresholds.generation_suspect_s)
+            self.assertEqual(90,store.tasks[0].thresholds.generation_verify_s)
+            self.assertEqual(180,store.tasks[0].thresholds.generation_stall_s)
             self.assertEqual(3,store.tasks[0].thresholds.max_recovery_attempts)
     def test_ambiguous_start_does_not_send_again(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -90,4 +92,18 @@ class BrowserExecutorTests(unittest.TestCase):
             self.assertEqual('started',result['phase'])
             self.assertEqual(0,len(browser.calls))
             self.assertEqual(1,len(store.tasks))
-            self.assertEqual(40,store.tasks[0].thresholds.generation_stall_s)
+            self.assertEqual(40,store.tasks[0].thresholds.generation_suspect_s)
+            self.assertEqual(180,store.tasks[0].thresholds.generation_stall_s)
+
+    def test_global_degradation_suspends_new_chat_without_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            browser=FakeBrowser();receipt=Path(tmp)/'r.json'
+            with patch('c2_chatgpt_executor.lane_degraded',return_value=True):
+                result=dispatch(run_id='one',work_item_id='wi:fixture',
+                    metadata={'executor':'chatgpt','activity':'semantic',
+                              'project_url':'https://chatgpt.com/g/g-p-project'},
+                    prompt='Decide',db_path=Path(tmp)/'db',receipt=receipt,
+                    browser=browser,store=FakeStore())
+            self.assertEqual('suspended',result['phase'])
+            self.assertFalse(receipt.exists())
+            self.assertEqual([],browser.calls)

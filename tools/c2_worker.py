@@ -10,7 +10,7 @@ import sqlite3
 import sys
 
 from c2_appserver_rpc import AppServerRPC, AppServerError, resolve_model
-from c2_chatgpt_executor import dispatch as dispatch_browser
+from c2_chatgpt_executor import dispatch as dispatch_browser, lane_degraded
 from c2_codex_executor import dispatch as dispatch_codex, record_terminal, parse_terminal_result, ExecutorError
 from roadmap_finish import _queue_repo_integration
 from roadmap_result import RoadmapResultError
@@ -38,6 +38,8 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             raise WorkerError('worker_identity_mismatch')
         metadata=json.loads(run['metadata_json'])
         executor=run['executor']
+        if executor in ('rdc','chatgpt') and metadata.get('activity') in ('gui','semantic') and lane_degraded():
+            return {'run_id':run_id,'executor':executor,'phase':'suspended'}
         submit('executor_started',{'run_id':run_id},'c2-executor-start-'+run_id)
         if executor=='rdc' and metadata.get('activity')=='native':
             receipt=Path(state_root)/f'{run_id}.native.json'

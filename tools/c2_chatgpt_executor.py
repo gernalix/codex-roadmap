@@ -8,12 +8,20 @@ import sys
 from c2_codex_executor import persist
 
 SUPERVISOR_SRC=Path('/home/daniele/projects/chatgpt-rdc-supervisor/src')
-C2_GENERATION_STALL_S=40
+C2_GENERATION_SUSPECT_S=40
 C2_MAX_RECOVERY_ATTEMPTS=3
+LANE_STATE=Path.home()/'.local/state/chatgpt-rdc-supervisor/global.json'
 
 
 class ChatWorkerError(RuntimeError):
     pass
+
+
+def lane_degraded(path: Path = LANE_STATE) -> bool:
+    try:
+        return json.loads(path.read_text()).get('chatgpt_lane',{}).get('state') in ('suspected','global_degraded')
+    except (OSError,ValueError,TypeError):
+        return False
 
 
 def _supervisor_types():
@@ -36,13 +44,17 @@ def _task_config(TaskConfig, *, work_item_id: str, db_path: Path,
     thresholds=getattr(task,'thresholds',None)
     if thresholds is None:
         raise ChatWorkerError('supervisor_thresholds_unavailable')
-    thresholds.generation_stall_s=C2_GENERATION_STALL_S
+    thresholds.generation_suspect_s=C2_GENERATION_SUSPECT_S
+    thresholds.generation_verify_s=90
+    thresholds.generation_stall_s=180
     thresholds.max_recovery_attempts=C2_MAX_RECOVERY_ATTEMPTS
     return task
 
 
 def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
              db_path: Path, receipt: Path, browser=None, store=None):
+    if lane_degraded():
+        return {'phase':'suspended','chat_url':None,'resubmitted':False}
     if metadata.get('executor') not in ('chatgpt','rdc') or metadata.get('activity') not in ('gui','semantic'):
         raise ChatWorkerError('browser_executor_not_configured')
     project_url=metadata.get('project_url')
