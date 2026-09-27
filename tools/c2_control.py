@@ -20,8 +20,13 @@ OPERATIONS = (
 
 
 def submit_control(*, operation, arguments, request_key, supervisor_id,
-                   fencing_token, actor='c2-control'):
-    """Submit one command after validating and renewing the current local fence."""
+                   fencing_token, actor='c2-control', canonical_renew=False):
+    """Submit one command after validating and renewing the current local fence.
+
+    ``canonical_renew`` atomically prepends a writer-side lease renewal. It is
+    intended for asynchronously applied Workflowy control mutations, where the
+    canonical lease can otherwise expire between enqueue and writer apply.
+    """
     if operation not in OPERATIONS:
         raise ValueError('invalid_c2_control_operation')
     if not isinstance(arguments,dict):
@@ -32,18 +37,29 @@ def submit_control(*, operation, arguments, request_key, supervisor_id,
         row=record_activity(lease,supervisor_id=row['supervisor_id'],
                             token=row['fencing_token'],
                             operation='control:'+operation)
+        full_authority={
+            'supervisor_id':row['supervisor_id'],
+            'fencing_token':row['fencing_token'],
+            'lease_expires_at':row['lease_expires_at'],
+        }
         arguments['supervisor_authority']={
             'supervisor_id':row['supervisor_id'],
             'fencing_token':row['fencing_token'],
         }
         stable_authority = (
             operation == 'clear_manual_order' and actor == 'c2-workflowy-order'
+            and not canonical_renew
         )
         if not stable_authority:
             arguments['supervisor_authority']['lease_expires_at'] = row['lease_expires_at']
+    operations=[]
+    if canonical_renew:
+        operations.append({'op':'c2_renew_supervisor','arguments':{
+            'supervisor_authority':full_authority,
+        }})
+    operations.append({'op':'c2_'+operation,'arguments':arguments})
     return submit_document({'schema':'codex-roadmap.mutation.v1','actor':actor,
-        'operations':[{'op':'c2_'+operation,'arguments':arguments}]},
-        request_key=request_key)
+        'operations':operations},request_key=request_key)
 
 
 def main(argv=None):
