@@ -7,10 +7,27 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
 import c2_mutations
+import c2_scheduler
 import c2_supervisor_authority as authority
 
 
 class CanonicalFencingTests(unittest.TestCase):
+    def test_manual_order_install_tolerates_minimal_authority_schema(self):
+        db = sqlite3.connect(':memory:')
+        db.row_factory = sqlite3.Row
+        db.execute('CREATE VIEW prompts AS SELECT 1 AS prompt_id')
+        db.execute('CREATE TABLE work_items(work_item_id TEXT PRIMARY KEY,status TEXT)')
+        c2_scheduler.install_schema(db)
+        self.assertIsNotNone(db.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' "
+            "AND name='manual_order_overrides'"
+        ).fetchone())
+        self.assertIsNone(db.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='view' "
+            "AND name='v_roadmap_manual_order'"
+        ).fetchone())
+        db.close()
+
     def test_delayed_renewal_keeps_same_generation_only(self):
         db = sqlite3.connect(':memory:')
         db.row_factory = sqlite3.Row

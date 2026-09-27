@@ -67,14 +67,33 @@ def install_schema(conn: sqlite3.Connection) -> None:
             statement = ""
     if statement.strip():
         raise ManualOrderError("incomplete_manual_order_schema")
+    objects = {
+        (str(row[0]), str(row[1]))
+        for row in conn.execute(
+            "SELECT type,name FROM sqlite_master WHERE type IN ('table','view')"
+        )
+    }
+    roadmap_prerequisites = {
+        ("table", "work_items"),
+        ("table", "work_item_tags"),
+        ("table", "manual_order_overrides"),
+    }
+    if not roadmap_prerequisites.issubset(objects):
+        return
     roadmap_columns = {
         str(row[1]) for row in conn.execute("PRAGMA table_info(v_roadmap_manual_order)")
     }
-    summary_columns = {
-        str(row[1]) for row in conn.execute("PRAGMA table_info(v_work_item_summary)")
-    }
     rebuild_roadmap = not READBACK_COLUMNS.issubset(roadmap_columns)
-    rebuild_summary = rebuild_roadmap or not READBACK_COLUMNS.issubset(summary_columns)
+    summary_prerequisites = {("view", "v_work_item_progress")}
+    can_build_summary = summary_prerequisites.issubset(objects)
+    summary_columns = set()
+    if can_build_summary:
+        summary_columns = {
+            str(row[1]) for row in conn.execute("PRAGMA table_info(v_work_item_summary)")
+        }
+    rebuild_summary = can_build_summary and (
+        rebuild_roadmap or not READBACK_COLUMNS.issubset(summary_columns)
+    )
     if rebuild_summary:
         conn.execute("DROP VIEW IF EXISTS v_work_item_summary")
     if rebuild_roadmap:
