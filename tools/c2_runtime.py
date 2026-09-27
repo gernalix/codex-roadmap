@@ -10,6 +10,7 @@ import argparse
 from contextlib import closing
 import hashlib
 import json
+import os
 from pathlib import Path
 import sqlite3
 import subprocess
@@ -26,6 +27,18 @@ from c2_repository_integration import integration_status, prompt_repository
 C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
 class RuntimeErrorC2(RuntimeError):
     pass
+
+
+def _user_systemd_environment() -> dict[str, str]:
+    """Recover the conventional user bus environment omitted by headless callers."""
+    env = os.environ.copy()
+    runtime_dir = Path(env.get('XDG_RUNTIME_DIR') or f'/run/user/{os.getuid()}')
+    if not env.get('XDG_RUNTIME_DIR') and runtime_dir.is_dir():
+        env['XDG_RUNTIME_DIR'] = str(runtime_dir)
+    bus = runtime_dir / 'bus'
+    if not env.get('DBUS_SESSION_BUS_ADDRESS') and bus.is_socket():
+        env['DBUS_SESSION_BUS_ADDRESS'] = f'unix:path={bus}'
+    return env
 
 
 def _open_snapshot(path: Path) -> sqlite3.Connection:
@@ -71,11 +84,12 @@ def _launch_worker(run_id: str, db_path: Path):
     unit='c2-run-'+run_id
     command=[sys.executable,str(Path(__file__).with_name('c2_worker.py')),
         '--run-id',run_id,'--db',str(db_path)]
+    env = _user_systemd_environment()
     result=subprocess.run(['systemd-run','--user','--collect',
-        '--unit='+unit,*command],capture_output=True,text=True)
+        '--unit='+unit,*command],capture_output=True,text=True,env=env)
     if result.returncode:
         active=subprocess.run(['systemctl','--user','is-active','--quiet',unit],
-            capture_output=True)
+            capture_output=True,env=env)
         if active.returncode:
             raise RuntimeErrorC2('worker_launch_failed:'+str(result.returncode))
 

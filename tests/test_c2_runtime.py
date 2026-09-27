@@ -288,6 +288,24 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(['systemctl','--user','is-active','--quiet','c2-run-same-run'],
             run.call_args.args[0])
 
+    def test_user_systemd_environment_recovers_missing_session_bus(self):
+        with patch.dict(c2_runtime.os.environ,{},clear=True), \
+                patch.object(c2_runtime.os,'getuid',return_value=4242), \
+                patch.object(Path,'is_dir',return_value=True), \
+                patch.object(Path,'is_socket',return_value=True):
+            env=c2_runtime._user_systemd_environment()
+        self.assertEqual('/run/user/4242',env['XDG_RUNTIME_DIR'])
+        self.assertEqual('unix:path=/run/user/4242/bus',env['DBUS_SESSION_BUS_ADDRESS'])
+
+    def test_worker_launch_passes_recovered_user_systemd_environment(self):
+        env={'XDG_RUNTIME_DIR':'/run/user/4242',
+             'DBUS_SESSION_BUS_ADDRESS':'unix:path=/run/user/4242/bus'}
+        with patch.object(c2_runtime,'_user_systemd_environment',return_value=env), \
+                patch.object(c2_runtime.subprocess,'run',
+                             return_value=subprocess.CompletedProcess([],0)) as run:
+            c2_runtime._launch_worker('same-run',Path('/tmp/snapshot.sqlite3'))
+        self.assertEqual(env,run.call_args.kwargs['env'])
+
     def test_failed_inactive_worker_launch_is_reported(self):
         failed=subprocess.CompletedProcess([],1,stderr='Unit conflict')
         with patch.object(c2_runtime.subprocess,'run',side_effect=[failed,failed]):
