@@ -1,6 +1,6 @@
 ---
 prompt_id: 856999
-status: running
+status: completed
 project_id: —
 model: GPT-6 Luna
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - priority:p0
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/unknown
 ---
 
 # 856999 · Aggiungere gate C2 per acceptance post-merge
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/aggiungere-gate-c2-per-acceptance-post-merge-856999|Apri prompt]]
+- **Prompt:** [[../../completed/aggiungere-gate-c2-per-acceptance-post-merge-856999|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
