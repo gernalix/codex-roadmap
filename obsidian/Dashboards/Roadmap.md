@@ -11,4 +11,3 @@
 
 - [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]]
 - [[obsidian/Prompts/682297 c2-supervisor-rollover-fallito-degrada-a-human-r-682297|682297 · C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]]
-- [[obsidian/Prompts/328371 c2-dashboard-mutation-applicata-ma-invisibile-fi-328371|328371 · C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]]

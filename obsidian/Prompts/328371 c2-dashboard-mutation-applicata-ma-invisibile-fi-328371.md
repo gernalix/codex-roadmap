@@ -1,6 +1,6 @@
 ---
 prompt_id: 328371
-status: running
+status: completed
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - projection
   - workflowy
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/unknown
 ---
 
 # 328371 · C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/c2-dashboard-mutation-applicata-ma-invisibile-fi-328371|Apri prompt]]
+- **Prompt:** [[../../completed/c2-dashboard-mutation-applicata-ma-invisibile-fi-328371|Apri prompt]]
 - **Primo lancio:** 2026-09-27T05:11:09Z
 - **Ultimo lancio:** 2026-09-27T05:11:09Z
 - **Ultimo esito:** PASS
