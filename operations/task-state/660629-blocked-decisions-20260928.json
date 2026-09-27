@@ -80,11 +80,13 @@
       "snapshot_updated_at": "2026-09-26T23:07:58Z",
       "disposition": "TERMINAL",
       "evidence": [
-        "This immutable prompt requires literal 107210 PASS, but 107210 is canonically superseded; the prerequisite can never become true for this prompt."
+        "This immutable prompt requires literal 107210 PASS, but 107210 is canonically superseded; the prerequisite can never become true for this prompt.",
+        "Replacement wi:ab3b68fe0a4841b2a9c4b34b894ae801 created from canonical prompt851204 scope, depends on completed PH cutover913264, and was inserted at manual rank10 without changing prior relative order."
       ],
       "blocker": null,
       "next_action": "Cancel this obsolete prompt; use a fresh intake if the Datasette Alerts goal remains needed.",
-      "terminal_status": "cancelled"
+      "terminal_status": "superseded",
+      "superseded_by": "wi:ab3b68fe0a4841b2a9c4b34b894ae801"
     },
     {
       "snapshot_index": 6,
