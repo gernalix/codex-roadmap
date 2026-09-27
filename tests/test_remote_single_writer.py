@@ -290,6 +290,8 @@ class RemoteSingleWriterTests(unittest.TestCase):
         args = gh.call_args.args
         self.assertIn("repos/gernalix/codex-roadmap/issues", args)
         self.assertNotIn("contents", " ".join(args))
+        self.assertNotIn(submit_mutation._canonical_bytes(document).decode("utf-8"), args)
+        self.assertEqual(document, json.loads(json.loads(gh.call_args.kwargs["input_text"])["body"]))
 
 
 if __name__ == "__main__":

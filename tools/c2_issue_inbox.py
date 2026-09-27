@@ -110,6 +110,12 @@ def _required_text(value: object, field: str) -> str:
     return result
 
 
+def _required_description(value: object) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise IssueInboxError("description_required")
+    return value
+
+
 def _issue_id(value: str | None) -> str:
     if value is None:
         return "issue:" + uuid.uuid4().hex
@@ -243,7 +249,7 @@ def capture(
            ) VALUES(?,?,?,?,?,?,?,?,?,?,'pending',?)""",
         (
             identity,
-            _required_text(description, "description"),
+            _required_description(description),
             _optional_text(repo),
             _optional_text(code_location),
             executor,

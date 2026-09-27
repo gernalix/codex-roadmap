@@ -33,13 +33,14 @@ def _validate_request_key(request_key: str) -> str:
     return request_key
 
 
-def _gh(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
+def _gh(*args: str, check: bool = True, input_text: str | None = None) -> subprocess.CompletedProcess[str]:
     try:
         proc = subprocess.run(
             ["gh", *args],
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
+            input=input_text,
             env={**os.environ, "GH_HOST": DEFAULT_REMOTE_HOST},
         )
     except FileNotFoundError as exc:
@@ -144,10 +145,9 @@ def submit_document(
         "--method",
         "POST",
         f"repos/{repository}/issues",
-        "-f",
-        f"title={title}",
-        "-f",
-        f"body={body}",
+        "--input",
+        "-",
+        input_text=json.dumps({"title": title, "body": body}, ensure_ascii=False),
         check=False,
     )
     if proc.returncode:
@@ -160,8 +160,9 @@ def submit_document(
             repository,
             "--title",
             title,
-            "--body",
-            body,
+            "--body-file",
+            "-",
+            input_text=body,
             check=False,
         )
         if fallback.returncode == 0:

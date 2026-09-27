@@ -5,6 +5,9 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from pathlib import Path
+import re
+import sys
 import uuid
 
 from submit_mutation import submit_document
@@ -40,7 +43,12 @@ def _context(args) -> dict[str, str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("description")
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument("--stdin", action="store_true", help="Read the exact description from stdin")
+    source.add_argument("--file", type=Path, help="Read the exact description from a UTF-8 file")
+    source.add_argument("--json", help="JSON object with description and optional capture metadata")
+    parser.add_argument("description", nargs="?")
+    parser.add_argument("--issue-id", help="Stable issue:<32 hex> identity for an idempotent retry")
     parser.add_argument("--task-id")
     parser.add_argument("--run-id")
     parser.add_argument("--repo")
@@ -49,16 +57,42 @@ def main() -> int:
     parser.add_argument("--chat-url")
     args = parser.parse_args()
 
-    issue_id = "issue:" + uuid.uuid4().hex
+    if args.description is not None and (args.stdin or args.file or args.json):
+        parser.error("choose one description source")
+    payload = {}
+    if args.json:
+        try:
+            payload = json.loads(args.json)
+        except json.JSONDecodeError:
+            parser.error("invalid JSON payload")
+        allowed = {"description", "issue_id", "task_id", "run_id", "repo",
+                   "code_location", "executor_ref", "chat_url"}
+        if not isinstance(payload, dict) or set(payload) - allowed:
+            parser.error("invalid JSON capture fields")
+        description = payload.get("description")
+    elif args.stdin:
+        description = sys.stdin.read()
+    elif args.file:
+        description = args.file.read_text(encoding="utf-8")
+    else:
+        description = args.description
+    if not isinstance(description, str) or not description.strip():
+        parser.error("description required")
+
+    supplied_id = args.issue_id or payload.get("issue_id")
+    if supplied_id and not re.fullmatch(r"issue:[0-9a-f]{32}", supplied_id):
+        parser.error("invalid issue ID")
+
+    issue_id = supplied_id or "issue:" + uuid.uuid4().hex
     arguments = {
         "issue_id": issue_id,
-        "description": args.description,
+        "description": description,
         **_context(args),
     }
-    if args.repo:
-        arguments["repo"] = args.repo
-    if args.code_location:
-        arguments["code_location"] = args.code_location
+    for key in ("task_id", "run_id", "repo", "code_location", "executor_ref", "chat_url"):
+        value = getattr(args, key) or payload.get(key)
+        if value:
+            arguments[key] = value
 
     request_key = "c2-issue-capture-" + issue_id.removeprefix("issue:")
     result = submit_document(
@@ -68,7 +102,7 @@ def main() -> int:
             "operations": [{"op": "c2_capture_issue", "arguments": arguments}],
         },
         request_key=request_key,
-        lookup_existing=False,
+        lookup_existing=bool(supplied_id),
     )
     print(json.dumps({"issue_id": issue_id, **result}, sort_keys=True))
     return 0

@@ -139,6 +139,11 @@ plane associa run, executor e link della chat; la capture è unfenced e passa
 dal writer unico. Il triage C2 è fenced: dispone ogni riga pending con
 `promote_issue` o `discard_issue`; un match completed è regressione attiva,
 un match attivo riceve evidence sul work item esistente.
+Una cattura isolata non esegue un task e non richiede `executor_started` o
+`C2_RUN_ID`. Per testo multilinea usare `--stdin`, `--file PATH` o `--json
+'{"description":"..."}'`; il testo viene conservato esattamente. Un `--issue-id
+issue:<32 hex>` stabile rende idempotente un retry dello stesso payload; senza
+ID ogni invocazione crea una nuova osservazione append-only.
 
 
 ### Checklist obbligatoria quando ChatGPT deve “mettere un prompt nella roadmap”
