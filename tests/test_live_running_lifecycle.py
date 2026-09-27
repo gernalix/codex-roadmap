@@ -129,6 +129,55 @@ class LiveRunningLifecycleTests(unittest.TestCase):
             self.assertEqual(0, db.reconcile_terminal_requests(conn))
             conn.close()
 
+    def test_historical_terminal_request_does_not_replay_after_reactivation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            conn = db.connect(repo)
+            db.register_prompt(conn, prompt_id="123456", slug="old", title="Old",
+                               current_path="prompts/old.md")
+            db.set_status(conn, "123456", "running", actor="codex")
+            db.request_terminal(conn, "123456", "blocked", actor="codex")
+            request = conn.execute("SELECT running_history_id FROM terminal_requests "
+                                   "WHERE prompt_id='123456'").fetchone()[0]
+            self.assertIsNotNone(request)
+            # The explicit blocked reconciliation preserves the terminal row.
+            conn.execute("UPDATE prompts SET status='pending' WHERE prompt_id='123456'")
+            conn.execute("""INSERT INTO status_history
+                (prompt_id,old_status,new_status,changed_at,actor,note)
+                VALUES('123456','blocked','waiting',?,'test',NULL)""", (db.now_utc(),))
+            conn.execute("""INSERT INTO status_history
+                (prompt_id,old_status,new_status,changed_at,actor,note)
+                VALUES('123456','waiting','pending',?,'test',NULL)""", (db.now_utc(),))
+            db.set_status(conn, "123456", "running", actor="codex")
+            self.assertEqual(0, db.reconcile_terminal_requests(conn))
+            self.assertEqual("running", db.prompt_row(conn, "123456")["status"])
+            self.assertEqual("blocked", conn.execute(
+                "SELECT requested_status FROM terminal_requests WHERE prompt_id='123456'"
+            ).fetchone()[0])
+            conn.close()
+
+    def test_legacy_terminal_request_from_old_run_does_not_replay(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            conn = db.connect(repo)
+            db.register_prompt(conn, prompt_id="123456", slug="old", title="Old",
+                               current_path="prompts/old.md")
+            db.set_status(conn, "123456", "running", actor="codex")
+            db.request_terminal(conn, "123456", "blocked", actor="codex")
+            conn.execute("UPDATE terminal_requests SET running_history_id=NULL "
+                         "WHERE prompt_id='123456'")
+            conn.execute("UPDATE prompts SET status='pending' WHERE prompt_id='123456'")
+            conn.execute("""INSERT INTO status_history
+                (prompt_id,old_status,new_status,changed_at,actor,note)
+                VALUES('123456','blocked','waiting',?,'test',NULL)""", (db.now_utc(),))
+            conn.execute("""INSERT INTO status_history
+                (prompt_id,old_status,new_status,changed_at,actor,note)
+                VALUES('123456','waiting','pending',?,'test',NULL)""", (db.now_utc(),))
+            db.set_status(conn, "123456", "running", actor="codex")
+            self.assertEqual(0, db.reconcile_terminal_requests(conn))
+            self.assertEqual("running", db.prompt_row(conn, "123456")["status"])
+            conn.close()
+
 
 if __name__ == "__main__":
     unittest.main()

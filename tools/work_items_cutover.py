@@ -177,7 +177,8 @@ REBUILDS: dict[str, tuple[str, str]] = {
             CHECK (requested_status IN ('completed','failed','blocked','cancelled','unknown')),
           actor TEXT NOT NULL,
           note TEXT,
-          requested_at TEXT NOT NULL
+          requested_at TEXT NOT NULL,
+          running_history_id INTEGER
         )""",
         "prompt_id,requested_status,actor,note,requested_at",
     ),
