@@ -180,7 +180,7 @@
 | [[obsidian/Prompts/319311 prompt-319311\|319311 · Prompt 319311]] | cancelled | 2026-09-18T17:40:55Z | 2026-09-18T17:40:55Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/809537 roadmap-sqlite-state-migration\|809537 · Vecchia migrazione SQLite della roadmap]] | superseded | — | — | — | no | no | — | codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/151583 prompt-151583\|151583 · Historical prompt 151583]] | cancelled | 2026-08-05T22:50:59Z | 2026-08-05T22:50:59Z | CANCELLED | no | no | — | — | — | — |
-| [[obsidian/Prompts/157771 prompt-157771\|157771 · Historical prompt 157771]] | completed | 2026-09-16T02:38:14Z | 2026-09-16T02:38:14Z | PASS | no | no | — | — | — | — |
+| [[obsidian/Prompts/157771 prompt-157771\|157771 · Historical prompt 157771]] | completed | 2026-09-16T02:34:56Z | 2026-09-16T02:38:14Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/184627 prompt-184627\|184627 · Historical prompt 184627]] | cancelled | 2026-09-03T03:30:22Z | 2026-09-03T03:30:22Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/184639 prompt-184639\|184639 · Historical prompt 184639]] | completed | 2026-09-12T17:52:14Z | 2026-09-12T17:52:14Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/264913 prompt-264913\|264913 · Historical prompt 264913]] | completed | 2026-09-09T08:16:11Z | 2026-09-09T08:16:11Z | PASS | no | no | — | — | — | — |
