@@ -1,6 +1,6 @@
 ---
 prompt_id: 377172
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Terra
 reasoning: low
@@ -9,13 +9,13 @@ tags:
   - grindr
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 377172 · Aggiornare documentazione Grindr callback queue/worker
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/aggiornare-documentazione-grindr-callback-queue--377172|Apri prompt]]
 - **Primo lancio:** —

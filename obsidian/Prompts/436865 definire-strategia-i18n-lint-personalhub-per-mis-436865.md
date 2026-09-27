@@ -1,6 +1,6 @@
 ---
 prompt_id: 436865
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -11,13 +11,13 @@ tags:
   - priority:p1
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/definire-strategia-i18n-lint-personalhub-per-mis-436865|Apri prompt]]
 - **Primo lancio:** —
