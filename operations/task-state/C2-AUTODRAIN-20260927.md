@@ -2,49 +2,66 @@ TASK_ID=C2-AUTODRAIN-20260927
 PROMPT_ID=660629
 
 # Objective
-Continue C2 autonomously until quiescence: Inbox -> reconcile -> priority -> execute -> repeat. Preserve existing runs/threads and use C2/Git as canonical memory.
+Continue C2 autonomously until quiescence. NEW USER STEER: in the successor chat, PROCESS THE C2 INBOX FIRST because it contains urgent issues. After actionable Inbox is drained/reconciled, resume highest-priority roadmap work and parallelize maximally where locks/dependencies permit, including Codex CLI.
 
-# Current supervisor authority
-- supervisor_id: a920f0c2-c0f9-411b-8656-0f65cd833689
+# Supervisor handoff
+- Current supervisor before handoff: a920f0c2-c0f9-411b-8656-0f65cd833689
 - fencing_token: 20
-- Previous token 19 expired during the handoff; token 20 was claimed canonically.
-- Durable recovery pointer is this file; runtime worktree is disposable.
+- This authority is being intentionally retired for chat handoff.
+- Successor MUST acquire a NEW unique supervisor_id by omitting --supervisor-id and obtain fencing token >20 before fenced mutation/scheduling.
+- Do not request the prior transcript.
 
-# Completed since recovery
-- PROMPT_ID 999198 completed canonically after PR #1965 merge.
-- Added verified resolved_by relations 528123 -> 886300 and 340495 -> 886300; historical BLOCKED outcomes preserved; PBF dispositions resolved.
-- Fresh Inbox triage processed actionable rows; one user-deferred Kuma row remains intentionally pending and MUST NOT be promoted/scheduled until explicit release.
-- Stale P0 finalizer regression and executor_started recovery items reconciled as already implemented with evidence.
-- New P0 umbrella created: wi:68cd5b09eae24fe59352bd0750a559c1.
-- Legacy overlapping MegaVault roots c24bc..., 05f8..., 6d4b... superseded by that umbrella.
-- P0 umbrella phases: A c615636..., B 9b77740..., C c0d99c..., D 6a187c..., E 911686..., final gate e20d87....
-- Duplicate final gate 879ae... superseded by e20d87....
-- C2 repo-lock defect promoted as wi:09c58fd538c3440a9e44d2414ddea29f.
+# Inbox — FIRST ACTION IN SUCCESSOR CHAT
+Canonical pending rows at handoff:
+1. issue:bfcfdb13f8b647c3b667dbc7af832b30 — Linux periodic-service registry + automatic Kuma monitors. EXPLICIT USER CONSTRAINT: Inbox-only; do NOT promote/schedule/start until explicit user release.
+2. issue:b6bc31c985fa48beaf53c2826a28789b — protocol P0: define “esegui C2” = process entire Inbox + entire roadmap, maximize parallelism, freely use Codex CLI until quiescence.
+3. issue:a945951b39da4d04a54381b9571279d5 — github-autosync regression tests invoke real bootstrap/systemd without mocking and fail with systemd runtime coupling.
+Process/reconcile #2 and #3 before resuming ordinary roadmap work; preserve #1 pending.
 
-# Current active leaf
-- Phase A work item: wi:c615636f22314b2c89c3a8b037d2d6cc
-- PROMPT_ID=853479
-- Run ID: ca41243058a34906a088c21c271dba56
-- Model/reasoning/MegaVault: GPT-5.6 Sol / medium / STRICT
-- Worktree: /home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_MegaVault/853479
-- Branch task/853479; clean at creation, initially equal to origin/master.
-- Run is canonically running/acknowledged but no worker unit/receipt was created because c2-runtime.service failed its worktree guard.
+# Canonical state
+- PROMPT_ID 999198 completed.
+- Phase A MegaVault PROMPT_ID=853479 is now canonical COMPLETED.
+- Its run ca41243058a34906a088c21c271dba56 is still marked recovering even though terminal was confirmed; reconcile the run after the urgent Inbox pass.
+- MegaVault P0 umbrella: wi:68cd5b09eae24fe59352bd0750a559c1.
+  - A wi:c615636f22314b2c89c3a8b037d2d6cc / PROMPT_ID=853479 — completed.
+  - B wi:9b77740b71c44e728490cf1f96415a6d — next dependency-unblocked phase.
+  - C wi:c0d99c19998740e2b386bb2bf54ae106.
+  - D wi:6a187c7e94be40daba8dce5678ba64f6.
+  - E wi:9116862e72024e89b0033b4c6eeb146c.
+  - final gate wi:e20d87af9a6641c385b03b40aa72ab8a.
+- Legacy overlapping MegaVault roots c24bc..., 05f8..., 6d4b... were superseded by the umbrella.
+- C2 repo-lock defect: wi:09c58fd538c3440a9e44d2414ddea29f (P0).
+- C2 ACK renewal idempotency defect is promoted as P0 work item (query by title: “Rendere idempotente ACK C2 attraverso rinnovi di supervisor authority”).
+- C2 promote_issue contract + mandatory queue reprioritization/dependency re-evaluation were captured as P0 Inbox items and submitted for promotion shortly before handoff; verify their canonical state during Inbox pass.
 
-# Current blocker
-c2-runtime.service reports runtime worktree unhealthy: dirty_worktree + runtime_code_drift. Runtime worktree ~/.local/share/c2-supervisor/worktree is branch c2/supervisor-runtime, 116 commits behind main, with only operations/task-state/C2-AUTODRAIN-20260927.md modified. Incident captured as C2 Inbox issue #2026 / issue:1ae99de21cff4d33a87aac4ea6ada7bf.
+# Parallel Codex CLI lanes prepared but NOT launched
+These were roadmap_start-claimed and are status=running, but no Codex CLI thread/process was launched by this chat:
+- PROMPT_ID=625582 — wi:cc78ff4dcaf942f998d821fb48826d23 — Grindr photo/profile_id + Nautilus/Datasette UX.
+  Worktree: /home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_grindr-favorites-monitor/625582
+  model/reasoning/MegaVault: GPT-5.6 Terra / medium / FAST.
+- PROMPT_ID=545953 — wi:8bbbddd5318f44ee89decb25f910b87c6 — telegram_insert_bot Grindr historical diff regression.
+  Worktree: /home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_telegram_insert_bot/545953
+  model/reasoning/MegaVault: GPT-5.6 Terra / medium / FAST.
+Do NOT call roadmap_start again. After Inbox priority work, launch each exactly once via Codex CLI if repo ownership is still safe; then bind/record executor identity and supervise through terminal/integration.
 
-# Deferred Inbox item
-issue:bfcfdb13f8b647c3b667dbc7af832b30 — automatic Uptime Kuma monitors + Linux service registry. Explicit user constraint: Inbox only; do not promote, schedule, or start until explicit release. Triage work item wi:c01fa42e01da48be80bd048ad5e07653 is BLOCKED on this intentional deferral.
+# Runtime/control-plane facts
+- Runtime worktree ~/.local/share/c2-supervisor/worktree was safely realigned to main and c2_worktree_guard reported healthy.
+- The prior runtime dirty/drift incident was captured to Inbox and attached to the global dirty-worktree remediation item.
+- c2_runtime ACK replay can conflict after supervisor renewal because request key omits changing authority payload; incident captured and promoted as P0.
+- Long-running macrogoal 660629 consumes same-repo lock despite no worker/spec; defect promoted as P0. Do not weaken same-repo safety for real workers.
+
+# Durable evidence
+- Phase A thread: codex://threads/01a0e264-8472-7573-b67c-f8650a78b701.
+- Phase A run: ca41243058a34906a088c21c271dba56.
+- Phase A terminal confirmed by roadmap_pull; work item status completed.
+- Recovery branch for this file: chatgpt/c2-autodrain-20260927.
 
 # Exact next action
-1. Preserve this checkpoint with commit+push.
-2. Update local supervisor lease recovery_pointer to this durable file.
-3. Restore the disposable runtime worktree: discard its pointer edit, fast-forward/reset c2/supervisor-runtime to local main, preserve upstream=main, then verify tools/c2_worktree_guard.py reports healthy.
-4. Run one fenced c2_runtime cycle with supervisor token 20. Do NOT schedule a duplicate: recover/launch existing run ca41243058a34906a088c21c271dba56.
-5. Confirm executor_started receipt + Codex thread binding for PROMPT_ID=853479; supervise that thread until terminal/integration.
-6. Then continue Phase B -> C -> D -> E -> final gate, returning to Inbox/reconcile between transitions.
-7. After P0 umbrella is complete, execute wi:09c58fd... and resume normal priority.
-8. Ignore/defer the Kuma Inbox row until explicit user release.
-
-# Quiescence
-Quiescence requires no actionable pending Inbox rows (explicit user-deferred rows may remain), no unreconciled running/recovering work, no configured runnable/schedulable work, and no recoverable local blocker or completed integration left unreconciled.
+1. Acquire new local supervisor lease with NEW supervisor_id and token >20 using this file as recovery pointer; claim canonical authority.
+2. Pull canonical roadmap.
+3. PRIORITIZE INBOX: triage/process all actionable pending rows; preserve the Kuma row as Inbox-only.
+4. Re-read Inbox before leaving triage; recompute priorities and dependencies after every promotion.
+5. Reconcile terminal Phase A run ca41243058a34906a088c21c271dba56.
+6. Resume/launch the already-claimed 625582 and 545953 lanes exactly once via Codex CLI when safe, while also starting independent eligible leaves up to resource/repo constraints.
+7. Continue MegaVault Phase B→C→D→E→gate and remaining roadmap work, returning to Inbox/reconcile between transitions.
+8. Stop only at quiescence; user-deferred Inbox rows do not count as actionable until released.
