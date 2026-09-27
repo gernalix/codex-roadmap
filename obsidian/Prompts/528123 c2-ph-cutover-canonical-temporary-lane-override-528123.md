@@ -1,6 +1,6 @@
 ---
 prompt_id: 528123
-status: blocked
+status: waiting
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -12,15 +12,15 @@ tags:
   - priority:p0
   - scheduler
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/waiting
   - roadmap/project/unknown
 ---
 
 # 528123 · C2 PH cutover + canonical temporary lane override
 
-- **Stato:** blocked
+- **Stato:** waiting
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../falliti/c2-ph-cutover-canonical-temporary-lane-override-528123|Apri prompt]]
+- **Prompt:** [[../../prompts/c2-ph-cutover-canonical-temporary-lane-override-528123|Apri prompt]]
 - **Primo lancio:** 2026-09-26T23:47:46Z
 - **Ultimo lancio:** 2026-09-26T23:51:04Z
 - **Ultimo esito:** BLOCKED

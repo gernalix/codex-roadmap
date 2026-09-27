@@ -1,6 +1,6 @@
 ---
 prompt_id: 705998
-status: blocked
+status: waiting
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,15 +9,15 @@ tags:
   - git-guard
   - reliability
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/waiting
   - roadmap/project/unknown
 ---
 
 # 705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo
 
-- **Stato:** blocked
+- **Stato:** waiting
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../falliti/c2-git-guard-commit-su-branch-emette-errore-pack-705998|Apri prompt]]
+- **Prompt:** [[../../prompts/c2-git-guard-commit-su-branch-emette-errore-pack-705998|Apri prompt]]
 - **Primo lancio:** 2026-09-26T18:20:59Z
 - **Ultimo lancio:** 2026-09-26T18:22:16Z
 - **Ultimo esito:** BLOCKED

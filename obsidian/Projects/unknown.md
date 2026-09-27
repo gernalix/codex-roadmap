@@ -10,23 +10,23 @@ tags:
 - [[obsidian/Prompts/742579 rendere-il-db-grindr-favorites-frictionless-da-e-742579|742579 · Rendere il DB Grindr Favorites frictionless da esplorare]] · `completed`
 - [[obsidian/Prompts/366587 regression-rendere-le-view-grindr-compatibili-co-366587|366587 · Regression: rendere le view Grindr compatibili con DB Browser SQLite]] · `completed`
 - [[obsidian/Prompts/999198 correggere-mapping-prompt-id-work-item-id-nel-cu-999198|999198 · Correggere mapping prompt_id→work_item_id nel cutover C2]] · `completed`
-- [[obsidian/Prompts/528123 c2-ph-cutover-canonical-temporary-lane-override-528123|528123 · C2 PH cutover + canonical temporary lane override]] · `blocked`
-- [[obsidian/Prompts/340495 rendere-idempotente-il-cli-execution-override-c2-340495|340495 · Rendere idempotente il CLI execution override C2]] · `blocked`
+- [[obsidian/Prompts/528123 c2-ph-cutover-canonical-temporary-lane-override-528123|528123 · C2 PH cutover + canonical temporary lane override]] · `waiting`
+- [[obsidian/Prompts/340495 rendere-idempotente-il-cli-execution-override-c2-340495|340495 · Rendere idempotente il CLI execution override C2]] · `waiting`
 - [[obsidian/Prompts/588982 c2-ph-cutover-temporary-execution-override-588982|588982 · C2 PH cutover + temporary execution override]] · `superseded`
 - [[obsidian/Prompts/582408 completare-bootstrap-e-handoff-del-drain-autonom-582408|582408 · Completare bootstrap e handoff del drain autonomo C2]] · `completed`
 - [[obsidian/Prompts/232898 completare-preparazione-e-drain-autonomo-c2-fino-232898|232898 · Completare preparazione e drain autonomo C2 fino a quiescenza]] · `superseded`
-- [[obsidian/Prompts/384495 rimuovere-special-case-ph-e-implementare-overrid-384495|384495 · Rimuovere special-case PH e implementare override execution canonico]] · `blocked`
+- [[obsidian/Prompts/384495 rimuovere-special-case-ph-e-implementare-overrid-384495|384495 · Rimuovere special-case PH e implementare override execution canonico]] · `waiting`
 - [[obsidian/Prompts/507648 rimuovere-special-case-ph-e-aggiungere-execution-507648|507648 · Rimuovere special-case PH e aggiungere execution override C2]] · `superseded`
 - [[obsidian/Prompts/592418 c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418|592418 · C2 scheduler: due chat RDC possono scrivere contemporaneamente nello stesso worktree/task]] · `completed`
-- [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] · `blocked`
-- [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] · `blocked`
+- [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] · `waiting`
+- [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] · `waiting`
 - [[obsidian/Prompts/614593 c2-intake-collisioni-request-key-tra-chat-parall-614593|614593 · C2 intake: collisioni request-key tra chat parallele]] · `completed`
 - [[obsidian/Prompts/682297 c2-supervisor-rollover-fallito-degrada-a-human-r-682297|682297 · C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]] · `completed`
 - [[obsidian/Prompts/718501 c2-supervisor-backoff-rate-limit-globale-blocca--718501|718501 · C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]] · `completed`
 - [[obsidian/Prompts/328371 c2-dashboard-mutation-applicata-ma-invisibile-fi-328371|328371 · C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]] · `completed`
 - [[obsidian/Prompts/158995 c2-dashboard-rendere-immediatamente-visibili-i-n-158995|158995 · C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati]] · `completed`
 - [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] · `blocked`
-- [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]] · `blocked`
+- [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]] · `waiting`
 - [[obsidian/Prompts/255325 prompt-255325|255325 · Prompt 255325]] · `cancelled`
 - [[obsidian/Prompts/294731 prompt-294731|294731 · Prompt 294731]] · `cancelled`
 - [[obsidian/Prompts/319311 prompt-319311|319311 · Prompt 319311]] · `cancelled`

@@ -1,6 +1,6 @@
 ---
 prompt_id: 891963
-status: blocked
+status: waiting
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,15 +9,15 @@ tags:
   - priority
   - scheduler
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/waiting
   - roadmap/project/unknown
 ---
 
 # 891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane
 
-- **Stato:** blocked
+- **Stato:** waiting
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../falliti/c2-supervisor-terminal-workers-restano-abilitati-891963|Apri prompt]]
+- **Prompt:** [[../../prompts/c2-supervisor-terminal-workers-restano-abilitati-891963|Apri prompt]]
 - **Primo lancio:** 2026-09-26T23:37:08Z
 - **Ultimo lancio:** 2026-09-26T23:40:37Z
 - **Ultimo esito:** PASS

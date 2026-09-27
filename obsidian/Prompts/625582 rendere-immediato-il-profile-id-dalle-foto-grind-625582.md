@@ -1,6 +1,6 @@
 ---
 prompt_id: 625582
-status: blocked
+status: waiting
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - source:issue-inbox
   - ux:media
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/waiting
   - roadmap/project/unknown
 ---
 
 # 625582 · Rendere immediato il profile_id dalle foto Grindr scaricate
 
-- **Stato:** blocked
+- **Stato:** waiting
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../falliti/rendere-immediato-il-profile-id-dalle-foto-grind-625582|Apri prompt]]
+- **Prompt:** [[../../prompts/rendere-immediato-il-profile-id-dalle-foto-grind-625582|Apri prompt]]
 - **Primo lancio:** 2026-09-27T10:43:26Z
 - **Ultimo lancio:** 2026-09-27T10:45:01Z
 - **Ultimo esito:** BLOCKED

@@ -1,6 +1,6 @@
 ---
 prompt_id: 340495
-status: blocked
+status: waiting
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -12,15 +12,15 @@ tags:
   - priority:p0
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/waiting
   - roadmap/project/unknown
 ---
 
 # 340495 · Rendere idempotente il CLI execution override C2
 
-- **Stato:** blocked
+- **Stato:** waiting
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../falliti/rendere-idempotente-il-cli-execution-override-c2-340495|Apri prompt]]
+- **Prompt:** [[../../prompts/rendere-idempotente-il-cli-execution-override-c2-340495|Apri prompt]]
 - **Primo lancio:** 2026-09-27T05:11:56Z
 - **Ultimo lancio:** 2026-09-27T05:15:23Z
 - **Ultimo esito:** BLOCKED
