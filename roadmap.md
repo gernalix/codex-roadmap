@@ -10,3 +10,5 @@
 6. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 7. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 8. [[prompts/regression-c2-issue-1310-grindr-favorites-histor-575295|regression-c2-issue-1310-grindr-favorites-histor-575295]]
+9. [[prompts/phase-c-source-fedora-system-monitor-datasette-f-394865|phase-c-source-fedora-system-monitor-datasette-f-394865]]
+10. [[prompts/phase-c-source-codex-usage-monitor-datasette-fri-205775|phase-c-source-codex-usage-monitor-datasette-fri-205775]]
