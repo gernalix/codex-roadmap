@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/366587 regression-rendere-le-view-grindr-compatibili-co-366587\|366587 · Regression: rendere le view Grindr compatibili con DB Browser SQLite]] | running | — | — | — | no | no | — | — | GPT-6 Luna | medium |
 | [[obsidian/Prompts/999198 correggere-mapping-prompt-id-work-item-id-nel-cu-999198\|999198 · Correggere mapping prompt_id→work_item_id nel cutover C2]] | running | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence\|660629 · Orchestrare C2 fino a quiescenza]] | running | 2026-09-27T06:00:21Z | 2026-09-27T07:49:33Z | UNKNOWN | no | no | — | codex-roadmap | GPT-6 Luna | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
@@ -12,6 +11,7 @@
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/366587 regression-rendere-le-view-grindr-compatibili-co-366587\|366587 · Regression: rendere le view Grindr compatibili con DB Browser SQLite]] | completed | — | — | PASS | no | no | — | — | GPT-6 Luna | medium |
 | [[obsidian/Prompts/886300 riparare-il-finalizer-c2-per-task-su-codex-roadm-886300\|886300 · Riparare il finalizer C2 per task su codex-roadmap]] | completed | 2026-09-27T07:10:07Z | 2026-09-27T07:10:07Z | PASS | no | no | — | codex-roadmap | GPT-6 Sol | medium |
 | [[obsidian/Prompts/528123 c2-ph-cutover-canonical-temporary-lane-override-528123\|528123 · C2 PH cutover + canonical temporary lane override]] | blocked | 2026-09-26T23:47:46Z | 2026-09-26T23:51:04Z | BLOCKED | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/340495 rendere-idempotente-il-cli-execution-override-c2-340495\|340495 · Rendere idempotente il CLI execution override C2]] | blocked | 2026-09-27T05:11:56Z | 2026-09-27T05:15:23Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |

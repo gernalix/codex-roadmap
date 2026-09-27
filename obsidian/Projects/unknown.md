@@ -5,8 +5,8 @@ tags:
 
 # Unknown
 
-- [[obsidian/Prompts/366587 regression-rendere-le-view-grindr-compatibili-co-366587|366587 · Regression: rendere le view Grindr compatibili con DB Browser SQLite]] · `running`
 - [[obsidian/Prompts/999198 correggere-mapping-prompt-id-work-item-id-nel-cu-999198|999198 · Correggere mapping prompt_id→work_item_id nel cutover C2]] · `running`
+- [[obsidian/Prompts/366587 regression-rendere-le-view-grindr-compatibili-co-366587|366587 · Regression: rendere le view Grindr compatibili con DB Browser SQLite]] · `completed`
 - [[obsidian/Prompts/528123 c2-ph-cutover-canonical-temporary-lane-override-528123|528123 · C2 PH cutover + canonical temporary lane override]] · `blocked`
 - [[obsidian/Prompts/340495 rendere-idempotente-il-cli-execution-override-c2-340495|340495 · Rendere idempotente il CLI execution override C2]] · `blocked`
 - [[obsidian/Prompts/588982 c2-ph-cutover-temporary-execution-override-588982|588982 · C2 PH cutover + temporary execution override]] · `superseded`

@@ -1,6 +1,6 @@
 ---
 prompt_id: 366587
-status: running
+status: completed
 project_id: —
 model: GPT-6 Luna
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - regression
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/unknown
 ---
 
 # 366587 · Regression: rendere le view Grindr compatibili con DB Browser SQLite
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/regression-rendere-le-view-grindr-compatibili-co-366587|Apri prompt]]
+- **Prompt:** [[../../completed/regression-rendere-le-view-grindr-compatibili-co-366587|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
