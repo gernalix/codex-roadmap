@@ -114,19 +114,45 @@ def inspect_worktree(
     }
 
 
+def sync_runtime_worktree(
+    canonical: Path = DEFAULT_CANONICAL,
+    runtime: Path = DEFAULT_RUNTIME,
+) -> dict:
+    """Fast-forward a clean runtime branch to accepted local main, then guard it."""
+    before = inspect_worktree(canonical, runtime)
+    if set(before["issues"]) - {"runtime_code_drift"}:
+        raise GuardError("unsafe_runtime_worktree:" + ",".join(before["issues"]))
+    ancestor = subprocess.run(
+        ["git", "-C", str(runtime), "merge-base", "--is-ancestor", "HEAD", "main"]
+    )
+    if ancestor.returncode:
+        raise GuardError("runtime_not_ancestor_of_main")
+    _git(runtime, "merge", "--ff-only", "main")
+    after = inspect_worktree(canonical, runtime)
+    if after["state"] != "healthy":
+        raise GuardError("runtime_guard_after_sync:" + ",".join(after["issues"]))
+    return after
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--canonical", type=Path, default=DEFAULT_CANONICAL)
     parser.add_argument("--runtime", type=Path, default=DEFAULT_RUNTIME)
     parser.add_argument("--expected-branch", default=EXPECTED_BRANCH)
     parser.add_argument("--expected-upstream", default=EXPECTED_UPSTREAM)
+    parser.add_argument("--sync", action="store_true", help="Guarded fast-forward to local main before validation")
     args = parser.parse_args()
-    result = inspect_worktree(
-        args.canonical,
-        args.runtime,
-        expected_branch=args.expected_branch,
-        expected_upstream=args.expected_upstream,
-    )
+    if args.sync:
+        if args.expected_branch != EXPECTED_BRANCH or args.expected_upstream != EXPECTED_UPSTREAM:
+            raise GuardError("custom_sync_target_forbidden")
+        result = sync_runtime_worktree(args.canonical, args.runtime)
+    else:
+        result = inspect_worktree(
+            args.canonical,
+            args.runtime,
+            expected_branch=args.expected_branch,
+            expected_upstream=args.expected_upstream,
+        )
     print(json.dumps(result, sort_keys=True))
     if result["state"] != "healthy":
         raise SystemExit(2)

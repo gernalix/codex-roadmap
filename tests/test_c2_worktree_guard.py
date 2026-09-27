@@ -5,7 +5,7 @@ import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from c2_worktree_guard import inspect_worktree
+from c2_worktree_guard import GuardError, inspect_worktree, sync_runtime_worktree
 
 
 def git(repo: Path, *args: str) -> str:
@@ -69,6 +69,39 @@ class C2WorktreeGuardTests(unittest.TestCase):
             result = inspect_worktree(repo, runtime)
             self.assertEqual(result["ahead"], 0)
             self.assertIn("runtime_code_drift", result["issues"])
+
+    def test_clean_behind_runtime_fast_forwards_and_rechecks(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo, runtime = self.make_repo(Path(directory))
+            (repo / "tools" / "runtime.py").write_text("v2\n")
+            git(repo, "add", "tools/runtime.py")
+            git(repo, "commit", "-m", "runtime update")
+            result = sync_runtime_worktree(repo, runtime)
+            self.assertEqual("healthy", result["state"])
+            self.assertEqual(git(repo, "rev-parse", "main"), git(runtime, "rev-parse", "HEAD"))
+
+    def test_dirty_runtime_never_moves(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo, runtime = self.make_repo(Path(directory))
+            old = git(runtime, "rev-parse", "HEAD")
+            (runtime / "dirty.txt").write_text("uncommitted\n")
+            (repo / "tools" / "runtime.py").write_text("v2\n")
+            git(repo, "add", "tools/runtime.py")
+            git(repo, "commit", "-m", "runtime update")
+            with self.assertRaisesRegex(GuardError, "unsafe_runtime_worktree"):
+                sync_runtime_worktree(repo, runtime)
+            self.assertEqual(old, git(runtime, "rev-parse", "HEAD"))
+
+    def test_ahead_runtime_never_moves(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo, runtime = self.make_repo(Path(directory))
+            (runtime / "local.txt").write_text("local\n")
+            git(runtime, "add", "local.txt")
+            git(runtime, "commit", "-m", "local")
+            old = git(runtime, "rev-parse", "HEAD")
+            with self.assertRaisesRegex(GuardError, "unsafe_runtime_worktree"):
+                sync_runtime_worktree(repo, runtime)
+            self.assertEqual(old, git(runtime, "rev-parse", "HEAD"))
 
     def test_missing_upstream_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
