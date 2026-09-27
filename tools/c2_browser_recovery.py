@@ -7,13 +7,12 @@ never reads conversation contents.
 from __future__ import annotations
 
 import json
-from pathlib import Path
 import sys
 import time
 from urllib.request import urlopen
 
 ENDPOINT = 'http://127.0.0.1:9333'
-SUPERVISOR_SRC = Path('/home/daniele/projects/chatgpt-rdc-supervisor/src')
+from c2_supervisor_source import require_supervisor_source
 
 
 class BrowserRecoveryError(RuntimeError):
@@ -58,8 +57,9 @@ def _evaluate(page, expression):
 
 
 def open_successor_tab():
-    if str(SUPERVISOR_SRC) not in sys.path:
-        sys.path.insert(0, str(SUPERVISOR_SRC))
+    source = require_supervisor_source()
+    if str(source) not in sys.path:
+        sys.path.insert(0, str(source))
     from chatgpt_rdc_supervisor.safety import reserve_launch
     tabs = _json('/json/list')
     reserve_launch(open_tabs=sum(1 for tab in tabs if tab.get('type') == 'page'))
