@@ -71,18 +71,26 @@ class BlockedReconcileTests(unittest.TestCase):
         self.assertEqual('External source missing', self.db.execute(
             'SELECT blocker FROM work_items WHERE work_item_id=?', (self.child,)).fetchone()[0])
 
-    def test_terminal_prompt_history_and_safety_net_replay(self):
+    def test_terminal_prompt_history_and_resolved_by_requires_full_review(self):
         successor = c2_intake.add_work_item(self.db, title='Successor')['work_item_id']
         self.db.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?", (successor,))
         self.db.execute("""INSERT INTO work_item_relations VALUES(
             'prompt:123456',?,'resolved_by','now','test','canonical')""", (successor,))
-        expected = blocked.automatic_candidates(self.db)
-        self.assertEqual([('prompt:123456', 'resolved_by')],
-                         [(x['work_item_id'], x['kind']) for x in expected])
-        result = blocked.safety_net(self.db, expected=expected)
-        self.assertEqual('superseded', result[0]['new_status'])
-        self.assertEqual([], blocked.safety_net(self.db, expected=expected))
+        self.assertEqual([], blocked.automatic_candidates(self.db))
+        result = self._reconcile('prompt:123456', disposition='TERMINAL',
+                                 terminal_status='superseded', superseded_by=successor)
+        self.assertEqual('superseded', result['new_status'])
         self.assertEqual(1, self.db.execute("SELECT count(*) FROM status_history WHERE prompt_id='123456' AND new_status='superseded'").fetchone()[0])
+
+    def test_completed_finalizer_successor_does_not_resolve_unchecked_smoke(self):
+        successor = c2_intake.add_work_item(self.db, title='Finalizer fix')['work_item_id']
+        self.db.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?", (successor,))
+        self.db.execute("""INSERT INTO work_item_relations VALUES(
+            ?,?,'resolved_by','now','test','finalizer only')""", (self.root, successor))
+        self.db.execute("UPDATE work_items SET blocker='Live smoke still required' WHERE work_item_id=?", (self.root,))
+        self.assertEqual([], blocked.automatic_candidates(self.db))
+        self.assertEqual('blocked', self.db.execute('SELECT status FROM work_items WHERE work_item_id=?',
+                                                 (self.root,)).fetchone()[0])
 
     def test_safety_net_dependency_requires_explicit_marker_and_all_dependencies(self):
         dependency = c2_intake.add_work_item(self.db, title='Dependency')['work_item_id']
@@ -95,6 +103,15 @@ class BlockedReconcileTests(unittest.TestCase):
         self.assertEqual('dependency', expected[0]['kind'])
         self.assertEqual('waiting', blocked.safety_net(self.db, expected=expected)[0]['new_status'])
         self.assertEqual([], blocked.safety_net(self.db, expected=expected))
+
+    def test_cancelled_or_superseded_dependency_is_not_fulfilled(self):
+        dependency = c2_intake.add_work_item(self.db, title='Dependency')['work_item_id']
+        self.db.execute("INSERT INTO work_item_dependencies(work_item_id,depends_on_work_item_id,required) VALUES(?,?,1)",
+                        (self.child, dependency))
+        self.db.execute("UPDATE work_items SET blocker=? WHERE work_item_id=?", ('dependency:' + dependency, self.child))
+        for status in ('cancelled', 'superseded'):
+            self.db.execute("UPDATE work_items SET status=? WHERE work_item_id=?", (status, dependency))
+            self.assertEqual([], blocked.automatic_candidates(self.db))
 
     def test_single_writer_route_and_replay_fail_closed(self):
         args = dict(work_item_id=self.child, expected_updated_at='old',
@@ -110,8 +127,9 @@ class BlockedReconcileTests(unittest.TestCase):
     def test_runtime_periodic_tick_submits_only_structured_candidate(self):
         successor = c2_intake.add_work_item(self.db, title='Successor')['work_item_id']
         self.db.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?", (successor,))
-        self.db.execute("""INSERT INTO work_item_relations VALUES(
-            ?,?,'resolved_by','now','test','canonical')""", (self.child, successor))
+        self.db.execute("INSERT INTO work_item_dependencies(work_item_id,depends_on_work_item_id,required) VALUES(?,?,1)",
+                        (self.child, successor))
+        self.db.execute("UPDATE work_items SET blocker=? WHERE work_item_id=?", ('dependency:' + successor, self.child))
         calls = []
         c2_runtime.advance(self.db, submit=lambda *args: calls.append(args),
                            repo_task_status=lambda _: {}, launch=lambda _: None,

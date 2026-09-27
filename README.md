@@ -46,9 +46,10 @@ Si invia tramite il single writer con autorità supervisor; non modifica run
 attivi, receipt o terminal request storiche. Il writer registra evento,
 evidenza e, per i prompt, lo storico dello stato.
 
-Il tick periodico di C2 riconcilia automaticamente solo due segnali strutturati:
-una relazione `resolved_by` verso un item completato o un blocker esplicito
-`dependency:<work_item_id>` la cui dipendenza richiesta è conclusa. Gli altri
+Il tick periodico di C2 riconcilia automaticamente solo un blocker esplicito
+`dependency:<work_item_id>` la cui dipendenza richiesta è `completed` o
+`waived`. Una relazione `resolved_by` non dimostra di per sé tutti i criteri
+di accettazione dell'item storico. Gli altri
 blocker restano `BLOCKED` finché un executor presenta prove e condizione di
 recovery. La gestione per evento resta il percorso principale.
 

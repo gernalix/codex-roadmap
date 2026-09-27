@@ -120,7 +120,7 @@ def pending_review(conn: sqlite3.Connection) -> list[dict]:
         (SELECT count(*) FROM work_item_dependencies d JOIN work_items dep
           ON dep.work_item_id=d.depends_on_work_item_id
           WHERE d.work_item_id=w.work_item_id AND d.required=1
-            AND dep.status NOT IN ('completed','waived','cancelled','superseded')) AS unmet_dependencies
+            AND dep.status NOT IN ('completed','waived')) AS unmet_dependencies
         FROM work_items w WHERE w.status='blocked' ORDER BY w.updated_at,w.work_item_id""")]
 
 
@@ -130,16 +130,6 @@ def automatic_candidates(conn: sqlite3.Connection) -> list[dict]:
     for row in conn.execute("""SELECT w.work_item_id,w.updated_at,w.blocker
         FROM work_items w WHERE w.status='blocked' ORDER BY w.work_item_id"""):
         work_item_id = row["work_item_id"]
-        resolved = conn.execute("""SELECT r.to_work_item_id FROM work_item_relations r
-            JOIN work_items successor ON successor.work_item_id=r.to_work_item_id
-            WHERE r.from_work_item_id=? AND r.relation_type='resolved_by'
-              AND successor.status='completed' ORDER BY r.to_work_item_id LIMIT 1""",
-            (work_item_id,)).fetchone()
-        if resolved:
-            candidates.append({"work_item_id": work_item_id,
-                               "expected_updated_at": row["updated_at"],
-                               "kind": "resolved_by", "source": resolved[0]})
-            continue
         blocker = str(row["blocker"] or "")
         if blocker.startswith("dependency:"):
             dependency = blocker.partition(":")[2].strip()
@@ -147,11 +137,11 @@ def automatic_candidates(conn: sqlite3.Connection) -> list[dict]:
                 JOIN work_items dep ON dep.work_item_id=d.depends_on_work_item_id
                 WHERE d.work_item_id=? AND d.depends_on_work_item_id=? AND d.required=1""",
                 (work_item_id, dependency)).fetchone()
-            if matches and matches[0] in {"completed", "waived", "cancelled", "superseded"}:
+            if matches and matches[0] in {"completed", "waived"}:
                 unmet = conn.execute("""SELECT 1 FROM work_item_dependencies d
                     JOIN work_items dep ON dep.work_item_id=d.depends_on_work_item_id
                     WHERE d.work_item_id=? AND d.required=1
-                      AND dep.status NOT IN ('completed','waived','cancelled','superseded') LIMIT 1""",
+                      AND dep.status NOT IN ('completed','waived') LIMIT 1""",
                     (work_item_id,)).fetchone()
                 if not unmet:
                     candidates.append({"work_item_id": work_item_id,
@@ -174,17 +164,9 @@ def safety_net(conn: sqlite3.Connection, *, expected: list[dict]) -> list[dict]:
         candidate = current.get(item["work_item_id"])
         if candidate != item:
             continue
-        if item["kind"] == "resolved_by":
-            results.append(reconcile(conn, item["work_item_id"],
-                expected_updated_at=item["expected_updated_at"],
-                disposition="TERMINAL", terminal_status="superseded",
-                superseded_by=item["source"],
-                evidence=["Canonical resolved_by successor completed: " + item["source"]],
-                next_action="Historical BLOCKED item resolved by completed successor."))
-        else:
-            results.append(reconcile(conn, item["work_item_id"],
-                expected_updated_at=item["expected_updated_at"],
-                disposition="WAITING",
-                evidence=["Canonical required dependency terminal: " + item["source"]],
-                next_action="Reassess runnable work after dependency completion."))
+        results.append(reconcile(conn, item["work_item_id"],
+            expected_updated_at=item["expected_updated_at"],
+            disposition="WAITING",
+            evidence=["Canonical required dependency completed or waived: " + item["source"]],
+            next_action="Reassess runnable work after dependency completion."))
     return results
