@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+"""Dedicated GitHub PR writer for isolated codex-roadmap task branches."""
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+import re
+import subprocess
+import tempfile
+
+REPOSITORY = "gernalix/codex-roadmap"
+SHA = re.compile(r"[0-9a-f]{40}\Z")
+PROMPT = re.compile(r"[0-9]{6}\Z")
+
+
+class IntegrationError(RuntimeError):
+    pass
+
+
+def _run(*args: str, cwd: Path | None = None) -> str:
+    proc = subprocess.run(args, cwd=cwd, text=True, capture_output=True, check=False)
+    if proc.returncode:
+        raise IntegrationError(f"command_failed:{args[0]}:{proc.stderr.strip() or proc.stdout.strip() or proc.returncode}")
+    return proc.stdout.strip()
+
+
+def _git(repo: Path, *args: str) -> str:
+    return _run("git", "-C", str(repo), *args)
+
+
+def _pr(prompt_id: str) -> dict | None:
+    rows = json.loads(_run("gh", "pr", "list", "--repo", REPOSITORY,
+        "--head", "task/" + prompt_id, "--state", "all", "--limit", "100",
+        "--json", "number,state,headRefName,headRefOid,baseRefName,mergeCommit,body,isDraft,mergeable,statusCheckRollup,url"))
+    matches = [row for row in rows if row.get("headRefName") == "task/" + prompt_id
+               and row.get("baseRefName") == "main"]
+    if len(matches) > 1:
+        raise IntegrationError("multiple_task_prs")
+    return matches[0] if matches else None
+
+
+def _marker(pr: dict) -> str | None:
+    match = re.search(r"(?m)^C2-tested-head: ([0-9a-f]{40})$", str(pr.get("body") or ""))
+    return match.group(1) if match else None
+
+
+def _valid(prompt_id: str) -> None:
+    if not PROMPT.fullmatch(prompt_id):
+        raise IntegrationError("invalid_prompt_id")
+
+
+def _identity(repo: Path, prompt_id: str) -> str:
+    if Path(_git(repo, "rev-parse", "--show-toplevel")).resolve() != repo.resolve():
+        raise IntegrationError("worktree_root_mismatch")
+    if _git(repo, "branch", "--show-current") != "task/" + prompt_id:
+        raise IntegrationError("task_branch_mismatch")
+    remote = _git(repo, "remote", "get-url", "origin")
+    if not re.fullmatch(r"(?:https://github\.com/|git@github\.com:)gernalix/codex-roadmap(?:\.git)?", remote):
+        raise IntegrationError("repository_mismatch")
+    if _git(repo, "status", "--porcelain"):
+        raise IntegrationError("task_worktree_dirty")
+    head = _git(repo, "rev-parse", "HEAD")
+    if not SHA.fullmatch(head):
+        raise IntegrationError("invalid_task_head")
+    return head
+
+
+def status(prompt_id: str) -> dict:
+    _valid(prompt_id)
+    pr = _pr(prompt_id)
+    if pr is None:
+        return {"status": "no-task-record", "integration_state": "missing"}
+    head = str(pr.get("headRefOid") or "")
+    if not SHA.fullmatch(head):
+        raise IntegrationError("pr_head_missing")
+    marker = _marker(pr)
+    if marker and marker != head:
+        raise IntegrationError("tested_head_drift")
+    if pr.get("state") == "MERGED":
+        merge = str((pr.get("mergeCommit") or {}).get("oid") or "")
+        if not SHA.fullmatch(merge):
+            raise IntegrationError("merge_commit_missing")
+        comparison = json.loads(_run("gh", "api", f"repos/{REPOSITORY}/compare/{merge}...main"))
+        if comparison.get("status") not in ("ahead", "identical"):
+            raise IntegrationError("merge_not_on_main")
+        return {"status": "merged", "integration_state": "merged", "head_sha": head,
+                "merge_sha": merge, "pr_number": pr["number"]}
+    if pr.get("state") != "OPEN" or marker is None:
+        raise IntegrationError("unmanaged_or_closed_task_pr")
+    return {"status": "queued", "integration_state": "queued", "head_sha": head,
+            "pr_number": pr["number"]}
+
+
+def queue(repo: Path, prompt_id: str, *, expected_head: str | None = None) -> dict:
+    _valid(prompt_id)
+    repo = repo.expanduser().resolve()
+    head = _identity(repo, prompt_id)
+    if expected_head is not None and head != expected_head:
+        raise IntegrationError("tested_head_drift")
+    existing = _pr(prompt_id)
+    if existing:
+        result = status(prompt_id)
+        if result.get("head_sha") != head:
+            raise IntegrationError("task_pr_head_drift")
+        return result
+    remote = _git(repo, "ls-remote", "origin", "refs/heads/task/" + prompt_id)
+    remote_head = remote.split()[0] if remote else "0" * 40
+    if remote_head != "0" * 40 and remote_head != head:
+        raise IntegrationError("remote_task_head_conflict")
+    _git(repo, "push", f"--force-with-lease=refs/heads/task/{prompt_id}:{remote_head}",
+         "origin", f"{head}:refs/heads/task/{prompt_id}")
+    body = f"C2 codex-roadmap task {prompt_id}\n\nC2-tested-head: {head}\n"
+    with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", suffix=".md") as doc:
+        doc.write(body)
+        doc.flush()
+        _run("gh", "pr", "create", "--repo", REPOSITORY, "--base", "main",
+             "--head", "task/" + prompt_id, "--title", f"[c2-roadmap] {prompt_id}",
+             "--body-file", doc.name)
+    result = status(prompt_id)
+    if result.get("head_sha") != head:
+        raise IntegrationError("queued_head_mismatch")
+    return result
+
+
+def integrate(prompt_id: str) -> dict:
+    _valid(prompt_id)
+    current = status(prompt_id)
+    if current["status"] == "merged":
+        return current
+    if current["status"] != "queued":
+        raise IntegrationError("task_pr_missing")
+    pr = _pr(prompt_id)
+    assert pr is not None
+    if pr.get("isDraft") or pr.get("mergeable") != "MERGEABLE":
+        raise IntegrationError("task_pr_not_mergeable")
+    checks = pr.get("statusCheckRollup") or []
+    if not checks or any(c.get("conclusion") not in ("SUCCESS", "NEUTRAL", "SKIPPED") for c in checks):
+        raise IntegrationError("task_pr_checks_not_green")
+    head = current["head_sha"]
+    merged = json.loads(_run("gh", "api", "--method", "PUT",
+        f"repos/{REPOSITORY}/pulls/{pr['number']}/merge", "-f", f"sha={head}",
+        "-f", "merge_method=merge"))
+    if not merged.get("merged"):
+        raise IntegrationError("task_pr_merge_rejected")
+    result = status(prompt_id)
+    if result.get("head_sha") != head or result.get("merge_sha") != merged.get("sha"):
+        raise IntegrationError("merged_head_mismatch")
+    return result
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("command", choices=("queue", "status", "integrate"))
+    parser.add_argument("--prompt-id", required=True)
+    parser.add_argument("--worktree", type=Path)
+    parser.add_argument("--expected-head")
+    args = parser.parse_args()
+    try:
+        if args.command == "queue":
+            if args.worktree is None:
+                raise IntegrationError("worktree_required")
+            result = queue(args.worktree, args.prompt_id, expected_head=args.expected_head)
+        elif args.command == "integrate":
+            result = integrate(args.prompt_id)
+        else:
+            result = status(args.prompt_id)
+    except (IntegrationError, OSError, ValueError, json.JSONDecodeError) as exc:
+        print(json.dumps({"status": "blocked", "error": str(exc)}, sort_keys=True))
+        return 2
+    print(json.dumps(result, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

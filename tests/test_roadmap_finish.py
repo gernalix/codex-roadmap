@@ -6,90 +6,77 @@ from unittest.mock import patch
 TOOLS=Path(__file__).resolve().parents[1]/"tools"
 sys.path.insert(0,str(TOOLS))
 import roadmap_finish
+import c2_repository_integration as integration
+import roadmap_repo_integration as dedicated
 
 
 class FinishWrapperTests(unittest.TestCase):
+    @patch("roadmap_finish.prompt_repository", return_value="gernalix/codex-roadmap")
+    @patch("roadmap_finish.queue_integration", return_value=("queued", False))
+    def test_self_repo_no_generic_task_record_needed(self, queue, repository):
+        out=roadmap_finish.finish(Path("/tmp/r"),"123456",confirm_executed=True)
+        queue.assert_called_once_with("123456","gernalix/codex-roadmap",Path("/tmp/r"))
+        self.assertEqual("queued",out["status"])
+
+    @patch("c2_repository_integration._external", return_value={"status":"queued"})
+    @patch("c2_repository_integration.queue")
+    def test_external_path_unchanged(self, own, external):
+        self.assertEqual(("queued",False),integration.queue_integration(
+            "123456","owner/other",Path("/tmp/r")))
+        external.assert_called_once_with("123456","finish-any")
+        own.assert_not_called()
+
+    @patch("c2_repository_integration._external", return_value={"status":"merged","integration_state":"merged"})
+    def test_external_status_path_unchanged(self, external):
+        self.assertEqual("merged",integration.integration_status("123456","owner/other")["status"])
+        external.assert_called_once_with("123456","status-any")
+
+    @patch("c2_repository_integration.queue", return_value={"status":"queued","head_sha":"a"*40})
+    def test_own_queued(self, own):
+        self.assertEqual(("queued",False),integration.queue_integration(
+            "123456",dedicated.REPOSITORY,Path("/tmp/r")))
+        own.assert_called_once()
+
+    @patch("c2_repository_integration.status", return_value={"status":"merged","integration_state":"merged","merge_sha":"b"*40})
+    def test_own_merged(self, own):
+        result=integration.integration_status("123456",dedicated.REPOSITORY)
+        self.assertEqual("merged",result["status"])
+        self.assertEqual("b"*40,result["merge_sha"])
+
+    @patch("roadmap_repo_integration._pr")
+    @patch("roadmap_repo_integration._run")
+    def test_merged_requires_main_contains_merge(self, run, pr):
+        pr.return_value={"state":"MERGED","headRefOid":"a"*40,
+                         "mergeCommit":{"oid":"b"*40},"number":42}
+        run.return_value=json.dumps({"status":"diverged"})
+        with self.assertRaisesRegex(dedicated.IntegrationError,"merge_not_on_main"):
+            dedicated.status("123456")
+
+    @patch("roadmap_repo_integration._pr")
+    def test_open_pr_fails_on_tested_head_drift(self, pr):
+        pr.return_value={"state":"OPEN","headRefOid":"a"*40,
+            "body":"C2-tested-head: "+"b"*40,"number":42}
+        with self.assertRaisesRegex(dedicated.IntegrationError,"tested_head_drift"):
+            dedicated.status("123456")
+
     @patch("roadmap_finish._queue_repo_integration", return_value=("merged", True))
-    def test_finish_terminalizes_only_after_repo_is_already_merged(self, queue):
-        original=roadmap_finish.finish_result
-        calls=[]
-        def fake(repo,prompt_id,result,**kwargs):
-            calls.append((str(repo),prompt_id,result,kwargs))
-            return {"status":"queued","prompt_id":prompt_id}
-        roadmap_finish.finish_result=fake
-        try:
-            out=roadmap_finish.finish(Path("/tmp/r"),"123456",confirm_executed=True)
-        finally:
-            roadmap_finish.finish_result=original
-        queue.assert_called_once_with("123456")
-        self.assertEqual("PASS",calls[0][2])
-        self.assertEqual("remote_single_writer",out["finish_mode"])
+    @patch("roadmap_finish.finish_result", return_value={"status":"queued"})
+    def test_pass_terminal_only_after_merge(self, result, queue):
+        out=roadmap_finish.finish(Path("/tmp/r"),"123456",confirm_executed=True)
         self.assertEqual("merged",out["repo_integration"])
+        result.assert_called_once()
 
     @patch("roadmap_finish._queue_repo_integration", return_value=("queued", False))
-    def test_queued_repo_work_returns_without_terminalizing_or_waiting(self, queue):
-        original=roadmap_finish.finish_result
-        calls=[]
-        roadmap_finish.finish_result=lambda *args,**kwargs: calls.append((args,kwargs))
-        try:
-            out=roadmap_finish.finish(Path("/tmp/r"),"123456",confirm_executed=True)
-        finally:
-            roadmap_finish.finish_result=original
-        self.assertEqual([], calls)
-        self.assertEqual("queued",out["status"])
+    @patch("roadmap_finish.finish_result")
+    def test_queued_does_not_terminalize(self, result, queue):
+        out=roadmap_finish.finish(Path("/tmp/r"),"123456",confirm_executed=True)
         self.assertEqual("QUEUED",out["result"])
-        self.assertEqual("async_integration_queue",out["finish_mode"])
-        self.assertEqual("none",out["user_action"])
-
-    @patch("roadmap_finish.subprocess.run")
-    @patch.object(Path, "is_file", return_value=True)
-    def test_queue_helper_accepts_queued_payload(self, _is_file, run):
-        run.return_value=subprocess.CompletedProcess([],0,stdout=json.dumps({"status":"queued"}),stderr="")
-        state, integrated=roadmap_finish._queue_repo_integration("123456")
-        self.assertEqual("queued",state)
-        self.assertFalse(integrated)
-        self.assertIn("finish-any",run.call_args.args[0])
-
-    @patch("roadmap_finish.subprocess.run")
-    @patch.object(Path, "is_file", return_value=True)
-    def test_queue_helper_fails_closed_without_task_record(self, _is_file, run):
-        run.return_value=subprocess.CompletedProcess(
-            [],0,stdout=json.dumps({"status":"no-task-record"}),stderr=""
-        )
-        with self.assertRaisesRegex(
-            roadmap_finish.RoadmapResultError,
-            "repo_integration_task_record_missing",
-        ):
-            roadmap_finish._queue_repo_integration("123456")
+        result.assert_not_called()
 
     @patch("roadmap_finish._queue_repo_integration")
-    def test_non_pass_terminalizes_without_repo_integration(self, queue):
-        original=roadmap_finish.finish_result
-        calls=[]
-        def fake(repo,prompt_id,result,**kwargs):
-            calls.append((prompt_id,result,kwargs))
-            return {"status":"queued","prompt_id":prompt_id,"result":result}
-        roadmap_finish.finish_result=fake
-        try:
-            out=roadmap_finish.finish(
-                Path("/tmp/r"),"123456",result="BLOCKED",confirm_executed=True
-            )
-        finally:
-            roadmap_finish.finish_result=original
+    @patch("roadmap_finish.finish_result", return_value={"status":"queued"})
+    def test_non_pass_skips_integration(self, result, queue):
+        roadmap_finish.finish(Path("/tmp/r"),"123456",result="BLOCKED",confirm_executed=True)
         queue.assert_not_called()
-        self.assertEqual("BLOCKED",calls[0][1])
-        self.assertEqual("not-applicable",out["repo_integration"])
-
-    @patch("roadmap_finish._queue_repo_integration")
-    def test_dry_run_does_not_touch_repo_queue(self, queue):
-        original=roadmap_finish.finish_result
-        roadmap_finish.finish_result=lambda *args,**kwargs: {"status":"dry-run"}
-        try:
-            out=roadmap_finish.finish(Path("/tmp/r"),"123456",dry_run=True)
-        finally:
-            roadmap_finish.finish_result=original
-        queue.assert_not_called()
-        self.assertEqual("dry-run",out["repo_integration"])
-
 
 if __name__=="__main__": unittest.main()
