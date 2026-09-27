@@ -28,6 +28,10 @@ ANSI_AMBER = "\033[38;5;214m"
 ANSI_FOCUS_ON = "\033[?1004h"
 ANSI_FOCUS_OFF = "\033[?1004l"
 ANSI_CLEAR = "\033[2J\033[H"
+ANSI_HOME = "\033[H"
+ANSI_ERASE_DOWN = "\033[J"
+ANSI_SYNC_ON = "\033[?2026h"
+ANSI_SYNC_OFF = "\033[?2026l"
 INLINE_CODE_RE = re.compile(r"`([^`]+)`")
 ROOT_PATH_RE = re.compile(r"(?<![\w`])(/root/[A-Za-z0-9_./-]+)")
 URL_RE = re.compile(r"(?<![\w`])(https?://\S+)")
@@ -307,15 +311,26 @@ def _status_line(state: UnreadState, read_after: float, color: bool, now: float 
     return f"{ANSI_DIM}{text}{ANSI_RESET}" if color else text
 
 
-def _redraw(path: Path, messages: list[HumanMessage], state: UnreadState, read_after: float, color: bool, *, now_mono: float | None = None) -> None:
-    print(ANSI_CLEAR, end="")
+def _frame_text(path: Path, messages: list[HumanMessage], state: UnreadState, read_after: float, color: bool, *, now_mono: float | None = None) -> str:
     header = f"Codex human view · {path.stem}"
-    print(f"{ANSI_DIM}{header}{ANSI_RESET}" if color else header)
-    print(_status_line(state, read_after, color, now=now_mono))
-    print()
+    lines = [f"{ANSI_DIM}{header}{ANSI_RESET}" if color else header]
+    lines.append(_status_line(state, read_after, color, now=now_mono))
+    lines.append("")
     for message in messages:
-        print(render(message, color=color, unread=message.key in (state.unread or set())))
-        print()
+        lines.append(render(message, color=color, unread=message.key in (state.unread or set())))
+        lines.append("")
+    return "\n".join(lines)
+
+
+def _redraw(path: Path, messages: list[HumanMessage], state: UnreadState, read_after: float, color: bool, *, now_mono: float | None = None, initial: bool = False) -> None:
+    frame = _frame_text(path, messages, state, read_after, color, now_mono=now_mono)
+    if initial:
+        sys.stdout.write(ANSI_CLEAR + frame)
+    else:
+        # VTE/Ptyxis supports synchronized output: update the frame off-screen,
+        # then present it at once. HOME+erase-after avoids the visible blank
+        # interval caused by clearing the screen before every refresh.
+        sys.stdout.write(ANSI_SYNC_ON + ANSI_HOME + frame + ANSI_ERASE_DOWN + ANSI_SYNC_OFF)
     sys.stdout.flush()
 
 
@@ -331,7 +346,7 @@ def follow(path: Path, history: int, poll: float, *, color: bool = True, read_af
         tty.setcbreak(fd)
         os.set_blocking(fd, False)
         print(ANSI_FOCUS_ON, end="")
-    _redraw(path, messages, state, read_after, color)
+    _redraw(path, messages, state, read_after, color, initial=True)
     age_signature = tuple(relative_age(message.timestamp) for message in messages)
     last_status_tick = int(time.monotonic()) if state.unread else None
     last_columns = shutil.get_terminal_size(fallback=(120, 24)).columns

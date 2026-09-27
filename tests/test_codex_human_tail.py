@@ -1,3 +1,4 @@
+import io
 import json
 import tempfile
 import unittest
@@ -7,7 +8,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
-from codex_human_tail import UnreadState, _read_input, _status_line, colorize, extract_human_message, relative_age, render, select_session, wrap_text, HumanMessage
+from codex_human_tail import ANSI_CLEAR, ANSI_ERASE_DOWN, ANSI_HOME, ANSI_SYNC_ON, UnreadState, _read_input, _redraw, _status_line, colorize, extract_human_message, relative_age, render, select_session, wrap_text, HumanMessage
 
 
 def _read_input_bytes_for_test(data: bytes):
@@ -130,6 +131,19 @@ class CodexHumanTailTests(unittest.TestCase):
         events, pending = _read_input_bytes_for_test(b"\x1b[Or\x1b[Iq")
         self.assertEqual(["focus_out", "mark_read", "focus_in", "quit"], events)
         self.assertEqual(b"", pending)
+
+    def test_refresh_does_not_blank_screen_before_redraw(self):
+        import contextlib
+        message = HumanMessage(datetime(2026, 9, 28, 0, 27, tzinfo=timezone.utc), "testo")
+        state = UnreadState(focused=True, focus_since=0.0)
+        stream = io.StringIO()
+        with contextlib.redirect_stdout(stream):
+            _redraw(Path("/tmp/session.jsonl"), [message], state, 20.0, False, initial=False)
+        output = stream.getvalue()
+        self.assertNotIn(ANSI_CLEAR, output)
+        self.assertIn(ANSI_SYNC_ON, output)
+        self.assertIn(ANSI_HOME, output)
+        self.assertIn(ANSI_ERASE_DOWN, output)
 
     def test_zero_unread_status_is_always_visible(self):
         state = UnreadState(focused=True, focus_since=0.0)

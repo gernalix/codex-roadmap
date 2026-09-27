@@ -24,3 +24,5 @@ Checklist:
 Acceptance: focus-out/new-message/focus-in/dwell/focus-out-before-dwell/manual-clear/configuration all behave as requested.
 Current step: implementation and canonical lifecycle repair verified.
 Next action: commit and push final code/checkpoint, restart the live viewer, then submit canonical PASS when executor_started is applied.
+
+Update 2026-09-28: removed refresh flash by switching recurring redraws from clear-then-paint to synchronized VTE/Ptyxis frame updates (HOME + frame + erase-down inside DEC synchronized-output mode). Initial draw still clears once. Added local single-instance launcher state so a new viewer terminates the previous viewer and its owning wrapper shell when identifiable. Future launches must omit `; exec bash` so terminated viewers close their Ptyxis tab instead of leaving a Signal 15 tombstone. Focused suite: 14/14 PASS.
