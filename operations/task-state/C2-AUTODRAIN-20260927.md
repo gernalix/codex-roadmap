@@ -65,3 +65,14 @@ Do NOT call roadmap_start again. After Inbox priority work, launch each exactly 
 6. Resume/launch the already-claimed 625582 and 545953 lanes exactly once via Codex CLI when safe, while also starting independent eligible leaves up to resource/repo constraints.
 7. Continue MegaVault Phase B→C→D→E→gate and remaining roadmap work, returning to Inbox/reconcile between transitions.
 8. Stop only at quiescence; user-deferred Inbox rows do not count as actionable until released.
+
+
+# FINAL HANDOFF DELTA — authoritative over earlier Inbox section
+- Canonical supervisor authority token 20 has been retired; local lease state is retired. Successor can acquire token 21 immediately.
+- Actionable Inbox was processed before handoff. Canonical pending Inbox now contains ONLY issue:bfcfdb13f8b647c3b667dbc7af832b30 (Kuma/service registry), still explicitly Inbox-only/deferred.
+- Urgent Inbox-derived work is now canonical:
+  - wi:8eb0f2e8ed2c46349114896c9007a46d — “Definire il comando canonico «esegui C2»” — pending, P0, codex-roadmap. PRIORITIZE FIRST.
+  - wi:853f2846c06d406bb19cf53e20afec5c — “Isolare il bootstrap systemd nei regression test github-autosync” — pending. PRIORITIZE immediately after/parallel where safe.
+- Phase A 853479 is completed canonically.
+- PROMPT_ID=625582 and PROMPT_ID=545953 are status=running from roadmap_start, but this chat did NOT launch Codex CLI processes/sessions for them. Do not roadmap_start again; after the two urgent Inbox-derived items, launch/bind each exactly once if still safe.
+- User’s latest steer: in the successor chat, prioritize Inbox-derived urgent work before ordinary roadmap continuation, then maximize parallelism using Codex CLI wherever repo/resource/dependency constraints allow.
