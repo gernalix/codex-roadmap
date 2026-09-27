@@ -107,6 +107,43 @@ class SchedulerTests(unittest.TestCase):
             'SELECT status FROM work_items WHERE work_item_id=?',(wid,)).fetchone()[0])
         self.assertEqual(wid,receipt['work_item_id'])
 
+    def test_manual_start_ignores_status_only_same_repo_orchestration(self):
+        supervisor=intake.add_work_item(self.conn,title='Supervisor',repo='shared')
+        self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",
+            (supervisor['work_item_id'],))
+        item=intake.add_work_item(self.conn,title='Isolated task',repo='shared',
+            executor_policy='auto')
+        wid=item['work_item_id']
+        scheduler.configure(self.conn,wid,activity='native',command=['true'],
+            worktree='/tmp/isolated-task')
+
+        receipt=scheduler.executor_started(self.conn,work_item_id=wid,executor='codex')
+
+        self.assertEqual(wid,receipt['work_item_id'])
+        self.assertEqual('running',self.conn.execute(
+            'SELECT status FROM work_items WHERE work_item_id=?',(wid,)).fetchone()[0])
+
+    def test_manual_start_still_blocks_real_active_same_repo_run(self):
+        holder=self.add('shared')
+        run=scheduler.schedule(self.conn,event_key='active-writer',now=10,max_parallel=1)[0]
+        self.assertEqual(holder,run['work_item_id'])
+        candidate=self.add('shared')
+
+        with self.assertRaisesRegex(scheduler.SchedulingError,'executor_start_repo_conflict'):
+            scheduler.executor_started(self.conn,work_item_id=candidate,executor='codex')
+
+    def test_manual_start_still_blocks_prompt_writer_with_worktree(self):
+        writer=self.conn.execute(
+            "SELECT work_item_id FROM work_items WHERE prompt_id='123456'").fetchone()[0]
+        self.conn.execute("UPDATE work_items SET repo='shared' WHERE work_item_id=?",(writer,))
+        scheduler.configure(self.conn,writer,activity='coding',model='GPT-5',reasoning='high',
+            worktree='/tmp/prompt-writer')
+        self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",(writer,))
+        candidate=self.add('shared')
+
+        with self.assertRaisesRegex(scheduler.SchedulingError,'executor_start_repo_conflict'):
+            scheduler.executor_started(self.conn,work_item_id=candidate,executor='codex')
+
     def test_manual_prompt_start_cannot_bypass_roadmap_start(self):
         with self.assertRaisesRegex(scheduler.SchedulingError,'prompt_requires_roadmap_start'):
             scheduler.executor_started(self.conn,prompt_id='123456',executor='codex',
@@ -284,8 +321,13 @@ class SchedulerTests(unittest.TestCase):
         scheduler.complete(self.conn,run['run_id'],succeeded=True,worker_ref='worker-1')
         self.assertEqual(1,len(scheduler.schedule(self.conn,event_key='completion',now=1001)))
 
-    def test_adopted_running_is_never_claimed_or_changed(self):
-        self.conn.execute("UPDATE work_items SET status='running',repo='repo-a' WHERE prompt_id='123456'")
+    def test_adopted_prompt_writer_is_never_claimed_or_changed(self):
+        writer=self.conn.execute(
+            "SELECT work_item_id FROM work_items WHERE prompt_id='123456'").fetchone()[0]
+        self.conn.execute("UPDATE work_items SET repo='repo-a' WHERE work_item_id=?",(writer,))
+        scheduler.configure(self.conn,writer,activity='coding',model='GPT-5',reasoning='high',
+            worktree='/tmp/adopted-writer')
+        self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",(writer,))
         before=tuple(self.conn.execute("SELECT * FROM work_items WHERE prompt_id='123456'").fetchone())
         self.add()
         self.assertEqual([],scheduler.schedule(self.conn,event_key='migration',now=1))
