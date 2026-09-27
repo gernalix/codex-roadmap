@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import sys
+import sqlite3
+import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import Mock, patch
@@ -9,9 +11,15 @@ TOOLS=Path(__file__).resolve().parents[1]/"tools"
 sys.path.insert(0,str(TOOLS))
 
 import roadmap_start as start
+REAL_REQUIRE_CANONICAL_CLAIM = start._require_canonical_claim
 
 
 class RoadmapStartTests(unittest.TestCase):
+    def setUp(self) -> None:
+        canonical_claim = patch("roadmap_start._require_canonical_claim")
+        self.claim_check = canonical_claim.start()
+        self.addCleanup(canonical_claim.stop)
+
     def test_gh_json_forces_canonical_github_host(self) -> None:
         response = Mock(returncode=0, stdout="{}", stderr="")
         with patch.object(start.subprocess, "run", return_value=response) as run:
@@ -19,7 +27,7 @@ class RoadmapStartTests(unittest.TestCase):
         self.assertEqual("github.com", run.call_args.kwargs["env"]["GH_HOST"])
 
     @patch("roadmap_start._repo_task_worktree", return_value=None)
-    @patch("roadmap_start._local_prompt_record", return_value={"status":"pending","repo":"","project_id":""})
+    @patch("roadmap_start._local_prompt_record", return_value={"status":"pending","repo":"","project_id":"","status_generation":7})
     @patch("roadmap_start.guarded_pull", return_value={"status":"PASS"})
     @patch("roadmap_start._wait_issue_applied")
     @patch("roadmap_start.submit_document")
@@ -29,7 +37,7 @@ class RoadmapStartTests(unittest.TestCase):
         self.assertFalse(submit.call_args.kwargs["lookup_existing"])
 
     @patch("roadmap_start._repo_task_worktree", return_value=None)
-    @patch("roadmap_start._local_prompt_record", return_value={"status":"pending","repo":"","project_id":""})
+    @patch("roadmap_start._local_prompt_record", return_value={"status":"pending","repo":"","project_id":"","status_generation":7})
     @patch("roadmap_start.guarded_pull", return_value={"status":"PASS"})
     @patch("roadmap_start._wait_issue_applied")
     @patch("roadmap_start.submit_document")
@@ -48,7 +56,7 @@ class RoadmapStartTests(unittest.TestCase):
         wait.assert_called_once_with("gernalix/codex-roadmap","42",1)
 
     @patch("roadmap_start._repo_task_worktree", return_value=None)
-    @patch("roadmap_start._local_prompt_record", return_value={"status":"pending","repo":"","project_id":""})
+    @patch("roadmap_start._local_prompt_record", return_value={"status":"pending","repo":"","project_id":"","status_generation":7})
     @patch("roadmap_start.guarded_pull", return_value={"status":"PASS"})
     @patch("roadmap_start._wait_issue_applied")
     @patch("roadmap_start.submit_document")
@@ -62,7 +70,9 @@ class RoadmapStartTests(unittest.TestCase):
         self.assertEqual("ok",result["status"])
         self.assertEqual("running",result["roadmap_status"])
         wait.assert_called_once_with("gernalix/codex-roadmap","42",1)
-        pull.assert_called_once_with(Path("."), branch="main")
+        self.assertEqual(2, pull.call_count)
+        self.assertEqual("start-123456-7", submit.call_args.kwargs["request_key"])
+        self.claim_check.assert_called_once_with(Path("."), "123456", "start-123456-7", "42")
         record.assert_called_once_with(Path("."), "123456")
         task.assert_called_once()
 
@@ -77,7 +87,7 @@ class RoadmapStartTests(unittest.TestCase):
         submit.assert_not_called()
 
     @patch("roadmap_start._repo_task_worktree", return_value=None)
-    @patch("roadmap_start._local_prompt_record", return_value={"status":"pending","repo":"","project_id":""})
+    @patch("roadmap_start._local_prompt_record", return_value={"status":"pending","repo":"","project_id":"","status_generation":7})
     @patch("roadmap_start.guarded_pull", return_value={"status":"PASS"})
     @patch("roadmap_start._wait_issue_applied")
     @patch("roadmap_start.submit_document")
@@ -88,7 +98,7 @@ class RoadmapStartTests(unittest.TestCase):
         task.assert_called_once()
 
     @patch("roadmap_start._repo_task_worktree", return_value="/tmp/task-worktree")
-    @patch("roadmap_start._local_prompt_record", return_value={"status":"pending","repo":"gernalix/example","project_id":"1"})
+    @patch("roadmap_start._local_prompt_record", return_value={"status":"pending","repo":"gernalix/example","project_id":"1","status_generation":7})
     @patch("roadmap_start.guarded_pull", return_value={"status":"PASS"})
     @patch("roadmap_start._wait_issue_applied")
     @patch("roadmap_start.submit_document")
@@ -98,6 +108,49 @@ class RoadmapStartTests(unittest.TestCase):
         self.assertEqual("/tmp/task-worktree",result["worktree_path"])
         self.assertEqual("task/123456",result["task_branch"])
         self.assertEqual("enabled",result["repo_single_writer"])
+
+    def test_reactivated_waiting_prompt_uses_new_generation_key(self) -> None:
+        with patch.object(start, "guarded_pull"), \
+             patch.object(start, "_local_prompt_record", return_value={
+                 "status": "waiting", "repo": "", "project_id": "", "status_generation": 1080,
+             }), \
+             patch.object(start, "submit_document", return_value={"issue_number": "42"}) as submit, \
+             patch.object(start, "_wait_issue_applied"), \
+             patch.object(start, "_repo_task_worktree", return_value=None):
+            start.claim_start(Path("."), "714263")
+        self.assertEqual("start-714263-1080", submit.call_args.kwargs["request_key"])
+
+    def test_closed_noop_claim_does_not_start_worktree(self) -> None:
+        self.claim_check.side_effect = start.RoadmapStartError(
+            "start_claim_not_applied:714263:42"
+        )
+        with patch.object(start, "guarded_pull"), \
+             patch.object(start, "_local_prompt_record", return_value={
+                 "status": "waiting", "repo": "gernalix/example", "project_id": "1",
+                 "status_generation": 1080,
+             }), \
+             patch.object(start, "submit_document", return_value={"issue_number": "42"}), \
+             patch.object(start, "_wait_issue_applied"), \
+             patch.object(start, "_repo_task_worktree") as worktree:
+            with self.assertRaisesRegex(start.RoadmapStartError, "start_claim_not_applied"):
+                start.claim_start(Path("."), "714263")
+        worktree.assert_not_called()
+
+    def test_canonical_claim_requires_matching_issue_receipt(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            with sqlite3.connect(root / "roadmap.sqlite") as conn:
+                conn.execute("CREATE TABLE prompts(prompt_id TEXT, status TEXT)")
+                conn.execute("CREATE TABLE mutation_receipts(request_key TEXT, issue_number INTEGER)")
+                conn.execute("INSERT INTO prompts VALUES('714263','waiting')")
+                conn.execute("INSERT INTO mutation_receipts VALUES('start-714263-1080',3167)")
+            with self.assertRaisesRegex(start.RoadmapStartError, "start_claim_not_running"):
+                REAL_REQUIRE_CANONICAL_CLAIM(root, "714263", "start-714263-1080", "3167")
+            with sqlite3.connect(root / "roadmap.sqlite") as conn:
+                conn.execute("UPDATE prompts SET status='running'")
+            with self.assertRaisesRegex(start.RoadmapStartError, "start_claim_not_applied"):
+                REAL_REQUIRE_CANONICAL_CLAIM(root, "714263", "start-714263-1080", "3168")
+            REAL_REQUIRE_CANONICAL_CLAIM(root, "714263", "start-714263-1080", "3167")
 
 
 if __name__=="__main__":
