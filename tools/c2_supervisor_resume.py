@@ -103,7 +103,9 @@ def _submit_claim(row: dict, pointer: dict) -> dict:
     authority = {
         'supervisor_id': row['supervisor_id'],
         'fencing_token': int(row['fencing_token']),
-        'lease_expires_at': float(row['lease_expires_at']),
+        # The request key identifies this acquisition. Later local heartbeats
+        # must not change the immutable claim document on replay.
+        'lease_expires_at': float(row['acquired_at']) + STALE_TAKEOVER_SECONDS,
     }
     identity = pointer['path'] + ':' + row['supervisor_id'] + ':' + str(row['fencing_token'])
     key = 'c2-supervisor-resume-' + hashlib.sha256(identity.encode()).hexdigest()[:32]
@@ -111,6 +113,23 @@ def _submit_claim(row: dict, pointer: dict) -> dict:
         'schema': 'codex-roadmap.mutation.v1',
         'actor': 'c2-supervisor-resume',
         'operations': [{'op': 'c2_claim_supervisor',
+                        'arguments': {'supervisor_authority': authority}}],
+    }, request_key=key)
+
+
+def _submit_renewal(row: dict, pointer: dict) -> dict:
+    authority = {
+        'supervisor_id': row['supervisor_id'],
+        'fencing_token': int(row['fencing_token']),
+        'lease_expires_at': float(row['lease_expires_at']),
+    }
+    identity = (pointer['path'] + ':' + row['supervisor_id'] + ':'
+                + str(row['fencing_token']) + ':' + repr(authority['lease_expires_at']))
+    key = 'c2-supervisor-renew-' + hashlib.sha256(identity.encode()).hexdigest()[:32]
+    return submit_document({
+        'schema': 'codex-roadmap.mutation.v1',
+        'actor': 'c2-supervisor-resume',
+        'operations': [{'op': 'c2_renew_supervisor',
                         'arguments': {'supervisor_authority': authority}}],
     }, request_key=key)
 
@@ -142,6 +161,19 @@ def resume(db, canonical: dict, pointer: dict, *, owner='c2-supervisor-resume',
         return {'outcome': 'ALREADY_ACTIVE', 'phase': 'canonical_successor',
                 'supervisor_id': remote['supervisor_id'],
                 'fencing_token': int(remote['fencing_token'])}
+
+    if (local and remote and _same_authority(local, remote)
+            and local['state'] == 'active' and local['lease_expires_at'] > now
+            and now - float(local['last_progress_at']) < STALE_TAKEOVER_SECONDS
+            and float(remote['lease_expires_at']) <= now):
+        receipt = _submit_renewal(local, pointer)
+        # Preserve the response shape consumed by Workflowy's preflight: it
+        # waits for a queued submission and proceeds only after application.
+        return {'outcome': 'RESUMED', 'phase': 'canonical_renewal',
+                'supervisor_id': local['supervisor_id'],
+                'fencing_token': int(local['fencing_token']),
+                'exact_next_action': pointer['exact_next_action'],
+                'claim': receipt}
 
     # Replays between local acquisition and canonical application reuse one identity.
     if (local and int(local['fencing_token']) > previous_token and
