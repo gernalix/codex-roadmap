@@ -1,6 +1,6 @@
 ---
 prompt_id: 575295
-status: running
+status: blocked
 project_id: —
 model: gpt-6-sol
 reasoning: medium
@@ -11,15 +11,15 @@ tags:
   - source:issue-inbox
   - telegram
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/unknown
 ---
 
 # 575295 · Regression: C2 Issue #1310 Grindr favorites history and Telegram actions
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/regression-c2-issue-1310-grindr-favorites-histor-575295|Apri prompt]]
+- **Prompt:** [[../../falliti/regression-c2-issue-1310-grindr-favorites-histor-575295|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
