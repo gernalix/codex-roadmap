@@ -104,7 +104,9 @@ Spostare un nodo Workflowy tra sezioni di stato non produce alcuna mutazione di
 lifecycle in questo protocollo.
 Workflowy usa esclusivamente `python3 tools/c2_workflowy_order.py set --scope
 inbox|roadmap --source-modified-at VALUE ID...` oppure `clear --scope
-inbox|roadmap [ID...]`: l'helper legge l'identità corrente da
+inbox|roadmap --source-modified-at RESET_EVENT_ID [ID...]`: per `clear`, il
+valore identifica stabilmente l'evento reset del nodo Workflowy e il comando
+fallisce chiuso se manca. L'helper legge l'identità corrente da
 `~/.config/c2-supervisor/runtime.env` e passa dal medesimo gate fenced di
 `c2_control`, senza esporre authority al chiamante.
 

@@ -21,7 +21,7 @@ def install_schema(conn):
     conn.execute(SCHEMA)
 
 
-def _fields(authority):
+def _fields(authority, *, require_expiry=True):
     if not isinstance(authority, dict):
         raise AuthorityError('supervisor_authority_required')
     supervisor_id = authority.get('supervisor_id')
@@ -30,9 +30,10 @@ def _fields(authority):
     if (not isinstance(supervisor_id, str) or
             not re.fullmatch(r'[A-Za-z0-9_.:-]+', supervisor_id) or
             type(token) is not int or token < 1 or
-            type(expires) not in (int, float)):
+            (expires is not None and type(expires) not in (int, float)) or
+            (require_expiry and expires is None)):
         raise AuthorityError('invalid_supervisor_authority')
-    return supervisor_id, token, float(expires)
+    return supervisor_id, token, float(expires) if expires is not None else None
 
 
 def claim(conn, authority, *, now=None):
@@ -56,11 +57,11 @@ def claim(conn, authority, *, now=None):
 
 def require(conn, authority, *, now=None):
     now = time.time() if now is None else now
-    supervisor_id, token, expires = _fields(authority)
+    supervisor_id, token, expires = _fields(authority, require_expiry=False)
     row = conn.execute('SELECT * FROM c2_supervisor_authority WHERE singleton=1').fetchone()
     if (not row or row['supervisor_id'] != supervisor_id or
             row['fencing_token'] != token or row['lease_expires_at'] <= now or
-            expires <= now):
+            (expires is not None and expires <= now)):
         raise AuthorityError('stale_or_expired_supervisor')
     return row
 
