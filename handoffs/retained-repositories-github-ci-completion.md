@@ -6,7 +6,7 @@
 Per tutti e soli i repository marcati `[x]` nella checklist di retention MegaVault, rendere GitHub Actions la sede canonica di tutto il testing deterministico/sandboxabile ragionevolmente disponibile, senza duplicare CI già adeguata.
 
 Sorgente autoritativa:
-`/home/daniele/projects/MegaVault/ai/repository-retention-checklist.md`
+`/home/daniele/MegaVault/ai/repository-retention-checklist.md`
 
 Usa sempre la versione corrente del file. Lo scope è esattamente l'insieme dei repository con `[x]`; ogni voce `[ ]` e ogni repository assente dalla checklist sono fuori scope. Non aggiungere automaticamente altri repository. Non rifare inventory globale, audit segreti/pubblicabilità o decisioni PUBLIC/PRIVATE.
 
