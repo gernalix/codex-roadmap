@@ -462,6 +462,8 @@ def ensure_triage(conn: sqlite3.Connection, *, project_url: str) -> dict:
             "through tools/c2_control.py with the current supervisor ID and fencing token. "
             "For active matches, promote into the existing work item with evidence. "
             "For completed matches, promote a regression successor; never discard as fixed. "
+            "Before every promotion, review relative priority and dependencies in both "
+            "directions against the current queue; encode verified changes explicitly. "
             "For irrelevant or obsolete issues, discard with a concrete reason. "
             "Read pending rows again before completion and finish only when none remain."
         ),
