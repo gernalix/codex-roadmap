@@ -1,7 +1,7 @@
 # Da controllare
 
+- [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/545953 ripristinare-il-diff-storico-delle-notifiche-tel-545953|545953 · Ripristinare il diff storico delle notifiche Telegram dopo enrichment Grindr]] · `blocked` · analizzato=no · fix=—
-- [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence|660629 · Orchestrare C2 fino a quiescenza]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] · `failed` · analizzato=no · fix=—
 - [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] · `blocked` · analizzato=no · fix=—

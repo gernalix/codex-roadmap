@@ -12,4 +12,3 @@
 ## In esecuzione
 
 - [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence|660629 · Orchestrare C2 fino a quiescenza]]
-- [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]]
