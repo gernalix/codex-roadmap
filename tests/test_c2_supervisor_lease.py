@@ -22,6 +22,28 @@ class SupervisorLeaseTests(unittest.TestCase):
                 self.assertEqual(1,row['progress_counter'])
                 self.assertEqual('writer:schedule',row['current_action'])
 
+    def test_short_activity_and_heartbeat_never_shorten_long_live_lease(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with connect(Path(directory) / 'lease.sqlite3') as db:
+                acquire(db, owner='runtime', pointer='/tmp/pointer',
+                        supervisor_id='runtime', now=100, ttl=1800)
+                activity = record_activity(
+                    db, supervisor_id='runtime', token=1,
+                    operation='control:clear_manual_order', now=150,
+                )
+                self.assertEqual(1900, activity['lease_expires_at'])
+                heartbeat = update(
+                    db, supervisor_id='runtime', token=1, now=200, ttl=180,
+                )
+                self.assertEqual(1900, heartbeat['lease_expires_at'])
+                with self.assertRaisesRegex(
+                    LeaseError, 'stale_or_expired_supervisor'
+                ):
+                    update(
+                        db, supervisor_id='runtime', token=1,
+                        now=1900, ttl=1800,
+                    )
+
     def test_watchdog_encodes_bounded_stall_thresholds(self):
         with tempfile.TemporaryDirectory() as directory:
             with connect(Path(directory) / 'lease.sqlite3') as db:
