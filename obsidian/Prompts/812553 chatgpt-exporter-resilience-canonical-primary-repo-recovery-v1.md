@@ -29,7 +29,7 @@ tags:
 
 ## Spiegazione
 
-Hardening ChatGPTExporter nel repository primario gernalix/prompt-history, dopo verifica del routing canonico: il fork gernalix/ChatGPTExporter non esiste. Il prerequisito formale 222733 è già completato. Il task può procedere indipendentemente dal blocco cost-source di 302284; conservare il checkpoint e verificare retry, failure handling e salute runtime prima della chiusura.
+Hardening ChatGPTExporter nel repository primario gernalix/prompt-history, dopo verifica del routing canonico: il fork gernalix/ChatGPTExporter non esiste. Il prerequisito formale 222733 è già completato. Il task può procedere indipendentemente dal blocco cost-source di 302284; conservare il checkpoint e verificare retry, failure handling e salute runtime prima della chiusura. Correzione scope da mutation #1636: garantire completezza rispetto a tutti i reasoning/sommari intermedi visibili e persistenti nella UI ChatGPT Web anche dopo il turno, non solo thoughts[].summary. Preferire conversation-detail raw/normalizzato; usare acquisizione DOM post-turno come fallback/verifica quando contenuto UI-visibile manca dalla sorgente API. Conservare testo visibile, associazione turn/message, durata UI se disponibile, sorgente e raw; deduplicare API/DOM. Escludere chain-of-thought non esposta all’utente.
 
 ## Esecuzioni
 
