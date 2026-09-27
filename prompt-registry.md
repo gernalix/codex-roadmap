@@ -5,7 +5,6 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence\|660629 · Orchestrare C2 fino a quiescenza]] | running | 2026-09-27T06:00:21Z | 2026-09-27T13:01:32Z | UNKNOWN | no | no | — | codex-roadmap | GPT-6 Luna | medium |
-| [[obsidian/Prompts/592759 phase-c-source-megavault-datasette-friendliness-592759\|592759 · Phase C source — megavault Datasette friendliness]] | running | — | — | — | no | no | — | MegaVault | GPT-6 Sol | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
@@ -440,3 +439,4 @@
 | [[obsidian/Prompts/377172 aggiornare-documentazione-grindr-callback-queue--377172\|377172 · Aggiornare documentazione Grindr callback queue/worker]] | completed | 2026-09-27T18:50:48Z | 2026-09-27T18:51:08Z | PASS | no | no | — | — | GPT-5.6 Terra | low |
 | [[obsidian/Prompts/394865 phase-c-source-fedora-system-monitor-datasette-f-394865\|394865 · Phase C source — fedora-system-monitor Datasette friendliness]] | completed | 2026-09-27T19:02:05Z | 2026-09-27T19:10:36Z | PASS | no | no | — | fedora-system-monitor | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/205775 phase-c-source-codex-usage-monitor-datasette-fri-205775\|205775 · Phase C source — codex-usage-monitor Datasette friendliness]] | completed | — | — | PASS | no | no | — | codex-usage-monitor | GPT-6 Luna | medium |
+| [[obsidian/Prompts/592759 phase-c-source-megavault-datasette-friendliness-592759\|592759 · Phase C source — megavault Datasette friendliness]] | completed | — | — | PASS | no | no | — | MegaVault | GPT-6 Sol | medium |
