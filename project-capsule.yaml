@@ -1,0 +1,93 @@
+schema_version: c2.project-capsule.v1
+identity:
+  project_id: 51
+  slug: codex-roadmap
+  repository_id: R0051
+scope:
+  purpose: C2 work lifecycle, canonical roadmap writer clients, and operational projections.
+  boundaries:
+    - MegaVault owns global project and repository identity.
+    - github-autosync owns integration for external repositories.
+    - Target repositories own their application code and runtime operations.
+repository:
+  canonical_workdir: /home/daniele/projects/codex-roadmap
+  branch_policy: main is canonical; use isolated task worktrees and the dedicated writer for roadmap state.
+architecture:
+  summary: SQLite is canonical; GitHub mutation Issues feed a single writer; tools and workers expose executor lifecycle and materialized views.
+  entrypoints:
+    - tools/submit_mutation.py
+    - tools/c2_executor_start.py
+    - tools/roadmap_finish.py
+  important_paths:
+    - tools
+    - tests
+    - operations/task-state
+    - .github/workflows
+    - docs/project-capsule
+  
+dependencies:
+  - name: MegaVault
+    project_id: 23
+    purpose: Canonical project and repository registry.
+  - name: github-autosync
+    project_id: 92
+    purpose: Protected single writer integration for external repositories.
+data:
+  schema: roadmap.sqlite is canonical; schema and migrations are in tools/roadmap_db.py and writer modules.
+  migrations: Roadmap writer migration flow; never modify roadmap.sqlite directly for lifecycle changes.
+runtime:
+  services: [c2-supervisor]
+  timers: [c2-supervisor]
+  containers: []
+devices: []
+commands:
+  setup: {not_applicable: Python tooling runs from the canonical checkout and isolated worktrees.}
+  build: {not_applicable: No compiled build artifact.}
+  test_targeted: {argv: [python3, -m, unittest, discover, -s, tests, -p, test_project_capsule.py], cwd: .}
+  test_full: {argv: [python3, -m, unittest, discover, -s, tests], cwd: .}
+  lint: {argv: [python3, -m, compileall, -q, tools], cwd: .}
+  deploy_install: {not_applicable: Runtime deployment belongs to the C2 supervisor controlled flow.}
+  smoke: {argv: [python3, tools/project_capsule.py, --repo, ., --mode, FAST], cwd: .}
+  verify:
+    fast: {argv: [python3, tools/project_capsule.py, --repo, ., --mode, FAST], cwd: .}
+    full: {argv: [python3, tools/project_capsule.py, --repo, ., --mode, FULL], cwd: .}
+safety:
+  invariants:
+    - Roadmap lifecycle changes go through the GitHub Issues single writer.
+    - Do not edit the supervisor runtime worktree.
+    - Repository backed PASS requires integration evidence.
+  risky_operations:
+    - Direct roadmap.sqlite writes outside the fenced writer are prohibited.
+    - Deployment and service changes require installed-unit and runtime readback.
+  recovery:
+    - Preserve task worktree and checkpoint; use writer receipts and repository integration status for reconciliation.
+acceptance:
+  - Writer applies a submitted mutation and canonical DB readback confirms it.
+  - Repository integration is confirmed before terminal PASS.
+references:
+  megavault: /home/daniele/MegaVault/megavault.sqlite
+  c2: /home/daniele/projects/codex-roadmap/roadmap.sqlite
+freshness:
+  reviewed_commit: 8312230ad91a4f39cbd1fa7f088b8d2bcb7b60cf
+  watch_paths:
+    - tools/project_capsule.py
+    - docs/project-capsule/schema-v1.json
+    - tools/roadmap_db.py
+    - tools/submit_mutation.py
+    - tools/c2_executor_start.py
+    - tools/roadmap_finish.py
+    - .github/workflows
+artifacts:
+  agents: AGENTS.md
+  contract: docs/project-capsule/README.md
+  schema: docs/project-capsule/schema-v1.json
+validation_hooks:
+  - id: capsule-tests
+    argv: [python3, -m, unittest, discover, -s, tests, -p, test_project_capsule.py]
+    cwd: .
+    safe: true
+change_verification:
+  - paths: ['tools/**', '.github/workflows/**', 'project-capsule.yaml', 'docs/project-capsule/**']
+    commands: [test_targeted]
+  - paths: ['tests/**']
+    commands: [test_targeted]
