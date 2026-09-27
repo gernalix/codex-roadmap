@@ -4,7 +4,7 @@
 
 ## Lanciabili adesso
 
-- Nessuno.
+- [[obsidian/Prompts/886300 riparare-il-finalizer-c2-per-task-su-codex-roadm-886300|886300 · Riparare il finalizer C2 per task su codex-roadmap]]
 
 ## In esecuzione
 
