@@ -76,6 +76,13 @@ def _writer_submit(operation: str, arguments: dict, key: str):
                 'fencing_token':row['fencing_token'],
                 'lease_expires_at':row['lease_expires_at'],
             }
+            if operation == 'acknowledge':
+                # The same snapshot can be replayed after a lease renewal.
+                # Its fenced document changes, so its Issue identity must too.
+                key = _key('c2-ack-authorized', {
+                    'request_key':key,
+                    'authority':arguments['supervisor_authority'],
+                })
     return submit_document({'schema':'codex-roadmap.mutation.v1','actor':'c2-runtime',
         'operations':[{'op':'c2_'+operation,'arguments':arguments}]},request_key=key)
 
