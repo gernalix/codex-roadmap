@@ -68,7 +68,7 @@ references:
   megavault: /home/daniele/MegaVault/megavault.sqlite
   c2: /home/daniele/projects/codex-roadmap/roadmap.sqlite
 freshness:
-  reviewed_commit: 8312230ad91a4f39cbd1fa7f088b8d2bcb7b60cf
+  reviewed_commit: 1f9261809bb8cec3cf2bcc0dea83cc9d63ee3330
   watch_paths:
     - tools/project_capsule.py
     - docs/project-capsule/schema-v1.json
