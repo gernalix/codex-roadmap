@@ -16,8 +16,8 @@ tags:
 - **Progetto:** [[../Projects/github-autosync|github-autosync]]
 - **Prompt:** [[../../completed/864205-github-reconcile-production-hardening|Apri prompt]]
 - **Primo lancio:** 2026-09-19T09:36:49Z
-- **Ultimo lancio:** 2026-09-19T09:36:49Z
-- **Ultimo esito:** PASS
+- **Ultimo lancio:** 2026-09-27T10:55:53Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -36,6 +36,7 @@ Rende affidabile la riconciliazione Git dei repository gestiti. Serve a recupera
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-19T09:36:49Z | 2026-09-19T09:55:30Z | PASS | 1120.801 | gpt-5.6-sol | medium | 87 | 178359 |
+| 2026-09-27T10:55:53Z | 2026-09-27T10:55:57Z | UNKNOWN | 4.479 | codex-auto-review | low | 0 | 10452 |
 
 ## Analisi ChatGPT
 
