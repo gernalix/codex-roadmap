@@ -35,9 +35,6 @@
 - Use the assigned isolated worktree and task branch; never write the canonical branch directly.
 - Acquire and release only the shared resources assigned to the run.
 - Do not wait, poll, or act on resources owned by another active run.
-- Treat `AndroidKeyStore` failures under Robolectric as environment evidence,
-  not app bugs. Verify provider paths on canonical `Pixel_8a` AVD before
-  physical device, per MegaVault protocol.
 
 ## 5 Checkpoint and recovery
 
@@ -64,8 +61,7 @@
 - Declare PASS only with evidence for every required acceptance criterion.
 - A repository-backed PASS is complete only after canonical integration and
   the writer's terminal receipt. A queued PR is not PASS.
-- Stop the run after its terminal receipt; preserve BLOCKED evidence and
-  worktrees for recovery.
+- Stop after terminal receipt; preserve BLOCKED evidence and worktrees.
 - Do not wait for asynchronous integration, CI, or manual external state.
 
 ## 8 Identities and metadata
@@ -75,3 +71,9 @@
 - Do not change protected metadata or task semantics after the run starts.
 - Prompt-backed Codex reports begin `PROMPT_ID=<id>`; terminal reports put
   `RESULT=PASS|BLOCKED|FAIL` on line two.
+
+## 9 Android provider gates
+
+- Treat `AndroidKeyStore` failures under Robolectric as environment evidence,
+  not app bugs. Verify provider paths on canonical `Pixel_8a` AVD before
+  physical device, per MegaVault protocol.
