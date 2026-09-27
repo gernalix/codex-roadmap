@@ -144,3 +144,23 @@ Do NOT call roadmap_start again. After Inbox priority work, launch each exactly 
 2. Reuse active supervisor token25 if still valid and canonical; only if truly expired/stale perform deterministic takeover per C2 recovery rules.
 3. Complete the six remaining #2330 live E2E gates above on the real Workflowy page.
 4. Only after live PASS, terminalize #2330/hotfix and notify the user; then resume the saved C2 drain.
+
+# CHECKPOINT — #2330 LIVE E2E COMPLETE — 2026-09-27 17:18 CEST
+- Supervisor authority preserved: supervisor_id=fd368caf-8d31-42a5-979e-b67fae4484b5, fencing_token=25.
+- GitHub/canonical work item wi:214f6cf5571d426dba2373960a6bfdf1 is COMPLETED with executor-result PASS receipt after all live gates.
+- Backend hotfix wi:296cf26cd863421a88b1296387492807 is COMPLETED; required child wi:cbfee25c9d1f471e984fabfebfd8753d is COMPLETED.
+- Final real Workflowy verification on https://workflowy.com/#/98c00c618b80: remote canonical Inbox pending=21 and live visible Inbox cards=21, exact multiset+order equality; 21/21 compact expandable details; no technical IDs/URLs in normal Inbox view.
+- Roadmap live declares 1209 canonical work items in 7 sections; after viewport scroll all seven groups are present/visible: Ready, Blocked / dependency context, Paused, Running, Waiting, Done, Archive.
+- Hard refresh and navigate-away/reopen both preserved exact Inbox equality/order, reset controls, 1209 Roadmap declaration, and all 7 navigable groups.
+- Previously proven live gates retained: >=2 Inbox manual reorder persists across sync/refresh; >=2 Roadmap manual reorder persists; Reset to AI order restores canonical AI order and recreates fresh controls; repeated reset/sync idempotent.
+- Canonical state-change propagation proven: one exact duplicate pending issue was dispositioned through canonical writer; automatic sync changed issues 22->21, deleted=2, duplicate live card 2->1 without projection edits.
+- workflowy-roadmap-sync.service repeatedly finishes Result=success / ExecMainStatus=0 with issues=21, prompts=1209, warnings=0.
+- workflowy-importer 429 retry is merged on main (move_node retry-safe + JSON retry_after); targeted retry suite 6/6 PASS; full suite 108 PASS.
+- Safety notifications sent after canonical completion: Fedora critical desktop notification + Telegram via ~/.local/bin/c2-notify.
+- Resume prior preserved drain now: integrate/terminalize MegaVault capsule tooling wi:7d582a5bab484b7b8a9fc559b6bdfcbd; continue existing Fedora journald Python/SQLite thread wi:72083276ee994f5b97113da073005ad3 without duplication; then launch capture-path wi:2f02116ccfaf4454b1872d7c636a9c99 and continue capsule standard/score + Inbox/roadmap to quiescence; preserve PersonalHub workers/devices.
+
+## Next action
+1. Re-read current canonical Inbox and active runs/executors from remote main/current runtime.
+2. Integrate/terminalize wi:7d582a5bab484b7b8a9fc559b6bdfcbd from its already-pushed task commit; do not redo verified work.
+3. Resume/supervise existing wi:72083276ee994f5b97113da073005ad3 Codex thread exactly once; do not duplicate it.
+4. Continue Inbox -> reconcile -> priority -> execute until quiescence, respecting repo/device locks and preserving PersonalHub workers/devices.
