@@ -1,6 +1,6 @@
 ---
 prompt_id: 742579
-status: pending
+status: running
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -11,13 +11,13 @@ tags:
   - priority:p0
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 742579 · Rendere il DB Grindr Favorites frictionless da esplorare
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/rendere-il-db-grindr-favorites-frictionless-da-e-742579|Apri prompt]]
 - **Primo lancio:** —
