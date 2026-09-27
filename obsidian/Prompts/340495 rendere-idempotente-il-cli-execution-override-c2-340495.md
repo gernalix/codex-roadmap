@@ -1,6 +1,6 @@
 ---
 prompt_id: 340495
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -12,13 +12,13 @@ tags:
   - priority:p0
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 340495 · Rendere idempotente il CLI execution override C2
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/rendere-idempotente-il-cli-execution-override-c2-340495|Apri prompt]]
 - **Primo lancio:** —
