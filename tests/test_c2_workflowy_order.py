@@ -188,6 +188,36 @@ class WorkflowyOrderCliTests(unittest.TestCase):
         self.assertNotIn("supervisor_authority", arguments)
         self.assertEqual("stable-key", submit.call_args.kwargs["request_key"])
 
+    def test_workflowy_canonical_renew_is_atomic_with_manual_order(self):
+        lease = MagicMock()
+        lease.__enter__.return_value = lease
+        lease.__exit__.return_value = False
+        row = {
+            "supervisor_id": "supervisor-one",
+            "fencing_token": 9,
+            "lease_expires_at": 9999999999.0,
+        }
+        with patch.object(c2_control, "connect", return_value=lease), \
+             patch.object(c2_control, "_require", return_value=row), \
+             patch.object(c2_control, "record_activity", return_value=row), \
+             patch.object(c2_control, "submit_document", return_value={}) as submit:
+            c2_control.submit_control(
+                operation="clear_manual_order",
+                arguments={"scope": "roadmap", "ids": ["wi:a"]},
+                request_key="fresh-transport-key",
+                supervisor_id="supervisor-one",
+                fencing_token=9,
+                actor="c2-workflowy-order",
+                canonical_renew=True,
+            )
+        document = submit.call_args.args[0]
+        self.assertEqual(
+            ["c2_renew_supervisor", "c2_clear_manual_order"],
+            [operation["op"] for operation in document["operations"]],
+        )
+        for operation in document["operations"]:
+            self.assertEqual(row, operation["arguments"]["supervisor_authority"])
+
     def test_authority_renewal_does_not_change_same_event_document(self):
         lease = MagicMock()
         lease.__enter__.return_value = lease
