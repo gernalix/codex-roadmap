@@ -18,9 +18,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
 - **Prompt:** [[../../prompts/riparare-il-finalizer-c2-per-task-su-codex-roadm-886300|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-27T07:10:07Z
+- **Ultimo lancio:** 2026-09-27T07:10:07Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-27T07:10:07Z | 2026-09-27T07:17:20Z | UNKNOWN | 433.227 | gpt-6-sol | medium | 38 | 90827 |
 
 ## Analisi ChatGPT
 

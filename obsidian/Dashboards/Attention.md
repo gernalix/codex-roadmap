@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/886300 riparare-il-finalizer-c2-per-task-su-codex-roadm-886300|886300 · Riparare il finalizer C2 per task su codex-roadmap]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence|660629 · Orchestrare C2 fino a quiescenza]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] · `failed` · analizzato=no · fix=—
 - [[obsidian/Prompts/340495 rendere-idempotente-il-cli-execution-override-c2-340495|340495 · Rendere idempotente il CLI execution override C2]] · `blocked` · analizzato=no · fix=—
