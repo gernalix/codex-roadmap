@@ -8,4 +8,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/682297 c2-supervisor-rollover-fallito-degrada-a-human-r-682297|682297 · C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]]
+- Nessuno.
