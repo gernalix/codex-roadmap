@@ -4,46 +4,20 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-import subprocess
 
 from roadmap_result import RoadmapResultError, finish_result
+from c2_repository_integration import (RepositoryIntegrationError, prompt_repository,
+                                       queue_integration)
 
 
-DEFAULT_REPO_TASK = Path.home() / "projects" / "github-autosync" / "repo_single_writer.py"
-
-
-def _queue_repo_integration(prompt_id: str) -> tuple[str, bool]:
+def _queue_repo_integration(prompt_id: str, repo: Path | None = None) -> tuple[str, bool]:
     """Queue completed repository work without waiting for CI or canonical merge."""
-    if not DEFAULT_REPO_TASK.is_file():
-        raise RoadmapResultError("repo_task_helper_missing")
-    proc = subprocess.run(
-        [
-            "python3",
-            str(DEFAULT_REPO_TASK),
-            "finish-any",
-            "--task-id",
-            prompt_id,
-        ],
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-    )
-    if proc.returncode:
-        detail = proc.stderr.strip() or proc.stdout.strip() or f"exit={proc.returncode}"
-        raise RoadmapResultError(f"repo_integration_queue_failed:{detail}")
     try:
-        payload = json.loads(proc.stdout)
-    except json.JSONDecodeError as exc:
-        raise RoadmapResultError("repo_integration_queue_invalid_response") from exc
-    status = str(payload.get("status") or "")
-    if status == "merged":
-        return status, True
-    if status == "no-task-record":
-        raise RoadmapResultError("repo_integration_task_record_missing")
-    if status in {"queued", "ready"}:
-        return "queued", False
-    raise RoadmapResultError(f"repo_integration_queue_unexpected_status:{status or 'missing'}")
+        worktree = (repo or Path.cwd()).expanduser().resolve()
+        repository = prompt_repository(worktree / "roadmap.sqlite", prompt_id)
+        return queue_integration(prompt_id, repository, worktree)
+    except RepositoryIntegrationError as exc:
+        raise RoadmapResultError(str(exc)) from exc
 
 
 def finish(
@@ -61,7 +35,7 @@ def finish(
     integration = "dry-run" if result == "PASS" else "not-applicable"
     integrated = True
     if result == "PASS" and not dry_run:
-        integration, integrated = _queue_repo_integration(prompt_id)
+        integration, integrated = _queue_repo_integration(prompt_id, repo)
         if not integrated:
             return {
                 "status": "queued",

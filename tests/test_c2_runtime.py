@@ -14,6 +14,13 @@ from test_c2_intake import C2IntakeTests
 
 
 class RuntimeTests(unittest.TestCase):
+    @patch("c2_runtime.integration_status", return_value={"status":"merged","integration_state":"merged","merge_sha":"b"*40})
+    @patch("c2_runtime.prompt_repository", return_value="gernalix/codex-roadmap")
+    def test_runtime_routes_self_repo_status_through_shared_helper(self, repository, integration):
+        result=c2_runtime._repo_task_status("123456")
+        self.assertEqual("merged",result["status"])
+        integration.assert_called_once_with("123456","gernalix/codex-roadmap")
+
     def _pass_receipt_snapshot(self, root):
         path=C2IntakeTests().make_cutover_db(root)
         with closing(c2_intake._connect(path)) as writer:

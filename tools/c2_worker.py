@@ -152,7 +152,7 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
                 submit('executor_result',base_args,'c2-executor-result-'+run_id)
                 if parsed['outcome']=='PASS':
                     try:
-                        _,integrated=_queue_repo_integration(prompt_id)
+                        _,integrated=_queue_repo_integration(prompt_id,Path(str(metadata['worktree'])))
                     except RoadmapResultError as exc:
                         raise WorkerError(str(exc)) from exc
                     if integrated:

@@ -21,11 +21,9 @@ from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_
 from c2_mutations import SUPERVISOR_OPERATIONS
 from c2_scheduler import read_override, override_matches, dispatchable
 from c2_chatgpt_executor import lane_degraded
+from c2_repository_integration import integration_status, prompt_repository
 
 C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
-REPO_SINGLE_WRITER = Path.home()/'projects/github-autosync/repo_single_writer.py'
-
-
 class RuntimeErrorC2(RuntimeError):
     pass
 
@@ -90,14 +88,11 @@ def _launch_notify(event_key: str):
 
 
 def _repo_task_status(prompt_id: str) -> dict:
-    result=subprocess.run([sys.executable,str(REPO_SINGLE_WRITER),'status-any',
-        '--task-id',prompt_id],capture_output=True,text=True)
-    if result.returncode:
-        raise RuntimeErrorC2('repo_task_status_failed:'+str(result.returncode))
     try:
-        return json.loads(result.stdout)
-    except (TypeError,ValueError) as exc:
-        raise RuntimeErrorC2('repo_task_status_invalid_json') from exc
+        repository=prompt_repository(Path.home()/'projects/codex-roadmap/roadmap.sqlite',prompt_id)
+        return integration_status(prompt_id,repository)
+    except Exception as exc:
+        raise RuntimeErrorC2('repo_task_status_failed:'+str(exc)) from exc
 
 
 def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_worker,
