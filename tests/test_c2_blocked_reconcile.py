@@ -54,6 +54,22 @@ class BlockedReconcileTests(unittest.TestCase):
         self.assertEqual(1, self.db.execute("SELECT count(*) FROM work_item_result_receipts WHERE receipt_id='prior'").fetchone()[0])
         self.assertEqual(3, self.db.execute("SELECT count(*) FROM work_item_scheduler_events WHERE event_key LIKE 'blocked-reconcile:%'").fetchone()[0])
 
+    def test_old_terminal_request_cannot_block_reclaimed_prompt(self):
+        self.db.execute("""INSERT INTO terminal_requests
+            (prompt_id,requested_status,actor,note,requested_at)
+            VALUES('123456','blocked','historical','prior result','2026-09-25T09:27:22Z')""")
+        self.db.execute("""INSERT INTO status_history
+            (prompt_id,old_status,new_status,changed_at,actor,note)
+            VALUES('123456','running','blocked','2026-09-25T09:27:22Z','historical','prior result')""")
+        self._reconcile('prompt:123456')
+        roadmap_db = __import__('roadmap_db')
+        roadmap_db.set_status(self.db, '123456', 'running', actor='codex',
+                              note='launch-claim:roadmap_start')
+        self.assertEqual(0, roadmap_db.reconcile_terminal_requests(self.db))
+        self.assertEqual('running', self.db.execute(
+            "SELECT status FROM work_items WHERE work_item_id='prompt:123456'"
+        ).fetchone()[0])
+
     def test_stale_updated_at_and_active_run_fail_closed(self):
         with self.assertRaisesRegex(ValueError, 'blocked_item_changed'):
             self._reconcile(self.root, expected_updated_at='stale')

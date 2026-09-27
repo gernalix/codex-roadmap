@@ -146,9 +146,14 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
                  CHECK (requested_status IN ('completed','failed','blocked','cancelled','unknown')),
              actor TEXT NOT NULL,
              note TEXT,
-             requested_at TEXT NOT NULL
+             requested_at TEXT NOT NULL,
+             running_history_id INTEGER
            )"""
     )
+    if "running_history_id" not in {
+        row[1] for row in conn.execute("PRAGMA table_info(terminal_requests)")
+    }:
+        conn.execute("ALTER TABLE terminal_requests ADD COLUMN running_history_id INTEGER")
     _ensure_prompt_relations_contract(conn)
     # Views are runtime contracts too. Refresh them only when their SQL changes;
     # opening the writer must not rewrite roadmap.sqlite on a rejected/no-op Issue.
@@ -684,7 +689,8 @@ def reconcile_terminal_requests(
 ) -> int:
     reconciled = 0
     rows = conn.execute(
-        """SELECT tr.prompt_id,tr.requested_status,tr.note,p.status
+        """SELECT tr.prompt_id,tr.requested_status,tr.note,tr.requested_at,
+                  tr.running_history_id,p.status
            FROM terminal_requests tr
            JOIN prompts p ON p.prompt_id=tr.prompt_id
            ORDER BY tr.requested_at,tr.prompt_id"""
@@ -709,6 +715,27 @@ def reconcile_terminal_requests(
                 ),
             )
             continue
+        latest_run = conn.execute(
+            "SELECT MAX(history_id) FROM status_history "
+            "WHERE prompt_id=? AND new_status='running'",
+            (row["prompt_id"],),
+        ).fetchone()[0]
+        request_run = row["running_history_id"]
+        if request_run is not None:
+            if request_run != latest_run:
+                continue
+        else:
+            # Legacy requests have no run ID. A terminal history entry at the
+            # request time followed by a later activation proves this request
+            # belongs to an older generation. Keep the historical row intact.
+            old_terminal = conn.execute(
+                """SELECT MAX(history_id) FROM status_history
+                   WHERE prompt_id=? AND new_status=?
+                     AND julianday(changed_at)<=julianday(?)""",
+                (row["prompt_id"], requested, row["requested_at"]),
+            ).fetchone()[0]
+            if old_terminal is not None and latest_run is not None and latest_run > old_terminal:
+                continue
         set_status(
             conn,
             str(row["prompt_id"]),
@@ -1318,9 +1345,13 @@ def request_terminal(
             raise RoadmapDBError(f"terminal_request_requires_running:{prompt_id}:{row['status']}")
         ts = now_utc()
         conn.execute(
-            """INSERT INTO terminal_requests(prompt_id,requested_status,actor,note,requested_at)
-               VALUES(?,?,?,?,?)""",
-            (prompt_id, requested_status, actor, note, ts),
+            """INSERT INTO terminal_requests(
+                 prompt_id,requested_status,actor,note,requested_at,running_history_id
+               ) VALUES(?,?,?,?,?,(
+                 SELECT MAX(history_id) FROM status_history
+                 WHERE prompt_id=? AND new_status='running'
+               ))""",
+            (prompt_id, requested_status, actor, note, ts, prompt_id),
         )
         conn.execute(
             "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
