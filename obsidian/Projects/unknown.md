@@ -5,7 +5,7 @@ tags:
 
 # Unknown
 
-- [[obsidian/Prompts/575295 regression-c2-issue-1310-grindr-favorites-histor-575295|575295 · Regression: C2 Issue #1310 Grindr favorites history and Telegram actions]] · `pending`
+- [[obsidian/Prompts/575295 regression-c2-issue-1310-grindr-favorites-histor-575295|575295 · Regression: C2 Issue #1310 Grindr favorites history and Telegram actions]] · `running`
 - [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479|853479 · Phase A — MegaVault one source of truth definitiva]] · `completed`
 - [[obsidian/Prompts/856999 aggiungere-gate-c2-per-acceptance-post-merge-856999|856999 · Aggiungere gate C2 per acceptance post-merge]] · `completed`
 - [[obsidian/Prompts/742579 rendere-il-db-grindr-favorites-frictionless-da-e-742579|742579 · Rendere il DB Grindr Favorites frictionless da esplorare]] · `completed`
