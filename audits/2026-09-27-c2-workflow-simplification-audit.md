@@ -37,3 +37,18 @@ Terrei il **single-writer come proprietà**, le resource lease sui dispositivi/w
 Questa non sarebbe una semplice “pulizia estetica”: secondo quanto ho visto, può togliere **migliaia di LOC dalla superficie operativa**, diversi round-trip per task e una buona parte dei blocker artificiali senza indebolire le protezioni importanti.
 
 Durante l’audit sono emersi due difetti abbastanza concreti da essere registrati automaticamente nella C2 Inbox: **#2428** per la scarsa discoverability del CLI di intake e **#2434** per il protocollo PROMPT_ID/MegaVault ormai obsoleto rispetto al writer C2.
+
+
+---
+
+## Workflow predefinito richiesto per le issue C2 grandi
+
+Per le issue sufficientemente grandi da rendere Inbox/Workflowy ingombrante, il workflow predefinito deve essere:
+
+1. salvare tutto il contenuto dettagliato in un file Markdown tracciato in Git;
+2. fare commit/push del file prima della capture;
+3. usare nella Inbox un titolo conciso e leggibile;
+4. mettere nella descrizione **esclusivamente l’URL GitHub stabile del file Markdown**, senza duplicare analisi, specifica, metadati, ID o riassunti;
+5. lasciare al processor C2 deduplica, triage, priorità, promozione ed esecuzione.
+
+Le issue piccole e autosufficienti possono continuare a essere inline.
