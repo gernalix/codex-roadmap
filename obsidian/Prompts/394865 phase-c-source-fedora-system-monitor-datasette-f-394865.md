@@ -18,9 +18,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/fedora-system-monitor|fedora-system-monitor]]
 - **Prompt:** [[../../prompts/phase-c-source-fedora-system-monitor-datasette-f-394865|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-27T19:02:05Z
+- **Ultimo lancio:** 2026-09-27T19:02:05Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-27T19:02:05Z | 2026-09-27T19:09:57Z | UNKNOWN | 472.673 | gpt-6-luna | medium | 59 | 93219 |
 
 ## Analisi ChatGPT
 
