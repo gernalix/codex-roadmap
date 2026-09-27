@@ -1,19 +1,19 @@
 ---
 prompt_id: 318410
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 318410 · Riparare il rilevamento composer del C2 ChatGPT browser executor
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/riparare-il-rilevamento-composer-del-c2-chatgpt--318410|Apri prompt]]
 - **Primo lancio:** —
