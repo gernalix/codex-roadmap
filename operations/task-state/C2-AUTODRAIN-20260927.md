@@ -17,32 +17,33 @@ Keep C2 draining autonomously through the canonical fenced control plane until q
 - [x] Register this non-prompt work item and executor_started.
 - [ ] Realign runtime worktree to canonical main and pass guard.
 - [ ] Update runtime supervisor env; enable path/timer/watchdog.
-- [ ] Recover expired runs without duplicate turns.
+- [x] Recover expired runs without duplicate turns.
+- [ ] Integrate failed-Codex-turn terminalization and reconcile stuck run 812553.
 - [ ] Verify real schedule/ack/launch cycle for runnable Codex work.
 - [ ] Leave event-driven drain running independently of this chat.
 - [ ] Verify quiescence definition: no runnable/schedulable work and no recoverable run ignored.
 
 # Current step
-Realign the dedicated runtime worktree and reactivate the event-driven runtime.
+Integrate the failed-Codex-turn terminalization fix, deploy it to the runtime worktree, and reconcile stuck run 812553.
 
 # Verified facts
 - Work item: wi:0b820bf53cfa46ebaef48dd50ed8f4fc; executor_started applied via Issue #1709.
 - Local/canonical supervisor: a9fd7222-6cd5-4eef-b205-39126fa09262, fencing token 15.
-- c2-runtime.path and c2-runtime.timer are inactive; watchdog timer is active.
-- Runtime guard is unhealthy: dirty_worktree + runtime_code_drift.
+- c2-runtime.timer and watchdog are active; c2-runtime.path is temporarily disabled after detecting a self-trigger/retry loop (Inbox #1725).
+- Runtime worktree was safely realigned to main and guard is healthy.
 - Runtime worktree branch c2/supervisor-runtime tracks main, is 66 commits behind, and its only local modification is roadmap.sqlite.
-- Two Codex runs are still active in canonical state with expired leases: prompts 812553 and 328371.
+- Expired runs were recovered. 812553 is stuck because its durable Codex receipt is terminal/failed with no C2_RESULT; 328371 and 340495 have live workers.
 - Current runnable view exposed 20 immediately relevant work items before reactivation; denominator is dynamic.
 - Finalizer fix is on current main: no-task-record fails closed.
 
 # Completed
-Supervisor recovery, canonical authority claim, current task intake/start boundary, and incident captures #1706/#1710.
+Supervisor recovery, canonical authority claim, current task intake/start boundary, runtime realignment/reactivation, expired-run recovery, and incident captures #1706/#1710/#1725/#1727. Added synthetic FAIL/CANCELLED terminalization for Codex turns that end without C2_RESULT; focused worker suite 15/15 PASS.
 
 # Remaining
-Runtime realignment/reactivation, expired-run recovery, real scheduling/launch verification, then persistent autonomous drain.
+Integrate/deploy the failed-turn fix; reconcile 812553; verify continued scheduling/launch and persistent autonomous drain. Fix #1725 before re-enabling path-triggered wakeups; timer remains active meanwhile.
 
 # Blockers
-Runtime guard currently prevents service start; no other blocker known.
+No blocker to timer-driven drain. c2-runtime.path remains disabled to prevent a self-trigger retry loop pending #1725.
 
 # Evidence
 Issues #1707/#1708/#1709 applied. Guard JSON reports dirty=true, ahead=0, issues=[dirty_worktree,runtime_code_drift]. Runtime worktree status shows only M roadmap.sqlite and branch behind 66.
@@ -51,4 +52,4 @@ Issues #1707/#1708/#1709 applied. Guard JSON reports dirty=true, ahead=0, issues
 Runtime remains event-driven and fenced; stale runs recover; Codex runnable work is scheduled/launched automatically; no duplicate turns/schedulers; drain survives loss of this chat and stops only at defined quiescence.
 
 # Next action
-Reset only the dedicated runtime worktree to local main, verify guard healthy, then update runtime.env and start c2-runtime.path/timer.
+Commit/push/integrate the failed-turn terminalization fix, realign runtime to main, and launch one runtime cycle so 812553 terminalizes instead of recovering forever.

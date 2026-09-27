@@ -132,8 +132,20 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             result['phase']=terminal['status']
         if terminal is not None:
             parsed=parse_terminal_result(terminal,prompt_id)
-            if parsed is None and terminal.get('status')=='completed':
+            terminal_status=str(terminal.get('status') or '')
+            if parsed is None and terminal_status=='completed':
                 raise WorkerError('codex_terminal_contract_missing')
+            if parsed is None and terminal_status in ('failed','cancelled'):
+                parsed={
+                    'outcome':'FAIL' if terminal_status=='failed' else 'CANCELLED',
+                    'summary':'Codex turn terminated before producing the C2 terminal contract',
+                    'completed':[],
+                    'remaining':['Task did not complete'],
+                    'evidence':['Codex turn '+str(result.get('turn_id'))+' ended '+terminal_status],
+                    'blocker':'Codex turn ended '+terminal_status+' before a terminal result was produced',
+                    'next_action':'Retry from the existing checkpoint or create a follow-up run.',
+                    'strict_contract':True,
+                }
             if parsed is not None:
                 base_args={'run_id':run_id,'prompt_id':prompt_id,**parsed,
                            'integration_ready':False}
