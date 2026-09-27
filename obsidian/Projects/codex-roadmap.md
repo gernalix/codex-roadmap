@@ -5,8 +5,8 @@ tags:
 
 # codex-roadmap
 
-- [[obsidian/Prompts/886300 riparare-il-finalizer-c2-per-task-su-codex-roadm-886300|886300 · Riparare il finalizer C2 per task su codex-roadmap]] · `running`
 - [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence|660629 · Orchestrare C2 fino a quiescenza]] · `running`
+- [[obsidian/Prompts/886300 riparare-il-finalizer-c2-per-task-su-codex-roadm-886300|886300 · Riparare il finalizer C2 per task su codex-roadmap]] · `completed`
 - [[obsidian/Prompts/572280 recover-641582-missing-roadmap-registration-v1|572280 · Recuperare 641582 e correggere il bootstrap roadmap]] · `completed`
 - [[obsidian/Prompts/175908 checklist2-single-work-item-control-plane-v2|175908 · Creare Checklist 2.0 come unico albero di lavoro]] · `completed`
 - [[obsidian/Prompts/233366 implementare-struttura-minima-del-contratto-c2-233366|233366 · Implementare struttura minima del contratto C2]] · `completed`
