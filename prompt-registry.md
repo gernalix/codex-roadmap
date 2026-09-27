@@ -6,7 +6,6 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence\|660629 · Orchestrare C2 fino a quiescenza]] | running | 2026-09-27T06:00:21Z | 2026-09-27T08:05:56Z | UNKNOWN | no | no | — | codex-roadmap | GPT-6 Luna | medium |
 | [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582\|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]] | running | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
-| [[obsidian/Prompts/545953 ripristinare-il-diff-storico-delle-notifiche-tel-545953\|545953 · Ripristinare il diff storico delle notifiche Telegram dopo enrichment Grindr]] | running | — | — | — | no | no | — | telegram_insert_bot | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
@@ -437,3 +436,4 @@
 | [[obsidian/Prompts/226672 integrare-supervisione-chatgpt-codex-nella-c2-226672\|226672 · Integrare supervisione ChatGPT/Codex nella C2]] | completed | — | — | PASS | no | no | — | codex-roadmap | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/653776 fix-c2-successor-supervisor-authority-handoff-cl-653776\|653776 · Fix C2 successor supervisor authority handoff (claim vs renew)]] | completed | 2026-09-26T15:51:47Z | 2026-09-26T15:52:58Z | PASS | sì | sì | — | codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/669941 personalhub-workflowy-home-audit-resume\|669941 · Completa jump Workflowy, tile Home e Audit log PersonalHub]] | completed | — | — | PASS | no | no | — | PersonalHub | GPT-6 Sol | medium |
+| [[obsidian/Prompts/545953 ripristinare-il-diff-storico-delle-notifiche-tel-545953\|545953 · Ripristinare il diff storico delle notifiche Telegram dopo enrichment Grindr]] | blocked | — | — | BLOCKED | no | no | — | telegram_insert_bot | GPT-5.6 Terra | medium |
