@@ -60,6 +60,21 @@ It never invents semantic decisions or silently repairs an invalid AI proposal.
 5. Submit only those semantic mutations through the writer.
 6. Verify writer receipts/projection and stop. Do not start executing the reorganized tasks.
 
+## Inbox promotion contract
+
+Capture records an observation only. A triager reads `v_issue_inbox_pending_ordered` and submits one fenced `c2_promote_issue` or `c2_discard_issue` through `tools/c2_control.py` for each pending issue. Every disposition needs a concrete `reason` and `triaged_by`; the single writer owns the state transition and evidence.
+
+For `promote_issue`, choose `matched_work_item_id` from canonical work-item evidence, or leave it empty when no existing item matches:
+
+| Match at writer application | Canonical effect |
+| --- | --- |
+| Pending, running, waiting, blocked, needs_fix, or unknown | Attach the observation to that work item. Preserve its lifecycle and execution metadata. |
+| Completed | Create a new regression work item with a `regression_of` relation to the completed item; never reopen or discard the completed history. |
+| Cancelled, superseded, or waived | Create a new work item. The old terminal item is evidence, not an active owner. |
+| No match | Create a new work item from the observation. |
+
+For a newly created item, the triager supplies a useful title/objective and the explicit parent, dependencies, tags, order, executor policy, project and repository when verified. The writer may inherit fields from a matched item and records `source:issue-inbox`; it does not infer semantic priority or dependencies. Review priority relative to the current queue and dependencies in both directions before promotion. If the match is active, promotion adds evidence only; use a separate allowed roadmap mutation for any metadata change. `discard_issue` is for an irrelevant or obsolete observation with a concrete reason; a fresh observation of completed work requires regression promotion, and a relevant active match requires promotion into that item.
+
 ## Standard prompt
 Use this prompt when the goal is to **update + optimize the C2 roadmap**, not execute its tasks:
 
