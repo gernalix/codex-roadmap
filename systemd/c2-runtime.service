@@ -6,7 +6,7 @@ ConditionPathExists=/home/daniele/.local/share/c2-supervisor/worktree/tools/c2_s
 [Service]
 Type=oneshot
 EnvironmentFile=%h/.config/c2-supervisor/runtime.env
-ExecStartPre=/usr/bin/python3 /home/daniele/.local/share/c2-supervisor/worktree/tools/c2_worktree_guard.py
+ExecStartPre=/usr/bin/python3 /home/daniele/.local/share/c2-supervisor/worktree/tools/c2_worktree_guard.py --sync
 ExecStartPre=/usr/bin/python3 /home/daniele/.local/share/c2-supervisor/worktree/tools/c2_snapshot_sync.py
 ExecStart=/usr/bin/python3 /home/daniele/.local/share/c2-supervisor/worktree/tools/c2_runtime.py --db %h/.local/state/c2-supervisor/roadmap.sqlite3 --supervisor-id ${C2_SUPERVISOR_ID} --fencing-token ${C2_FENCING_TOKEN}
 TimeoutStartSec=90
