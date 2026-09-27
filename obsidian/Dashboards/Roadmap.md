@@ -4,7 +4,7 @@
 
 ## Lanciabili adesso
 
-- Nessuno.
+- [[obsidian/Prompts/856999 aggiungere-gate-c2-per-acceptance-post-merge-856999|856999 · Aggiungere gate C2 per acceptance post-merge]]
 
 ## In esecuzione
 
