@@ -1,0 +1,52 @@
+schema_version: c2.project-capsule.v1
+identity:
+  project_id: 0 # Replace from MegaVault projects table.
+  slug: replace-from-megavault
+  repository_id: replace-from-megavault
+scope:
+  purpose: Describe the product or service in one sentence.
+  boundaries: [Describe what this repository does not own.]
+repository:
+  canonical_workdir: /absolute/path/from/megavault
+  branch_policy: Describe canonical branch and isolated integration rule.
+architecture:
+  summary: Describe the main components and data flow.
+  entrypoints: [relative/path/to/entrypoint]
+  important_paths: [relative/path/to/important/dir]
+dependencies: [] # name, optional project_id, purpose
+data:
+  schema: Describe local database schema or why none exists.
+  migrations: Describe migration entrypoint or why none exists.
+runtime:
+  services: []
+  timers: []
+  containers: []
+devices: []
+commands:
+  setup: {not_applicable: Explain why setup is unnecessary.}
+  build: {not_applicable: Explain why there is no build.}
+  test_targeted: {argv: [python3, -m, pytest, tests/test_example.py], cwd: .}
+  test_full: {argv: [python3, -m, pytest], cwd: .}
+  lint: {not_applicable: Explain if there is no lint.}
+  deploy_install: {not_applicable: Explain if there is no deployment.}
+  smoke: {not_applicable: Explain if there is no smoke test.}
+  verify:
+    fast: {argv: [python3, tools/project_capsule.py, --repo, ., --mode, FAST], cwd: .}
+    full: {argv: [python3, tools/project_capsule.py, --repo, ., --mode, FULL], cwd: .}
+safety:
+  invariants: [Describe a real invariant.]
+  risky_operations: [Describe a risky operation and its gate.]
+  recovery: [Describe restore or rollback entrypoint.]
+acceptance: [Describe an observable success condition.]
+references:
+  megavault: /home/daniele/MegaVault/megavault.sqlite
+  c2: /home/daniele/projects/codex-roadmap/roadmap.sqlite
+freshness:
+  reviewed_commit: 0000000000000000000000000000000000000000
+  watch_paths: [src, migrations, .github/workflows]
+artifacts:
+  agents: AGENTS.md
+validation_hooks: [] # Only safe=true hooks run in FULL.
+change_verification:
+  - paths: ['src/**', 'migrations/**']
+    commands: [test_targeted]
