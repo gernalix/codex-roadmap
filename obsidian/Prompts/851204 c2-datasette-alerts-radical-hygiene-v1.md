@@ -1,6 +1,6 @@
 ---
 prompt_id: 851204
-status: blocked
+status: superseded
 project_id: 42
 model: GPT-6 Sol
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - notification-hygiene
   - telegram
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/telegram-insert-bot
 ---
 
 # 851204 · Bonificare radicalmente Datasette Alerts
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/telegram-insert-bot|telegram_insert_bot]]
 - **Prompt:** [[../../falliti/c2-datasette-alerts-radical-hygiene-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-26T23:06:30Z
