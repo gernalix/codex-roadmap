@@ -1,18 +1,18 @@
 ---
 prompt_id: 660629
-status: pending
+status: running
 project_id: 51
 model: GPT-6 Luna
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/codex-roadmap
 ---
 
 # 660629 · Orchestrare C2 fino a quiescenza
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
 - **Prompt:** [[../../prompts/c2-autonomous-orchestration-to-quiescence|Apri prompt]]
 - **Primo lancio:** 2026-09-27T06:00:21Z
