@@ -15,6 +15,7 @@ import c2_issue_inbox
 import c2_manual_order
 import c2_scheduler
 import c2_issue_capture
+import c2_issue_manage
 import c2_runtime
 import c2_supervisor_authority
 import roadmap_db
@@ -27,6 +28,79 @@ class IssueInboxTests(unittest.TestCase):
         conn = c2_intake._connect(path)
         c2_scheduler.install_schema(conn)
         return path, conn
+
+    def test_pending_edit_and_void_are_audited_and_idempotent(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute("BEGIN IMMEDIATE")
+                issue_id = c2_issue_inbox.capture(conn, description="Old", repo="old/repo")["issue_id"]
+                edit_id = "a" * 32
+                args = dict(issue_id=issue_id, mutation_id=edit_id, actor="operator",
+                            reason="Correct typo", changes={"description": "New\ntext", "repo": None})
+                first = c2_issue_inbox.edit(conn, **args)
+                self.assertEqual("New\ntext", first["description"])
+                self.assertIsNone(first["repo"])
+                self.assertEqual(first, c2_issue_inbox.edit(conn, **args))
+                self.assertEqual(1, conn.execute("SELECT COUNT(*) FROM issue_inbox_revisions").fetchone()[0])
+                history = conn.execute("SELECT before_json,after_json FROM issue_inbox_revisions").fetchone()
+                self.assertEqual("Old", json.loads(history[0])["description"])
+                self.assertEqual("New\ntext", json.loads(history[1])["description"])
+                with self.assertRaisesRegex(c2_issue_inbox.IssueInboxError, "mutation_id_conflict"):
+                    c2_issue_inbox.edit(conn, **{**args, "reason": "Different"})
+                with self.assertRaisesRegex(c2_issue_inbox.IssueInboxError, "invalid_edit_fields"):
+                    c2_issue_inbox.edit(conn, **{**args, "mutation_id": "b" * 32,
+                                                 "changes": {"origin_run_id": None}})
+                void_args = dict(issue_id=issue_id, mutation_id="c" * 32,
+                                 actor="operator", reason="Accidental capture")
+                voided = c2_issue_inbox.void(conn, **void_args)
+                self.assertEqual("voided", voided["state"])
+                self.assertEqual(voided, c2_issue_inbox.void(conn, **void_args))
+                self.assertEqual([], c2_issue_inbox.pending_issues(conn))
+                self.assertEqual(2, conn.execute("SELECT COUNT(*) FROM issue_inbox_revisions").fetchone()[0])
+                with self.assertRaisesRegex(c2_issue_inbox.IssueInboxError, "issue_already_triaged"):
+                    c2_issue_inbox.edit(conn, **{**args, "mutation_id": "d" * 32})
+                with self.assertRaisesRegex(c2_issue_inbox.IssueInboxError, "issue_already_triaged"):
+                    c2_issue_inbox.discard(conn, issue_id=issue_id, reason="x", triaged_by="test")
+            finally:
+                conn.close()
+
+    def test_triaged_rows_cannot_be_edited_or_voided(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute("BEGIN IMMEDIATE")
+                issue_id = c2_issue_inbox.capture(conn, description="Real")["issue_id"]
+                c2_issue_inbox.discard(conn, issue_id=issue_id, reason="Handled", triaged_by="test")
+                with self.assertRaisesRegex(c2_issue_inbox.IssueInboxError, "issue_already_triaged"):
+                    c2_issue_inbox.void(conn, issue_id=issue_id, mutation_id="e" * 32,
+                                        actor="operator", reason="Late correction")
+                self.assertEqual(0, conn.execute("SELECT COUNT(*) FROM issue_inbox_revisions").fetchone()[0])
+            finally:
+                conn.close()
+
+    def test_legacy_state_constraint_migrates_without_losing_rows(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute("BEGIN IMMEDIATE")
+                issue_id = c2_issue_inbox.capture(conn, description="Legacy")["issue_id"]
+                conn.execute("DROP VIEW v_issue_inbox_pending_ordered")
+                conn.execute("DROP TABLE issue_inbox_revisions")
+                conn.execute("CREATE TABLE legacy AS SELECT * FROM issue_inbox")
+                conn.execute("DROP TABLE issue_inbox")
+                old = c2_issue_inbox.SCHEMA.split("CREATE INDEX")[0].split("CREATE TABLE IF NOT EXISTS issue_inbox_revisions")[0]
+                old = old.replace("'discarded','voided'", "'discarded'")
+                conn.execute(old.replace("CREATE TABLE IF NOT EXISTS", "CREATE TABLE"))
+                conn.execute("INSERT INTO issue_inbox SELECT * FROM legacy")
+                conn.execute("DROP TABLE legacy")
+                c2_issue_inbox.install_schema(conn)
+                self.assertEqual("Legacy", conn.execute("SELECT description FROM issue_inbox WHERE issue_id=?", (issue_id,)).fetchone()[0])
+                self.assertEqual("voided", c2_issue_inbox.void(conn, issue_id=issue_id,
+                    mutation_id="f" * 32, actor="operator", reason="Invalid")["state"])
+                self.assertEqual([], conn.execute("PRAGMA foreign_key_check").fetchall())
+            finally:
+                conn.close()
 
     def test_capture_is_append_only_and_requires_no_dedup(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -285,6 +359,39 @@ class IssueInboxTests(unittest.TestCase):
                 )
             finally:
                 conn.close()
+
+    def test_edit_requires_fenced_writer_and_cli_submits_one_operation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute("BEGIN IMMEDIATE")
+                issue_id = c2_issue_inbox.capture(conn, description="Before")["issue_id"]
+                args = {"issue_id": issue_id, "mutation_id": "1" * 32,
+                        "actor": "operator", "reason": "Correction",
+                        "changes": {"description": "After"}}
+                with self.assertRaisesRegex(Exception, "supervisor_authority_required"):
+                    roadmap_db.apply_mutation(conn, {"op": "c2_edit_issue", "arguments": args})
+                authority = {"supervisor_id": "test-supervisor", "fencing_token": 1,
+                             "lease_expires_at": time.time() + 120}
+                roadmap_db.apply_mutation(conn, {"op": "c2_claim_supervisor",
+                    "arguments": {"supervisor_authority": authority}})
+                roadmap_db.apply_mutation(conn, {"op": "c2_edit_issue",
+                    "arguments": {**args, "supervisor_authority": authority}})
+                self.assertEqual("After", conn.execute("SELECT description FROM issue_inbox").fetchone()[0])
+            finally:
+                conn.close()
+        with tempfile.TemporaryDirectory() as tmp:
+            changes_file = Path(tmp) / "changes.json"
+            changes_file.write_text('{"description":"Corrected"}', encoding="utf-8")
+            with patch.object(c2_issue_manage, "load_runtime_identity", return_value=("supervisor", 4)), \
+                 patch.object(c2_issue_manage.c2_control, "submit_control", return_value={"status": "queued"}) as submit:
+                self.assertEqual(0, c2_issue_manage.main([
+                    "edit", "issue:" + "2" * 32, "--actor", "operator",
+                    "--reason", "Correction", "--mutation-id", "3" * 32,
+                    "--changes-json", str(changes_file)]))
+                self.assertEqual("edit_issue", submit.call_args.kwargs["operation"])
+                self.assertEqual({"description": "Corrected"},
+                                 submit.call_args.kwargs["arguments"]["changes"])
 
     def test_capture_cli_uses_only_description_and_run_environment(self):
         submitted = []

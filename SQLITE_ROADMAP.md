@@ -124,3 +124,24 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 
 ChatGPT non crea più il file prompt con un commit separato. La Issue `register` contiene `current_path` e `prompt_text`; il single writer crea `prompts/<slug>.md`, registra la fingerprint nel DB e rigenera tutte le viste nello stesso commit autorevole.
 
+
+## Correzione e annullamento C2 Inbox
+
+Solo il writer canonico può applicare `c2_edit_issue` e `c2_void_issue`; entrambe
+le operazioni richiedono l'autorità fenced del supervisor. Un operatore usa
+`python3 tools/c2_issue_manage.py edit issue:<32 hex> --actor NAME --reason TEXT
+--changes-json FILE` oppure `python3 tools/c2_issue_manage.py void issue:<32 hex>
+--actor NAME --reason TEXT`. Il file JSON di edit può contenere solo
+`description`, `repo`, `code_location`, `executor_ref`, `chat_url`; `description`
+non può essere vuota e i campi opzionali possono essere azzerati con `null`.
+L'helper legge l'identità fenced dal runtime locale e invia una mutation Issue,
+senza aprire il database in scrittura. `--mutation-id <32 hex>` stabilizza un
+retry; lo stesso ID con contenuto diverso è rifiutato.
+
+Edit e void si applicano solo alle righe `pending`. Ogni variazione conserva
+snapshot prima/dopo, attore, motivo e ID della mutation in
+`issue_inbox_revisions`. Void lascia la riga nel DB con stato `voided` e la
+esclude dalla coda di triage. Le righe già `promoted` o `discarded` e i loro
+riferimenti/evidence restano immutabili; la correzione successiva va gestita
+come nuovo lavoro C2, non riscrivendo la cattura storica. Gli ID origine,
+il timestamp osservato e i campi di triage non sono editabili.

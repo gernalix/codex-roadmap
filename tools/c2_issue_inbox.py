@@ -1,4 +1,4 @@
-"""Append-only incidental issue inbox and fenced C2 triage primitives."""
+"""Incidental issue inbox with fenced, audited corrections and triage."""
 from __future__ import annotations
 
 import json
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS issue_inbox (
   origin_work_item_id TEXT REFERENCES work_items(work_item_id) ON DELETE RESTRICT,
   origin_run_id TEXT REFERENCES work_item_runs(run_id) ON DELETE RESTRICT,
   observed_at_ms INTEGER NOT NULL CHECK(observed_at_ms > 0),
-  state TEXT NOT NULL DEFAULT 'pending' CHECK(state IN ('pending','promoted','discarded')),
+  state TEXT NOT NULL DEFAULT 'pending' CHECK(state IN ('pending','promoted','discarded','voided')),
   matched_work_item_id TEXT REFERENCES work_items(work_item_id) ON DELETE RESTRICT,
   promoted_work_item_id TEXT REFERENCES work_items(work_item_id) ON DELETE RESTRICT,
   disposition_reason TEXT,
@@ -40,6 +40,19 @@ CREATE TABLE IF NOT EXISTS issue_inbox (
   triaged_at_ms INTEGER,
   created_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS issue_inbox_revisions (
+  mutation_id TEXT PRIMARY KEY,
+  issue_id TEXT NOT NULL REFERENCES issue_inbox(issue_id) ON DELETE RESTRICT,
+  operation TEXT NOT NULL CHECK(operation IN ('edit','void')),
+  actor TEXT NOT NULL,
+  reason TEXT NOT NULL,
+  payload_json TEXT NOT NULL,
+  before_json TEXT NOT NULL,
+  after_json TEXT NOT NULL,
+  created_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_issue_inbox_revisions_issue
+  ON issue_inbox_revisions(issue_id, created_at, mutation_id);
 CREATE INDEX IF NOT EXISTS idx_issue_inbox_state_observed
   ON issue_inbox(state, observed_at_ms, issue_id);
 CREATE INDEX IF NOT EXISTS idx_issue_inbox_repo_state
@@ -65,6 +78,27 @@ def install_schema(conn: sqlite3.Connection) -> None:
     ):
         if column not in columns:
             conn.execute(f"ALTER TABLE issue_inbox ADD COLUMN {column} {ddl}")
+    # SQLite cannot widen a CHECK in place. No table references issue_inbox, so
+    # preserve every row while replacing only the old state constraint.
+    table_sql = conn.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='issue_inbox'").fetchone()[0]
+    if "'voided'" not in table_sql:
+        conn.execute("DROP VIEW IF EXISTS v_issue_inbox_pending_ordered")
+        conn.execute("DROP TABLE IF EXISTS issue_inbox_revisions")
+        conn.execute("CREATE TABLE issue_inbox_migrated " + table_sql[table_sql.index('('):].replace(
+            "CHECK(state IN ('pending','promoted','discarded'))",
+            "CHECK(state IN ('pending','promoted','discarded','voided'))"))
+        conn.execute("INSERT INTO issue_inbox_migrated SELECT * FROM issue_inbox")
+        conn.execute("DROP TABLE issue_inbox")
+        conn.execute("ALTER TABLE issue_inbox_migrated RENAME TO issue_inbox")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_issue_inbox_state_observed ON issue_inbox(state,observed_at_ms,issue_id)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_issue_inbox_repo_state ON issue_inbox(repo,state,observed_at_ms)")
+        conn.execute("""CREATE TABLE issue_inbox_revisions (
+          mutation_id TEXT PRIMARY KEY,
+          issue_id TEXT NOT NULL REFERENCES issue_inbox(issue_id) ON DELETE RESTRICT,
+          operation TEXT NOT NULL CHECK(operation IN ('edit','void')),
+          actor TEXT NOT NULL, reason TEXT NOT NULL, payload_json TEXT NOT NULL,
+          before_json TEXT NOT NULL, after_json TEXT NOT NULL, created_at TEXT NOT NULL)""")
+        conn.execute("CREATE INDEX idx_issue_inbox_revisions_issue ON issue_inbox_revisions(issue_id,created_at,mutation_id)")
     import c2_manual_order
 
     c2_manual_order.install_schema(conn)
@@ -272,6 +306,67 @@ def _row(conn: sqlite3.Connection, issue_id: str) -> sqlite3.Row:
     if row["state"] != "pending":
         raise IssueInboxError("issue_already_triaged")
     return row
+
+
+EDIT_FIELDS = frozenset({"description", "repo", "code_location", "executor_ref", "chat_url"})
+
+
+def _change(conn: sqlite3.Connection, *, issue_id: str, mutation_id: str,
+            operation: str, actor: str, reason: str, changes: dict | None = None) -> dict:
+    _transaction(conn)
+    install_schema(conn)
+    _issue_id(issue_id)
+    if not re.fullmatch(r"[0-9a-f]{32}", str(mutation_id)):
+        raise IssueInboxError("invalid_mutation_id")
+    actor = _required_text(actor, "actor")
+    reason = _required_text(reason, "reason")
+    if operation == "edit":
+        if not isinstance(changes, dict) or not changes or set(changes) - EDIT_FIELDS:
+            raise IssueInboxError("invalid_edit_fields")
+        normalized = {key: (_required_description(value) if key == "description"
+                            else _optional_text(value)) for key, value in changes.items()}
+    else:
+        if changes is not None:
+            raise IssueInboxError("void_disallows_changes")
+        normalized = {}
+    payload = json.dumps({"issue_id": issue_id, "operation": operation,
+                          "actor": actor, "reason": reason, "changes": normalized},
+                         ensure_ascii=False, sort_keys=True)
+    prior = conn.execute("SELECT * FROM issue_inbox_revisions WHERE mutation_id=?", (mutation_id,)).fetchone()
+    if prior:
+        if prior["payload_json"] != payload:
+            raise IssueInboxError("mutation_id_conflict")
+        return json.loads(prior["after_json"])
+    before = dict(_row(conn, issue_id))
+    if operation == "edit":
+        after = {**before, **normalized}
+        if after == before:
+            raise IssueInboxError("edit_no_change")
+        assignments = ",".join(f"{key}=?" for key in normalized)
+        conn.execute(f"UPDATE issue_inbox SET {assignments} WHERE issue_id=?",
+                     (*normalized.values(), issue_id))
+    else:
+        conn.execute("UPDATE issue_inbox SET state='voided',disposition_reason=?,triaged_by=?,triaged_at_ms=? WHERE issue_id=?",
+                     (reason, actor, int(time.time() * 1000), issue_id))
+    after = dict(conn.execute("SELECT * FROM issue_inbox WHERE issue_id=?", (issue_id,)).fetchone())
+    conn.execute("""INSERT INTO issue_inbox_revisions
+        (mutation_id,issue_id,operation,actor,reason,payload_json,before_json,after_json,created_at)
+        VALUES(?,?,?,?,?,?,?,?,?)""", (mutation_id, issue_id, operation, actor, reason,
+        payload, json.dumps(before, ensure_ascii=False, sort_keys=True),
+        json.dumps(after, ensure_ascii=False, sort_keys=True), c2_identity.utc_now()))
+    return after
+
+
+def edit(conn: sqlite3.Connection, *, issue_id: str, mutation_id: str,
+         actor: str, reason: str, changes: dict) -> dict:
+    return _change(conn, issue_id=issue_id, mutation_id=mutation_id,
+                   operation="edit", actor=actor, reason=reason, changes=changes)
+
+
+def void(conn: sqlite3.Connection, *, issue_id: str, mutation_id: str,
+         actor: str, reason: str) -> dict:
+    return _change(conn, issue_id=issue_id, mutation_id=mutation_id,
+                   operation="void", actor=actor, reason=reason)
 
 
 def _matched(conn: sqlite3.Connection, work_item_id: str | None) -> sqlite3.Row | None:
