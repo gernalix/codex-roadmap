@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+from contextlib import closing
 import json
 import os
 import re
@@ -91,6 +92,11 @@ def _local_prompt_record(repo: Path, prompt_id: str) -> dict[str, Any]:
             "SELECT status,repo,project_id FROM prompts WHERE prompt_id=?",
             (prompt_id,),
         ).fetchone()
+        generation = conn.execute(
+            "SELECT history_id FROM status_history WHERE prompt_id=? "
+            "ORDER BY history_id DESC LIMIT 1",
+            (prompt_id,),
+        ).fetchone()
     except sqlite3.DatabaseError as exc:
         raise RoadmapStartError("local_roadmap_db_invalid") from exc
     finally:
@@ -100,11 +106,33 @@ def _local_prompt_record(repo: Path, prompt_id: str) -> dict[str, Any]:
             pass
     if not row:
         raise RoadmapStartError(f"prompt_not_found:{prompt_id}")
+    if not generation:
+        raise RoadmapStartError(f"prompt_status_generation_missing:{prompt_id}")
     return {
         "status": str(row[0]),
         "repo": str(row[1] or ""),
         "project_id": str(row[2] or ""),
+        "status_generation": int(generation[0]),
     }
+
+
+def _require_canonical_claim(
+    repo: Path, prompt_id: str, request_key: str, issue_number: str
+) -> None:
+    """A closed Issue alone may be a no-op replay of an older claim."""
+    path = repo.expanduser().resolve() / "roadmap.sqlite"
+    with closing(sqlite3.connect(f"file:{path}?mode=ro", uri=True)) as conn:
+        status = conn.execute(
+            "SELECT status FROM prompts WHERE prompt_id=?", (prompt_id,)
+        ).fetchone()
+        receipt = conn.execute(
+            "SELECT issue_number FROM mutation_receipts WHERE request_key=?",
+            (request_key,),
+        ).fetchone()
+    if not status or status[0] != "running":
+        raise RoadmapStartError(f"start_claim_not_running:{prompt_id}")
+    if not receipt or int(receipt[0]) != int(issue_number):
+        raise RoadmapStartError(f"start_claim_not_applied:{prompt_id}:{issue_number}")
 
 
 def _repo_task_worktree(record: dict[str, Any], prompt_id: str) -> str | None:
@@ -207,6 +235,11 @@ def claim_start(
         if str(exc) == f"prompt_not_found:{prompt_id}":
             raise RoadmapStartError(f"prompt_not_registered:{prompt_id}") from exc
         raise
+    if prompt_record["status"] not in {"pending", "waiting"}:
+        raise RoadmapStartError(
+            f"prompt_not_ready_for_start:{prompt_id}:{prompt_record['status']}"
+        )
+    request_key = f"start-{prompt_id}-{prompt_record['status_generation']}"
 
     document = {
         "schema": SCHEMA,
@@ -224,7 +257,7 @@ def claim_start(
     try:
         submitted = submit_document(
             document,
-            request_key=f"start-{prompt_id}",
+            request_key=request_key,
             repository=repository,
             branch=branch,
             lookup_existing=False,
@@ -233,10 +266,15 @@ def claim_start(
         raise RoadmapStartError(str(exc)) from exc
 
     _wait_issue_applied(repository, submitted["issue_number"], timeout)
-    # The single-writer workflow closes an Issue as "completed" only after the
-    # mutation is applied and verified; rejected mutations close as "not_planned".
-    # Therefore a second remote DB read is redundant and only adds another
-    # failure point to the critical claim path.
+    # A duplicate request key can close as completed without applying a new
+    # transition. Verify the exact receipt and running state before isolation.
+    try:
+        guarded_pull(repo, branch=branch)
+    except RoadmapPullBlocked as exc:
+        raise RoadmapStartError(f"roadmap_pull_blocked:{exc}") from exc
+    except Exception as exc:
+        raise RoadmapStartError(f"roadmap_pull_failed:{exc}") from exc
+    _require_canonical_claim(repo, prompt_id, request_key, submitted["issue_number"])
     status = "running"
 
     try:
