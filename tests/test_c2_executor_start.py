@@ -10,6 +10,7 @@ import c2_executor_start as start
 
 class ExecutorStartTests(unittest.TestCase):
     @patch('c2_executor_start.submit_document')
+    @patch.dict(os.environ,{'CODEX_THREAD_ID':''})
     def test_run_identity_is_minimal_and_idempotent(self, submit):
         submit.return_value={'submission':'queued','request_key':'x'}
         start.submit_start(run_id='run-1')
