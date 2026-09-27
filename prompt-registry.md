@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/742579 rendere-il-db-grindr-favorites-frictionless-da-e-742579\|742579 · Rendere il DB Grindr Favorites frictionless da esplorare]] | running | — | — | — | no | no | — | — | GPT-6 Sol | medium |
+| [[obsidian/Prompts/742579 rendere-il-db-grindr-favorites-frictionless-da-e-742579\|742579 · Rendere il DB Grindr Favorites frictionless da esplorare]] | running | 2026-09-27T08:31:27Z | 2026-09-27T08:31:27Z | UNKNOWN | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/999198 correggere-mapping-prompt-id-work-item-id-nel-cu-999198\|999198 · Correggere mapping prompt_id→work_item_id nel cutover C2]] | running | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence\|660629 · Orchestrare C2 fino a quiescenza]] | running | 2026-09-27T06:00:21Z | 2026-09-27T08:05:56Z | UNKNOWN | no | no | — | codex-roadmap | GPT-6 Luna | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
