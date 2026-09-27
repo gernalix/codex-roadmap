@@ -63,6 +63,52 @@ class WorkerTests(unittest.TestCase):
             finally:
                 conn.close()
 
+    def test_failed_codex_turn_without_contract_submits_fail_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); path=C2IntakeTests().make_cutover_db(root)
+            conn=c2_intake._connect(path)
+            try:
+                c2_scheduler.install_schema(conn)
+                conn.execute('BEGIN IMMEDIATE')
+                conn.execute("UPDATE work_items SET status='running' WHERE prompt_id='123456'")
+                conn.execute("INSERT OR REPLACE INTO prompt_materializations(prompt_id,body,sha256,created_at,actor) VALUES(?,?,?,?,?)",
+                    ('123456','PROMPT_ID=123456\nDo the task.','fixture-sha','2026-01-01T00:00:00Z','test'))
+                metadata={'activity':'coding','model':'exact','reasoning':'medium',
+                    'worktree':'/tmp/worktree','prompt_id':'123456',
+                    'work_item_id':'prompt:123456','goal_mode':0}
+                conn.execute("""INSERT INTO work_item_runs VALUES(
+                  'failed-result','prompt:123456','event',1,'codex','running',100,
+                  'c2-run:failed-result',NULL,?,1)""",(json.dumps(metadata),))
+                conn.commit()
+                turn={'id':'turn-failed','status':'failed','items':[]}
+                class RPC:
+                    def __enter__(self): return self
+                    def __exit__(self,*args): pass
+                    def __call__(self,method,params):
+                        if method=='model/list':
+                            return {'data':[{'model':'exact','id':'exact','displayName':'exact',
+                                'supportedReasoningEfforts':[{'reasoningEffort':'medium'}]}],
+                                'nextCursor':None}
+                        if method=='thread/read':
+                            return {'thread':{'turns':[turn]}}
+                        raise AssertionError(method)
+                calls=[]
+                def submit(op,args,key):
+                    calls.append((op,args,key)); return {'submission':'queued'}
+                fake={'thread_id':'thread-1','turn_id':'turn-failed',
+                      'phase':'terminal','turn_status':'failed'}
+                with patch.object(c2_worker,'dispatch_codex',return_value=fake):
+                    result=c2_worker.run_once(path,'failed-result',
+                        state_root=root/'receipts',submit=submit,rpc_factory=RPC)
+                self.assertEqual('failed',result['phase'])
+                result_calls=[c for c in calls if c[0]=='executor_result']
+                self.assertEqual(1,len(result_calls))
+                self.assertEqual('FAIL',result_calls[0][1]['outcome'])
+                self.assertIn('ended failed',result_calls[0][1]['blocker'])
+                self.assertFalse(result_calls[0][1]['integration_ready'])
+            finally:
+                conn.close()
+
 
     def test_worker_does_not_execute_if_start_notification_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
