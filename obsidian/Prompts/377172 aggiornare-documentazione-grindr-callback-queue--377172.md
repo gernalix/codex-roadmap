@@ -18,9 +18,9 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../completed/aggiornare-documentazione-grindr-callback-queue--377172|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-27T18:50:48Z
+- **Ultimo lancio:** 2026-09-27T18:50:48Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-27T18:50:48Z | 2026-09-27T18:51:20Z | PASS | 32.156 | gpt-5.6-terra | low | 7 | 32180 |
 
 ## Analisi ChatGPT
 
