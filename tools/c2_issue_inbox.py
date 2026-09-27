@@ -65,11 +65,35 @@ def install_schema(conn: sqlite3.Connection) -> None:
     ):
         if column not in columns:
             conn.execute(f"ALTER TABLE issue_inbox ADD COLUMN {column} {ddl}")
+    import c2_manual_order
+
+    c2_manual_order.install_schema(conn)
+    conn.execute(
+        """CREATE VIEW IF NOT EXISTS v_issue_inbox_pending_ordered AS
+           SELECT
+             i.*,
+             o.rank AS manual_rank,
+             o.source AS manual_order_source,
+             o.source_modified_at AS manual_order_source_modified_at,
+             o.updated_at AS manual_order_updated_at
+           FROM issue_inbox i
+           LEFT JOIN manual_order_overrides o
+             ON o.scope='inbox' AND o.entity_id=i.issue_id
+           WHERE i.state='pending'
+           ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,
+                    o.rank,i.observed_at_ms,i.issue_id"""
+    )
 
 
 def _transaction(conn: sqlite3.Connection) -> None:
     if not conn.in_transaction:
         raise IssueInboxError("canonical_writer_transaction_required")
+
+
+def pending_issues(conn: sqlite3.Connection) -> list[dict]:
+    """Return pending inbox rows in the authoritative human/AI triage order."""
+    install_schema(conn)
+    return [dict(row) for row in conn.execute("SELECT * FROM v_issue_inbox_pending_ordered")]
 
 
 def _optional_text(value: object) -> str | None:
@@ -426,7 +450,8 @@ def ensure_triage(conn: sqlite3.Connection, *, project_url: str) -> dict:
     item = c2_intake.add_work_item(
         conn, title="Triage C2 issue inbox",
         objective=(
-            "Process every pending issue_inbox row. Use the canonical snapshot to identify "
+            "Process every row from v_issue_inbox_pending_ordered in its displayed order. "
+            "Use the canonical snapshot to identify "
             "related roadmap/repository work. Submit c2_promote_issue or c2_discard_issue "
             "through tools/c2_control.py with the current supervisor ID and fencing token. "
             "For active matches, promote into the existing work item with evidence. "
@@ -435,7 +460,9 @@ def ensure_triage(conn: sqlite3.Connection, *, project_url: str) -> dict:
             "Read pending rows again before completion and finish only when none remain."
         ),
         acceptance=["No pending issue_inbox rows remain at completion"],
-        next_action="Read issue_inbox pending rows; apply one fenced disposition per row.",
+        next_action=(
+            "Read v_issue_inbox_pending_ordered; apply one fenced disposition per row in order."
+        ),
         tags=["c2:issue-triage", "priority:p0"],
         execution={"activity": "semantic", "project_url": project_url,
                    "resources": ["c2:issue-triage"], "max_attempts": 3},

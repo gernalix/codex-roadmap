@@ -8,6 +8,7 @@ import c2_supervisor_authority
 import c2_terminal_state_reimport
 import c2_work_item_admin
 import c2_issue_inbox
+import c2_manual_order
 import roadmap_db
 
 
@@ -18,6 +19,7 @@ SUPERVISOR_OPERATIONS = frozenset({
     'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item', 'bind_executor',
     'promote_issue', 'discard_issue', 'ensure_issue_triage',
     'set_execution_override', 'clear_execution_override',
+    'set_manual_order', 'clear_manual_order',
 })
 
 
@@ -59,6 +61,8 @@ def apply(conn, mutation):
         'schedule': c2_scheduler.schedule,
         'set_execution_override': c2_scheduler.set_override,
         'clear_execution_override': c2_scheduler.clear_override,
+        'set_manual_order': c2_manual_order.set_manual_order,
+        'clear_manual_order': c2_manual_order.clear_manual_order,
         'acknowledge': c2_scheduler.acknowledge,
         'executor_started': c2_scheduler.executor_started,
         'bind_executor': c2_scheduler.bind_executor,

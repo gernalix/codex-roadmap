@@ -54,6 +54,17 @@ CREATE TABLE IF NOT EXISTS work_item_tags (
   tag TEXT NOT NULL,
   PRIMARY KEY (work_item_id, tag)
 );
+
+CREATE TABLE IF NOT EXISTS manual_order_overrides (
+  scope TEXT NOT NULL CHECK(scope IN ('inbox','roadmap')),
+  entity_id TEXT NOT NULL,
+  rank INTEGER NOT NULL CHECK(rank >= 0),
+  source TEXT NOT NULL CHECK(source='workflowy'),
+  source_modified_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  PRIMARY KEY(scope, entity_id),
+  UNIQUE(scope, rank)
+);
 CREATE TABLE IF NOT EXISTS work_item_checkpoints (
   checkpoint_id INTEGER PRIMARY KEY AUTOINCREMENT,
   work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
@@ -126,6 +137,7 @@ CREATE INDEX IF NOT EXISTS idx_work_item_dependencies_target
   ON work_item_dependencies(depends_on_work_item_id, work_item_id);
 
 DROP VIEW IF EXISTS v_work_item_runnable;
+DROP VIEW IF EXISTS v_roadmap_manual_order;
 DROP VIEW IF EXISTS v_work_item_summary;
 DROP VIEW IF EXISTS v_work_item_progress;
 CREATE VIEW v_work_item_progress AS
@@ -196,6 +208,23 @@ CREATE VIEW v_work_item_summary AS
 SELECT w.*, p.total_actionable, p.completed_actionable, p.progress_percent
 FROM work_items w
 JOIN v_work_item_progress p ON p.work_item_id=w.work_item_id;
+
+CREATE VIEW v_roadmap_manual_order AS
+SELECT
+  w.*,
+  CASE
+    WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p0') THEN 0
+    WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p1') THEN 1
+    WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
+    ELSE 3
+  END AS ai_priority_rank,
+  o.rank AS manual_rank,
+  o.source AS manual_order_source,
+  o.source_modified_at AS manual_order_source_modified_at,
+  o.updated_at AS manual_order_updated_at
+FROM work_items w
+LEFT JOIN manual_order_overrides o
+  ON o.scope='roadmap' AND o.entity_id=w.work_item_id;
 
 CREATE VIEW v_work_item_runnable AS
 SELECT w.*
