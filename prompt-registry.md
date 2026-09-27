@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence\|660629 · Orchestrare C2 fino a quiescenza]] | running | 2026-09-27T06:00:21Z | 2026-09-27T08:05:56Z | UNKNOWN | no | no | — | codex-roadmap | GPT-6 Luna | medium |
+| [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence\|660629 · Orchestrare C2 fino a quiescenza]] | running | 2026-09-27T06:00:21Z | 2026-09-27T12:57:11Z | UNKNOWN | no | no | — | codex-roadmap | GPT-6 Luna | medium |
 | [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865\|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] | running | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/377172 aggiornare-documentazione-grindr-callback-queue--377172\|377172 · Aggiornare documentazione Grindr callback queue/worker]] | running | — | — | — | no | no | — | — | GPT-5.6 Terra | low |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
