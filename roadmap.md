@@ -9,3 +9,5 @@
 5. [[prompts/eboks-full-export-resume-after-mitid-v1|eboks-full-export-resume-after-mitid-v1]]
 6. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 7. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
+8. [[prompts/rendere-immediato-il-profile-id-dalle-foto-grind-625582|rendere-immediato-il-profile-id-dalle-foto-grind-625582]]
+9. [[prompts/ripristinare-il-diff-storico-delle-notifiche-tel-545953|ripristinare-il-diff-storico-delle-notifiche-tel-545953]]

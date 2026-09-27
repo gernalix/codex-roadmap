@@ -4,7 +4,8 @@
 
 ## Lanciabili adesso
 
-- Nessuno.
+- [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]]
+- [[obsidian/Prompts/545953 ripristinare-il-diff-storico-delle-notifiche-tel-545953|545953 · Ripristinare il diff storico delle notifiche Telegram dopo enrichment Grindr]]
 
 ## In esecuzione
 
