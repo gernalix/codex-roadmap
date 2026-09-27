@@ -1,5 +1,6 @@
 TASK_ID=C2-AUTODRAIN-20260927
 PROMPT_ID=660629
+C2_RECOVERY_STATE={"previous_supervisor_id":"8eb05a5e-b928-44b6-bd69-6e60b9912c1a","previous_fencing_token":21,"active_runs":["22bbc9a625bc443a89e6d2f6424a9074","b2744c52472c42718af5a73d4f27ecd1"],"active_executors":["codex://threads/01a0e173-23e2-76d0-b9d5-d520ad172f0c","codex://threads/01a0e297-19c1-7c80-aa9e-dfa9b2215c43","codex://threads/01a0e297-e543-7242-8ec7-41a89d41c59e"],"preserve_resources":["repo:gernalix/PersonalHub","worktree:/home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_PersonalHub/436865","repo:gernalix/telegram_insert_bot","worktree:/home/daniele/.local/share/codex-github-autosync/worktrees/gernalix_telegram_insert_bot/377172"],"blocker":null}
 
 # Objective
 Continue C2 autonomously until quiescence. NEW USER STEER: in the successor chat, PROCESS THE C2 INBOX FIRST because it contains urgent issues. After actionable Inbox is drained/reconciled, resume highest-priority roadmap work and parallelize maximally where locks/dependencies permit, including Codex CLI.
@@ -76,3 +77,25 @@ Do NOT call roadmap_start again. After Inbox priority work, launch each exactly 
 - Phase A 853479 is completed canonically.
 - PROMPT_ID=625582 and PROMPT_ID=545953 are status=running from roadmap_start, but this chat did NOT launch Codex CLI processes/sessions for them. Do not roadmap_start again; after the two urgent Inbox-derived items, launch/bind each exactly once if still safe.
 - User’s latest steer: in the successor chat, prioritize Inbox-derived urgent work before ordinary roadmap continuation, then maximize parallelism using Codex CLI wherever repo/resource/dependency constraints allow.
+
+
+# CHECKPOINT 2026-09-27 — USER PRIORITY #2330
+- User ordered: save current work, then give ABSOLUTE PRIORITY to GitHub issue #2330 until completion; after #2330 resume the prior drain from this checkpoint.
+- Canonical supervisor currently active locally as supervisor_id=28ae628c-081f-4128-add9-277e45aafc3b, fencing_token=22. Preserve its authority/lease and do not create a duplicate supervisor while active.
+- #2330 is capture issue issue:e21c3528a43a4c539c4c23a1c3525e89 in gernalix/workflowy-importer. Goal: fix live C2 Workflowy dashboard Inbox/Roadmap freshness, compact Inbox rendering, idempotent Reset to AI order, stale-node cleanup, stable continuous sync; acceptance is defined in GitHub issue #2330.
+- Workflowy baseline already merged before this steer: PR #29 (manual-order projection) and PR #30 (deploy .path fix). Current #2330 is a follow-up correctness/freshness P0 and must supersede ordinary drain work.
+- Current non-#2330 work to preserve and resume AFTER #2330:
+  - wi:7d582a5bab484b7b8a9fc559b6bdfcbd (MegaVault capsule inventory/tooling): Codex completed, commit 2907daa7fd53a881b0074da8125c27e2a2f8ff64 pushed on task/wi-7d582a5bab484b7b8a9fc559b6bdfcbd; 85 tests PASS, MegaVault validate PASS, SQLite integrity/FK PASS. Worktree is ahead by 1 and awaits integration/terminalization. Inventory result: 36 eligible, 72 excluded; artifact_missing=31, repository_unavailable=5.
+  - wi:72083276ee994f5b97113da073005ad3 (Fedora Python/SQLite journald history): active Codex thread codex://threads/01a0e2fc-a4e8-7f52-924b-3a47cd819798, process pid 4028185 when checkpointed; worktree has active uncommitted implementation changes. Do not duplicate/restart this thread; supervise/resume it after #2330.
+  - wi:2f02116ccfaf4454b1872d7c636a9c99 (C2 capture-only frictionless path): executor_started mutation #2333 was applied successfully after scheduler fix; no Codex worker had been launched yet at checkpoint. Start only after #2330.
+  - wi:d6185f8fb88d466f907814bf6125890e (Project Capsule standard) pending; wi:344346f8ef8446cabac86d947fde9c64 (Capsule Score) depends on it; resume after #2330.
+  - wi:7ee12d74262b498f892f51de128e041b PersonalHub remains pending behind existing PersonalHub worker; preserve PH worker/device.
+- Scheduler monopoly bug was fixed and merged via PR #2324, merge ef911a6697f16bb42f9f49804248a6b835085749. issue:5575650c19224036a171af15d95b6cf8 was absorbed/resolved.
+- Fedora Bash journald collector wi:593ca7211d154268aa839cb1b0d7e697 merged as PR #17; dependency for Python/SQLite collector is satisfied.
+- Inbox was drained to zero before issue:557... appeared; #2330 now has absolute priority. Re-read Inbox after #2330 because new rows may accumulate while it runs.
+
+## Exact next action (OVERRIDES all earlier Next action until #2330 completes)
+1. Resolve/promote/find the canonical work item for issue:e21c3528a43a4c539c4c23a1c3525e89 / GitHub issue #2330.
+2. Execute #2330 to completion in gernalix/workflowy-importer, using Codex CLI and live Workflowy/systemd verification as needed. Do not consider it complete until live dashboard Inbox matches canonical pending count, compact rendering is verified, Roadmap is visible/fresh, reset is repeatable/idempotent, sync service is stable, and regression tests pass.
+3. Notify the user clearly when #2330 is completed/live.
+4. Resume exactly the preserved work above: integrate/terminalize MegaVault capsule tooling, continue the existing Fedora journald Python/SQLite thread, then launch capture-path and continue capsule standard/score and remaining roadmap/Inbox until quiescence.
