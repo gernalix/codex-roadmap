@@ -99,3 +99,48 @@ Do NOT call roadmap_start again. After Inbox priority work, launch each exactly 
 2. Execute #2330 to completion in gernalix/workflowy-importer, using Codex CLI and live Workflowy/systemd verification as needed. Do not consider it complete until live dashboard Inbox matches canonical pending count, compact rendering is verified, Roadmap is visible/fresh, reset is repeatable/idempotent, sync service is stable, and regression tests pass.
 3. Notify the user clearly when #2330 is completed/live.
 4. Resume exactly the preserved work above: integrate/terminalize MegaVault capsule tooling, continue the existing Fedora journald Python/SQLite thread, then launch capture-path and continue capsule standard/score and remaining roadmap/Inbox until quiescence.
+
+
+# HANDOFF CHECKPOINT — #2330 LIVE E2E — 2026-09-27 16:28 CEST
+- User requested continuation in a NEW ChatGPT chat now. Stop this chat after successor is launched.
+- Keep absolute priority on GitHub issue #2330 / issue:e21c3528a43a4c539c4c23a1c3525e89 / work item wi:214f6cf5571d426dba2373960a6bfdf1 until full live E2E acceptance passes.
+- Active supervisor identity at handoff: supervisor_id=fd368caf-8d31-42a5-979e-b67fae4484b5, fencing_token=25. This is a session handoff, NOT a supervisor takeover: successor should reuse this active authority from ~/.config/c2-supervisor/runtime.env if still valid/canonical; do not mint a competing supervisor token while 25 is live.
+- Canonical/local token25 were renewed with long lease and monotonic-lease fix; canonical expiry was extended to ~16:48 CEST during this turn.
+- Merged fixes for #2330:
+  - workflowy-importer PR #31 merged; live UI/freshness/compact rendering/reset lifecycle fixes.
+  - codex-roadmap PR #2360 merged; reset-event idempotency and stable authority payload.
+  - codex-roadmap PR #2369 merged; same-generation activity/heartbeat no longer shortens an already-longer supervisor lease.
+- Runtime deployment completed:
+  - workflowy-roadmap-sync.service runs successfully.
+  - c2_workflowy_order.py, c2_control.py and c2_supervisor_lease.py runtime copies updated to merged versions without touching roadmap.sqlite.
+- LIVE E2E gates already proven on real dashboard https://workflowy.com/#/98c00c618b80:
+  - Root visibly reached ✅ “Proiezione Workflowy allineata alla roadmap canonica.”
+  - Inbox real projection visible, compact titles + repo/executor tags + collapsed Dettagli; no normal-view C2_ISSUE_ID/URL.
+  - Roadmap populated/navigable with 1209 canonical work items in Ready/Blocked/Paused/Running/Waiting/Done/Archive groups.
+  - Inbox manual reorder was real and persisted canonically: AI order had issue:c74bea... before issue:68ac..., manual override reversed them; survived sync + hard refresh.
+  - Roadmap manual reorder was real and persisted canonically: hotfix wi:296cf... rank 40 before #2330 wi:214f... rank 41 even though AI sort_order puts #2330 first; survived sync + hard refresh.
+  - Reset mutations were applied by canonical single writer: #2380 roadmap clear, #2381 inbox clear.
+  - After reset, manual_order_overrides were cleared; visible AI order restored in both Inbox and Running.
+  - After reset, fresh Reset to AI order nodes were recreated, new node IDs, unchecked in both Inbox and Roadmap.
+  - Retry/sync stability after monotonic-lease fix: three consecutive manual starts succeeded, no request_key_conflict/stale_or_expired errors. Latest two/three runs had mutations_submitted=0; service Result=success ExecMainStatus=0.
+- Important current dashboard/canonical state is changing because the C2 retrospective continues creating new Inbox issues. At latest sync the dashboard reported issues=21. Therefore equality gate must compare LIVE UI against a fresh canonical clone/readback at the same verification point, not older count 14/19/20.
+- Remaining mandatory #2330 gates before PASS:
+  1. Fresh exact equality check: live Inbox visible set == canonical pending issue_inbox set, no stale/missing rows, using current count/state.
+  2. Verify current live Roadmap remains populated/navigable after latest sync.
+  3. Verify no visible technical IDs/URLs in normal Inbox cards; long-description cards remain compact/collapsed.
+  4. Real canonical state-change propagation: choose a safe real pending issue that is genuinely resolved/absorbed, disposition/promote/discard it through canonical C2 writer, then verify dashboard automatically removes/changes it without manual projection edits.
+  5. Hard refresh AND navigate away/reopen https://workflowy.com/#/98c00c618b80; verify Inbox, Roadmap, reset controls and AI order remain correct.
+  6. If any failure occurs, fix and repeat the live gate; do NOT terminalize #2330 based on DB/cache/tests alone.
+  7. On final PASS, terminalize/reconcile wi:214f6cf5571d426dba2373960a6bfdf1 and backend hotfix wi:296cf26cd863421a88b1296387492807 with merged/live evidence; send Fedora notification that #2330/dashboard is fully ready.
+- Latest repeated sync evidence immediately before handoff:
+  - SYNC1 success / ExecMainStatus=0
+  - SYNC2 success / ExecMainStatus=0
+  - SYNC3 success / ExecMainStatus=0
+  - no request_key_conflict in those runs.
+- AFTER #2330 final PASS, resume the prior drain from the earlier saved checkpoint: integrate/terminalize MegaVault capsule tooling wi:7d582a5..., continue existing Fedora journald Python/SQLite thread wi:720832... without duplicating it, then capture-path and capsule standard/score, PersonalHub preserved, and continue Inbox/roadmap until quiescence.
+
+## Exact next action for successor chat
+1. Read this durable pointer and ~/.config/c2-supervisor/runtime.env.
+2. Reuse active supervisor token25 if still valid and canonical; only if truly expired/stale perform deterministic takeover per C2 recovery rules.
+3. Complete the six remaining #2330 live E2E gates above on the real Workflowy page.
+4. Only after live PASS, terminalize #2330/hotfix and notify the user; then resume the saved C2 drain.
