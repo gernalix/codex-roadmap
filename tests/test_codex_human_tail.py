@@ -8,7 +8,8 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
-from codex_human_tail import ANSI_CLEAR, ANSI_ERASE_DOWN, ANSI_HOME, ANSI_SYNC_ON, UnreadState, _read_input, _redraw, _status_line, colorize, extract_human_message, relative_age, render, select_session, wrap_text, HumanMessage
+from codex_human_companion import ViewerDB, bundle_hash
+from codex_human_tail import ANSI_CLEAR, ANSI_ERASE_DOWN, ANSI_HOME, ANSI_SYNC_ON, ExplainState, UnreadState, _read_input, _redraw, _status_line, colorize, extract_human_message, relative_age, render, select_session, wrap_text, HumanMessage
 
 
 def _read_input_bytes_for_test(data: bytes):
@@ -155,6 +156,39 @@ class CodexHumanTailTests(unittest.TestCase):
         message = HumanMessage(datetime(2026, 9, 28, 0, 27, tzinfo=timezone.utc), "testo")
         rendered = render(message, now=datetime(2026, 9, 28, 0, 30, tzinfo=timezone.utc), width=80, color=False, unread=True)
         self.assertTrue(rendered.startswith("●      3 min fa │ "))
+
+    def test_explain_multi_selection_and_range(self):
+        state = ExplainState()
+        state.enter(6)
+        self.assertEqual(5, state.cursor)
+        state.toggle_current()
+        state.move(-1, 6, extend=True)
+        state.move(-1, 6, extend=True)
+        self.assertEqual([3, 4, 5], state.targets())
+
+    def test_input_parser_for_explain_controls(self):
+        events, pending = _read_input_bytes_for_test(b"e\x1b[A \x1b[1;2A3\rEw")
+        self.assertEqual([
+            "explain_mode", "select_up", "select_toggle",
+            "select_extend_up", "select_digit:3", "select_explain",
+            "explain_all", "companion_toggle"
+        ], events)
+        self.assertEqual(b"", pending)
+
+    def test_single_db_stores_codex_and_ai_transcripts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            db = ViewerDB(Path(tmp) / "viewer.sqlite3")
+            db.ensure_session("s1", "/tmp/s1.jsonl")
+            mid = db.save_message("s1", "2026-09-28T00:00:00Z", "messaggio codex")
+            bh = bundle_hash("single", [mid])
+            run_id = db.start_ai_run("s1", "single", bh, [mid], "request AI", "test-model", "medium")
+            db.finish_ai_run(run_id, "risposta AI")
+            self.assertEqual("risposta AI", db.cached_response("s1", bh))
+            rows = db.messages("s1")
+            self.assertEqual(1, len(rows))
+            self.assertEqual("messaggio codex", rows[0]["text"])
+            ai = db.conn.execute("select request_text,response_text from ai_runs").fetchone()
+            self.assertEqual(("request AI", "risposta AI"), tuple(ai))
 
     def test_auto_selection_prefers_latest_root_tui(self):
         with tempfile.TemporaryDirectory() as tmp:

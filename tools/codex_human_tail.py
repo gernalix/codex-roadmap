@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import queue
 import re
 import select
 import shutil
@@ -17,6 +18,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
 
+from codex_human_companion import AIWorker, ViewerDB, DEFAULT_DB, DEFAULT_MODEL, DEFAULT_REASONING
+
 DEFAULT_ROOT = Path.home() / ".codex" / "sessions"
 
 ANSI_RESET = "\033[0m"
@@ -25,6 +28,8 @@ ANSI_CYAN = "\033[36m"
 ANSI_DIM = "\033[2m"
 ANSI_BOLD = "\033[1m"
 ANSI_AMBER = "\033[38;5;214m"
+ANSI_MAGENTA = "\033[35m"
+ANSI_REVERSE = "\033[7m"
 ANSI_FOCUS_ON = "\033[?1004h"
 ANSI_FOCUS_OFF = "\033[?1004l"
 ANSI_CLEAR = "\033[2J\033[H"
@@ -93,6 +98,59 @@ class UnreadState:
         self.last_unread_at = None
         if self.focused:
             self.focus_since = time.monotonic()
+
+
+@dataclass
+class ExplainState:
+    active: bool = False
+    cursor: int | None = None
+    anchor: int | None = None
+    selected: set[int] | None = None
+    pending_label: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.selected is None:
+            self.selected = set()
+
+    def enter(self, count: int) -> None:
+        self.active = bool(count)
+        self.cursor = count - 1 if count else None
+        self.anchor = self.cursor
+        self.selected.clear()
+
+    def cancel(self) -> None:
+        self.active = False
+        self.cursor = None
+        self.anchor = None
+        self.selected.clear()
+
+    def move(self, delta: int, count: int, *, extend: bool = False) -> None:
+        if not self.active or not count:
+            return
+        if self.cursor is None:
+            self.cursor = count - 1
+        old = self.cursor
+        self.cursor = max(0, min(count - 1, self.cursor + delta))
+        if extend:
+            if self.anchor is None:
+                self.anchor = old
+            lo, hi = sorted((self.anchor, self.cursor))
+            self.selected.update(range(lo, hi + 1))
+        else:
+            self.anchor = self.cursor
+
+    def toggle_current(self) -> None:
+        if self.cursor is None:
+            return
+        if self.cursor in self.selected:
+            self.selected.remove(self.cursor)
+        else:
+            self.selected.add(self.cursor)
+
+    def targets(self) -> list[int]:
+        if self.selected:
+            return sorted(self.selected)
+        return [self.cursor] if self.cursor is not None else []
 
 
 def parse_timestamp(value: str) -> datetime:
@@ -273,26 +331,113 @@ def _read_input(fd: int, buffer: bytes) -> tuple[list[str], bytes]:
         return events, buffer
     buffer += chunk
     while buffer:
-        if buffer.startswith(b"\x1b[I"):
+        if buffer.startswith(b"\x1b[1;2A"):
+            events.append("select_extend_up")
+            buffer = buffer[6:]
+        elif buffer.startswith(b"\x1b[1;2B"):
+            events.append("select_extend_down")
+            buffer = buffer[6:]
+        elif buffer.startswith(b"\x1b[A"):
+            events.append("select_up")
+            buffer = buffer[3:]
+        elif buffer.startswith(b"\x1b[B"):
+            events.append("select_down")
+            buffer = buffer[3:]
+        elif buffer.startswith(b"\x1b[I"):
             events.append("focus_in")
             buffer = buffer[3:]
         elif buffer.startswith(b"\x1b[O"):
             events.append("focus_out")
             buffer = buffer[3:]
+        elif buffer[:1] == b"\x1b":
+            if len(buffer) == 1:
+                events.append("escape")
+                buffer = b""
+            elif len(buffer) < 3:
+                break
+            else:
+                buffer = buffer[1:]
+        elif buffer[:1] in {b"\r", b"\n"}:
+            events.append("select_explain")
+            buffer = buffer[1:]
+        elif buffer[:1] == b" ":
+            events.append("select_toggle")
+            buffer = buffer[1:]
+        elif buffer[:1] == b"e":
+            events.append("explain_mode")
+            buffer = buffer[1:]
+        elif buffer[:1] == b"E":
+            events.append("explain_all")
+            buffer = buffer[1:]
+        elif buffer[:1] in {b"w", b"W"}:
+            events.append("companion_toggle")
+            buffer = buffer[1:]
+        elif buffer[:1] in b"123456789":
+            events.append("select_digit:" + buffer[:1].decode())
+            buffer = buffer[1:]
         elif buffer[:1] in {b"r", b"R"}:
             events.append("mark_read")
             buffer = buffer[1:]
         elif buffer[:1] in {b"q", b"Q", b"\x03"}:
             events.append("quit")
             buffer = buffer[1:]
-        elif buffer.startswith(b"\x1b") and len(buffer) < 3:
-            break
         else:
             buffer = buffer[1:]
     return events, buffer
 
 
-def _status_line(state: UnreadState, read_after: float, color: bool, now: float | None = None) -> str:
+def _session_id(path: Path) -> str:
+    meta = session_meta(path)
+    return str(meta.get("session_id") or meta.get("id") or path.stem)
+
+
+def _visible_index_map(messages: list[HumanMessage]) -> dict[int, int]:
+    start = max(0, len(messages) - 9)
+    return {index: index - start + 1 for index in range(start, len(messages))}
+
+
+def _row_for_message(message: HumanMessage, message_ids: dict[tuple[str, str], str]) -> dict:
+    return {
+        "message_id": message_ids[message.key],
+        "timestamp": message.timestamp.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "text": message.text,
+    }
+
+
+def _nearby_rows(messages: list[HumanMessage], targets: list[int],
+                 message_ids: dict[tuple[str, str], str]) -> list[dict]:
+    indexes: set[int] = set()
+    for idx in targets:
+        indexes.update(i for i in range(max(0, idx - 2), min(len(messages), idx + 2)))
+    indexes.difference_update(targets)
+    return [_row_for_message(messages[i], message_ids) for i in sorted(indexes)]
+
+
+def _decorate_message(block: str, marker: str) -> str:
+    lines = block.splitlines()
+    if not lines:
+        return marker
+    pad = " " * len(marker)
+    return "\n".join([marker + lines[0], *(pad + line for line in lines[1:])])
+
+
+def _render_explanation(text: str, width: int, color: bool) -> str:
+    label = "AI · spiegazione"
+    head = f"{ANSI_MAGENTA}{ANSI_BOLD}{label}{ANSI_RESET}" if color else label
+    body: list[str] = [head]
+    for paragraph in text.splitlines():
+        if not paragraph.strip():
+            body.append("")
+            continue
+        body.extend(textwrap.wrap(
+            paragraph, width=max(30, width - 6),
+            break_long_words=False, break_on_hyphens=False,
+        ) or [""])
+    return "\n".join("    " + line for line in body)
+
+
+def _status_line(state: UnreadState, read_after: float, color: bool, now: float | None = None,
+                 *, companion_enabled: bool = False, ai_pending: str | None = None) -> str:
     count = len(state.unread or ())
     if count:
         if state.focused and state.focus_since is not None:
@@ -304,39 +449,172 @@ def _status_line(state: UnreadState, read_after: float, color: bool, now: float 
             focus = f"letti tra {remaining}s se resti qui"
         else:
             focus = "fuori focus"
-        text = f"● {count} non lett{'o' if count == 1 else 'i'} · {focus} · r segna letti · q esci"
-        return f"{ANSI_AMBER}{ANSI_BOLD}{text}{ANSI_RESET}" if color else text
-    focus = "in focus" if state.focused else "fuori focus"
-    text = f"○ 0 non letti · {focus} · soglia {read_after:g}s · r segna letti · q esci"
-    return f"{ANSI_DIM}{text}{ANSI_RESET}" if color else text
+        base = f"● {count} non lett{'o' if count == 1 else 'i'} · {focus}"
+        base = f"{ANSI_AMBER}{ANSI_BOLD}{base}{ANSI_RESET}" if color else base
+    else:
+        focus = "in focus" if state.focused else "fuori focus"
+        base = f"○ 0 non letti · {focus} · soglia {read_after:g}s"
+        base = f"{ANSI_DIM}{base}{ANSI_RESET}" if color else base
+    companion = "ON" if companion_enabled else "off"
+    pending = f" · AI: {ai_pending}" if ai_pending else ""
+    return f"{base} · e spiega · E tutto · w companion {companion} · r letti · q esci{pending}"
 
 
-def _frame_text(path: Path, messages: list[HumanMessage], state: UnreadState, read_after: float, color: bool, *, now_mono: float | None = None) -> str:
+def _frame_text(path: Path, messages: list[HumanMessage], state: UnreadState, read_after: float,
+                color: bool, *, now_mono: float | None = None,
+                explain: ExplainState | None = None,
+                explanations: dict[str, list[str]] | None = None,
+                message_ids: dict[tuple[str, str], str] | None = None,
+                companion_enabled: bool = False, companion_summary: str = "",
+                ai_pending: str | None = None) -> str:
+    explain = explain or ExplainState()
+    explanations = explanations or {}
+    message_ids = message_ids or {}
+    columns = shutil.get_terminal_size(fallback=(120, 24)).columns
     header = f"Codex human view · {path.stem}"
     lines = [f"{ANSI_DIM}{header}{ANSI_RESET}" if color else header]
-    lines.append(_status_line(state, read_after, color, now=now_mono))
+    lines.append(_status_line(
+        state, read_after, color, now=now_mono,
+        companion_enabled=companion_enabled, ai_pending=ai_pending,
+    ))
+    if explain.active:
+        hint = "EXPLAIN: ↑/↓ muovi · Shift+↑/↓ estendi · Space seleziona · 1-9 toggle · Enter spiega · Esc annulla"
+        lines.append(f"{ANSI_MAGENTA}{hint}{ANSI_RESET}" if color else hint)
     lines.append("")
-    for message in messages:
-        lines.append(render(message, color=color, unread=message.key in (state.unread or set())))
+
+    shortcuts = _visible_index_map(messages) if explain.active else {}
+    for idx, message in enumerate(messages):
+        unread = message.key in (state.unread or set())
+        marker = ""
+        if explain.active:
+            n = shortcuts.get(idx)
+            cursor = idx == explain.cursor
+            chosen = idx in (explain.selected or set())
+            tag = str(n) if n else " "
+            symbol = "▶" if cursor else ("✓" if chosen else " ")
+            marker_plain = f"{symbol}[{tag}] "
+            marker = (
+                f"{ANSI_MAGENTA}{ANSI_BOLD}{marker_plain}{ANSI_RESET}"
+                if color and (cursor or chosen) else marker_plain
+            )
+        block = render(message, color=color, unread=unread)
+        lines.append(_decorate_message(block, marker))
+        mid = message_ids.get(message.key)
+        if mid and mid in explanations:
+            for response in explanations[mid]:
+                lines.append(_render_explanation(response, columns, color))
         lines.append("")
+
+    if companion_enabled:
+        title = "COMPANION LIVE"
+        lines.append("─" * min(columns, 80))
+        lines.append(f"{ANSI_MAGENTA}{ANSI_BOLD}{title}{ANSI_RESET}" if color else title)
+        if companion_summary:
+            for paragraph in companion_summary.splitlines():
+                if not paragraph.strip():
+                    lines.append("")
+                else:
+                    lines.extend(textwrap.wrap(
+                        paragraph, width=max(30, columns - 2),
+                        break_long_words=False, break_on_hyphens=False,
+                    ) or [""])
+        else:
+            lines.append("In attesa della prima sintesi…")
     return "\n".join(lines)
 
 
-def _redraw(path: Path, messages: list[HumanMessage], state: UnreadState, read_after: float, color: bool, *, now_mono: float | None = None, initial: bool = False) -> None:
-    frame = _frame_text(path, messages, state, read_after, color, now_mono=now_mono)
+def _redraw(path: Path, messages: list[HumanMessage], state: UnreadState, read_after: float,
+            color: bool, *, now_mono: float | None = None, initial: bool = False, **kwargs) -> None:
+    frame = _frame_text(
+        path, messages, state, read_after, color, now_mono=now_mono, **kwargs
+    )
     if initial:
         sys.stdout.write(ANSI_CLEAR + frame)
     else:
-        # VTE/Ptyxis supports synchronized output: update the frame off-screen,
-        # then present it at once. HOME+erase-after avoids the visible blank
-        # interval caused by clearing the screen before every refresh.
         sys.stdout.write(ANSI_SYNC_ON + ANSI_HOME + frame + ANSI_ERASE_DOWN + ANSI_SYNC_OFF)
     sys.stdout.flush()
 
 
-def follow(path: Path, history: int, poll: float, *, color: bool = True, read_after: float = 20.0) -> None:
-    messages = list(iter_messages(path))[-history:]
+def follow(path: Path, history: int, poll: float, *, color: bool = True,
+           read_after: float = 20.0, db_path: Path = DEFAULT_DB,
+           ai_model: str = DEFAULT_MODEL, ai_reasoning: str = DEFAULT_REASONING) -> None:
+    all_messages = list(iter_messages(path))
+    messages = all_messages[-history:] if history else all_messages
     state = UnreadState(focused=True, focus_since=time.monotonic())
+    explain = ExplainState()
+    session_id = _session_id(path)
+    db = ViewerDB(db_path)
+    db.ensure_session(session_id, str(path))
+    message_ids: dict[tuple[str, str], str] = {}
+    for message in all_messages:
+        timestamp = message.timestamp.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+        message_ids[message.key] = db.save_message(session_id, timestamp, message.text)
+
+    companion_enabled, companion_summary, companion_last_id = db.get_companion(session_id)
+    worker = AIWorker(db, session_id, model=ai_model, reasoning=ai_reasoning)
+    companion_inflight = False
+    companion_pending: list[dict] = []
+    explanations: dict[str, list[str]] = {}
+    ai_pending: str | None = None
+    request_counter = 0
+
+    def submit_explanation(targets: list[int], mode: str) -> None:
+        nonlocal ai_pending, request_counter
+        if not targets:
+            return
+        selected = [_row_for_message(messages[i], message_ids) for i in targets]
+        nearby = [] if mode == "all" else _nearby_rows(messages, targets, message_ids)
+        request_counter += 1
+        label = f"explain-{request_counter}"
+        worker.submit_explain(
+            request_id=label, mode=mode, selected=selected, nearby=nearby
+        )
+        ai_pending = "spiegazione in corso…"
+        explain.pending_label = label
+
+    def submit_all() -> None:
+        nonlocal ai_pending, request_counter
+        rows = [dict(row) for row in db.messages(session_id)]
+        if not rows:
+            return
+        request_counter += 1
+        label = f"all-{request_counter}"
+        worker.submit_explain(
+            request_id=label, mode="all", selected=rows, nearby=[]
+        )
+        ai_pending = "analisi completa in corso…"
+        explain.pending_label = label
+
+    def rows_after(last_id: str | None) -> list[dict]:
+        rows = [dict(row) for row in db.messages(session_id)]
+        if not last_id:
+            return rows
+        for index, row in enumerate(rows):
+            if row["message_id"] == last_id:
+                return rows[index + 1:]
+        return rows
+
+    def schedule_companion(rows: list[dict]) -> None:
+        nonlocal companion_inflight, ai_pending, request_counter
+        if not companion_enabled or not rows:
+            return
+        companion_pending.extend(rows)
+        if companion_inflight:
+            return
+        batch = list(companion_pending)
+        companion_pending.clear()
+        request_counter += 1
+        label = f"companion-{request_counter}"
+        worker.submit_companion(
+            request_id=label, previous_summary=companion_summary,
+            new_messages=batch,
+        )
+        companion_inflight = True
+        ai_pending = "companion in aggiornamento…"
+
+    if companion_enabled:
+        schedule_companion(rows_after(companion_last_id))
+
     interactive = sys.stdin.isatty() and sys.stdout.isatty()
     fd = sys.stdin.fileno() if interactive else -1
     old_termios = termios.tcgetattr(fd) if interactive else None
@@ -346,7 +624,12 @@ def follow(path: Path, history: int, poll: float, *, color: bool = True, read_af
         tty.setcbreak(fd)
         os.set_blocking(fd, False)
         print(ANSI_FOCUS_ON, end="")
-    _redraw(path, messages, state, read_after, color, initial=True)
+    _redraw(
+        path, messages, state, read_after, color, initial=True,
+        explain=explain, explanations=explanations, message_ids=message_ids,
+        companion_enabled=companion_enabled, companion_summary=companion_summary,
+        ai_pending=ai_pending,
+    )
     age_signature = tuple(relative_age(message.timestamp) for message in messages)
     last_status_tick = int(time.monotonic()) if state.unread else None
     last_columns = shutil.get_terminal_size(fallback=(120, 24)).columns
@@ -357,6 +640,7 @@ def follow(path: Path, history: int, poll: float, *, color: bool = True, read_af
         while True:
             now_mono = time.monotonic()
             redraw = False
+
             if interactive:
                 ready, _, _ = select.select([fd], [], [], 0)
                 if ready:
@@ -368,11 +652,76 @@ def follow(path: Path, history: int, poll: float, *, color: bool = True, read_af
                             state.focus_in(now_mono)
                         elif event == "mark_read":
                             state.mark_all_read()
+                        elif event == "explain_mode":
+                            explain.enter(len(messages))
+                        elif event == "escape":
+                            explain.cancel()
+                        elif event == "select_up":
+                            explain.move(-1, len(messages))
+                        elif event == "select_down":
+                            explain.move(1, len(messages))
+                        elif event == "select_extend_up":
+                            explain.move(-1, len(messages), extend=True)
+                        elif event == "select_extend_down":
+                            explain.move(1, len(messages), extend=True)
+                        elif event == "select_toggle" and explain.active:
+                            explain.toggle_current()
+                        elif event.startswith("select_digit:") and explain.active:
+                            digit = int(event.split(":", 1)[1])
+                            reverse = {n: idx for idx, n in _visible_index_map(messages).items()}
+                            if digit in reverse:
+                                explain.cursor = reverse[digit]
+                                explain.toggle_current()
+                        elif event == "select_explain" and explain.active:
+                            targets = explain.targets()
+                            submit_explanation(
+                                targets, "single" if len(targets) == 1 else "multi"
+                            )
+                        elif event == "explain_all":
+                            submit_all()
+                        elif event == "companion_toggle":
+                            companion_enabled = not companion_enabled
+                            db.set_companion(session_id, enabled=companion_enabled)
+                            if companion_enabled:
+                                schedule_companion(rows_after(companion_last_id))
                         elif event == "quit":
                             return
                         redraw = True
 
             if state.maybe_clear_after_dwell(now_mono, read_after):
+                redraw = True
+
+            while True:
+                try:
+                    result = worker.results.get_nowait()
+                except queue.Empty:
+                    break
+                ai_pending = None
+                if result.error:
+                    anchor = result.selected_ids[-1] if result.selected_ids else None
+                    if anchor:
+                        explanations.setdefault(anchor, []).append(
+                            f"Errore AI: {result.error}"
+                        )
+                elif result.mode == "companion" and result.response:
+                    companion_summary = result.response
+                    companion_inflight = False
+                    last_id = result.selected_ids[-1] if result.selected_ids else companion_last_id
+                    companion_last_id = last_id
+                    db.set_companion(
+                        session_id, summary=companion_summary,
+                        last_message_id=companion_last_id, enabled=companion_enabled,
+                    )
+                    if companion_pending:
+                        batch = list(companion_pending)
+                        companion_pending.clear()
+                        schedule_companion(batch)
+                elif result.response:
+                    anchor = result.selected_ids[-1] if result.selected_ids else None
+                    if anchor:
+                        prefix = "[cache] " if result.from_cache else ""
+                        explanations.setdefault(anchor, []).append(prefix + result.response)
+                    explain.cancel()
                 redraw = True
 
             try:
@@ -399,9 +748,18 @@ def follow(path: Path, history: int, poll: float, *, color: bool = True, read_af
                     message = extract_human_message(obj)
                     if message:
                         state.mark_message(message, now=now_mono)
+                        timestamp = message.timestamp.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+                        mid = db.save_message(session_id, timestamp, message.text)
+                        message_ids[message.key] = mid
                         messages.append(message)
-                        messages = messages[-200:]
+                        if history:
+                            messages = messages[-max(history, 9):]
+                        if companion_enabled:
+                            schedule_companion([{
+                                "message_id": mid, "timestamp": timestamp, "text": message.text
+                            }])
                         redraw = True
+
             current_age_signature = tuple(relative_age(message.timestamp) for message in messages)
             if current_age_signature != age_signature:
                 age_signature = current_age_signature
@@ -416,8 +774,14 @@ def follow(path: Path, history: int, poll: float, *, color: bool = True, read_af
             if status_tick != last_status_tick:
                 last_status_tick = status_tick
                 redraw = True
+
             if redraw:
-                _redraw(path, messages, state, read_after, color, now_mono=now_mono)
+                _redraw(
+                    path, messages, state, read_after, color, now_mono=now_mono,
+                    explain=explain, explanations=explanations, message_ids=message_ids,
+                    companion_enabled=companion_enabled, companion_summary=companion_summary,
+                    ai_pending=ai_pending,
+                )
             time.sleep(poll)
     except KeyboardInterrupt:
         return
@@ -435,24 +799,31 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--source-root", default=str(DEFAULT_ROOT))
     parser.add_argument("--session", help="Path o UUID/parziale della sessione da seguire.")
-    parser.add_argument("--history", type=int, default=8, help="Messaggi precedenti da mostrare.")
+    parser.add_argument("--history", type=int, default=12, help="Messaggi recenti mostrati nel viewer.")
     parser.add_argument("--poll", type=float, default=0.25, help="Intervallo di polling in secondi.")
-    parser.add_argument("--read-after", type=float, default=20.0, metavar="SECONDS", help="Secondi continui in focus prima di segnare i non letti come letti (default: 20).")
+    parser.add_argument("--read-after", type=float, default=20.0, metavar="SECONDS",
+                        help="Secondi continui in focus prima di segnare i non letti come letti.")
+    parser.add_argument("--db", default=str(DEFAULT_DB), help="SQLite unico per transcript Codex e AI.")
+    parser.add_argument("--ai-model", default=DEFAULT_MODEL, help="Modello per explain/companion.")
+    parser.add_argument("--ai-reasoning", default=DEFAULT_REASONING,
+                        choices=["low", "medium", "high"], help="Reasoning per explain/companion.")
     parser.add_argument("--once", action="store_true", help="Stampa lo storico e termina.")
     args = parser.parse_args(argv)
 
     root = Path(args.source_root).expanduser()
     path = select_session(root, args.session)
     use_color = os.isatty(sys.stdout.fileno()) and os.environ.get("NO_COLOR") is None
-    if os.isatty(sys.stdout.fileno()):
-        header = f"Codex human view · {path.stem}"
-        print(f"{ANSI_DIM}{header}{ANSI_RESET}\n" if use_color else f"{header}\n")
     if args.once:
         for message in list(iter_messages(path))[-args.history:]:
             print(render(message, color=use_color))
             print()
         return 0
-    follow(path, max(0, args.history), max(0.05, args.poll), color=use_color, read_after=max(0.0, args.read_after))
+    follow(
+        path, max(0, args.history), max(0.05, args.poll),
+        color=use_color, read_after=max(0.0, args.read_after),
+        db_path=Path(args.db).expanduser(),
+        ai_model=args.ai_model, ai_reasoning=args.ai_reasoning,
+    )
     return 0
 
 
