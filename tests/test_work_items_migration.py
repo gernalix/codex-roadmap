@@ -15,6 +15,33 @@ import work_items_migration as migration
 
 
 class WorkItemsMigrationTests(unittest.TestCase):
+    def test_base_schema_exposes_stable_ordering_readback_views(self) -> None:
+        conn = sqlite3.connect(":memory:")
+        try:
+            migration.install_schema(conn)
+            summary = {
+                row[1] for row in conn.execute("PRAGMA table_info(v_work_item_summary)")
+            }
+            self.assertTrue({
+                "ai_priority_rank", "manual_rank", "manual_order_source",
+                "manual_order_source_modified_at", "manual_order_updated_at",
+            }.issubset(summary))
+            inbox = {
+                row[1]
+                for row in conn.execute("PRAGMA table_info(v_issue_inbox_pending_ordered)")
+            }
+            self.assertTrue({
+                "issue_id", "description", "manual_rank", "manual_order_source",
+                "manual_order_source_modified_at", "manual_order_updated_at",
+            }.issubset(inbox))
+            self.assertEqual([], conn.execute(
+                "SELECT issue_id,description,manual_rank,manual_order_source,"
+                "manual_order_source_modified_at,manual_order_updated_at "
+                "FROM v_issue_inbox_pending_ordered"
+            ).fetchall())
+        finally:
+            conn.close()
+
     def make_v1_repo(self, root: Path) -> Path:
         conn = db.connect(root)
         db.register_prompt(

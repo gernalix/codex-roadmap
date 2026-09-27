@@ -110,6 +110,9 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
     has_issue_inbox = bool(db.execute(
         "SELECT 1 FROM sqlite_master WHERE type='table' AND name='issue_inbox'"
     ).fetchone())
+    has_manual_order = bool(db.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='manual_order_overrides'"
+    ).fetchone())
     pending_issue_inbox = (
         int(db.execute("SELECT COUNT(*) FROM issue_inbox WHERE state='pending'").fetchone()[0])
         if has_issue_inbox else 0
@@ -158,6 +161,13 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         if triage is None or triage['status'] in ('completed','failed','cancelled','superseded','waived'):
             pending_ids = [
                 str(row[0]) for row in db.execute(
+                    """SELECT i.issue_id FROM issue_inbox i
+                       LEFT JOIN manual_order_overrides o
+                         ON o.scope='inbox' AND o.entity_id=i.issue_id
+                       WHERE i.state='pending'
+                       ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,
+                                o.rank,i.observed_at_ms,i.issue_id"""
+                    if has_manual_order else
                     "SELECT issue_id FROM issue_inbox WHERE state='pending' ORDER BY observed_at_ms,issue_id"
                 )
             ]
@@ -235,16 +245,26 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         key=_key('c2-recover',sorted((r['run_id'],r['lease_until']) for r in expired))
         submit('recover',{},key)
         events.append(('recover',str(len(expired))))
-    ready=[dict(r) for r in db.execute('''SELECT w.*,
-            s.activity,s.model,s.reasoning,s.worktree,s.project_url,s.resources_json
-          FROM v_work_item_runnable w
-          JOIN work_item_execution_specs s USING(work_item_id)
-          ORDER BY CASE
+    ready_query='''SELECT w.*,
+            s.activity,s.model,s.reasoning,s.worktree,s.project_url,s.resources_json'''
+    if has_manual_order:
+        ready_query+=''',o.rank AS manual_rank,o.source AS manual_order_source,
+            o.source_modified_at AS manual_order_source_modified_at'''
+    ready_query+=''' FROM v_work_item_runnable w
+          JOIN work_item_execution_specs s USING(work_item_id)'''
+    if has_manual_order:
+        ready_query+=""" LEFT JOIN manual_order_overrides o
+          ON o.scope='roadmap' AND o.entity_id=w.work_item_id"""
+        ready_query+=""" ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,o.rank,"""
+    else:
+        ready_query+=''' ORDER BY '''
+    ready_query+='''CASE
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p0') THEN 0
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p1') THEN 1
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
             ELSE 3 END,
-            COALESCE(w.sort_order,2147483647),w.work_item_id''')]
+            COALESCE(w.sort_order,2147483647),w.created_at,w.work_item_id'''
+    ready=[dict(r) for r in db.execute(ready_query)]
     if chatgpt_suspended:
         ready=[r for r in ready if r['activity'] not in ('gui','semantic')]
     override=read_override(db)

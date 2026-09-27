@@ -91,6 +91,23 @@ canonico. `drain_first` ammette nuovi dispatch solo nello scope finche' vi e'
 almeno un item scoped runnable con spec eseguibile; poi torna all'ordine
 normale. L'override non cambia `priority:p0/p1/p2` o `sort_order`.
 
+**Ordine manuale Workflowy:** il writer fenced accetta
+`c2_set_manual_order` con `scope=inbox|roadmap`, `ordered_ids` completo,
+`source=workflowy` e `source_modified_at`, oppure `c2_clear_manual_order` con
+`scope` e `ids` opzionali. Il bulk set sostituisce atomicamente lo scope e usa
+rank zero-based; il clear senza `ids` ripristina l'ordine AI. I rank vivono in
+`manual_order_overrides` e non modificano priorità, `sort_order`, stato o
+dipendenze. `v_roadmap_manual_order` e `v_issue_inbox_pending_ordered` espongono
+rank e provenienza. Il rank manuale precede priorità/sort order soltanto dopo i
+filtri di eleggibilità; un item bloccato conserva il rank ma non viene lanciato.
+Spostare un nodo Workflowy tra sezioni di stato non produce alcuna mutazione di
+lifecycle in questo protocollo.
+Workflowy usa esclusivamente `python3 tools/c2_workflowy_order.py set --scope
+inbox|roadmap --source-modified-at VALUE ID...` oppure `clear --scope
+inbox|roadmap [ID...]`: l'helper legge l'identità corrente da
+`~/.config/c2-supervisor/runtime.env` e passa dal medesimo gate fenced di
+`c2_control`, senza esporre authority al chiamante.
+
 **Preparazione Codex di un intake verificato:** usa unicamente
 `python3 tools/c2_prepare_codex.py --spec <file.json>`. Il file deve fornire
 esplicitamente `work_item_id`, `prompt_file`, `source`, `model`,

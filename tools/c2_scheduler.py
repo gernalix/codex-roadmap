@@ -11,6 +11,8 @@ import sqlite3
 import time
 import uuid
 
+import c2_manual_order
+
 
 class SchedulingError(RuntimeError):
     pass
@@ -111,6 +113,7 @@ def install_schema(conn):
         if sqlite3.complete_statement(statement):
             conn.execute(statement)
             statement = ''
+    c2_manual_order.install_schema(conn)
 
 
 def choose_executor(policy: str, activity: str) -> str | None:
@@ -341,8 +344,16 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120,
         SELECT 1 FROM work_item_runs r WHERE r.work_item_id=w.work_item_id
         AND r.state IN ('claimed','running','recovering')))''').fetchone()[0]
     results = []
-    candidates = conn.execute('''SELECT w.* FROM v_work_item_runnable w
-      ORDER BY CASE
+    candidates = conn.execute('''SELECT w.*,
+        o.rank AS manual_rank,
+        o.source AS manual_order_source,
+        o.source_modified_at AS manual_order_source_modified_at
+      FROM v_work_item_runnable w
+      LEFT JOIN manual_order_overrides o
+        ON o.scope='roadmap' AND o.entity_id=w.work_item_id
+      ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,
+        o.rank,
+        CASE
         WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p0') THEN 0
         WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p1') THEN 1
         WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
