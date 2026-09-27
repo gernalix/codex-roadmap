@@ -403,6 +403,7 @@ def follow(path: Path, history: int, poll: float, *, color: bool = True, read_af
             print(ANSI_FOCUS_OFF, end="", flush=True)
             if old_termios is not None:
                 termios.tcsetattr(fd, termios.TCSADRAIN, old_termios)
+            os.set_blocking(fd, True)
 
 
 def main(argv: list[str] | None = None) -> int:

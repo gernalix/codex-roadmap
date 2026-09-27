@@ -12,14 +12,15 @@ Constraints:
 - Preserve filtering, Codex-like colors and word-safe wrapping.
 
 Checklist:
-- [ ] Canonical C2 lifecycle identity is being reimported by the active Codex supervisor; the earlier local-only work item/claim #3232 was invalid and must not be used.
+- [x] Canonical C2 item `wi:9f00e562bd584d1ab1d486ac02bbbf85` created through writer Issue #3248; duplicate `wi:1fb27dfe25434839aaeb2ce1a278f764` queued for CANCELLED via #3257; executor_started queued via #3259. Earlier local-only item/claim #3232 is invalid and must not be used.
 - [x] Choose terminal-native focus reporting (DEC mode 1004) rather than GNOME window polling.
 - [x] Implement unread state machine and focus input parser.
 - [x] Implement visual unread treatment and redraw after clear.
 - [x] Add `--read-after` and manual shortcut (`r`; `q` exits).
 - [x] Add focused tests: 12/12 PASS; real rollout timestamps verified against wall clock.
-- [ ] Commit and push checkpoint.
+- [x] Fix relative-time labels to age live on screen instead of freezing at `adesso`; unread countdown also refreshes.
+- [ ] Commit and push final checkpoint.
 
 Acceptance: focus-out/new-message/focus-in/dwell/focus-out-before-dwell/manual-clear/configuration all behave as requested.
-Current step: implementation verified; canonical C2 lifecycle reimport remains external to this branch.
-Next action: commit and push code/checkpoint; do not create any local roadmap lifecycle records.
+Current step: implementation and canonical lifecycle repair verified.
+Next action: commit and push final code/checkpoint, restart the live viewer, then submit canonical PASS when executor_started is applied.
