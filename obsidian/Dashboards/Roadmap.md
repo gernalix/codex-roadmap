@@ -4,8 +4,8 @@
 
 ## Lanciabili adesso
 
-- [[obsidian/Prompts/718501 c2-supervisor-backoff-rate-limit-globale-blocca--718501|718501 · C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]]
+- Nessuno.
 
 ## In esecuzione
 
-- Nessuno.
+- [[obsidian/Prompts/718501 c2-supervisor-backoff-rate-limit-globale-blocca--718501|718501 · C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]]

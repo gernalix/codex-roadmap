@@ -1,6 +1,6 @@
 ---
 prompt_id: 718501
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - rate-limit
   - scheduler
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 718501 · C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/c2-supervisor-backoff-rate-limit-globale-blocca--718501|Apri prompt]]
 - **Primo lancio:** —
