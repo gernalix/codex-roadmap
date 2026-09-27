@@ -287,6 +287,23 @@ def execution_metadata(conn, item, spec, executor):
     return result
 
 
+def _repo_writer_worktrees(conn, repo, work_item_id):
+    """Return same-repo worktrees that represent actual writer ownership."""
+    return conn.execute('''SELECT s.worktree FROM work_items w
+      LEFT JOIN work_item_execution_specs s USING(work_item_id)
+      WHERE w.repo=? AND w.work_item_id<>? AND w.status='running'
+      AND (NULLIF(TRIM(s.worktree),'') IS NOT NULL OR EXISTS(
+        SELECT 1 FROM work_item_runs r WHERE r.work_item_id=w.work_item_id
+        AND r.state IN ('claimed','running','recovering')))''',
+      (repo,work_item_id)).fetchall()
+
+
+def _repo_writer_conflict(conn, item, spec):
+    peers = _repo_writer_worktrees(conn,item['repo'],item['work_item_id'])
+    return any(not spec['worktree'] or not peer['worktree']
+               or spec['worktree']==peer['worktree'] for peer in peers)
+
+
 def dispatchable(conn, item):
     """Whether an item could acquire a new C2 run with current shared locks."""
     ancestor = item['parent_id']
@@ -309,8 +326,7 @@ def dispatchable(conn, item):
     resources = set(json.loads(spec['resources_json']))
     if item['repo']:
         resources.add('worktree:'+spec['worktree'] if spec['worktree'] else 'repo:'+item['repo'])
-        peers = conn.execute("SELECT s.worktree FROM work_items w LEFT JOIN work_item_execution_specs s USING(work_item_id) WHERE w.repo=? AND w.status='running'", (item['repo'],)).fetchall()
-        if any(not spec['worktree'] or not peer['worktree'] or spec['worktree']==peer['worktree'] for peer in peers):
+        if _repo_writer_conflict(conn,item,spec):
             return False
     if any(conn.execute('SELECT 1 FROM work_item_resource_leases WHERE resource=?',(r,)).fetchone() for r in resources):
         return False
@@ -390,8 +406,7 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120,
             # Default exclusive repo writer. Explicit isolated worktree resource
             # is permitted only when the spec supplies the actual worktree.
             resources.add('worktree:'+spec['worktree'] if spec['worktree'] else 'repo:'+item['repo'])
-            peers = conn.execute("SELECT w.work_item_id,s.worktree FROM work_items w LEFT JOIN work_item_execution_specs s USING(work_item_id) WHERE w.repo=? AND w.status='running'", (item['repo'],)).fetchall()
-            if any(not spec['worktree'] or not peer['worktree'] or spec['worktree']==peer['worktree'] for peer in peers):
+            if _repo_writer_conflict(conn,item,spec):
                 continue
         if any(conn.execute('SELECT 1 FROM work_item_resource_leases WHERE resource=?',(r,)).fetchone() for r in resources):
             continue
@@ -524,9 +539,10 @@ def executor_started(conn, *, run_id=None, work_item_id=None, prompt_id=None,
         runnable=conn.execute('SELECT 1 FROM v_work_item_runnable WHERE work_item_id=?',(work_item_id,)).fetchone()
         if not runnable:
             raise SchedulingError('executor_start_work_item_not_runnable')
-        repo=conn.execute('SELECT repo FROM work_items WHERE work_item_id=?',(work_item_id,)).fetchone()[0]
-        if repo and conn.execute('''SELECT 1 FROM work_items WHERE repo=? AND work_item_id<>?
-          AND status='running' LIMIT 1''',(repo,work_item_id)).fetchone():
+        pending=conn.execute('''SELECT w.work_item_id,w.repo,s.worktree
+          FROM work_items w LEFT JOIN work_item_execution_specs s USING(work_item_id)
+          WHERE w.work_item_id=?''',(work_item_id,)).fetchone()
+        if pending['repo'] and _repo_writer_conflict(conn,pending,pending):
             raise SchedulingError('executor_start_repo_conflict')
         conn.execute("UPDATE work_items SET status='running',current_action='Executor started',blocker=NULL WHERE work_item_id=?",
                      (work_item_id,))
