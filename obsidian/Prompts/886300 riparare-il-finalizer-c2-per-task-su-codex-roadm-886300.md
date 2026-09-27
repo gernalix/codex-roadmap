@@ -1,6 +1,6 @@
 ---
 prompt_id: 886300
-status: pending
+status: running
 project_id: 51
 model: GPT-6 Sol
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - c2:control-plane
   - priority:p0
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/codex-roadmap
 ---
 
 # 886300 · Riparare il finalizer C2 per task su codex-roadmap
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
 - **Prompt:** [[../../prompts/riparare-il-finalizer-c2-per-task-su-codex-roadm-886300|Apri prompt]]
 - **Primo lancio:** —
