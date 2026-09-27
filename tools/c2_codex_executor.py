@@ -101,9 +101,11 @@ def parse_terminal_result(turn: dict, expected_prompt_id: str) -> dict | None:
 
 
 def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path,
-             on_thread_created=None):
+             goal_objective: str | None = None, on_thread_created=None):
     if not run_id or not prompt or not all(metadata.get(k) for k in ('model','reasoning','worktree')):
         raise ExecutorError('canonical_execution_metadata_required')
+    if metadata.get('goal_mode') and not goal_objective:
+        raise ExecutorError('compact_goal_objective_required')
     if receipt.exists():
         state=json.loads(receipt.read_text())
         if state['run_id']!=run_id or state['metadata']!=metadata:
@@ -155,17 +157,22 @@ def dispatch(rpc, *, run_id: str, metadata: dict, prompt: str, receipt: Path,
                 persist(receipt,state)
         if state['phase']=='started' and metadata.get('goal_mode'):
             goal=rpc('thread/goal/get',{'threadId':thread_id}).get('goal')
-            if not goal or goal.get('objective')!=prompt:
+            if not goal or goal.get('objective') not in (prompt,goal_objective):
                 raise ExecutorError('codex_goal_readback_mismatch')
+            if goal.get('objective')!=goal_objective:
+                rpc('thread/goal/set',{'threadId':thread_id,'objective':goal_objective})
+                updated=rpc('thread/goal/get',{'threadId':thread_id}).get('goal')
+                if not updated or updated.get('objective')!=goal_objective:
+                    raise ExecutorError('codex_goal_readback_mismatch')
             if goal['status']=='paused':
                 rpc('thread/goal/set',{'threadId':thread_id,'status':'active'})
         return {'thread_id':thread_id,'turn_id':state.get('turn_id'),
                 'phase':state['phase'],'observed':observed,'resubmitted':False}
     if metadata.get('goal_mode'):
         # Set the objective paused so it cannot race the explicit first turn.
-        rpc('thread/goal/set',{'threadId':thread_id,'objective':prompt,'status':'paused'})
+        rpc('thread/goal/set',{'threadId':thread_id,'objective':goal_objective,'status':'paused'})
         goal=rpc('thread/goal/get',{'threadId':thread_id}).get('goal')
-        if not goal or goal.get('objective')!=prompt or goal.get('status')!='paused':
+        if not goal or goal.get('objective')!=goal_objective or goal.get('status')!='paused':
             raise ExecutorError('codex_goal_readback_mismatch')
     state['phase']='starting'; persist(receipt,state)
     result=rpc('turn/start',{'threadId':thread_id,
