@@ -4,7 +4,7 @@
 
 ## Lanciabili adesso
 
-- Nessuno.
+- [[obsidian/Prompts/366587 regression-rendere-le-view-grindr-compatibili-co-366587|366587 · Regression: rendere le view Grindr compatibili con DB Browser SQLite]]
 
 ## In esecuzione
 
