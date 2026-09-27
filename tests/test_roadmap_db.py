@@ -477,6 +477,18 @@ class RoadmapDBTests(unittest.TestCase):
             add("100006", status="blocked"); add("200006", status="completed")
             db.add_relation(conn,"100006","200006","resolved_by",actor="chatgpt")
 
+            # A blocked predecessor can point to a running repair. It becomes
+            # resolved only when the repair reaches completed.
+            add("100013", status="blocked"); add("200013", status="running")
+            db.add_relation(conn,"100013","200013","resolved_by",actor="chatgpt")
+            self.assertEqual("covered",conn.execute(
+                "SELECT pbf_disposition FROM v_pbf_dispositions WHERE prompt_id='100013'"
+            ).fetchone()[0])
+            db.set_status(conn,"200013","completed",actor="writer",allow_running_terminal=True)
+            self.assertEqual("resolved",conn.execute(
+                "SELECT pbf_disposition FROM v_pbf_dispositions WHERE prompt_id='100013'"
+            ).fetchone()[0])
+
             # A completed prompt with a historical non-PASS execution is a
             # resolved PBF; the historical execution outcome remains unchanged.
             add("100007", status="completed")

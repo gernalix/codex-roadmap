@@ -59,6 +59,40 @@ class FinishWrapperTests(unittest.TestCase):
         with self.assertRaisesRegex(dedicated.IntegrationError,"tested_head_drift"):
             dedicated.status("123456")
 
+    @patch("roadmap_repo_integration._run")
+    def test_new_open_pr_supersedes_prior_merged_pr(self, run):
+        run.return_value=json.dumps([
+            {"number":1,"state":"MERGED","headRefName":"task/123456","baseRefName":"main"},
+            {"number":2,"state":"OPEN","headRefName":"task/123456","baseRefName":"main"},
+        ])
+        self.assertEqual(2,dedicated._pr("123456")["number"])
+
+    @patch("roadmap_repo_integration._identity", return_value="b"*40)
+    @patch("roadmap_repo_integration._git")
+    @patch("roadmap_repo_integration.status", return_value={"status":"merged","head_sha":"a"*40})
+    @patch("roadmap_repo_integration._pr", return_value={"state":"MERGED"})
+    def test_merged_tested_head_accepts_only_later_operational_checkpoint(self, pr, status, git, identity):
+        git.side_effect=lambda repo,*args: "operations/task-state/123456.md" if args[0]=="diff" else ""
+        out=dedicated.queue(Path("/tmp/r"),"123456")
+        self.assertEqual("merged",out["status"])
+        self.assertFalse(any(call.args[1]=="push" for call in git.call_args_list))
+
+    @patch("roadmap_repo_integration._identity", return_value="b"*40)
+    @patch("roadmap_repo_integration._run", return_value="https://example.test/pr")
+    @patch("roadmap_repo_integration._git")
+    @patch("roadmap_repo_integration.status", side_effect=[{"status":"merged","head_sha":"a"*40},
+                                                           {"status":"queued","head_sha":"b"*40}])
+    @patch("roadmap_repo_integration._pr", return_value={"state":"MERGED"})
+    def test_code_after_merge_queues_new_exact_head(self, pr, status, git, run, identity):
+        def git_result(repo,*args):
+            if args[0]=="diff": return "tools/roadmap_repo_integration.py"
+            if args[0]=="ls-remote": return "a"*40+"\trefs/heads/task/123456"
+            return ""
+        git.side_effect=git_result
+        out=dedicated.queue(Path("/tmp/r"),"123456",expected_head="b"*40)
+        self.assertEqual("queued",out["status"])
+        self.assertTrue(any(call.args[1]=="push" for call in git.call_args_list))
+
     @patch("roadmap_finish._queue_repo_integration", return_value=("merged", True))
     @patch("roadmap_finish.finish_result", return_value={"status":"queued"})
     def test_pass_terminal_only_after_merge(self, result, queue):

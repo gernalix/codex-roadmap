@@ -1109,7 +1109,7 @@ def add_relation(
 ) -> None:
     source = assert_prompt_not_running(conn, from_prompt_id, f"relation:{relation_type}")
     target = prompt_row(conn, to_prompt_id)
-    if target["status"] == "running":
+    if target["status"] == "running" and relation_type != "resolved_by":
         raise RoadmapDBError(f"running_prompt_locked:{to_prompt_id}:relation_target:{relation_type}")
     ts = now_utc()
     if work_items_cutover_active(conn):

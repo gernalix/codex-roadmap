@@ -35,9 +35,10 @@ def _pr(prompt_id: str) -> dict | None:
         "--json", "number,state,headRefName,headRefOid,baseRefName,mergeCommit,body,isDraft,mergeable,statusCheckRollup,url"))
     matches = [row for row in rows if row.get("headRefName") == "task/" + prompt_id
                and row.get("baseRefName") == "main"]
-    if len(matches) > 1:
-        raise IntegrationError("multiple_task_prs")
-    return matches[0] if matches else None
+    open_prs = [row for row in matches if row.get("state") == "OPEN"]
+    if len(open_prs) > 1:
+        raise IntegrationError("multiple_open_task_prs")
+    return max(open_prs or matches, key=lambda row: int(row["number"])) if matches else None
 
 
 def _marker(pr: dict) -> str | None:
@@ -101,13 +102,19 @@ def queue(repo: Path, prompt_id: str, *, expected_head: str | None = None) -> di
     existing = _pr(prompt_id)
     if existing:
         result = status(prompt_id)
-        if result.get("head_sha") != head:
+        prior = result.get("head_sha")
+        if prior == head:
+            return result
+        if result.get("status") != "merged":
             raise IntegrationError("task_pr_head_drift")
-        return result
+        _git(repo, "merge-base", "--is-ancestor", str(prior), head)
+        changed = set(_git(repo, "diff", "--name-only", str(prior), head).splitlines())
+        if changed and changed <= {f"operations/task-state/{prompt_id}.md"}:
+            return result
     remote = _git(repo, "ls-remote", "origin", "refs/heads/task/" + prompt_id)
     remote_head = remote.split()[0] if remote else "0" * 40
     if remote_head != "0" * 40 and remote_head != head:
-        raise IntegrationError("remote_task_head_conflict")
+        _git(repo, "merge-base", "--is-ancestor", remote_head, head)
     _git(repo, "push", f"--force-with-lease=refs/heads/task/{prompt_id}:{remote_head}",
          "origin", f"{head}:refs/heads/task/{prompt_id}")
     body = f"C2 codex-roadmap task {prompt_id}\n\nC2-tested-head: {head}\n"
