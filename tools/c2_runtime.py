@@ -21,6 +21,7 @@ from submit_mutation import submit_document
 from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot, record_activity
 from c2_mutations import SUPERVISOR_OPERATIONS
 from c2_scheduler import read_override, override_matches, dispatchable, inbox_drain_state, inbox_gate_exempt
+from c2_blocked_reconcile import automatic_candidates
 from c2_chatgpt_executor import lane_degraded
 from c2_repository_integration import integration_status, prompt_repository
 
@@ -201,6 +202,15 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         events.append(('issue_triage_active',str(triage['work_item_id'])))
     elif pending_issue_inbox:
         events.append(('issue_triage_unconfigured',str(pending_issue_inbox)))
+
+    # The periodic runtime tick is a safety net for structured canonical facts.
+    # Free-text and external blockers require an explicit evidence-gated decision.
+    if not pending_issue_inbox:
+        blocked_candidates = automatic_candidates(db)[:100]
+        if blocked_candidates:
+            key = _key('c2-blocked-safety-net', blocked_candidates)
+            submit('reconcile_blocked_safety_net', {'expected': blocked_candidates}, key)
+            events.append(('blocked_safety_net', str(len(blocked_candidates))))
 
     # Recover missed terminal delivery natively; a PASS receipt and canonical
     # repository merge are both required before the writer replays finalization.

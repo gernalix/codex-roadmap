@@ -34,6 +34,24 @@ Non implementare miglioramenti per eleganza, completezza teorica, telemetria agg
 
 ## Protocollo PBF
 
+### Riconciliazione dei BLOCKED
+
+Un item `blocked` resta tale finché una prova canonica non risolve il suo
+prerequisito. Il writer accetta `c2_reconcile_blocked` per root, child, gate e
+prompt: richiede `work_item_id`, l'esatto `expected_updated_at`, `disposition`
+(`WAITING`, `BLOCKED` o `TERMINAL`), `evidence` non vuota e `next_action`.
+`BLOCKED` richiede anche `blocker` e `recovery_condition`; `TERMINAL` richiede
+`terminal_status` (`cancelled` o `superseded`) ed eventualmente `superseded_by`.
+Si invia tramite il single writer con autorità supervisor; non modifica run
+attivi, receipt o terminal request storiche. Il writer registra evento,
+evidenza e, per i prompt, lo storico dello stato.
+
+Il tick periodico di C2 riconcilia automaticamente solo due segnali strutturati:
+una relazione `resolved_by` verso un item completato o un blocker esplicito
+`dependency:<work_item_id>` la cui dipendenza richiesta è conclusa. Gli altri
+blocker restano `BLOCKED` finché un executor presenta prove e condizione di
+recovery. La gestione per evento resta il percorso principale.
+
 PBF significa qualunque prompt con evidenza terminale non-PASS. La classificazione canonica è derivata da `v_pbf_dispositions` e non riscrive mai gli outcome storici:
 
 - `resolved`: l'obiettivo è provato chiuso successivamente (prompt completato con storico non-PASS o catena `resolved_by` completata);

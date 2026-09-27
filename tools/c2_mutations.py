@@ -7,6 +7,7 @@ import c2_cutover_writer
 import c2_supervisor_authority
 import c2_terminal_state_reimport
 import c2_work_item_admin
+import c2_blocked_reconcile
 import c2_issue_inbox
 import c2_manual_order
 import c2_human_copy
@@ -17,7 +18,8 @@ SUPERVISOR_OPERATIONS = frozenset({
     'intake', 'prepare_codex', 'configure', 'auto_configure', 'schedule', 'acknowledge',
     'recover', 'reconcile_run', 'milestone', 'claim_milestone',
     'mark_milestone', 'verify_work_item',
-    'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item', 'bind_executor',
+    'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item',
+    'reconcile_blocked', 'reconcile_blocked_safety_net', 'bind_executor',
     'promote_issue', 'discard_issue', 'edit_issue', 'void_issue', 'ensure_issue_triage',
     'set_execution_override', 'clear_execution_override',
     'set_manual_order', 'clear_manual_order', 'set_human_copy',
@@ -84,6 +86,8 @@ def apply(conn, mutation):
         'reimport_terminal_state': c2_terminal_state_reimport.apply,
         'repair_prompt_materialization': c2_intake.repair_prompt_materialization,
         'reconcile_item': c2_work_item_admin.reconcile,
+        'reconcile_blocked': c2_blocked_reconcile.reconcile,
+        'reconcile_blocked_safety_net': c2_blocked_reconcile.safety_net,
         'capture_issue': c2_issue_inbox.capture,
         'promote_issue': c2_issue_inbox.promote,
         'discard_issue': c2_issue_inbox.discard,
