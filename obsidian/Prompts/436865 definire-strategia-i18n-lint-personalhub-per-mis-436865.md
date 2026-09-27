@@ -20,9 +20,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/definire-strategia-i18n-lint-personalhub-per-mis-436865|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-27T18:54:07Z
+- **Ultimo lancio:** 2026-09-27T18:54:07Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -40,7 +40,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-27T18:54:07Z | 2026-09-27T18:54:11Z | UNKNOWN | 3.777 | codex-auto-review | low | 0 | 21368 |
 
 ## Analisi ChatGPT
 
