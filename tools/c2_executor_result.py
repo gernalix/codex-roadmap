@@ -15,6 +15,13 @@ def _env(name: str) -> str | None:
     return value.strip() if value and value.strip() else None
 
 
+def build_request_key(arguments: dict) -> str:
+    """Derive replay identity from the canonical executor-result semantics."""
+    encoded=json.dumps(arguments,sort_keys=True,ensure_ascii=False,
+                       separators=(',',':')).encode()
+    return 'c2-executor-result-'+hashlib.sha256(encoded).hexdigest()[:32]
+
+
 def main() -> int:
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--result',required=True,
@@ -51,7 +58,7 @@ def main() -> int:
     }
     arguments={k:v for k,v in arguments.items() if v is not None}
     identity=run_id or work_item_id or prompt_id
-    key='c2-executor-result-'+hashlib.sha256(str(identity).encode()).hexdigest()[:32]
+    key=build_request_key(arguments)
     result=submit_document({
         'schema':'codex-roadmap.mutation.v1',
         'actor':'c2-executor',

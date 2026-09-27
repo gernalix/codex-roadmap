@@ -68,6 +68,34 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(1,self.conn.execute(
             "SELECT COUNT(*) FROM work_item_result_receipts WHERE run_id='result-run'").fetchone()[0])
 
+    def test_manual_result_allows_later_lifecycle_submission_with_new_receipt(self):
+        item=intake.add_work_item(self.conn,title='Manual result',repo='manual-result')
+        wid=item['work_item_id']
+        self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",(wid,))
+        blocked=scheduler.executor_result(self.conn,work_item_id=wid,outcome='BLOCKED',
+            completed=[],remaining=['wait'],evidence=['first report'],blocker='wait',
+            next_action='resume',strict_contract=True)
+        passed=scheduler.executor_result(self.conn,work_item_id=wid,outcome='PASS',
+            completed=['done'],remaining=[],evidence=['second report'],strict_contract=True)
+        self.assertNotEqual(blocked['receipt_id'],passed['receipt_id'])
+        self.assertEqual('completed',self.conn.execute(
+            'SELECT status FROM work_items WHERE work_item_id=?',(wid,)).fetchone()[0])
+        self.assertEqual(2,self.conn.execute(
+            'SELECT COUNT(*) FROM work_item_result_receipts WHERE work_item_id=?',(wid,)).fetchone()[0])
+
+    def test_new_manual_result_cannot_bypass_terminal_lifecycle(self):
+        item=intake.add_work_item(self.conn,title='Terminal result',repo='terminal-result')
+        wid=item['work_item_id']
+        self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",(wid,))
+        scheduler.executor_result(self.conn,work_item_id=wid,outcome='PASS',
+            completed=['done'],remaining=[],evidence=['proof'],strict_contract=True)
+        with self.assertRaisesRegex(scheduler.SchedulingError,'executor_result_item_state_conflict'):
+            scheduler.executor_result(self.conn,work_item_id=wid,outcome='BLOCKED',
+                completed=[],remaining=['reopen'],evidence=['different report'],blocker='new blocker',
+                next_action='do not reopen',strict_contract=True)
+        self.assertEqual(1,self.conn.execute(
+            'SELECT COUNT(*) FROM work_item_result_receipts WHERE work_item_id=?',(wid,)).fetchone()[0])
+
     def test_manual_nonprompt_start_claims_runnable_pending_item(self):
         item=intake.add_work_item(self.conn,title='Manual runnable',repo='manual',
             executor_policy='auto')
