@@ -1,5 +1,6 @@
 # Da controllare
 
+- [[obsidian/Prompts/999198 correggere-mapping-prompt-id-work-item-id-nel-cu-999198|999198 · Correggere mapping prompt_id→work_item_id nel cutover C2]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence|660629 · Orchestrare C2 fino a quiescenza]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] · `failed` · analizzato=no · fix=—
 - [[obsidian/Prompts/340495 rendere-idempotente-il-cli-execution-override-c2-340495|340495 · Rendere idempotente il CLI execution override C2]] · `blocked` · analizzato=no · fix=—

@@ -19,9 +19,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/correggere-mapping-prompt-id-work-item-id-nel-cu-999198|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-27T07:38:32Z
+- **Ultimo lancio:** 2026-09-27T07:38:32Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -39,7 +39,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-27T07:38:32Z | 2026-09-27T08:45:57Z | UNKNOWN | 4044.768 | gpt-6-sol | medium | 31 | 60191 |
 
 ## Analisi ChatGPT
 
