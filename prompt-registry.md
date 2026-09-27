@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/682297 c2-supervisor-rollover-fallito-degrada-a-human-r-682297\|682297 · C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]] | running | — | — | — | no | no | — | — | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/682297 c2-supervisor-rollover-fallito-degrada-a-human-r-682297\|682297 · C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]] | running | 2026-09-27T05:20:41Z | 2026-09-27T05:20:41Z | PASS | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/158995 c2-dashboard-rendere-immediatamente-visibili-i-n-158995\|158995 · C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati]] | running | 2026-09-27T05:21:37Z | 2026-09-27T05:21:37Z | PASS | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |

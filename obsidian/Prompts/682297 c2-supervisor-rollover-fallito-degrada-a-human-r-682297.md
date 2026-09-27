@@ -18,9 +18,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/c2-supervisor-rollover-fallito-degrada-a-human-r-682297|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-27T05:20:41Z
+- **Ultimo lancio:** 2026-09-27T05:20:41Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-27T05:20:41Z | 2026-09-27T05:25:15Z | PASS | 274.36 | gpt-5.6-sol | medium | 23 | 55502 |
 
 ## Analisi ChatGPT
 
