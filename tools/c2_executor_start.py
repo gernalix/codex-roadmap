@@ -39,8 +39,14 @@ def submit_start(*, run_id=None, work_item_id=None, prompt_id=None,
         'executor':executor,'executor_ref':executor_ref,'chat_url':chat_url,
     }
     arguments={k:v for k,v in arguments.items() if v is not None}
-    identity=run_id or (str(work_item_id or prompt_id)+':'+str(executor))
-    key='c2-executor-start-'+hashlib.sha256(identity.encode()).hexdigest()[:32]
+    # Request identity must include optional binding fields. The canonical
+    # executor_started receipt remains keyed by run/work-item+executor inside
+    # the writer, so a later call may safely enrich executor_ref/chat_url.
+    # Reusing one transport key for both the unbound and bound documents makes
+    # submit_mutation reject the legitimate enrichment as a key conflict.
+    encoded=json.dumps(arguments,sort_keys=True,ensure_ascii=False,
+                       separators=(',',':')).encode()
+    key='c2-executor-start-'+hashlib.sha256(encoded).hexdigest()[:32]
     return submit_document({
         'schema':'codex-roadmap.mutation.v1',
         'actor':'c2-executor-start',

@@ -15,7 +15,16 @@ class FinishWrapperTests(unittest.TestCase):
     @patch("roadmap_finish.queue_integration", return_value=("queued", False))
     def test_self_repo_no_generic_task_record_needed(self, queue, repository):
         out=roadmap_finish.finish(Path("/tmp/r"),"123456",confirm_executed=True)
+        repository.assert_called_once_with(roadmap_finish.ROADMAP_DB,"123456")
         queue.assert_called_once_with("123456","gernalix/codex-roadmap",Path("/tmp/r"))
+        self.assertEqual("queued",out["status"])
+
+    @patch("roadmap_finish.prompt_repository", return_value="owner/other")
+    @patch("roadmap_finish.queue_integration", return_value=("queued", False))
+    def test_external_worktree_reads_routing_from_roadmap_db(self, queue, repository):
+        out=roadmap_finish.finish(Path("/tmp/external"),"123456",confirm_executed=True)
+        repository.assert_called_once_with(roadmap_finish.ROADMAP_DB,"123456")
+        queue.assert_called_once_with("123456","owner/other",Path("/tmp/external"))
         self.assertEqual("queued",out["status"])
 
     @patch("c2_repository_integration._external", return_value={"status":"queued"})

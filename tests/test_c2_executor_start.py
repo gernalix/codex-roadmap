@@ -28,6 +28,18 @@ class ExecutorStartTests(unittest.TestCase):
         self.assertEqual('thread-1',args['executor_ref'])
         self.assertEqual('codex://threads/thread-1',args['chat_url'])
 
+    @patch('c2_executor_start.submit_document')
+    def test_manual_binding_enrichment_gets_distinct_stable_request_key(self, submit):
+        submit.return_value={'submission':'queued'}
+        start.submit_start(prompt_id='123456',executor='codex')
+        start.submit_start(prompt_id='123456',executor='codex',
+            executor_ref='thread-1',chat_url='codex://threads/thread-1')
+        start.submit_start(prompt_id='123456',executor='codex',
+            executor_ref='thread-1',chat_url='codex://threads/thread-1')
+        keys=[call.kwargs['request_key'] for call in submit.call_args_list]
+        self.assertNotEqual(keys[0],keys[1])
+        self.assertEqual(keys[1],keys[2])
+
     def test_manual_start_requires_executor_without_run(self):
         with patch.dict(os.environ,{},clear=True):
             with self.assertRaisesRegex(ValueError,'executor required'):

@@ -9,12 +9,16 @@ from roadmap_result import RoadmapResultError, finish_result
 from c2_repository_integration import (RepositoryIntegrationError, prompt_repository,
                                        queue_integration)
 
+ROADMAP_DB = Path(__file__).resolve().parents[1] / "roadmap.sqlite"
+
 
 def _queue_repo_integration(prompt_id: str, repo: Path | None = None) -> tuple[str, bool]:
     """Queue completed repository work without waiting for CI or canonical merge."""
     try:
         worktree = (repo or Path.cwd()).expanduser().resolve()
-        repository = prompt_repository(worktree / "roadmap.sqlite", prompt_id)
+        # repo is the target project worktree. External repositories do not
+        # contain roadmap.sqlite; routing metadata comes from codex-roadmap.
+        repository = prompt_repository(ROADMAP_DB, prompt_id)
         return queue_integration(prompt_id, repository, worktree)
     except RepositoryIntegrationError as exc:
         raise RoadmapResultError(str(exc)) from exc
