@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
-from codex_human_tail import UnreadState, _read_input, colorize, extract_human_message, relative_age, render, select_session, wrap_text, HumanMessage
+from codex_human_tail import UnreadState, _read_input, _status_line, colorize, extract_human_message, relative_age, render, select_session, wrap_text, HumanMessage
 
 
 def _read_input_bytes_for_test(data: bytes):
@@ -130,6 +130,12 @@ class CodexHumanTailTests(unittest.TestCase):
         events, pending = _read_input_bytes_for_test(b"\x1b[Or\x1b[Iq")
         self.assertEqual(["focus_out", "mark_read", "focus_in", "quit"], events)
         self.assertEqual(b"", pending)
+
+    def test_zero_unread_status_is_always_visible(self):
+        state = UnreadState(focused=True, focus_since=0.0)
+        status = _status_line(state, 20.0, color=False, now=0.0)
+        self.assertIn("0 non letti", status)
+        self.assertIn("soglia 20s", status)
 
     def test_unread_render_has_evident_marker(self):
         message = HumanMessage(datetime(2026, 9, 28, 0, 27, tzinfo=timezone.utc), "testo")

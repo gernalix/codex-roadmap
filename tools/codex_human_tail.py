@@ -302,7 +302,9 @@ def _status_line(state: UnreadState, read_after: float, color: bool, now: float 
             focus = "fuori focus"
         text = f"● {count} non lett{'o' if count == 1 else 'i'} · {focus} · r segna letti · q esci"
         return f"{ANSI_AMBER}{ANSI_BOLD}{text}{ANSI_RESET}" if color else text
-    return "r segna letti · q esci"
+    focus = "in focus" if state.focused else "fuori focus"
+    text = f"○ 0 non letti · {focus} · soglia {read_after:g}s · r segna letti · q esci"
+    return f"{ANSI_DIM}{text}{ANSI_RESET}" if color else text
 
 
 def _redraw(path: Path, messages: list[HumanMessage], state: UnreadState, read_after: float, color: bool, *, now_mono: float | None = None) -> None:
@@ -332,6 +334,7 @@ def follow(path: Path, history: int, poll: float, *, color: bool = True, read_af
     _redraw(path, messages, state, read_after, color)
     age_signature = tuple(relative_age(message.timestamp) for message in messages)
     last_status_tick = int(time.monotonic()) if state.unread else None
+    last_columns = shutil.get_terminal_size(fallback=(120, 24)).columns
 
     offset = path.stat().st_size
     pending = ""
@@ -387,6 +390,11 @@ def follow(path: Path, history: int, poll: float, *, color: bool = True, read_af
             current_age_signature = tuple(relative_age(message.timestamp) for message in messages)
             if current_age_signature != age_signature:
                 age_signature = current_age_signature
+                redraw = True
+
+            columns = shutil.get_terminal_size(fallback=(120, 24)).columns
+            if columns != last_columns:
+                last_columns = columns
                 redraw = True
 
             status_tick = int(now_mono) if state.focused and state.unread else None
