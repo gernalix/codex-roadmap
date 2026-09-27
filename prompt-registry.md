@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479\|853479 · Phase A — MegaVault one source of truth definitiva]] | running | 2026-09-27T10:24:49Z | 2026-09-27T10:30:08Z | UNKNOWN | no | no | — | — | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479\|853479 · Phase A — MegaVault one source of truth definitiva]] | running | 2026-09-27T10:24:49Z | 2026-09-27T10:35:14Z | UNKNOWN | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence\|660629 · Orchestrare C2 fino a quiescenza]] | running | 2026-09-27T06:00:21Z | 2026-09-27T08:05:56Z | UNKNOWN | no | no | — | codex-roadmap | GPT-6 Luna | medium |
 | [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582\|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]] | running | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/545953 ripristinare-il-diff-storico-delle-notifiche-tel-545953\|545953 · Ripristinare il diff storico delle notifiche Telegram dopo enrichment Grindr]] | running | — | — | — | no | no | — | telegram_insert_bot | GPT-5.6 Terra | medium |
