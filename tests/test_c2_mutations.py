@@ -44,10 +44,14 @@ class C2WriterTests(unittest.TestCase):
                                              'supervisor_authority_required'):
                     roadmap_db.apply_mutation(conn,{'op':'c2_clear_manual_order',
                                                     'arguments':{'scope':'roadmap'}})
+                stable_authority={
+                    'supervisor_id':authority['supervisor_id'],
+                    'fencing_token':authority['fencing_token'],
+                }
                 roadmap_db.apply_mutation(conn,{'op':'c2_clear_manual_order','arguments':{
-                    'scope':'roadmap','supervisor_authority':authority}})
+                    'scope':'roadmap','supervisor_authority':stable_authority}})
                 roadmap_db.apply_mutation(conn,{'op':'c2_clear_manual_order','arguments':{
-                    'scope':'roadmap','supervisor_authority':authority}})
+                    'scope':'roadmap','supervisor_authority':stable_authority}})
                 self.assertEqual([],c2_manual_order.read_manual_order(conn,'roadmap')['items'])
 
     def test_manual_order_invalid_scope_ids_and_duplicates_fail_closed(self):

@@ -37,9 +37,19 @@ class CanonicalFencingTests(unittest.TestCase):
         extended = {**old, 'lease_expires_at': 140}
         authority.renew(db, extended, now=120)
         self.assertEqual(authority.require(db, extended, now=121)['fencing_token'], 1)
+        self.assertEqual(
+            authority.require(
+                db, {'supervisor_id': 'old', 'fencing_token': 1}, now=121
+            )['fencing_token'],
+            1,
+        )
         authority.retire(db, extended, now=122)
         successor = {'supervisor_id': 'new', 'fencing_token': 2, 'lease_expires_at': 150}
         authority.claim(db, successor, now=123)
+        with self.assertRaisesRegex(authority.AuthorityError, 'stale_or_expired_supervisor'):
+            authority.require(
+                db, {'supervisor_id': 'old', 'fencing_token': 1}, now=124
+            )
         with self.assertRaisesRegex(authority.AuthorityError, 'stale_or_expired_supervisor'):
             authority.renew(db, {**old, 'lease_expires_at': 160}, now=124)
         db.close()

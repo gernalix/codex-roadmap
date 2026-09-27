@@ -49,7 +49,7 @@ def request_key(action: str, scope: str, ids: list[str],
         "action": action,
         "scope": scope,
         "ids": ids if action == "set" else sorted(ids),
-        "source_modified_at": source_modified_at if action == "set" else None,
+        "source_modified_at": source_modified_at,
     }
     encoded = json.dumps(
         stable, ensure_ascii=False, sort_keys=True, separators=(",", ":")
@@ -66,6 +66,11 @@ def main(argv=None, *, runtime_env: Path = RUNTIME_ENV) -> int:
     setter.add_argument("ids", nargs="*")
     clearer = sub.add_parser("clear")
     clearer.add_argument("--scope", choices=("inbox", "roadmap"), required=True)
+    clearer.add_argument(
+        "--source-modified-at",
+        required=True,
+        help="stable modifiedAt/action identity of this Workflowy reset event",
+    )
     clearer.add_argument("ids", nargs="*")
     args = parser.parse_args(argv)
 
@@ -82,14 +87,18 @@ def main(argv=None, *, runtime_env: Path = RUNTIME_ENV) -> int:
             "source": "workflowy",
             "source_modified_at": args.source_modified_at,
         }
-        modified = args.source_modified_at
     else:
+        if not args.source_modified_at:
+            raise WorkflowyOrderError("source_modified_at_required")
+        if args.source_modified_at != args.source_modified_at.strip():
+            raise WorkflowyOrderError("invalid_source_modified_at")
         operation = "clear_manual_order"
         arguments = {"scope": args.scope}
         if args.ids:
             arguments["ids"] = sorted(args.ids)
-        modified = None
-    key = request_key(args.action, args.scope, args.ids, modified)
+    key = request_key(
+        args.action, args.scope, args.ids, args.source_modified_at
+    )
     result = c2_control.submit_control(
         operation=operation,
         arguments=arguments,
