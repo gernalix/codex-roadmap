@@ -18,9 +18,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/c2-dashboard-rendere-immediatamente-visibili-i-n-158995|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-27T05:21:37Z
+- **Ultimo lancio:** 2026-09-27T05:21:37Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-27T05:21:37Z | 2026-09-27T05:22:47Z | PASS | 69.991 | gpt-5.6-terra | medium | 18 | 50897 |
 
 ## Analisi ChatGPT
 
