@@ -5,7 +5,6 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/682297 c2-supervisor-rollover-fallito-degrada-a-human-r-682297\|682297 · C2 supervisor: rollover fallito degrada a human-required invece di recuperare autonomamente]] | running | 2026-09-27T05:20:41Z | 2026-09-27T05:20:41Z | PASS | no | no | — | — | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/158995 c2-dashboard-rendere-immediatamente-visibili-i-n-158995\|158995 · C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati]] | running | 2026-09-27T05:21:37Z | 2026-09-27T05:21:37Z | PASS | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
@@ -165,6 +164,7 @@
 | [[obsidian/Prompts/614593 c2-intake-collisioni-request-key-tra-chat-parall-614593\|614593 · C2 intake: collisioni request-key tra chat parallele]] | completed | 2026-09-26T23:10:07Z | 2026-09-26T23:12:36Z | PASS | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/604812 chrome-codex-switcher-gnome-global-search-shortcut-rpm-fix-v2\|604812 · Fix GNOME global search shortcut on Chrome RPM]] | completed | 2026-09-21T21:50:23Z | 2026-09-21T21:50:23Z | PASS | sì | no | — | Facilitatori di prompt | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/328371 c2-dashboard-mutation-applicata-ma-invisibile-fi-328371\|328371 · C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]] | completed | 2026-09-27T05:11:09Z | 2026-09-27T05:15:37Z | PASS | no | no | — | — | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/158995 c2-dashboard-rendere-immediatamente-visibili-i-n-158995\|158995 · C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati]] | completed | 2026-09-27T05:21:37Z | 2026-09-27T05:21:37Z | PASS | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/875575 conservare-e-confrontare-lo-storico-dei-test-adb-875575\|875575 · Conservare e confrontare lo storico dei test ADB]] | blocked | 2026-09-26T22:45:54Z | 2026-09-26T22:49:45Z | BLOCKED | no | no | — | codex-roadmap | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/255325 prompt-255325\|255325 · Prompt 255325]] | cancelled | 2026-09-18T17:42:04Z | 2026-09-18T17:42:04Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/294731 prompt-294731\|294731 · Prompt 294731]] | cancelled | 2026-09-16T17:42:10Z | 2026-09-16T17:42:10Z | CANCELLED | sì | no | — | — | — | — |

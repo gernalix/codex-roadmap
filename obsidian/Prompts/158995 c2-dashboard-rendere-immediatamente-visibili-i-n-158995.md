@@ -1,6 +1,6 @@
 ---
 prompt_id: 158995
-status: running
+status: completed
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,15 +9,15 @@ tags:
   - dashboard
   - ux
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/unknown
 ---
 
 # 158995 · C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/c2-dashboard-rendere-immediatamente-visibili-i-n-158995|Apri prompt]]
+- **Prompt:** [[../../completed/c2-dashboard-rendere-immediatamente-visibili-i-n-158995|Apri prompt]]
 - **Primo lancio:** 2026-09-27T05:21:37Z
 - **Ultimo lancio:** 2026-09-27T05:21:37Z
 - **Ultimo esito:** PASS
