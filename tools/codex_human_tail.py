@@ -4,7 +4,10 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
+import shutil
 import sys
+import textwrap
 import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -12,6 +15,15 @@ from pathlib import Path
 from typing import Iterable
 
 DEFAULT_ROOT = Path.home() / ".codex" / "sessions"
+
+ANSI_RESET = "\033[0m"
+ANSI_GREEN = "\033[32m"
+ANSI_CYAN = "\033[36m"
+ANSI_DIM = "\033[2m"
+ANSI_BOLD = "\033[1m"
+INLINE_CODE_RE = re.compile(r"`([^`]+)`")
+ROOT_PATH_RE = re.compile(r"(?<![\w`])(/root/[A-Za-z0-9_./-]+)")
+URL_RE = re.compile(r"(?<![\w`])(https?://\S+)")
 
 
 @dataclass(frozen=True)
@@ -123,18 +135,66 @@ def iter_messages(path: Path) -> Iterable[HumanMessage]:
             message = extract_human_message(obj)
             if message:
                 yield message
-def render(message: HumanMessage, now: datetime | None = None) -> str:
+def colorize(text: str) -> str:
+    # Codex TUI-like emphasis: inline code/state names green, paths/URLs cyan.
+    protected: list[str] = []
+
+    def protect_code(match: re.Match[str]) -> str:
+        token = f"\x00CODE{len(protected)}\x00"
+        protected.append(f"{ANSI_GREEN}`{match.group(1)}`{ANSI_RESET}")
+        return token
+
+    text = INLINE_CODE_RE.sub(protect_code, text)
+    text = URL_RE.sub(lambda m: f"{ANSI_CYAN}{m.group(1)}{ANSI_RESET}", text)
+    text = ROOT_PATH_RE.sub(lambda m: f"{ANSI_CYAN}{m.group(1)}{ANSI_RESET}", text)
+    for index, styled in enumerate(protected):
+        text = text.replace(f"\x00CODE{index}\x00", styled)
+    return text
+
+
+def wrap_text(text: str, width: int) -> list[str]:
+    output: list[str] = []
+    for paragraph in text.splitlines() or [""]:
+        if not paragraph.strip():
+            output.append("")
+            continue
+        wrapped = textwrap.wrap(
+            paragraph,
+            width=max(1, width),
+            break_long_words=False,
+            break_on_hyphens=False,
+            replace_whitespace=False,
+            drop_whitespace=True,
+        )
+        output.extend(wrapped or [""])
+    return output
+
+
+def render(
+    message: HumanMessage,
+    now: datetime | None = None,
+    *,
+    width: int | None = None,
+    color: bool = True,
+) -> str:
     label = relative_age(message.timestamp, now=now)
-    lines = message.text.splitlines() or [""]
     prefix = f"{label:>12} │ "
-    continuation = " " * 15
-    return "\n".join([prefix + lines[0], *(continuation + line for line in lines[1:])])
+    continuation = " " * len(prefix)
+    terminal_width = width or shutil.get_terminal_size(fallback=(120, 24)).columns
+    content_width = max(20, terminal_width - len(prefix) - 1)
+    lines = wrap_text(message.text, content_width)
+    if color:
+        lines = [colorize(line) for line in lines]
+    return "\n".join(
+        (prefix if index == 0 else continuation) + line
+        for index, line in enumerate(lines)
+    )
 
 
-def follow(path: Path, history: int, poll: float) -> None:
+def follow(path: Path, history: int, poll: float, *, color: bool = True) -> None:
     messages = list(iter_messages(path))
     for message in messages[-history:]:
-        print(render(message))
+        print(render(message, color=color))
         print()
     sys.stdout.flush()
 
@@ -161,7 +221,7 @@ def follow(path: Path, history: int, poll: float) -> None:
                         continue
                     message = extract_human_message(obj)
                     if message:
-                        print(render(message))
+                        print(render(message, color=color))
                         print()
                         sys.stdout.flush()
             time.sleep(poll)
@@ -184,14 +244,16 @@ def main(argv: list[str] | None = None) -> int:
 
     root = Path(args.source_root).expanduser()
     path = select_session(root, args.session)
+    use_color = os.isatty(sys.stdout.fileno()) and os.environ.get("NO_COLOR") is None
     if os.isatty(sys.stdout.fileno()):
-        print(f"Codex human view · {path.stem}\n")
+        header = f"Codex human view · {path.stem}"
+        print(f"{ANSI_DIM}{header}{ANSI_RESET}\n" if use_color else f"{header}\n")
     if args.once:
         for message in list(iter_messages(path))[-args.history:]:
-            print(render(message))
+            print(render(message, color=use_color))
             print()
         return 0
-    follow(path, max(0, args.history), max(0.05, args.poll))
+    follow(path, max(0, args.history), max(0.05, args.poll), color=use_color)
     return 0
 
 

@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
-from codex_human_tail import extract_human_message, relative_age, select_session
+from codex_human_tail import colorize, extract_human_message, relative_age, render, select_session, wrap_text, HumanMessage
 
 
 class CodexHumanTailTests(unittest.TestCase):
@@ -41,6 +41,30 @@ class CodexHumanTailTests(unittest.TestCase):
              "payload": {"type": "token_count"}},
         ]
         self.assertTrue(all(extract_human_message(item) is None for item in noisy))
+
+    def test_wrap_never_splits_normal_words(self):
+        lines = wrap_text("Questa parola lunghissima_non_va_spezzata e il resto continua", 18)
+        self.assertIn("lunghissima_non_va_spezzata", lines)
+        self.assertNotIn("lunghissima_non_va_", lines)
+
+    def test_render_wraps_on_words_with_indented_continuations(self):
+        message = HumanMessage(
+            timestamp=datetime(2026, 9, 28, 0, 27, tzinfo=timezone.utc),
+            text="uno due tre quattro cinque sei sette otto nove dieci",
+        )
+        rendered = render(message, now=datetime(2026, 9, 28, 0, 30, tzinfo=timezone.utc), width=36, color=False)
+        lines = rendered.splitlines()
+        self.assertGreater(len(lines), 1)
+        self.assertTrue(lines[0].startswith("    3 min fa │ "))
+        self.assertTrue(all(line.startswith(" " * 15) for line in lines[1:]))
+        self.assertFalse(any(line.rstrip().endswith(("quat", "cin", "sett")) for line in lines))
+
+    def test_colorize_matches_codex_like_inline_emphasis(self):
+        styled = colorize("Stato `BLOCKED`, file `roadmap_start.py`, path /root/worker e https://example.test/x")
+        self.assertIn("\x1b[32m`BLOCKED`\x1b[0m", styled)
+        self.assertIn("\x1b[32m`roadmap_start.py`\x1b[0m", styled)
+        self.assertIn("\x1b[36m/root/worker\x1b[0m", styled)
+        self.assertIn("\x1b[36mhttps://example.test/x\x1b[0m", styled)
 
     def test_auto_selection_prefers_latest_root_tui(self):
         with tempfile.TemporaryDirectory() as tmp:
