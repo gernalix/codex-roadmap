@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/340495 rendere-idempotente-il-cli-execution-override-c2-340495\|340495 · Rendere idempotente il CLI execution override C2]] | running | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1\|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] | running | 2026-09-26T22:52:04Z | 2026-09-26T22:52:21Z | UNKNOWN | no | no | — | Prompt infrastructure | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/328371 c2-dashboard-mutation-applicata-ma-invisibile-fi-328371\|328371 · C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]] | running | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
@@ -16,6 +15,7 @@
 | [[obsidian/Prompts/718501 c2-supervisor-backoff-rate-limit-globale-blocca--718501\|718501 · C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]] | pending | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/158995 c2-dashboard-rendere-immediatamente-visibili-i-n-158995\|158995 · C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati]] | pending | — | — | — | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/528123 c2-ph-cutover-canonical-temporary-lane-override-528123\|528123 · C2 PH cutover + canonical temporary lane override]] | blocked | 2026-09-26T23:47:46Z | 2026-09-26T23:51:04Z | BLOCKED | no | no | — | — | GPT-6 Sol | medium |
+| [[obsidian/Prompts/340495 rendere-idempotente-il-cli-execution-override-c2-340495\|340495 · Rendere idempotente il CLI execution override C2]] | blocked | 2026-09-27T05:14:53Z | 2026-09-27T05:14:53Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/588982 c2-ph-cutover-temporary-execution-override-588982\|588982 · C2 PH cutover + temporary execution override]] | superseded | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/107210 c2-p0-personalhub-interim-minified-apk-db-pixel-v1\|107210 · P0 C2: installare interim PersonalHub minificato + DB sul Pixel]] | superseded | — | — | — | no | no | — | Personal Hub | GPT-6 Sol | medium |
 | [[obsidian/Prompts/582408 completare-bootstrap-e-handoff-del-drain-autonom-582408\|582408 · Completare bootstrap e handoff del drain autonomo C2]] | completed | 2026-09-26T22:43:47Z | 2026-09-26T22:45:20Z | PASS | no | no | — | — | GPT-5.6 Sol | medium |
