@@ -1,20 +1,20 @@
 ---
 prompt_id: 714263
-status: waiting
+status: blocked
 project_id: —
 model: GPT-6 Luna
 reasoning: low
 tags:
   - roadmap/prompt
-  - roadmap/status/waiting
+  - roadmap/status/blocked
   - roadmap/project/fedora-fedora-system-monitor
 ---
 
 # 714263 · Chiudere il residuo Kuma di sqlite-to-obsidian
 
-- **Stato:** waiting
+- **Stato:** blocked
 - **Progetto:** [[../Projects/fedora-fedora-system-monitor|Fedora / fedora-system-monitor]]
-- **Prompt:** [[../../prompts/sqlite-to-obsidian-kuma-connection-recovery-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/sqlite-to-obsidian-kuma-connection-recovery-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-25T09:22:42Z
 - **Ultimo lancio:** 2026-09-25T09:22:42Z
 - **Ultimo esito:** BLOCKED
