@@ -65,6 +65,31 @@ CREATE TABLE IF NOT EXISTS manual_order_overrides (
   PRIMARY KEY(scope, entity_id),
   UNIQUE(scope, rank)
 );
+
+CREATE TABLE IF NOT EXISTS issue_inbox (
+  issue_id TEXT PRIMARY KEY,
+  description TEXT NOT NULL,
+  repo TEXT,
+  code_location TEXT,
+  executor TEXT,
+  executor_ref TEXT,
+  chat_url TEXT,
+  origin_work_item_id TEXT REFERENCES work_items(work_item_id) ON DELETE RESTRICT,
+  origin_run_id TEXT REFERENCES work_item_runs(run_id) ON DELETE RESTRICT,
+  observed_at_ms INTEGER NOT NULL CHECK(observed_at_ms > 0),
+  state TEXT NOT NULL DEFAULT 'pending' CHECK(state IN ('pending','promoted','discarded')),
+  matched_work_item_id TEXT REFERENCES work_items(work_item_id) ON DELETE RESTRICT,
+  promoted_work_item_id TEXT REFERENCES work_items(work_item_id) ON DELETE RESTRICT,
+  disposition_reason TEXT,
+  triaged_by TEXT,
+  triaged_at_ms INTEGER,
+  created_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_issue_inbox_state_observed
+  ON issue_inbox(state, observed_at_ms, issue_id);
+CREATE INDEX IF NOT EXISTS idx_issue_inbox_repo_state
+  ON issue_inbox(repo, state, observed_at_ms);
+
 CREATE TABLE IF NOT EXISTS work_item_checkpoints (
   checkpoint_id INTEGER PRIMARY KEY AUTOINCREMENT,
   work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
@@ -137,8 +162,9 @@ CREATE INDEX IF NOT EXISTS idx_work_item_dependencies_target
   ON work_item_dependencies(depends_on_work_item_id, work_item_id);
 
 DROP VIEW IF EXISTS v_work_item_runnable;
-DROP VIEW IF EXISTS v_roadmap_manual_order;
 DROP VIEW IF EXISTS v_work_item_summary;
+DROP VIEW IF EXISTS v_roadmap_manual_order;
+DROP VIEW IF EXISTS v_issue_inbox_pending_ordered;
 DROP VIEW IF EXISTS v_work_item_progress;
 CREATE VIEW v_work_item_progress AS
 WITH RECURSIVE descendants(root_id, work_item_id) AS (
@@ -204,11 +230,6 @@ SELECT
 FROM work_items w
 LEFT JOIN stats s ON s.root_id=w.work_item_id;
 
-CREATE VIEW v_work_item_summary AS
-SELECT w.*, p.total_actionable, p.completed_actionable, p.progress_percent
-FROM work_items w
-JOIN v_work_item_progress p ON p.work_item_id=w.work_item_id;
-
 CREATE VIEW v_roadmap_manual_order AS
 SELECT
   w.*,
@@ -225,6 +246,25 @@ SELECT
 FROM work_items w
 LEFT JOIN manual_order_overrides o
   ON o.scope='roadmap' AND o.entity_id=w.work_item_id;
+
+CREATE VIEW v_work_item_summary AS
+SELECT w.*, p.total_actionable, p.completed_actionable, p.progress_percent
+FROM v_roadmap_manual_order w
+JOIN v_work_item_progress p ON p.work_item_id=w.work_item_id;
+
+CREATE VIEW v_issue_inbox_pending_ordered AS
+SELECT
+  i.*,
+  o.rank AS manual_rank,
+  o.source AS manual_order_source,
+  o.source_modified_at AS manual_order_source_modified_at,
+  o.updated_at AS manual_order_updated_at
+FROM issue_inbox i
+LEFT JOIN manual_order_overrides o
+  ON o.scope='inbox' AND o.entity_id=i.issue_id
+WHERE i.state='pending'
+ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,
+         o.rank,i.observed_at_ms,i.issue_id;
 
 CREATE VIEW v_work_item_runnable AS
 SELECT w.*

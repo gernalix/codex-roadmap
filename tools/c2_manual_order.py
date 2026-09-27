@@ -25,7 +25,9 @@ CREATE TABLE IF NOT EXISTS manual_order_overrides (
   PRIMARY KEY(scope, entity_id),
   UNIQUE(scope, rank)
 );
-CREATE VIEW IF NOT EXISTS v_roadmap_manual_order AS
+"""
+
+ROADMAP_VIEW = """CREATE VIEW v_roadmap_manual_order AS
 SELECT
   w.*,
   CASE
@@ -40,8 +42,20 @@ SELECT
   o.updated_at AS manual_order_updated_at
 FROM work_items w
 LEFT JOIN manual_order_overrides o
-  ON o.scope='roadmap' AND o.entity_id=w.work_item_id;
-"""
+  ON o.scope='roadmap' AND o.entity_id=w.work_item_id"""
+
+SUMMARY_VIEW = """CREATE VIEW v_work_item_summary AS
+SELECT w.*, p.total_actionable, p.completed_actionable, p.progress_percent
+FROM v_roadmap_manual_order w
+JOIN v_work_item_progress p ON p.work_item_id=w.work_item_id"""
+
+READBACK_COLUMNS = {
+    "ai_priority_rank",
+    "manual_rank",
+    "manual_order_source",
+    "manual_order_source_modified_at",
+    "manual_order_updated_at",
+}
 
 
 def install_schema(conn: sqlite3.Connection) -> None:
@@ -53,6 +67,21 @@ def install_schema(conn: sqlite3.Connection) -> None:
             statement = ""
     if statement.strip():
         raise ManualOrderError("incomplete_manual_order_schema")
+    roadmap_columns = {
+        str(row[1]) for row in conn.execute("PRAGMA table_info(v_roadmap_manual_order)")
+    }
+    summary_columns = {
+        str(row[1]) for row in conn.execute("PRAGMA table_info(v_work_item_summary)")
+    }
+    rebuild_roadmap = not READBACK_COLUMNS.issubset(roadmap_columns)
+    rebuild_summary = rebuild_roadmap or not READBACK_COLUMNS.issubset(summary_columns)
+    if rebuild_summary:
+        conn.execute("DROP VIEW IF EXISTS v_work_item_summary")
+    if rebuild_roadmap:
+        conn.execute("DROP VIEW IF EXISTS v_roadmap_manual_order")
+        conn.execute(ROADMAP_VIEW)
+    if rebuild_summary:
+        conn.execute(SUMMARY_VIEW)
 
 
 def _transaction(conn: sqlite3.Connection) -> None:

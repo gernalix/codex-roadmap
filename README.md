@@ -102,6 +102,11 @@ rank e provenienza. Il rank manuale precede priorità/sort order soltanto dopo i
 filtri di eleggibilità; un item bloccato conserva il rank ma non viene lanciato.
 Spostare un nodo Workflowy tra sezioni di stato non produce alcuna mutazione di
 lifecycle in questo protocollo.
+Workflowy usa esclusivamente `python3 tools/c2_workflowy_order.py set --scope
+inbox|roadmap --source-modified-at VALUE ID...` oppure `clear --scope
+inbox|roadmap [ID...]`: l'helper legge l'identità corrente da
+`~/.config/c2-supervisor/runtime.env` e passa dal medesimo gate fenced di
+`c2_control`, senza esporre authority al chiamante.
 
 **Preparazione Codex di un intake verificato:** usa unicamente
 `python3 tools/c2_prepare_codex.py --spec <file.json>`. Il file deve fornire

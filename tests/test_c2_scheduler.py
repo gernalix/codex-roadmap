@@ -188,7 +188,7 @@ class SchedulerTests(unittest.TestCase):
             source='workflowy',source_modified_at='wf-2')
         readback=self.conn.execute(
             'SELECT manual_rank,manual_order_source,ai_priority_rank,sort_order,status '
-            'FROM v_roadmap_manual_order WHERE work_item_id=?',(p1,)).fetchone()
+            'FROM v_work_item_summary WHERE work_item_id=?',(p1,)).fetchone()
         self.assertEqual((0,'workflowy',1,2,'pending'),tuple(readback))
         self.assertEqual(p1,scheduler.schedule(
             self.conn,event_key='manual-priority',now=1,max_parallel=1)[0]['work_item_id'])
