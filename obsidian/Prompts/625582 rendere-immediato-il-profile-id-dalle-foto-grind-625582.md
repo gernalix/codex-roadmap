@@ -19,9 +19,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/rendere-immediato-il-profile-id-dalle-foto-grind-625582|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-27T10:44:26Z
+- **Ultimo lancio:** 2026-09-27T10:44:26Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -39,7 +39,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-27T10:44:26Z | 2026-09-27T10:44:29Z | UNKNOWN | 3.139 | codex-auto-review | low | 0 | 14124 |
 
 ## Analisi ChatGPT
 
