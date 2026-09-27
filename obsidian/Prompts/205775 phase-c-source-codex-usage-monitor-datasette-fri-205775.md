@@ -1,6 +1,6 @@
 ---
 prompt_id: 205775
-status: pending
+status: running
 project_id: 8
 model: GPT-6 Luna
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - phase-c
   - source-schema
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/codex-usage-monitor
 ---
 
 # 205775 · Phase C source — codex-usage-monitor Datasette friendliness
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/codex-usage-monitor|codex-usage-monitor]]
 - **Prompt:** [[../../prompts/phase-c-source-codex-usage-monitor-datasette-fri-205775|Apri prompt]]
 - **Primo lancio:** —
