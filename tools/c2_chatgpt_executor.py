@@ -11,6 +11,7 @@ SUPERVISOR_SRC=Path('/home/daniele/projects/chatgpt-rdc-supervisor/src')
 C2_GENERATION_SUSPECT_S=40
 C2_MAX_RECOVERY_ATTEMPTS=3
 LANE_STATE=Path.home()/'.local/state/chatgpt-rdc-supervisor/global.json'
+KILL_SWITCH=Path.home()/'.config/c2/disable-chat-supervisor'
 
 
 class ChatWorkerError(RuntimeError):
@@ -53,6 +54,8 @@ def _task_config(TaskConfig, *, work_item_id: str, db_path: Path,
 
 def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
              db_path: Path, receipt: Path, browser=None, store=None):
+    if KILL_SWITCH.exists():
+        return {'phase':'suspended','chat_url':None,'resubmitted':False}
     if lane_degraded():
         return {'phase':'suspended','chat_url':None,'resubmitted':False}
     if metadata.get('executor') not in ('chatgpt','rdc') or metadata.get('activity') not in ('gui','semantic'):
@@ -96,14 +99,27 @@ def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
         # A sent message without an acknowledged URL remains ambiguous;
         # never create another chat from the same run.
         return {'phase':state['phase'],'chat_url':state.get('chat_url'),'resubmitted':False}
+    ChatGPTBrowser, is_persisted_chat_url, TaskConfig, Store=_supervisor_types()
+    store=store or Store()
+    load_task=getattr(store,'load_task',None)
+    if load_task is not None:
+        try:
+            previous=load_task(work_item_id)
+        except FileNotFoundError:
+            previous=None
+        if previous is not None and is_persisted_chat_url(previous.chat_url):
+            if previous.project_url != project_url:
+                raise ChatWorkerError('browser_work_item_project_conflict')
+            state={'run_id':run_id,'work_item_id':work_item_id,'project_url':project_url,
+                   'phase':'started','chat_url':previous.chat_url}
+            persist(receipt,state)
+            return {'phase':'started','chat_url':previous.chat_url,'resubmitted':False}
     state={'run_id':run_id,'work_item_id':work_item_id,'project_url':project_url,'phase':'starting'}
     persist(receipt,state)
-    ChatGPTBrowser, is_persisted_chat_url, TaskConfig, Store=_supervisor_types()
     task=_task_config(TaskConfig,work_item_id=work_item_id,db_path=db_path,
         chat_url='',project_url=project_url)
     owned=browser is None
     browser=browser or ChatGPTBrowser()
-    store=store or Store()
     try:
         if owned:
             browser.connect()

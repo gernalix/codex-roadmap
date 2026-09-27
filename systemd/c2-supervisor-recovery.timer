@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the single C2 supervisor recovery controller
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=1min
+Persistent=true
+Unit=c2-supervisor-recovery.service
+
+[Install]
+WantedBy=timers.target
