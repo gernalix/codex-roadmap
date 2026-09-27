@@ -4,7 +4,7 @@
 
 ## Lanciabili adesso
 
-- Nessuno.
+- [[obsidian/Prompts/742579 rendere-il-db-grindr-favorites-frictionless-da-e-742579|742579 · Rendere il DB Grindr Favorites frictionless da esplorare]]
 
 ## In esecuzione
 
