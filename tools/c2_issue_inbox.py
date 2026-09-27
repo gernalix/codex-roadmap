@@ -9,6 +9,7 @@ import uuid
 
 import c2_identity
 import c2_intake
+import c2_human_copy
 
 
 ACTIVE_STATES = {"pending", "running", "waiting", "blocked", "needs_fix", "unknown"}
@@ -465,6 +466,10 @@ def promote(
     executor_policy: str = "auto",
     project: str | None = None,
     repo: str | None = None,
+    human_title: str | None = None,
+    ai_title: str | None = None,
+    human_summary: str | None = None,
+    copy_status: str = "complete",
 ) -> dict:
     """Absorb an observation into active work or create a successor/regression."""
     _transaction(conn)
@@ -472,6 +477,12 @@ def promote(
     matched = _matched(conn, matched_work_item_id)
     reason = _required_text(reason, "reason")
     triaged_by = _required_text(triaged_by, "triaged_by")
+
+    copy_values = (human_title, ai_title, human_summary)
+    if any(value is not None for value in copy_values) and not all(
+        value is not None for value in copy_values
+    ):
+        raise IssueInboxError("complete_human_copy_required")
 
     if matched and matched["status"] in ACTIVE_STATES:
         target = dict(matched)
@@ -484,6 +495,28 @@ def promote(
             project=project, repo=repo,
         )
         promoted_id = str(target["work_item_id"])
+
+    if all(value is not None for value in copy_values):
+        c2_human_copy.set_copy(
+            conn,
+            entity_kind="issue",
+            entity_id=str(issue["issue_id"]),
+            human_title=str(human_title),
+            ai_title=str(ai_title),
+            human_summary=str(human_summary),
+            copy_status=copy_status,
+            source="issue-triage",
+        )
+        c2_human_copy.set_copy(
+            conn,
+            entity_kind="work_item",
+            entity_id=promoted_id,
+            human_title=str(human_title),
+            ai_title=str(ai_title),
+            human_summary=str(human_summary),
+            copy_status=copy_status,
+            source="issue-triage",
+        )
 
     _record_evidence(conn, promoted_id, issue)
     triaged_at = int(time.time() * 1000)
@@ -555,7 +588,16 @@ def ensure_triage(conn: sqlite3.Connection, *, project_url: str) -> dict:
             "Use the canonical snapshot to identify "
             "related roadmap/repository work. Submit c2_promote_issue or c2_discard_issue "
             "through tools/c2_control.py with the current supervisor ID and fencing token. "
-            "For active matches, promote into the existing work item with evidence. "
+            "For every row, create human-facing copy before disposition. human_title must be "
+            "plain Italian, concrete, normally 20-90 characters (hard max 120), contain no "
+            "unnecessary IDs or implementation jargon, and never end in ellipsis. ai_title must "
+            "remain technically precise (hard max 220). human_summary must explain in 1-3 short "
+            "Italian sentences what changes and why it matters (hard max 600). If the source is "
+            "too ambiguous to translate safely, never guess: use copy_status=needs_clarification, "
+            "human_title='Chiarire: <area comprensibile>', and a human_summary stating exactly "
+            "what is missing. Submit c2_set_human_copy for the issue; when promoting, pass the "
+            "same human_title, ai_title, human_summary and copy_status so the roadmap item inherits "
+            "the copy. For active matches, promote into the existing work item with evidence. "
             "For completed matches, promote a regression successor; never discard as fixed. "
             "Before every promotion, review relative priority and dependencies in both "
             "directions against the current queue; encode verified changes explicitly. "

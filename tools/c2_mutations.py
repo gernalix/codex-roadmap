@@ -9,6 +9,7 @@ import c2_terminal_state_reimport
 import c2_work_item_admin
 import c2_issue_inbox
 import c2_manual_order
+import c2_human_copy
 import roadmap_db
 
 
@@ -19,7 +20,7 @@ SUPERVISOR_OPERATIONS = frozenset({
     'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item', 'bind_executor',
     'promote_issue', 'discard_issue', 'edit_issue', 'void_issue', 'ensure_issue_triage',
     'set_execution_override', 'clear_execution_override',
-    'set_manual_order', 'clear_manual_order',
+    'set_manual_order', 'clear_manual_order', 'set_human_copy',
 })
 
 
@@ -30,6 +31,7 @@ def apply(conn, mutation):
         conn.execute('BEGIN IMMEDIATE')
     c2_scheduler.install_schema(conn)
     c2_supervisor_authority.install_schema(conn)
+    c2_human_copy.install_schema(conn)
     action = mutation['op'].removeprefix('c2_')
     arguments = dict(mutation.get('arguments') or {})
     authority = arguments.pop('supervisor_authority', None)
@@ -63,6 +65,7 @@ def apply(conn, mutation):
         'clear_execution_override': c2_scheduler.clear_override,
         'set_manual_order': c2_manual_order.set_manual_order,
         'clear_manual_order': c2_manual_order.clear_manual_order,
+        'set_human_copy': c2_human_copy.set_copy,
         'acknowledge': c2_scheduler.acknowledge,
         'executor_started': c2_scheduler.executor_started,
         'bind_executor': c2_scheduler.bind_executor,
