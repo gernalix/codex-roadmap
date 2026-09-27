@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 import sys
 import tempfile
 import unittest
@@ -72,6 +73,60 @@ class WorkItemAdminTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "repository_evidence_required"):
             admin.reconcile(self.conn, self.root_id, classification="CURRENT_READY",
                             status="pending", evidence=[])
+
+    def test_updates_acceptance_and_adds_or_replaces_dependencies_and_tags(self):
+        old_dep = c2_intake.add_work_item(self.conn, title="Old dependency")
+        new_dep = c2_intake.add_work_item(self.conn, title="New dependency")
+        extra_dep = c2_intake.add_work_item(self.conn, title="Extra dependency")
+        self.conn.execute("INSERT INTO work_item_dependencies(work_item_id,depends_on_work_item_id,required,note) VALUES(?,?,0,'old')",
+                          (self.root_id, old_dep["work_item_id"]))
+        self.conn.execute("INSERT INTO work_item_tags(work_item_id,tag) VALUES(?, 'old-tag')", (self.root_id,))
+
+        admin.reconcile(
+            self.conn, self.root_id, classification="CURRENT_READY", status="pending",
+            evidence=["repo main abc123 acceptance reviewed"],
+            fields={"acceptance_json": ["First criterion", "Second criterion"]},
+            add_dependencies=[new_dep["work_item_id"]], add_tags=["new-tag"],
+        )
+        self.assertEqual(["First criterion", "Second criterion"], json.loads(self.conn.execute(
+            "SELECT acceptance_json FROM work_items WHERE work_item_id=?", (self.root_id,)
+        ).fetchone()[0]))
+        self.assertEqual({old_dep["work_item_id"], new_dep["work_item_id"]}, {
+            row[0] for row in self.conn.execute(
+                "SELECT depends_on_work_item_id FROM work_item_dependencies WHERE work_item_id=?", (self.root_id,)
+            )
+        })
+        self.assertEqual({"old-tag", "new-tag"}, {
+            row[0] for row in self.conn.execute("SELECT tag FROM work_item_tags WHERE work_item_id=?", (self.root_id,))
+        })
+
+        admin.reconcile(
+            self.conn, self.root_id, classification="CURRENT_READY", status="pending",
+            evidence=["repo main abc123 dependencies and tags replaced"],
+            replace_dependencies=[extra_dep["work_item_id"]], replace_tags=["replacement"],
+        )
+        self.assertEqual({extra_dep["work_item_id"]}, {
+            row[0] for row in self.conn.execute(
+                "SELECT depends_on_work_item_id FROM work_item_dependencies WHERE work_item_id=?", (self.root_id,)
+            )
+        })
+        self.assertEqual({"replacement"}, {
+            row[0] for row in self.conn.execute("SELECT tag FROM work_item_tags WHERE work_item_id=?", (self.root_id,))
+        })
+
+    def test_acceptance_dependencies_and_tags_validation_fail_closed(self):
+        dep = c2_intake.add_work_item(self.conn, title="Dependency")
+        with self.assertRaisesRegex(ValueError, "invalid_acceptance"):
+            admin.reconcile(self.conn, self.root_id, classification="CURRENT_READY", status="pending",
+                            evidence=["repo main abc123"], fields={"acceptance_json": [" "]})
+        with self.assertRaisesRegex(ValueError, "dependency_cycle"):
+            self.conn.execute("INSERT INTO work_item_dependencies(work_item_id,depends_on_work_item_id,required) VALUES(?,?,1)",
+                              (dep["work_item_id"], self.root_id))
+            admin.reconcile(self.conn, self.root_id, classification="CURRENT_READY", status="pending",
+                            evidence=["repo main abc123"], add_dependencies=[dep["work_item_id"]])
+        with self.assertRaisesRegex(ValueError, "invalid_tags"):
+            admin.reconcile(self.conn, self.root_id, classification="CURRENT_READY", status="pending",
+                            evidence=["repo main abc123"], replace_tags=[""])
 
 
 if __name__ == "__main__":

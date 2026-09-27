@@ -19,7 +19,7 @@ CLASS_STATUSES = {
 }
 EDITABLE_FIELDS = {
     "title", "objective", "current_action", "next_action", "blocker",
-    "sort_order", "executor_policy", "repo", "actionable",
+    "sort_order", "executor_policy", "repo", "actionable", "acceptance_json",
 }
 TERMINAL = {"completed", "cancelled", "superseded"}
 
@@ -34,6 +34,10 @@ def reconcile(
     fields: dict | None = None,
     superseded_by: str | None = None,
     remove_dependencies: list[str] | None = None,
+    add_dependencies: list[str] | None = None,
+    replace_dependencies: list[str] | None = None,
+    add_tags: list[str] | None = None,
+    replace_tags: list[str] | None = None,
     include_descendants: bool = False,
 ) -> None:
     """Update one root and, for terminal dispositions, its imported descendants."""
@@ -42,6 +46,42 @@ def reconcile(
         raise ValueError("invalid_work_item_classification")
     if set(fields) - EDITABLE_FIELDS or "status" in fields:
         raise ValueError("invalid_work_item_fields")
+    if "acceptance_json" in fields:
+        acceptance = fields["acceptance_json"]
+        if not isinstance(acceptance, list) or any(
+            not isinstance(item, str) or not item.strip() for item in acceptance
+        ):
+            raise ValueError("invalid_acceptance")
+        fields["acceptance_json"] = json.dumps(acceptance, ensure_ascii=False)
+    if replace_dependencies is not None and add_dependencies:
+        raise ValueError("dependency_add_replace_conflict")
+    if replace_tags is not None and add_tags:
+        raise ValueError("tag_add_replace_conflict")
+    for values, error in (
+        (remove_dependencies, "invalid_dependencies"),
+        (add_dependencies, "invalid_dependencies"),
+        (replace_dependencies, "invalid_dependencies"),
+        (add_tags, "invalid_tags"),
+        (replace_tags, "invalid_tags"),
+    ):
+        if values is not None:
+            if (not isinstance(values, list)
+                    or any(not isinstance(value, str) or not value.strip() for value in values)):
+                raise ValueError(error)
+            normalized = [value.strip() for value in values]
+            if len(normalized) != len(set(normalized)):
+                raise ValueError(error)
+            if error == "invalid_dependencies":
+                if values is remove_dependencies:
+                    remove_dependencies = normalized
+                elif values is add_dependencies:
+                    add_dependencies = normalized
+                else:
+                    replace_dependencies = normalized
+            elif values is add_tags:
+                add_tags = normalized
+            else:
+                replace_tags = normalized
     if not isinstance(evidence, list) or not evidence or any(
         not isinstance(fact, str) or not fact.strip() for fact in evidence
     ):
@@ -76,16 +116,39 @@ def reconcile(
             "SELECT 1 FROM work_items WHERE work_item_id=?", (superseded_by,)
         ).fetchone():
             raise ValueError("invalid_superseding_work_item")
+    desired_dependencies = replace_dependencies
+    for dependency in (add_dependencies or []) + (replace_dependencies or []):
+        if dependency == work_item_id or not conn.execute(
+            "SELECT 1 FROM work_items WHERE work_item_id=?", (dependency,)
+        ).fetchone():
+            raise ValueError("dependency_not_found")
+        if conn.execute("""WITH RECURSIVE ancestors(id) AS (
+            SELECT depends_on_work_item_id FROM work_item_dependencies WHERE work_item_id=?
+            UNION SELECT d.depends_on_work_item_id FROM work_item_dependencies d
+            JOIN ancestors a ON d.work_item_id=a.id
+        ) SELECT 1 FROM ancestors WHERE id=? LIMIT 1""",
+            (dependency, work_item_id)).fetchone():
+            raise ValueError("dependency_cycle")
     for dependency in remove_dependencies or []:
-        if not conn.execute("""SELECT 1 FROM work_item_dependencies
-            WHERE work_item_id=? AND depends_on_work_item_id=?""",
-            (work_item_id, dependency)).fetchone():
+        if not conn.execute("SELECT 1 FROM work_item_dependencies WHERE work_item_id=? AND depends_on_work_item_id=?",
+                            (work_item_id, dependency)).fetchone():
             raise ValueError("dependency_not_found")
 
     now = c2_identity.utc_now()
     assignments = ["status=?", "updated_at=?", *(f"{key}=?" for key in fields)]
     conn.execute(f"UPDATE work_items SET {','.join(assignments)} WHERE work_item_id=?",
                  [status, now, *fields.values(), work_item_id])
+    if desired_dependencies is not None:
+        conn.execute("DELETE FROM work_item_dependencies WHERE work_item_id=?", (work_item_id,))
+    for dependency in (add_dependencies or []) if desired_dependencies is None else desired_dependencies:
+        conn.execute("""INSERT OR IGNORE INTO work_item_dependencies
+            (work_item_id,depends_on_work_item_id,required,note) VALUES(?,?,1,'c2_reconcile_item')""",
+            (work_item_id, dependency))
+    if replace_tags is not None:
+        conn.execute("DELETE FROM work_item_tags WHERE work_item_id=?", (work_item_id,))
+    for tag in (add_tags or []) if replace_tags is None else replace_tags:
+        conn.execute("INSERT OR IGNORE INTO work_item_tags(work_item_id,tag) VALUES(?,?)",
+                     (work_item_id, tag.strip()))
     if descendants:
         conn.executemany("""UPDATE work_items SET status=?,updated_at=?
             WHERE work_item_id=? AND status NOT IN ('completed','cancelled','superseded','waived','failed')""",
