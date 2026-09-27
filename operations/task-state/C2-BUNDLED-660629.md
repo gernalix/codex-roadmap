@@ -21,10 +21,10 @@ Implement the already-started C2 supervisor controls and fix the live scheduler 
 - [x] Distinguish status-only same-repo running rows from actual repo writer ownership.
 - [x] Add focused regressions for orchestration rows, active runs, and prompt-backed writers.
 - [x] Run final scheduler/runtime and full C2 verification for the blocker fix.
-- [ ] Commit and push the blocker fix on task/660629.
+- [x] Commit and push the blocker fix on task/660629.
 
 # Current step
-Review the final diff, then commit and push the scheduler blocker fix.
+Scheduler blocker fix complete and pushed; do not terminalize the supervisor prompt.
 
 # Verified facts
 - Branch task/660629 started clean.
@@ -38,6 +38,7 @@ Review the final diff, then commit and push the scheduler blocker fix.
 - The live blocker is caused by same-repo peer queries treating every running row as a writer even when it has no active run or configured worktree.
 - Focused scheduler/runtime tests for the blocker fix pass 57/57.
 - The complete isolated `test_c2_*.py` subset passes 213/213 after the fix.
+- Commit `8ae8aa53` is pushed to `origin/task/660629`.
 
 # Decisions
 - Derive Git writable roots from the assigned worktree at launch; never accept arbitrary roots from prompt metadata.
@@ -55,7 +56,7 @@ Review the final diff, then commit and push the scheduler blocker fix.
 - Added regressions proving a status-only orchestration row does not block while active runs and prompt-backed worktree writers still do.
 
 # Remaining work
-Commit and push.
+None.
 
 # Blockers
 No implementation blocker. The full C2 subset passes in an isolated test environment.
@@ -68,9 +69,10 @@ No implementation blocker. The full C2 subset passes in an isolated test environ
 - Full C2 subset with inherited session identity removed: 210 PASS.
 - Blocker-fix focused scheduler/runtime suite: 57 PASS.
 - Blocker-fix full C2 subset with inherited session identity removed: 213 PASS.
+- `git diff --check` PASS; commit `8ae8aa53` pushed.
 
 # Acceptance criteria
 Focused regressions prove scoped commit-capable sandbox roots, automatic activity-backed liveness, idempotent resume outcomes, and correct repo writer occupancy; focused tests and diff check pass; commits are pushed.
 
 # Next action
-Commit and push the blocker fix on task/660629.
+Stop without terminalizing PROMPT_ID=660629.
