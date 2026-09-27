@@ -381,6 +381,11 @@ class IssueInboxTests(unittest.TestCase):
                 url = c2_runtime.C2_TRIAGE_PROJECT_URL
                 first = c2_issue_inbox.ensure_triage(conn, project_url=url)
                 self.assertEqual('created', first['state'])
+                objective = conn.execute(
+                    'SELECT objective FROM work_items WHERE work_item_id=?',
+                    (first['work_item_id'],)).fetchone()[0]
+                self.assertIn('relative priority', objective)
+                self.assertIn('dependencies in both directions', objective)
                 self.assertEqual(first['work_item_id'], c2_issue_inbox.ensure_triage(
                     conn, project_url=url)['work_item_id'])
                 conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?",
