@@ -1,6 +1,6 @@
 ---
 prompt_id: 999198
-status: pending
+status: running
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - priority:p0
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 999198 · Correggere mapping prompt_id→work_item_id nel cutover C2
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/correggere-mapping-prompt-id-work-item-id-nel-cu-999198|Apri prompt]]
 - **Primo lancio:** —
