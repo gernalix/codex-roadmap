@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+from contextlib import closing
 import json
 import os
 import re
@@ -120,7 +121,7 @@ def _require_canonical_claim(
 ) -> None:
     """A closed Issue alone may be a no-op replay of an older claim."""
     path = repo.expanduser().resolve() / "roadmap.sqlite"
-    with sqlite3.connect(f"file:{path}?mode=ro", uri=True) as conn:
+    with closing(sqlite3.connect(f"file:{path}?mode=ro", uri=True)) as conn:
         status = conn.execute(
             "SELECT status FROM prompts WHERE prompt_id=?", (prompt_id,)
         ).fetchone()
