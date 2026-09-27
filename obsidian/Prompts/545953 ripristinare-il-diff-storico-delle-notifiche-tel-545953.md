@@ -16,9 +16,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/telegram-insert-bot|telegram_insert_bot]]
 - **Prompt:** [[../../falliti/ripristinare-il-diff-storico-delle-notifiche-tel-545953|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-27T10:45:40Z
+- **Ultimo lancio:** 2026-09-27T10:45:40Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -36,7 +36,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-27T10:45:40Z | 2026-09-27T10:45:42Z | UNKNOWN | 2.415 | codex-auto-review | low | 0 | 18673 |
 
 ## Analisi ChatGPT
 
