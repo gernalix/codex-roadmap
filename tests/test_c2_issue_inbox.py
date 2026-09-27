@@ -1,6 +1,8 @@
 from contextlib import closing
 from pathlib import Path
 import sys
+import io
+import json
 import tempfile
 import time
 import unittest
@@ -41,6 +43,19 @@ class IssueInboxTests(unittest.TestCase):
                 self.assertEqual(2, conn.execute(
                     "SELECT COUNT(*) FROM issue_inbox"
                 ).fetchone()[0])
+            finally:
+                conn.close()
+
+    def test_capture_preserves_exact_multiline_description_without_execution_identity(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute("BEGIN IMMEDIATE")
+                body = "  First line\nsecond line\n"
+                row = c2_issue_inbox.capture(conn, description=body)
+                self.assertEqual(body, row["description"])
+                self.assertIsNone(row["origin_run_id"])
+                self.assertIsNone(row["origin_work_item_id"])
             finally:
                 conn.close()
 
@@ -284,6 +299,35 @@ class IssueInboxTests(unittest.TestCase):
         self.assertEqual('run-known', args['run_id'])
         self.assertNotIn('repo', args)
         self.assertNotIn('code_location', args)
+
+    def test_capture_cli_native_sources_and_idempotent_identity(self):
+        body = "  Long text\nwith punctuation: $ ` \\ \n"
+        submitted = []
+        def record(doc, **kwargs):
+            submitted.append((doc, kwargs))
+            return {'status': 'queued'}
+        with tempfile.TemporaryDirectory() as tmp, \
+             patch.dict('os.environ', {}, clear=True), \
+             patch.object(c2_issue_capture, 'submit_document', side_effect=record), \
+             patch('sys.stdout', new_callable=io.StringIO):
+            source = Path(tmp) / 'issue.txt'
+            source.write_text(body)
+            with patch('sys.argv', ['capture', '--file', str(source)]):
+                self.assertEqual(0, c2_issue_capture.main())
+            with patch('sys.argv', ['capture', '--stdin']), \
+                 patch('sys.stdin', io.StringIO(body)):
+                self.assertEqual(0, c2_issue_capture.main())
+            identity = 'issue:' + 'a' * 32
+            payload = json.dumps({'issue_id': identity, 'description': body, 'repo': 'example/repo'})
+            for _ in range(2):
+                with patch('sys.argv', ['capture', '--json', payload]):
+                    self.assertEqual(0, c2_issue_capture.main())
+        self.assertEqual([body] * 4,
+                         [item[0]['operations'][0]['arguments']['description'] for item in submitted])
+        self.assertNotEqual(submitted[0][1]['request_key'], submitted[1][1]['request_key'])
+        self.assertEqual(submitted[2][1]['request_key'], submitted[3][1]['request_key'])
+        self.assertTrue(submitted[2][1]['lookup_existing'])
+        self.assertEqual('example/repo', submitted[2][0]['operations'][0]['arguments']['repo'])
 
     def test_manual_start_receipt_resolves_executor_without_run_binding(self):
         with tempfile.TemporaryDirectory() as tmp:
