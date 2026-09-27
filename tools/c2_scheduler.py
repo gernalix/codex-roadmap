@@ -664,7 +664,12 @@ def executor_result(conn, *, outcome, work_item_id=None, prompt_id=None, run_id=
              'remaining':remaining,'evidence':evidence,'blocker':blocker,
              'next_action':next_action,'strict_contract':bool(strict_contract)}
     digest=hashlib.sha256(json.dumps(payload,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
-    receipt_id='run:'+str(run_id) if run_id else ('prompt:'+str(prompt_id) if prompt_id else 'work-item:'+work_item_id)
+    # A scheduled run has one immutable result.  Manual/non-prompt work has no
+    # run identity, so retain every lifecycle-admitted result as its own
+    # immutable receipt instead of conflating different submissions.
+    receipt_id=('run:'+str(run_id) if run_id else
+                ('prompt:'+str(prompt_id) if prompt_id else
+                 'work-item:'+work_item_id+':'+digest[:32]))
     existing=conn.execute('SELECT payload_sha256,outcome FROM work_item_result_receipts WHERE receipt_id=?',
                           (receipt_id,)).fetchone()
     if existing:
@@ -673,23 +678,6 @@ def executor_result(conn, *, outcome, work_item_id=None, prompt_id=None, run_id=
         return {'receipt_id':receipt_id,'work_item_id':work_item_id,'run_id':run_id,
                 'prompt_id':prompt_id,'outcome':outcome,'target_status':RESULT_STATUS[outcome],
                 'idempotent':True}
-    conn.execute("""INSERT INTO work_item_result_receipts(
-      receipt_id,work_item_id,run_id,prompt_id,outcome,summary,completed_json,remaining_json,
-      evidence_json,blocker,next_action,strict_contract,payload_sha256,captured_at)
-      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
-      (receipt_id,work_item_id,run_id,prompt_id,outcome,summary,json.dumps(completed),
-       json.dumps(remaining),json.dumps(evidence),blocker,next_action,int(bool(strict_contract)),
-       digest,time.time()))
-    for fact in evidence:
-        conn.execute("""INSERT OR IGNORE INTO work_item_evidence
-          (work_item_id,evidence_kind,label,uri,value_json,created_at)
-          VALUES(?,'executor_result',?,NULL,?,?)""",
-          (work_item_id,fact[:120],json.dumps(fact,ensure_ascii=False),
-           time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())))
-    if item['status'] in ('pending','running','waiting','blocked'):
-        conn.execute("""UPDATE work_items SET current_action=?,next_action=?,blocker=?
-          WHERE work_item_id=?""",(summary or ('Completed' if outcome=='PASS' else outcome),
-                                  next_action,blocker,work_item_id))
     if outcome=='PASS':
         missing=conn.execute('''WITH RECURSIVE children(id) AS (
           SELECT work_item_id FROM work_items WHERE parent_id=?
@@ -709,6 +697,24 @@ def executor_result(conn, *, outcome, work_item_id=None, prompt_id=None, run_id=
             conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(run_id,))
         if item['status'] not in (target,'pending','running','waiting','blocked'):
             raise SchedulingError('executor_result_item_state_conflict')
+    conn.execute("""INSERT INTO work_item_result_receipts(
+      receipt_id,work_item_id,run_id,prompt_id,outcome,summary,completed_json,remaining_json,
+      evidence_json,blocker,next_action,strict_contract,payload_sha256,captured_at)
+      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+      (receipt_id,work_item_id,run_id,prompt_id,outcome,summary,json.dumps(completed),
+       json.dumps(remaining),json.dumps(evidence),blocker,next_action,int(bool(strict_contract)),
+       digest,time.time()))
+    for fact in evidence:
+        conn.execute("""INSERT OR IGNORE INTO work_item_evidence
+          (work_item_id,evidence_kind,label,uri,value_json,created_at)
+          VALUES(?,'executor_result',?,NULL,?,?)""",
+          (work_item_id,fact[:120],json.dumps(fact,ensure_ascii=False),
+           time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())))
+    if item['status'] in ('pending','running','waiting','blocked'):
+        conn.execute("""UPDATE work_items SET current_action=?,next_action=?,blocker=?
+          WHERE work_item_id=?""",(summary or ('Completed' if outcome=='PASS' else outcome),
+                                  next_action,blocker,work_item_id))
+    if not prompt_id:
         conn.execute('UPDATE work_items SET status=?,blocker=? WHERE work_item_id=?',
                      (target,blocker,work_item_id))
         if outcome=='PASS':
