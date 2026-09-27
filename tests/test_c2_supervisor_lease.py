@@ -51,11 +51,9 @@ class SupervisorLeaseTests(unittest.TestCase):
                         supervisor_id='runtime',now=0,ttl=1000)
                 self.assertEqual('suspected_stall',watch_once(db,now=40)['state'])
                 self.assertEqual('final_verification',watch_once(db,now=90)['state'])
-                launched=[]
-                result=watch_once(db,now=180,launch=lambda row:
-                    (launched.append(row['retirement_reason']) or {'state':'prepared'}))
-                self.assertEqual(['progress_stalled'],launched)
-                self.assertEqual('prepared',result['state'])
+                result=watch_once(db,now=180)
+                self.assertEqual('recovery_required',result['state'])
+                self.assertEqual('progress_stalled',result['reason'])
 
     def test_successor_fences_expired_primary_without_duplicate_recovery(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -70,13 +68,8 @@ class SupervisorLeaseTests(unittest.TestCase):
                 self.assertEqual(progress['last_progress_at'], 102)
                 with self.assertRaisesRegex(LeaseError, 'primary_lease_held'):
                     acquire(db, owner='second', pointer='/tmp/pointer', now=103)
-                dispatched = []
-                def prepare(row):
-                    dispatched.append(row['supervisor_id'])
-                    return {'state': 'prepared', 'session_id': 'https://chatgpt.com/c/test'}
-                watch_once(db, launch=prepare, now=113)
-                watch_once(db, launch=prepare, now=114)
-                self.assertEqual(dispatched, ['first'])
+                self.assertEqual('recovery_required', watch_once(db, now=113)['state'])
+                self.assertEqual('recovery_required', watch_once(db, now=114)['state'])
                 self.assertEqual(snapshot(db)['state'], 'retired')
                 with self.assertRaisesRegex(LeaseError, 'supervisor_id_reused'):
                     acquire(db, owner='second', pointer='/tmp/pointer',

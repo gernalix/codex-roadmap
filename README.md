@@ -34,6 +34,18 @@ Non implementare miglioramenti per eleganza, completezza teorica, telemetria agg
 
 ## Protocollo PBF
 
+### C2 supervisor recovery
+
+`c2-supervisor-watchdog.service` only detects/fences stale lease state. The
+separate `c2-supervisor-recovery.service` is the sole controller that may
+prepare a recovery chat or start a missing dedicated browser/supervisor.
+Its receipt is keyed by `SUPERVISOR_RECOVERY_ID`; an ambiguous send remains
+reserved and cannot create a second chat. The controller timer runs once per
+minute after installing both files from `systemd/` into the user systemd unit
+directory and enabling `c2-supervisor-recovery.timer`. Browser health only
+reports CDP state. `~/.config/c2/disable-chat-supervisor` blocks all new
+launcher activity and is removed only after the underlying cause is reviewed.
+
 ### Riconciliazione dei BLOCKED
 
 Un item `blocked` resta tale finché una prova canonica non risolve il suo

@@ -107,3 +107,33 @@ class BrowserExecutorTests(unittest.TestCase):
             self.assertEqual('suspended',result['phase'])
             self.assertFalse(receipt.exists())
             self.assertEqual([],browser.calls)
+
+    def test_kill_switch_suspends_before_receipt_or_browser_launch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            browser=FakeBrowser();receipt=Path(tmp)/'r.json';kill=Path(tmp)/'disable-chat-supervisor'
+            kill.touch()
+            with patch('c2_chatgpt_executor.KILL_SWITCH',kill):
+                result=dispatch(run_id='one',work_item_id='wi:fixture',
+                    metadata={'executor':'chatgpt','activity':'semantic',
+                              'project_url':'https://chatgpt.com/g/g-p-project'},
+                    prompt='Decide',db_path=Path(tmp)/'db',receipt=receipt,
+                    browser=browser,store=FakeStore())
+            self.assertEqual('suspended',result['phase'])
+            self.assertFalse(receipt.exists())
+            self.assertEqual([],browser.calls)
+
+    def test_new_run_reuses_persisted_work_item_chat(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            browser=FakeBrowser();receipt=Path(tmp)/'new-run.json'
+            class ExistingStore(FakeStore):
+                def load_task(self, task_id):
+                    return SimpleNamespace(chat_url='https://chatgpt.com/c/existing',
+                                           project_url='https://chatgpt.com/g/g-p-project')
+            result=dispatch(run_id='new-run',work_item_id='wi:fixture',
+                metadata={'executor':'chatgpt','activity':'semantic',
+                          'project_url':'https://chatgpt.com/g/g-p-project'},
+                prompt='Resume',db_path=Path(tmp)/'db',receipt=receipt,
+                browser=browser,store=ExistingStore())
+            self.assertEqual('https://chatgpt.com/c/existing',result['chat_url'])
+            self.assertEqual([],browser.calls)
+            self.assertEqual('started',__import__('json').loads(receipt.read_text())['phase'])
