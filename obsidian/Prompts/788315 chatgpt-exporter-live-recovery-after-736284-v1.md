@@ -37,6 +37,7 @@ Riprende il blocco di ChatGPTExporter: corregge il percorso reale dell'estension
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-22T22:02:18Z | 2026-09-22T22:12:06Z | UNKNOWN | 588.888 | gpt-6-sol | medium | 25 | 205692 |
 | 2026-09-23T03:03:56Z | 2026-09-23T03:04:10Z | UNKNOWN | 14.514 | gpt-6-sol | medium | 1 | 80463 |
+| 2026-09-23T09:08:56Z | 2026-09-23T09:09:15Z | UNKNOWN | 18.92 | gpt-6-sol | medium | 1 | 136892 |
 | 2026-09-24T00:29:56Z | 2026-09-24T00:30:08Z | UNKNOWN | 11.813 | gpt-6-sol | medium | 1 | 189109 |
 | 2026-09-24T01:47:25Z | 2026-09-24T01:47:38Z | UNKNOWN | 13.222 | gpt-6-sol | medium | 1 | 197425 |
 | 2026-09-24T01:57:25Z | 2026-09-24T01:57:34Z | UNKNOWN | 8.949 | gpt-6-sol | medium | 1 | 201150 |
