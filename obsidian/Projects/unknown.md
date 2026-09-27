@@ -6,8 +6,8 @@ tags:
 # Unknown
 
 - [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479|853479 · Phase A — MegaVault one source of truth definitiva]] · `running`
+- [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]] · `running`
 - [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] · `pending`
-- [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]] · `pending`
 - [[obsidian/Prompts/318410 riparare-il-rilevamento-composer-del-c2-chatgpt--318410|318410 · Riparare il rilevamento composer del C2 ChatGPT browser executor]] · `pending`
 - [[obsidian/Prompts/377172 aggiornare-documentazione-grindr-callback-queue--377172|377172 · Aggiornare documentazione Grindr callback queue/worker]] · `pending`
 - [[obsidian/Prompts/575295 regression-c2-issue-1310-grindr-favorites-histor-575295|575295 · Regression: C2 Issue #1310 Grindr favorites history and Telegram actions]] · `pending`
