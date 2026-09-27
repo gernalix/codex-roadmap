@@ -16,7 +16,7 @@ OPERATIONS = (
     'mark_milestone','reimport_terminal_state','repair_prompt_materialization',
     'reconcile_item','executor_started','bind_executor','promote_issue','discard_issue',
     'edit_issue','void_issue',
-    'ensure_issue_triage','set_manual_order','clear_manual_order',
+    'ensure_issue_triage','set_manual_order','clear_manual_order','set_human_copy',
 )
 
 

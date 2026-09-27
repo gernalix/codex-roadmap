@@ -55,6 +55,22 @@ CREATE TABLE IF NOT EXISTS work_item_tags (
   PRIMARY KEY (work_item_id, tag)
 );
 
+CREATE TABLE IF NOT EXISTS c2_human_copy (
+  entity_kind TEXT NOT NULL CHECK(entity_kind IN ('work_item','issue')),
+  entity_id TEXT NOT NULL,
+  human_title TEXT NOT NULL,
+  ai_title TEXT NOT NULL,
+  human_summary TEXT NOT NULL,
+  copy_status TEXT NOT NULL DEFAULT 'complete'
+    CHECK(copy_status IN ('complete','fallback','needs_clarification')),
+  source TEXT NOT NULL DEFAULT 'ai',
+  source_sha256 TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  PRIMARY KEY(entity_kind, entity_id)
+);
+CREATE INDEX IF NOT EXISTS idx_c2_human_copy_status
+  ON c2_human_copy(copy_status, entity_kind, entity_id);
+
 CREATE TABLE IF NOT EXISTS manual_order_overrides (
   scope TEXT NOT NULL CHECK(scope IN ('inbox','roadmap')),
   entity_id TEXT NOT NULL,
