@@ -1,5 +1,8 @@
 # Codex instructions — codex-roadmap
 
+Every C2 executor follows [the common C2 executor contract](C2_EXECUTOR_CONTRACT.md).
+The rules below describe repository-specific and prompt-specific procedures.
+
 ## C2 repository/worktree contract
 
 - C2 is the sole PersonalHub orchestrator. A PersonalHub adapter, if used, is a C2 executor under its run and resource leases. Declare shared Pixel/TCL/ADB/release/install surfaces as explicit resources on execution specs.
@@ -27,13 +30,13 @@ Never directly edit or commit canonical/generated roadmap state to perform a roa
 
 Instead, submit one immutable `codex-roadmap.mutation.v1` request as a GitHub Issue named `[roadmap-mutation] <request_key>`, normally through `tools/submit_mutation.py`. Let `.github/workflows/apply-roadmap-mutations.yml` serialize, apply, render, commit and push it.
 
-All terminal Codex results must use `tools/roadmap_finish.py --result PASS|BLOCKED|FAIL|CANCELLED`. `roadmap_result.py` is an internal compatibility helper only and must not be used as a second operational entry point.
+Prompt-backed Codex results use `tools/roadmap_finish.py --result PASS|BLOCKED|FAIL|CANCELLED`. Non-prompt work-item results use `tools/c2_executor_result.py`; `roadmap_result.py` is an internal compatibility helper.
 
-C2 execution has an explicit start boundary: scheduler assignment/claim is not proof that an executor actually began work. Before substantive work, every executor must have queued one writer-owned `executor_started` receipt. C2-managed workers do this automatically before native/ChatGPT/RDC/Codex execution and conversation binding only enriches the same receipt. A manually launched executor must first run `python3 ~/projects/codex-roadmap/tools/c2_executor_start.py` with the identity it actually has: `--work-item-id <wi:...>` for non-prompt C2 work, or after `roadmap_start.py`, `--prompt-id <PROMPT_ID>` for prompt-backed work. Manual non-prompt start atomically claims a runnable pending work item and records the executor; PROMPT_ID is not required. Do not proceed if submission fails.
+Apply the contract's start boundary. C2-managed workers emit the receipt automatically. Manual non-prompt start atomically claims a runnable pending item and records its executor; conversation binding enriches the same receipt.
 
 For a verified non-prompt intake that must become Codex-backed, the only manual preparation entry point is `python3 tools/c2_prepare_codex.py --spec <json>`. The spec must explicitly provide prompt source, exact model/reasoning and coding/diagnostic activity. The helper may move a waiting/blocked item to ready only with caller-supplied readiness evidence, then uses the single writer for materialization/configuration, allocates or reuses one isolated worktree, verifies canonical readback, and stops with the item still pending. It must never dispatch or infer missing execution metadata from prose. Do not use the direct `c2_intake.py prepare-codex` CLI.
 
-C2 executors share one terminal contract: submit a structured result receipt through the single writer (`C2_RESULT` is the Codex text fallback; legacy `PROMPT_ID`/`RESULT` remains recoverable). The writer receipt is authoritative. PASS requires evidence and validated acceptance; repository-backed PASS finalizes only after `repo_single_writer.py status-any --task-id <PROMPT_ID>` reports merged. Native C2 runtime reconciliation replays an existing PASS receipt after merge; never infer completion from a turn ending, and never wait on integration in a model turn. BLOCKED/FAIL/CANCELLED finalize without the merge gate.
+The writer receipt is authoritative for terminal outcomes. `C2_RESULT` is the Codex text fallback; legacy `PROMPT_ID`/`RESULT` remains recoverable. Native reconciliation replays an existing PASS receipt after repository integration.
 
 For requests to update/optimize/reorganize the C2 roadmap, follow `C2_SEMANTIC_REORGANIZATION.md`: deterministic scripts own factual sync/lifecycle/reconciliation; AI performs only semantic judgments; all canonical changes still go through the single writer. Do not execute roadmap tasks during a roadmap-only semantic reorganization.
 
@@ -124,7 +127,7 @@ Live lifecycle protection is mandatory:
 - `tools/roadmap_start.py` remains the authoritative synchronous launch claim and must run before substantive project work.
 - `codex-roadmap-live-status.timer` is a start-claim safety net only: it tails native Codex rollouts and claims a newly observed six-digit PROMPT_ID when the explicit start path was missed. Terminal events never trigger publication, sync or finalization from this watcher.
 - The writer prioritizes start claims before ordinary mutations so a prompt that is actually running is locked before queued edits can supersede, reorder, retag, or otherwise mutate it.
-- `roadmap_finish.py` is the only operational terminal entry point. Its explicit terminal request is authoritative. `codex-usage` is strictly telemetry/audit: it may record outcome mismatches or missing-finalization anomalies, but it never starts, completes, blocks or fails a prompt.
+- `roadmap_finish.py` is the prompt-backed terminal entry point. `codex-usage` is strictly telemetry/audit: it may record outcome mismatches or missing-finalization anomalies, but it never starts, completes, blocks or fails a prompt.
 
 Every Codex report tied to a roadmap task must begin on line 1 with exactly `PROMPT_ID=<six-digit id>` for that task. This applies both to the final Codex response and to any Markdown/text report artifact Codex produces. When a terminal result is reported, `RESULT=PASS|BLOCKED|FAIL` belongs on line 2, not line 1.
 

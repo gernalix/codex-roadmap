@@ -2,6 +2,8 @@
 
 > `roadmap.sqlite` è la source of truth. Le viste Markdown sono generate.
 
+Per ogni executor C2 vale [C2_EXECUTOR_CONTRACT.md](C2_EXECUTOR_CONTRACT.md); qui ci sono le istruzioni specifiche per i prompt Codex.
+
 ## Percorso normale
 
 Per una sessione Codex Desktop:
