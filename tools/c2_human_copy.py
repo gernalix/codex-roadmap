@@ -6,6 +6,7 @@ or canonical technical titles.
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import sqlite3
 
@@ -68,22 +69,42 @@ def _validate(human_title: str, ai_title: str, human_summary: str, copy_status: 
         raise HumanCopyError("human_title_must_not_be_truncated")
     return human_title, ai_title, human_summary, copy_status
 
-def source_text(conn: sqlite3.Connection, entity_kind: str, entity_id: str) -> str:
+def source_document(conn: sqlite3.Connection, entity_kind: str, entity_id: str) -> dict:
+    """Return the lifecycle-aware source used to fence asynchronous humanization."""
     if entity_kind == "work_item":
         row = conn.execute(
-            "SELECT title,objective FROM work_items WHERE work_item_id=?", (entity_id,)
+            """SELECT title,objective,status,current_action,next_action,blocker
+               FROM work_items WHERE work_item_id=?""",
+            (entity_id,),
         ).fetchone()
         if not row:
             raise HumanCopyError("work_item_not_found")
-        return str(row[0] or "") + "\n" + str(row[1] or "")
+        return {
+            "title": row[0], "objective": row[1], "status": row[2],
+            "current_action": row[3], "next_action": row[4], "blocker": row[5],
+        }
     if entity_kind == "issue":
         row = conn.execute(
-            "SELECT description FROM issue_inbox WHERE issue_id=?", (entity_id,)
+            """SELECT description,state,matched_work_item_id,promoted_work_item_id,
+                      disposition_reason
+               FROM issue_inbox WHERE issue_id=?""",
+            (entity_id,),
         ).fetchone()
         if not row:
             raise HumanCopyError("issue_not_found")
-        return str(row[0] or "")
+        return {
+            "description": row[0], "state": row[1],
+            "matched_work_item_id": row[2], "promoted_work_item_id": row[3],
+            "disposition_reason": row[4],
+        }
     raise HumanCopyError("invalid_entity_kind")
+
+def source_sha256(conn: sqlite3.Connection, entity_kind: str, entity_id: str) -> str:
+    raw = json.dumps(
+        source_document(conn, entity_kind, entity_id),
+        ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+    ).encode()
+    return hashlib.sha256(raw).hexdigest()
 
 def set_copy(
     conn: sqlite3.Connection,
@@ -95,6 +116,7 @@ def set_copy(
     human_summary: str,
     copy_status: str = "complete",
     source: str = "ai",
+    expected_source_sha256: str | None = None,
 ) -> dict:
     if not conn.in_transaction:
         raise HumanCopyError("canonical_writer_transaction_required")
@@ -107,8 +129,13 @@ def set_copy(
         human_title, ai_title, human_summary, copy_status
     )
     source = _one_line(source, "source")
-    raw = source_text(conn, entity_kind, entity_id)
-    digest = hashlib.sha256(raw.encode()).hexdigest()
+    digest = source_sha256(conn, entity_kind, entity_id)
+    if expected_source_sha256 is not None:
+        expected = str(expected_source_sha256).strip().lower()
+        if not re.fullmatch(r"[0-9a-f]{64}", expected):
+            raise HumanCopyError("invalid_expected_source_sha256")
+        if expected != digest:
+            raise HumanCopyError("stale_human_copy_source")
     now = c2_identity.utc_now()
     conn.execute(
         """INSERT INTO c2_human_copy(
@@ -134,6 +161,7 @@ def set_copy(
         "human_summary": human_summary,
         "copy_status": copy_status,
         "source": source,
+        "source_sha256": digest,
     }
 
 def get_copy(conn: sqlite3.Connection, entity_kind: str, entity_id: str) -> dict | None:

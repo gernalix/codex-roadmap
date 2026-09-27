@@ -109,6 +109,45 @@ class HumanCopyTests(unittest.TestCase):
             ).fetchone()[0],
         )
 
+    def test_async_copy_rejects_lifecycle_change_after_snapshot(self):
+        conn = self.make_conn()
+        conn.execute("BEGIN IMMEDIATE")
+        item = c2_intake.add_work_item(
+            conn, title="Do active work", objective="Finish one active task."
+        )
+        expected = c2_human_copy.source_sha256(
+            conn, "work_item", item["work_item_id"]
+        )
+        conn.execute(
+            "UPDATE work_items SET status='completed',current_action='PASS' WHERE work_item_id=?",
+            (item["work_item_id"],),
+        )
+        with self.assertRaisesRegex(
+            c2_human_copy.HumanCopyError, "stale_human_copy_source"
+        ):
+            c2_human_copy.set_copy(
+                conn,
+                entity_kind="work_item",
+                entity_id=item["work_item_id"],
+                human_title="Completa il lavoro attivo",
+                ai_title="Complete active work",
+                human_summary="Il task deve essere completato.",
+                expected_source_sha256=expected,
+            )
+
+    def test_issue_promotion_changes_source_fingerprint(self):
+        conn = self.make_conn()
+        conn.execute("BEGIN IMMEDIATE")
+        issue = c2_issue_inbox.capture(
+            conn, description="Investigate the sync failure", observed_at_ms=1000
+        )
+        before = c2_human_copy.source_sha256(conn, "issue", issue["issue_id"])
+        c2_issue_inbox.discard(
+            conn, issue_id=issue["issue_id"], reason="obsolete", triaged_by="test"
+        )
+        after = c2_human_copy.source_sha256(conn, "issue", issue["issue_id"])
+        self.assertNotEqual(before, after)
+
 
 if __name__ == "__main__":
     unittest.main()
