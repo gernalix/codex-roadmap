@@ -2,7 +2,7 @@
 prompt_id: 575295
 status: pending
 project_id: —
-model: GPT-5.6 Terra
+model: gpt-6-sol
 reasoning: medium
 tags:
   - grindr
