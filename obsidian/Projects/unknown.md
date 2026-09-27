@@ -6,7 +6,6 @@ tags:
 # Unknown
 
 - [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] · `running`
-- [[obsidian/Prompts/377172 aggiornare-documentazione-grindr-callback-queue--377172|377172 · Aggiornare documentazione Grindr callback queue/worker]] · `running`
 - [[obsidian/Prompts/318410 riparare-il-rilevamento-composer-del-c2-chatgpt--318410|318410 · Riparare il rilevamento composer del C2 ChatGPT browser executor]] · `pending`
 - [[obsidian/Prompts/575295 regression-c2-issue-1310-grindr-favorites-histor-575295|575295 · Regression: C2 Issue #1310 Grindr favorites history and Telegram actions]] · `pending`
 - [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479|853479 · Phase A — MegaVault one source of truth definitiva]] · `completed`
@@ -203,3 +202,4 @@ tags:
 - [[obsidian/Prompts/947261 prompt-947261|947261 · Historical prompt 947261]] · `completed`
 - [[obsidian/Prompts/953204 prompt-953204|953204 · Historical prompt 953204]] · `cancelled`
 - [[obsidian/Prompts/978216 prompt-978216|978216 · Historical prompt 978216]] · `completed`
+- [[obsidian/Prompts/377172 aggiornare-documentazione-grindr-callback-queue--377172|377172 · Aggiornare documentazione Grindr callback queue/worker]] · `completed`

@@ -1,6 +1,6 @@
 ---
 prompt_id: 377172
-status: running
+status: completed
 project_id: —
 model: GPT-5.6 Terra
 reasoning: low
@@ -9,15 +9,15 @@ tags:
   - grindr
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/unknown
 ---
 
 # 377172 · Aggiornare documentazione Grindr callback queue/worker
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/aggiornare-documentazione-grindr-callback-queue--377172|Apri prompt]]
+- **Prompt:** [[../../completed/aggiornare-documentazione-grindr-callback-queue--377172|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
