@@ -39,6 +39,11 @@ Non implementare miglioramenti per eleganza, completezza teorica, telemetria agg
 `c2-supervisor-watchdog.service` only detects/fences stale lease state. The
 separate `c2-supervisor-recovery.service` is the sole controller that may
 prepare a recovery chat or start a missing dedicated browser/supervisor.
+Both C2 browser launch paths load the supervisor safety module from the clean
+runtime worktree at `~/.local/share/chatgpt-rdc-supervisor/source/src`; the
+canonical development checkout may contain unrelated staged work and is not
+an executable dependency. Create/update that runtime worktree from the
+verified merged supervisor main before enabling controller services.
 Its receipt is keyed by `SUPERVISOR_RECOVERY_ID`; an ambiguous send remains
 reserved and cannot create a second chat. The controller timer runs once per
 minute after installing both files from `systemd/` into the user systemd unit

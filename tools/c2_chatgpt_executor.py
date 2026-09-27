@@ -6,8 +6,8 @@ from pathlib import Path
 import sys
 
 from c2_codex_executor import persist
+from c2_supervisor_source import require_supervisor_source
 
-SUPERVISOR_SRC=Path('/home/daniele/projects/chatgpt-rdc-supervisor/src')
 C2_GENERATION_SUSPECT_S=40
 C2_MAX_RECOVERY_ATTEMPTS=3
 LANE_STATE=Path.home()/'.local/state/chatgpt-rdc-supervisor/global.json'
@@ -26,10 +26,12 @@ def lane_degraded(path: Path = LANE_STATE) -> bool:
 
 
 def _supervisor_types():
-    if not SUPERVISOR_SRC.is_dir():
-        raise ChatWorkerError('supervisor_runtime_missing')
-    if str(SUPERVISOR_SRC) not in sys.path:
-        sys.path.insert(0,str(SUPERVISOR_SRC))
+    try:
+        source=require_supervisor_source()
+    except RuntimeError as exc:
+        raise ChatWorkerError(str(exc)) from exc
+    if str(source) not in sys.path:
+        sys.path.insert(0,str(source))
     from chatgpt_rdc_supervisor.browser import ChatGPTBrowser, is_persisted_chat_url
     from chatgpt_rdc_supervisor.model import TaskConfig
     from chatgpt_rdc_supervisor.storage import Store

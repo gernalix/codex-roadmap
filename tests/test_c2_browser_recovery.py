@@ -28,6 +28,7 @@ class BrowserRecoveryTests(unittest.TestCase):
         def data(path):
             return next(lists) if path == '/json/list' else {'webSocketDebuggerUrl': 'ws://browser'}
         with patch.dict(sys.modules, {'chatgpt_rdc_supervisor.safety': safety}), \
+             patch.object(recovery, 'require_supervisor_source', return_value=Path('/tmp')), \
              patch.object(recovery, '_json', side_effect=data), \
              patch.object(recovery, 'CDP', FakeCDP):
             target, page = recovery.open_successor_tab()
@@ -42,6 +43,7 @@ class BrowserRecoveryTests(unittest.TestCase):
             raise RuntimeError('circuit_breaker')
         safety.reserve_launch = reject
         with patch.dict(sys.modules, {'chatgpt_rdc_supervisor.safety': safety}), \
+             patch.object(recovery, 'require_supervisor_source', return_value=Path('/tmp')), \
              patch.object(recovery, '_json', return_value=[{'type': 'page'}]), \
              patch.object(recovery, 'CDP') as cdp:
             with self.assertRaisesRegex(RuntimeError, 'circuit_breaker'):
