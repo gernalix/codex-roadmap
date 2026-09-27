@@ -1,18 +1,21 @@
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 from c2_codex_executor import dispatch, record_terminal, parse_terminal_result, ExecutorError
+from c2_codex_sandbox import git_metadata_writable_roots
 
 
 class RPC:
-    def __init__(self,model='exact',lose_ack=False):
-        self.model=model; self.lose_ack=lose_ack; self.calls=[]; self.goal=None
+    def __init__(self,model='exact',lose_ack=False,cwd='/tmp/worktree'):
+        self.model=model; self.lose_ack=lose_ack; self.cwd=cwd; self.calls=[]; self.goal=None
     def __call__(self,method,params):
         self.calls.append((method,params))
         if method in ('thread/start','thread/resume'):
-            return {'thread':{'id':'thread-1'},'model':self.model,'reasoningEffort':'medium','cwd':'/tmp/worktree'}
+            return {'thread':{'id':'thread-1'},'model':self.model,'reasoningEffort':'medium','cwd':self.cwd}
         if method=='thread/goal/set':
             self.goal={**(self.goal or {}),**params}; return {}
         if method=='thread/goal/get': return {'goal':self.goal}
@@ -24,6 +27,47 @@ class RPC:
 
 
 class CodexExecutorTests(unittest.TestCase):
+    def setUp(self):
+        self.sandbox_patch=patch('c2_codex_executor.workspace_write_policy',return_value={
+            'type':'workspaceWrite','writableRoots':[],'networkAccess':False})
+        self.sandbox_patch.start()
+        self.addCleanup(self.sandbox_patch.stop)
+
+    def test_external_linked_worktree_gets_only_its_git_metadata_root(self):
+        self.sandbox_patch.stop()
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            repository=root/'repository'
+            worktree=root/'assigned-worktree'
+            subprocess.run(['git','init','--initial-branch=main',str(repository)],check=True,
+                           stdout=subprocess.DEVNULL)
+            (repository/'base.txt').write_text('base\n')
+            subprocess.run(['git','-C',str(repository),'add','base.txt'],check=True)
+            subprocess.run(['git','-C',str(repository),'-c','user.name=C2 Test',
+                            '-c','user.email=c2@example.invalid','commit','-m','base'],
+                           check=True,stdout=subprocess.DEVNULL)
+            subprocess.run(['git','-C',str(repository),'worktree','add','-b','task/test',
+                            str(worktree)],check=True,stdout=subprocess.DEVNULL)
+            roots=git_metadata_writable_roots(worktree)
+            self.assertEqual([str((repository/'.git').resolve())],roots)
+            self.assertNotIn(str(root.resolve()),roots)
+            rpc=RPC(cwd=str(worktree))
+            dispatch(rpc,run_id='run-external',metadata={
+                'model':'exact','reasoning':'medium','worktree':str(worktree)},
+                prompt='Commit and finish.',receipt=root/'receipt.json')
+            start=next(params for method,params in rpc.calls if method=='thread/start')
+            self.assertEqual({'type':'workspaceWrite','writableRoots':roots,
+                              'networkAccess':False},start['sandbox'])
+            self.assertEqual(start['sandbox'],next(
+                params for method,params in rpc.calls if method=='turn/start')['sandbox'])
+            (worktree/'change.txt').write_text('change\n')
+            subprocess.run(['git','-C',str(worktree),'add','change.txt'],check=True)
+            subprocess.run(['git','-C',str(worktree),'-c','user.name=C2 Test',
+                            '-c','user.email=c2@example.invalid','commit','-m','change'],
+                           check=True,stdout=subprocess.DEVNULL)
+            self.assertEqual('',subprocess.run(['git','-C',str(worktree),'status','--porcelain'],
+                                               text=True,capture_output=True,check=True).stdout)
+        self.sandbox_patch.start()
 
     def test_strict_terminal_contract_parses_structured_receipt(self):
         text='PROMPT_ID=123456\nRESULT=PASS\nC2_RESULT={"completed":["A"],"remaining":[],"evidence":["pytest PASS"],"blocker":null,"next_action":null}'

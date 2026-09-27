@@ -10,10 +10,31 @@ import c2_intake
 import c2_scheduler
 import c2_runtime
 import c2_supervisor_authority
+import c2_supervisor_lease
 from test_c2_intake import C2IntakeTests
 
 
 class RuntimeTests(unittest.TestCase):
+    def test_supervisor_writer_operation_automatically_records_progress(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            lease_path=Path(tmp)/'lease.sqlite3'
+            with c2_supervisor_lease.connect(lease_path) as lease:
+                c2_supervisor_lease.acquire(lease,owner='runtime',pointer='/tmp/pointer',
+                                            supervisor_id='runtime',now=100,ttl=10000000000)
+            captured=[]
+            with patch.object(c2_runtime,'SUPERVISOR_DB',lease_path), \
+                    patch.object(c2_runtime,'submit_document',side_effect=lambda document,request_key:
+                                 (captured.append((document,request_key)) or {'issue_number':'1'})), \
+                    patch.object(c2_runtime.time,'time',return_value=150):
+                c2_runtime._writer_submit('schedule',{'event_key':'event'},'key')
+            with c2_supervisor_lease.connect(lease_path) as lease:
+                row=c2_supervisor_lease.snapshot(lease)
+            self.assertEqual(1,row['progress_counter'])
+            self.assertEqual(150,row['last_progress_at'])
+            self.assertEqual('writer:schedule',row['current_action'])
+            authority=captured[0][0]['operations'][0]['arguments']['supervisor_authority']
+            self.assertEqual(row['lease_expires_at'],authority['lease_expires_at'])
+
     @patch("c2_runtime.integration_status", return_value={"status":"merged","integration_state":"merged","merge_sha":"b"*40})
     @patch("c2_runtime.prompt_repository", return_value="gernalix/codex-roadmap")
     def test_runtime_routes_self_repo_status_through_shared_helper(self, repository, integration):

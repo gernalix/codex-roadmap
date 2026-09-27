@@ -55,7 +55,8 @@ def _event(db, row, event, detail=None, now=None):
                (time.time() if now is None else now, row['supervisor_id'], row['fencing_token'], event, detail))
 
 
-def acquire(db, *, owner, pointer, supervisor_id=None, ttl=180, now=None):
+def acquire(db, *, owner, pointer, supervisor_id=None, ttl=180, now=None,
+            minimum_token=0):
     now = time.time() if now is None else now
     if not owner or not pointer or ttl <= 0:
         raise LeaseError('invalid_acquisition')
@@ -70,7 +71,7 @@ def acquire(db, *, owner, pointer, supervisor_id=None, ttl=180, now=None):
         old = snapshot(db)
         if old and old['state'] == 'active' and old['lease_expires_at'] > now:
             raise LeaseError('primary_lease_held')
-        token = old['fencing_token'] + 1 if old else 1
+        token = max(old['fencing_token'] if old else 0, int(minimum_token)) + 1
         if old and old['state'] == 'active':
             _event(db, old, 'expired', now=now)
         db.execute('''INSERT INTO supervisor VALUES(1,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
@@ -125,6 +126,41 @@ def update(db, *, supervisor_id, token, action=None, step=None, progress=False,
         _event(db, result, 'progress' if progress else 'heartbeat', now=now)
         db.commit()
         return result
+    except Exception:
+        db.rollback()
+        raise
+
+
+def record_activity(db, *, supervisor_id, token, operation, step=None,
+                    ttl=180, now=None):
+    """Renew the fenced lease and progress counter for one real C2 operation."""
+    operation = str(operation or '').strip()
+    if not operation or len(operation) > 160:
+        raise LeaseError('invalid_activity')
+    current = snapshot(db)
+    return update(
+        db, supervisor_id=supervisor_id, token=token,
+        action=operation, step=step or operation, progress=True, ttl=ttl,
+        executor=current.get('executor') if current else None,
+        stall_reason=None, now=now,
+    )
+
+
+def retire_stalled(db, *, stalled_after=180, now=None):
+    """Retire an active supervisor whose real progress is deterministically stale."""
+    now = time.time() if now is None else now
+    if stalled_after <= 0:
+        raise LeaseError('invalid_stall_threshold')
+    db.execute('BEGIN IMMEDIATE')
+    try:
+        row = snapshot(db)
+        if (row and row['state'] == 'active' and
+                now - float(row['last_progress_at']) >= stalled_after):
+            db.execute("UPDATE supervisor SET state='retired',retirement_reason='progress_stalled' WHERE singleton=1")
+            _event(db, row, 'retired', 'progress_stalled', now)
+            row = snapshot(db)
+        db.commit()
+        return row
     except Exception:
         db.rollback()
         raise

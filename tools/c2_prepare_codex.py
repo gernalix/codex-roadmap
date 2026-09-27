@@ -15,7 +15,8 @@ import time
 from typing import Any, Callable
 
 import c2_snapshot_sync
-from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot
+from c2_codex_sandbox import git_metadata_writable_roots, SandboxPathError
+from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot, record_activity
 from roadmap_start import _wait_issue_applied, RoadmapStartError
 from submit_mutation import submit_document, MutationSubmitError
 
@@ -125,13 +126,16 @@ def _refresh_state(work_item_id: str) -> dict[str, Any]:
         return _state(conn,work_item_id)
 
 
-def _current_authority() -> dict[str, Any]:
+def _current_authority(activity: str | None=None) -> dict[str, Any]:
     with closing(connect_supervisor(SUPERVISOR_DB)) as db:
         row=supervisor_snapshot(db)
         if not row:
             raise PrepareCodexError("supervisor_lease_missing")
         try:
             row=require_supervisor(db,row["supervisor_id"],int(row["fencing_token"]),time.time())
+            if activity:
+                row=record_activity(db,supervisor_id=row["supervisor_id"],
+                                    token=int(row["fencing_token"]),operation=activity)
         except Exception as exc:
             raise PrepareCodexError("supervisor_lease_not_active") from exc
         return {
@@ -152,6 +156,11 @@ def _request_key(phase: str, work_item_id: str, arguments: dict[str, Any],
 
 def _submit_phase(operation: str, arguments: dict[str, Any], phase: str,
                   work_item_id: str, authority: dict[str, Any], timeout: float) -> dict[str,str]:
+    current=_current_authority("prepare:"+phase)
+    if (current["supervisor_id"]!=authority["supervisor_id"] or
+            current["fencing_token"]!=authority["fencing_token"]):
+        raise PrepareCodexError("supervisor_authority_changed")
+    authority=dict(current)
     payload=dict(arguments)
     payload["supervisor_authority"]=dict(authority)
     key=_request_key(phase,work_item_id,arguments,authority)
@@ -323,6 +332,7 @@ def prepare(spec: dict[str, Any], *, timeout: float=120.0,
             refresh: Callable[[str],dict[str,Any]]|None=None,
             submit_phase: Callable[[str,dict[str,Any],str],Any]|None=None,
             allocate_worktree: Callable[[dict[str,Any],str],str]|None=None,
+            sandbox_roots: Callable[[str],list[str]]|None=None,
             authority: dict[str,Any]|None=None) -> dict[str,Any]:
     refresh=refresh or _refresh_state
     authority=authority or _current_authority()
@@ -331,6 +341,7 @@ def prepare(spec: dict[str, Any], *, timeout: float=120.0,
         submit_phase=lambda operation,arguments,phase: _submit_phase(
             operation,arguments,phase,wid,authority,timeout)
     allocate_worktree=allocate_worktree or _allocate_worktree
+    sandbox_roots=sandbox_roots or git_metadata_writable_roots
     state=refresh(wid)
     if state["active_runs"]:
         raise PrepareCodexError("active_run_conflict")
@@ -366,6 +377,10 @@ def prepare(spec: dict[str, Any], *, timeout: float=120.0,
         state=refresh(wid)
     prompt_id=_validate_prompt_state(state,spec,prompt_text)
     worktree=allocate_worktree(state["item"],prompt_id)
+    try:
+        sandbox_writable_roots=sandbox_roots(worktree)
+    except SandboxPathError as exc:
+        raise PrepareCodexError(str(exc)) from exc
     execution={
         "activity":spec["activity"],"worktree":worktree,
         "model":spec["model"],"reasoning":spec["reasoning"],
@@ -380,6 +395,7 @@ def prepare(spec: dict[str, Any], *, timeout: float=120.0,
     return {
         "status":"prepared","work_item_id":wid,"prompt_id":prompt_id,
         "worktree":worktree,"activity":spec["activity"],
+        "sandbox_writable_roots":sandbox_writable_roots,
         "model":spec["model"],"reasoning":spec["reasoning"],
         "dispatched":False,
     }
