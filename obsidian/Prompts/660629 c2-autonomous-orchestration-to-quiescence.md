@@ -16,8 +16,8 @@ tags:
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
 - **Prompt:** [[../../prompts/c2-autonomous-orchestration-to-quiescence|Apri prompt]]
 - **Primo lancio:** 2026-09-27T06:00:21Z
-- **Ultimo lancio:** 2026-09-27T06:00:21Z
-- **Ultimo esito:** BLOCKED
+- **Ultimo lancio:** 2026-09-27T07:12:41Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -36,6 +36,7 @@ Orchestra Inbox, riconciliazione, prioritizzazione e leaf Codex freschi fino a q
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-27T06:00:21Z | 2026-09-27T06:00:58Z | BLOCKED | 36.677 | gpt-6-luna | medium | 7 | 38883 |
+| 2026-09-27T07:12:41Z | 2026-09-27T07:15:57Z | UNKNOWN | 195.756 | gpt-6-luna | medium | 8 | 103846 |
 
 ## Analisi ChatGPT
 
