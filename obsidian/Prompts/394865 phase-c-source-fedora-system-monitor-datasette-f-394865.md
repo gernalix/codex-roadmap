@@ -1,6 +1,6 @@
 ---
 prompt_id: 394865
-status: pending
+status: running
 project_id: 15
 model: GPT-5.6 Terra
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - phase-c
   - source-schema
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/fedora-system-monitor
 ---
 
 # 394865 · Phase C source — fedora-system-monitor Datasette friendliness
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/fedora-system-monitor|fedora-system-monitor]]
 - **Prompt:** [[../../prompts/phase-c-source-fedora-system-monitor-datasette-f-394865|Apri prompt]]
 - **Primo lancio:** —
