@@ -1,6 +1,6 @@
 ---
 prompt_id: 592759
-status: pending
+status: running
 project_id: 23
 model: GPT-6 Sol
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - phase-c
   - source-schema
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/megavault
 ---
 
 # 592759 · Phase C source — megavault Datasette friendliness
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/megavault|MegaVault]]
 - **Prompt:** [[../../prompts/phase-c-source-megavault-datasette-friendliness-592759|Apri prompt]]
 - **Primo lancio:** —
