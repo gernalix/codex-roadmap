@@ -2,23 +2,21 @@
 
 ## 0 Scope
 
-- This is the sole common operating contract for C2 executors. Task-specific
-  instructions may add constraints or make an explicit exception.
+- Sole common C2 executor contract; task-specific exceptions must be explicit.
 - Follow the assigned work item, acceptance criteria, repository, worktree,
   and resources.
 
 ## 1 Read
 
-- Read operational state from `roadmap.sqlite`, authoritative C2 receipts, and
-  repository integration status where applicable.
+- Read `roadmap.sqlite`, C2 receipts, and repository integration status.
 - Treat Workflowy as the human-facing projection.
 - Treat Markdown, prompt files, titles, branches, and chat as context, not
   lifecycle authority.
 
 ## 2 Write
 
-- Submit every canonical C2 mutation through the single writer.
-- Do not edit canonical state, generated projections, or writer queues directly.
+- Submit canonical mutations through the single writer.
+- Never edit canonical state, projections, or queues directly.
 - Verify the writer receipt before relying on a mutation.
 
 ## 3 Intake
@@ -37,6 +35,9 @@
 - Use the assigned isolated worktree and task branch; never write the canonical branch directly.
 - Acquire and release only the shared resources assigned to the run.
 - Do not wait, poll, or act on resources owned by another active run.
+- Treat `AndroidKeyStore` failures under Robolectric as environment evidence,
+  not app bugs. Verify provider paths on canonical `Pixel_8a` AVD before
+  physical device, per MegaVault protocol.
 
 ## 5 Checkpoint and recovery
 
