@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/718501 c2-supervisor-backoff-rate-limit-globale-blocca--718501\|718501 · C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]] | running | 2026-09-27T05:42:03Z | 2026-09-27T05:42:03Z | UNKNOWN | no | no | — | — | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/718501 c2-supervisor-backoff-rate-limit-globale-blocca--718501\|718501 · C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]] | running | 2026-09-27T05:39:24Z | 2026-09-27T05:42:03Z | PASS | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
