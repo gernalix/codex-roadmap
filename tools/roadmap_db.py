@@ -292,6 +292,16 @@ def prompt_work_item_id(prompt_id: str) -> str:
     return f"prompt:{prompt_id}"
 
 
+def canonical_prompt_work_item_id(conn: sqlite3.Connection, prompt_id: str) -> str:
+    """Resolve an existing prompt's canonical work item after cutover."""
+    row = conn.execute(
+        "SELECT work_item_id FROM work_items WHERE prompt_id=?", (prompt_id,)
+    ).fetchone()
+    if row:
+        return str(row[0])
+    raise RoadmapDBError(f"prompt_work_item_not_found:{prompt_id}")
+
+
 def _update_prompt_metadata(
     conn: sqlite3.Connection,
     prompt_id: str,
@@ -976,7 +986,7 @@ def add_dependency(conn: sqlite3.Connection, prompt_id: str, depends_on: str, *,
             """INSERT OR IGNORE INTO work_item_dependencies(
                  work_item_id,depends_on_work_item_id,required,note
                ) VALUES(?,?,1,?)""",
-            (prompt_work_item_id(prompt_id), prompt_work_item_id(depends_on), note),
+            (canonical_prompt_work_item_id(conn, prompt_id), canonical_prompt_work_item_id(conn, depends_on), note),
         )
     else:
         conn.execute(
@@ -1004,7 +1014,7 @@ def remove_dependency(
         conn.execute(
             """DELETE FROM work_item_dependencies
                WHERE work_item_id=? AND depends_on_work_item_id=?""",
-            (prompt_work_item_id(prompt_id), prompt_work_item_id(depends_on)),
+            (canonical_prompt_work_item_id(conn, prompt_id), canonical_prompt_work_item_id(conn, depends_on)),
         )
     else:
         conn.execute(
@@ -1060,8 +1070,8 @@ def replace_dependency(
                  work_item_id,depends_on_work_item_id,required,note
                ) VALUES(?,?,1,?)""",
             (
-                prompt_work_item_id(prompt_id),
-                prompt_work_item_id(new_depends_on),
+                canonical_prompt_work_item_id(conn, prompt_id),
+                canonical_prompt_work_item_id(conn, new_depends_on),
                 note,
             ),
         )
@@ -1069,8 +1079,8 @@ def replace_dependency(
             """DELETE FROM work_item_dependencies
                WHERE work_item_id=? AND depends_on_work_item_id=?""",
             (
-                prompt_work_item_id(prompt_id),
-                prompt_work_item_id(old_depends_on),
+                canonical_prompt_work_item_id(conn, prompt_id),
+                canonical_prompt_work_item_id(conn, old_depends_on),
             ),
         )
     else:
@@ -1119,8 +1129,8 @@ def add_relation(
                ) VALUES(?,?,?,?,?,?)
                ON CONFLICT(from_work_item_id,to_work_item_id,relation_type) DO NOTHING""",
             (
-                prompt_work_item_id(from_prompt_id),
-                prompt_work_item_id(to_prompt_id),
+                canonical_prompt_work_item_id(conn, from_prompt_id),
+                canonical_prompt_work_item_id(conn, to_prompt_id),
                 relation_type,
                 ts,
                 actor,
@@ -1132,7 +1142,7 @@ def add_relation(
                 "SELECT parent_id FROM work_items WHERE prompt_id=?",
                 (to_prompt_id,),
             ).fetchone()
-            expected_parent = prompt_work_item_id(from_prompt_id)
+            expected_parent = canonical_prompt_work_item_id(conn, from_prompt_id)
             if child and child["parent_id"] not in (None, expected_parent):
                 raise RoadmapDBError(
                     f"work_item_parent_conflict:{to_prompt_id}:{child['parent_id']}:{expected_parent}"
@@ -1173,8 +1183,8 @@ def add_relation(
                          work_item_id,depends_on_work_item_id,required,note
                        ) VALUES(?,?,1,?)""",
                     (
-                        prompt_work_item_id(child_id),
-                        prompt_work_item_id(to_prompt_id),
+                        canonical_prompt_work_item_id(conn, child_id),
+                        canonical_prompt_work_item_id(conn, to_prompt_id),
                         child["note"] or f"auto-forwarded from {from_prompt_id}",
                     ),
                 )
@@ -1182,8 +1192,8 @@ def add_relation(
                     """DELETE FROM work_item_dependencies
                        WHERE work_item_id=? AND depends_on_work_item_id=?""",
                     (
-                        prompt_work_item_id(child_id),
-                        prompt_work_item_id(from_prompt_id),
+                        canonical_prompt_work_item_id(conn, child_id),
+                        canonical_prompt_work_item_id(conn, from_prompt_id),
                     ),
                 )
             else:
@@ -1231,7 +1241,7 @@ def add_tag(conn: sqlite3.Connection, prompt_id: str, tag: str) -> None:
     if work_items_cutover_active(conn):
         conn.execute(
             "INSERT OR IGNORE INTO work_item_tags(work_item_id,tag) VALUES(?,?)",
-            (prompt_work_item_id(prompt_id), tag),
+            (canonical_prompt_work_item_id(conn, prompt_id), tag),
         )
     else:
         conn.execute(
@@ -1257,7 +1267,7 @@ def remove_tag(
     if work_items_cutover_active(conn):
         conn.execute(
             "DELETE FROM work_item_tags WHERE work_item_id=? AND tag=?",
-            (prompt_work_item_id(prompt_id), tag),
+            (canonical_prompt_work_item_id(conn, prompt_id), tag),
         )
     else:
         conn.execute(
