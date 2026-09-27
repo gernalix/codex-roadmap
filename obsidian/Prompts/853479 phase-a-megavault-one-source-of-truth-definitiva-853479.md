@@ -1,6 +1,6 @@
 ---
 prompt_id: 853479
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Sol
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - priority:absolute
   - priority:p0
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 853479 · Phase A — MegaVault one source of truth definitiva
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/phase-a-megavault-one-source-of-truth-definitiva-853479|Apri prompt]]
 - **Primo lancio:** —
