@@ -1,20 +1,20 @@
 ---
 prompt_id: 812553
-status: running
+status: failed
 project_id: —
 model: GPT-5.6 Sol
 reasoning: medium
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/failed
   - roadmap/project/prompt-infrastructure
 ---
 
 # 812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido
 
-- **Stato:** running
+- **Stato:** failed
 - **Progetto:** [[../Projects/prompt-infrastructure|Prompt infrastructure]]
-- **Prompt:** [[../../prompts/chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|Apri prompt]]
+- **Prompt:** [[../../falliti/chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-26T22:52:04Z
 - **Ultimo lancio:** 2026-09-26T22:52:21Z
 - **Ultimo esito:** UNKNOWN
