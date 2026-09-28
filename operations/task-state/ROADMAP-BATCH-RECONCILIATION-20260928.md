@@ -683,7 +683,10 @@ After canonical order readback: process batch 00 only, reconcile its current rep
 - These classes are not terminal product work. They remain mapped in the existing project/batch checkpoint; no fresh source scan was needed for this readback.
 
 ## Next action
-Continue independent batch work while guarded PersonalHub i18n PR #67 integrates; do not poll its checks or open another PersonalHub writer lane. After an authoritative merge event, verify the prompt-backed terminal receipt and reread all six PersonalHub rows. Preserve the other C2 supervisor's active fence. Keep Grindr login external and branch convergence behind conditionally BLOCKED `d083…`.
+On the next authoritative PR #67 integration event, verify the prompt-backed terminal receipt and reread all six PersonalHub rows. Do not open another PersonalHub writer lane or re-run the passing focused Gradle gate. Preserve the other C2 supervisor's active fence. Datasette5 PR #3/#4, amici_fb PR #2, ADB keeper PR #2, absent dedicated browsers and T7 have unchanged exact recovery gates; reconsider a named batch only when its gate changes. Keep branch convergence behind conditionally BLOCKED `d083…`.
+
+### 2026-09-28 18:00 UTC guarded i18n integration in progress
+- PR #67 checks have GitGuardian and capsule boundaries PASS; `unit` and both play-preflight jobs remain PENDING at the one bounded GitHub read. No merge SHA or terminal C2 PASS was inferred. The local repo-task event watcher was stopped; no model session is retained solely to wait for CI. This parent Goal stays active and the pushed checkpoint identifies the next exact transition.
 
 ### 2026-09-28 17:52 UTC i18n focused acceptance and guarded queue
 - The one Gradle invocation in session 77322 exited 0: `:app:compileDebugKotlin`, `:app:lintDebug`, `:core:ui:lintDebug`, `:core:database:lintDebug`, and `:feature:sostanze:lintDebug` all PASS. These are the app and all three modules with `values-it` resources, under the root MissingTranslation-error policy. No code change beyond the existing 25-line i18n commit was needed; `git diff --check` and clean task worktree passed.
