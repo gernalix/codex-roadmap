@@ -369,7 +369,7 @@ Normalize the active C2 roadmap into project-backed semantic batches before furt
 5. Prefer consolidated survivor tasks over historical phase/step mirrors.
 6. Re-check dependencies after each batch terminalizes.
 
-# Next action
+# Historical next action
 Apply roadmap ordering so 00/01 survivor tasks come first, product/data survivor batches follow, conditional/external-wait batches remain parked, and Z1/Z2 cannot compete for dispatch.
 
 ## Canonical project attribution
@@ -476,7 +476,7 @@ Only these 56 active items are ranked for future execution. All other active row
 - 6 items: source-evidence wait (302284).
 - Remaining survivors: preserve/execute according to ordered batches and repository locks.
 
-## Next action
+## Historical next action
 Verify the manual survivor order has landed in canonical roadmap. Then reconcile batch 00 and batch 01 against current repository heads before any new dispatch.
 
 # Reconciled execution queue
@@ -504,7 +504,7 @@ Verify the manual survivor order has landed in canonical roadmap. Then reconcile
 # Ordering
 A reconciled survivor order was rendered into Workflowy first. Canonical manual-order publication is submitted atomically with supervisor renewal so the Workflowy source and roadmap DB converge instead of repeatedly overwriting one another.
 
-# Next action
+# Historical next action
 After canonical order readback: process batch 00 only, reconcile its current repository state again, and complete the minimum lifecycle/safety fixes before any fresh broad dispatch.
 
 ## Applied reconciliation checkpoint
@@ -528,5 +528,14 @@ After canonical order readback: process batch 00 only, reconcile its current rep
 5. `d08356…` — global dirty/worktree sanitation and recurrence prevention.
 6. `dad7a0…` — global branch convergence after active writer work settles.
 
+## 2026-09-28 live recovery checkpoint
+- Fetched remote main commit `61f620f5` into `FETCH_HEAD` after the protected ref hook rejected the local ref update. Read `FETCH_HEAD:roadmap.sqlite` once; local canonical checkout DB is stale and must not be used for this continuation.
+- Current DB has 263 active rows, all covered by the prior batch map. Eleven mapped items have since become terminal, including the lifecycle/project/readiness/worktree semantic merges. No new active item appeared.
+- Only one `work_item_run` is in `claimed/running/recovering`: Datasette5 `f884ddc1…` is `recovering`. The PersonalHub `17e233…` and C2 lifecycle `b9e561…` rows say `running`, but neither has a live run in this DB snapshot. Preserve their existing thread/worktree evidence; do not duplicate them or infer completion.
+- Batch 00 preliminary readback: `56582…`, `7237…`, `fd61…` are superseded by `b9e561…`; `948b…` is superseded by `b4973…`. `b9e561…` has a clean, pushed `task/484338` worktree at `573eeee3`; its checkpoint reports 91 focused tests PASS and says only the terminal result remains. `db4eb9…` has a separate clean, pushed implementation branch at `da3eb726`. `b455…` remains waiting for selective stale-descendant reconciliation. Do not dispatch the superseded rows.
+- Batch 01 preliminary readback: `9b5fe…`, `e0eed…`, `daad70…` are superseded by existing batch owners. The historical phase/step rows remain active but represent the same branch-cleanup task, not separate executors. `a299…` is an ADB metrics task and appears misclassified in Git convergence. Further semantic classification and canonical mutations were not performed.
+- Attempted `c2_executor_start.py --work-item-id wi:b4973… --executor codex` as the reconciliation owner. Mutation Issue #3817 was rejected with `executor_start_repo_conflict`; no `executor_started` receipt was applied. This likely reflects the existing C2 lifecycle writer ownership and must be reconciled through that lane, not bypassed. Git hook fetch diagnostic was captured as C2 Issue #3818 using the observed failure only.
+- No batch executor was launched and no canonical roadmap mutation was applied in this continuation.
+
 ## Next action
-After mutation queue drains, resume exactly one existing scoped control-plane task (`b9e561…`, prompt 484338/worktree preserved) and verify it before opening another codex-roadmap writer lane.
+Resolve the rejected start by completing/reconciling the preserved `b9e561…` / prompt 484338 lifecycle lane through its existing checkpoint, then obtain an applied executor-start receipt for this reconciliation owner before continuing batch 00 and 01 semantic work.
