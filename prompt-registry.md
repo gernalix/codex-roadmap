@@ -4,7 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865\|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] | running | 2026-09-27T18:50:49Z | 2026-09-27T18:56:39Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865\|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] | running | 2026-09-27T18:50:49Z | 2026-09-28T05:57:00Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/344032 personalhub-restore-built-in-kotlin-classes-in-h-344032\|344032 · PersonalHub: Restore built-in Kotlin classes in hub-context artifacts]] | running | — | — | — | no | no | — | PersonalHub | gpt-6-sol | medium |
 | [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338\|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] | running | — | — | — | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/715479 regression-datasette5-import-test-blocked-by-pyd-715479\|715479 · Regression: Datasette5 import test blocked by pydantic-core mismatch]] | pending | — | — | — | no | no | — | datasette5 | GPT-5.6 Sol | medium |
