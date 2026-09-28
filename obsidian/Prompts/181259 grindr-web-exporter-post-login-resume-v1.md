@@ -1,6 +1,6 @@
 ---
 prompt_id: 181259
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -8,13 +8,13 @@ tags:
   - manual-prerequisite:grindr-login
   - manual-prerequisite:restore-grindr-web-exporter-repo
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/grindr-web-exporter
 ---
 
 # 181259 · Riprendi Grindr dopo il login senza model waiting
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../prompts/grindr-web-exporter-post-login-resume-v1|Apri prompt]]
 - **Primo lancio:** —
