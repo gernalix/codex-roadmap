@@ -178,6 +178,72 @@ class LiveRunningLifecycleTests(unittest.TestCase):
             self.assertEqual("running", db.prompt_row(conn, "123456")["status"])
             conn.close()
 
+    def test_later_run_replaces_archived_terminal_request_by_generation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            conn = db.connect(repo)
+            db.register_prompt(conn, prompt_id="123456", slug="later", title="Later",
+                               current_path="prompts/later.md")
+            db.set_status(conn, "123456", "running", actor="codex", note="first run")
+            first_run = conn.execute(
+                "SELECT MAX(history_id) FROM status_history WHERE prompt_id='123456' AND new_status='running'"
+            ).fetchone()[0]
+            db.request_terminal(conn, "123456", "blocked", expected_running_history_id=first_run)
+
+            conn.execute("UPDATE prompts SET status='pending' WHERE prompt_id='123456'")
+            conn.execute("""INSERT INTO status_history
+                (prompt_id,old_status,new_status,changed_at,actor,note)
+                VALUES('123456','blocked','pending',?,'test','reactivate')""", (db.now_utc(),))
+            db.set_status(conn, "123456", "running", actor="codex", note="second run")
+            second_run = conn.execute(
+                "SELECT MAX(history_id) FROM status_history WHERE prompt_id='123456' AND new_status='running'"
+            ).fetchone()[0]
+            self.assertNotEqual(first_run, second_run)
+
+            with self.assertRaisesRegex(db.RoadmapDBError, "terminal_request_generation_conflict"):
+                db.request_terminal(conn, "123456", "completed",
+                                    expected_running_history_id=first_run)
+            self.assertEqual(0, conn.execute(
+                "SELECT COUNT(*) FROM terminal_request_history"
+            ).fetchone()[0])
+
+            # Same target status is valid for a later generation and remains
+            # idempotent for retries within that generation.
+            db.request_terminal(conn, "123456", "blocked",
+                                expected_running_history_id=second_run)
+            db.request_terminal(conn, "123456", "blocked",
+                                expected_running_history_id=second_run)
+
+            conn.execute("UPDATE prompts SET status='pending' WHERE prompt_id='123456'")
+            conn.execute("""INSERT INTO status_history
+                (prompt_id,old_status,new_status,changed_at,actor,note)
+                VALUES('123456','blocked','pending',?,'test','reactivate again')""", (db.now_utc(),))
+            db.set_status(conn, "123456", "running", actor="codex", note="third run")
+            third_run = conn.execute(
+                "SELECT MAX(history_id) FROM status_history WHERE prompt_id='123456' AND new_status='running'"
+            ).fetchone()[0]
+            # A different target status is also valid after a new run starts.
+            db.request_terminal(conn, "123456", "completed",
+                                expected_running_history_id=third_run)
+            with self.assertRaisesRegex(db.RoadmapDBError, "terminal_request_conflict"):
+                db.request_terminal(conn, "123456", "failed",
+                                    expected_running_history_id=third_run)
+
+            active = conn.execute("SELECT requested_status,running_history_id FROM terminal_requests "
+                                  "WHERE prompt_id='123456'").fetchone()
+            self.assertEqual(("completed", third_run), tuple(active))
+            archived_rows = conn.execute(
+                "SELECT requested_status,running_history_id FROM terminal_request_history "
+                "WHERE prompt_id='123456' ORDER BY request_history_id"
+            ).fetchall()
+            self.assertEqual([("blocked", first_run), ("blocked", second_run)],
+                             [tuple(row) for row in archived_rows])
+            self.assertEqual(3, conn.execute(
+                "SELECT COUNT(*) FROM audit_events WHERE prompt_id='123456' AND event_type='terminal_requested'"
+            ).fetchone()[0])
+            self.assertEqual("completed", db.prompt_row(conn, "123456")["status"])
+            conn.close()
+
 
 if __name__ == "__main__":
     unittest.main()

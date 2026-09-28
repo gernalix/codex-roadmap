@@ -174,10 +174,18 @@ def _repo_task_worktree(record: dict[str, Any], prompt_id: str) -> str | None:
 def _request_start_failure_block(
     prompt_id: str,
     *,
+    repo: Path,
     repository: str,
     branch: str,
     timeout: float,
 ) -> None:
+    try:
+        current = _local_prompt_record(repo, prompt_id)
+    except RoadmapStartError:
+        return
+    if current["status"] != "running":
+        return
+    running_history_id = current["status_generation"]
     document = {
         "schema": SCHEMA,
         "actor": "codex",
@@ -188,13 +196,14 @@ def _request_start_failure_block(
                 "status": "blocked",
                 "actor": "codex",
                 "note": "repo-task isolation could not be established after launch claim",
+                "expected_running_history_id": running_history_id,
             }
         ],
     }
     try:
         submitted = submit_document(
             document,
-            request_key=f"terminal-{prompt_id}",
+            request_key=f"terminal-{prompt_id}-{running_history_id}-blocked",
             repository=repository,
             branch=branch,
         )
@@ -282,6 +291,7 @@ def claim_start(
     except RoadmapStartError:
         _request_start_failure_block(
             prompt_id,
+            repo=repo,
             repository=repository,
             branch=branch,
             timeout=timeout,

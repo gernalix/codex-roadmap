@@ -11,6 +11,74 @@ import roadmap_repo_integration as dedicated
 
 
 class FinishWrapperTests(unittest.TestCase):
+    def test_c2_work_item_id_uses_guarded_dedicated_branch(self):
+        work_item_id = "wi:" + "a" * 32
+        repo = Path("/tmp/codex-roadmap-task")
+        head = "b" * 40
+
+        def git_result(_repo, *args):
+            if args == ("rev-parse", "--show-toplevel"):
+                return str(repo)
+            if args == ("branch", "--show-current"):
+                return "task/wi-" + "a" * 32
+            if args == ("remote", "get-url", "origin"):
+                return "https://github.com/gernalix/codex-roadmap.git"
+            if args == ("status", "--porcelain"):
+                return ""
+            if args == ("rev-parse", "HEAD"):
+                return head
+            raise AssertionError(args)
+
+        with patch.object(dedicated, "_git", side_effect=git_result):
+            self.assertEqual(head, dedicated._identity(repo, work_item_id))
+        self.assertEqual("wi-" + "a" * 32, dedicated._branch_name(work_item_id))
+
+    def test_work_item_pr_lookup_uses_task_branch(self):
+        work_item_id = "wi:" + "a" * 32
+        row = {"number": 44, "state": "OPEN",
+               "headRefName": "task/wi-" + "a" * 32,
+               "baseRefName": "main"}
+        with patch.object(dedicated, "_run", return_value=json.dumps([row])) as run:
+            self.assertEqual(row, dedicated._pr(work_item_id))
+        self.assertIn("task/wi-" + "a" * 32, run.call_args.args)
+
+    def test_work_item_queue_uses_single_writer_process_title(self):
+        work_item_id = "wi:" + "a" * 32
+        head = "b" * 40
+        with patch.object(dedicated, "_identity", return_value=head), \
+             patch.object(dedicated, "_pr", return_value=None), \
+             patch.object(dedicated, "_git", return_value="") as git, \
+             patch.object(dedicated, "_run", return_value="https://example.test/pr") as run, \
+             patch.object(dedicated, "status", return_value={"status":"queued","head_sha":head}):
+            out = dedicated.queue(Path("/tmp/codex-roadmap-task"), work_item_id)
+        self.assertEqual("queued", out["status"])
+        self.assertTrue(any(call.args[-1] == f"{head}:refs/heads/task/wi-{'a'*32}"
+                            for call in git.call_args_list if call.args[1] == "push"))
+        self.assertIn("[single-writer] " + work_item_id, run.call_args.args)
+
+    def test_work_item_queue_updates_managed_pr_only_for_exact_new_head(self):
+        work_item_id = "wi:" + "a" * 32
+        old_head, new_head = "a" * 40, "b" * 40
+        with patch.object(dedicated, "_identity", return_value=new_head), \
+             patch.object(dedicated, "_pr", return_value={"number": 44}), \
+             patch.object(dedicated, "_git", return_value=old_head + "\trefs/heads/task/wi-" + "a" * 32), \
+             patch.object(dedicated, "_run", return_value="updated") as run, \
+             patch.object(dedicated, "status", side_effect=[
+                 {"status":"queued","head_sha":old_head},
+                 {"status":"queued","head_sha":new_head},
+             ]):
+            out = dedicated.queue(Path("/tmp/codex-roadmap-task"), work_item_id,
+                                  expected_head=new_head)
+        self.assertEqual(new_head, out["head_sha"])
+        self.assertIn("edit", run.call_args.args)
+        self.assertIn("[single-writer] " + work_item_id, run.call_args.args)
+
+        with patch.object(dedicated, "_identity", return_value=new_head), \
+             patch.object(dedicated, "_pr", return_value={"number": 44}), \
+             patch.object(dedicated, "status", return_value={"status":"queued","head_sha":old_head}):
+            with self.assertRaisesRegex(dedicated.IntegrationError, "task_pr_head_drift"):
+                dedicated.queue(Path("/tmp/codex-roadmap-task"), work_item_id)
+
     @patch("roadmap_finish.prompt_repository", return_value="gernalix/codex-roadmap")
     @patch("roadmap_finish.queue_integration", return_value=("queued", False))
     def test_self_repo_no_generic_task_record_needed(self, queue, repository):

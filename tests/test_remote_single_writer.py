@@ -22,9 +22,11 @@ class RemoteSingleWriterTests(unittest.TestCase):
                 "submission": "queued",
                 "issue_number": "42",
                 "issue_url": "https://github.example/issues/42",
-                "request_key": "terminal-123456",
+                "request_key": "terminal-123456-1089-completed",
             },
-        ) as submit:
+        ) as submit, patch.object(
+            roadmap_result, "_current_running_generation", return_value=1089
+        ):
             out = roadmap_result.finish_result(
                 Path("/definitely/not/a/git/repo"),
                 "123456",
@@ -33,13 +35,14 @@ class RemoteSingleWriterTests(unittest.TestCase):
             )
         self.assertEqual("queued", out["status"])
         self.assertEqual("completed", out["target_status"])
-        self.assertEqual("terminal-123456", out["request_key"])
+        self.assertEqual("terminal-123456-1089-completed", out["request_key"])
         self.assertEqual("42", out["issue_number"])
         document = submit.call_args.args[0]
         self.assertEqual("terminal_request", document["operations"][0]["op"])
         self.assertEqual("completed", document["operations"][0]["status"])
+        self.assertEqual(1089, document["operations"][0]["expected_running_history_id"])
 
-    def test_terminal_request_key_is_one_per_prompt(self) -> None:
+    def test_terminal_request_key_is_scoped_to_run_generation_and_status(self) -> None:
         captured: list[tuple[str, str]] = []
 
         def fake_submit(document, *, request_key, **_kwargs):
@@ -51,12 +54,14 @@ class RemoteSingleWriterTests(unittest.TestCase):
                 "request_key": request_key,
             }
 
-        with patch.object(roadmap_result, "submit_document", side_effect=fake_submit):
+        with patch.object(roadmap_result, "submit_document", side_effect=fake_submit), \
+             patch.object(roadmap_result, "_current_running_generation", side_effect=[1089, 1094]):
             roadmap_result.finish_result(Path("."), "654321", "PASS", confirm_executed=True)
             roadmap_result.finish_result(Path("."), "654321", "FAIL", confirm_executed=True)
 
         self.assertEqual(
-            [("terminal-654321", "completed"), ("terminal-654321", "failed")],
+            [("terminal-654321-1089-completed", "completed"),
+             ("terminal-654321-1094-failed", "failed")],
             captured,
         )
 
