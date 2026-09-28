@@ -683,7 +683,10 @@ After canonical order readback: process batch 00 only, reconcile its current rep
 - These classes are not terminal product work. They remain mapped in the existing project/batch checkpoint; no fresh source scan was needed for this readback.
 
 ## Next action
-Continue useful independent batch reconciliation while PersonalHub feedback PR #66 integrates; use an authoritative integration event before strict C2 PASS for `wi:528ed…`. Keep PersonalHub i18n in its existing worktree until rightful fenced unblock. Keep Grindr login external and branch convergence behind `d083…`; do not launch another writer in either repository.
+Use an authoritative PR #66 integration event before strict C2 PASS for `wi:528ed…`; then reread all six PersonalHub rows and, after a rightful C2 fenced BLOCKED→WAITING transition, resume the existing clean 436865 i18n worktree for targeted compile/lint. If PR #66 does not integrate, keep its branch and exact check result. Keep Grindr login external and branch convergence behind `d083…`; do not launch another writer in either repository.
+
+### 2026-09-28 16:57 UTC external integration boundary
+- PersonalHub repo-task record still reports PR #66 `checks-pending`/pipeline `integration`, no merge SHA. One bounded GitHub check read found GitGuardian, capsule boundaries and both play-preflight jobs PASS; only `unit` remains PENDING. No C2 PASS or next PersonalHub writer is authorized from that state. The integration record was watched by a non-polling filesystem event wait while other reconciliation advanced; the watcher was stopped before checkpointing and no model polling loop was retained.
 
 ### 2026-09-28 feedback residual implemented and queued
 - Executor-start Issue #4270 applied using the existing `wi:528ed…` binding `01a0e537…`, moving the reset row to RUNNING. Reused repo-task `wi-528ed2b27875441eb577c61d660ae65e` and its historical clean branch, fast-forwarded to PersonalHub main `06277d32` before the narrow edit. No new worker or task ID.
