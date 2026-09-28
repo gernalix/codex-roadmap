@@ -4,9 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865\|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] | running | 2026-09-27T18:50:49Z | 2026-09-28T05:57:00Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/344032 personalhub-restore-built-in-kotlin-classes-in-h-344032\|344032 · PersonalHub: Restore built-in Kotlin classes in hub-context artifacts]] | running | — | — | — | no | no | — | PersonalHub | gpt-6-sol | medium |
-| [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338\|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] | running | — | — | — | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/715479 regression-datasette5-import-test-blocked-by-pyd-715479\|715479 · Regression: Datasette5 import test blocked by pydantic-core mismatch]] | pending | — | — | — | no | no | — | datasette5 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
@@ -177,6 +175,7 @@
 | [[obsidian/Prompts/328371 c2-dashboard-mutation-applicata-ma-invisibile-fi-328371\|328371 · C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]] | completed | 2026-09-27T05:11:09Z | 2026-09-27T05:15:37Z | PASS | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/158995 c2-dashboard-rendere-immediatamente-visibili-i-n-158995\|158995 · C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati]] | completed | 2026-09-27T05:21:37Z | 2026-09-27T05:22:30Z | PASS | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/875575 conservare-e-confrontare-lo-storico-dei-test-adb-875575\|875575 · Conservare e confrontare lo storico dei test ADB]] | blocked | 2026-09-26T22:45:54Z | 2026-09-26T22:49:45Z | BLOCKED | no | no | — | codex-roadmap | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865\|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] | blocked | 2026-09-27T18:50:49Z | 2026-09-28T05:57:00Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582\|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]] | waiting | 2026-09-27T10:43:26Z | 2026-09-28T03:06:58Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/255325 prompt-255325\|255325 · Prompt 255325]] | cancelled | 2026-09-18T17:42:04Z | 2026-09-18T17:42:04Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/294731 prompt-294731\|294731 · Prompt 294731]] | cancelled | 2026-09-16T17:42:10Z | 2026-09-16T17:42:10Z | CANCELLED | sì | no | — | — | — | — |
@@ -443,3 +442,4 @@
 | [[obsidian/Prompts/394865 phase-c-source-fedora-system-monitor-datasette-f-394865\|394865 · Phase C source — fedora-system-monitor Datasette friendliness]] | completed | 2026-09-27T19:02:05Z | 2026-09-27T19:10:36Z | PASS | no | no | — | fedora-system-monitor | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/205775 phase-c-source-codex-usage-monitor-datasette-fri-205775\|205775 · Phase C source — codex-usage-monitor Datasette friendliness]] | completed | — | — | PASS | no | no | — | codex-usage-monitor | GPT-6 Luna | medium |
 | [[obsidian/Prompts/592759 phase-c-source-megavault-datasette-friendliness-592759\|592759 · Phase C source — megavault Datasette friendliness]] | completed | 2026-09-27T19:11:47Z | 2026-09-27T19:11:47Z | PASS | no | no | — | MegaVault | GPT-6 Sol | medium |
+| [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338\|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] | blocked | — | — | BLOCKED | no | no | — | — | GPT-5.6 Sol | medium |

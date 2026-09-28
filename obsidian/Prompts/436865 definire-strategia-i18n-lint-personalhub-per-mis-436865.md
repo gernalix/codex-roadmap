@@ -1,6 +1,6 @@
 ---
 prompt_id: 436865
-status: running
+status: blocked
 project_id: —
 model: GPT-5.6 Terra
 reasoning: medium
@@ -11,15 +11,15 @@ tags:
   - priority:p1
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/unknown
 ---
 
 # 436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/definire-strategia-i18n-lint-personalhub-per-mis-436865|Apri prompt]]
+- **Prompt:** [[../../falliti/definire-strategia-i18n-lint-personalhub-per-mis-436865|Apri prompt]]
 - **Primo lancio:** 2026-09-27T18:50:49Z
 - **Ultimo lancio:** 2026-09-28T05:57:00Z
 - **Ultimo esito:** BLOCKED

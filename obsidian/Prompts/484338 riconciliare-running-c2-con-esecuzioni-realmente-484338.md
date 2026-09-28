@@ -1,6 +1,6 @@
 ---
 prompt_id: 484338
-status: running
+status: blocked
 project_id: —
 model: GPT-5.6 Sol
 reasoning: medium
@@ -9,15 +9,15 @@ tags:
   - priority:p0
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/blocked
   - roadmap/project/unknown
 ---
 
 # 484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive
 
-- **Stato:** running
+- **Stato:** blocked
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/riconciliare-running-c2-con-esecuzioni-realmente-484338|Apri prompt]]
+- **Prompt:** [[../../falliti/riconciliare-running-c2-con-esecuzioni-realmente-484338|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
