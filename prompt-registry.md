@@ -6,7 +6,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/715479 regression-datasette5-import-test-blocked-by-pyd-715479\|715479 · Regression: Datasette5 import test blocked by pydantic-core mismatch]] | running | — | — | — | no | no | — | datasette5 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/344032 personalhub-restore-built-in-kotlin-classes-in-h-344032\|344032 · PersonalHub: Restore built-in Kotlin classes in hub-context artifacts]] | running | 2026-09-28T06:05:35Z | 2026-09-28T06:05:35Z | PASS | no | no | — | PersonalHub | gpt-6-sol | medium |
-| [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338\|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] | running | — | — | — | no | no | — | — | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338\|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] | running | 2026-09-28T07:01:22Z | 2026-09-28T07:01:22Z | UNKNOWN | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |

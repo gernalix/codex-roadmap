@@ -18,9 +18,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/riconciliare-running-c2-con-esecuzioni-realmente-484338|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-28T07:01:22Z
+- **Ultimo lancio:** 2026-09-28T07:01:22Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -38,7 +38,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-28T07:01:22Z | 2026-09-28T07:01:31Z | UNKNOWN | 8.626 | codex-auto-review | low | 0 | 25929 |
 
 ## Analisi ChatGPT
 
