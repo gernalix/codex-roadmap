@@ -1,6 +1,5 @@
 # Da controllare
 
-- [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] · `blocked` · analizzato=sì · fix=—
 - [[obsidian/Prompts/384495 rimuovere-special-case-ph-e-implementare-overrid-384495|384495 · Rimuovere special-case PH e implementare override execution canonico]] · `waiting` · analizzato=no · fix=—

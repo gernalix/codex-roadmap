@@ -5,7 +5,6 @@ tags:
 
 # Unknown
 
-- [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] · `running`
 - [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479|853479 · Phase A — MegaVault one source of truth definitiva]] · `completed`
 - [[obsidian/Prompts/856999 aggiungere-gate-c2-per-acceptance-post-merge-856999|856999 · Aggiungere gate C2 per acceptance post-merge]] · `completed`
 - [[obsidian/Prompts/742579 rendere-il-db-grindr-favorites-frictionless-da-e-742579|742579 · Rendere il DB Grindr Favorites frictionless da esplorare]] · `completed`
@@ -204,3 +203,4 @@ tags:
 - [[obsidian/Prompts/318410 riparare-il-rilevamento-composer-del-c2-chatgpt--318410|318410 · Riparare il rilevamento composer del C2 ChatGPT browser executor]] · `completed`
 - [[obsidian/Prompts/377172 aggiornare-documentazione-grindr-callback-queue--377172|377172 · Aggiornare documentazione Grindr callback queue/worker]] · `completed`
 - [[obsidian/Prompts/575295 regression-c2-issue-1310-grindr-favorites-histor-575295|575295 · Regression: C2 Issue #1310 Grindr favorites history and Telegram actions]] · `blocked`
+- [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] · `completed`
