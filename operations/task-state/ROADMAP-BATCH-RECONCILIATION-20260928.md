@@ -7,7 +7,7 @@ Normalize the active C2 roadmap into project-backed semantic batches before furt
 - Active backlog reconciled: 275 work items.
 - Project inference complete: 275/275 items mapped to a MegaVault project; 231 previously lacked usable C2 project metadata.
 - MegaVault is the project authority used for repo/path/project mapping.
-- Current execution is reconciled from authoritative receipts, not RUNNING rows: C2 sanitation `d083…` has a conditional BLOCKED result awaiting writer Issue #4297; PersonalHub feedback PR #66 is merged and strict PASS awaits writer Issue #4299; PersonalHub i18n 436865 has a clean preserved branch but awaits a rightful fenced BLOCKED→WAITING transition after the stale 344032 dependency was integrated. Datasette5 Phase D is blocked on external CI/privacy gates with its PR #4 preserved. Other historical projections alone do not establish live workers.
+- Current execution is reconciled from authoritative receipts, not RUNNING rows: C2 sanitation `d083…` is conditionally BLOCKED by applied writer Issue #4297; PersonalHub feedback PR #66 is merged and strict PASS awaits writer Issue #4299; PersonalHub i18n 436865 has a clean preserved branch but awaits a rightful fenced BLOCKED→WAITING transition after the stale 344032 dependency was integrated. Datasette5 Phase D is blocked on external CI/privacy gates with its PR #4 preserved. Other historical projections alone do not establish live workers.
 - Legacy task-state descendants can remain operational after terminal parents; they must not be treated as direct runnable work.
 
 # Project inference summary
@@ -683,7 +683,10 @@ After canonical order readback: process batch 00 only, reconcile its current rep
 - These classes are not terminal product work. They remain mapped in the existing project/batch checkpoint; no fresh source scan was needed for this readback.
 
 ## Next action
-Read the applied/rejected writer receipts for d083 conditional BLOCKED Issue #4297 and PersonalHub feedback PASS Issue #4299 once. Then reread all six PersonalHub rows and, after a rightful C2 fenced BLOCKED→WAITING transition, resume the existing clean 436865 i18n worktree for targeted compile/lint. Keep Grindr login external and branch convergence behind `d083…`; do not launch another writer in either repository.
+Read the applied/rejected writer receipt for PersonalHub feedback PASS Issue #4299 once. Then reread all six PersonalHub rows and, after a rightful C2 fenced BLOCKED→WAITING transition, resume the existing clean 436865 i18n worktree for targeted compile/lint. Keep Grindr login external and branch convergence behind `d083…`; do not launch another writer in either repository.
+
+### 2026-09-28 batch-01 conditional result applied
+- Single-writer Issue #4297 closed APPLIED at 16:59:34 UTC, recording the existing `d083…` sanitation lane as BLOCKED with exact owner-level recovery conditions. This is not PASS and cannot unlock the required `dad7…` branch-convergence dependency. No branch was deleted or dirty worktree reset. The parent roadmap Goal remains active across this child result.
 
 ### 2026-09-28 16:59 UTC feedback integration and strict result
 - PersonalHub PR #66 completed guarded integration at merge SHA `0b09abe25f22adf282a1706072d3a670a1849dbb`; repo-task pipeline is `done`. Its formerly pending `unit` job concluded PASS at 16:57:57 UTC; GitGuardian, capsule boundaries and both play-preflight jobs also passed. Strict non-prompt feedback PASS was submitted as C2 Issue #4299 and awaits the single-writer receipt. No i18n source work starts before this lifecycle result and a fresh whole-batch read.
