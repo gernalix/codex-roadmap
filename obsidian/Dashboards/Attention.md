@@ -9,5 +9,4 @@
 - [[obsidian/Prompts/575295 regression-c2-issue-1310-grindr-favorites-histor-575295|575295 · Regression: C2 Issue #1310 Grindr favorites history and Telegram actions]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/875575 conservare-e-confrontare-lo-storico-dei-test-adb-875575|875575 · Conservare e confrontare lo storico dei test ADB]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/302284 prompt-infrastructure-final-runtime-activation-v1|302284 · Distribuisci gli ultimi fix della prompt infrastructure]] · `blocked` · analizzato=no · fix=—
-- [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence|660629 · Orchestrare C2 fino a quiescenza]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/812553 chatgpt-exporter-resilience-canonical-primary-repo-recovery-v1|812553 · Riprendere l’hardening ChatGPTExporter con repository canonico valido]] · `failed` · analizzato=no · fix=—

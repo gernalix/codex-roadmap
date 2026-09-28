@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence\|660629 · Orchestrare C2 fino a quiescenza]] | running | 2026-09-27T06:00:21Z | 2026-09-27T13:01:32Z | UNKNOWN | no | no | — | codex-roadmap | GPT-6 Luna | medium |
 | [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865\|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] | running | 2026-09-27T18:50:49Z | 2026-09-27T18:56:39Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/344032 personalhub-restore-built-in-kotlin-classes-in-h-344032\|344032 · PersonalHub: Restore built-in Kotlin classes in hub-context artifacts]] | running | — | — | — | no | no | — | PersonalHub | gpt-6-sol | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
@@ -68,6 +67,7 @@
 | [[obsidian/Prompts/238170 c2-supervisor-human-milestone-telegram-v1\|238170 · Rendere strutturali le notifiche milestone C2]] | superseded | — | — | — | no | no | — | chatgpt-rdc-supervisor | GPT-6 Luna | low |
 | [[obsidian/Prompts/992303 c2-executor-chat-reference-history\|992303 · Traccia executor e chat di ogni task C2]] | completed | 2026-09-26T22:49:58Z | 2026-09-26T22:55:45Z | PASS | no | no | — | codex-roadmap / C2 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/233366 implementare-struttura-minima-del-contratto-c2-233366\|233366 · Implementare struttura minima del contratto C2]] | completed | 2026-09-26T22:58:15Z | 2026-09-26T23:00:09Z | PASS | no | no | — | codex-roadmap | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence\|660629 · Orchestrare C2 fino a quiescenza]] | cancelled | 2026-09-27T06:00:21Z | 2026-09-27T13:01:32Z | CANCELLED | no | no | — | codex-roadmap | GPT-6 Luna | medium |
 | [[obsidian/Prompts/538642 codex-usage-publisher-attribution-fastpath-followup\|538642 · Velocizzare e correggere il salvataggio dei dati Codex]] | completed | 2026-09-18T18:37:02Z | 2026-09-18T18:37:02Z | PASS | sì | sì | [[obsidian/Prompts/371237 codex-usage-publisher-attribution-fastpath-runtime-fix\|371237]] | Fedora | GPT-5.6 Luna | low |
 | [[obsidian/Prompts/886414 personalhub-100-capsule-isolation-local-validation\|886414 · PersonalHub 100% capsule isolation — validazione locale]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/200725 personalhub-100-capsule-isolation-local-validation-v2\|200725 · PersonalHub 100% capsule isolation — integra main e valida]] | superseded | — | — | — | no | no | — | PersonalHub | GPT-5.6 Terra | medium |
