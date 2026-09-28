@@ -7,7 +7,7 @@ Normalize the active C2 roadmap into project-backed semantic batches before furt
 - Active backlog reconciled: 275 work items.
 - Project inference complete: 275/275 items mapped to a MegaVault project; 231 previously lacked usable C2 project metadata.
 - MegaVault is the project authority used for repo/path/project mapping.
-- Current execution is reconciled from authoritative receipts, not RUNNING rows: this Goal owns the manual C2 `d083…` receipt; PersonalHub 344032 is queued on PR #63 in its existing worktree; Datasette5 Phase D is blocked on external CI/privacy gates with its PR #4 preserved. Other historical projections alone do not establish live workers.
+- Current execution is reconciled from authoritative receipts, not RUNNING rows: this Goal owns the manual C2 `d083…` receipt; PersonalHub feedback `528ed…` is queued on guarded PR #66 in its reused task branch; PersonalHub i18n 436865 has a clean preserved branch but awaits a rightful fenced BLOCKED→WAITING transition after the stale 344032 dependency was integrated. Datasette5 Phase D is blocked on external CI/privacy gates with its PR #4 preserved. Other historical projections alone do not establish live workers.
 - Legacy task-state descendants can remain operational after terminal parents; they must not be treated as direct runnable work.
 
 # Project inference summary
