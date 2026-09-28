@@ -57,6 +57,42 @@ class WorkItemAdminTests(unittest.TestCase):
         self.assertEqual("pending", states[gate["work_item_id"]])
         self.assertEqual(0, self.conn.execute("SELECT count(*) FROM work_item_relations").fetchone()[0])
 
+    def test_selective_descendant_preserves_root_and_siblings(self):
+        stale = c2_intake.add_work_item(self.conn, title="Stale imported step", parent_id=self.root_id)
+        current = c2_intake.add_work_item(self.conn, title="Current step", parent_id=self.root_id)
+        self.conn.execute("UPDATE work_items SET status='waiting' WHERE work_item_id=?", (self.root_id,))
+        source_ref = self.conn.execute("SELECT source_ref FROM work_items WHERE work_item_id=?",
+                                       (stale["work_item_id"],)).fetchone()[0]
+        admin.reconcile_descendant(
+            self.conn, stale["work_item_id"], expected_parent_id=self.root_id,
+            expected_source_ref=source_ref, expected_status="pending",
+            classification="DUPLICATE_MERGE", evidence=["Terminal source prompt and canonical owner verified"],
+            superseded_by=current["work_item_id"],
+        )
+        states = dict(self.conn.execute("SELECT work_item_id,status FROM work_items"))
+        self.assertEqual("waiting", states[self.root_id])
+        self.assertEqual("superseded", states[stale["work_item_id"]])
+        self.assertEqual("pending", states[current["work_item_id"]])
+        self.assertEqual(1, self.conn.execute("SELECT count(*) FROM work_item_evidence WHERE work_item_id=?",
+                                              (stale["work_item_id"],)).fetchone()[0])
+
+    def test_selective_descendant_rejects_stale_precondition_and_active_run(self):
+        child = c2_intake.add_work_item(self.conn, title="Child", parent_id=self.root_id)
+        source_ref = self.conn.execute("SELECT source_ref FROM work_items WHERE work_item_id=?",
+                                       (child["work_item_id"],)).fetchone()[0]
+        args = dict(expected_parent_id=self.root_id, expected_source_ref=source_ref,
+                    expected_status="pending", classification="ALREADY_IMPLEMENTED",
+                    evidence=["Verified merged source"])
+        with self.assertRaisesRegex(ValueError, "descendant_precondition_changed"):
+            admin.reconcile_descendant(self.conn, child["work_item_id"],
+                                       **{**args, "expected_source_ref": "different"})
+        c2_scheduler.configure(self.conn, self.root_id, activity="native", command=["true"])
+        self.assertEqual(self.root_id, c2_scheduler.schedule(self.conn, event_key="test", now=1)[0]["work_item_id"])
+        with self.assertRaisesRegex(ValueError, "active_run_requires_normal_lifecycle"):
+            admin.reconcile_descendant(self.conn, child["work_item_id"], **args)
+        self.assertEqual("pending", self.conn.execute("SELECT status FROM work_items WHERE work_item_id=?",
+                                                      (child["work_item_id"],)).fetchone()[0])
+
     def test_waiting_requires_blocker_and_removes_only_named_dependency(self):
         dep = c2_intake.add_work_item(self.conn, title="Old dependency")
         self.conn.execute("INSERT INTO work_item_dependencies(work_item_id,depends_on_work_item_id,required) VALUES(?,?,1)", (self.root_id, dep["work_item_id"]))
