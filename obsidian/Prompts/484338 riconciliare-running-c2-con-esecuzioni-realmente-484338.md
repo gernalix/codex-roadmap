@@ -1,6 +1,6 @@
 ---
 prompt_id: 484338
-status: pending
+status: running
 project_id: —
 model: GPT-5.6 Sol
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - priority:p0
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/riconciliare-running-c2-con-esecuzioni-realmente-484338|Apri prompt]]
 - **Primo lancio:** —
