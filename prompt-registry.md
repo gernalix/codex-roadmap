@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/344032 personalhub-restore-built-in-kotlin-classes-in-h-344032\|344032 · PersonalHub: Restore built-in Kotlin classes in hub-context artifacts]] | running | 2026-09-28T06:05:35Z | 2026-09-28T06:05:35Z | PASS | no | no | — | PersonalHub | gpt-6-sol | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
@@ -176,6 +175,7 @@
 | [[obsidian/Prompts/158995 c2-dashboard-rendere-immediatamente-visibili-i-n-158995\|158995 · C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati]] | completed | 2026-09-27T05:21:37Z | 2026-09-27T05:22:30Z | PASS | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/875575 conservare-e-confrontare-lo-storico-dei-test-adb-875575\|875575 · Conservare e confrontare lo storico dei test ADB]] | blocked | 2026-09-26T22:45:54Z | 2026-09-26T22:49:45Z | BLOCKED | no | no | — | codex-roadmap | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865\|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] | blocked | 2026-09-27T18:50:49Z | 2026-09-28T05:57:00Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
+| [[obsidian/Prompts/344032 personalhub-restore-built-in-kotlin-classes-in-h-344032\|344032 · PersonalHub: Restore built-in Kotlin classes in hub-context artifacts]] | completed | 2026-09-28T06:05:35Z | 2026-09-28T06:05:35Z | PASS | no | no | — | PersonalHub | gpt-6-sol | medium |
 | [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582\|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]] | waiting | 2026-09-27T10:43:26Z | 2026-09-28T03:06:58Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/255325 prompt-255325\|255325 · Prompt 255325]] | cancelled | 2026-09-18T17:42:04Z | 2026-09-18T17:42:04Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/294731 prompt-294731\|294731 · Prompt 294731]] | cancelled | 2026-09-16T17:42:10Z | 2026-09-16T17:42:10Z | CANCELLED | sì | no | — | — | — | — |
