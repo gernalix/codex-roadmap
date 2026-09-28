@@ -5,7 +5,7 @@
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [[obsidian/Prompts/660629 c2-autonomous-orchestration-to-quiescence\|660629 · Orchestrare C2 fino a quiescenza]] | running | 2026-09-27T06:00:21Z | 2026-09-27T13:01:32Z | UNKNOWN | no | no | — | codex-roadmap | GPT-6 Luna | medium |
-| [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1\|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] | running | 2026-09-25T09:22:42Z | 2026-09-25T09:22:42Z | BLOCKED | sì | no | — | Fedora / fedora-system-monitor | GPT-6 Luna | low |
+| [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1\|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] | running | 2026-09-25T09:22:42Z | 2026-09-28T00:49:56Z | BLOCKED | sì | no | — | Fedora / fedora-system-monitor | GPT-6 Luna | low |
 | [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865\|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] | running | 2026-09-27T18:50:49Z | 2026-09-27T18:56:39Z | BLOCKED | no | no | — | — | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |

@@ -16,7 +16,7 @@ tags:
 - **Progetto:** [[../Projects/fedora-fedora-system-monitor|Fedora / fedora-system-monitor]]
 - **Prompt:** [[../../prompts/sqlite-to-obsidian-kuma-connection-recovery-v1|Apri prompt]]
 - **Primo lancio:** 2026-09-25T09:22:42Z
-- **Ultimo lancio:** 2026-09-25T09:22:42Z
+- **Ultimo lancio:** 2026-09-28T00:49:56Z
 - **Ultimo esito:** BLOCKED
 - **Analizzato da ChatGPT:** sì
 - **Codice modificato da ChatGPT:** no (0 interventi)
@@ -36,6 +36,7 @@ Ritenta e diagnostica una sola volta il provisioning Kuma centrale fallito per C
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-25T09:22:42Z | 2026-09-25T09:27:16Z | BLOCKED | 273.84 | gpt-6-luna | low | 23 | 46166 |
+| 2026-09-28T00:49:56Z | 2026-09-28T00:54:03Z | BLOCKED | 247.27 | gpt-6-sol | medium | 29 | 127782 |
 
 ## Analisi ChatGPT
 
