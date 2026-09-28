@@ -1,19 +1,19 @@
 ---
 prompt_id: 545953
-status: blocked
+status: superseded
 project_id: 42
 model: GPT-5.6 Terra
 reasoning: medium
 tags:
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/blocked
+  - roadmap/status/superseded
   - roadmap/project/telegram-insert-bot
 ---
 
 # 545953 · Ripristinare il diff storico delle notifiche Telegram dopo enrichment Grindr
 
-- **Stato:** blocked
+- **Stato:** superseded
 - **Progetto:** [[../Projects/telegram-insert-bot|telegram_insert_bot]]
 - **Prompt:** [[../../falliti/ripristinare-il-diff-storico-delle-notifiche-tel-545953|Apri prompt]]
 - **Primo lancio:** 2026-09-27T10:43:38Z
