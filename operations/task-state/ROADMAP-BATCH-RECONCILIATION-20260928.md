@@ -371,3 +371,110 @@ Normalize the active C2 roadmap into project-backed semantic batches before furt
 
 # Next action
 Apply roadmap ordering so 00/01 survivor tasks come first, product/data survivor batches follow, conditional/external-wait batches remain parked, and Z1/Z2 cannot compete for dispatch.
+
+## Canonical project attribution
+MegaVault-backed attribution covers all 275 active items. 231 items lacked usable C2 project metadata before inference; all 231 were resolved. Highest-volume projects:
+- codex-roadmap: 142
+- personalhub: 42
+- fedora-system-monitor: 15
+- megavault: 9
+- adb-device-keeper: 9
+- chatgpt-rdc-supervisor: 9
+- datasette5: 6
+- workflowy-importer: 6
+- grindr-favorites-monitor: 4
+- grindr-web-exporter: 3
+- salute: 3
+- chrome-codex-switcher: 2
+- logseq-updates: 2
+- activity-watch-uploader: 2
+- github-autosync: 2
+- fedora-external-updater: 2
+- telegram_insert_bot: 2
+- vm_oracle: 1
+- owntracks-watcher: 1
+- oracle-backup-service: 1
+- amici-fb: 1
+- codex-usage: 1
+- duplicate-photos-detector: 1
+- livinggaul-x-downloader: 1
+- fedora-t7-backup: 1
+- windows-winget-daily-update: 1
+- codex-usage-monitor: 1
+- windows-flight-recorder: 1
+- x-repost-downloader: 1
+- oracle-uptime-kuma: 1
+- fedora-diagnostics: 1
+- prompt-history: 1
+
+## Canonical survivor order
+Only these 56 active items are ranked for future execution. All other active rows are intentionally unranked because they are stale orchestration, duplicates, absorbed detail, deferred until Symphony, or external/conditional waits.
+00. `wi:52a87ab8460d479dbee0fc970cbc58a0` — newly created/consolidated survivor
+01. `wi:17e233380ed8409c98fe00cc294ed003` — PersonalHub: Restore built-in Kotlin classes in hub-context artifacts
+02. `wi:5ec3b96d0dd842aca654b588213bc5eb` — Regression: Datasette5 import test blocked by pydantic-core mismatch
+03. `wi:b9e561a89cd64ec1b344d4becb958651` — Riconciliare RUNNING C2 con esecuzioni realmente vive
+04. `wi:b45503242af34c10ba32832d0645dbc6` — C2 import: discendenti task-state obsoleti restano operativi sotto root waiting
+05. `wi:b4973cff2a6449bfa8e93af99d71ed7a` — Aggiungere la riconciliazione di progetto prima dei batch C2
+06. `wi:948b530657cb46c78a5e403826e2b7f4` — Reconcile MegaVault and C2 project identity mappings before routing
+07. `wi:56582a64875f4bcf8df3b708f4a17e95` — Reconcile C2 parent lifecycle after required child receipts change
+08. `wi:7237e4d93f2e40b085ccb1c6fac02da9` — Gate child dispatch on applied executor start and reconcile stale parent ownership
+09. `wi:fd61fd5e14ff4cb7a83c3bcd8c5c864c` — Make executor-start reliable when worker GitHub egress is unavailable
+10. `wi:db4eb9c690ce4db88f75f0e8823409b0` — Regression: impedire il riavvio automatico del browser RDC da C2
+11. `wi:d08356a155404433bbea2f6700287927` — Sanare tutti i repo/worktree sporchi e prevenire ricorrenza
+12. `wi:dad7a0b2953041a597762b7190bd074c` — Convergere tutti i branch non-main su main e rimuovere quelli integrati
+13. `wi:daad704307a448e09f7b32b903939a52` — C2 worktree integration: isolare le modifiche concorrenti e prevenire contaminazione
+14. `wi:e0eed3bec9584f3a82f28c77b7a00e38` — Validate repository and publication readiness before C2 dispatch
+15. `wi:9b5fe27af4814065918a72c1d5b85fc4` — Prevent task-state writes in canonical and runtime C2 worktrees
+16. `wi:f2d5d81a952b47b1bd4fa4c07d175265` — C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo
+17. `wi:0fa0c1ccfc3d4d269d28225ee81161bc` — C2 prompt routing: repo canonico e-Boks resta MegaVault dopo la verifica del nuovo repo
+18. `wi:126a7347376647d08d75cfb0b3aed128` — Rimuovere Datasette completamente da PersonalHub
+19. `wi:f5e4489e271244c68e987a58a006cedb` — Ripristinare History PersonalHub con Mutation Event Store semantico
+20. `wi:7ee12d74262b498f892f51de128e041b` — Substances registra con stock 0 e clear+focus globale nei filtri Cerca
+21. `wi:528ed2b27875441eb577c61d660ae65e` — PersonalHub: unificare la presentazione di toast e snackbar
+22. `wi:f078db802caf4cdcbcf8682527fe0e14` — Definire strategia i18n/lint PersonalHub per MissingTranslation
+23. `wi:1af496ffb5834cfdbbc623dfd2c9f0c1` — Phase C verify — salute salute.db
+24. `wi:6a187c7e94be40daba8dce5678ba64f6` — Phase D — motore unico Fedora → Oracle → Datasette
+25. `wi:9116862e72024e89b0033b4c6eeb146c` — Phase E — UX Datasette standard e navigazione frictionless
+26. `wi:e20d87af9a6641c385b03b40aa72ab8a` — Gate finale — MegaVault + database inventory + Datasette end-to-end
+27. `wi:7c0bbc55a6b14f99845c133eff406c1a` — Resolve salute.db authority classification mismatch
+28. `wi:7e98dee44dae4265ab7b8210cf6a2cc8` — Datasette5: correggere il percorso predefinito degli schemi nei test PersonalHub
+29. `wi:340dd4d8d5c54faf933f2060df3728c6` — newly created/consolidated survivor
+30. `prompt:714263` — Chiudere il residuo Kuma di sqlite-to-obsidian
+31. `wi:f5cef53ce33749e8b100ad866f01278f` — Diagnostica e ripristina i monitor Uptime Kuma rossi
+32. `wi:a372ffb8c3e245e9b9f68cb935197788` — Riparare SMART Disk Monitor per Samsung T7 / bridge ASMedia
+33. `wi:a392bc6406104fd98a665f42716d88ff` — Distinguish intentional Workflowy ExecCondition skip from Kuma outage
+34. `wi:e9752f40936a4cfcbd5c1995de397a23` — Fedora System Monitor: attribuire memoria Chrome a tab e conservare storico top-N
+35. `prompt:181259` — Riprendi Grindr dopo il login senza model waiting
+36. `wi:ce3676f92b59422f94c4d5607daf630a` — Valutare enrichment chat e convergenza repo Grindr
+37. `wi:fdd72bab3cd44ee89decb25f910b87c6` — Usare identità canonica per le card Grindr Favorites
+38. `wi:37832d5a38a04e29a6c1bdccabf08f82` — Regression: C2 Issue #1310 Grindr favorites history and Telegram actions
+39. `wi:cc78ff4dcaf942f998d821fb48826d23` — Rendere immediato il profile_id dalle foto Grindr scaricate
+40. `prompt:556372` — Delegare export Grindr end-to-end a ChatGPT Desktop
+41. `wi:b0e08a6e920442d7b3eb2533fcf52ed9` — Riconciliare path authority e metadata repository di MegaVault
+42. `wi:91bda0f2a16f43049ab1f15c4d8005b7` — Recover the Phase C MegaVault worktree without losing mixed changes
+43. `prompt:582946` — Riprendere export e-Boks dopo login MitID
+44. `prompt:218695` — Creare e validare il repository pubblico e-Boks scraper
+45. `wi:3c7c9af3af3141b28b44f6d0016e41a4` — C2 supervisor: terminal workers restano abilitati e possono contendere la lane
+46. `wi:94bef287ab7a4dc7960a084a9ab6a72f` — RDC supervisor: impedire invii duplicati tra percorso manuale e automatico
+47. `wi:c613a965f8a340f7906e512168c6626e` — RDC supervisor: definire soglie di stall e recovery basate su evidenza dinamica
+48. `wi:80573401502e4845b6e7520cd0cc79e0` — Scope repo_single_writer status-any by repository identity
+49. `wi:2f0f5246432e48ed8f454714e8cff72c` — Reconcile stale chrome-codex-switcher repo-task without publishing historical branch
+50. `wi:dce555999f864385912180bedadb974d` — Automatizzare la copertura updater del software esterno, incluso RDC
+51. `wi:8e74cd241eea460faa2556eb392d4bb6` — Investigate T7 restic backup failures and repository corruption
+52. `wi:ab3b68fe0a4841b2a9c4b34b894ae801` — Bonificare Datasette Alerts dopo il cutover PersonalHub verificato
+53. `wi:880930830ac54dcdb3ccf8d062f8648b` — Restore Codex Desktop Linux access through the current Cloudflare challenge
+54. `prompt:588376` — Bonificare history Logseq e attivare updater
+55. `prompt:302284` — Distribuisci gli ultimi fix della prompt infrastructure
+
+## Reconciliation result
+- 84 items: stale legacy orchestration; do not dispatch.
+- 59 items: defer C2-specific improvements until Symphony decision/migration.
+- 23 items: absorb into current Git/worktree convergence batch.
+- 16 items: consolidate into repository-level batches rather than micro-task dispatch.
+- 21 items: external waits.
+- 9 items: condition waits.
+- 6 items: source-evidence wait (302284).
+- Remaining survivors: preserve/execute according to ordered batches and repository locks.
+
+## Next action
+Verify the manual survivor order has landed in canonical roadmap. Then reconcile batch 00 and batch 01 against current repository heads before any new dispatch.
