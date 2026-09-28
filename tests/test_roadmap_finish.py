@@ -42,6 +42,43 @@ class FinishWrapperTests(unittest.TestCase):
             self.assertEqual(row, dedicated._pr(work_item_id))
         self.assertIn("task/wi-" + "a" * 32, run.call_args.args)
 
+    def test_work_item_queue_uses_single_writer_process_title(self):
+        work_item_id = "wi:" + "a" * 32
+        head = "b" * 40
+        with patch.object(dedicated, "_identity", return_value=head), \
+             patch.object(dedicated, "_pr", return_value=None), \
+             patch.object(dedicated, "_git", return_value="") as git, \
+             patch.object(dedicated, "_run", return_value="https://example.test/pr") as run, \
+             patch.object(dedicated, "status", return_value={"status":"queued","head_sha":head}):
+            out = dedicated.queue(Path("/tmp/codex-roadmap-task"), work_item_id)
+        self.assertEqual("queued", out["status"])
+        self.assertTrue(any(call.args[-1] == f"{head}:refs/heads/task/wi-{'a'*32}"
+                            for call in git.call_args_list if call.args[1] == "push"))
+        self.assertIn("[single-writer] " + work_item_id, run.call_args.args)
+
+    def test_work_item_queue_updates_managed_pr_only_for_exact_new_head(self):
+        work_item_id = "wi:" + "a" * 32
+        old_head, new_head = "a" * 40, "b" * 40
+        with patch.object(dedicated, "_identity", return_value=new_head), \
+             patch.object(dedicated, "_pr", return_value={"number": 44}), \
+             patch.object(dedicated, "_git", return_value=old_head + "\trefs/heads/task/wi-" + "a" * 32), \
+             patch.object(dedicated, "_run", return_value="updated") as run, \
+             patch.object(dedicated, "status", side_effect=[
+                 {"status":"queued","head_sha":old_head},
+                 {"status":"queued","head_sha":new_head},
+             ]):
+            out = dedicated.queue(Path("/tmp/codex-roadmap-task"), work_item_id,
+                                  expected_head=new_head)
+        self.assertEqual(new_head, out["head_sha"])
+        self.assertIn("edit", run.call_args.args)
+        self.assertIn("[single-writer] " + work_item_id, run.call_args.args)
+
+        with patch.object(dedicated, "_identity", return_value=new_head), \
+             patch.object(dedicated, "_pr", return_value={"number": 44}), \
+             patch.object(dedicated, "status", return_value={"status":"queued","head_sha":old_head}):
+            with self.assertRaisesRegex(dedicated.IntegrationError, "task_pr_head_drift"):
+                dedicated.queue(Path("/tmp/codex-roadmap-task"), work_item_id)
+
     @patch("roadmap_finish.prompt_repository", return_value="gernalix/codex-roadmap")
     @patch("roadmap_finish.queue_integration", return_value=("queued", False))
     def test_self_repo_no_generic_task_record_needed(self, queue, repository):

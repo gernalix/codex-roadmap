@@ -112,17 +112,23 @@ def queue(repo: Path, prompt_id: str, *, expected_head: str | None = None) -> di
     if expected_head is not None and head != expected_head:
         raise IntegrationError("tested_head_drift")
     existing = _pr(prompt_id)
+    update_existing = False
     if existing:
         result = status(prompt_id)
         prior = result.get("head_sha")
         if prior == head:
             return result
-        if result.get("status") != "merged":
+        if result.get("status") == "queued" and expected_head == head:
+            # A caller that names the exact tested local HEAD may update an
+            # existing managed PR; CI will rerun for that new head.
+            update_existing = True
+        elif result.get("status") != "merged":
             raise IntegrationError("task_pr_head_drift")
-        _git(repo, "merge-base", "--is-ancestor", str(prior), head)
-        changed = set(_git(repo, "diff", "--name-only", str(prior), head).splitlines())
-        if changed and changed <= {_state_path(prompt_id)}:
-            return result
+        if not update_existing:
+            _git(repo, "merge-base", "--is-ancestor", str(prior), head)
+            changed = set(_git(repo, "diff", "--name-only", str(prior), head).splitlines())
+            if changed and changed <= {_state_path(prompt_id)}:
+                return result
     branch = "task/" + _branch_name(prompt_id)
     remote = _git(repo, "ls-remote", "origin", "refs/heads/" + branch)
     remote_head = remote.split()[0] if remote else "0" * 40
@@ -130,13 +136,19 @@ def queue(repo: Path, prompt_id: str, *, expected_head: str | None = None) -> di
         _git(repo, "merge-base", "--is-ancestor", remote_head, head)
     _git(repo, "push", f"--force-with-lease=refs/heads/{branch}:{remote_head}",
          "origin", f"{head}:refs/heads/{branch}")
+    is_work_item = WORK_ITEM.fullmatch(prompt_id) is not None
+    pr_title = ("[single-writer] " if is_work_item else "[c2-roadmap] ") + prompt_id
     body = f"C2 codex-roadmap task {prompt_id}\n\nC2-tested-head: {head}\n"
     with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", suffix=".md") as doc:
         doc.write(body)
         doc.flush()
-        _run("gh", "pr", "create", "--repo", REPOSITORY, "--base", "main",
-             "--head", branch, "--title", f"[c2-roadmap] {prompt_id}",
-             "--body-file", doc.name)
+        if update_existing:
+            _run("gh", "pr", "edit", str(existing["number"]), "--repo", REPOSITORY,
+                 "--title", pr_title, "--body-file", doc.name)
+        else:
+            _run("gh", "pr", "create", "--repo", REPOSITORY, "--base", "main",
+                 "--head", branch, "--title", pr_title,
+                 "--body-file", doc.name)
     result = status(prompt_id)
     if result.get("head_sha") != head:
         raise IntegrationError("queued_head_mismatch")
