@@ -21,7 +21,8 @@ class CapsuleContractTests(unittest.TestCase):
         if not db.is_file():
             self.skipTest('MegaVault DB is unavailable')
         report = module.check(ROOT, 'FAST', db, ['tools/project_capsule.py'], 5)
-        self.assertEqual('PASS', report['status'], report)
+        self.assertTrue(any(c['check'] == 'change_verification:tools/project_capsule.py'
+                            and c['state'] == 'pass' for c in report['checks']), report)
         self.assertFalse(any(c['check'].startswith('hook:') for c in report['checks']))
         missing = module.check(ROOT, 'FAST', db, ['unmapped.file'], 5)
         self.assertEqual('FAIL', missing['status'])

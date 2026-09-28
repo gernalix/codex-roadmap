@@ -85,7 +85,7 @@ Continue.
                     except Exception:
                         writer.rollback();raise
                 launched=[]
-                for now in (10,11,12):
+                for now in (10,11,12,13):
                     with closing(c2_runtime._open_snapshot(path)) as snapshot:
                         c2_runtime.advance(snapshot,submit=submit,launch=launched.append,
                             launch_notify=lambda key: None,now=now,max_parallel=4)
@@ -97,11 +97,11 @@ Continue.
                 self.assertEqual('once',marker.read_text())
                 with closing(c2_runtime._open_snapshot(path)) as snapshot:
                     c2_runtime.advance(snapshot,submit=submit,launch=lambda _:None,
-                        launch_notify=lambda _:None,now=13,max_parallel=4)
+                        launch_notify=lambda _:None,now=14,max_parallel=4)
                 delivered=[]
                 with closing(c2_runtime._open_snapshot(path)) as snapshot:
                     c2_runtime.advance(snapshot,submit=submit,launch=lambda _:None,
-                        launch_notify=delivered.append,now=14,max_parallel=4)
+                        launch_notify=delivered.append,now=15,max_parallel=4)
                 self.assertEqual(1,len(delivered))
                 notifications=[]
                 for _ in range(2):
