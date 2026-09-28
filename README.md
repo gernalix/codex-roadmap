@@ -98,6 +98,17 @@ Le strutture storiche `analyses` e `analysis_code_changes` restano nel DB per co
 
 `roadmap.sqlite` è l'unica fonte autorevole di metadati **e testo canonico dei prompt**. Workflowy è la dashboard operativa. `roadmap.md`, `spiegazioni.md`, `prompt-registry.md`, `obsidian/` e i file prompt restano materializzazioni di compatibilità/audit e non devono essere usati per dedurre lo stato operativo.
 
+Lo stato di un executor live è distinto dal lifecycle del work item. I consumer,
+incluso Workflowy, devono leggere `v_work_item_execution_liveness`: solo
+`has_live_executor=1` prova un executor `claimed`, `running` o `recovering`.
+`execution_state=stale_running` non è live. Un supervisore status-only deve
+avere il tag esplicito `c2:status-only-supervisor`, viene esposto come
+`supervising` e non consuma capacità executor né possiede un lock writer repo.
+Il runtime lancia un worker solo dopo il readback canonico del receipt
+`executor_started`; il worker fallisce chiuso se il receipt non è presente.
+Un turno Codex interrotto o definitivamente orfano emette un risultato
+`BLOCKED` con recovery action, così run e lease vengono terminalizzati dal writer.
+
 ChatGPT, Codex e il sync `codex-usage` inviano richieste come **GitHub Issues** con titolo `[roadmap-mutation] <request_key>` e body JSON immutabile. Ogni run del workflow drena **tutte** le mutation Issue aperte in ordine, le applica serialmente, materializza eventuali nuovi prompt, verifica ogni mutation e rigenera le viste **una sola volta per batch**, poi aggiorna `main` e chiude le Issue processate. Se GitHub cancella un run pending per la concurrency, la Issue resta aperta e viene raccolta automaticamente dal run successivo. Una mutation invalida/collidente viene isolata, commentata e chiusa `not_planned` senza impedire l'applicazione delle Issue valide successive.
 
 I client non committano più file di inbox, prompt, DB o viste. Le directory `mutations/inbox/` e `mutations/applied/` restano solo come storico del trasporto precedente. Gli entry point operativi di mutazione diretta sono bloccati: `roadmap_db.py` è read-only da CLI, `import_codex_usage.py` delega a `roadmap_sync.py`, l'inbox legacy è test-only e `bootstrap_roadmap.py` richiede il contesto writer esplicito.

@@ -37,11 +37,13 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             raise WorkerError('run_not_claimed_and_acknowledged')
         if run['worker_ref']!='c2-run:'+run_id:
             raise WorkerError('worker_identity_mismatch')
+        if not conn.execute('''SELECT 1 FROM work_item_executor_starts
+              WHERE run_id=? LIMIT 1''',(run_id,)).fetchone():
+            raise WorkerError('executor_start_receipt_missing')
         metadata=json.loads(run['metadata_json'])
         executor=run['executor']
         if executor in ('rdc','chatgpt') and metadata.get('activity') in ('gui','semantic') and lane_degraded():
             return {'run_id':run_id,'executor':executor,'phase':'suspended'}
-        submit('executor_started',{'run_id':run_id},'c2-executor-start-'+run_id)
         if executor=='rdc' and metadata.get('activity')=='native':
             receipt=Path(state_root)/f'{run_id}.native.json'
             result=execute_native(run_id=run_id,metadata=metadata,receipt=receipt)
@@ -138,7 +140,12 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             turn_id=result.get('turn_id')
             if not turn_id:
                 raise WorkerError('codex_started_turn_identity_missing')
-            terminal=rpc.wait_for_turn(result['thread_id'],turn_id)
+            try:
+                terminal=rpc.wait_for_turn(result['thread_id'],turn_id)
+            except AppServerError as exc:
+                if str(exc)!='orphaned_turn_requires_recovery':
+                    raise
+                terminal={'id':turn_id,'status':'interrupted','items':[]}
             record_terminal(receipt,run_id=run_id,thread_id=result['thread_id'],
                 turn_id=turn_id,status=terminal['status'])
             result['phase']=terminal['status']
@@ -147,9 +154,11 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             terminal_status=str(terminal.get('status') or '')
             if parsed is None and terminal_status=='completed':
                 raise WorkerError('codex_terminal_contract_missing')
-            if parsed is None and terminal_status in ('failed','cancelled'):
+            if parsed is None and terminal_status in ('failed','cancelled','interrupted'):
+                outcome=('FAIL' if terminal_status=='failed' else
+                         'BLOCKED' if terminal_status=='interrupted' else 'CANCELLED')
                 parsed={
-                    'outcome':'FAIL' if terminal_status=='failed' else 'CANCELLED',
+                    'outcome':outcome,
                     'summary':'Codex turn terminated before producing the C2 terminal contract',
                     'completed':[],
                     'remaining':['Task did not complete'],

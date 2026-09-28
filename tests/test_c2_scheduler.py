@@ -135,6 +135,8 @@ class SchedulerTests(unittest.TestCase):
         supervisor=intake.add_work_item(self.conn,title='Supervisor',repo='shared')
         self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",
             (supervisor['work_item_id'],))
+        self.conn.execute("INSERT INTO work_item_tags VALUES(?,'c2:status-only-supervisor')",
+            (supervisor['work_item_id'],))
         item=intake.add_work_item(self.conn,title='Isolated task',repo='shared',
             executor_policy='auto')
         wid=item['work_item_id']
@@ -146,6 +148,10 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(wid,receipt['work_item_id'])
         self.assertEqual('running',self.conn.execute(
             'SELECT status FROM work_items WHERE work_item_id=?',(wid,)).fetchone()[0])
+        live=self.conn.execute('''SELECT execution_state,has_live_executor,
+          is_status_only_supervisor FROM v_work_item_execution_liveness
+          WHERE work_item_id=?''',(supervisor['work_item_id'],)).fetchone()
+        self.assertEqual(('supervising',0,1),tuple(live))
 
     def test_manual_start_still_blocks_real_active_same_repo_run(self):
         holder=self.add('shared')
@@ -156,7 +162,7 @@ class SchedulerTests(unittest.TestCase):
         with self.assertRaisesRegex(scheduler.SchedulingError,'executor_start_repo_conflict'):
             scheduler.executor_started(self.conn,work_item_id=candidate,executor='codex')
 
-    def test_manual_start_still_blocks_prompt_writer_with_worktree(self):
+    def test_manual_start_ignores_stale_prompt_with_configured_worktree(self):
         writer=self.conn.execute(
             "SELECT work_item_id FROM work_items WHERE prompt_id='123456'").fetchone()[0]
         self.conn.execute("UPDATE work_items SET repo='shared' WHERE work_item_id=?",(writer,))
@@ -165,8 +171,12 @@ class SchedulerTests(unittest.TestCase):
         self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",(writer,))
         candidate=self.add('shared')
 
-        with self.assertRaisesRegex(scheduler.SchedulingError,'executor_start_repo_conflict'):
-            scheduler.executor_started(self.conn,work_item_id=candidate,executor='codex')
+        receipt=scheduler.executor_started(self.conn,work_item_id=candidate,executor='codex')
+
+        self.assertEqual(candidate,receipt['work_item_id'])
+        self.assertEqual('stale_running',self.conn.execute('''
+          SELECT execution_state FROM v_work_item_execution_liveness
+          WHERE work_item_id=?''',(writer,)).fetchone()[0])
 
     def test_manual_prompt_start_cannot_bypass_roadmap_start(self):
         with self.assertRaisesRegex(scheduler.SchedulingError,'prompt_requires_roadmap_start'):
@@ -345,7 +355,7 @@ class SchedulerTests(unittest.TestCase):
         scheduler.complete(self.conn,run['run_id'],succeeded=True,worker_ref='worker-1')
         self.assertEqual(1,len(scheduler.schedule(self.conn,event_key='completion',now=1001)))
 
-    def test_adopted_prompt_writer_is_never_claimed_or_changed(self):
+    def test_stale_prompt_worktree_does_not_block_or_change_lifecycle(self):
         writer=self.conn.execute(
             "SELECT work_item_id FROM work_items WHERE prompt_id='123456'").fetchone()[0]
         self.conn.execute("UPDATE work_items SET repo='repo-a' WHERE work_item_id=?",(writer,))
@@ -353,9 +363,50 @@ class SchedulerTests(unittest.TestCase):
             worktree='/tmp/adopted-writer')
         self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",(writer,))
         before=tuple(self.conn.execute("SELECT * FROM work_items WHERE prompt_id='123456'").fetchone())
-        self.add()
-        self.assertEqual([],scheduler.schedule(self.conn,event_key='migration',now=1))
+        candidate=self.add()
+        runs=scheduler.schedule(self.conn,event_key='migration',now=1)
+        self.assertEqual([candidate],[run['work_item_id'] for run in runs])
         self.assertEqual(before,tuple(self.conn.execute("SELECT * FROM work_items WHERE prompt_id='123456'").fetchone()))
+
+    def test_expired_run_recovers_and_keeps_capacity_and_repo_lock(self):
+        holder=self.add('shared')
+        run=scheduler.schedule(self.conn,event_key='expiring',now=10,max_parallel=1,
+            lease_seconds=1)[0]
+        recovered=scheduler.recover(self.conn,now=12)
+        self.assertEqual([run['run_id']],[row['run_id'] for row in recovered])
+        live=self.conn.execute('''SELECT execution_state,has_live_executor
+          FROM v_work_item_execution_liveness WHERE work_item_id=?''',(holder,)).fetchone()
+        self.assertEqual(('recovering',1),tuple(live))
+        candidate=self.add('shared')
+        self.assertFalse(scheduler.dispatchable(self.conn,self.conn.execute(
+            'SELECT * FROM work_items WHERE work_item_id=?',(candidate,)).fetchone()))
+        self.assertEqual([],scheduler.schedule(self.conn,event_key='while-recovering',now=13,
+            max_parallel=2))
+
+    def test_failed_run_is_stale_and_releases_capacity_and_repo_lock(self):
+        holder=self.add('shared')
+        run=scheduler.schedule(self.conn,event_key='failed-holder',now=10,max_parallel=1)[0]
+        self.conn.execute("UPDATE work_item_runs SET state='failed' WHERE run_id=?",(run['run_id'],))
+        self.conn.execute('DELETE FROM work_item_resource_leases WHERE run_id=?',(run['run_id'],))
+        live=self.conn.execute('''SELECT execution_state,has_live_executor
+          FROM v_work_item_execution_liveness WHERE work_item_id=?''',(holder,)).fetchone()
+        self.assertEqual(('stale_running',0),tuple(live))
+        candidate=self.add('shared')
+        runs=scheduler.schedule(self.conn,event_key='after-failure',now=11,max_parallel=1)
+        self.assertEqual([candidate],[row['work_item_id'] for row in runs])
+
+    def test_stale_running_parent_does_not_block_child_dispatch(self):
+        parent=self.add('parent')
+        child=self.add('child',parent_id=parent)
+        self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",
+            (parent,))
+
+        runs=scheduler.schedule(self.conn,event_key='stale-parent',now=11,max_parallel=1)
+
+        self.assertEqual([child],[row['work_item_id'] for row in runs])
+        self.assertEqual('stale_running',self.conn.execute('''
+          SELECT execution_state FROM v_work_item_execution_liveness
+          WHERE work_item_id=?''',(parent,)).fetchone()[0])
 
     def test_imported_running_state_without_worker_does_not_consume_capacity(self):
         self.conn.execute("UPDATE work_items SET status='running' WHERE prompt_id='123456'")
