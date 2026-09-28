@@ -79,6 +79,26 @@ class FinishWrapperTests(unittest.TestCase):
             with self.assertRaisesRegex(dedicated.IntegrationError, "task_pr_head_drift"):
                 dedicated.queue(Path("/tmp/codex-roadmap-task"), work_item_id)
 
+    def test_exact_new_head_repairs_pushed_managed_pr_marker(self):
+        old_head, new_head = "a" * 40, "b" * 40
+        existing = {"number": 44, "state": "OPEN", "headRefOid": new_head,
+                    "body": "C2-tested-head: " + old_head}
+        with patch.object(dedicated, "_identity", return_value=new_head), \
+             patch.object(dedicated, "_pr", return_value=existing), \
+             patch.object(dedicated, "_git", return_value=new_head + "\trefs/heads/task/123456") as git, \
+             patch.object(dedicated, "_run", return_value="updated") as run, \
+             patch.object(dedicated, "status", return_value={"status":"queued","head_sha":new_head}):
+            out = dedicated.queue(Path("/tmp/r"), "123456", expected_head=new_head)
+        self.assertEqual(new_head, out["head_sha"])
+        self.assertTrue(any(call.args[1:] == ("merge-base", "--is-ancestor", old_head, new_head)
+                            for call in git.call_args_list))
+        self.assertIn("edit", run.call_args.args)
+
+        with patch.object(dedicated, "_identity", return_value=new_head), \
+             patch.object(dedicated, "_pr", return_value=existing):
+            with self.assertRaisesRegex(dedicated.IntegrationError, "tested_head_drift"):
+                dedicated.queue(Path("/tmp/r"), "123456")
+
     @patch("roadmap_finish.prompt_repository", return_value="gernalix/codex-roadmap")
     @patch("roadmap_finish.queue_integration", return_value=("queued", False))
     def test_self_repo_no_generic_task_record_needed(self, queue, repository):
