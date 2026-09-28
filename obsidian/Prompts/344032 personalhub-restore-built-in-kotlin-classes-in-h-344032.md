@@ -20,9 +20,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../prompts/personalhub-restore-built-in-kotlin-classes-in-h-344032|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-28T06:05:35Z
+- **Ultimo lancio:** 2026-09-28T06:05:35Z
+- **Ultimo esito:** PASS
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -40,7 +40,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-28T06:05:35Z | 2026-09-28T06:08:40Z | PASS | 185.579 | gpt-5.6-sol | medium | 12 | 176278 |
 
 ## Analisi ChatGPT
 
