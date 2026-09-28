@@ -9,3 +9,4 @@
 5. [[prompts/eboks-full-export-resume-after-mitid-v1|eboks-full-export-resume-after-mitid-v1]]
 6. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 7. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
+8. [[prompts/riconciliare-running-c2-con-esecuzioni-realmente-484338|riconciliare-running-c2-con-esecuzioni-realmente-484338]]

@@ -6,6 +6,7 @@ tags:
 # Unknown
 
 - [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] · `running`
+- [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] · `pending`
 - [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479|853479 · Phase A — MegaVault one source of truth definitiva]] · `completed`
 - [[obsidian/Prompts/856999 aggiungere-gate-c2-per-acceptance-post-merge-856999|856999 · Aggiungere gate C2 per acceptance post-merge]] · `completed`
 - [[obsidian/Prompts/742579 rendere-il-db-grindr-favorites-frictionless-da-e-742579|742579 · Rendere il DB Grindr Favorites frictionless da esplorare]] · `completed`
