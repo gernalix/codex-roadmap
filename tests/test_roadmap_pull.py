@@ -100,6 +100,23 @@ class RoadmapPullTests(unittest.TestCase):
         self.assertEqual(before, git(self.local, "rev-parse", "HEAD").stdout.strip())
         self.assertNotEqual(remote_head, before)
 
+    def test_pack_refs_maintenance_is_quiet_but_main_delete_stays_guarded(self) -> None:
+        before = git(self.local, "rev-parse", "refs/heads/main").stdout.strip()
+        packed = git(self.local, "pack-refs", "--all", check=False)
+        self.assertEqual(0, packed.returncode, packed.stderr)
+        self.assertNotIn("codex-roadmap main is guarded", packed.stderr)
+        self.assertEqual(before, git(self.local, "rev-parse", "refs/heads/main").stdout.strip())
+        git(self.local, "switch", "-c", "task/allowed")
+        (self.local / "allowed.txt").write_text("task work\n", encoding="utf-8")
+        git(self.local, "add", "allowed.txt")
+        committed = git(self.local, "commit", "-m", "allowed branch", check=False)
+        self.assertEqual(0, committed.returncode, committed.stderr)
+        self.assertNotIn("codex-roadmap main is guarded", committed.stderr)
+        deleted = git(self.local, "update-ref", "-d", "refs/heads/main", check=False)
+        self.assertNotEqual(0, deleted.returncode)
+        self.assertIn("codex-roadmap main is guarded", deleted.stderr)
+        self.assertEqual(before, git(self.local, "rev-parse", "refs/heads/main").stdout.strip())
+
     def test_guarded_pull_preserves_running_prompt_and_view(self) -> None:
         (self.seed / "README.md").write_text("remote\n", encoding="utf-8")
         remote_head = self.push_seed("remote unrelated change")
