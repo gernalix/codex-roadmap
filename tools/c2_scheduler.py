@@ -71,6 +71,64 @@ CREATE TABLE IF NOT EXISTS work_item_executor_starts (
 );
 CREATE INDEX IF NOT EXISTS idx_work_item_executor_starts_item
  ON work_item_executor_starts(work_item_id,started_at);
+CREATE VIEW IF NOT EXISTS v_work_item_execution_liveness AS
+SELECT w.work_item_id,
+       w.status AS lifecycle_status,
+       r.run_id AS live_run_id,
+       r.state AS live_run_state,
+       CASE
+         WHEN r.run_id IS NOT NULL THEN r.state
+         WHEN w.status='running' AND EXISTS(
+           SELECT 1 FROM work_item_tags t
+           WHERE t.work_item_id=w.work_item_id
+             AND t.tag='c2:status-only-supervisor'
+         ) THEN 'supervising'
+         WHEN w.status='running' THEN 'stale_running'
+         ELSE 'inactive'
+       END AS execution_state,
+       CASE WHEN r.run_id IS NOT NULL THEN 1 ELSE 0 END AS has_live_executor,
+       CASE WHEN w.status='running' AND r.run_id IS NULL AND EXISTS(
+         SELECT 1 FROM work_item_tags t
+         WHERE t.work_item_id=w.work_item_id
+           AND t.tag='c2:status-only-supervisor'
+       ) THEN 1 ELSE 0 END AS is_status_only_supervisor
+FROM work_items w
+LEFT JOIN work_item_runs r
+  ON r.work_item_id=w.work_item_id
+ AND r.state IN ('claimed','running','recovering');
+DROP VIEW IF EXISTS v_work_item_runnable;
+CREATE VIEW v_work_item_runnable AS
+SELECT w.*
+FROM work_items w
+WHERE w.status='pending'
+  AND w.actionable=1
+  AND w.executor_policy<>'human'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM work_item_dependencies d
+    JOIN work_items dep ON dep.work_item_id=d.depends_on_work_item_id
+    WHERE d.work_item_id=w.work_item_id
+      AND d.required=1
+      AND dep.status NOT IN ('completed','waived','cancelled','superseded')
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM work_item_tags t
+    WHERE t.work_item_id=w.work_item_id
+      AND t.tag LIKE 'manual-prerequisite:%'
+  )
+  AND NOT EXISTS (
+    WITH RECURSIVE ancestors(id) AS (
+      SELECT w.parent_id
+      UNION ALL
+      SELECT p.parent_id FROM work_items p
+      JOIN ancestors a ON p.work_item_id=a.id
+      WHERE p.parent_id IS NOT NULL
+    )
+    SELECT 1 FROM ancestors a
+    JOIN work_item_runs r ON r.work_item_id=a.id
+    WHERE r.state IN ('claimed','running','recovering')
+  )
+ORDER BY COALESCE(w.sort_order,2147483647), w.created_at, w.work_item_id;
 CREATE TABLE IF NOT EXISTS work_item_result_receipts (
  receipt_id TEXT PRIMARY KEY,
  work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE CASCADE,
@@ -294,10 +352,8 @@ def _repo_writer_worktrees(conn, repo, work_item_id):
     """Return same-repo worktrees that represent actual writer ownership."""
     return conn.execute('''SELECT s.worktree FROM work_items w
       LEFT JOIN work_item_execution_specs s USING(work_item_id)
-      WHERE w.repo=? AND w.work_item_id<>? AND w.status='running'
-      AND (NULLIF(TRIM(s.worktree),'') IS NOT NULL OR EXISTS(
-        SELECT 1 FROM work_item_runs r WHERE r.work_item_id=w.work_item_id
-        AND r.state IN ('claimed','running','recovering')))''',
+      JOIN v_work_item_execution_liveness live USING(work_item_id)
+      WHERE w.repo=? AND w.work_item_id<>? AND live.has_live_executor=1''',
       (repo,work_item_id)).fetchall()
 
 
@@ -315,8 +371,10 @@ def dispatchable(conn, item):
         if ancestor in seen:
             raise SchedulingError('hierarchy_cycle')
         seen.add(ancestor)
-        row = conn.execute('SELECT parent_id,status FROM work_items WHERE work_item_id=?', (ancestor,)).fetchone()
-        if row['status'] == 'running':
+        row = conn.execute('''SELECT w.parent_id,live.has_live_executor
+          FROM work_items w JOIN v_work_item_execution_liveness live USING(work_item_id)
+          WHERE w.work_item_id=?''', (ancestor,)).fetchone()
+        if row['has_live_executor']:
             return False
         ancestor = row['parent_id']
     spec = conn.execute('SELECT * FROM work_item_execution_specs WHERE work_item_id=?',
@@ -374,12 +432,8 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120,
     prior = conn.execute('SELECT result_json FROM work_item_scheduler_events WHERE event_key=?', (event_key,)).fetchone()
     if prior:
         return json.loads(prior[0])
-    # Imported task-state roots can say running without owning a C2 worker.
-    # Count only actual leases and adopted prompt-backed executions.
-    active = conn.execute('''SELECT COUNT(*) FROM work_items w
-      WHERE w.status='running' AND (w.prompt_id IS NOT NULL OR EXISTS(
-        SELECT 1 FROM work_item_runs r WHERE r.work_item_id=w.work_item_id
-        AND r.state IN ('claimed','running','recovering')))''').fetchone()[0]
+    active = conn.execute('''SELECT COUNT(*) FROM v_work_item_execution_liveness
+      WHERE has_live_executor=1''').fetchone()[0]
     results = []
     candidates = conn.execute('''SELECT w.*,
         o.rank AS manual_rank,
@@ -421,8 +475,10 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120,
             if ancestor in seen:
                 raise SchedulingError('hierarchy_cycle')
             seen.add(ancestor)
-            row = conn.execute('SELECT parent_id,status FROM work_items WHERE work_item_id=?', (ancestor,)).fetchone()
-            if row['status'] == 'running':
+            row = conn.execute('''SELECT w.parent_id,live.has_live_executor
+              FROM work_items w JOIN v_work_item_execution_liveness live USING(work_item_id)
+              WHERE w.work_item_id=?''', (ancestor,)).fetchone()
+            if row['has_live_executor']:
                 blocked = True
                 break
             ancestor = row['parent_id']

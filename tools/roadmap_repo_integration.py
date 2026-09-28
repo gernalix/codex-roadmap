@@ -114,16 +114,29 @@ def queue(repo: Path, prompt_id: str, *, expected_head: str | None = None) -> di
     existing = _pr(prompt_id)
     update_existing = False
     if existing:
-        result = status(prompt_id)
-        prior = result.get("head_sha")
-        if prior == head:
-            return result
-        if result.get("status") == "queued" and expected_head == head:
-            # A caller that names the exact tested local HEAD may update an
-            # existing managed PR; CI will rerun for that new head.
+        marker = _marker(existing)
+        pr_head = str(existing.get("headRefOid") or "")
+        if marker and marker != pr_head:
+            # A verified successor head may already have been pushed before
+            # the managed PR body is advanced. Require exact local identity
+            # and ancestry before refreshing its tested-head marker.
+            if (existing.get("state") != "OPEN" or expected_head != head
+                    or pr_head != head):
+                raise IntegrationError("tested_head_drift")
+            _git(repo, "merge-base", "--is-ancestor", marker, head)
             update_existing = True
-        elif result.get("status") != "merged":
-            raise IntegrationError("task_pr_head_drift")
+            prior = marker
+        else:
+            result = status(prompt_id)
+            prior = result.get("head_sha")
+            if prior == head:
+                return result
+            if result.get("status") == "queued" and expected_head == head:
+                # A caller that names the exact tested local HEAD may update
+                # an existing managed PR; CI will rerun for that new head.
+                update_existing = True
+            elif result.get("status") != "merged":
+                raise IntegrationError("task_pr_head_drift")
         if not update_existing:
             _git(repo, "merge-base", "--is-ancestor", str(prior), head)
             changed = set(_git(repo, "diff", "--name-only", str(prior), head).splitlines())

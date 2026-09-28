@@ -269,8 +269,15 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
                 'metadata':metadata},key)
             events.append(('acknowledge',run['run_id']))
         elif run['worker_ref']=='c2-run:'+run['run_id']:
-            launch(run['run_id'])
-            events.append(('launch',run['run_id']))
+            started=db.execute('''SELECT 1 FROM work_item_executor_starts
+              WHERE run_id=? LIMIT 1''',(run['run_id'],)).fetchone()
+            if not started:
+                submit('executor_started',{'run_id':run['run_id']},
+                       'c2-executor-start-'+run['run_id'])
+                events.append(('executor_started',run['run_id']))
+            else:
+                launch(run['run_id'])
+                events.append(('launch',run['run_id']))
     expired=[r for r in active if r['state'] in ('claimed','running') and r['lease_until']<=now]
     if expired:
         key=_key('c2-recover',sorted((r['run_id'],r['lease_until']) for r in expired))
@@ -311,15 +318,15 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         events.append(('execution_override',override['selector']+':'+override['value']+':'+
                        ('draining' if scoped_ready else 'fallback')))
     statuses=[tuple(r) for r in db.execute('''SELECT w.work_item_id,w.status FROM work_items w
-       WHERE w.status='running' AND (w.prompt_id IS NOT NULL OR EXISTS(
-         SELECT 1 FROM work_item_runs r WHERE r.work_item_id=w.work_item_id
-         AND r.state IN ('claimed','running','recovering')))
+       JOIN v_work_item_execution_liveness live USING(work_item_id)
+       WHERE live.has_live_executor=1
        ORDER BY w.work_item_id''')]
     lock_context=[
         tuple(r) for r in db.execute('''SELECT w.work_item_id,w.status,w.repo,w.project_name,
               COALESCE(s.worktree,'') AS worktree
            FROM work_items w LEFT JOIN work_item_execution_specs s USING(work_item_id)
-           WHERE w.status='running' AND w.repo IS NOT NULL
+           JOIN v_work_item_execution_liveness live USING(work_item_id)
+           WHERE live.has_live_executor=1 AND w.repo IS NOT NULL
            ORDER BY w.work_item_id''')
     ]
     dependencies=[tuple(r) for r in db.execute('''SELECT d.work_item_id,d.depends_on_work_item_id,w.status

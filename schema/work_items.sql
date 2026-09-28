@@ -310,8 +310,8 @@ WHERE w.status='pending'
       WHERE p.parent_id IS NOT NULL
     )
     SELECT 1 FROM ancestors a
-    JOIN work_items parent ON parent.work_item_id=a.id
-    WHERE parent.status='running'
+    JOIN work_item_runs r ON r.work_item_id=a.id
+    WHERE r.state IN ('claimed','running','recovering')
   )
 ORDER BY COALESCE(w.sort_order,2147483647), w.created_at, w.work_item_id;
 

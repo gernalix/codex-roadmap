@@ -76,6 +76,7 @@ class RuntimeTests(unittest.TestCase):
                 'c2-run:pass-run',NULL,'{}',1)""")
             c2_scheduler.executor_result(writer,run_id='pass-run',prompt_id='123456',
                 outcome='PASS',completed=['acceptance'],evidence=['verified'],strict_contract=True)
+            c2_scheduler.executor_started(writer,run_id='pass-run',now=2)
             writer.commit()
         return path
 
@@ -221,6 +222,7 @@ class RuntimeTests(unittest.TestCase):
                 writer.execute("""INSERT INTO work_item_runs VALUES(
                     'codex-live','prompt:123456','event',1,'codex','running',999,
                     'c2-run:codex-live',NULL,'{}',1)""")
+                c2_scheduler.executor_started(writer,run_id='codex-live',now=2)
                 writer.commit()
             submitted=[]; launched=[]
             with patch('c2_runtime.lane_degraded',return_value=True):
@@ -253,6 +255,7 @@ class RuntimeTests(unittest.TestCase):
                 run=c2_scheduler.schedule(writer,event_key='chat-start',now=1)[0]
                 c2_scheduler.acknowledge(writer,run['run_id'],
                     worker_ref='c2-run:'+run['run_id'],metadata=run['metadata'],now=2)
+                c2_scheduler.executor_started(writer,run_id=run['run_id'],now=2)
                 writer.commit()
             for degraded, expected in ((True, []), (False, [run['run_id']])):
                 launched=[]
@@ -265,6 +268,35 @@ class RuntimeTests(unittest.TestCase):
                 state=snapshot.execute('SELECT state FROM work_item_runs WHERE run_id=?',
                                        (run['run_id'],)).fetchone()[0]
                 self.assertEqual('running',state)
+
+    def test_worker_launch_waits_for_applied_executor_start_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                item=c2_intake.add_work_item(writer,title='Start gate',repo='gate')
+                c2_scheduler.configure(writer,item['work_item_id'],activity='native',command=['true'])
+                run=c2_scheduler.schedule(writer,event_key='start-gate',now=1)[0]
+                c2_scheduler.acknowledge(writer,run['run_id'],
+                    worker_ref='c2-run:'+run['run_id'],metadata=run['metadata'],now=2)
+                writer.commit()
+            submitted=[]; launched=[]
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                first=c2_runtime.advance(snapshot,
+                    submit=lambda op,args,key:submitted.append((op,args,key)),
+                    launch=launched.append,launch_notify=lambda _:None,now=3)
+            self.assertEqual(['executor_started'],[op for op,_,_ in submitted])
+            self.assertEqual([],launched)
+            self.assertIn(('executor_started',run['run_id']),first['events'])
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                c2_scheduler.executor_started(writer,run_id=run['run_id'],now=4)
+                writer.commit()
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                second=c2_runtime.advance(snapshot,submit=lambda *_:None,
+                    launch=launched.append,launch_notify=lambda _:None,now=5)
+            self.assertEqual([run['run_id']],launched)
+            self.assertIn(('launch',run['run_id']),second['events'])
 
     def test_override_readback_and_fallback_event(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -401,6 +433,7 @@ class RuntimeTests(unittest.TestCase):
                     conn.execute('BEGIN IMMEDIATE')
                     if op=='schedule': c2_scheduler.schedule(conn,now=10,**args)
                     elif op=='acknowledge': c2_scheduler.acknowledge(conn,now=11,**args)
+                    elif op=='executor_started': c2_scheduler.executor_started(conn,now=12,**args)
                     conn.commit()
                 # Read connection is independent of the writer connection to
                 # model accepted remote snapshots between events.
@@ -410,7 +443,10 @@ class RuntimeTests(unittest.TestCase):
                     c2_runtime.advance(snapshot,submit=submit,launch=launched.append,now=11)
                 with closing(c2_runtime._open_snapshot(path)) as snapshot:
                     c2_runtime.advance(snapshot,submit=submit,launch=launched.append,now=12)
-                self.assertEqual(['schedule','acknowledge'],[op for op,_ in submitted])
+                with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                    c2_runtime.advance(snapshot,submit=submit,launch=launched.append,now=13)
+                self.assertEqual(['schedule','acknowledge','executor_started'],
+                    [op for op,_ in submitted])
                 self.assertEqual(1,len(launched))
                 self.assertEqual('running',conn.execute('SELECT status FROM work_items WHERE work_item_id=?',(item['work_item_id'],)).fetchone()[0])
             finally:
