@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -30,7 +31,35 @@ for line in sys.stdin:
 
 auth_path = git_dir() / "roadmap-pull-authorization.json"
 
-if state == "prepared" and updates:
+
+def pack_refs_maintenance() -> bool:
+    """Allow Git's storage rewrite only when logical main stays at the same OID."""
+    if not updates:
+        return False
+    try:
+        parent = Path(f"/proc/{os.getppid()}")
+        if not (parent / "exe").resolve().name.startswith("git"):
+            return False
+        command = (parent / "cmdline").read_bytes().split(b"\0")
+        if b"pack-refs" not in command:
+            return False
+        current = subprocess.run(
+            ["git", "rev-parse", "--verify", "refs/heads/main"],
+            text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            check=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return False
+    zero = "0" * len(current)
+    return all((old == zero and new == current) or
+               (old == current and new == zero) or
+               (old == new == current)
+               for old, new, _ in updates)
+
+
+maintenance = pack_refs_maintenance()
+
+if state == "prepared" and updates and not maintenance:
     if len(updates) != 1 or not auth_path.is_file():
         print(
             "BLOCKED: codex-roadmap main is guarded. "
@@ -48,5 +77,5 @@ if state == "prepared" and updates:
         print("BLOCKED: roadmap pull authorization does not match ref update", file=sys.stderr)
         raise SystemExit(1)
 
-if state in {"committed", "aborted"} and updates:
+if state in {"committed", "aborted"} and updates and not maintenance:
     auth_path.unlink(missing_ok=True)

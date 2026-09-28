@@ -86,6 +86,16 @@ class RecoveryControllerTests(unittest.TestCase):
         self.assertEqual(['systemctl', '--user', 'is-active', '--quiet',
                           'chatgpt-rdc-browser.service'], calls[0])
 
+    def test_browser_started_status_cannot_prepare_recovery(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with connect(Path(tmp) / 'lease.sqlite3') as db:
+                acquire(db, owner='first', pointer='/tmp/pointer', supervisor_id='first', now=100, ttl=10)
+                watch_once(db, now=111)
+                with patch.object(controller, 'KILL_SWITCH', Path(tmp) / 'missing'):
+                    result = controller.recover_once(db, browser=lambda: 'started',
+                        supervisor=lambda: self.fail('supervisor called'))
+                self.assertEqual('started', result['state'])
+
     def test_controller_never_restarts_active_supervisor(self):
         calls = []
         def run(command, **kwargs):

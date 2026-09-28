@@ -98,7 +98,7 @@ def recover_once(db, *, prepare=prepare_successor, browser=ensure_browser,
     if row['successor_session_id']:
         return {'state': 'successor_prepared', 'session_id': row['successor_session_id']}
     browser_state = browser()
-    if browser_state not in ('healthy', 'started'):
+    if browser_state != 'healthy':
         return {'state': browser_state}
     supervisor_state = supervisor()
     if supervisor_state not in ('healthy', 'started'):

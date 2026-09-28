@@ -92,6 +92,30 @@ class C2WorktreeGuardTests(unittest.TestCase):
                 sync_runtime_worktree(repo, runtime)
             self.assertEqual(old, git(runtime, "rev-parse", "HEAD"))
 
+    def test_exactly_accepted_local_patch_can_be_recovered_explicitly(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo, runtime = self.make_repo(Path(directory))
+            (repo / "tools" / "runtime.py").write_text("v2\n")
+            git(repo, "add", "tools/runtime.py")
+            git(repo, "commit", "-m", "accepted runtime update")
+            (runtime / "tools" / "runtime.py").write_text("v2\n")
+            result = sync_runtime_worktree(repo, runtime, recover_equivalent_dirty=True)
+            self.assertEqual("healthy", result["state"])
+            self.assertEqual(git(repo, "rev-parse", "main"), git(runtime, "rev-parse", "HEAD"))
+
+    def test_unique_local_patch_is_preserved_even_with_recovery_flag(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo, runtime = self.make_repo(Path(directory))
+            old = git(runtime, "rev-parse", "HEAD")
+            (repo / "tools" / "runtime.py").write_text("v2\n")
+            git(repo, "add", "tools/runtime.py")
+            git(repo, "commit", "-m", "accepted runtime update")
+            (runtime / "tools" / "runtime.py").write_text("unique\n")
+            with self.assertRaisesRegex(GuardError, "runtime_dirty_not_equivalent"):
+                sync_runtime_worktree(repo, runtime, recover_equivalent_dirty=True)
+            self.assertEqual(old, git(runtime, "rev-parse", "HEAD"))
+            self.assertEqual("unique\n", (runtime / "tools" / "runtime.py").read_text())
+
     def test_ahead_runtime_never_moves(self):
         with tempfile.TemporaryDirectory() as directory:
             repo, runtime = self.make_repo(Path(directory))

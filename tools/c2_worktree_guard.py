@@ -117,17 +117,46 @@ def inspect_worktree(
 def sync_runtime_worktree(
     canonical: Path = DEFAULT_CANONICAL,
     runtime: Path = DEFAULT_RUNTIME,
+    *,
+    recover_equivalent_dirty: bool = False,
 ) -> dict:
     """Fast-forward a clean runtime branch to accepted local main, then guard it."""
     before = inspect_worktree(canonical, runtime)
-    if set(before["issues"]) - {"runtime_code_drift"}:
+    allowed = {"runtime_code_drift"}
+    if recover_equivalent_dirty:
+        allowed.add("dirty_worktree")
+    if set(before["issues"]) - allowed:
         raise GuardError("unsafe_runtime_worktree:" + ",".join(before["issues"]))
     ancestor = subprocess.run(
         ["git", "-C", str(runtime), "merge-base", "--is-ancestor", "HEAD", "main"]
     )
     if ancestor.returncode:
         raise GuardError("runtime_not_ancestor_of_main")
-    _git(runtime, "merge", "--ff-only", "main")
+    if before["dirty"]:
+        # Only discard a local patch when every byte is already in accepted
+        # main. Reject staged, untracked, deleted, renamed and symlink state.
+        status = subprocess.run(
+            ["git", "-C", str(runtime), "status", "--porcelain=v1", "-z"],
+            check=True, stdout=subprocess.PIPE,
+        ).stdout
+        for entry in status.split(b"\0"):
+            if not entry:
+                continue
+            if not entry.startswith(b" M "):
+                raise GuardError("runtime_dirty_not_equivalent")
+            relative = entry[3:].decode("utf-8", "surrogateescape")
+            local = runtime / relative
+            if not local.is_file() or local.is_symlink():
+                raise GuardError("runtime_dirty_not_equivalent")
+            accepted = subprocess.run(
+                ["git", "-C", str(canonical), "show", "main:" + relative],
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            )
+            if accepted.returncode or local.read_bytes() != accepted.stdout:
+                raise GuardError("runtime_dirty_not_equivalent")
+        _git(runtime, "reset", "--hard", "main")
+    else:
+        _git(runtime, "merge", "--ff-only", "main")
     after = inspect_worktree(canonical, runtime)
     if after["state"] != "healthy":
         raise GuardError("runtime_guard_after_sync:" + ",".join(after["issues"]))
@@ -141,12 +170,17 @@ def main() -> None:
     parser.add_argument("--expected-branch", default=EXPECTED_BRANCH)
     parser.add_argument("--expected-upstream", default=EXPECTED_UPSTREAM)
     parser.add_argument("--sync", action="store_true", help="Guarded fast-forward to local main before validation")
+    parser.add_argument("--recover-equivalent-dirty", action="store_true",
+                        help="With --sync, clear only tracked local bytes already identical to accepted main")
     args = parser.parse_args()
     if args.sync:
         if args.expected_branch != EXPECTED_BRANCH or args.expected_upstream != EXPECTED_UPSTREAM:
             raise GuardError("custom_sync_target_forbidden")
-        result = sync_runtime_worktree(args.canonical, args.runtime)
+        result = sync_runtime_worktree(args.canonical, args.runtime,
+                                       recover_equivalent_dirty=args.recover_equivalent_dirty)
     else:
+        if args.recover_equivalent_dirty:
+            raise GuardError("equivalent_recovery_requires_sync")
         result = inspect_worktree(
             args.canonical,
             args.runtime,
