@@ -7,7 +7,7 @@ Normalize the active C2 roadmap into project-backed semantic batches before furt
 - Active backlog reconciled: 275 work items.
 - Project inference complete: 275/275 items mapped to a MegaVault project; 231 previously lacked usable C2 project metadata.
 - MegaVault is the project authority used for repo/path/project mapping.
-- Current execution is reconciled from authoritative receipts, not RUNNING rows: C2 sanitation `d083…` is conditionally BLOCKED by applied writer Issue #4297; five PersonalHub items including feedback are COMPLETED, while i18n 436865 has a clean preserved branch but awaits a rightful fenced BLOCKED→WAITING transition after the stale 344032 dependency was integrated. Datasette5 Phase D is blocked on external CI/privacy gates with its PR #4 preserved. Other historical projections alone do not establish live workers.
+- Current execution is reconciled from authoritative receipts, not RUNNING rows: C2 sanitation `d083…` is conditionally BLOCKED by applied writer Issue #4297; all six PersonalHub batch items are COMPLETED after guarded i18n PR #67 and prompt 436865 terminal PASS. Datasette5 Phase D is blocked on external CI/privacy gates with its PR #4 preserved. Other historical projections alone do not establish live workers.
 - Legacy task-state descendants can remain operational after terminal parents; they must not be treated as direct runnable work.
 
 # Project inference summary
@@ -683,7 +683,10 @@ After canonical order readback: process batch 00 only, reconcile its current rep
 - These classes are not terminal product work. They remain mapped in the existing project/batch checkpoint; no fresh source scan was needed for this readback.
 
 ## Next action
-On the next authoritative PR #67 integration event, verify the prompt-backed terminal receipt and reread all six PersonalHub rows. Do not open another PersonalHub writer lane or re-run the passing focused Gradle gate. Preserve the other C2 supervisor's active fence. Datasette5 PR #3/#4, amici_fb PR #2, ADB keeper PR #2, absent dedicated browsers and T7 have unchanged exact recovery gates; reconsider a named batch only when its gate changes. Keep branch convergence behind conditionally BLOCKED `d083…`.
+Freshly reconcile the entire 03/megavault-datasette-chain batch against current canonical C2, MegaVault project identity, Datasette5 PR #3/#4 gates, and existing Phase D lane. Reconsider both BLOCKED items and preserve the Phase D worktree; dispatch only if a real prerequisite changed. Keep branch convergence behind conditionally BLOCKED `d083…` and ordinary Inbox work excluded.
+
+### 2026-09-28 20:16 UTC PersonalHub batch-02 terminal
+- Guarded PersonalHub PR #67 merged at `fea53220573de63179d792d454cb35f7c4d7988d` at 18:13 UTC; repo-task pipeline is done and queued its prompt completion. Remote C2 main `7cc58729` has prompt 436865 and work item `wi:f078…` COMPLETED at 18:14 UTC via terminal `roadmap_result:PASS` history 1108. A fresh six-row read shows all six PersonalHub items COMPLETED and no claimed/running/recovering batch `work_item_run`. Remote MegaVault master `5c26b3d8` confirms authoritative project 49 `personalhub` for all six, including old rows without project_id. No further PersonalHub executor or repeated Gradle check is needed.
 
 ### 2026-09-28 18:00 UTC guarded i18n integration in progress
 - PR #67 checks have GitGuardian and capsule boundaries PASS; `unit` and both play-preflight jobs remain PENDING at the one bounded GitHub read. No merge SHA or terminal C2 PASS was inferred. The local repo-task event watcher was stopped; no model session is retained solely to wait for CI. This parent Goal stays active and the pushed checkpoint identifies the next exact transition.
