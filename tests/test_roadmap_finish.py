@@ -11,6 +11,37 @@ import roadmap_repo_integration as dedicated
 
 
 class FinishWrapperTests(unittest.TestCase):
+    def test_c2_work_item_id_uses_guarded_dedicated_branch(self):
+        work_item_id = "wi:" + "a" * 32
+        repo = Path("/tmp/codex-roadmap-task")
+        head = "b" * 40
+
+        def git_result(_repo, *args):
+            if args == ("rev-parse", "--show-toplevel"):
+                return str(repo)
+            if args == ("branch", "--show-current"):
+                return "task/wi-" + "a" * 32
+            if args == ("remote", "get-url", "origin"):
+                return "https://github.com/gernalix/codex-roadmap.git"
+            if args == ("status", "--porcelain"):
+                return ""
+            if args == ("rev-parse", "HEAD"):
+                return head
+            raise AssertionError(args)
+
+        with patch.object(dedicated, "_git", side_effect=git_result):
+            self.assertEqual(head, dedicated._identity(repo, work_item_id))
+        self.assertEqual("wi-" + "a" * 32, dedicated._branch_name(work_item_id))
+
+    def test_work_item_pr_lookup_uses_task_branch(self):
+        work_item_id = "wi:" + "a" * 32
+        row = {"number": 44, "state": "OPEN",
+               "headRefName": "task/wi-" + "a" * 32,
+               "baseRefName": "main"}
+        with patch.object(dedicated, "_run", return_value=json.dumps([row])) as run:
+            self.assertEqual(row, dedicated._pr(work_item_id))
+        self.assertIn("task/wi-" + "a" * 32, run.call_args.args)
+
     @patch("roadmap_finish.prompt_repository", return_value="gernalix/codex-roadmap")
     @patch("roadmap_finish.queue_integration", return_value=("queued", False))
     def test_self_repo_no_generic_task_record_needed(self, queue, repository):

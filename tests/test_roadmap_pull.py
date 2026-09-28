@@ -421,6 +421,38 @@ class RoadmapPullTests(unittest.TestCase):
         self.assertTrue((self.local / "prompts" / "one.md").exists())
         self.assertFalse((self.local / "completed" / "one.md").exists())
 
+    def test_stale_legacy_terminal_row_cannot_confirm_a_later_remote_terminal(self) -> None:
+        conn = db.connect(self.seed)
+        db.set_status(conn, "123456", "blocked", actor="legacy", note="old terminal",
+                      allow_running_terminal=True)
+        conn.execute("UPDATE status_history SET changed_at='2026-09-25T10:00:00Z' "
+                     "WHERE prompt_id='123456' AND new_status='blocked'")
+        conn.execute("""INSERT INTO terminal_requests(
+            prompt_id,requested_status,actor,note,requested_at,running_history_id
+        ) VALUES('123456','blocked','legacy','old run','2026-09-25T10:01:00Z',NULL)""")
+        conn.execute("UPDATE prompts SET status='pending' WHERE prompt_id='123456'")
+        conn.execute("""INSERT INTO status_history
+            (prompt_id,old_status,new_status,changed_at,actor,note)
+            VALUES('123456','blocked','pending',?,'test','reactivate')""", (db.now_utc(),))
+        db.set_status(conn, "123456", "running", actor="codex", note="later run")
+        latest_run = conn.execute(
+            "SELECT MAX(history_id) FROM status_history WHERE prompt_id='123456' AND new_status='running'"
+        ).fetchone()[0]
+        old_terminal = conn.execute(
+            "SELECT MAX(history_id) FROM status_history WHERE prompt_id='123456' AND new_status='blocked'"
+        ).fetchone()[0]
+        self.assertGreater(latest_run, old_terminal)
+        db.set_status(conn, "123456", "blocked", actor="stale-remote", note="old result",
+                      allow_running_terminal=True)
+        conn.commit()
+        conn.close()
+        db.render(self.seed)
+        self.push_seed("stale legacy terminal row")
+
+        with self.assertRaisesRegex(roadmap_pull.RoadmapPullBlocked,
+                                    "running_prompt_not_preserved:123456"):
+            roadmap_pull.guarded_pull(self.local)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -15,7 +15,7 @@ import work_items_migration as migration
 
 
 class WorkItemsCutoverTests(unittest.TestCase):
-    def prepare(self, root: Path) -> Path:
+    def prepare(self, root: Path, *, terminal_history: bool = False) -> Path:
         repo = root / "repo"
         repo.mkdir()
         (repo / "prompts").mkdir()
@@ -58,6 +58,12 @@ class WorkItemsCutoverTests(unittest.TestCase):
         db.add_dependency(conn, "222222", "111111")
         db.add_tag(conn, "222222", "before")
         db.add_relation(conn, "111111", "333333", "parent", actor="test")
+        if terminal_history:
+            conn.execute("""INSERT INTO terminal_request_history(
+                prompt_id,requested_status,actor,note,requested_at,running_history_id,
+                archived_at,replaced_by_running_history_id
+            ) VALUES('111111','blocked','test','prior generation',
+                     '2026-09-25T10:01:00Z',42,'2026-09-26T10:00:00Z',73)""")
         db.refresh_materialization_hashes(conn, repo)
         conn.commit()
         conn.close()
@@ -89,6 +95,17 @@ class WorkItemsCutoverTests(unittest.TestCase):
                 conn.execute(
                     "UPDATE prompts SET status='completed' WHERE prompt_id='111111'"
                 )
+            conn.close()
+
+    def test_terminal_request_history_survives_work_item_cutover(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.prepare(Path(tmp), terminal_history=True)
+            conn = sqlite3.connect(repo / "roadmap.sqlite")
+            row = conn.execute(
+                "SELECT prompt_id,requested_status,running_history_id,replaced_by_running_history_id "
+                "FROM terminal_request_history"
+            ).fetchone()
+            self.assertEqual(("111111", "blocked", 42, 73), row)
             conn.close()
 
     def test_canonical_api_writes_new_authority_after_cutover(self) -> None:

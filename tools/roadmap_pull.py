@@ -321,12 +321,37 @@ def _terminal_confirmed(conn: sqlite3.Connection, prompt_id: str, remote_status:
     # to advance to a remote terminal state. codex-usage is telemetry only.
     try:
         request = conn.execute(
-            "SELECT requested_status FROM terminal_requests WHERE prompt_id=?",
+            "SELECT requested_status,running_history_id,requested_at "
+            "FROM terminal_requests WHERE prompt_id=?",
             (prompt_id,),
         ).fetchone()
     except sqlite3.OperationalError:
         request = None
-    return request is not None and str(request["requested_status"]) == remote_status
+    if request is None or str(request["requested_status"]) != remote_status:
+        return False
+    try:
+        latest_run = conn.execute(
+            "SELECT MAX(history_id) FROM status_history "
+            "WHERE prompt_id=? AND new_status='running'",
+            (prompt_id,),
+        ).fetchone()[0]
+    except sqlite3.OperationalError:
+        return False
+    request_run = request["running_history_id"]
+    if request_run is not None:
+        return latest_run is not None and int(request_run) == int(latest_run)
+    # NULL-generation legacy rows are accepted only when there is no evidence
+    # that a later run began after their requested terminal outcome.
+    old_terminal = conn.execute(
+        """SELECT MAX(history_id) FROM status_history
+           WHERE prompt_id=? AND new_status=?
+             AND julianday(changed_at)<=julianday(?)""",
+        (prompt_id, remote_status, request["requested_at"]),
+    ).fetchone()[0]
+    return not (
+        old_terminal is not None and latest_run is not None
+        and int(latest_run) > int(old_terminal)
+    )
 
 
 def _show_exists(repo: Path, ref: str, path: str) -> bool:
