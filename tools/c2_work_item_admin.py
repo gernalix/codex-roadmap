@@ -22,6 +22,81 @@ EDITABLE_FIELDS = {
     "sort_order", "executor_policy", "repo", "actionable", "acceptance_json",
 }
 TERMINAL = {"completed", "cancelled", "superseded"}
+DESCENDANT_TERMINAL = {
+    "ALREADY_IMPLEMENTED": "completed",
+    "OBSOLETE": "cancelled",
+    "SUPERSEDED": "superseded",
+    "DUPLICATE_MERGE": "superseded",
+}
+
+
+def reconcile_descendant(
+    conn: sqlite3.Connection,
+    work_item_id: str,
+    *,
+    expected_parent_id: str,
+    expected_source_ref: str,
+    expected_status: str,
+    classification: str,
+    evidence: list[str],
+    superseded_by: str | None = None,
+) -> None:
+    """Terminalize one named non-prompt child without changing its live root."""
+    status = DESCENDANT_TERMINAL.get(classification)
+    if not status:
+        raise ValueError("invalid_descendant_classification")
+    if not isinstance(evidence, list) or not evidence or any(
+        not isinstance(fact, str) or not fact.strip() for fact in evidence
+    ):
+        raise ValueError("repository_evidence_required")
+    row = conn.execute("SELECT * FROM work_items WHERE work_item_id=?", (work_item_id,)).fetchone()
+    if not row or not row["parent_id"] or row["prompt_id"]:
+        raise ValueError("nonprompt_descendant_required")
+    if (row["parent_id"] != expected_parent_id or
+            row["source_ref"] != expected_source_ref or
+            row["status"] != expected_status):
+        raise ValueError("descendant_precondition_changed")
+    if row["status"] not in ("pending", "waiting", "blocked", "unknown", status):
+        raise ValueError("descendant_lifecycle_conflict")
+    if superseded_by:
+        successor = conn.execute(
+            "SELECT parent_id FROM work_items WHERE work_item_id=?", (superseded_by,)
+        ).fetchone()
+        if (status != "superseded" or superseded_by == work_item_id or not successor or
+                (row["kind"] == "gate" and successor["parent_id"] != row["parent_id"])):
+            raise ValueError("invalid_descendant_successor")
+    elif status == "superseded":
+        raise ValueError("descendant_successor_required")
+    if conn.execute("""WITH RECURSIVE ancestors(id,parent_id) AS (
+        SELECT work_item_id,parent_id FROM work_items WHERE work_item_id=?
+        UNION ALL SELECT p.work_item_id,p.parent_id FROM work_items p
+        JOIN ancestors a ON p.work_item_id=a.parent_id
+    ) SELECT 1 FROM ancestors a JOIN work_item_runs r ON r.work_item_id=a.id
+      WHERE r.state IN ('claimed','running','recovering') LIMIT 1""",
+                    (work_item_id,)).fetchone():
+        raise ValueError("active_run_requires_normal_lifecycle")
+    if conn.execute("""WITH RECURSIVE descendants(id) AS (
+        SELECT work_item_id FROM work_items WHERE parent_id=?
+        UNION ALL SELECT w.work_item_id FROM work_items w
+        JOIN descendants d ON w.parent_id=d.id
+    ) SELECT 1 FROM descendants d JOIN work_items w ON w.work_item_id=d.id
+      WHERE w.required=1 AND w.status NOT IN ('completed','cancelled','superseded','waived')
+      LIMIT 1""", (work_item_id,)).fetchone():
+        raise ValueError("required_descendant_incomplete")
+    now = c2_identity.utc_now()
+    conn.execute("""UPDATE work_items SET status=?,blocker=NULL,current_action=?,
+        next_action=NULL,updated_at=? WHERE work_item_id=?""",
+                 (status, classification, now, work_item_id))
+    if superseded_by:
+        conn.execute("""INSERT OR IGNORE INTO work_item_relations
+            (from_work_item_id,to_work_item_id,relation_type,created_at,actor,note)
+            VALUES(?,?,'superseded_by',?,'c2-descendant-audit',?)""",
+                     (work_item_id, superseded_by, now, classification))
+    for fact in evidence:
+        conn.execute("""INSERT OR IGNORE INTO work_item_evidence
+            (work_item_id,evidence_kind,label,uri,value_json,created_at)
+            VALUES(?,'classification',?,NULL,?,?)""",
+                     (work_item_id, fact[:120], json.dumps(fact, ensure_ascii=False), now))
 
 
 def reconcile(
