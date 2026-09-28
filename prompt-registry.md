@@ -4,8 +4,8 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [[obsidian/Prompts/715479 regression-datasette5-import-test-blocked-by-pyd-715479\|715479 · Regression: Datasette5 import test blocked by pydantic-core mismatch]] | running | — | — | — | no | no | — | datasette5 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/344032 personalhub-restore-built-in-kotlin-classes-in-h-344032\|344032 · PersonalHub: Restore built-in Kotlin classes in hub-context artifacts]] | running | — | — | — | no | no | — | PersonalHub | gpt-6-sol | medium |
-| [[obsidian/Prompts/715479 regression-datasette5-import-test-blocked-by-pyd-715479\|715479 · Regression: Datasette5 import test blocked by pydantic-core mismatch]] | pending | — | — | — | no | no | — | datasette5 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
@@ -442,4 +442,4 @@
 | [[obsidian/Prompts/394865 phase-c-source-fedora-system-monitor-datasette-f-394865\|394865 · Phase C source — fedora-system-monitor Datasette friendliness]] | completed | 2026-09-27T19:02:05Z | 2026-09-27T19:10:36Z | PASS | no | no | — | fedora-system-monitor | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/205775 phase-c-source-codex-usage-monitor-datasette-fri-205775\|205775 · Phase C source — codex-usage-monitor Datasette friendliness]] | completed | — | — | PASS | no | no | — | codex-usage-monitor | GPT-6 Luna | medium |
 | [[obsidian/Prompts/592759 phase-c-source-megavault-datasette-friendliness-592759\|592759 · Phase C source — megavault Datasette friendliness]] | completed | 2026-09-27T19:11:47Z | 2026-09-27T19:11:47Z | PASS | no | no | — | MegaVault | GPT-6 Sol | medium |
-| [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338\|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] | blocked | — | — | BLOCKED | no | no | — | — | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338\|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] | waiting | — | — | — | no | no | — | — | GPT-5.6 Sol | medium |
