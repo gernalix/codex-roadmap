@@ -506,3 +506,27 @@ A reconciled survivor order was rendered into Workflowy first. Canonical manual-
 
 # Next action
 After canonical order readback: process batch 00 only, reconcile its current repository state again, and complete the minimum lifecycle/safety fixes before any fresh broad dispatch.
+
+## Applied reconciliation checkpoint
+- Active backlog at initial read: 275.
+- Semantic merges applied in canonical DB:
+  - lifecycle `56582…`, `7237…`, `fd61…` -> `b9e561…`;
+  - worktree contamination `daad70…`, protected task-state writes `9b5fe…`, MegaVault mixed worktree `91bda…` -> global sanitation `d08356…`;
+  - Workflowy source tasks -> consolidated umbrella `340dd4…`;
+  - salute authority mismatch `7c0bbc…` -> Phase C salute gate `1af496…`;
+  - project identity/readiness items `948b…`, `e0eed…` -> pre-dispatch reconciliation owner `b4973…`.
+- 25 standalone C2-only enhancements moved to `waiting`, `actionable=0`, blocker `Deferred pending Symphony migration/replacement decision.`
+- `175908.md` terminal-state reimport executed through the bounded writer primitive; remaining pending phase-4 descendants are source-file semantics and require selective descendant reconciliation (`b455…`), so they were not force-closed.
+- No new feature executor was launched by this reconciliation pass. Existing PersonalHub/Datasette/Symphony work was preserved.
+- Workflowy manual order is not authoritative for this pass: attempts to replace it were rejected/competed with another full-render process. Git checkpoint + canonical work-item relations are the source for the reconciled batch plan.
+
+## Remaining essential control-plane work before broad dispatch
+1. `b9e561…` — finish live-execution/lifecycle semantics from preserved worktree 484338.
+2. `b45503…` — add selective stale-descendant reconciliation so terminal parent task-state residue can be cleaned safely.
+3. `b4973…` — keep the MegaVault-backed project/batch reconciliation contract; project drift/readiness details are now absorbed here.
+4. `db4eb9…` — prevent automatic RDC browser resurrection; safety regression.
+5. `d08356…` — global dirty/worktree sanitation and recurrence prevention.
+6. `dad7a0…` — global branch convergence after active writer work settles.
+
+## Next action
+After mutation queue drains, resume exactly one existing scoped control-plane task (`b9e561…`, prompt 484338/worktree preserved) and verify it before opening another codex-roadmap writer lane.
