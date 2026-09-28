@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/715479 regression-datasette5-import-test-blocked-by-pyd-715479\|715479 · Regression: Datasette5 import test blocked by pydantic-core mismatch]] | running | — | — | — | no | no | — | datasette5 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/344032 personalhub-restore-built-in-kotlin-classes-in-h-344032\|344032 · PersonalHub: Restore built-in Kotlin classes in hub-context artifacts]] | running | 2026-09-28T06:05:35Z | 2026-09-28T06:05:35Z | PASS | no | no | — | PersonalHub | gpt-6-sol | medium |
 | [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1\|181259 · Riprendi Grindr dopo il login senza model waiting]] | pending | — | — | — | no | no | — | grindr-web-exporter | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
@@ -12,6 +11,7 @@
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479\|853479 · Phase A — MegaVault one source of truth definitiva]] | completed | 2026-09-27T10:23:54Z | 2026-09-27T10:46:42Z | PASS | no | no | — | — | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/715479 regression-datasette5-import-test-blocked-by-pyd-715479\|715479 · Regression: Datasette5 import test blocked by pydantic-core mismatch]] | completed | — | — | PASS | no | no | — | datasette5 | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/856999 aggiungere-gate-c2-per-acceptance-post-merge-856999\|856999 · Aggiungere gate C2 per acceptance post-merge]] | completed | — | — | PASS | no | no | — | — | GPT-6 Luna | medium |
 | [[obsidian/Prompts/742579 rendere-il-db-grindr-favorites-frictionless-da-e-742579\|742579 · Rendere il DB Grindr Favorites frictionless da esplorare]] | completed | 2026-09-27T08:31:27Z | 2026-09-27T08:31:27Z | PASS | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/366587 regression-rendere-le-view-grindr-compatibili-co-366587\|366587 · Regression: rendere le view Grindr compatibili con DB Browser SQLite]] | completed | — | — | PASS | no | no | — | — | GPT-6 Luna | medium |

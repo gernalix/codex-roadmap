@@ -1,6 +1,6 @@
 ---
 prompt_id: 715479
-status: running
+status: completed
 project_id: 10
 model: GPT-5.6 Sol
 reasoning: medium
@@ -9,15 +9,15 @@ tags:
   - regression
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/datasette5
 ---
 
 # 715479 · Regression: Datasette5 import test blocked by pydantic-core mismatch
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/datasette5|datasette5]]
-- **Prompt:** [[../../prompts/regression-datasette5-import-test-blocked-by-pyd-715479|Apri prompt]]
+- **Prompt:** [[../../completed/regression-datasette5-import-test-blocked-by-pyd-715479|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
