@@ -5,6 +5,7 @@ tags:
 
 # Unknown
 
+- [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] · `running`
 - [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479|853479 · Phase A — MegaVault one source of truth definitiva]] · `completed`
 - [[obsidian/Prompts/856999 aggiungere-gate-c2-per-acceptance-post-merge-856999|856999 · Aggiungere gate C2 per acceptance post-merge]] · `completed`
 - [[obsidian/Prompts/742579 rendere-il-db-grindr-favorites-frictionless-da-e-742579|742579 · Rendere il DB Grindr Favorites frictionless da esplorare]] · `completed`
@@ -25,7 +26,6 @@ tags:
 - [[obsidian/Prompts/718501 c2-supervisor-backoff-rate-limit-globale-blocca--718501|718501 · C2 supervisor: backoff rate-limit globale blocca anche worker recuperabili]] · `completed`
 - [[obsidian/Prompts/328371 c2-dashboard-mutation-applicata-ma-invisibile-fi-328371|328371 · C2 dashboard: mutation applicata ma invisibile fino al successivo Workflowy sync]] · `completed`
 - [[obsidian/Prompts/158995 c2-dashboard-rendere-immediatamente-visibili-i-n-158995|158995 · C2 dashboard: rendere immediatamente visibili i nuovi work item appena catturati]] · `completed`
-- [[obsidian/Prompts/436865 definire-strategia-i18n-lint-personalhub-per-mis-436865|436865 · Definire strategia i18n/lint PersonalHub per MissingTranslation]] · `waiting`
 - [[obsidian/Prompts/625582 rendere-immediato-il-profile-id-dalle-foto-grind-625582|625582 · Rendere immediato il profile_id dalle foto Grindr scaricate]] · `waiting`
 - [[obsidian/Prompts/255325 prompt-255325|255325 · Prompt 255325]] · `cancelled`
 - [[obsidian/Prompts/294731 prompt-294731|294731 · Prompt 294731]] · `cancelled`
