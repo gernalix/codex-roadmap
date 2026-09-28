@@ -478,3 +478,31 @@ Only these 56 active items are ranked for future execution. All other active row
 
 ## Next action
 Verify the manual survivor order has landed in canonical roadmap. Then reconcile batch 00 and batch 01 against current repository heads before any new dispatch.
+
+# Reconciled execution queue
+- 00/c2-control-plane-minimum: 7 source items; only transitional safety/lifecycle fixes survive.
+- 01/c2-git-worktree-convergence: 33 source items; legacy cleanup steps are absorbed by current dirty-worktree/branch/worktree-safety survivors.
+- 02/personalhub-modern: 6 current product items; preserve any live worker and keep one writer lane.
+- 03/megavault-datasette-chain: 9 items; preserve active Datasette5 regression, then salute verification, Phase D, Phase E, one final gate. The second final gate is duplicate.
+- 04/workflowy-sync: five source tasks consolidated into `wi:340dd4d8d5c54faf933f2060df3728c6`.
+- 05/fedora-monitoring: 5 source items; blocked incidents remain evidence-gated, pending monitoring enhancements are later work.
+- 06/grindr: 6 items; repo convergence precedes the old ChatGPT Desktop export bootstrap.
+- 07/megavault-authority: 2 items.
+- 08/eboks-conditional: 2 prompts, gated by MitID/user dependency.
+- 09/rdc-supervisor: 8 source items, logically one batch; canonical writer currently rejects umbrella intake, so keep it out of the immediate ranked queue rather than spawning micro-lanes.
+- 10/github-autosync: 2 items.
+- 11/fedora-maintenance: 2 items.
+- 12/infra-services: 2 items.
+- 13/telegram-hygiene-wait: 9 items waiting on representative history.
+- 14/ntfy-wait-external: 11 items waiting on credential/tool prerequisite.
+- 15/adb-wait-external: 8 items waiting on CI/account/reboot prerequisites.
+- 16/prompt-runtime-302284-wait: 6 items waiting on source evidence.
+- 17/logseq-wait-external: 1 prompt waiting on credential prerequisite.
+- Z1/stale-and-duplicate-cleanup: 92 imported/duplicate rows; never dispatch directly.
+- Z2/deferred-until-symphony: 59 C2/governance/UI/performance items; do not spend implementation time before Symphony migration unless they become a concrete blocker.
+
+# Ordering
+A reconciled survivor order was rendered into Workflowy first. Canonical manual-order publication is submitted atomically with supervisor renewal so the Workflowy source and roadmap DB converge instead of repeatedly overwriting one another.
+
+# Next action
+After canonical order readback: process batch 00 only, reconcile its current repository state again, and complete the minimum lifecycle/safety fixes before any fresh broad dispatch.
