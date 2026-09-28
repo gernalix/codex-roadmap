@@ -17,9 +17,9 @@ tags:
 - **Stato:** blocked
 - **Progetto:** [[../Projects/grindr-web-exporter|grindr-web-exporter]]
 - **Prompt:** [[../../falliti/grindr-web-exporter-post-login-resume-v1|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-28T21:37:30Z
+- **Ultimo lancio:** 2026-09-28T21:37:30Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -37,7 +37,7 @@ Resta in Waiting finché sono soddisfatti due prerequisiti: login Grindr manuale
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-28T21:37:30Z | 2026-09-28T21:37:34Z | UNKNOWN | 3.871 | codex-auto-review | low | 0 | 28211 |
 
 ## Analisi ChatGPT
 
