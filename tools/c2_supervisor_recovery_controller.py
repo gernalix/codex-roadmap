@@ -18,7 +18,7 @@ KILL_SWITCH = Path.home() / '.config/c2/disable-chat-supervisor'
 
 
 def ensure_browser(*, run=subprocess.run):
-    """Start a missing browser only; never restart an active session."""
+    """Observe browser health without ever starting or restarting Chrome."""
     try:
         _json('/json/version')
         return 'healthy'
@@ -29,9 +29,7 @@ def ensure_browser(*, run=subprocess.run):
             return 'active_browser_unhealthy'
         if KILL_SWITCH.exists():
             return 'kill_switch_active'
-        started = run(['systemctl', '--user', 'start', 'chatgpt-rdc-browser.service'],
-                      capture_output=True)
-        return 'started' if started.returncode == 0 else 'browser_start_failed'
+        return 'browser_manual_start_required'
 
 
 def ensure_supervisor(*, run=subprocess.run):

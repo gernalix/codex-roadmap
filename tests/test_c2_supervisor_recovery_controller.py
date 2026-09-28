@@ -73,6 +73,19 @@ class RecoveryControllerTests(unittest.TestCase):
                     result = controller.recover_once(db, browser=lambda: self.fail('browser called'))
                 self.assertEqual('kill_switch_active', result['state'])
 
+    def test_controller_never_starts_missing_browser(self):
+        calls = []
+        def run(command, **kwargs):
+            calls.append(command)
+            return SimpleNamespace(returncode=3)
+        with patch.object(controller, '_json', side_effect=OSError('cdp down')), \
+             patch.object(controller, 'KILL_SWITCH', Path('/definitely/missing')):
+            self.assertEqual('browser_manual_start_required',
+                             controller.ensure_browser(run=run))
+        self.assertEqual(1, len(calls))
+        self.assertEqual(['systemctl', '--user', 'is-active', '--quiet',
+                          'chatgpt-rdc-browser.service'], calls[0])
+
     def test_controller_never_restarts_active_supervisor(self):
         calls = []
         def run(command, **kwargs):
