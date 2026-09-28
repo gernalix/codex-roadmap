@@ -1,6 +1,6 @@
 ---
 prompt_id: 344032
-status: pending
+status: running
 project_id: 49
 model: gpt-6-sol
 reasoning: medium
@@ -11,13 +11,13 @@ tags:
   - priority:p1
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/personalhub
 ---
 
 # 344032 · PersonalHub: Restore built-in Kotlin classes in hub-context artifacts
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/personalhub|PersonalHub]]
 - **Prompt:** [[../../prompts/personalhub-restore-built-in-kotlin-classes-in-h-344032|Apri prompt]]
 - **Primo lancio:** —
