@@ -42,7 +42,7 @@ Total: 231
 | `wi:e20d87af9a6641c385b03b40aa72ab8a` | `megavault` | `root` | Gate finale — MegaVault + database inventory + Datasette end-to-end |
 | `wi:7ee12d74262b498f892f51de128e041b` | `personalhub` | `repo` | Substances registra con stock 0 e clear+focus globale nei filtri Cerca |
 | `prompt:181259` | `grindr-web-exporter` | `repo` | Riprendi Grindr dopo il login senza model waiting |
-| `prompt:556372` | `grindr-web-exporter` | `manual_verified` | Delegare export Grindr end-to-end a ChatGPT Desktop |
+| `prompt:556372` | `grindr-export` | `repo` | Delegare export Grindr end-to-end a ChatGPT Desktop |
 | `prompt:588376` | `logseq-updates` | `repo` | Bonificare history Logseq e attivare updater |
 | `wi:4679f25e5daa41e1bb43f74914aad26e` | `workflowy-importer` | `repo` | Verify recurring Workflowy roadmap sync heartbeat alert |
 | `wi:862b055b7d354891bf6a25ea47c5904a` | `datasette5` | `manual_verified` | Verify recurring Oracle Datasette API Kuma heartbeat alert |
