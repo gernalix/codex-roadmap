@@ -13,7 +13,7 @@ Reconcile the full active C2 roadmap rationally: identify the canonical MegaVaul
 
 # Verified facts
 - Active roadmap items: 275.
-- Projectless active items before classification: 220; resolved against MegaVault: 220; unresolved: 0.
+- Projectless active items before classification: 220; resolved against MegaVault: 220; unresolved: 0. Strong-root correction applied so product/infra roots beat weak semantic keywords.
 - Exclusive semantic batches: 47.
 - C2 internal project registry is stale relative to MegaVault (notably project IDs around grindr-favorites-monitor/chatgpt-rdc-supervisor); assignments use MegaVault IDs/names.
 
@@ -104,8 +104,9 @@ Reconcile the full active C2 roadmap rationally: identify the canonical MegaVaul
 Semantic reconciliation of batches. Begin with the largest/highest-impact legacy clusters and remove stale/duplicate/covered work before making anything runnable.
 
 # Completed
-- Full project attribution manifest built.
-- Full exclusive batch manifest built and stored in C2-ROADMAP-BATCHES-20260928.json.
+- Full project attribution manifest built (v3; MegaVault authoritative, strong-root inheritance corrected).
+- Full exclusive batch manifest rebuilt from v3 project attribution and stored in C2-ROADMAP-BATCHES-20260928.json.
+- Project attribution details stored in C2-ROADMAP-PROJECT-ASSIGNMENTS-20260928.json.
 
 # Remaining
 - Reconcile each batch semantically.
