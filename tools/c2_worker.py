@@ -16,6 +16,7 @@ from c2_goal_objective import compact_goal_objective
 from roadmap_finish import _queue_repo_integration
 from roadmap_result import RoadmapResultError
 from c2_native_executor import execute as execute_native
+from c2_inbox_codex_executor import execute as execute_inbox_codex
 from c2_runtime import _open_snapshot, _writer_submit
 
 STATE_ROOT=Path.home()/'.local/state/c2/runs'
@@ -42,7 +43,15 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             raise WorkerError('executor_start_receipt_missing')
         metadata=json.loads(run['metadata_json'])
         executor=run['executor']
+        is_issue_triage=bool(conn.execute('''SELECT 1 FROM work_item_tags
+              WHERE work_item_id=? AND tag='c2:issue-triage' LIMIT 1''',
+              (run['work_item_id'],)).fetchone())
         if executor in ('rdc','chatgpt') and metadata.get('activity') in ('gui','semantic') and lane_degraded():
+            if is_issue_triage and metadata.get('activity')=='semantic':
+                result=execute_inbox_codex(run_id=run_id,
+                    work_item_id=str(run['work_item_id']),db_path=db_path)
+                return {'run_id':run_id,'executor':'codex-fallback',
+                        'phase':result['state'],'before':result['before'],'after':result['after']}
             return {'run_id':run_id,'executor':executor,'phase':'suspended'}
         if executor=='rdc' and metadata.get('activity')=='native':
             receipt=Path(state_root)/f'{run_id}.native.json'

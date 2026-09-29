@@ -6,7 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 import c2_master_watchdog as watchdog
 
 
-def db_state(*, inbox=1, pending=1, waiting=0, blocked=0, runnable=None, runs=None):
+def db_state(*, inbox=1, pending=1, waiting=0, blocked=0, runnable=None, runs=None, triage_run=None):
     return {
         "available": True,
         "counts": {
@@ -17,7 +17,8 @@ def db_state(*, inbox=1, pending=1, waiting=0, blocked=0, runnable=None, runs=No
         "inbox_pending": inbox,
         "runnable_ids": list(runnable or []),
         "active_runs": list(runs or []),
-        "authority": {"supervisor_id": "sup-a", "lease_valid": True},
+        "authority": {"supervisor_id": "sup-a", "lease_valid": True, "lease_stale": False},
+        "triage_run": triage_run,
         "last_triaged_at_ms": 123,
     }
 
@@ -54,6 +55,17 @@ class MasterWatchdogDecisionTests(unittest.TestCase):
         )
         self.assertEqual(again["status"], "waiting_external")
         self.assertFalse(again["should_start_goal"])
+
+    def test_triage_gate_ignores_inbox_growth_and_unrelated_counts(self):
+        triage = {
+            "run_id": "triage-1", "state": "recovering",
+            "worker_ref": "c2-run:triage-1", "lease_expired": True,
+        }
+        first = db_state(inbox=264, pending=80, waiting=10, blocked=5, triage_run=triage)
+        second = db_state(inbox=284, pending=120, waiting=18, blocked=9, triage_run=triage)
+        self.assertEqual(watchdog.state_fingerprint(first), watchdog.state_fingerprint(second))
+        second["authority"]["lease_stale"] = True
+        self.assertNotEqual(watchdog.state_fingerprint(first), watchdog.state_fingerprint(second))
 
     def test_failed_service_has_bounded_retries(self):
         db = db_state()
