@@ -348,6 +348,16 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "intervention": "", "attention_key": "", "should_start_goal": False,
             "why": ["Il servizio Master Goal o il suo worker risultano attivi."], "state_key": fp,
         }
+    if snapshot.get("goal_status") == "active":
+        return {
+            "status": "working", "phase": "executing",
+            "headline": "Il Master Goal è attivo",
+            "current": "Il daemon Codex possiede il thread e continua il Goal nativo quando il thread è idle.",
+            "next": "Attendere il prossimo cambiamento reale del control plane.",
+            "intervention": "", "attention_key": "", "should_start_goal": False,
+            "why": ["Un Goal nativo active non richiede thread/resume da un secondo app-server."],
+            "state_key": fp,
+        }
     if service.get("active") not in ("inactive", "failed") or any(
         worker.get("active") not in ("inactive", "failed") or not worker.get("lease_expired")
         for worker in workers
@@ -370,7 +380,7 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "intervention": "", "attention_key": "", "should_start_goal": False,
             "why": ["Nessun secondo Goal mentre un run non è terminale."], "state_key": fp,
         }
-    if snapshot.get("goal_status") not in ("active", "paused"):
+    if snapshot.get("goal_status") not in ("active", "paused", "blocked"):
         return {
             "status": "needs_user", "phase": "unknown",
             "headline": "Stato Master Goal non leggibile",
@@ -386,9 +396,8 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
     failed_service = service.get("result") not in ("success", "", "unknown")
     changed = fp != last_fp
     retry_due = failed_service and failures < MAX_START_FAILURES and now - last_wake >= RETRY_DELAY_S
-    if (changed or retry_due or snapshot.get("goal_status") == "active") and failures < MAX_START_FAILURES:
-        reason = "Goal attivo senza worker" if snapshot.get("goal_status") == "active" else (
-            "Lo stato C2 è cambiato" if changed else "Il precedente avvio del Goal è fallito")
+    if (changed or retry_due) and failures < MAX_START_FAILURES:
+        reason = "Lo stato C2 è cambiato" if changed else "Il precedente avvio del Goal è fallito"
         return {
             "status": "recovering", "phase": "inbox",
             "headline": "Il watchdog sta riattivando il Master Goal",
