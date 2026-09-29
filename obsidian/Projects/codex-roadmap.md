@@ -5,7 +5,7 @@ tags:
 
 # codex-roadmap
 
-- [[obsidian/Prompts/200487 c2-live-diagnosis-repair|200487 · Diagnostica e ripara C2 live]] · `pending`
+- [[obsidian/Prompts/200487 c2-live-diagnosis-repair|200487 · Diagnostica e ripara C2 live]] · `running`
 - [[obsidian/Prompts/886300 riparare-il-finalizer-c2-per-task-su-codex-roadm-886300|886300 · Riparare il finalizer C2 per task su codex-roadmap]] · `completed`
 - [[obsidian/Prompts/572280 recover-641582-missing-roadmap-registration-v1|572280 · Recuperare 641582 e correggere il bootstrap roadmap]] · `completed`
 - [[obsidian/Prompts/175908 checklist2-single-work-item-control-plane-v2|175908 · Creare Checklist 2.0 come unico albero di lavoro]] · `completed`
