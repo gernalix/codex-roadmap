@@ -19,7 +19,7 @@ tags:
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../completed/riconciliare-running-c2-con-esecuzioni-realmente-484338|Apri prompt]]
 - **Primo lancio:** 2026-09-28T06:56:00Z
-- **Ultimo lancio:** 2026-09-29T00:03:33Z
+- **Ultimo lancio:** 2026-09-29T09:00:37Z
 - **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
@@ -53,6 +53,7 @@ tags:
 | 2026-09-28T22:48:12Z | 2026-09-28T22:50:10Z | UNKNOWN | 118.569 | gpt-6-sol | medium | 12 | 84448 |
 | 2026-09-28T23:55:09Z | 2026-09-29T00:00:09Z | UNKNOWN | 300.087 | gpt-6-sol | medium | 27 | 136424 |
 | 2026-09-29T00:03:33Z | 2026-09-29T00:04:36Z | UNKNOWN | 62.942 | gpt-6-sol | medium | 7 | 166967 |
+| 2026-09-29T09:00:37Z | 2026-09-29T09:04:29Z | UNKNOWN | 231.258 | gpt-6-sol | medium | 16 | 190969 |
 
 ## Analisi ChatGPT
 
