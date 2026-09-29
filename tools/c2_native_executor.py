@@ -16,8 +16,15 @@ class NativeExecutionError(RuntimeError):
     pass
 
 
-def execute(*, run_id: str, metadata: dict, receipt: Path, timeout=3600):
+DEFAULT_TIMEOUT=3600
+ISSUE_TRIAGE_TIMEOUT=21600
+
+
+def execute(*, run_id: str, metadata: dict, receipt: Path, timeout=DEFAULT_TIMEOUT):
     command=json.loads(metadata.get('command_json') or 'null')
+    resources=json.loads(metadata.get('resources_json') or '[]')
+    if timeout == DEFAULT_TIMEOUT and 'c2:issue-triage' in resources:
+        timeout=ISSUE_TRIAGE_TIMEOUT
     if metadata.get('activity')!='native' or not isinstance(command,list) or not command or not all(isinstance(v,str) and v for v in command):
         raise NativeExecutionError('deterministic_native_argv_required')
     cwd=metadata.get('worktree')
