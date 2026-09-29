@@ -111,10 +111,28 @@ def db_snapshot(now: float | None = None) -> dict[str, Any]:
                 "SELECT supervisor_id,lease_expires_at FROM c2_supervisor_authority WHERE singleton=1"
             ).fetchone()
             if row:
+                expires = float(row[1] or 0)
                 authority = {
                     "supervisor_id": row[0],
-                    "lease_valid": float(row[1] or 0) > now,
+                    "lease_expires_at": expires,
+                    "lease_valid": expires > now,
+                    "lease_stale": now > expires + 120,
                 }
+        triage_run = None
+        if _table_exists(conn, "work_item_tags"):
+            row = conn.execute("""
+                SELECT r.run_id,r.work_item_id,r.state,r.worker_ref,r.lease_until
+                FROM work_items w
+                JOIN work_item_tags t USING(work_item_id)
+                JOIN work_item_runs r USING(work_item_id)
+                WHERE t.tag='c2:issue-triage'
+                  AND w.status NOT IN ('completed','failed','cancelled','superseded','waived')
+                  AND r.state IN ('claimed','running','recovering')
+                ORDER BY r.created_at DESC LIMIT 1
+            """).fetchone()
+            if row:
+                triage_run = dict(row)
+                triage_run["lease_expired"] = float(triage_run.get("lease_until") or 0) <= now
         triaged = None
         if _table_exists(conn, "issue_inbox"):
             row = conn.execute(
@@ -125,7 +143,8 @@ def db_snapshot(now: float | None = None) -> dict[str, Any]:
         return {
             "available": True, "counts": counts, "inbox_pending": int(inbox),
             "runnable_ids": runnable, "active_runs": runs,
-            "authority": authority, "last_triaged_at_ms": triaged,
+            "authority": authority, "triage_run": triage_run,
+            "last_triaged_at_ms": triaged,
         }
     except Exception as exc:
         return {"available": False, "error": f"{type(exc).__name__}:{exc}"}
@@ -141,19 +160,33 @@ def state_fingerprint(db: dict[str, Any]) -> str:
     counts = db.get("counts") or {}
     runs = db.get("active_runs") or []
     authority = db.get("authority") or {}
-    core = {
-        "inbox_bucket": _bucket(int(db.get("inbox_pending") or 0), 10),
-        "pending_bucket": _bucket(int(counts.get("pending") or 0), 10),
-        "waiting_bucket": _bucket(int(counts.get("waiting") or 0), 5),
-        "blocked_bucket": _bucket(int(counts.get("blocked") or 0), 5),
-        "runnable_ids": list(db.get("runnable_ids") or []),
-        "runs": [
-            (r.get("run_id"), r.get("state"), bool(r.get("worker_ref")), bool(r.get("lease_expired")))
-            for r in runs
-        ],
-        "authority": (authority.get("supervisor_id"), authority.get("lease_valid")),
-        "last_triaged_at_ms": db.get("last_triaged_at_ms"),
-    }
+    triage = db.get("triage_run") or {}
+    if int(db.get("inbox_pending") or 0) > 0 and triage:
+        core = {
+            "mode": "triage_gate",
+            "inbox_nonempty": True,
+            "triage_run": (
+                triage.get("run_id"), triage.get("state"),
+                bool(triage.get("worker_ref")), bool(triage.get("lease_expired")),
+            ),
+            "authority": (
+                authority.get("supervisor_id"), bool(authority.get("lease_stale")),
+            ),
+        }
+    else:
+        core = {
+            "mode": "general",
+            "inbox_nonempty": bool(int(db.get("inbox_pending") or 0)),
+            "pending_bucket": _bucket(int(counts.get("pending") or 0), 10),
+            "waiting_bucket": _bucket(int(counts.get("waiting") or 0), 5),
+            "blocked_bucket": _bucket(int(counts.get("blocked") or 0), 5),
+            "runnable_ids": list(db.get("runnable_ids") or []),
+            "runs": [
+                (r.get("run_id"), r.get("state"), bool(r.get("worker_ref")), bool(r.get("lease_expired")))
+                for r in runs
+            ],
+            "authority": (authority.get("supervisor_id"), bool(authority.get("lease_stale"))),
+        }
     raw = json.dumps(core, sort_keys=True, separators=(",", ":")).encode()
     return hashlib.sha256(raw).hexdigest()
 
