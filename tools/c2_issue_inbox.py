@@ -612,7 +612,8 @@ def ensure_triage(conn: sqlite3.Connection, *, project_url: str) -> dict:
             "Read v_issue_inbox_pending_ordered; apply one fenced disposition per row in order."
         ),
         tags=["c2:issue-triage", "priority:p0"],
-        execution={"activity": "semantic", "project_url": project_url,
+        execution={"activity": "native",
+                   "command": ["/home/daniele/.local/bin/c2-inbox-drain-native"],
                    "resources": ["c2:issue-triage"], "max_attempts": 3},
     )
     return {"state": "created", "work_item_id": item["work_item_id"], "pending": pending}
