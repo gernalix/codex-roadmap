@@ -31,7 +31,9 @@ class WorkerTests(unittest.TestCase):
                 c2_scheduler.executor_started(conn,run_id='triage-fallback',now=2)
                 conn.commit()
                 fallback={'state':'progress','before':20,'after':10,'returncode':0}
-                with patch.object(c2_worker,'lane_degraded',return_value=True), \
+                kill_switch=root/'disable-chat-supervisor'; kill_switch.write_text('')
+                with patch.object(c2_worker,'lane_degraded',return_value=False), \
+                     patch.object(c2_worker,'KILL_SWITCH',kill_switch), \
                      patch.object(c2_worker,'execute_inbox_codex',return_value=fallback) as execute:
                     result=c2_worker.run_once(path,'triage-fallback',state_root=root/'receipts',
                         submit=lambda *_:self.fail('fallback should own its fenced writes'))
