@@ -174,6 +174,29 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual([('renew_supervisor','3')],result['events'])
             self.assertEqual([],launched)
 
+    def test_matching_authority_outside_renew_window_continues_scheduling(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=self._authority_db(tmp,'same',3,170)
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                item=c2_intake.add_work_item(writer,title='Ready native',repo='fixture')
+                c2_scheduler.configure(writer,item['work_item_id'],activity='native',command=['true'])
+                writer.commit()
+            submitted=[]
+            current={'supervisor_id':'same','fencing_token':3,'lease_expires_at':500}
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                result=c2_runtime.advance(
+                    snapshot,
+                    submit=lambda op,args,key:submitted.append((op,args,key)),
+                    launch=lambda _:None,
+                    launch_notify=lambda _:None,
+                    now=100,
+                    supervisor_authority=current,
+                )
+            self.assertNotIn('renew_supervisor',[op for op,_,_ in submitted])
+            self.assertIn('schedule',[op for op,_,_ in submitted])
+            self.assertEqual(1,result['ready'])
+
     def test_unexpired_different_authority_fences_without_scheduling(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=self._authority_db(tmp,'other',4,500)

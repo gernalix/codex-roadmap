@@ -160,7 +160,7 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             submit('claim_supervisor',{},key)
             return {'events':[('claim_supervisor',str(current_token))],
                     'ready':0,'active':0}
-        if (float(authority['lease_expires_at']) <= now+300 and
+        if (float(authority['lease_expires_at']) <= now+60 and
                 current_expiry > float(authority['lease_expires_at'])+1):
             key=_key('c2-renew-supervisor',{'token':current_token,
                                            'expires':current_expiry})
@@ -169,7 +169,7 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
                     'ready':0,'active':0}
     elif supervisor_expiry is not None and db.execute("SELECT 1 FROM sqlite_master WHERE name='c2_supervisor_authority'").fetchone():
         authority=db.execute('SELECT fencing_token,lease_expires_at FROM c2_supervisor_authority WHERE singleton=1').fetchone()
-        if (authority and authority['lease_expires_at'] <= now+300 and
+        if (authority and authority['lease_expires_at'] <= now+60 and
                 supervisor_expiry > authority['lease_expires_at']+1):
             key=_key('c2-renew-supervisor',{'token':authority['fencing_token'],
                                            'expires':supervisor_expiry})
