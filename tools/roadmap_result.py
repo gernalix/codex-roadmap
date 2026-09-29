@@ -22,7 +22,7 @@ class RoadmapResultError(RuntimeError):
     pass
 
 
-ROADMAP_ROOT = Path.home() / "projects" / "codex-roadmap"
+ROADMAP_ROOT = Path(__file__).resolve().parents[1]
 ROADMAP_DB = ROADMAP_ROOT / "roadmap.sqlite"
 
 
