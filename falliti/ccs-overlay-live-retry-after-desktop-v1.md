@@ -1,3 +1,5 @@
+PROMPT_ID=784216
+
 PROMPT_ID=784216 | PARENT_PROMPT_ID=125435 | project_id=23
 MODEL=GPT-5.6 Luna | reasoning=low | MegaVault=FAST
 REPO=gernalix/chrome-codex-switcher

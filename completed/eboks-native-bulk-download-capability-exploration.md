@@ -1,3 +1,5 @@
+PROMPT_ID=206756
+
 PROMPT_ID=206756 | PROJECT=e-Boks exploration | project_id=23 | MODEL=GPT-5.6 Terra | reasoning=medium | MegaVault=FAST
 
 # Goal

@@ -1,3 +1,5 @@
+PROMPT_ID=936284
+
 PROMPT_ID=936284 | PARENT_PROMPT_ID=417592 | project_id=23 | MODEL=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
 PRIMARY_REPO=gernalix/MegaVault
 TARGET_WORKTREE=/home/daniele/projects/fedora-external-updater

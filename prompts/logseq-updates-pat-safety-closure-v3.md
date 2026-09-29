@@ -1,3 +1,5 @@
+PROMPT_ID=588376
+
 PROMPT_ID=588376 | PARENT_PROMPT_ID=357862 | project=logseq_updates | MegaVault=STRICT
 
 # Goal

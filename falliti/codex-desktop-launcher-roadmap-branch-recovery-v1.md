@@ -1,3 +1,5 @@
+PROMPT_ID=403496
+
 PROMPT_ID=403496 | PARENT_PROMPT_ID=989559 | project_id=23
 MODEL=GPT-5.6 Terra | reasoning=medium | MegaVault=FAST
 REPO=gernalix/chrome-codex-switcher

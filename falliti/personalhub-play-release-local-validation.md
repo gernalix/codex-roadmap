@@ -1,3 +1,5 @@
+PROMPT_ID=311947
+
 PROMPT_ID=311947 | PARENT_PROMPT_ID=294731 | project_id=49 | model=GPT-5.6 Luna | reasoning=low | MegaVault=FAST
 
 # Goal

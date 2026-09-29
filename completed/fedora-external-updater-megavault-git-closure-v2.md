@@ -1,3 +1,5 @@
+PROMPT_ID=417592
+
 PROMPT_ID=417592 | PARENT_PROMPT_ID=854653 | model=GPT-5.6 Luna | reasoning=low | MegaVault=FAST
 WORKDIR=/home/daniele/projects/fedora-external-updater
 

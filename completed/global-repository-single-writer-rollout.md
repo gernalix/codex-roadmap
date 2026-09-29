@@ -1,3 +1,5 @@
+PROMPT_ID=642913
+
 PROMPT_ID=642913 | project=GitHub Autosync | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
 
 # Goal

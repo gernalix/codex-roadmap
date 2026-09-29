@@ -1,3 +1,5 @@
+PROMPT_ID=556372
+
 PROMPT_ID=556372 | MegaVault=FAST
 WORKDIR=/home/daniele/projects/grindr-export
 

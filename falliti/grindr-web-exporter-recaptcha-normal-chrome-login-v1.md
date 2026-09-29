@@ -1,3 +1,5 @@
+PROMPT_ID=515955
+
 PROMPT_ID=515955 | PARENT_PROMPT_ID=601566 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=FAST
 WORKDIR=/home/daniele/projects/grindr-web-exporter
 

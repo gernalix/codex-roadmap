@@ -1,3 +1,5 @@
+PROMPT_ID=748203
+
 PROMPT_ID=748203 | PARENT_PROMPT_ID=643918 | project_id=8
 MODEL=GPT-5.6 Luna | REASONING=low | MEGAVAULT=FAST
 WORKDIR=/home/daniele/projects/codex-usage-monitor

@@ -1,3 +1,5 @@
+PROMPT_ID=736284
+
 PROMPT_ID=736284 | project_id=92 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=FAST
 REPO=gernalix/prompt-history
 WORKDIR=/home/daniele/projects/prompt-history

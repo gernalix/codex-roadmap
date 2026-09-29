@@ -1,3 +1,5 @@
+PROMPT_ID=223679
+
 PROMPT_ID=223679 | PARENT_PROMPT_ID=284916 | project_id=49 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
 
 # Goal

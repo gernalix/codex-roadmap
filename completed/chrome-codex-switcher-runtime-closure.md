@@ -1,3 +1,5 @@
+PROMPT_ID=519564
+
 PROMPT_ID=519564 | project=chrome-codex-switcher | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
 
 # Goal

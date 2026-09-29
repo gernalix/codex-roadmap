@@ -1,3 +1,5 @@
+PROMPT_ID=856234
+
 PROMPT_ID=856234 | PARENT_PROMPT_ID=418906 | project_id=96 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST
 Codex Desktop project: Fedora
 

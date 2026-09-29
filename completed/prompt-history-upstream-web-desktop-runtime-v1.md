@@ -1,3 +1,5 @@
+PROMPT_ID=571364
+
 PROMPT_ID=571364 | project_id=92 | model=GPT-5.5 | reasoning=medium | MegaVault=FAST
 REPO=gernalix/prompt-history
 WORKDIR=/home/daniele/projects/prompt-history

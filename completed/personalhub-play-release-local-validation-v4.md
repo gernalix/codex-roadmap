@@ -1,3 +1,5 @@
+PROMPT_ID=788606
+
 PROMPT_ID=788606 | PARENT_PROMPT_ID=334679 | project_id=49 | MegaVault=FAST
 
 # Goal

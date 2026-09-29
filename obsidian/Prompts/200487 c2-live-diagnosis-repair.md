@@ -1,20 +1,20 @@
 ---
 prompt_id: 200487
-status: running
+status: completed
 project_id: 51
 model: GPT-6 Astra
 reasoning: high
 tags:
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/codex-roadmap
 ---
 
 # 200487 · Diagnostica e ripara C2 live
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
-- **Prompt:** [[../../prompts/c2-live-diagnosis-repair|Apri prompt]]
+- **Prompt:** [[../../completed/c2-live-diagnosis-repair|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —

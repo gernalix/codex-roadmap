@@ -1,3 +1,5 @@
+PROMPT_ID=463817
+
 PROMPT_ID=463817 | project_id=15 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STRICT
 WORKDIR=/home/daniele/projects/fedora-system-monitor
 

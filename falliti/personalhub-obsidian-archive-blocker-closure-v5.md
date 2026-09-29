@@ -1,3 +1,5 @@
+PROMPT_ID=649781
+
 PROMPT_ID=649781 | PARENT_PROMPT_ID=728918 | project_id=49 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=FAST
 WORKDIR=/home/daniele/projects/PersonalHub
 

@@ -1,3 +1,5 @@
+PROMPT_ID=817264
+
 PROMPT_ID=817264 | PARENT_PROMPT_ID=642815 | project_id=8 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=FAST
 Codex Desktop project: Fedora
 last_result=BLOCKED

@@ -1,3 +1,5 @@
+PROMPT_ID=404846
+
 PROMPT_ID=404846 | PARENT_PROMPT_ID=962109 | project_id=49 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=FAST
 Codex Desktop project: Personal Hub
 

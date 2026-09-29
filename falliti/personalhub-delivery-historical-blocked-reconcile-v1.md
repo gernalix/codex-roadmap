@@ -1,3 +1,5 @@
+PROMPT_ID=941372
+
 PROMPT_ID=941372 | PARENT_PROMPT_ID=618472 | project_id=49
 MODEL=GPT-5.6 Luna | REASONING=low | MEGAVAULT=FAST
 WORKDIR=/home/daniele/projects/codex-roadmap

@@ -1,3 +1,5 @@
+PROMPT_ID=285894
+
 PROMPT_ID=285894 | model=GPT-5.6 Terra | reasoning=medium | MegaVault=STANDARD
 WORKDIR=/home/daniele/projects
 

@@ -1,3 +1,5 @@
+PROMPT_ID=553232
+
 Completa autonomamente tutta la parte PersonalHub ancora realmente aperta nella C2.
 
 SCOPE

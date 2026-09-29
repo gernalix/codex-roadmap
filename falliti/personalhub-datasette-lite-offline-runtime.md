@@ -1,3 +1,5 @@
+PROMPT_ID=861305
+
 PROMPT_ID=861305 | project_id=49 | model=GPT-5.6 Sol | reasoning=medium | MegaVault=STANDARD
 
 # Goal
