@@ -1,5 +1,3 @@
-PROMPT_ID=200487
-
 # Goal
 Diagnostica cosa non va nella C2 live e risolvi il guasto con il minimo cambiamento necessario.
 
