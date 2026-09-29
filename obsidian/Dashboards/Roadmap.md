@@ -4,7 +4,7 @@
 
 ## Lanciabili adesso
 
-- Nessuno.
+- [[obsidian/Prompts/200487 c2-live-diagnosis-repair|200487 · Diagnostica e ripara C2 live]]
 
 ## In esecuzione
 
