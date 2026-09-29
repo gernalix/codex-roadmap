@@ -15,6 +15,53 @@ from test_c2_intake import C2IntakeTests
 
 
 class RuntimeTests(unittest.TestCase):
+    def test_adaptive_wave_and_completed_slot_backfill(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                for index in range(5):
+                    item=c2_intake.add_work_item(writer,title=f'Independent {index}',
+                                                 repo=f'repo-{index}')
+                    c2_scheduler.configure(writer,item['work_item_id'],
+                                           activity='native',command=['true'])
+                writer.commit()
+            submitted=[]
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                c2_runtime.advance(snapshot,
+                    submit=lambda op,args,key:submitted.append((op,args)),
+                    launch=lambda _:None,launch_notify=lambda _:None,now=10)
+            schedule=[args for op,args in submitted if op=='schedule'][0]
+            self.assertEqual(5,schedule['max_parallel'])
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                runs=c2_scheduler.schedule(writer,now=10,**schedule)
+                self.assertEqual(5,len(runs))
+                c2_scheduler.acknowledge(writer,runs[0]['run_id'],
+                    worker_ref='c2-run:'+runs[0]['run_id'],
+                    metadata=runs[0]['metadata'],now=10)
+                c2_scheduler.complete(writer,runs[0]['run_id'],succeeded=True,
+                                      worker_ref='c2-run:'+runs[0]['run_id'])
+                item=c2_intake.add_work_item(writer,title='Backfill',repo='repo-new')
+                c2_scheduler.configure(writer,item['work_item_id'],
+                                       activity='native',command=['true'])
+                writer.commit()
+            submitted=[]
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                c2_runtime.advance(snapshot,
+                    submit=lambda op,args,key:submitted.append((op,args)),
+                    launch=lambda _:None,launch_notify=lambda _:None,now=11)
+            schedule=[args for op,args in submitted if op=='schedule'][0]
+            self.assertEqual(5,schedule['max_parallel'])
+
+    def test_parallel_cap_is_bounded(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                with self.assertRaisesRegex(c2_runtime.RuntimeErrorC2,
+                                            'parallel_cap_out_of_range'):
+                    c2_runtime.advance(snapshot,max_parallel=17)
+
     def test_supervisor_writer_operation_automatically_records_progress(self):
         with tempfile.TemporaryDirectory() as tmp:
             lease_path=Path(tmp)/'lease.sqlite3'

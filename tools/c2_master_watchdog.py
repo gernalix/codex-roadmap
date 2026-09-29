@@ -248,13 +248,29 @@ def run_worker_states(db: dict[str, Any]) -> list[dict[str, Any]]:
     return states
 
 
-def goal_status() -> str:
+def goal_observation() -> dict[str, Any]:
     try:
         with AppServerRPC(timeout=5) as rpc:
             goal = rpc("thread/goal/get", {"threadId": MASTER_THREAD}).get("goal") or {}
-            return str(goal.get("status") or "unknown")
+            status = str(goal.get("status") or "unknown")
+            if status != "blocked":
+                return {"status": status}
+            thread = (rpc("thread/read", {"threadId": MASTER_THREAD,
+                                          "includeTurns": True}).get("thread") or {})
+            turns = thread.get("turns") or []
+            latest = turns[-1] if turns else {}
+            return {
+                "status": status,
+                "thread_status": (thread.get("status") or {}).get("type"),
+                "turn_status": latest.get("status"),
+                "turn_error": bool(latest.get("error")),
+                "approval_pending": any(
+                    any(word in str(item.get("type") or "").lower()
+                        for word in ("approval", "requestuserinput", "elicitation"))
+                    for item in latest.get("items") or []),
+            }
     except Exception:
-        return "unknown"
+        return {"status": "unknown"}
 
 
 def work_remains(db: dict[str, Any]) -> bool:
@@ -380,7 +396,8 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "intervention": "", "attention_key": "", "should_start_goal": False,
             "why": ["Nessun secondo Goal mentre un run non è terminale."], "state_key": fp,
         }
-    if snapshot.get("goal_status") not in ("active", "paused", "blocked"):
+    goal_status = snapshot.get("goal_status")
+    if goal_status not in ("active", "paused", "blocked"):
         return {
             "status": "needs_user", "phase": "unknown",
             "headline": "Stato Master Goal non leggibile",
@@ -396,6 +413,41 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
     failed_service = service.get("result") not in ("success", "", "unknown")
     changed = fp != last_fp
     retry_due = failed_service and failures < MAX_START_FAILURES and now - last_wake >= RETRY_DELAY_S
+    if goal_status == "blocked":
+        observation = snapshot.get("goal_observation") or {}
+        if (observation.get("thread_status") not in ("idle", "notLoaded") or
+                observation.get("turn_status") != "completed" or
+                observation.get("turn_error") or observation.get("approval_pending")):
+            return {
+                "status": "needs_user", "phase": "unknown",
+                "headline": "Master Goal bloccato con stato non recuperabile in sicurezza",
+                "current": "Il turno o una richiesta di approvazione richiedono una verifica esplicita.",
+                "next": "Verificare il blocco prima di riattivare il Goal.",
+                "intervention": "Chiedimi di diagnosticare il Master Goal C2.",
+                "attention_key": "c2_goal_block_ambiguous", "should_start_goal": False,
+                "why": ["Nessun restart su un blocco o turno ambiguo."], "state_key": fp,
+            }
+        actionable = bool(db.get("inbox_pending") or db.get("runnable_ids"))
+        if not actionable:
+            return {
+                "status": "waiting_external", "phase": "external_wait",
+                "headline": "Master Goal in attesa di un gate C2",
+                "current": "Non risultano Inbox pendente o item runnable.",
+                "next": "Attendere una transizione canonica di gate o dipendenza.",
+                "intervention": "", "attention_key": "", "should_start_goal": False,
+                "why": ["I soli item waiting o blocked non autorizzano un retry."], "state_key": fp,
+            }
+        if fp == meta.get("last_blocked_recovery_fingerprint"):
+            return {
+                "status": "needs_user", "phase": "unknown",
+                "headline": "Master Goal ancora bloccato dopo il recovery",
+                "current": "Lo stesso lavoro runnable resta presente dopo un tentativo automatico.",
+                "next": "Diagnosticare il blocco senza ripetere il Goal.",
+                "intervention": "Chiedimi di diagnosticare il Master Goal C2.",
+                "attention_key": "c2_goal_block_repeated", "should_start_goal": False,
+                "why": ["Recovery già tentato su questo stato canonico."], "state_key": fp,
+            }
+        changed = True
     if (changed or retry_due) and failures < MAX_START_FAILURES:
         reason = "Lo stato C2 è cambiato" if changed else "Il precedente avvio del Goal è fallito"
         return {
@@ -511,10 +563,10 @@ def snapshot(now: float | None = None) -> dict[str, Any]:
         "service": service,
         "master_worker_alive": alive,
         "run_workers": workers,
-        "goal_status": (goal_status() if db.get("available") and work_remains(db)
-                        and service.get("active") not in ("active",) and not alive
-                        and not any(w["active"] == "active" for w in workers)
-                        else "not_checked"),
+        "goal_observation": (goal_observation() if db.get("available") and work_remains(db)
+                             and service.get("active") not in ("active",) and not alive
+                             and not any(w["active"] == "active" for w in workers)
+                             else {"status": "not_checked"}),
         "delegated_worker": delegated_worker_state(db, now),
     }
 
@@ -541,6 +593,7 @@ def run_once(now: float | None = None) -> int:
     now = time.time() if now is None else now
     ROOT.mkdir(parents=True, exist_ok=True)
     snap = snapshot(now)
+    snap["goal_status"] = snap["goal_observation"]["status"]
     meta = read_json(META, {})
     result = decide(snap, meta, now)
     fp = (result.get("state_key") or
@@ -562,6 +615,8 @@ def run_once(now: float | None = None) -> int:
         wake_result = "started" if ok else "start_failed"
         meta["last_wake_fingerprint"] = fp
         meta["last_wake_at"] = now
+        if snap.get("goal_status") == "blocked":
+            meta["last_blocked_recovery_fingerprint"] = fp
         if ok:
             meta["start_failures"] = 0
         else:

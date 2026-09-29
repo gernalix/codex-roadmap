@@ -11,6 +11,7 @@ HOME = Path.home()
 LIB = HOME / ".local/lib/c2-master-watchdog"
 BIN = HOME / ".local/bin"
 USER_SYSTEMD = HOME / ".config/systemd/user"
+OBJECTIVE = HOME / ".local/share/c2-master-goal/objective.txt"
 
 FILES = {
     ROOT / "tools/c2_master_watchdog.py": LIB / "c2_master_watchdog.py",
@@ -22,6 +23,7 @@ FILES = {
     ROOT / "systemd/c2-master-goal.service": USER_SYSTEMD / "c2-master-goal.service",
     ROOT / "systemd/c2-master-watcher.service": USER_SYSTEMD / "c2-master-watcher.service",
     ROOT / "systemd/c2-master-watcher.timer": USER_SYSTEMD / "c2-master-watcher.timer",
+    ROOT / "systemd/c2-master-goal-objective.txt": OBJECTIVE,
 }
 
 
@@ -33,6 +35,7 @@ def main() -> int:
     LIB.mkdir(parents=True, exist_ok=True)
     BIN.mkdir(parents=True, exist_ok=True)
     USER_SYSTEMD.mkdir(parents=True, exist_ok=True)
+    OBJECTIVE.parent.mkdir(parents=True, exist_ok=True)
     for src, dst in FILES.items():
         shutil.copy2(src, dst)
     for path in (LIB / "c2_master_watchdog.py", BIN / "c2-master-goal-start", BIN / "c2-master-watcher-view", BIN / "c2-master-executor-view", BIN / "c2-roadmap-status"):
