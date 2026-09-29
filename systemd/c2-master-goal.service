@@ -1,0 +1,11 @@
+[Unit]
+Description=C2 Master Goal coordinator
+After=network-online.target c2-runtime.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/home/daniele/.local/bin/c2-master-goal-start
+Restart=no
+Environment=HOME=/home/daniele
+WorkingDirectory=/home/daniele/projects/codex-roadmap
