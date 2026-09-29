@@ -16,7 +16,7 @@ tags:
 - **Progetto:** [[../Projects/codex-roadmap|codex-roadmap]]
 - **Prompt:** [[../../falliti/c2-autonomous-orchestration-to-quiescence|Apri prompt]]
 - **Primo lancio:** 2026-09-27T06:00:21Z
-- **Ultimo lancio:** 2026-09-29T20:25:18Z
+- **Ultimo lancio:** 2026-09-29T20:28:34Z
 - **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
@@ -60,6 +60,7 @@ Orchestra Inbox, riconciliazione, prioritizzazione e leaf Codex freschi fino a q
 | 2026-09-29T20:20:13Z | 2026-09-29T20:22:26Z | UNKNOWN | 132.897 | gpt-6-luna | medium | 6 | 111105 |
 | 2026-09-29T20:22:26Z | 2026-09-29T20:25:18Z | UNKNOWN | 171.639 | gpt-6-luna | medium | 5 | 116544 |
 | 2026-09-29T20:25:18Z | 2026-09-29T20:28:34Z | UNKNOWN | 195.703 | gpt-6-luna | medium | 7 | 124080 |
+| 2026-09-29T20:28:34Z | 2026-09-29T20:31:14Z | UNKNOWN | 159.981 | gpt-6-luna | medium | 5 | 128588 |
 
 ## Analisi ChatGPT
 
