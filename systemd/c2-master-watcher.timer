@@ -3,7 +3,7 @@ Description=Run C2 Master deterministic watchdog
 
 [Timer]
 OnBootSec=20s
-OnUnitActiveSec=10s
+OnUnitActiveSec=30s
 AccuracySec=2s
 Persistent=true
 

@@ -14,6 +14,7 @@ USER_SYSTEMD = HOME / ".config/systemd/user"
 
 FILES = {
     ROOT / "tools/c2_master_watchdog.py": LIB / "c2_master_watchdog.py",
+    ROOT / "tools/c2_appserver_rpc.py": LIB / "c2_appserver_rpc.py",
     ROOT / "tools/c2_master_goal_start.py": BIN / "c2-master-goal-start",
     ROOT / "tools/c2_master_watcher_view.py": BIN / "c2-master-watcher-view",
     ROOT / "tools/c2_master_executor_view.py": BIN / "c2-master-executor-view",
