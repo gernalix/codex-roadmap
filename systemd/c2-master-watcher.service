@@ -1,0 +1,10 @@
+[Unit]
+Description=C2 Master deterministic watchdog pass
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /home/daniele/.local/lib/c2-master-watchdog/c2_master_watchdog.py
+Environment=HOME=/home/daniele
+WorkingDirectory=/home/daniele/projects/codex-roadmap
