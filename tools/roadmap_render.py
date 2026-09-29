@@ -8,6 +8,14 @@ from typing import Any
 
 from roadmap_db import RoadmapDBError, canonical_prompt_text, connect, now_utc, prompt_row, summary_rows
 
+_PROMPT_ID_HEADER_RE = re.compile(r"(?m)^PROMPT_ID\s*[:=]\s*\d{6}\s*$")
+
+
+def _project_prompt_body(prompt_id: str, body: str) -> str:
+    if _PROMPT_ID_HEADER_RE.search(body):
+        return body
+    return f"PROMPT_ID={prompt_id}\n\n{body}"
+
 def _wikilink_for_prompt(row: sqlite3.Row) -> str:
     return f"[[obsidian/Prompts/{row['prompt_id']} {row['slug']}|{row['prompt_id']} · {row['title']}]]"
 
@@ -163,7 +171,7 @@ def render(repo: Path) -> list[str]:
             continue
         path = repo / current_path
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(body, encoding="utf-8")
+        path.write_text(_project_prompt_body(str(row["prompt_id"]), body), encoding="utf-8")
 
     roadmap_lines = [
         "# Roadmap",
