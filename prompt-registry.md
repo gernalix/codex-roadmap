@@ -276,7 +276,7 @@
 | [[obsidian/Prompts/657823 prompt-657823\|657823 · Historical prompt 657823]] | completed | 2026-09-05T19:28:23Z | 2026-09-05T19:28:23Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/672491 prompt-672491\|672491 · Historical prompt 672491]] | cancelled | 2026-09-16T08:43:59Z | 2026-09-16T08:43:59Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/672541 prompt-672541\|672541 · Historical prompt 672541]] | cancelled | 2026-09-11T20:47:04Z | 2026-09-11T20:47:04Z | CANCELLED | no | no | — | — | — | — |
-| [[obsidian/Prompts/673914 prompt-673914\|673914 · Historical prompt 673914]] | cancelled | 2026-09-16T06:00:06Z | 2026-09-16T06:00:06Z | CANCELLED | sì | no | — | — | — | — |
+| [[obsidian/Prompts/673914 prompt-673914\|673914 · Historical prompt 673914]] | cancelled | 2026-09-16T05:22:24Z | 2026-09-16T06:00:06Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/681247 prompt-681247\|681247 · Historical prompt 681247]] | completed | 2026-09-16T14:21:02Z | 2026-09-16T14:21:02Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/681395 prompt-681395\|681395 · Historical prompt 681395]] | cancelled | 2026-09-07T10:36:31Z | 2026-09-07T10:37:15Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/681427 prompt-681427\|681427 · Historical prompt 681427]] | completed | 2026-09-12T07:08:04Z | 2026-09-12T07:08:04Z | PASS | no | no | — | — | — | — |
