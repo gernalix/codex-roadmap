@@ -23,11 +23,12 @@ def db_state(*, inbox=1, pending=1, waiting=0, blocked=0, runnable=None, runs=No
     }
 
 
-def snap(db, *, active="inactive", result="success", worker=False):
+def snap(db, *, active="inactive", result="success", worker=False, delegated=None):
     return {
         "db": db,
         "service": {"active": active, "result": result},
         "master_worker_alive": worker,
+        "delegated_worker": delegated or {},
     }
 
 
@@ -43,6 +44,79 @@ class MasterWatchdogDecisionTests(unittest.TestCase):
         result = watchdog.decide(snap(db, active="active"), {}, now=1000)
         self.assertEqual(result["status"], "working")
         self.assertFalse(result["should_start_goal"])
+
+    def test_live_delegated_worker_is_working_even_with_expired_lease(self):
+        triage = {
+            "run_id": "triage-1", "state": "recovering",
+            "worker_ref": "c2-run:triage-1", "lease_expired": True,
+        }
+        db = db_state(inbox=25, triage_run=triage)
+        result = watchdog.decide(snap(db, delegated={
+            "run_id": "triage-1", "alive": True,
+            "progressing": True, "progress_age_s": 30,
+        }), {}, now=1000)
+        self.assertEqual(result["status"], "working")
+        self.assertEqual(result["phase"], "delegated")
+        self.assertFalse(result["should_start_goal"])
+
+    def test_delegated_worker_health_changes_fingerprint(self):
+        triage = {
+            "run_id": "triage-1", "state": "running",
+            "worker_ref": "c2-run:triage-1", "lease_expired": True,
+        }
+        db = db_state(inbox=25, triage_run=triage)
+        healthy = watchdog.state_fingerprint(
+            db, {"alive": True, "progressing": True}
+        )
+        stalled = watchdog.state_fingerprint(
+            db, {"alive": True, "progressing": False}
+        )
+        dead = watchdog.state_fingerprint(
+            db, {"alive": False, "progressing": False}
+        )
+        self.assertNotEqual(healthy, stalled)
+        self.assertNotEqual(healthy, dead)
+
+    def test_stalled_delegated_worker_wakes_goal_after_healthy_state(self):
+        triage = {
+            "run_id": "triage-1", "state": "running",
+            "worker_ref": "c2-run:triage-1", "lease_expired": True,
+        }
+        db = db_state(inbox=25, triage_run=triage)
+        healthy_fp = watchdog.state_fingerprint(
+            db, {"alive": True, "progressing": True}
+        )
+        result = watchdog.decide(
+            snap(db, delegated={
+                "run_id": "triage-1", "alive": True,
+                "progressing": False, "progress_age_s": 4000,
+            }),
+            {"last_wake_fingerprint": healthy_fp, "last_wake_at": 900},
+            now=1000,
+        )
+        self.assertEqual(result["status"], "recovering")
+        self.assertTrue(result["should_start_goal"])
+        self.assertIn("non mostra progresso", result["current"])
+
+    def test_dead_delegated_worker_wakes_goal_after_healthy_state(self):
+        triage = {
+            "run_id": "triage-1", "state": "running",
+            "worker_ref": "c2-run:triage-1", "lease_expired": True,
+        }
+        db = db_state(inbox=25, triage_run=triage)
+        healthy_fp = watchdog.state_fingerprint(
+            db, {"alive": True, "progressing": True}
+        )
+        result = watchdog.decide(
+            snap(db, delegated={
+                "run_id": "triage-1", "alive": False,
+                "progressing": False, "progress_age_s": 4000,
+            }),
+            {"last_wake_fingerprint": healthy_fp, "last_wake_at": 900},
+            now=1000,
+        )
+        self.assertEqual(result["status"], "recovering")
+        self.assertTrue(result["should_start_goal"])
 
     def test_changed_state_wakes_goal_once(self):
         db = db_state(inbox=25)

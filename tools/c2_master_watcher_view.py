@@ -36,6 +36,9 @@ try:
         print('HEARTBEAT:',time.strftime('%H:%M:%S',time.localtime(h.get('checked_at',0))) if h.get('checked_at') else '—',
               '  ANALYZED:',h.get('analyzed','—'),
               '  MASTER WORKER:',h.get('master_worker_alive','—'))
+        print('DELEGATED WORKER:',h.get('delegated_worker_alive','—'),
+              '  PROGRESSING:',h.get('delegated_worker_progressing','—'),
+              '  RUN:',h.get('delegated_run_id') or '—')
         print('NOTIFICHE: Telegram + Fedora',
               '  ALLARME ATTIVO:', 'SÌ' if a.get('active') else 'no',
               '  trigger: needs_user → recovery quando il Goal riparte')

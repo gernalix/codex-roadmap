@@ -156,11 +156,12 @@ def _bucket(value: int, size: int) -> int:
     return 1 + (value - 1) // size
 
 
-def state_fingerprint(db: dict[str, Any]) -> str:
+def state_fingerprint(db: dict[str, Any], delegated: dict[str, Any] | None = None) -> str:
     counts = db.get("counts") or {}
     runs = db.get("active_runs") or []
     authority = db.get("authority") or {}
     triage = db.get("triage_run") or {}
+    delegated = delegated or {}
     if int(db.get("inbox_pending") or 0) > 0 and triage:
         core = {
             "mode": "triage_gate",
@@ -171,6 +172,9 @@ def state_fingerprint(db: dict[str, Any]) -> str:
             ),
             "authority": (
                 authority.get("supervisor_id"), bool(authority.get("lease_stale")),
+            ),
+            "delegated_worker": (
+                bool(delegated.get("alive")), bool(delegated.get("progressing")),
             ),
         }
     else:
@@ -189,6 +193,39 @@ def state_fingerprint(db: dict[str, Any]) -> str:
         }
     raw = json.dumps(core, sort_keys=True, separators=(",", ":")).encode()
     return hashlib.sha256(raw).hexdigest()
+
+
+def delegated_worker_state(db: dict[str, Any], now: float | None = None) -> dict[str, Any]:
+    now = time.time() if now is None else now
+    triage = db.get("triage_run") or {}
+    run_id = str(triage.get("run_id") or "")
+    worker_ref = str(triage.get("worker_ref") or "")
+    out = {
+        "run_id": run_id or None,
+        "worker_ref": worker_ref or None,
+        "alive": False,
+        "progressing": False,
+        "progress_age_s": None,
+        "unit": None,
+        "unit_state": "inactive",
+    }
+    if not run_id or worker_ref != "c2-run:" + run_id:
+        return out
+    unit = "c2-run-" + run_id + ".service"
+    state = systemd_state(unit)
+    out["unit"] = unit
+    out["unit_state"] = state.get("active", "unknown")
+    out["alive"] = state.get("active") == "active"
+    last = db.get("last_triaged_at_ms")
+    if last:
+        try:
+            out["progress_age_s"] = max(0.0, now - float(last) / 1000.0)
+        except Exception:
+            pass
+    out["progressing"] = bool(out["alive"] and (
+        out["progress_age_s"] is None or out["progress_age_s"] <= 3600
+    ))
+    return out
 
 
 def work_remains(db: dict[str, Any]) -> bool:
@@ -213,7 +250,8 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "attention_key": "c2_runtime_db_unavailable", "should_start_goal": False,
             "why": ["Il watchdog non può verificare il control plane senza il database runtime."],
         }
-    fp = state_fingerprint(db)
+    delegated = snapshot.get("delegated_worker") or {}
+    fp = state_fingerprint(db, delegated)
     if not work_remains(db):
         return {
             "status": "globally_quiescent", "phase": "external_wait",
@@ -222,6 +260,22 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "next": "Il watchdog attenderà un cambiamento reale di stato.",
             "intervention": "", "attention_key": "", "should_start_goal": False,
             "why": ["Nessun lavoro autonomo risulta dal control plane locale."], "state_key": fp,
+        }
+    if delegated.get("alive") and delegated.get("progressing"):
+        progress = delegated.get("progress_age_s")
+        progress_text = (
+            " avanzamento Inbox recente" if progress is not None and progress <= 3600
+            else " worker systemd vivo"
+        )
+        return {
+            "status": "working", "phase": "delegated",
+            "headline": "Lavoro delegato C2 in corso",
+            "current": ("Il Master Goal può restare PAUSED per design: il worker canonico "
+                        f"{delegated.get('run_id')} è vivo;{progress_text}."),
+            "next": "Il runtime continuerà i batch e farà recovery solo se il worker termina o il run resta senza esecutore vivo.",
+            "intervention": "", "attention_key": "", "should_start_goal": False,
+            "why": ["Il worker delegato systemd è attivo; una lease scaduta da sola non equivale a stallo."],
+            "state_key": fp,
         }
     if service.get("active") == "active" or snapshot.get("master_worker_alive"):
         return {
@@ -239,7 +293,10 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
     changed = fp != last_fp
     retry_due = failed_service and failures < MAX_START_FAILURES and now - last_wake >= RETRY_DELAY_S
     if changed or retry_due:
-        reason = "Lo stato C2 è cambiato" if changed else "Il precedente avvio del Goal è fallito"
+        if delegated.get("alive") and not delegated.get("progressing"):
+            reason = "Il worker delegato è vivo ma non mostra progresso entro la soglia"
+        else:
+            reason = "Lo stato C2 è cambiato" if changed else "Il precedente avvio del Goal è fallito"
         return {
             "status": "recovering", "phase": "inbox",
             "headline": "Il watchdog sta riattivando il Master Goal",
@@ -339,11 +396,13 @@ def apply_notification(result: dict[str, Any], goal_alive: bool) -> None:
 
 def snapshot(now: float | None = None) -> dict[str, Any]:
     now = time.time() if now is None else now
+    db = db_snapshot(now)
     return {
         "observed_at": now,
-        "db": db_snapshot(now),
+        "db": db,
         "service": systemd_state(MASTER_SERVICE),
         "master_worker_alive": master_worker_alive(),
+        "delegated_worker": delegated_worker_state(db, now),
     }
 
 
@@ -371,7 +430,8 @@ def run_once(now: float | None = None) -> int:
     snap = snapshot(now)
     meta = read_json(META, {})
     result = decide(snap, meta, now)
-    fp = result.get("state_key") or state_fingerprint(snap.get("db") or {}) if (snap.get("db") or {}).get("available") else "db-unavailable"
+    fp = (result.get("state_key") or
+          state_fingerprint(snap.get("db") or {}, snap.get("delegated_worker") or {})) if (snap.get("db") or {}).get("available") else "db-unavailable"
     wake_result = None
     if result.get("should_start_goal"):
         ok, detail = start_goal()
@@ -395,12 +455,17 @@ def run_once(now: float | None = None) -> int:
                     "why": ["Il comando systemd di recovery continua a fallire."],
                 }
         META.write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
-    post_alive = master_worker_alive() or systemd_state(MASTER_SERVICE).get("active") == "active"
-    apply_notification(result, post_alive)
+    post_delegated = delegated_worker_state(snap.get("db") or {}, time.time())
+    goal_alive = master_worker_alive() or systemd_state(MASTER_SERVICE).get("active") == "active"
+    apply_notification(result, goal_alive or bool(post_delegated.get("alive")))
     write_state(result, fp, wake_result)
     HEARTBEAT.write_text(json.dumps({
         "checked_at": time.time(), "analyzed": False,
-        "state_key": fp, "master_worker_alive": post_alive,
+        "state_key": fp, "master_worker_alive": goal_alive,
+        "delegated_worker_alive": bool(post_delegated.get("alive")),
+        "delegated_worker_progressing": bool(post_delegated.get("progressing")),
+        "delegated_run_id": post_delegated.get("run_id"),
+        "delegated_progress_age_s": post_delegated.get("progress_age_s"),
         "decision_source": "deterministic",
     }, indent=2), encoding="utf-8")
     return 0

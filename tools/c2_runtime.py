@@ -103,6 +103,16 @@ def _launch_worker(run_id: str, db_path: Path):
             raise RuntimeErrorC2('worker_launch_failed:'+str(result.returncode))
 
 
+def _worker_unit_active(run_id: str) -> bool:
+    unit = 'c2-run-' + str(run_id)
+    env = _user_systemd_environment()
+    result = subprocess.run(
+        ['systemctl', '--user', 'is-active', '--quiet', unit],
+        capture_output=True, env=env,
+    )
+    return result.returncode == 0
+
+
 def _launch_notify(event_key: str):
     run_hash=hashlib.sha256(event_key.encode()).hexdigest()[:24]
     command=[sys.executable,str(Path(__file__).with_name('c2_notify_worker.py')),
@@ -122,7 +132,7 @@ def _repo_task_status(prompt_id: str) -> dict:
 
 
 def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_worker,
-            launch_notify=_launch_notify,
+            launch_notify=_launch_notify, worker_active=_worker_unit_active,
             repo_task_status=_repo_task_status,
             now: float | None=None, max_parallel: int=3,
             supervisor_expiry: float | None=None,
@@ -284,7 +294,9 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             else:
                 launch(run['run_id'])
                 events.append(('launch',run['run_id']))
-    expired=[r for r in active if r['state'] in ('claimed','running') and r['lease_until']<=now]
+    expired=[r for r in active
+             if r['state'] in ('claimed','running') and r['lease_until']<=now
+             and not worker_active(str(r['run_id']))]
     if expired:
         key=_key('c2-recover',sorted((r['run_id'],r['lease_until']) for r in expired))
         submit('recover',{},key)
