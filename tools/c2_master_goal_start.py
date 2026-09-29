@@ -19,7 +19,6 @@ OBJECTIVE = (
     "durable contract: /home/daniele/.local/share/c2-master-goal/objective.txt"
 )
 PID = Path("/home/daniele/.local/state/c2-master-goal/rpc-worker.pid")
-PID.parent.mkdir(parents=True, exist_ok=True)
 
 
 def pause_if_active(rpc: AppServerRPC) -> str:
@@ -32,6 +31,7 @@ def pause_if_active(rpc: AppServerRPC) -> str:
 
 
 def main() -> int:
+    PID.parent.mkdir(parents=True, exist_ok=True)
     PID.write_text(str(os.getpid()) + "\n", encoding="utf-8")
     try:
         with AppServerRPC(timeout=30) as rpc:
