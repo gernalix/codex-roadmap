@@ -14,6 +14,9 @@ import submit_mutation
 
 
 class RemoteSingleWriterTests(unittest.TestCase):
+    def test_result_refresh_uses_the_checkout_containing_the_tool(self) -> None:
+        self.assertEqual(TOOLS.parent, roadmap_result.ROADMAP_ROOT)
+
     def test_result_submission_does_not_require_local_repo(self) -> None:
         with patch.object(
             roadmap_result,
