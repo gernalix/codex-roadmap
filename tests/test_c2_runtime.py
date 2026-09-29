@@ -250,6 +250,33 @@ class RuntimeTests(unittest.TestCase):
                     'SELECT status FROM work_items WHERE work_item_id=?',
                     (chat['work_item_id'],)).fetchone()[0])
 
+    def test_expired_live_worker_is_not_recovered_until_unit_is_dead(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                item=c2_intake.add_work_item(writer,title='Live worker',repo='live-worker')
+                c2_scheduler.configure(writer,item['work_item_id'],activity='native',command=['true'])
+                run=c2_scheduler.schedule(writer,event_key='live-worker',now=1)[0]
+                c2_scheduler.acknowledge(writer,run['run_id'],
+                    worker_ref='c2-run:'+run['run_id'],metadata=run['metadata'],now=2)
+                c2_scheduler.executor_started(writer,run_id=run['run_id'],now=2)
+                writer.execute('UPDATE work_item_runs SET lease_until=3 WHERE run_id=?',
+                               (run['run_id'],))
+                writer.commit()
+            for alive, should_recover in ((True, False), (False, True)):
+                submitted=[]
+                with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                    c2_runtime.advance(
+                        snapshot,
+                        submit=lambda op,args,key: submitted.append(op),
+                        launch=lambda _: None,
+                        launch_notify=lambda _: None,
+                        worker_active=lambda _run_id, value=alive: value,
+                        now=1000,
+                    )
+                self.assertEqual(should_recover, 'recover' in submitted)
+
     def test_existing_chatgpt_run_is_held_then_launched_after_recovery(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=C2IntakeTests().make_cutover_db(Path(tmp))

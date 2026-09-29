@@ -156,11 +156,12 @@ def _bucket(value: int, size: int) -> int:
     return 1 + (value - 1) // size
 
 
-def state_fingerprint(db: dict[str, Any]) -> str:
+def state_fingerprint(db: dict[str, Any], delegated: dict[str, Any] | None = None) -> str:
     counts = db.get("counts") or {}
     runs = db.get("active_runs") or []
     authority = db.get("authority") or {}
     triage = db.get("triage_run") or {}
+    delegated = delegated or {}
     if int(db.get("inbox_pending") or 0) > 0 and triage:
         core = {
             "mode": "triage_gate",
@@ -171,6 +172,9 @@ def state_fingerprint(db: dict[str, Any]) -> str:
             ),
             "authority": (
                 authority.get("supervisor_id"), bool(authority.get("lease_stale")),
+            ),
+            "delegated_worker": (
+                bool(delegated.get("alive")), bool(delegated.get("progressing")),
             ),
         }
     else:
@@ -246,7 +250,8 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "attention_key": "c2_runtime_db_unavailable", "should_start_goal": False,
             "why": ["Il watchdog non può verificare il control plane senza il database runtime."],
         }
-    fp = state_fingerprint(db)
+    delegated = snapshot.get("delegated_worker") or {}
+    fp = state_fingerprint(db, delegated)
     if not work_remains(db):
         return {
             "status": "globally_quiescent", "phase": "external_wait",
@@ -256,8 +261,7 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "intervention": "", "attention_key": "", "should_start_goal": False,
             "why": ["Nessun lavoro autonomo risulta dal control plane locale."], "state_key": fp,
         }
-    delegated = snapshot.get("delegated_worker") or {}
-    if delegated.get("alive"):
+    if delegated.get("alive") and delegated.get("progressing"):
         progress = delegated.get("progress_age_s")
         progress_text = (
             " avanzamento Inbox recente" if progress is not None and progress <= 3600
@@ -289,7 +293,10 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
     changed = fp != last_fp
     retry_due = failed_service and failures < MAX_START_FAILURES and now - last_wake >= RETRY_DELAY_S
     if changed or retry_due:
-        reason = "Lo stato C2 è cambiato" if changed else "Il precedente avvio del Goal è fallito"
+        if delegated.get("alive") and not delegated.get("progressing"):
+            reason = "Il worker delegato è vivo ma non mostra progresso entro la soglia"
+        else:
+            reason = "Lo stato C2 è cambiato" if changed else "Il precedente avvio del Goal è fallito"
         return {
             "status": "recovering", "phase": "inbox",
             "headline": "Il watchdog sta riattivando il Master Goal",
@@ -423,7 +430,8 @@ def run_once(now: float | None = None) -> int:
     snap = snapshot(now)
     meta = read_json(META, {})
     result = decide(snap, meta, now)
-    fp = result.get("state_key") or state_fingerprint(snap.get("db") or {}) if (snap.get("db") or {}).get("available") else "db-unavailable"
+    fp = (result.get("state_key") or
+          state_fingerprint(snap.get("db") or {}, snap.get("delegated_worker") or {})) if (snap.get("db") or {}).get("available") else "db-unavailable"
     wake_result = None
     if result.get("should_start_goal"):
         ok, detail = start_goal()
