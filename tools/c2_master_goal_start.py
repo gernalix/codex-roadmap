@@ -5,7 +5,7 @@ import os
 import sys
 from pathlib import Path
 
-sys.path.insert(0, "/home/daniele/projects/codex-roadmap/tools")
+sys.path.insert(0, str(Path.home() / ".local/lib/c2-master-watchdog"))
 from c2_appserver_rpc import AppServerRPC
 
 THREAD = "01a0e719-60ff-7b91-82db-1d7c55787c67"
