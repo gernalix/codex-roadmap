@@ -24,7 +24,7 @@ def db_state(*, inbox=1, pending=1, waiting=0, blocked=0, runnable=None, runs=No
 
 
 def snap(db, *, active="inactive", result="success", worker=False, delegated=None,
-         run_workers=None, goal_status="paused"):
+         run_workers=None, goal_status="paused", goal_observation=None):
     return {
         "db": db,
         "service": {"active": active, "result": result},
@@ -32,6 +32,10 @@ def snap(db, *, active="inactive", result="success", worker=False, delegated=Non
         "delegated_worker": delegated or {},
         "run_workers": run_workers or [],
         "goal_status": goal_status,
+        "goal_observation": goal_observation or {
+            "thread_status": "notLoaded", "turn_status": "completed",
+            "turn_error": False, "approval_pending": False,
+        },
     }
 
 
@@ -147,10 +151,38 @@ class MasterWatchdogDecisionTests(unittest.TestCase):
         self.assertFalse(result["should_start_goal"])
 
     def test_blocked_goal_reactivates_after_state_change(self):
-        db = db_state()
+        db = db_state(runnable=["wi:ready"])
         result = watchdog.decide(snap(db, goal_status="blocked"), {}, now=1000)
         self.assertEqual(result["status"], "recovering")
         self.assertTrue(result["should_start_goal"])
+
+    def test_stale_block_restarts_once_even_with_unchanged_control_plane(self):
+        db = db_state(runnable=["wi:ready"])
+        fp = watchdog.state_fingerprint(db)
+        prior = {"last_wake_fingerprint": fp, "last_wake_at": 900}
+        result = watchdog.decide(snap(db, goal_status="blocked"), prior, now=1000)
+        self.assertTrue(result["should_start_goal"])
+        prior["last_blocked_recovery_fingerprint"] = fp
+        repeated = watchdog.decide(snap(db, goal_status="blocked"), prior, now=1010)
+        self.assertEqual("needs_user", repeated["status"])
+        self.assertFalse(repeated["should_start_goal"])
+
+    def test_external_and_approval_blocks_do_not_restart(self):
+        db = db_state(inbox=0, pending=0, waiting=1, blocked=1)
+        result = watchdog.decide(snap(db, goal_status="blocked"), {}, now=1000)
+        self.assertEqual("waiting_external", result["status"])
+        self.assertFalse(result["should_start_goal"])
+        db["runnable_ids"] = ["wi:ready"]
+        for observation in (
+            {"thread_status": "notLoaded", "turn_status": "completed",
+             "turn_error": False, "approval_pending": True},
+            {"thread_status": "active", "turn_status": "inProgress",
+             "turn_error": False, "approval_pending": False},
+        ):
+            result = watchdog.decide(snap(db, goal_status="blocked",
+                                          goal_observation=observation), {}, now=1000)
+            self.assertEqual("needs_user", result["status"])
+            self.assertFalse(result["should_start_goal"])
 
     def test_recovery_deduplicated(self):
         db = db_state(runs=[{"run_id": "r1", "state": "running", "lease_expired": True}])

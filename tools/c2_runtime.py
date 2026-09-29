@@ -27,6 +27,8 @@ from c2_repository_integration import integration_status, prompt_repository
 
 C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
 SUPERVISOR_RENEW_MARGIN_S = 60
+DEFAULT_PARALLEL_CAP = 12
+HARD_PARALLEL_CAP = 16
 class RuntimeErrorC2(RuntimeError):
     pass
 
@@ -134,11 +136,13 @@ def _repo_task_status(prompt_id: str) -> dict:
 def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_worker,
             launch_notify=_launch_notify, worker_active=_worker_unit_active,
             repo_task_status=_repo_task_status,
-            now: float | None=None, max_parallel: int=3,
+            now: float | None=None, max_parallel: int=DEFAULT_PARALLEL_CAP,
             supervisor_expiry: float | None=None,
             supervisor_authority: dict | None=None,
             triage_project_url: str | None=None) -> dict:
     now=time.time() if now is None else now
+    if not 1 <= max_parallel <= HARD_PARALLEL_CAP:
+        raise RuntimeErrorC2('parallel_cap_out_of_range')
     events=[]
     has_issue_inbox = bool(db.execute(
         "SELECT 1 FROM sqlite_master WHERE type='table' AND name='issue_inbox'"
@@ -350,11 +354,15 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
     dependencies=[tuple(r) for r in db.execute('''SELECT d.work_item_id,d.depends_on_work_item_id,w.status
           FROM work_item_dependencies d JOIN work_items w ON w.work_item_id=d.depends_on_work_item_id
           ORDER BY d.work_item_id,d.depends_on_work_item_id''')]
-    if ready and len(statuses)<max_parallel:
+    # Size this wave from work that passes the current dependency/resource
+    # checks. The writer repeats those checks atomically when claiming runs.
+    dispatchable_count=sum(bool(dispatchable(db, item)) for item in ready)
+    wave_limit=min(max_parallel, len(statuses)+dispatchable_count)
+    if dispatchable_count and len(statuses)<wave_limit:
         key=_key('c2-schedule',{'ready':ready,'chatgpt_lane_degraded':chatgpt_suspended,
                                   'running':statuses,'lock_context':lock_context,
-                                  'dependencies':dependencies,'override':override,'limit':max_parallel})
-        submit('schedule',{'event_key':key,'max_parallel':max_parallel,
+                                  'dependencies':dependencies,'override':override,'limit':wave_limit})
+        submit('schedule',{'event_key':key,'max_parallel':wave_limit,
                            'chatgpt_lane_degraded':chatgpt_suspended},key)
         events.append(('schedule',str(len(ready))))
     return {'events':events,'ready':len(ready),'active':len(active),
@@ -365,7 +373,9 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db',type=Path,default=Path.home()/'projects/codex-roadmap/roadmap.sqlite')
-    parser.add_argument('--max-parallel',type=int,default=3)
+    parser.add_argument('--max-parallel',type=int,
+                        default=int(os.environ.get('C2_MAX_PARALLEL_CAP', DEFAULT_PARALLEL_CAP)),
+                        help='concurrent run cap (1-16; default 12)')
     parser.add_argument('--supervisor-id',required=True)
     parser.add_argument('--fencing-token',type=int,required=True)
     args=parser.parse_args()

@@ -32,6 +32,8 @@ class MasterGoalActivationTests(unittest.TestCase):
         self.assertEqual([method for method, _ in rpc.calls], [
             "thread/goal/set", "thread/goal/get"
         ])
+        self.assertNotIn("execute exactly one batch", goal_start.OBJECTIVE)
+        self.assertIn("backfill completed slots", goal_start.OBJECTIVE)
 
 
 if __name__ == "__main__":
