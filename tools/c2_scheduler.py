@@ -14,6 +14,10 @@ import uuid
 import c2_manual_order
 
 
+DEFAULT_PARALLEL_CAP = 12
+HARD_PARALLEL_CAP = 16
+
+
 class SchedulingError(RuntimeError):
     pass
 
@@ -423,12 +427,14 @@ def inbox_gate_exempt(conn, item):
         (item['work_item_id'],)).fetchone())
 
 
-def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120,
+def schedule(conn, *, event_key, now=None, max_parallel=DEFAULT_PARALLEL_CAP, lease_seconds=120,
              chatgpt_lane_degraded=False):
     _transaction(conn)
     now=time.time() if now is None else now
-    if not event_key or max_parallel < 1 or lease_seconds <= 0:
+    if not event_key or lease_seconds <= 0:
         raise SchedulingError('invalid_scheduler_event')
+    if not 1 <= max_parallel <= HARD_PARALLEL_CAP:
+        raise SchedulingError('parallel_cap_out_of_range')
     prior = conn.execute('SELECT result_json FROM work_item_scheduler_events WHERE event_key=?', (event_key,)).fetchone()
     if prior:
         return json.loads(prior[0])

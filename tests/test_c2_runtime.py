@@ -53,6 +53,12 @@ class RuntimeTests(unittest.TestCase):
                     launch=lambda _:None,launch_notify=lambda _:None,now=11)
             schedule=[args for op,args in submitted if op=='schedule'][0]
             self.assertEqual(5,schedule['max_parallel'])
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                backfill_runs=c2_scheduler.schedule(writer,now=11,**schedule)
+                writer.commit()
+            self.assertEqual(1,len(backfill_runs))
+            self.assertEqual(item['work_item_id'],backfill_runs[0]['work_item_id'])
 
     def test_parallel_cap_is_bounded(self):
         with tempfile.TemporaryDirectory() as tmp:

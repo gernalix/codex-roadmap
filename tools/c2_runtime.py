@@ -20,15 +20,21 @@ import time
 from submit_mutation import submit_document
 from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot, record_activity
 from c2_mutations import SUPERVISOR_OPERATIONS
-from c2_scheduler import read_override, override_matches, dispatchable, inbox_drain_state, inbox_gate_exempt
+from c2_scheduler import (
+    DEFAULT_PARALLEL_CAP,
+    HARD_PARALLEL_CAP,
+    dispatchable,
+    inbox_drain_state,
+    inbox_gate_exempt,
+    override_matches,
+    read_override,
+)
 from c2_blocked_reconcile import automatic_candidates
 from c2_chatgpt_executor import lane_degraded
 from c2_repository_integration import integration_status, prompt_repository
 
 C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
 SUPERVISOR_RENEW_MARGIN_S = 60
-DEFAULT_PARALLEL_CAP = 12
-HARD_PARALLEL_CAP = 16
 class RuntimeErrorC2(RuntimeError):
     pass
 
