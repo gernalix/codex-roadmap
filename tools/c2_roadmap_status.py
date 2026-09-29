@@ -506,10 +506,23 @@ def _focus_events(state: dict) -> list[bool]:
         buf=buf[idx+3:]
     return events
 
+def _live_screen_enter():
+    # Keep a live dashboard out of the terminal's normal scrollback.  The
+    # alternate screen is exactly what full-screen terminal UIs use for this.
+    sys.stdout.write("\033[?1049h\033[3J\033[2J\033[H")
+    sys.stdout.flush()
+
+
+def _live_screen_exit():
+    sys.stdout.write("\033[?1049l")
+    sys.stdout.flush()
+
+
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument("--live",action="store_true"); ap.add_argument("--interval",type=float,default=2); ap.add_argument("--refresh",action="store_true"); a=ap.parse_args()
     if not a.live:
         print(render(a.refresh)); return
+    _live_screen_enter()
     first=True
     focus=_focus_reporting_start()
     away_baseline=None
@@ -552,5 +565,6 @@ def main():
         pass
     finally:
         _focus_reporting_stop(focus)
+        _live_screen_exit()
 
 if __name__=="__main__": main()
