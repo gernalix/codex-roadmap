@@ -26,6 +26,7 @@ from c2_chatgpt_executor import lane_degraded
 from c2_repository_integration import integration_status, prompt_repository
 
 C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
+SUPERVISOR_RENEW_MARGIN_S = 60
 class RuntimeErrorC2(RuntimeError):
     pass
 
@@ -160,22 +161,27 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             submit('claim_supervisor',{},key)
             return {'events':[('claim_supervisor',str(current_token))],
                     'ready':0,'active':0}
-        if (float(authority['lease_expires_at']) <= now+300 and
-                current_expiry > float(authority['lease_expires_at'])+1):
+        canonical_expiry=float(authority['lease_expires_at'])
+        if (canonical_expiry <= now+SUPERVISOR_RENEW_MARGIN_S and
+                current_expiry > canonical_expiry+1):
             key=_key('c2-renew-supervisor',{'token':current_token,
                                            'expires':current_expiry})
             submit('renew_supervisor',{},key)
-            return {'events':[('renew_supervisor',str(current_token))],
-                    'ready':0,'active':0}
+            events.append(('renew_supervisor',str(current_token)))
+            if canonical_expiry <= now:
+                return {'events':events,'ready':0,'active':0}
     elif supervisor_expiry is not None and db.execute("SELECT 1 FROM sqlite_master WHERE name='c2_supervisor_authority'").fetchone():
         authority=db.execute('SELECT fencing_token,lease_expires_at FROM c2_supervisor_authority WHERE singleton=1').fetchone()
-        if (authority and authority['lease_expires_at'] <= now+300 and
-                supervisor_expiry > authority['lease_expires_at']+1):
-            key=_key('c2-renew-supervisor',{'token':authority['fencing_token'],
-                                           'expires':supervisor_expiry})
-            submit('renew_supervisor',{},key)
-            return {'events':[('renew_supervisor',str(authority['fencing_token']))],
-                    'ready':0,'active':0}
+        if authority:
+            canonical_expiry=float(authority['lease_expires_at'])
+            if (canonical_expiry <= now+SUPERVISOR_RENEW_MARGIN_S and
+                    supervisor_expiry > canonical_expiry+1):
+                key=_key('c2-renew-supervisor',{'token':authority['fencing_token'],
+                                               'expires':supervisor_expiry})
+                submit('renew_supervisor',{},key)
+                events.append(('renew_supervisor',str(authority['fencing_token'])))
+                if canonical_expiry <= now:
+                    return {'events':events,'ready':0,'active':0}
     if pending_issue_inbox and triage_project_url:
         triage = db.execute("""SELECT w.work_item_id,w.status FROM work_items w
             JOIN work_item_tags t USING(work_item_id) WHERE t.tag='c2:issue-triage'

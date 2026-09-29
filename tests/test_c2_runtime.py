@@ -156,9 +156,15 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual([('claim_supervisor','2')],result['events'])
             self.assertEqual([],launched)
 
-    def test_matching_authority_renews_before_scheduling(self):
+    def test_matching_authority_renews_without_starving_scheduling(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=self._authority_db(tmp,'same',3,150)
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                item=c2_intake.add_work_item(writer,title='Ready while renewing',repo='fixture')
+                writer.execute("INSERT INTO work_item_execution_specs(work_item_id,activity,command_json) VALUES(?,'native','[\"true\"]')",
+                               (item['work_item_id'],))
+                writer.commit()
             submitted=[]; launched=[]
             current={'supervisor_id':'same','fencing_token':3,'lease_expires_at':500}
             with closing(c2_runtime._open_snapshot(path)) as snapshot:
@@ -170,8 +176,9 @@ class RuntimeTests(unittest.TestCase):
                     now=100,
                     supervisor_authority=current,
                 )
-            self.assertEqual(['renew_supervisor'],[op for op,_,_ in submitted])
-            self.assertEqual([('renew_supervisor','3')],result['events'])
+            self.assertEqual(['renew_supervisor','schedule'],[op for op,_,_ in submitted])
+            self.assertIn(('renew_supervisor','3'),result['events'])
+            self.assertEqual(1,result['ready'])
             self.assertEqual([],launched)
 
     def test_unexpired_different_authority_fences_without_scheduling(self):
