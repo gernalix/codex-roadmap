@@ -10,7 +10,7 @@ import sqlite3
 import sys
 
 from c2_appserver_rpc import AppServerRPC, AppServerError, resolve_model
-from c2_chatgpt_executor import dispatch as dispatch_browser, lane_degraded
+from c2_chatgpt_executor import dispatch as dispatch_browser, lane_degraded, KILL_SWITCH
 from c2_codex_executor import dispatch as dispatch_codex, record_terminal, parse_terminal_result, ExecutorError
 from c2_goal_objective import compact_goal_objective
 from roadmap_finish import _queue_repo_integration
@@ -46,7 +46,8 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
         is_issue_triage=bool(conn.execute('''SELECT 1 FROM work_item_tags
               WHERE work_item_id=? AND tag='c2:issue-triage' LIMIT 1''',
               (run['work_item_id'],)).fetchone())
-        if executor in ('rdc','chatgpt') and metadata.get('activity') in ('gui','semantic') and lane_degraded():
+        browser_lane_unavailable = lane_degraded() or KILL_SWITCH.exists()
+        if executor in ('rdc','chatgpt') and metadata.get('activity') in ('gui','semantic') and browser_lane_unavailable:
             if is_issue_triage and metadata.get('activity')=='semantic':
                 result=execute_inbox_codex(run_id=run_id,
                     work_item_id=str(run['work_item_id']),db_path=db_path)
