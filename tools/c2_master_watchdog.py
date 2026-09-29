@@ -10,6 +10,8 @@ import time
 from pathlib import Path
 from typing import Any
 
+from c2_appserver_rpc import AppServerRPC
+
 ROOT = Path.home() / ".local/share/c2-master-watcher"
 STATE = ROOT / "state.json"
 META = ROOT / "deterministic-meta.json"
@@ -20,6 +22,8 @@ RUNTIME_DB = Path.home() / ".local/state/c2-supervisor/roadmap.sqlite3"
 MASTER_PID = Path.home() / ".local/state/c2-master-goal/rpc-worker.pid"
 NOTIFY = Path.home() / ".local/bin/c2-notify"
 MASTER_SERVICE = "c2-master-goal.service"
+RUNTIME_SERVICE = "c2-runtime.service"
+MASTER_THREAD = "01a0e719-60ff-7b91-82db-1d7c55787c67"
 MAX_START_FAILURES = 3
 RETRY_DELAY_S = 60
 
@@ -41,7 +45,9 @@ def _pid_alive(pid: int) -> bool:
 
 def master_worker_alive() -> bool:
     try:
-        return _pid_alive(int(MASTER_PID.read_text(encoding="utf-8").strip()))
+        pid = int(MASTER_PID.read_text(encoding="utf-8").strip())
+        return (_pid_alive(pid) and
+                b"c2-master-goal-start" in Path(f"/proc/{pid}/cmdline").read_bytes())
     except Exception:
         return False
 
@@ -100,7 +106,7 @@ def db_snapshot(now: float | None = None) -> dict[str, Any]:
             SELECT run_id,work_item_id,executor,state,worker_ref,lease_until
             FROM work_item_runs
             WHERE state IN ('claimed','running','recovering')
-            ORDER BY created_at DESC LIMIT 100
+            ORDER BY created_at DESC
         """):
             item = dict(row)
             item["lease_expired"] = float(item.get("lease_until") or 0) <= now
@@ -228,6 +234,29 @@ def delegated_worker_state(db: dict[str, Any], now: float | None = None) -> dict
     return out
 
 
+def run_worker_states(db: dict[str, Any]) -> list[dict[str, Any]]:
+    states = []
+    for run in db.get("active_runs") or []:
+        run_id = str(run.get("run_id") or "")
+        ref = str(run.get("worker_ref") or "")
+        if not run_id or ref != "c2-run:" + run_id:
+            active = "unknown"
+        else:
+            active = systemd_state("c2-run-" + run_id + ".service").get("active", "unknown")
+        states.append({"run_id": run_id, "active": active,
+                       "lease_expired": bool(run.get("lease_expired"))})
+    return states
+
+
+def goal_status() -> str:
+    try:
+        with AppServerRPC(timeout=5) as rpc:
+            goal = rpc("thread/goal/get", {"threadId": MASTER_THREAD}).get("goal") or {}
+            return str(goal.get("status") or "unknown")
+    except Exception:
+        return "unknown"
+
+
 def work_remains(db: dict[str, Any]) -> bool:
     counts = db.get("counts") or {}
     live = sum(int(counts.get(s) or 0) for s in (
@@ -251,7 +280,11 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "why": ["Il watchdog non può verificare il control plane senza il database runtime."],
         }
     delegated = snapshot.get("delegated_worker") or {}
+    workers = snapshot.get("run_workers") or []
     fp = state_fingerprint(db, delegated)
+    recovery_key = hashlib.sha256(json.dumps(sorted(
+        (w.get("run_id"), w.get("active"), w.get("lease_expired")) for w in workers
+    )).encode()).hexdigest()
     if not work_remains(db):
         return {
             "status": "globally_quiescent", "phase": "external_wait",
@@ -261,7 +294,37 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "intervention": "", "attention_key": "", "should_start_goal": False,
             "why": ["Nessun lavoro autonomo risulta dal control plane locale."], "state_key": fp,
         }
-    if delegated.get("alive") and delegated.get("progressing"):
+    if len(workers) != len(db.get("active_runs") or []):
+        return {
+            "status": "needs_user", "phase": "unknown",
+            "headline": "Liveness dei run incompleta", "current": "Manca lo stato di almeno un worker.",
+            "next": "Verificare i run prima del recovery.",
+            "intervention": "Chiedimi di diagnosticare la liveness C2.",
+            "attention_key": "c2_run_liveness_incomplete", "should_start_goal": False,
+            "why": ["Nessun restart con osservazione incompleta."], "state_key": fp,
+        }
+    if any(w.get("active") == "unknown" for w in workers):
+        return {
+            "status": "needs_user", "phase": "unknown",
+            "headline": "Liveness C2 ambigua", "current": "Almeno un worker non è osservabile.",
+            "next": "Verificare liveness prima del recovery.",
+            "intervention": "Chiedimi di diagnosticare la liveness C2.",
+            "attention_key": "c2_liveness_ambiguous", "should_start_goal": False,
+            "why": ["Nessun restart su stato ambiguo."], "state_key": fp,
+        }
+    recoverable = [w for w in workers if w.get("active") in ("inactive", "failed")
+                   and w.get("lease_expired")]
+    if recoverable and meta.get("last_recovery_fingerprint") != recovery_key:
+        return {
+            "status": "recovering", "phase": "worker",
+            "headline": "Run C2 recuperabile",
+            "current": "Lease scaduta e worker systemd inattivo; il runtime C2 applicherà il recovery fenced.",
+            "next": "Avviare il runtime C2 una volta per recuperare il run.",
+            "intervention": "", "attention_key": "", "should_start_goal": False,
+            "should_recover_runs": True, "recovery_key": recovery_key,
+            "why": ["Un run ha worker inattivo e lease scaduta."], "state_key": fp,
+        }
+    if any(worker.get("active") == "active" for worker in workers) or delegated.get("alive"):
         progress = delegated.get("progress_age_s")
         progress_text = (
             " avanzamento Inbox recente" if progress is not None and progress <= 3600
@@ -270,9 +333,8 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
         return {
             "status": "working", "phase": "delegated",
             "headline": "Lavoro delegato C2 in corso",
-            "current": ("Il Master Goal può restare PAUSED per design: il worker canonico "
-                        f"{delegated.get('run_id')} è vivo;{progress_text}."),
-            "next": "Il runtime continuerà i batch e farà recovery solo se il worker termina o il run resta senza esecutore vivo.",
+            "current": f"Il Master Goal può restare PAUSED: un worker C2 è vivo;{progress_text}.",
+            "next": "Il runtime continuerà i batch; il watchdog non avvia un secondo Goal mentre un worker è vivo.",
             "intervention": "", "attention_key": "", "should_start_goal": False,
             "why": ["Il worker delegato systemd è attivo; una lease scaduta da sola non equivale a stallo."],
             "state_key": fp,
@@ -286,17 +348,47 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "intervention": "", "attention_key": "", "should_start_goal": False,
             "why": ["Il servizio Master Goal o il suo worker risultano attivi."], "state_key": fp,
         }
+    if service.get("active") not in ("inactive", "failed") or any(
+        worker.get("active") not in ("inactive", "failed") or not worker.get("lease_expired")
+        for worker in workers
+    ):
+        return {
+            "status": "needs_user", "phase": "unknown",
+            "headline": "Liveness C2 ambigua",
+            "current": "Il servizio, il Goal o un run non hanno una prova sufficiente di inattività.",
+            "next": "Verificare liveness e lease prima di avviare un altro Goal.",
+            "intervention": "Chiedimi di diagnosticare la liveness C2.",
+            "attention_key": "c2_liveness_ambiguous", "should_start_goal": False,
+            "why": ["Nessun restart su stato ambiguo."], "state_key": fp,
+        }
+    if workers:
+        return {
+            "status": "waiting_external", "phase": "external_wait",
+            "headline": "Run C2 in attesa del writer",
+            "current": "Il recovery è già stato richiesto oppure la lease del run è ancora valida.",
+            "next": "Attendere una transizione verificabile del run.",
+            "intervention": "", "attention_key": "", "should_start_goal": False,
+            "why": ["Nessun secondo Goal mentre un run non è terminale."], "state_key": fp,
+        }
+    if snapshot.get("goal_status") not in ("active", "paused"):
+        return {
+            "status": "needs_user", "phase": "unknown",
+            "headline": "Stato Master Goal non leggibile",
+            "current": "Il Goal non può essere classificato senza conferma locale.",
+            "next": "Verificare lo stato del Goal prima del riavvio.",
+            "intervention": "Chiedimi di diagnosticare il Master Goal C2.",
+            "attention_key": "c2_goal_status_unknown", "should_start_goal": False,
+            "why": ["Nessun restart su stato ambiguo."], "state_key": fp,
+        }
     failures = int(meta.get("start_failures") or 0)
     last_fp = str(meta.get("last_wake_fingerprint") or "")
     last_wake = float(meta.get("last_wake_at") or 0)
     failed_service = service.get("result") not in ("success", "", "unknown")
     changed = fp != last_fp
     retry_due = failed_service and failures < MAX_START_FAILURES and now - last_wake >= RETRY_DELAY_S
-    if changed or retry_due:
-        if delegated.get("alive") and not delegated.get("progressing"):
-            reason = "Il worker delegato è vivo ma non mostra progresso entro la soglia"
-        else:
-            reason = "Lo stato C2 è cambiato" if changed else "Il precedente avvio del Goal è fallito"
+    if (changed or retry_due or snapshot.get("goal_status") == "active") and failures < MAX_START_FAILURES:
+        reason = "Goal attivo senza worker" if snapshot.get("goal_status") == "active" else (
+            "Lo stato C2 è cambiato" if changed else "Il precedente avvio del Goal è fallito")
         return {
             "status": "recovering", "phase": "inbox",
             "headline": "Il watchdog sta riattivando il Master Goal",
@@ -326,12 +418,16 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
 
 
 def start_goal() -> tuple[bool, str]:
+    return start_service(MASTER_SERVICE)
+
+
+def start_service(name: str) -> tuple[bool, str]:
     env = os.environ.copy()
     uid = os.getuid()
     env.setdefault("XDG_RUNTIME_DIR", f"/run/user/{uid}")
     env.setdefault("DBUS_SESSION_BUS_ADDRESS", f"unix:path=/run/user/{uid}/bus")
     proc = subprocess.run(
-        ["systemctl", "--user", "start", MASTER_SERVICE],
+        ["systemctl", "--user", "start", name],
         text=True, capture_output=True, env=env, timeout=15,
     )
     detail = (proc.stderr or proc.stdout or "").strip()
@@ -397,11 +493,19 @@ def apply_notification(result: dict[str, Any], goal_alive: bool) -> None:
 def snapshot(now: float | None = None) -> dict[str, Any]:
     now = time.time() if now is None else now
     db = db_snapshot(now)
+    service = systemd_state(MASTER_SERVICE)
+    alive = master_worker_alive()
+    workers = run_worker_states(db) if db.get("available") else []
     return {
         "observed_at": now,
         "db": db,
-        "service": systemd_state(MASTER_SERVICE),
-        "master_worker_alive": master_worker_alive(),
+        "service": service,
+        "master_worker_alive": alive,
+        "run_workers": workers,
+        "goal_status": (goal_status() if db.get("available") and work_remains(db)
+                        and service.get("active") not in ("active",) and not alive
+                        and not any(w["active"] == "active" for w in workers)
+                        else "not_checked"),
         "delegated_worker": delegated_worker_state(db, now),
     }
 
@@ -433,6 +537,17 @@ def run_once(now: float | None = None) -> int:
     fp = (result.get("state_key") or
           state_fingerprint(snap.get("db") or {}, snap.get("delegated_worker") or {})) if (snap.get("db") or {}).get("available") else "db-unavailable"
     wake_result = None
+    if result.get("should_recover_runs"):
+        ok, detail = start_service(RUNTIME_SERVICE)
+        wake_result = "recovery_started" if ok else "recovery_failed"
+        if ok:
+            meta["last_recovery_fingerprint"] = result["recovery_key"]
+            META.write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
+        if not ok:
+            result = {**result, "status": "needs_user", "phase": "unknown",
+                      "headline": "Recovery C2 fallito", "current": detail,
+                      "intervention": "Chiedimi di diagnosticare il runtime C2.",
+                      "attention_key": "c2_run_recovery_failed"}
     if result.get("should_start_goal"):
         ok, detail = start_goal()
         wake_result = "started" if ok else "start_failed"
