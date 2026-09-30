@@ -406,6 +406,8 @@ def dispatchable(conn, item, coding_route=None):
     if executor in (None, 'human', 'symphony-unhealthy'):
         return False
     resources = set(json.loads(spec['resources_json']))
+    if executor=='symphony':
+        resources.add('symphony:backend')
     if item['repo']:
         resources.add('worktree:'+spec['worktree'] if spec['worktree'] else 'repo:'+item['repo'])
         if _repo_writer_conflict(conn,item,spec):
@@ -524,6 +526,8 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120,
         if chatgpt_lane_degraded and spec['activity'] in ('gui','semantic'):
             continue
         resources = set(json.loads(spec['resources_json']))
+        if executor=='symphony':
+            resources.add('symphony:backend')
         if item['repo']:
             # Default exclusive repo writer. Explicit isolated worktree resource
             # is permitted only when the spec supplies the actual worktree.

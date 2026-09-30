@@ -46,6 +46,7 @@ class BackendTests(unittest.TestCase):
             stdout = "inactive\n"
         with patch.object(backend, "load_config", return_value=backend.load_config.__globals__["HostConfig"](
                 "canary", "gernalix/symphony-canary", frozenset({"gernalix/codex-roadmap"}))), \
+             patch.object(backend, "DEFAULT_CONFIG", MODULE), \
              patch.object(backend, "user_bus_environment", return_value={}), \
              patch.object(backend.subprocess, "run", return_value=Result()) as command:
             self.assertEqual(backend.status()["active_state"], "inactive")
@@ -80,6 +81,7 @@ class BackendTests(unittest.TestCase):
                                    "running": [{"secret": "not exposed"}]}).encode()
         with patch.object(backend, "load_config", return_value=backend.load_config.__globals__["HostConfig"](
                 "canary", "gernalix/symphony-canary", frozenset({"gernalix/codex-roadmap"}))), \
+             patch.object(backend, "DEFAULT_CONFIG", MODULE), \
              patch.object(backend, "user_bus_environment", return_value={}), \
              patch.object(backend.subprocess, "run", return_value=Result()), \
              patch.object(backend.urllib.request, "urlopen", return_value=Response()):
@@ -94,6 +96,12 @@ class BackendTests(unittest.TestCase):
                  patch.object(backend.Path, "is_socket", return_value=True):
                 env = backend.user_bus_environment({"XDG_RUNTIME_DIR": str(runtime)})
             self.assertEqual(env["DBUS_SESSION_BUS_ADDRESS"], f"unix:path={runtime}/bus")
+            with patch.object(backend.os, "getuid", return_value=1000), \
+                 patch.object(backend.Path, "is_dir", return_value=True), \
+                 patch.object(backend.Path, "is_socket", return_value=True):
+                fallback = backend.user_bus_environment({})
+            self.assertEqual(fallback["XDG_RUNTIME_DIR"], "/run/user/1000")
+            self.assertEqual(fallback["DBUS_SESSION_BUS_ADDRESS"], "unix:path=/run/user/1000/bus")
             with self.assertRaisesRegex(backend.BackendError, "user_runtime_directory_missing"):
                 backend.user_bus_environment({"XDG_RUNTIME_DIR": str(runtime/"missing")})
 
@@ -101,6 +109,7 @@ class BackendTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             binary = Path(directory)/"symphony"
             binary.write_bytes(b"approved artifact")
+            binary.chmod(0o755)
             with patch.object(backend, "PRODUCTION_BINARY", binary), \
                  patch.object(backend, "PRODUCTION_SHA256", hashlib.sha256(binary.read_bytes()).hexdigest()):
                 backend.verify_artifact(binary)

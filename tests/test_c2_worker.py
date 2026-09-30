@@ -6,10 +6,38 @@ from unittest.mock import patch
 import json
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import c2_intake,c2_scheduler,c2_worker
+from c3_symphony_bridge import HostConfig
 from test_c2_intake import C2IntakeTests
 
 
 class WorkerTests(unittest.TestCase):
+
+    def test_symphony_claim_uses_only_symphony_adapter(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); path=C2IntakeTests().make_cutover_db(root)
+            conn=c2_intake._connect(path)
+            try:
+                c2_scheduler.install_schema(conn)
+                conn.execute('BEGIN IMMEDIATE')
+                conn.execute("UPDATE work_items SET status='running',repo='gernalix/codex-roadmap' WHERE prompt_id='123456'")
+                config=HostConfig('production','gernalix/c3-symphony',frozenset({'gernalix/codex-roadmap'}))
+                metadata={'activity':'coding','symphony_route':{'mode':'production',
+                    'tracker_repo':'gernalix/c3-symphony','source_repos':['gernalix/codex-roadmap']}}
+                conn.execute("""INSERT INTO work_item_runs VALUES(
+                  'symphony-run','prompt:123456','event',1,'symphony','running',100,
+                  'c2-run:symphony-run',NULL,?,1)""",(json.dumps(metadata),))
+                c2_scheduler.executor_started(conn,run_id='symphony-run',now=2)
+                conn.commit()
+                with patch.object(c2_worker,'routing_mode',return_value=config), \
+                     patch.object(c2_worker,'dispatch_symphony',return_value={'executor':'symphony','phase':'running'}) as dispatch, \
+                     patch.object(c2_worker,'dispatch_codex') as legacy:
+                    result=c2_worker.run_once(path,'symphony-run',state_root=root/'receipts',
+                        submit=lambda *_:None)
+                self.assertEqual('symphony',result['executor'])
+                dispatch.assert_called_once()
+                legacy.assert_not_called()
+            finally:
+                conn.close()
 
     def test_issue_triage_uses_codex_fallback_when_chat_lane_is_disabled(self):
         with tempfile.TemporaryDirectory() as tmp:

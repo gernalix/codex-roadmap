@@ -39,7 +39,7 @@ python3 tools/c3_symphony_backend.py status
 python3 tools/c3_symphony_backend.py stop
 ```
 
-Generate a workflow for the exact next item before starting the service. A healthy active backend and a byte-exact workflow for that item are required at dispatch. The host supports one active workflow at a time (`max_concurrent_agents=1`); another eligible item cannot silently reuse its model, source, or tracker configuration. Production backend/config/artifact failure blocks selected Symphony coding rather than falling back to legacy. Change to `mode=legacy` only after the Symphony owner is reconciled; a durable owner record prevents a concurrent legacy worker. Stop the unit and preserve tracker/worktree evidence for rollback. Do not deploy production traffic from this branch.
+The worker writes the exact item workflow and starts the user unit when the selected backend is inactive. If the unit is already active, the workflow must match that item byte for byte. The scheduler holds `symphony:backend` as one shared lease, so a second eligible item waits until the first has a canonical terminal result. After exact tracker close and integration queue, the worker stops the unit; the next item receives its own workflow. A healthy backend and exact workflow are required before publication. Production backend/config/artifact failure blocks selected Symphony coding rather than falling back to legacy. Change to `mode=legacy` only after the Symphony owner is reconciled; a durable owner record prevents a concurrent legacy worker. Preserve tracker/worktree evidence for rollback. Do not deploy production traffic from this branch.
 
 ## Prior pilot and security evidence
 

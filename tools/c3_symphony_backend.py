@@ -12,7 +12,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-from c3_symphony_bridge import DEFAULT_CONFIG, load_config, BridgeError
+from c3_symphony_bridge import DEFAULT_CONFIG, HostConfig, load_config, BridgeError
 
 
 UNIT = "c3-symphony.service"
@@ -40,7 +40,8 @@ def credential_environment(environ: dict[str, str]) -> dict[str, str]:
 
 
 def run(binary: Path, workflow: Path, *, environ: dict[str, str] | None = None) -> None:
-    config = load_config(Path((environ or os.environ).get("C3_SYMPHONY_CONFIG", DEFAULT_CONFIG)))
+    provided = dict(os.environ if environ is None else environ)
+    config = load_config(Path(provided.get("C3_SYMPHONY_CONFIG", DEFAULT_CONFIG)))
     if config.mode == "legacy":
         raise BackendError("symphony_disabled_in_legacy_mode")
     if config.mode == "production":
@@ -56,7 +57,7 @@ def run(binary: Path, workflow: Path, *, environ: dict[str, str] | None = None) 
         raise BackendError("workflow_config_invalid") from exc
     if tracker != config.tracker_repo or host != "127.0.0.1":
         raise BackendError("workflow_tracker_or_listener_mismatch")
-    env = credential_environment(dict(os.environ if environ is None else environ))
+    env = credential_environment(provided)
     os.execve(str(binary), [str(binary),
                             "--i-understand-that-this-will-be-running-without-the-usual-guardrails",
                             str(workflow), "--port", PORT], env)
@@ -65,6 +66,8 @@ def run(binary: Path, workflow: Path, *, environ: dict[str, str] | None = None) 
 def verify_artifact(binary: Path) -> None:
     if binary.resolve() != PRODUCTION_BINARY.resolve() or not binary.is_file():
         raise BackendError("production_artifact_path_invalid")
+    if not os.access(binary, os.X_OK):
+        raise BackendError("production_artifact_not_executable")
     digest = hashlib.sha256(binary.read_bytes()).hexdigest()
     if digest != PRODUCTION_SHA256:
         raise BackendError("production_artifact_hash_mismatch")
@@ -103,7 +106,9 @@ def systemctl(*args: str) -> subprocess.CompletedProcess[str]:
 
 
 def status() -> dict:
-    config = load_config(Path(os.environ.get("C3_SYMPHONY_CONFIG", DEFAULT_CONFIG)))
+    config_path = Path(os.environ.get("C3_SYMPHONY_CONFIG", DEFAULT_CONFIG))
+    config = (load_config(config_path) if config_path.exists() else
+              HostConfig("legacy", None, frozenset()))
     if config.mode == "production":
         verify_artifact(PRODUCTION_BINARY)
     result = systemctl("show", "--property=ActiveState", "--value")

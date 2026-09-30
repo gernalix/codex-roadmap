@@ -236,11 +236,15 @@ def inspect(item: CodingItem, github: GitHubIssues,
         raise BridgeError("tracker_issue_invalid_state")
     result = {"issue_number": issue["number"], "state": issue["state"]}
     if issue["state"] == "closed":
+        actor = github.api("GET", "user")
+        if not isinstance(actor, dict) or not isinstance(actor.get("login"), str):
+            raise BridgeError("tracker_actor_unavailable")
         comments = github.api("GET", f"repos/{github.repo}/issues/{issue['number']}/comments?per_page=100")
         if not isinstance(comments, list) or len(comments) == 100:
             raise BridgeError("tracker_terminal_comments_unbounded")
         contracts = [str(row.get("body", ""))[10:] for row in comments
-                     if isinstance(row, dict) and str(row.get("body", "")).startswith("C3_RESULT=")]
+                     if (isinstance(row, dict) and str(row.get("body", "")).startswith("C3_RESULT=")
+                         and (row.get("user") or {}).get("login") == actor["login"])]
         if len(contracts) != 1:
             raise BridgeError("tracker_terminal_contract_missing_or_duplicate")
         try:
@@ -355,8 +359,10 @@ def main() -> int:
                 recorded = json.loads(owner.read_text(encoding="utf-8"))
             except (OSError, ValueError) as exc:
                 raise BridgeError("production_ownership_missing") from exc
-            if recorded != {"work_item_id": args.work_item_id, "run_id": args.run_id,
-                            "tracker_repo": config.tracker_repo, "mode": config.mode}:
+            expected_owner = {"work_item_id": args.work_item_id, "run_id": args.run_id,
+                              "tracker_repo": config.tracker_repo, "mode": config.mode}
+            if ({key: recorded.get(key) for key in expected_owner} != expected_owner
+                    or recorded.get("state", "reserved") not in {"reserved", "stopping", "queued"}):
                 raise BridgeError("production_ownership_mismatch")
         if args.action == "publish":
             result = publish(item, GitHubIssues(config.tracker_repo), args.lock,
