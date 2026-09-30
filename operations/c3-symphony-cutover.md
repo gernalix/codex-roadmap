@@ -62,4 +62,21 @@ Keep MegaVault identity, roadmap policy/dependencies, Inbox, Workflowy, reposito
 
 Rollback condition: any duplicate dispatch, orphan app-server, repository-state corruption, lost stop authority, credential exposure, or tracker reconciliation failure. On trigger, stop `c3-symphony.service`, remove the ready label from outstanding pilot issues, preserve workspaces/logs for diagnosis, and keep coding traffic on the existing C2 path. No canonical roadmap or MegaVault state is rewritten by this rollback.
 
-The first disposable live batch (#7/#8) was invalidated and closed because a child in the cloned repository followed legacy C2 launch instructions. That batch is evidence for the workflow isolation requirement, not acceptance evidence. A new batch must complete with the corrected `source/` layout.
+The first disposable live batch (#7/#8) was invalidated and closed because a child in the cloned repository followed legacy C2 launch instructions. That batch is evidence for the workflow isolation requirement, not acceptance evidence.
+
+## Corrected live pilot evidence
+
+- Correction checkpoint: `f834577d7b9291617dfa6e533cf282cf134aa537`.
+- Corrected tracker issues: GH-9 and GH-10, unique identities, both closed successfully.
+- Both workers started in parent `workspaces-v2/GH-*` directories and used a cloned `source/` repository, preventing automatic inheritance of the source repo's legacy C2 launch instructions.
+- Live app-server readback for both corrected workers: `gpt-6-sol`, `reasoningEffort=medium`.
+- GH-9 created exactly `source/PILOT_C.txt`; its evidence comment reported only `?? PILOT_C.txt` and no push.
+- GH-10 created exactly `source/PILOT_D.txt`; its evidence comment reported only `?? PILOT_D.txt` and no push/merge.
+- With `max_concurrent_agents=1`, terminal GH-9 was cleaned up before Symphony automatically backfilled GH-10.
+- After GH-10, the pilot workspace root was empty.
+- `c3-symphony.service` was stopped through systemd and no Symphony process remained.
+- Live bridge/backend child acceptance is PASS. This does **not** clear production gate 5 below: the dependency-security/hardening gate remains a separate parent-C3 requirement.
+
+## Remaining production cutover gate
+
+The corrected pilot satisfies readiness items 1–4 above. Production traffic must remain HOLD until deployment-relevant upstream dependency advisories are resolved or explicitly mitigated without creating a permanent Symphony fork.
