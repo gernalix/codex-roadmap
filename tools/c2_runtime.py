@@ -80,10 +80,12 @@ def _writer_submit(operation: str, arguments: dict, key: str):
                 'fencing_token':row['fencing_token'],
                 'lease_expires_at':row['lease_expires_at'],
             }
-            if operation == 'acknowledge':
-                # The same snapshot can be replayed after a lease renewal.
-                # Its fenced document changes, so its Issue identity must too.
-                key = _key('c2-ack-authorized', {
+            if operation in ('acknowledge','schedule'):
+                # The same canonical event can be replayed after a lease renewal.
+                # Its fenced document changes, so the transport Issue identity
+                # must change while the operation's own event key stays stable.
+                prefix = 'c2-ack-authorized' if operation == 'acknowledge' else 'c2-schedule-authorized'
+                key = _key(prefix, {
                     'request_key':key,
                     'authority':arguments['supervisor_authority'],
                 })
