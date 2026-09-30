@@ -2,6 +2,7 @@ import importlib.util
 from contextlib import closing
 import json
 import sqlite3
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -36,9 +37,12 @@ class FakeGitHub(bridge.GitHubIssues):
         return row
 
     def api(self, method, path, payload=None):
+        if method == "GET" and path == "user":
+            return {"login": "symphony-operator"}
         prefix = f"repos/{self.repo}/issues/"
         if method == "GET" and path.startswith(prefix) and path.endswith("/comments?per_page=100"):
-            return [{"body": 'C3_RESULT={"outcome":"PASS","completed":[],"remaining":[],"evidence":["tested"],"blocker":null,"next_action":null}'}]
+            return [{"user": {"login": "symphony-operator"},
+                     "body": 'C3_RESULT={"outcome":"PASS","completed":[],"remaining":[],"evidence":["tested"],"blocker":null,"next_action":null}'}]
         raise AssertionError(path)
 
 
@@ -175,6 +179,16 @@ class BridgeTests(unittest.TestCase):
                 conn.commit()
             with self.assertRaisesRegex(bridge.BridgeError, "item_not_autonomous_coding"):
                 bridge.load_item(db, ITEM_ID, CONFIG)
+            with closing(sqlite3.connect(db)) as conn:
+                conn.execute("UPDATE work_item_execution_specs SET activity='coding'")
+                conn.execute("UPDATE work_items SET status='running'")
+                conn.execute("INSERT INTO work_item_runs VALUES(?,?,?,?,?)",
+                             ("run-1", ITEM_ID, "symphony", "running", "c2-run:run-1"))
+                conn.commit()
+            self.assertEqual(bridge.load_item(db, ITEM_ID, CONFIG, "run-1").model,
+                             "gpt-6-sol")
+            with self.assertRaisesRegex(bridge.BridgeError, "item_not_runnable"):
+                bridge.load_item(db, ITEM_ID, CONFIG, "another-run")
 
     def test_auto_coding_and_human_model_label_resolve_for_appserver(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -241,6 +255,37 @@ class BridgeTests(unittest.TestCase):
             foreign = bridge.CodingItem(ITEM_ID, "x", "x", "[]", "gernalix/not-allowed", "gpt-6-sol", "medium")
             with self.assertRaisesRegex(bridge.BridgeError, "source_or_tracker_not_configured"):
                 bridge.workflow_text(foreign, Path(directory), config)
+
+    def test_production_workflow_uses_exact_isolated_task_worktree(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            tree=root/"task"
+            tree.mkdir()
+            for command in (["git","init","-q",str(tree)],
+                            ["git","-C",str(tree),"config","user.email","test@example.invalid"],
+                            ["git","-C",str(tree),"config","user.name","Test"]):
+                subprocess.run(command,check=True)
+            (tree/"README").write_text("test")
+            subprocess.run(["git","-C",str(tree),"add","README"],check=True)
+            subprocess.run(["git","-C",str(tree),"commit","-qm","init"],check=True)
+            subprocess.run(["git","-C",str(tree),"switch","-qc","task/123456"],check=True)
+            subprocess.run(["git","-C",str(tree),"remote","add","origin",
+                            "https://github.com/gernalix/codex-roadmap.git"],check=True)
+            config=bridge.HostConfig("production","gernalix/c3-symphony",
+                                     frozenset({"gernalix/codex-roadmap"}))
+            item=bridge.CodingItem(ITEM_ID,"Tiny","Fix","[]","gernalix/codex-roadmap",
+                                   "gpt-6-sol","medium",str(tree),"123456")
+            workflow=bridge.workflow_text(item,root/"workspaces",config)
+            settings=json.loads(workflow.split("---",2)[1])
+            self.assertEqual(settings["tracker"]["provider"]["repo"],"gernalix/c3-symphony")
+            self.assertNotIn("--add-dir",settings["codex"]["command"])
+            self.assertIn("git clone --no-hardlinks --branch task/123456",settings["hooks"]["after_create"])
+            self.assertIn(".c3-source-base",settings["hooks"]["after_create"])
+            self.assertNotIn("ln -s",settings["hooks"]["after_create"])
+            self.assertNotIn("gh repo clone",settings["hooks"]["after_create"])
+            subprocess.run(["git","-C",str(tree),"switch","-qc","wrong"],check=True)
+            with self.assertRaisesRegex(bridge.BridgeError,"worktree_identity_mismatch"):
+                bridge.workflow_text(item,root/"workspaces",config)
 
 
 if __name__ == "__main__":

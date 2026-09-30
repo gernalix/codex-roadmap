@@ -464,6 +464,8 @@ class SchedulerTests(unittest.TestCase):
         runs=scheduler.schedule(self.conn,event_key='healthy-c3',now=2,coding_route=route)
         self.assertEqual('symphony',runs[0]['executor'])
         self.assertEqual('gernalix/c3-symphony',runs[0]['metadata']['symphony_route']['tracker_repo'])
+        self.assertEqual(runs[0]['run_id'],self.conn.execute(
+            "SELECT run_id FROM work_item_resource_leases WHERE resource='symphony:backend'").fetchone()[0])
 
     def test_release_unstarted_symphony_claim_returns_item_to_pending(self):
         writer=self.conn.execute(

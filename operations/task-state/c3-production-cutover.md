@@ -11,16 +11,17 @@ Checklist:
 - [x] Add production workflow with exact model/reasoning, isolated task worktree, exact tracker target, and terminal contract.
 - [x] Add pinned build/install helper, artifact hash gate, durable service path, and user-bus fallback.
 - [x] Add worker routing, durable owner fence, tracker terminal readback, and existing integration queue.
-- [x] Add focused bridge/backend/routing tests; scheduler/runtime/worker tests passed (108 total).
-- [ ] Resolve remaining implementation review issues and verify production behavior with focused tests.
-- [ ] Run `git diff --check`, commit and push the task branch, then open a PR to main with evidence.
+- [x] Add focused bridge/backend/routing tests, canonical Symphony scheduler claim and shared backend lease, worker selection, exact worktree checks, bus fallback, and idempotent terminal replay.
+- [x] Run final focused suite after the last routing changes: 115 tests passed; compileall and `git diff --check` passed.
+- [x] Run `git diff --check` and focused suite (115 tests).
+- [ ] Create the final commit on `task/c3-production-cutover` and open the PR to main with evidence.
 
-Verified facts: pinned source archive and exact hardened lock/manifest preparation passed locally; 108 focused tests passed. Full production escript rebuild could not run in this shell because `mix` is absent from `PATH`; the established gate already reports audit 0, 299/0 tests, and the expected artifact SHA-256. No install or traffic deployment was attempted.
+Verified facts: pinned source archive and exact hardened lock/manifest preparation passed locally; 115 focused tests passed. Full production escript rebuild could not run in this shell because `mix` is absent from `PATH`; the established gate already reports audit 0, 299/0 tests, and the expected artifact SHA-256. No install or traffic deployment was attempted.
 
 Decision: the production service uses the durable `~/.local/share/c3-symphony/bin/symphony` path. The host must explicitly set `mode=production` and a non-canary tracker. A preexisting Symphony owner prevents legacy fallback for that work item.
 
-Blockers: local shell lacks the Elixir `mix` toolchain for rebuilding the binary here. The full artifact build remains an operator/deployment gate after merge.
+Blockers: local shell lacks the Elixir `mix` toolchain for rebuilding the binary here. The shared `.git` index is read only in this sandbox, so local `git add` failed. The connected GitHub `create_tree` commit path was rejected with `MCP tool call requires approval, but approval policy is never`; no final commit, push, or PR was created. The full artifact build remains an operator/deployment gate after merge.
 
 Acceptance: coding-only routing, explicit tracker/allowlist/model/reasoning, one owner/issue, exact closed-state result, one integration queue, healthy artifact and stop control, focused tests, clean diff, pushed PR.
 
-Next action: review routing and worktree edge cases, then run the focused suite and final diff check.
+Next action: in a session with writable Git metadata or approved GitHub write access, commit the dirty C3 files in this worktree, push `task/c3-production-cutover`, and open the PR to main; preserve the current worktree diff.
