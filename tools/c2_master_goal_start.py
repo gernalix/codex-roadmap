@@ -10,13 +10,14 @@ from c2_appserver_rpc import AppServerRPC
 
 THREAD = "01a0e719-60ff-7b91-82db-1d7c55787c67"
 OBJECTIVE = (
-    "C2 MASTER GOAL: operate the entire C2 autonomously. Before EVERY dispatch wave: "
-    "drain Inbox unless a live canonical c2:issue-triage worker already owns that drain; "
-    "never duplicate delegated triage. Reevaluate ALL WAITING, then ALL BLOCKED, then "
-    "form semantic waves; reconcile each selected task before dispatch; launch independent "
-    "survivors concurrently under C2 leases and fencing; backfill completed slots after "
-    "Inbox, WAITING and BLOCKED reconciliation. Stop only at global quiescence. Full "
-    "durable contract: /home/daniele/.local/share/c2-master-goal/objective.txt"
+    "C2 MASTER GOAL: maximize useful control-plane throughput with independent Inbox, "
+    "planning, execution and integration lanes. Never duplicate a live canonical triage "
+    "worker and never make unrelated work wait for Inbox=0 or a full rescan of unchanged "
+    "WAITING/BLOCKED items; backfill completed slots promptly under canonical "
+    "dependencies, leases, fencing and repository-writer protections. Treat C3/Symphony "
+    "migration as P0 and avoid extending legacy C2 Codex orchestration scheduled for "
+    "replacement. Full durable contract: "
+    "/home/daniele/.local/share/c2-master-goal/objective.txt"
 )
 PID = Path("/home/daniele/.local/state/c2-master-goal/rpc-worker.pid")
 
