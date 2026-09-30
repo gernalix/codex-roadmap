@@ -21,6 +21,43 @@ OPERATIONS = (
 )
 
 
+def submit_controls(*, operations, request_key, supervisor_id, fencing_token,
+                    actor='c2-control-batch', canonical_renew=False):
+    """Submit a bounded set of fenced C2 operations in one writer transaction."""
+    if not isinstance(operations, list) or not operations or len(operations) > 50:
+        raise ValueError('operations_must_be_nonempty_bounded_list')
+    normalized=[]
+    for entry in operations:
+        if not isinstance(entry, dict):
+            raise ValueError('batch_operation_must_be_object')
+        operation=entry.get('operation')
+        arguments=entry.get('arguments')
+        if operation not in OPERATIONS:
+            raise ValueError('invalid_c2_control_operation')
+        if not isinstance(arguments, dict):
+            raise ValueError('arguments_must_be_object')
+        normalized.append((operation, dict(arguments)))
+    with connect(DEFAULT_DB) as lease:
+        row=_require(lease,supervisor_id,int(fencing_token),time.time())
+        row=record_activity(lease,supervisor_id=row['supervisor_id'],
+                            token=row['fencing_token'],operation='control:batch')
+        authority={
+            'supervisor_id':row['supervisor_id'],
+            'fencing_token':row['fencing_token'],
+            'lease_expires_at':row['lease_expires_at'],
+        }
+    writer_ops=[]
+    if canonical_renew:
+        writer_ops.append({'op':'c2_renew_supervisor','arguments':{
+            'supervisor_authority':dict(authority),
+        }})
+    for operation,arguments in normalized:
+        arguments['supervisor_authority']=dict(authority)
+        writer_ops.append({'op':'c2_'+operation,'arguments':arguments})
+    return submit_document({'schema':'codex-roadmap.mutation.v1','actor':actor,
+        'operations':writer_ops},request_key=request_key)
+
+
 def submit_control(*, operation, arguments, request_key, supervisor_id,
                    fencing_token, actor='c2-control', canonical_renew=False):
     """Submit one command after validating and renewing the current local fence.
