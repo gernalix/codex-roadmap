@@ -29,6 +29,73 @@ class IssueInboxTests(unittest.TestCase):
         c2_scheduler.install_schema(conn)
         return path, conn
 
+    def test_batch_many_to_one_split_discard_and_replay(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute('BEGIN IMMEDIATE')
+                issues = [c2_issue_inbox.capture(conn, description=f'Observation {n}')['issue_id']
+                          for n in range(4)]
+                existing = c2_intake.add_work_item(conn, title='Existing')['work_item_id']
+                before_items = conn.execute('SELECT COUNT(*) FROM work_items').fetchone()[0]
+                args = dict(batch_id='semantic-1', triaged_by='test',
+                    new_items=[{'alias':'second', 'title':'Second decision'}],
+                    decisions=[
+                        {'issue_id':issues[0], 'reason':'same work', 'work_item_ids':[existing]},
+                        {'issue_id':issues[1], 'reason':'same work', 'work_item_ids':[existing]},
+                        {'issue_id':issues[2], 'reason':'two scopes', 'work_item_ids':[existing,'@second']},
+                        {'issue_id':issues[3], 'reason':'no work', 'work_item_ids':[]}])
+                result = c2_issue_inbox.reconcile_batch(conn, **args)
+                self.assertEqual(result, c2_issue_inbox.reconcile_batch(conn, **args))
+                self.assertEqual(before_items + 1, conn.execute('SELECT COUNT(*) FROM work_items').fetchone()[0])
+                self.assertEqual(4, conn.execute('SELECT COUNT(*) FROM issue_work_item_links WHERE role="decision"').fetchone()[0])
+                self.assertEqual(['promoted'] * 3 + ['discarded'],
+                    [conn.execute('SELECT state FROM issue_inbox WHERE issue_id=?',(i,)).fetchone()[0] for i in issues])
+                with self.assertRaisesRegex(c2_issue_inbox.IssueInboxError, 'batch_id_conflict'):
+                    c2_issue_inbox.reconcile_batch(conn, **{**args, 'triaged_by':'other'})
+            finally:
+                conn.close()
+
+    def test_legacy_scalar_links_are_migrated_once(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute('BEGIN IMMEDIATE')
+                item = c2_intake.add_work_item(conn, title='Old decision')['work_item_id']
+                issue = c2_issue_inbox.capture(conn, description='Old observation')['issue_id']
+                conn.execute('UPDATE issue_inbox SET state="promoted",promoted_work_item_id=? WHERE issue_id=?',(item,issue))
+                conn.execute('DROP TABLE issue_work_item_links')
+                c2_issue_inbox.install_schema(conn)
+                c2_issue_inbox.install_schema(conn)
+                self.assertEqual([(issue,item,'decision')], [tuple(row) for row in conn.execute(
+                    'SELECT issue_id,work_item_id,role FROM issue_work_item_links')])
+                self.assertEqual([], conn.execute('PRAGMA foreign_key_check').fetchall())
+            finally:
+                conn.close()
+
+    def test_batch_requires_fenced_writer_operation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute('BEGIN IMMEDIATE')
+                issue = c2_issue_inbox.capture(conn, description='Writer batch')['issue_id']
+                arguments = {'batch_id':'writer-batch', 'triaged_by':'test',
+                    'decisions':[{'issue_id':issue, 'reason':'no work', 'work_item_ids':[]}]}
+                with self.assertRaisesRegex(Exception, 'supervisor_authority_required'):
+                    roadmap_db.apply_mutation(conn, {'op':'c2_reconcile_issue_batch',
+                                                      'arguments':arguments})
+                authority = {'supervisor_id':'test-supervisor', 'fencing_token':1,
+                             'lease_expires_at':time.time()+120}
+                roadmap_db.apply_mutation(conn, {'op':'c2_claim_supervisor',
+                    'arguments':{'supervisor_authority':authority}})
+                roadmap_db.apply_mutation(conn, {'op':'c2_reconcile_issue_batch',
+                    'arguments':{**arguments, 'supervisor_authority':authority}})
+                self.assertEqual(1, conn.execute('SELECT COUNT(*) FROM issue_reconciliation_batches').fetchone()[0])
+                self.assertEqual('discarded', conn.execute(
+                    'SELECT state FROM issue_inbox WHERE issue_id=?',(issue,)).fetchone()[0])
+            finally:
+                conn.close()
+
     def test_pending_edit_and_void_are_audited_and_idempotent(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, conn = self.make_conn(Path(tmp))
@@ -491,8 +558,7 @@ class IssueInboxTests(unittest.TestCase):
                 objective = conn.execute(
                     'SELECT objective FROM work_items WHERE work_item_id=?',
                     (first['work_item_id'],)).fetchone()[0]
-                self.assertIn('relative priority', objective)
-                self.assertIn('dependencies in both directions', objective)
+                self.assertIn('bounded batch', objective)
                 self.assertEqual(first['work_item_id'], c2_issue_inbox.ensure_triage(
                     conn, project_url=url)['work_item_id'])
                 conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?",
@@ -506,33 +572,22 @@ class IssueInboxTests(unittest.TestCase):
             finally:
                 conn.close()
 
-    def test_runtime_requests_atomic_triage_once_per_nonterminal_item(self):
+    def test_runtime_does_not_create_triage_item_or_gate_scheduling(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, conn = self.make_conn(Path(tmp))
             try:
                 conn.execute('BEGIN IMMEDIATE')
                 c2_issue_inbox.capture(conn, description='Needs triage')
                 calls = []
-                def submit(op, arguments, key):
-                    calls.append((op, arguments, key))
-                    if op == 'ensure_issue_triage':
-                        c2_issue_inbox.ensure_triage(conn, **arguments)
-                c2_runtime.advance(conn, submit=submit, launch=lambda _: None,
-                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                self.assertEqual('ensure_issue_triage', calls[0][0])
-                c2_runtime.advance(conn, submit=submit, launch=lambda _: None,
-                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                self.assertEqual(1, sum(op == 'ensure_issue_triage' for op, _, _ in calls))
-                first_key = calls[0][2]
-                triage_id = conn.execute("""SELECT w.work_item_id FROM work_items w
-                    JOIN work_item_tags t USING(work_item_id)
-                    WHERE t.tag='c2:issue-triage'""").fetchone()[0]
-                conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?", (triage_id,))
-                c2_runtime.advance(conn, submit=submit, launch=lambda _: None,
-                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                triage_calls = [entry for entry in calls if entry[0] == 'ensure_issue_triage']
-                self.assertEqual(2, len(triage_calls))
-                self.assertNotEqual(first_key, triage_calls[1][2])
+                normal = c2_intake.add_work_item(conn, title='Independent', repo='independent')
+                c2_scheduler.configure(conn, normal['work_item_id'], activity='native', command=['true'])
+                with patch.object(c2_runtime, 'automatic_candidates', return_value=['candidate']):
+                    c2_runtime.advance(conn, submit=lambda *args: calls.append(args), launch=lambda _: None,
+                        triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
+                self.assertNotIn('ensure_issue_triage', [call[0] for call in calls])
+                self.assertIn('schedule', [call[0] for call in calls])
+                self.assertIn('reconcile_blocked_safety_net', [call[0] for call in calls])
+                self.assertEqual(0, conn.execute("SELECT COUNT(*) FROM work_item_tags WHERE tag='c2:issue-triage'").fetchone()[0])
             finally:
                 conn.close()
 

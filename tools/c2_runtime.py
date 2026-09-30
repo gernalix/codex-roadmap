@@ -203,41 +203,13 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
                 events.append(('renew_supervisor',str(authority['fencing_token'])))
                 if canonical_expiry <= now:
                     return {'events':events,'ready':0,'active':0}
-    if pending_issue_inbox and triage_project_url:
-        triage = db.execute("""SELECT w.work_item_id,w.status FROM work_items w
-            JOIN work_item_tags t USING(work_item_id) WHERE t.tag='c2:issue-triage'
-            ORDER BY w.created_at DESC,w.work_item_id DESC LIMIT 1""").fetchone()
-        if triage is None or triage['status'] in ('completed','failed','cancelled','superseded','waived'):
-            pending_ids = [
-                str(row[0]) for row in db.execute(
-                    """SELECT i.issue_id FROM issue_inbox i
-                       LEFT JOIN manual_order_overrides o
-                         ON o.scope='inbox' AND o.entity_id=i.issue_id
-                       WHERE i.state='pending'
-                       ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,
-                                o.rank,i.observed_at_ms,i.issue_id"""
-                    if has_manual_order else
-                    "SELECT issue_id FROM issue_inbox WHERE state='pending' ORDER BY observed_at_ms,issue_id"
-                )
-            ]
-            key=_key('c2-issue-triage-intake',{'pending':pending_ids,
-                'previous':str(triage['work_item_id']) if triage else None})
-            submit('ensure_issue_triage',{'project_url':triage_project_url},key)
-            events.append(('issue_triage_intake',str(pending_issue_inbox)))
-            return {'events':events,'ready':0,'active':0,
-                    'issue_inbox_pending':pending_issue_inbox}
-        events.append(('issue_triage_active',str(triage['work_item_id'])))
-    elif pending_issue_inbox:
-        events.append(('issue_triage_unconfigured',str(pending_issue_inbox)))
-
     # The periodic runtime tick is a safety net for structured canonical facts.
     # Free-text and external blockers require an explicit evidence-gated decision.
-    if not pending_issue_inbox:
-        blocked_candidates = automatic_candidates(db)[:100]
-        if blocked_candidates:
-            key = _key('c2-blocked-safety-net', blocked_candidates)
-            submit('reconcile_blocked_safety_net', {'expected': blocked_candidates}, key)
-            events.append(('blocked_safety_net', str(len(blocked_candidates))))
+    blocked_candidates = automatic_candidates(db)[:100]
+    if blocked_candidates:
+        key = _key('c2-blocked-safety-net', blocked_candidates)
+        submit('reconcile_blocked_safety_net', {'expected': blocked_candidates}, key)
+        events.append(('blocked_safety_net', str(len(blocked_candidates))))
 
     # Recover missed terminal delivery natively; a PASS receipt and canonical
     # repository merge are both required before the writer replays finalization.

@@ -21,7 +21,7 @@ SUPERVISOR_OPERATIONS = frozenset({
     'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item',
     'reconcile_descendant',
     'reconcile_blocked', 'reconcile_blocked_safety_net', 'bind_executor',
-    'promote_issue', 'discard_issue', 'edit_issue', 'void_issue', 'ensure_issue_triage',
+    'promote_issue', 'discard_issue', 'reconcile_issue_batch', 'edit_issue', 'void_issue', 'ensure_issue_triage',
     'set_execution_override', 'clear_execution_override',
     'set_manual_order', 'clear_manual_order', 'set_human_copy',
 })
@@ -93,6 +93,7 @@ def apply(conn, mutation):
         'capture_issue': c2_issue_inbox.capture,
         'promote_issue': c2_issue_inbox.promote,
         'discard_issue': c2_issue_inbox.discard,
+        'reconcile_issue_batch': c2_issue_inbox.reconcile_batch,
         'edit_issue': c2_issue_inbox.edit,
         'void_issue': c2_issue_inbox.void,
         'ensure_issue_triage': c2_issue_inbox.ensure_triage,

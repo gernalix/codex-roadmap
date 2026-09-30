@@ -62,7 +62,11 @@ It never invents semantic decisions or silently repairs an invalid AI proposal.
 
 ## Inbox promotion contract
 
-Capture records an observation only. A triager reads `v_issue_inbox_pending_ordered` and submits one fenced `c2_promote_issue` or `c2_discard_issue` through `tools/c2_control.py` for each pending issue. Every disposition needs a concrete `reason` and `triaged_by`; the single writer owns the state transition and evidence.
+Inbox records raw observations and evidence. `work_items` records canonical roadmap work decisions. Their provenance is many-to-many in `issue_work_item_links`; the old scalar Inbox columns remain for compatibility. Capture does not create an execution lifecycle, and pending observations do not gate roadmap scheduling or unrelated reconciliation.
+
+The independent `tools/c2_inbox_codex_executor.py --db <snapshot> --batch 25` runner reads up to 25 ordered pending observations and submits one fenced `c2_reconcile_issue_batch` operation through `tools/c2_control.py`. The operation takes a stable `batch_id`, `triaged_by`, `decisions` (`issue_id`, concrete `reason`, `work_item_ids`), and optional `new_items` with local aliases referenced as `@alias`. An empty target list records no work; multiple targets split an observation; multiple observations may share one target. Cluster and deduplicate within this batch. Ambiguous observations may remain pending. The writer applies the whole batch atomically and replays an identical batch without making duplicate work items. There is no required global post-drain pass or automatic triage work item.
+
+Legacy `promote_issue` and `discard_issue` remain available for compatibility. Every disposition needs a concrete `reason` and `triaged_by`; the single writer owns the state transition and evidence.
 
 For `promote_issue`, choose `matched_work_item_id` from canonical work-item evidence, or leave it empty when no existing item matches:
 

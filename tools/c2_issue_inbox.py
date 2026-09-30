@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import re
 import sqlite3
 import time
@@ -84,6 +85,8 @@ def install_schema(conn: sqlite3.Connection) -> None:
     table_sql = conn.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='issue_inbox'").fetchone()[0]
     if "'voided'" not in table_sql:
         conn.execute("DROP VIEW IF EXISTS v_issue_inbox_pending_ordered")
+        revisions = [tuple(row) for row in conn.execute(
+            "SELECT mutation_id,issue_id,operation,actor,reason,payload_json,before_json,after_json,created_at FROM issue_inbox_revisions")]
         conn.execute("DROP TABLE IF EXISTS issue_inbox_revisions")
         conn.execute("CREATE TABLE issue_inbox_migrated " + table_sql[table_sql.index('('):].replace(
             "CHECK(state IN ('pending','promoted','discarded'))",
@@ -100,6 +103,28 @@ def install_schema(conn: sqlite3.Connection) -> None:
           actor TEXT NOT NULL, reason TEXT NOT NULL, payload_json TEXT NOT NULL,
           before_json TEXT NOT NULL, after_json TEXT NOT NULL, created_at TEXT NOT NULL)""")
         conn.execute("CREATE INDEX idx_issue_inbox_revisions_issue ON issue_inbox_revisions(issue_id,created_at,mutation_id)")
+        conn.executemany("""INSERT INTO issue_inbox_revisions
+            (mutation_id,issue_id,operation,actor,reason,payload_json,before_json,after_json,created_at)
+            VALUES(?,?,?,?,?,?,?,?,?)""", revisions)
+    links_exist = bool(conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='issue_work_item_links'").fetchone())
+    conn.execute("""CREATE TABLE IF NOT EXISTS issue_work_item_links (
+        issue_id TEXT NOT NULL REFERENCES issue_inbox(issue_id) ON DELETE RESTRICT,
+        work_item_id TEXT NOT NULL REFERENCES work_items(work_item_id) ON DELETE RESTRICT,
+        role TEXT NOT NULL CHECK(role IN ('decision','matched')),
+        created_at TEXT NOT NULL,
+        PRIMARY KEY(issue_id,work_item_id,role))""")
+    conn.execute("CREATE INDEX IF NOT EXISTS idx_issue_work_item_links_item ON issue_work_item_links(work_item_id,issue_id)")
+    conn.execute("""CREATE TABLE IF NOT EXISTS issue_reconciliation_batches (
+        batch_id TEXT PRIMARY KEY, payload_sha256 TEXT NOT NULL,
+        result_json TEXT NOT NULL, created_at TEXT NOT NULL)""")
+    # Scalar columns remain for old readers; backfill is repeatable.
+    if not links_exist:
+        for column, role in (("matched_work_item_id", "matched"),
+                             ("promoted_work_item_id", "decision")):
+            conn.execute(f"""INSERT OR IGNORE INTO issue_work_item_links
+                (issue_id,work_item_id,role,created_at)
+                SELECT issue_id,{column},?,created_at FROM issue_inbox
+                WHERE {column} IS NOT NULL""", (role,))
     import c2_manual_order
 
     c2_manual_order.install_schema(conn)
@@ -406,6 +431,90 @@ def _record_evidence(conn: sqlite3.Connection, work_item_id: str, issue: sqlite3
     )
 
 
+def _link(conn: sqlite3.Connection, issue_id: str, work_item_id: str, role: str) -> None:
+    conn.execute("""INSERT OR IGNORE INTO issue_work_item_links
+        (issue_id,work_item_id,role,created_at) VALUES(?,?,?,?)""",
+        (issue_id,work_item_id,role,c2_identity.utc_now()))
+
+
+def reconcile_batch(conn: sqlite3.Connection, *, batch_id: str,
+                    decisions: list[dict], new_items: list[dict] | None = None,
+                    triaged_by: str) -> dict:
+    """Apply one bounded semantic cluster/merge/split decision in the writer transaction.
+
+    References to new items use ``@alias``. Unmentioned pending observations remain pending.
+    """
+    _transaction(conn)
+    install_schema(conn)
+    batch_id = _required_text(batch_id, "batch_id")
+    triaged_by = _required_text(triaged_by, "triaged_by")
+    new_items = new_items or []
+    if not isinstance(decisions, list) or not 1 <= len(decisions) <= 25:
+        raise IssueInboxError("decisions_must_be_bounded_list")
+    if not isinstance(new_items, list) or len(new_items) > 25:
+        raise IssueInboxError("new_items_must_be_bounded_list")
+    payload = json.dumps({"decisions": decisions, "new_items": new_items,
+                          "triaged_by": triaged_by}, sort_keys=True, ensure_ascii=False)
+    digest = hashlib.sha256(payload.encode()).hexdigest()
+    previous = conn.execute("SELECT payload_sha256,result_json FROM issue_reconciliation_batches WHERE batch_id=?",
+                            (batch_id,)).fetchone()
+    if previous:
+        if previous[0] != digest:
+            raise IssueInboxError("batch_id_conflict")
+        return json.loads(previous[1])
+    aliases = {}
+    for spec in new_items:
+        if not isinstance(spec, dict):
+            raise IssueInboxError("new_item_must_be_object")
+        alias = str(spec.get("alias", ""))
+        if not re.fullmatch(r"[a-z][a-z0-9_-]{0,63}", alias) or alias in aliases:
+            raise IssueInboxError("invalid_or_duplicate_alias")
+        aliases[alias] = None
+    issue_ids = [str(d.get("issue_id", "")) for d in decisions if isinstance(d, dict)]
+    if len(issue_ids) != len(decisions) or len(set(issue_ids)) != len(issue_ids):
+        raise IssueInboxError("duplicate_or_invalid_decision")
+    rows = {issue_id: _row(conn, issue_id) for issue_id in issue_ids}
+    used_aliases = set()
+    for decision in decisions:
+        _required_text(decision.get("reason"), "reason")
+        refs = decision.get("work_item_ids")
+        if not isinstance(refs, list) or len(refs) > 25 or any(not isinstance(r, str) for r in refs) or len(set(refs)) != len(refs):
+            raise IssueInboxError("invalid_work_item_ids")
+        for ref in refs:
+            if ref.startswith("@"):
+                if ref[1:] not in aliases:
+                    raise IssueInboxError("unknown_alias")
+                used_aliases.add(ref[1:])
+            else:
+                _matched(conn, ref)
+    if used_aliases != set(aliases):
+        raise IssueInboxError("unused_new_item")
+    for spec in new_items:
+        alias = spec["alias"]
+        item = c2_intake.add_work_item(conn, **{k: v for k, v in spec.items() if k != "alias"})
+        aliases[alias] = item["work_item_id"]
+    outcomes = []
+    for decision in decisions:
+        issue = rows[decision["issue_id"]]
+        targets = [aliases[ref[1:]] if ref.startswith("@") else ref
+                   for ref in decision["work_item_ids"]]
+        for target in targets:
+            _link(conn, issue["issue_id"], target, "decision")
+            _record_evidence(conn, target, issue)
+        state = "promoted" if targets else "discarded"
+        conn.execute("""UPDATE issue_inbox SET state=?,promoted_work_item_id=?,
+            disposition_reason=?,triaged_by=?,triaged_at_ms=? WHERE issue_id=?""",
+            (state, targets[0] if targets else None, decision["reason"],
+             triaged_by, int(time.time() * 1000), issue["issue_id"]))
+        outcomes.append({"issue_id": issue["issue_id"], "state": state,
+                         "work_item_ids": targets})
+    result = {"batch_id": batch_id, "aliases": aliases, "decisions": outcomes}
+    conn.execute("""INSERT INTO issue_reconciliation_batches
+        (batch_id,payload_sha256,result_json,created_at) VALUES(?,?,?,?)""",
+        (batch_id,digest,json.dumps(result,sort_keys=True),c2_identity.utc_now()))
+    return result
+
+
 def _new_promoted_item(
     conn: sqlite3.Connection,
     issue: sqlite3.Row,
@@ -519,6 +628,9 @@ def promote(
         )
 
     _record_evidence(conn, promoted_id, issue)
+    _link(conn, issue_id, promoted_id, "decision")
+    if matched_work_item_id:
+        _link(conn, issue_id, matched_work_item_id, "matched")
     triaged_at = int(time.time() * 1000)
     conn.execute(
         """UPDATE issue_inbox
@@ -562,6 +674,8 @@ def discard(
            WHERE issue_id=?""",
         (matched_work_item_id, reason, triaged_by, triaged_at, issue_id),
     )
+    if matched_work_item_id:
+        _link(conn, issue_id, matched_work_item_id, "matched")
     return {"issue_id": issue_id, "state": "discarded", "matched_work_item_id": matched_work_item_id}
 
 
@@ -600,14 +714,12 @@ def ensure_triage(conn: sqlite3.Connection, *, project_url: str) -> dict:
             "the copy. For active matches, promote into the existing work item with evidence. "
             "For completed matches, promote a regression successor; never discard as fixed. "
             "For each promotion, record any known priority or dependency consequence without "
-            "reprioritizing the whole queue. After the full Inbox drain, reconcile relative priority "
-            "and dependencies in both directions, duplicates, obsolete work, and incomplete items "
-            "against the resulting queue once; encode verified changes explicitly before finishing. "
+            "reprioritizing the whole queue. Cluster duplicates and related observations within "
+            "each bounded batch. "
             "For irrelevant or obsolete issues, discard with a concrete reason. "
             "Read pending rows again before completion and finish only when none remain."
         ),
-        acceptance=["No pending issue_inbox rows remain at completion",
-                    "Post-drain roadmap reconciliation is recorded before completion"],
+        acceptance=["Bounded Inbox decisions are recorded with canonical work-item provenance"],
         next_action=(
             "Read v_issue_inbox_pending_ordered; apply one fenced disposition per row in order."
         ),
