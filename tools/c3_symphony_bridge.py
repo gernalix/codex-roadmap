@@ -277,8 +277,12 @@ def workflow_text(item: CodingItem, workspace_root: Path, config: HostConfig) ->
                f"-c {shlex.quote('model_reasoning_effort=' + item.reasoning)}")
     if config.mode == "production":
         tree = verify_worktree(item)
-        command += f" --add-dir {shlex.quote(str(tree))}"
-        clone = f"ln -s {shlex.quote(str(tree))} source"
+        branch = "task/" + str(item.prompt_id)
+        clone = (
+            f"git clone --no-hardlinks --branch {shlex.quote(branch)} "
+            f"{shlex.quote(str(tree))} source && "
+            "git -C source rev-parse HEAD > .c3-source-base"
+        )
     else:
         clone = f"gh repo clone {item.repo} source -- --depth 1"
     command += " app-server"
@@ -295,7 +299,7 @@ def workflow_text(item: CodingItem, workspace_root: Path, config: HostConfig) ->
               "This issue is the Symphony execution handoff for one canonical C2 work item. "
               "Symphony has already dispatched it. Do not call roadmap_start.py, "
               "c2_executor_start.py, c2_executor_result.py, or roadmap_finish.py.\n"
-              "The isolated task worktree is available as source/. Work only there. "
+              "The isolated writable task clone is available as source/. Work only there. "
               "Run git commands with `git -C source`. Commit tested changes on the task branch. "
               "Do not push or merge; the existing repository writer owns integration.\n"
               "The issue description defines the task and acceptance checks.\n"

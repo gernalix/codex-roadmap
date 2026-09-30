@@ -76,6 +76,54 @@ def bridge_call(action: str, db: Path, work_item_id: str, run_id: str) -> dict:
         raise RouteError("symphony_bridge_invalid_response") from exc
 
 
+def _git(*args: str, cwd: Path) -> str:
+    result = subprocess.run(["git", "-C", str(cwd), *args], text=True,
+                            capture_output=True, check=False)
+    if result.returncode:
+        raise RouteError("workspace_git_failed:" + ":".join(args[:2]))
+    return result.stdout.strip()
+
+
+def import_workspace_commit(item, issue_number: int, workspace_root: Path) -> str:
+    if not item.prompt_id or not item.worktree:
+        raise RouteError("symphony_integration_identity_missing")
+    workspace = workspace_root / ("GH-" + str(issue_number))
+    source = workspace / "source"
+    base_file = workspace / ".c3-source-base"
+    target = Path(item.worktree).resolve()
+    if not source.is_dir() or not base_file.is_file() or not target.is_dir():
+        raise RouteError("symphony_workspace_import_missing")
+    branch = "task/" + item.prompt_id
+    if _git("branch", "--show-current", cwd=source) != branch:
+        raise RouteError("symphony_workspace_branch_mismatch")
+    if _git("branch", "--show-current", cwd=target) != branch:
+        raise RouteError("canonical_worktree_branch_mismatch")
+    if _git("status", "--porcelain", cwd=source):
+        raise RouteError("symphony_workspace_dirty_after_terminal")
+    if _git("status", "--porcelain", cwd=target):
+        raise RouteError("canonical_worktree_dirty_before_import")
+    base = base_file.read_text(encoding="utf-8").strip()
+    source_head = _git("rev-parse", "HEAD", cwd=source)
+    target_head = _git("rev-parse", "HEAD", cwd=target)
+    if not base or target_head != base:
+        raise RouteError("canonical_worktree_moved_during_symphony")
+    ancestor = subprocess.run(["git", "-C", str(source), "merge-base", "--is-ancestor",
+                               base, source_head], check=False)
+    if ancestor.returncode:
+        raise RouteError("symphony_workspace_not_descended_from_base")
+    fetch = subprocess.run(["git", "-C", str(target), "fetch", str(source), source_head],
+                           text=True, capture_output=True, check=False)
+    if fetch.returncode:
+        raise RouteError("symphony_workspace_fetch_failed")
+    merge = subprocess.run(["git", "-C", str(target), "merge", "--ff-only", "FETCH_HEAD"],
+                           text=True, capture_output=True, check=False)
+    if merge.returncode:
+        raise RouteError("symphony_workspace_fast_forward_failed")
+    if _git("rev-parse", "HEAD", cwd=target) != source_head or _git("status", "--porcelain", cwd=target):
+        raise RouteError("symphony_workspace_import_readback_failed")
+    return source_head
+
+
 def validate_terminal(value: object) -> dict:
     if not isinstance(value, dict) or value.get("outcome") != "PASS":
         raise RouteError("symphony_terminal_outcome_invalid")
@@ -115,8 +163,8 @@ def dispatch(db: Path, run_id: str, work_item_id: str, config: HostConfig,
     if observed.get("state") != "closed":
         raise RouteError("symphony_tracker_terminal_readback_failed")
     terminal = validate_terminal(observed.get("terminal"))
-    if not item.prompt_id or not item.worktree:
-        raise RouteError("symphony_integration_identity_missing")
+    imported_head = import_workspace_commit(item, observed["issue_number"], root)
+    terminal["evidence"] = [*terminal["evidence"], "C3 imported committed head " + imported_head]
     args = {"run_id": run_id, "prompt_id": item.prompt_id, **terminal,
             "integration_ready": False}
     submit("executor_result", args, "c3-symphony-result-"+run_id)
