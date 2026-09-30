@@ -180,11 +180,14 @@ Esempio minimo:
 
 **Comando «esegui C2»:** significa prendere in carico l'intera C2 Inbox e l'intera roadmap eseguibile fino alla quiescenza, non fermarsi al primo task o alla prima consegna. Partire dallo stato canonico e dalla `Next action`, riconciliare i run già attivi senza duplicarli, poi assegnare i task sbloccati secondo priorità e dipendenze. Usare in parallelo Codex CLI/worker quando repo, worktree e risorse non si sovrappongono; supervisionare e integrare ogni risultato prima di liberare altro lavoro. La chat coordinatrice conserva stato, decisioni e verifiche senza eseguire direttamente più task indipendenti che possono essere affidati ai worker. Terminare solo quando non resta lavoro eseguibile: ogni residuo deve avere uno stato e un blocker concreto che richiede un intervento esterno. Registrare checkpoint, receipt e commit/push lungo il percorso.
 
-**C2 issue inbox:** la cattura executor segue il contratto comune. Il control
-plane associa run, executor e link della chat; la capture passa
-dal writer unico. Il triage C2 è fenced: dispone ogni riga pending con
-`promote_issue` o `discard_issue`; un match completed è regressione attiva,
-un match attivo riceve evidence sul work item esistente.
+**C2 issue inbox:** `issue_inbox` contiene osservazioni grezze ed evidenze;
+`work_items` contiene le decisioni canoniche di lavoro. La provenienza è
+molti-a-molti tramite `issue_work_item_links`. La cattura passa dal writer
+unico, resta economica e non crea lifecycle esecutivo. La manutenzione
+semantica indipendente applica un solo `reconcile_issue_batch` fenced per
+massimo 25 osservazioni, con alias locali per nuovi work item; le osservazioni
+ambigue possono restare pending. Il pending Inbox non blocca la schedulazione
+né la riconciliazione indipendente. Non serve un pass globale dopo il drain.
 Una cattura isolata non esegue un task e non richiede `executor_started` o
 `C2_RUN_ID`. Per testo multilinea usare `--stdin`, `--file PATH` o `--json
 '{"description":"..."}'`; il testo viene conservato esattamente. Un `--issue-id

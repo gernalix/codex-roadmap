@@ -1,7 +1,9 @@
-"""Bounded Codex fallback for the canonical C2 issue-triage run."""
+"""Bounded independent semantic maintenance for Inbox observations."""
 from __future__ import annotations
 
 import json
+import argparse
+import fcntl
 import os
 import sqlite3
 import subprocess
@@ -13,6 +15,7 @@ RUNTIME_ENV = Path.home() / ".config/c2-supervisor/runtime.env"
 SYNC = Path.home() / ".local/share/c2-supervisor/worktree/tools/c2_snapshot_sync.py"
 CODEX = Path.home() / ".local/bin/codex"
 LOG = Path.home() / ".local/state/c2/inbox-drain-codex.log"
+LOCK = Path.home() / ".local/state/c2/inbox-maintenance.lock"
 DEFAULT_BATCH = 25
 
 PROMPT = """You are the semantic executor for the existing C2 issue-triage work item.
@@ -36,13 +39,33 @@ Use single submit_control only at such dependency boundaries. Preserve one human
 copy/evidence disposition per row. If a bulk writer receipt is rejected, split that batch
 and retry only its unchanged dispositions until the invalid/conflicting row is isolated;
 do not reprocess rows whose writer receipt already applied. Stop after {batch} rows or an empty Inbox.
-If the Inbox is empty at the start or becomes empty in this batch, perform the canonical
-post-drain reconciliation required by this work item's objective and acceptance criteria.
+Reconcile semantic overlap inside this bounded batch; leave ambiguous rows pending.
 Then submit c2_record_checkpoint through the fenced control path with the exact acceptance
 criteria in completed, remaining=[], blocker=null, concrete evidence, and one next_action.
 Do not claim completion until that checkpoint is writer-applied.
 C2_RUN_ID={run_id}
 C2_WORK_ITEM_ID={work_item_id}
+"""
+
+MAINTENANCE_PROMPT = """Reconcile at most {batch} pending C2 Inbox observations as one
+semantic batch. Inbox rows are raw observations; work_items are canonical work
+decisions. Read v_issue_inbox_pending_ordered and only minimum related roadmap
+context. Cluster duplicates, merge related observations into an existing item,
+split an observation across items where needed, and discard observations that
+require no work. Leave ambiguous rows pending. Do not drain the whole Inbox.
+Do not start, finish, or create an execution work item or perform a global
+post-drain pass. Do not duplicate human copy that already exists.
+
+Submit exactly one c2_reconcile_issue_batch writer operation through
+c2_control.submit_control with canonical_renew=True. Arguments: batch_id is
+a stable unique key for this semantic decision; triaged_by identifies this
+runner; decisions is a list of {{issue_id,reason,work_item_ids}}; new_items is
+a list of c2_intake.add_work_item arguments plus a unique local alias. Use
+@alias in work_item_ids to refer to an item created by this same mutation.
+Zero IDs discards; one or more links to canonical work. Do not submit when
+there are no unambiguous decisions. Verify the single writer receipt once,
+then stop. Preserve existing lifecycle and active work metadata.
+The fenced authority is in /home/daniele/.config/c2-supervisor/runtime.env.
 """
 
 
@@ -133,3 +156,39 @@ def execute(*, run_id: str, work_item_id: str, db_path: Path,
         "after": after,
         "returncode": int(proc.returncode),
     }
+
+
+def maintain(*, db_path: Path, batch: int = DEFAULT_BATCH) -> dict:
+    """Run one semantic pass without a roadmap execution lifecycle."""
+    if not 1 <= batch <= 25:
+        raise ValueError("batch_out_of_range")
+    LOCK.parent.mkdir(parents=True, exist_ok=True)
+    with LOCK.open("a+") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            return {"state": "already_running"}
+        env = _env()
+        _sync(env)
+        before = _pending(db_path)
+        if not before:
+            return {"state": "empty", "before": 0}
+        cmd = [str(CODEX), "exec", "-m", "gpt-6-luna",
+               "-c", 'model_reasoning_effort="medium"',
+               "--dangerously-bypass-approvals-and-sandbox",
+               "--skip-git-repo-check", "--ephemeral", "-C", str(REPO), "-"]
+        LOG.parent.mkdir(parents=True, exist_ok=True)
+        with LOG.open("a", encoding="utf-8", buffering=1) as stream:
+            proc = subprocess.run(cmd, input=MAINTENANCE_PROMPT.format(batch=batch),
+                                  text=True, env=env, cwd=REPO, stdout=stream,
+                                  stderr=subprocess.STDOUT, timeout=3000)
+        return {"state": "submitted" if proc.returncode == 0 else "failed",
+                "before": before, "returncode": proc.returncode}
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--db", type=Path, required=True)
+    parser.add_argument("--batch", type=int, default=DEFAULT_BATCH)
+    args = parser.parse_args()
+    print(json.dumps(maintain(db_path=args.db, batch=args.batch)))
