@@ -5,7 +5,7 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-LoadCredential=GITHUB_TOKEN:%h/.config/c3-symphony/github-token
+LoadCredentialEncrypted=GITHUB_TOKEN:%h/.config/c3-symphony/credentials/github-token.cred
 ExecStart=/usr/bin/python3 %h/projects/codex-roadmap/tools/c3_symphony_backend.py run --binary %h/.local/share/symphony-eval/bin/symphony-v0.0.3-linux_x86_64 --workflow %h/.local/share/c3-symphony/WORKFLOW.md
 KillMode=control-group
 TimeoutStopSec=30
