@@ -8,3 +8,4 @@
 4. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
 5. [[prompts/resolve-personalhub-hubcontextlinks-unresolved-d-103001|resolve-personalhub-hubcontextlinks-unresolved-d-103001]]
 6. [[prompts/handle-pixel-and-tcl-account-routing-in-grindr-f-941059|handle-pixel-and-tcl-account-routing-in-grindr-f-941059]]
+7. [[prompts/symphony-dependency-security-and-compatible-hard-998028|symphony-dependency-security-and-compatible-hard-998028]]
