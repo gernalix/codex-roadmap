@@ -182,6 +182,32 @@ class BridgeTests(unittest.TestCase):
             self.assertEqual((item.model, item.reasoning), ("gpt-6-sol", "medium"))
             self.assertIn("-c model=gpt-6-sol", bridge.workflow_text(item, Path(directory) / "workspaces", CONFIG))
 
+    def test_production_workflow_clones_writable_task_branch_inside_workspace(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            tree=root/"task-tree"
+            subprocess.run(["git","init",str(tree)],check=True,capture_output=True)
+            subprocess.run(["git","-C",str(tree),"config","user.name","Test"],check=True)
+            subprocess.run(["git","-C",str(tree),"config","user.email","test@example.com"],check=True)
+            subprocess.run(["git","-C",str(tree),"remote","add","origin",
+                            "https://github.com/gernalix/codex-roadmap.git"],check=True)
+            (tree/"a.txt").write_text("a\n")
+            subprocess.run(["git","-C",str(tree),"add","."],check=True)
+            subprocess.run(["git","-C",str(tree),"commit","-m","base"],check=True,capture_output=True)
+            subprocess.run(["git","-C",str(tree),"branch","-M","task/123456"],check=True)
+            item=bridge.CodingItem(ITEM_ID,"x","x","[]","gernalix/codex-roadmap",
+                                   "gpt-6-sol","medium",str(tree),"123456")
+            config=bridge.HostConfig("production","gernalix/c3-symphony",
+                                     frozenset({"gernalix/codex-roadmap"}))
+            data=bridge.workflow_text(item,root/"workspaces",config)
+            cfg=json.loads(data.split("---",2)[1])
+            hook=cfg["hooks"]["after_create"]
+            self.assertIn("git clone --no-hardlinks --branch task/123456",hook)
+            self.assertIn(".c3-source-base",hook)
+            self.assertNotIn("ln -s",hook)
+            self.assertNotIn("--add-dir",cfg["codex"]["command"])
+
     def test_production_requires_explicit_non_canary_tracker_and_allowlist(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory)/"config.json"
