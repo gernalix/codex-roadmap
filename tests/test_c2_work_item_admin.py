@@ -93,6 +93,42 @@ class WorkItemAdminTests(unittest.TestCase):
         self.assertEqual("pending", self.conn.execute("SELECT status FROM work_items WHERE work_item_id=?",
                                                       (child["work_item_id"],)).fetchone()[0])
 
+    def test_reparent_root_to_batch_records_audit_and_is_idempotent_by_precondition(self):
+        batch = c2_intake.add_work_item(self.conn, title="C3 batch", kind="goal")
+        result = admin.reparent(
+            self.conn, self.root_id, parent_id=batch["work_item_id"],
+            expected_parent_id=None, evidence=["C3 reconciliation groups this item into the batch"],
+        )
+        self.assertEqual(batch["work_item_id"], result["parent_id"])
+        self.assertEqual(batch["work_item_id"], self.conn.execute(
+            "SELECT parent_id FROM work_items WHERE work_item_id=?", (self.root_id,)
+        ).fetchone()[0])
+        self.assertEqual(1, self.conn.execute(
+            "SELECT count(*) FROM work_item_evidence WHERE work_item_id=? AND evidence_kind='reparent'",
+            (self.root_id,)
+        ).fetchone()[0])
+        with self.assertRaisesRegex(ValueError, "parent_precondition_changed"):
+            admin.reparent(
+                self.conn, self.root_id, parent_id=batch["work_item_id"],
+                expected_parent_id=None, evidence=["stale replay"],
+            )
+
+    def test_reparent_rejects_cycles_and_active_runs(self):
+        child = c2_intake.add_work_item(self.conn, title="Child", parent_id=self.root_id)
+        with self.assertRaisesRegex(ValueError, "hierarchy_cycle"):
+            admin.reparent(
+                self.conn, self.root_id, parent_id=child["work_item_id"],
+                expected_parent_id=None, evidence=["invalid cycle"],
+            )
+        batch = c2_intake.add_work_item(self.conn, title="Batch")
+        c2_scheduler.configure(self.conn, self.root_id, activity="native", command=["true"])
+        c2_scheduler.schedule(self.conn, event_key="reparent-active", now=1)
+        with self.assertRaisesRegex(ValueError, "active_run_requires_normal_lifecycle"):
+            admin.reparent(
+                self.conn, self.root_id, parent_id=batch["work_item_id"],
+                expected_parent_id=None, evidence=["cannot move live work"],
+            )
+
     def test_waiting_requires_blocker_and_removes_only_named_dependency(self):
         dep = c2_intake.add_work_item(self.conn, title="Old dependency")
         self.conn.execute("INSERT INTO work_item_dependencies(work_item_id,depends_on_work_item_id,required) VALUES(?,?,1)", (self.root_id, dep["work_item_id"]))
