@@ -472,6 +472,8 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120,
     active = conn.execute('''SELECT COUNT(*) FROM v_work_item_execution_liveness
       WHERE has_live_executor=1''').fetchone()[0]
     results = []
+    import c3_override
+    c3_override.install_schema(conn)
     candidates = conn.execute('''SELECT w.*,
         o.rank AS manual_rank,
         o.source AS manual_order_source,
@@ -479,8 +481,9 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120,
       FROM v_work_item_runnable w
       LEFT JOIN manual_order_overrides o
         ON o.scope='roadmap' AND o.entity_id=w.work_item_id
-      ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,
-        o.rank,
+      LEFT JOIN c3_user_order u ON u.work_item_id=w.work_item_id
+      ORDER BY CASE WHEN COALESCE(u.rank,o.rank) IS NULL THEN 1 ELSE 0 END,
+        COALESCE(u.rank,o.rank),
         CASE
         WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p0') THEN 0
         WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p1') THEN 1

@@ -283,7 +283,10 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         run_id=str(row['run_id'])
         submit('reconcile_run',{'run_id':run_id},'c2-reconcile-'+run_id)
         events.append(('reconcile_run',run_id))
+    paused_items = {r[0] for r in db.execute("SELECT work_item_id FROM work_item_tags WHERE tag='manual-prerequisite:c3-paused'")}
     for run in active:
+        if run['work_item_id'] in paused_items:
+            continue
         metadata=json.loads(run['metadata_json'])
         if chatgpt_suspended and metadata.get('activity') in ('gui','semantic'):
             continue
@@ -304,7 +307,8 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
                 launch(run['run_id'])
                 events.append(('launch',run['run_id']))
     expired=[r for r in active
-             if r['executor'] != 'symphony'
+             if r['work_item_id'] not in paused_items
+             and r['executor'] != 'symphony'
              and r['state'] in ('claimed','running') and r['lease_until']<=now
              and not worker_active(str(r['run_id']))]
     if expired:

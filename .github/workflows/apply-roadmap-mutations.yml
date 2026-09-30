@@ -42,12 +42,18 @@ jobs:
             : > /tmp/rejected-issues
 
             mapfile -t ISSUE_ROWS < <(
-              gh issue list                 --repo "$GITHUB_REPOSITORY"                 --state open                 --limit 1000                 --json number,title,body                 --jq 'sort_by((if (.title | startswith("[roadmap-mutation] start-")) then 0 elif (.title | startswith("[roadmap-mutation] terminal-")) then 1 elif (.title | startswith("[roadmap-mutation] usage-")) then 2 else 3 end), .number)[] | select(.title | startswith("[roadmap-mutation] ")) | @base64'
+              gh issue list                 --repo "$GITHUB_REPOSITORY"                 --state open                 --limit 1000                 --json number,title,body                 --jq 'sort_by((if (.title | startswith("[roadmap-mutation] c3-user-")) then -1 elif (.title | startswith("[roadmap-mutation] start-")) then 0 elif (.title | startswith("[roadmap-mutation] terminal-")) then 1 elif (.title | startswith("[roadmap-mutation] usage-")) then 2 else 3 end), .number)[] | select(.title | startswith("[roadmap-mutation] ")) | @base64'
             )
 
             if [ "${#ISSUE_ROWS[@]}" -eq 0 ]; then
               echo "No open roadmap mutation Issues"
               exit 0
+            fi
+
+            # User intent commits independently of the ordinary autonomous drain.
+            # Keep the existing concurrency group as the sole canonical writer.
+            if printf '%s\n' "${ISSUE_ROWS[0]}" | base64 --decode | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin)["title"].startswith("[roadmap-mutation] c3-user-") else 1)'; then
+              ISSUE_ROWS=("${ISSUE_ROWS[0]}")
             fi
 
             python3 tools/bootstrap_roadmap.py --repo . --writer-context
