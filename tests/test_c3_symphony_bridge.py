@@ -36,7 +36,8 @@ class FakeGitHub(bridge.GitHubIssues):
         return row
 
     def api(self, method, path, payload=None):
-        if method == "GET" and path == f"repos/{self.repo}/issues/1/comments?per_page=100":
+        prefix = f"repos/{self.repo}/issues/"
+        if method == "GET" and path.startswith(prefix) and path.endswith("/comments?per_page=100"):
             return [{"body": 'C3_RESULT={"outcome":"PASS","completed":[],"remaining":[],"evidence":["tested"],"blocker":null,"next_action":null}'}]
         raise AssertionError(path)
 
@@ -55,6 +56,23 @@ class BridgeTests(unittest.TestCase):
             self.assertEqual(bridge.publish(self.item(), github, lock),
                              {"issue_number": 1, "created": False})
             self.assertEqual(len(github.rows), 1)
+
+    def test_production_run_identity_separates_retry_tracker_issues(self):
+        with tempfile.TemporaryDirectory() as directory:
+            github = FakeGitHub()
+            lock = Path(directory) / "publish.lock"
+            first = bridge.publish(self.item(), github, lock, "a"*32)
+            replay = bridge.publish(self.item(), github, lock, "a"*32)
+            second = bridge.publish(self.item(), github, lock, "b"*32)
+            self.assertEqual(first, {"issue_number": 1, "created": True})
+            self.assertEqual(replay, {"issue_number": 1, "created": False})
+            self.assertEqual(second, {"issue_number": 2, "created": True})
+            self.assertEqual(2, len(github.rows))
+            self.assertIn("run:"+"a"*32, github.rows[0]["title"])
+            self.assertIn("C3 run: "+"b"*32, github.rows[1]["body"])
+            github.rows[1]["state"] = "closed"
+            observed = bridge.inspect(self.item(), github, "b"*32)
+            self.assertEqual(2, observed["issue_number"])
 
     def test_delayed_create_readback_does_not_create_twice(self):
         class DelayedGitHub(FakeGitHub):
