@@ -19,6 +19,8 @@ SESSION_ROOT=Path.home()/".codex/sessions"
 REMOTE="https://github.com/gernalix/codex-roadmap.git"
 TERMINAL={"completed","superseded","cancelled","failed","waived"}
 ACTIVE={"pending","waiting","blocked","claimed","running","recovering"}
+ANSI_BRIGHT_GREEN="\033[1;92m"
+ANSI_RESET="\033[0m"
 
 def sh(args,cwd=None,timeout=25):
     return subprocess.run(args,cwd=cwd,text=True,capture_output=True,timeout=timeout)
@@ -116,10 +118,29 @@ def task_metrics(c,now,window):
 
 def fmt_duration(sec):
     if sec is None:return "—"
-    sec=int(sec)
+    sec=max(0,int(sec))
     if sec<60:return f"{sec}s"
     if sec<3600:return f"{sec//60}m"
     return f"{sec//3600}h {(sec%3600)//60:02d}m"
+
+def relative_age(sec):
+    if sec is None:return "tempo sconosciuto"
+    sec=max(0,int(sec))
+    if sec<60:return "adesso" if sec<10 else f"{sec}s fa"
+    minutes=sec//60
+    if minutes<60:return f"{minutes} min fa"
+    hours,rem=divmod(minutes,60)
+    if hours<24:return f"{hours} h fa" if not rem else f"{hours} h {rem} min fa"
+    days,remh=divmod(hours,24)
+    return f"{days} g fa" if not remh else f"{days} g {remh} h fa"
+
+def age_from_iso(value, now):
+    ts=iso_ts(value) if value else None
+    return relative_age(now-ts) if ts is not None else "tempo sconosciuto"
+
+def with_age(text, age):
+    text=str(text or '').strip()
+    return f"{text}  ·  {age}" if text else age
 
 def usage_metrics(now):
     if not USAGE_DB.exists(): return None
@@ -265,7 +286,7 @@ def semantic_state(now: float) -> dict | None:
 
 def active_survivor_focus(c, survivors):
     survivor_set=set(survivors)
-    rows=c.execute("""SELECT w.work_item_id,w.title,w.status,w.current_action,w.next_action,r.state,r.lease_until
+    rows=c.execute("""SELECT w.work_item_id,w.title,w.status,w.current_action,w.next_action,w.updated_at,r.state,r.lease_until
         FROM work_item_runs r JOIN work_items w ON w.work_item_id=r.work_item_id
         WHERE r.state IN ('claimed','running','recovering')
         ORDER BY r.created_at DESC""").fetchall()
@@ -330,7 +351,7 @@ def render(force_refresh=False):
     active_focus=active_survivor_focus(c,surv)
     if sem:
         now_title=sem.get('headline') or 'Stato C2'
-        now_desc=sem.get('current') or 'Il watcher AI non ha fornito una descrizione.'
+        now_desc=with_age(sem.get('current') or 'Il watcher AI non ha fornito una descrizione.', relative_age(sem.get('analysis_age')))
         after_desc=sem.get('next') or 'Attendere il prossimo cambiamento di stato.'
         semantic_intervention=(sem.get('intervention') or '').strip() or 'No.'
     else:
@@ -340,6 +361,7 @@ def render(force_refresh=False):
             title=active_focus['title']
             action=active_focus['current_action'] or active_focus['next_action'] or next_action
             now_title,now_desc,after_desc=human_focus(focus,title,action)
+            now_desc=with_age(now_desc, age_from_iso(active_focus['updated_at'],now))
         elif conditional_wait:
             now_title='Nessuna attività eseguibile al momento'
             now_desc='Il Goal è correttamente in attesa di un gate canonico.'
@@ -394,17 +416,16 @@ def render(force_refresh=False):
 
     lines=['C2 — STATO ROADMAP','='*64,'',status_word]
     if usage:
-        quota=f"Quota Codex: {usage['remaining']:.0f}% rimasta"
-        if usage['remaining']<=10: quota+='  ⚠️'
-        quota+=f"  ·  consumo ultima ora ~{usage['burn1h']:+.0f} punti"
+        quota=f"Consumo Codex ultima ora: ~{usage['burn1h']:+.0f} punti"
+        if usage['remaining']<=10: quota+='  ⚠️ quota quasi esaurita'
         lines.append(quota)
     granular_pct=round(100*granular_done/granular_total,1) if granular_total else 0
     delta_text=f"  (+{granular_delta} negli ultimi 5 min)" if granular_delta>0 else ''
     lines += ['', 'PROGRESSO',
               f"Avanzamento operativo {progress_bar(granular_done,granular_total)}  {granular_done}/{granular_total} passi ({granular_pct:.1f}%){delta_text}",
-              f"Attività completate   {progress_bar(len(terminal),len(surv))}  {len(terminal)}/{len(surv)} ({done_pct}%)",
+              f"Attività completate: {len(terminal)}/{len(surv)}",
               '',
-              f"Il primo numero è più sensibile: segue {granular_nodes} task e sotto-task attraverso più tappe verificabili, quindi può muoversi anche prima che un'intera attività sia chiusa.",
+              f"Questa è l’unica percentuale mostrata perché è la più sensibile: segue {granular_nodes} task e sotto-task attraverso più tappe verificabili, quindi può muoversi anche prima che un'intera attività sia chiusa.",
               f"Restano {len(surv)-len(terminal)} attività reali: {effective_ready} eseguibili ora, {effective_waiting} condizionali/in attesa e {effective_other} già in corso o in aggiornamento.",
               'Le attività che aspettano qualcosa non sono necessariamente problemi: molte dipendono da un login, un dispositivo collegato, controlli automatici esterni o condizioni future.',
               '', 'COSA STA FACENDO ADESSO',
@@ -455,9 +476,10 @@ def _progress_pct(output: str) -> float | None:
     return float(match.group(1)) if match else None
 
 def _with_visit_delta(output: str, delta: float | None) -> str:
-    if delta is None or delta < 0.05:
+    if delta is None or abs(delta) < 0.05:
         return output
-    label=f"  (+{delta:.1f}% dalla tua ultima visita)"
+    sign='+' if delta>0 else ''
+    label=f"  {ANSI_BRIGHT_GREEN}({sign}{delta:.1f}% mentre eri fuori focus){ANSI_RESET}"
     return re.sub(
         r"(Avanzamento operativo .*?\(\d+(?:\.\d+)?%\))",
         lambda m:m.group(1)+label,
@@ -554,7 +576,7 @@ def main():
                         fresh=render(True)
                         current=_progress_pct(fresh)
                         if away_baseline is not None and current is not None:
-                            visit_delta=max(0.0,current-away_baseline)
+                            visit_delta=current-away_baseline
                         else:
                             visit_delta=None
                         last_pct=current
