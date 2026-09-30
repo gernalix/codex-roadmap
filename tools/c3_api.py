@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 from contextlib import closing
 import json
+import mimetypes
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import re
@@ -168,6 +169,9 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def do_GET(self):
+        if self.headers.get('Host') not in self.server.allowed_hosts:
+            self.reply(403, {'error': 'loopback_host_required'})
+            return
         try:
             if self.path == '/api/state':
                 self.reply(200, self.server.control.state())
@@ -175,7 +179,21 @@ class Handler(BaseHTTPRequestHandler):
                 self.server.control.state()
                 self.reply(200, {'status': 'ok'})
             else:
-                self.reply(404, {'error': 'not_found'})
+                asset = self.path.split('?', 1)[0]
+                names = {'/': 'index.html', '/index.html': 'index.html', '/style.css': 'style.css', '/app.mjs': 'app.mjs', '/model.mjs': 'model.mjs'}
+                if asset not in names:
+                    self.reply(404, {'error': 'not_found'})
+                    return
+                root = Path(__file__).resolve().parents[1] / 'web' / 'dist'
+                data = (root / names[asset]).read_bytes()
+                self.send_response(200)
+                self.send_header('Content-Type', mimetypes.guess_type(names[asset])[0] or 'application/octet-stream')
+                self.send_header('Cache-Control', 'no-cache')
+                self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'")
+                self.send_header('X-Content-Type-Options', 'nosniff')
+                self.send_header('Content-Length', str(len(data)))
+                self.end_headers()
+                self.wfile.write(data)
         except Exception as exc:
             self.reply(503, {'error': str(exc)})
 

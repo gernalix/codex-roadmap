@@ -21,6 +21,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: C3 frontend tests and production build
+        run: |
+          node --test web/model.test.mjs
+          node web/build.mjs
       - name: Run tests
         env:
           PYTHONDONTWRITEBYTECODE: "1"

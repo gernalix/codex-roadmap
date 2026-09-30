@@ -52,6 +52,8 @@ def precondition(conn, ids, action, work_item_id):
     body = {'items': {i: items[i] for i in sorted(scope)},
             'edges': sorted((i, p) for i, p in edges if i in scope or p in scope), 'runs': runs,
             'tags': [tuple(r) for r in conn.execute('SELECT work_item_id,tag FROM work_item_tags ORDER BY work_item_id,tag') if r[0] in scope]}
+    if conn.execute("SELECT 1 FROM sqlite_master WHERE name='c3_user_order'").fetchone():
+        body['user_order'] = [tuple(r) for r in conn.execute('SELECT work_item_id,rank FROM c3_user_order ORDER BY work_item_id') if r[0] in scope]
     # Renewing a lease does not change control ownership.
     for run in runs:
         run.pop('lease_until', None)
