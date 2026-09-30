@@ -6,13 +6,15 @@ import argparse
 import json
 import os
 import subprocess
+import sys
 import urllib.error
 import urllib.request
 from pathlib import Path
 
 
 UNIT = "c3-symphony.service"
-STATE_URL = "http://127.0.0.1:8765/api/v1/state"
+PORT = "18765"
+STATE_URL = f"http://127.0.0.1:{PORT}/api/v1/state"
 
 
 class BackendError(RuntimeError):
@@ -36,7 +38,16 @@ def run(binary: Path, workflow: Path, *, environ: dict[str, str] | None = None) 
     if not binary.is_file() or not workflow.is_file():
         raise BackendError("symphony_binary_or_workflow_missing")
     env = credential_environment(dict(os.environ if environ is None else environ))
-    os.execve(str(binary), [str(binary), str(workflow), "--port", "8765"], env)
+    os.execve(str(binary), [str(binary),
+                            "--i-understand-that-this-will-be-running-without-the-usual-guardrails",
+                            str(workflow), "--port", PORT], env)
+
+
+def publish(db: Path, work_item_id: str, *, environ: dict[str, str] | None = None) -> None:
+    env = credential_environment(dict(os.environ if environ is None else environ))
+    bridge = Path(__file__).with_name("c3_symphony_bridge.py")
+    os.execve(sys.executable, [sys.executable, str(bridge), "publish",
+                             "--db", str(db), "--work-item-id", work_item_id], env)
 
 
 def systemctl(*args: str) -> subprocess.CompletedProcess[str]:
@@ -75,15 +86,22 @@ def stop() -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=["run", "status", "stop"])
+    parser.add_argument("action", choices=["run", "publish", "status", "stop"])
     parser.add_argument("--binary", type=Path)
     parser.add_argument("--workflow", type=Path)
+    parser.add_argument("--db", type=Path)
+    parser.add_argument("--work-item-id")
     args = parser.parse_args()
     try:
         if args.action == "run":
             if args.binary is None or args.workflow is None:
                 raise BackendError("binary_and_workflow_required")
             run(args.binary, args.workflow)
+            raise AssertionError("execve returned")
+        if args.action == "publish":
+            if args.db is None or args.work_item_id is None:
+                raise BackendError("db_and_work_item_required")
+            publish(args.db, args.work_item_id)
             raise AssertionError("execve returned")
         result = status() if args.action == "status" else stop()
     except BackendError as exc:

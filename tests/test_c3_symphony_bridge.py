@@ -4,6 +4,7 @@ import json
 import sqlite3
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 
@@ -48,6 +49,27 @@ class BridgeTests(unittest.TestCase):
                              {"issue_number": 1, "created": False})
             self.assertEqual(len(github.rows), 1)
 
+    def test_delayed_create_readback_does_not_create_twice(self):
+        class DelayedGitHub(FakeGitHub):
+            def __init__(self):
+                super().__init__()
+                self.delay = False
+            def matching(self, title):
+                if self.delay:
+                    self.delay = False
+                    return []
+                return super().matching(title)
+            def create(self, title, body):
+                row = super().create(title, body)
+                self.delay = True
+                return row
+        with tempfile.TemporaryDirectory() as directory:
+            github = DelayedGitHub()
+            with patch.object(bridge.time, "sleep"):
+                result = bridge.publish(self.item(), github, Path(directory) / "lock")
+            self.assertEqual(result, {"issue_number": 1, "created": True})
+            self.assertEqual(len(github.rows), 1)
+
     def test_conflicting_or_duplicate_tracker_identity_fails_closed(self):
         with tempfile.TemporaryDirectory() as directory:
             github = FakeGitHub()
@@ -59,6 +81,16 @@ class BridgeTests(unittest.TestCase):
             with self.assertRaisesRegex(bridge.BridgeError, "duplicate_tracker_identity"):
                 bridge.publish(self.item(), github, lock)
 
+    def test_closed_issue_replay_is_idempotent(self):
+        with tempfile.TemporaryDirectory() as directory:
+            github = FakeGitHub()
+            github.create(bridge.issue_title(self.item()), bridge.issue_body(self.item()))
+            github.rows[0]["state"] = "closed"
+            github.rows[0]["labels"] = []
+            self.assertEqual(bridge.publish(self.item(), github, Path(directory) / "lock"),
+                             {"issue_number": 1, "created": False})
+            self.assertEqual(len(github.rows), 1)
+
     def test_workflow_has_host_token_reference_and_appserver_overrides(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -69,9 +101,15 @@ class BridgeTests(unittest.TestCase):
             config = json.loads(data.split("---", 2)[1])
             self.assertEqual(config["tracker"]["provider"]["token"], "$GITHUB_TOKEN")
             self.assertEqual(config["tracker"]["required_labels"], [bridge.LABEL])
+            self.assertIn(" source -- --depth 1", config["hooks"]["after_create"])
             self.assertIn("-c model=gpt-6-sol", config["codex"]["command"])
             self.assertIn("-c model_reasoning_effort=medium", config["codex"]["command"])
             self.assertNotIn(" -m ", config["codex"]["command"])
+            self.assertIn("Do not call roadmap_start.py", data)
+            self.assertIn("canonical tracker repository is gernalix/symphony-canary", data)
+            self.assertIn("the tracker issue is {{ issue.identifier }}", data)
+            self.assertIn("Source repository in the issue body is never the tracker target", data)
+            self.assertIn("read back that same tracker repository/issue and require state=closed", data)
             self.assertEqual(output.stat().st_mode & 0o777, 0o600)
             with self.assertRaisesRegex(bridge.BridgeError, "workflow_inside_codex_workspace"):
                 bridge.write_workflow(self.item(), workspace, workspace / "WORKFLOW.md")
@@ -101,6 +139,29 @@ class BridgeTests(unittest.TestCase):
                 conn.commit()
             with self.assertRaisesRegex(bridge.BridgeError, "item_not_autonomous_coding"):
                 bridge.load_item(db, ITEM_ID)
+
+    def test_auto_coding_and_human_model_label_resolve_for_appserver(self):
+        with tempfile.TemporaryDirectory() as directory:
+            db = Path(directory) / "roadmap.sqlite"
+            with closing(sqlite3.connect(db)) as conn:
+                conn.executescript("""
+                    CREATE TABLE work_items(work_item_id TEXT,title TEXT,objective TEXT,
+                      acceptance_json TEXT,repo TEXT,status TEXT,actionable INTEGER,
+                      executor_policy TEXT);
+                    CREATE TABLE work_item_execution_specs(work_item_id TEXT,activity TEXT,
+                      model TEXT,reasoning TEXT);
+                    CREATE VIEW v_work_item_runnable AS SELECT * FROM work_items
+                      WHERE status='pending' AND actionable=1;
+                """)
+                conn.execute("INSERT INTO work_items VALUES(?,?,?,?,?,?,?,?)",
+                             (ITEM_ID, "Tiny fix", "Create marker", "[]", bridge.SOURCE_REPO,
+                              "pending", 1, "auto"))
+                conn.execute("INSERT INTO work_item_execution_specs VALUES(?,?,?,?)",
+                             (ITEM_ID, "coding", "GPT-6 Sol", "Medium"))
+                conn.commit()
+            item = bridge.load_item(db, ITEM_ID)
+            self.assertEqual((item.model, item.reasoning), ("gpt-6-sol", "medium"))
+            self.assertIn("-c model=gpt-6-sol", bridge.workflow_text(item, Path(directory) / "workspaces"))
 
 
 if __name__ == "__main__":

@@ -30,7 +30,9 @@ class BackendTests(unittest.TestCase):
             with patch.object(backend.os, "execve") as execve:
                 backend.run(binary, workflow, environ={"CREDENTIALS_DIRECTORY": str(credential)})
             argv = execve.call_args.args
-            self.assertEqual(argv[1], [str(binary), str(workflow), "--port", "8765"])
+            self.assertEqual(argv[1], [str(binary),
+                             "--i-understand-that-this-will-be-running-without-the-usual-guardrails",
+                             str(workflow), "--port", backend.PORT])
             self.assertEqual(argv[2]["GITHUB_TOKEN"], "test-token")
 
     def test_status_and_stop_operate_one_unit(self):
@@ -42,6 +44,19 @@ class BackendTests(unittest.TestCase):
             self.assertTrue(backend.stop()["stop_requested"])
             self.assertEqual(command.call_args.args[0],
                              ["systemctl", "--user", "stop", backend.UNIT])
+
+    def test_publish_passes_decrypted_credential_only_to_host_bridge(self):
+        with tempfile.TemporaryDirectory() as directory:
+            credential = Path(directory) / "credentials"
+            credential.mkdir()
+            (credential / "GITHUB_TOKEN").write_text("test-token\n")
+            db = Path(directory) / "roadmap.sqlite"
+            with patch.object(backend.os, "execve") as execve:
+                backend.publish(db, "wi:" + "a" * 32,
+                                environ={"CREDENTIALS_DIRECTORY": str(credential)})
+            argv = execve.call_args.args
+            self.assertIn("c3_symphony_bridge.py", argv[1][1])
+            self.assertEqual(argv[2]["GITHUB_TOKEN"], "test-token")
 
     def test_status_returns_only_aggregate_counts(self):
         class Result:
