@@ -107,6 +107,31 @@ class RuntimeTests(unittest.TestCase):
                 [doc['operations'][0]['arguments']['event_key'] for doc,_ in captured],
             )
 
+    def test_bind_request_identity_changes_with_renewed_authority(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            lease_path=Path(tmp)/'lease.sqlite3'
+            with c2_supervisor_lease.connect(lease_path) as lease:
+                c2_supervisor_lease.acquire(lease,owner='runtime',pointer='/tmp/pointer',
+                                            supervisor_id='runtime',now=100,ttl=1000)
+            captured=[]
+            with patch.object(c2_runtime,'SUPERVISOR_DB',lease_path), \
+                    patch.object(c2_runtime,'submit_document',side_effect=lambda document,request_key:
+                                 (captured.append((document,request_key)) or {'issue_number':'1'})), \
+                    patch.object(c2_runtime.time,'time',return_value=150):
+                args={'run_id':'run-1','executor_ref':'thread-1',
+                      'chat_url':'codex://threads/thread-1'}
+                c2_runtime._writer_submit('bind_executor',args,'c2-bind-run-1')
+                c2_runtime._writer_submit('bind_executor',args,'c2-bind-run-1')
+                with c2_supervisor_lease.connect(lease_path) as lease:
+                    lease.execute('UPDATE supervisor SET lease_expires_at=2000 WHERE singleton=1')
+                c2_runtime._writer_submit('bind_executor',args,'c2-bind-run-1')
+            self.assertEqual(captured[0][1],captured[1][1])
+            self.assertNotEqual(captured[0][1],captured[2][1])
+            self.assertEqual(
+                ['thread-1']*3,
+                [doc['operations'][0]['arguments']['executor_ref'] for doc,_ in captured],
+            )
+
     def test_ack_request_identity_changes_with_renewed_authority(self):
         with tempfile.TemporaryDirectory() as tmp:
             lease_path=Path(tmp)/'lease.sqlite3'
