@@ -1,6 +1,6 @@
 ---
 prompt_id: 998028
-status: pending
+status: running
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -12,13 +12,13 @@ tags:
   - source:issue-inbox
   - symphony
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 998028 · Symphony dependency security and compatible hardening gate
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/symphony-dependency-security-and-compatible-hard-998028|Apri prompt]]
 - **Primo lancio:** —

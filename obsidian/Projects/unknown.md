@@ -5,9 +5,9 @@ tags:
 
 # Unknown
 
+- [[obsidian/Prompts/998028 symphony-dependency-security-and-compatible-hard-998028|998028 · Symphony dependency security and compatible hardening gate]] · `running`
 - [[obsidian/Prompts/103001 resolve-personalhub-hubcontextlinks-unresolved-d-103001|103001 · Resolve PersonalHub HubContextLinks unresolved dialog references]] · `pending`
 - [[obsidian/Prompts/941059 handle-pixel-and-tcl-account-routing-in-grindr-f-941059|941059 · Handle Pixel and TCL account routing in Grindr Favorites monitor]] · `pending`
-- [[obsidian/Prompts/998028 symphony-dependency-security-and-compatible-hard-998028|998028 · Symphony dependency security and compatible hardening gate]] · `pending`
 - [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479|853479 · Phase A — MegaVault one source of truth definitiva]] · `completed`
 - [[obsidian/Prompts/856999 aggiungere-gate-c2-per-acceptance-post-merge-856999|856999 · Aggiungere gate C2 per acceptance post-merge]] · `completed`
 - [[obsidian/Prompts/742579 rendere-il-db-grindr-favorites-frictionless-da-e-742579|742579 · Rendere il DB Grindr Favorites frictionless da esplorare]] · `completed`
