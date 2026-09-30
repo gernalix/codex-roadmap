@@ -5,6 +5,7 @@ tags:
 
 # Unknown
 
+- [[obsidian/Prompts/425315 c3-implementare-override-utente-sincroni-per-il--425315|425315 · C3: implementare override utente sincroni per il control plane]] · `pending`
 - [[obsidian/Prompts/941059 handle-pixel-and-tcl-account-routing-in-grindr-f-941059|941059 · Handle Pixel and TCL account routing in Grindr Favorites monitor]] · `pending`
 - [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479|853479 · Phase A — MegaVault one source of truth definitiva]] · `completed`
 - [[obsidian/Prompts/856999 aggiungere-gate-c2-per-acceptance-post-merge-856999|856999 · Aggiungere gate C2 per acceptance post-merge]] · `completed`

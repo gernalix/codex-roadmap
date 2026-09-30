@@ -6,4 +6,5 @@
 2. [[prompts/eboks-full-export-resume-after-mitid-v1|eboks-full-export-resume-after-mitid-v1]]
 3. [[prompts/eboks-scraper-bootstrap-public-repo-live-adapter|eboks-scraper-bootstrap-public-repo-live-adapter]]
 4. [[prompts/logseq-updates-pat-safety-closure-v3|logseq-updates-pat-safety-closure-v3]]
-5. [[prompts/handle-pixel-and-tcl-account-routing-in-grindr-f-941059|handle-pixel-and-tcl-account-routing-in-grindr-f-941059]]
+5. [[prompts/c3-implementare-override-utente-sincroni-per-il--425315|c3-implementare-override-utente-sincroni-per-il--425315]]
+6. [[prompts/handle-pixel-and-tcl-account-routing-in-grindr-f-941059|handle-pixel-and-tcl-account-routing-in-grindr-f-941059]]

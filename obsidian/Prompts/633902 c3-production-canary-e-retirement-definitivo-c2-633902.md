@@ -26,7 +26,7 @@ tags:
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
 - **Dipende da:** —
-- **Sblocca:** —
+- **Sblocca:** [[425315 c3-implementare-override-utente-sincroni-per-il--425315|425315]]
 - **Padri/precedenti:** —
 - **Figli/follow-up:** —
 - **Chat Codex:** —
