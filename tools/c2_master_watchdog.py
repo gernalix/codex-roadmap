@@ -101,6 +101,14 @@ def db_snapshot(now: float | None = None) -> dict[str, Any]:
         runnable = [r[0] for r in conn.execute(
             "SELECT work_item_id FROM v_work_item_runnable ORDER BY work_item_id LIMIT 200"
         )]
+        nontriage_planning = conn.execute("""
+            SELECT COUNT(*) FROM work_items w
+            WHERE w.status IN ('pending','waiting','blocked')
+              AND NOT EXISTS (
+                SELECT 1 FROM work_item_tags t
+                WHERE t.work_item_id=w.work_item_id AND t.tag='c2:issue-triage'
+              )
+        """).fetchone()[0] if _table_exists(conn, "work_item_tags") else 0
         runs = []
         for row in conn.execute("""
             SELECT run_id,work_item_id,executor,state,worker_ref,lease_until
@@ -149,6 +157,7 @@ def db_snapshot(now: float | None = None) -> dict[str, Any]:
         return {
             "available": True, "counts": counts, "inbox_pending": int(inbox),
             "runnable_ids": runnable, "active_runs": runs,
+            "nontriage_planning_count": int(nontriage_planning),
             "authority": authority, "triage_run": triage_run,
             "last_triaged_at_ms": triaged,
         }
@@ -181,6 +190,11 @@ def state_fingerprint(db: dict[str, Any], delegated: dict[str, Any] | None = Non
             ),
             "delegated_worker": (
                 bool(delegated.get("alive")), bool(delegated.get("progressing")),
+            ),
+            # Keep triage noise from retriggering the Goal, but do wake when
+            # the non-triage planning backlog materially changes.
+            "nontriage_planning_bucket": _bucket(
+                int(db.get("nontriage_planning_count") or 0), 5
             ),
         }
     else:
@@ -340,7 +354,17 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "should_recover_runs": True, "recovery_key": recovery_key,
             "why": ["Un run ha worker inattivo e lease scaduta."], "state_key": fp,
         }
-    if any(worker.get("active") == "active" for worker in workers) or delegated.get("alive"):
+    triage_parallel = bool(
+        delegated.get("alive") and int(db.get("nontriage_planning_count") or 0) > 0
+    )
+    triage_run_id = str(delegated.get("run_id") or "")
+    blocking_workers = [
+        worker for worker in workers
+        if not (triage_parallel and str(worker.get("run_id") or "") == triage_run_id)
+    ]
+    if any(worker.get("active") == "active" for worker in blocking_workers) or (
+        delegated.get("alive") and not triage_parallel
+    ):
         progress = delegated.get("progress_age_s")
         progress_text = (
             " avanzamento Inbox recente" if progress is not None and progress <= 3600
@@ -350,9 +374,9 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "status": "working", "phase": "delegated",
             "headline": "Lavoro delegato C2 in corso",
             "current": f"Il Master Goal può restare PAUSED: un worker C2 è vivo;{progress_text}.",
-            "next": "Il runtime continuerà i batch; il watchdog non avvia un secondo Goal mentre un worker è vivo.",
+            "next": "Il runtime continuerà i batch; il watchdog non duplica un executor già attivo.",
             "intervention": "", "attention_key": "", "should_start_goal": False,
-            "why": ["Il worker delegato systemd è attivo; una lease scaduta da sola non equivale a stallo."],
+            "why": ["Un worker non-triage è attivo, oppure il triage non ha altro lavoro di planning da affiancare."],
             "state_key": fp,
         }
     if service.get("active") == "active" or snapshot.get("master_worker_alive"):
@@ -376,7 +400,7 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
         }
     if service.get("active") not in ("inactive", "failed") or any(
         worker.get("active") not in ("inactive", "failed") or not worker.get("lease_expired")
-        for worker in workers
+        for worker in blocking_workers
     ):
         return {
             "status": "needs_user", "phase": "unknown",
@@ -387,7 +411,7 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "attention_key": "c2_liveness_ambiguous", "should_start_goal": False,
             "why": ["Nessun restart su stato ambiguo."], "state_key": fp,
         }
-    if workers:
+    if blocking_workers:
         return {
             "status": "waiting_external", "phase": "external_wait",
             "headline": "Run C2 in attesa del writer",
@@ -427,7 +451,10 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
                 "attention_key": "c2_goal_block_ambiguous", "should_start_goal": False,
                 "why": ["Nessun restart su un blocco o turno ambiguo."], "state_key": fp,
             }
-        actionable = bool(db.get("inbox_pending") or db.get("runnable_ids"))
+        actionable = bool(
+            db.get("inbox_pending") or db.get("runnable_ids")
+            or int(db.get("nontriage_planning_count") or 0)
+        )
         if not actionable:
             return {
                 "status": "waiting_external", "phase": "external_wait",
@@ -557,6 +584,15 @@ def snapshot(now: float | None = None) -> dict[str, Any]:
     service = systemd_state(MASTER_SERVICE)
     alive = master_worker_alive()
     workers = run_worker_states(db) if db.get("available") else []
+    delegated = delegated_worker_state(db, now) if db.get("available") else {}
+    triage_parallel = bool(
+        delegated.get("alive") and int(db.get("nontriage_planning_count") or 0) > 0
+    )
+    triage_run_id = str(delegated.get("run_id") or "")
+    goal_blocking_workers = [
+        worker for worker in workers
+        if not (triage_parallel and str(worker.get("run_id") or "") == triage_run_id)
+    ]
     return {
         "observed_at": now,
         "db": db,
@@ -565,9 +601,9 @@ def snapshot(now: float | None = None) -> dict[str, Any]:
         "run_workers": workers,
         "goal_observation": (goal_observation() if db.get("available") and work_remains(db)
                              and service.get("active") not in ("active",) and not alive
-                             and not any(w["active"] == "active" for w in workers)
+                             and not any(w["active"] == "active" for w in goal_blocking_workers)
                              else {"status": "not_checked"}),
-        "delegated_worker": delegated_worker_state(db, now),
+        "delegated_worker": delegated,
     }
 
 

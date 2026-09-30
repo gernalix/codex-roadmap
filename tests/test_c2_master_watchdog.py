@@ -1,12 +1,14 @@
 from pathlib import Path
 import sys
 import unittest
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 import c2_master_watchdog as watchdog
 
 
-def db_state(*, inbox=1, pending=1, waiting=0, blocked=0, runnable=None, runs=None, triage_run=None):
+def db_state(*, inbox=1, pending=1, waiting=0, blocked=0, runnable=None, runs=None,
+             triage_run=None, nontriage_planning=0):
     return {
         "available": True,
         "counts": {
@@ -17,6 +19,7 @@ def db_state(*, inbox=1, pending=1, waiting=0, blocked=0, runnable=None, runs=No
         "inbox_pending": inbox,
         "runnable_ids": list(runnable or []),
         "active_runs": list(runs or []),
+        "nontriage_planning_count": nontriage_planning,
         "authority": {"supervisor_id": "sup-a", "lease_valid": True, "lease_stale": False},
         "triage_run": triage_run,
         "last_triaged_at_ms": 123,
@@ -65,6 +68,26 @@ class MasterWatchdogDecisionTests(unittest.TestCase):
         self.assertEqual(result["status"], "working")
         self.assertEqual(result["phase"], "delegated")
         self.assertFalse(result["should_start_goal"])
+
+    def test_live_triage_worker_allows_master_goal_for_nontriage_planning(self):
+        triage = {
+            "run_id": "triage-1", "state": "running",
+            "worker_ref": "c2-run:triage-1", "lease_expired": True,
+        }
+        db = db_state(inbox=25, triage_run=triage, runs=[triage],
+                      nontriage_planning=7)
+        delegated = {
+            "run_id": "triage-1", "alive": True,
+            "progressing": True, "progress_age_s": 30,
+        }
+        result = watchdog.decide(
+            snap(db, delegated=delegated, run_workers=[{
+                "run_id": "triage-1", "active": "active", "lease_expired": True,
+            }]),
+            {"last_wake_fingerprint": "old"}, now=1000,
+        )
+        self.assertEqual(result["status"], "recovering")
+        self.assertTrue(result["should_start_goal"])
 
     def test_delegated_worker_health_changes_fingerprint(self):
         triage = {
@@ -225,6 +248,27 @@ class MasterWatchdogDecisionTests(unittest.TestCase):
         self.assertEqual(watchdog.state_fingerprint(first), watchdog.state_fingerprint(second))
         second["authority"]["lease_stale"] = True
         self.assertNotEqual(watchdog.state_fingerprint(first), watchdog.state_fingerprint(second))
+
+    def test_snapshot_observes_goal_when_only_triage_worker_is_active(self):
+        triage = {
+            "run_id": "triage-1", "state": "running",
+            "worker_ref": "c2-run:triage-1", "lease_expired": True,
+        }
+        db = db_state(inbox=25, triage_run=triage, runs=[triage],
+                      nontriage_planning=7)
+        with mock.patch.object(watchdog, "db_snapshot", return_value=db), \
+             mock.patch.object(watchdog, "systemd_state", return_value={"active": "inactive"}), \
+             mock.patch.object(watchdog, "master_worker_alive", return_value=False), \
+             mock.patch.object(watchdog, "run_worker_states", return_value=[{
+                 "run_id": "triage-1", "active": "active", "lease_expired": True,
+             }]), \
+             mock.patch.object(watchdog, "delegated_worker_state", return_value={
+                 "run_id": "triage-1", "alive": True, "progressing": True,
+             }), \
+             mock.patch.object(watchdog, "goal_observation", return_value={"status": "paused"}) as goal:
+            snapshot = watchdog.snapshot(now=1000)
+        self.assertEqual("paused", snapshot["goal_observation"]["status"])
+        goal.assert_called_once_with()
 
     def test_failed_service_has_bounded_retries(self):
         db = db_state()

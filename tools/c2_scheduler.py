@@ -450,9 +450,9 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120,
         WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
         ELSE 3 END,
         COALESCE(w.sort_order,2147483647),w.created_at,w.work_item_id''').fetchall()
-    inbox_gate = inbox_drain_state(conn)
-    if inbox_gate:
-        candidates = [item for item in candidates if inbox_gate_exempt(conn, item)]
+    # Inbox triage owns its own resource/priority lane. Do not turn a non-empty
+    # Inbox into a global scheduling barrier: that starves independent roadmap
+    # work whenever triage is slow or continuously receiving new observations.
     override = read_override(conn)
     scoped = []
     if override:

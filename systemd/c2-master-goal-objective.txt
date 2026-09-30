@@ -2,52 +2,44 @@ C2 MASTER GOAL
 
 This instruction supersedes every earlier narrower roadmap Goal objective, ordering rule, and stop condition.
 
-Operate the ENTIRE C2 control plane autonomously until GLOBAL QUIESCENCE. A child turn, queue boundary, worker completion, wave completion, BLOCKED/COMPLETE state of this thread, or temporary lack of runnable execution specs must never by itself end the Master Goal.
+Maximize useful roadmap throughput until global quiescence. Never serialize unrelated work merely because another control-plane lane is busy.
 
-MANDATORY GLOBAL CYCLE — EXACT ORDER:
+OPERATING MODEL — INDEPENDENT LANES
 
-1. INBOX FIRST
-Process the entire canonical C2 Inbox in canonical order. Triage only: deduplicate, absorb, promote, discard, update human copy and evidence. Do not manufacture implementation work during triage.
+1. INBOX TRIAGE LANE
+- If a dedicated c2:issue-triage worker is alive, it owns Inbox triage. Do not duplicate its work and do not wait for Inbox count to reach zero.
+- If Inbox is non-empty and no healthy triage worker owns it, ensure/recover exactly one triage worker.
+- New Inbox observations must not freeze independent planning, scheduling, execution, integration, or C3 migration work.
 
-2. WAITING SECOND
-Freshly reevaluate EVERY current WAITING item against the current canonical state, dependencies, authoritative MegaVault project/repo identity, active runs/worktrees, resource ownership and gate evidence. Promote when genuinely executable; terminalize stale/duplicate/obsolete work when evidence supports it; preserve only genuine external/conditional/manual gates.
+2. PLANNING / RECONCILIATION LANE
+- Reevaluate new or materially changed PENDING, WAITING and BLOCKED items as needed; do not rescan every unchanged item before each dispatch.
+- Convert executable survivors into complete execution specs promptly.
+- Preserve only evidence-backed external/conditional/manual gates.
+- Terminalize stale, duplicate or obsolete work when current evidence supports it.
 
-3. BLOCKED THIRD
-Freshly reevaluate EVERY current BLOCKED item with the same standard. BLOCKED is not automatically external. Resolve blockers that are now satisfiable, terminalize stale/duplicate/obsolete items when justified, and preserve only evidence-backed real blockers.
+3. EXECUTION LANE
+- Continuously dispatch independent ready tasks in canonical priority/dependency order up to the configured capacity cap.
+- Backfill a freed slot promptly; never wait for unrelated workers or a full-roadmap reconciliation cycle.
+- Dependency, fencing, receipt, resource lease, isolated-worktree and repository-writer protections remain authoritative.
+4. INTEGRATION / RECOVERY LANE
+- Integrate or terminalize verified results and release resources promptly.
+- Recover genuinely orphaned runs from canonical evidence; do not treat an expired lease alone as proof of failure when the worker is alive.
+- Capture incidental material bugs, bottlenecks, fragilities and avoidable cost/risk to C2 Inbox without triaging them inline.
 
-4. SCHEDULING ONLY AFTER 1-3
-Only after Inbox, ALL WAITING and ALL BLOCKED have been processed/re-evaluated for the CURRENT snapshot, rebuild the global task snapshot and form a dispatch wave. Scheduling from a stale pre-Inbox/pre-WAITING/pre-BLOCKED snapshot is forbidden.
+PRIORITY
+- Explicit user directives first.
+- C3 / Symphony migration and its production-readiness gates are P0 until cutover is complete.
+- Do not spend effort improving C2 Codex dispatch, app-server RPC, per-worker retry/stall logic, Codex concurrency or workspace lifecycle unless required to keep the migration path operational; those components are scheduled for replacement.
+- After P0 work, follow canonical priority, dependency and manual ordering.
 
-5. SELECT INDEPENDENT TASKS
-Select all currently dispatchable tasks in canonical priority and dependency order, up to the configured hard capacity cap. Dependency, resource lease, isolated worktree, repository writer, receipt and fencing checks remain authoritative. Independent tasks may execute concurrently.
+PAUSE / STOP
+- The Master Goal may pause while dedicated triage or other executors continue if there is no planning, dispatch, integration or recovery work for the Master Goal itself.
+- A non-empty Inbox is not by itself a reason to keep the Master Goal active and is not a reason to block other lanes.
+- Wake on material non-triage control-plane change; do not burn model tokens polling unchanged external gates.
+- Global quiescence means no currently actionable planning/dispatch/integration/recovery work remains and every remaining nonterminal item is a genuine evidence-backed gate. Active dedicated triage may continue independently.
 
-6. PRE-DISPATCH RECONCILIATION
-Before dispatch, reconcile EVERY selected item: authoritative project/repo, dependencies, duplicates, stale/obsolete work, active runs/worktrees, writer/resource ownership and current evidence. Classify each item as terminal, genuine gate, or executable survivor.
-
-7. EXECUTE AND BACKFILL
-Dispatch only reconciled survivors. Enforce C2 fencing/single-writer rules and the scheduler's repository/worktree exclusions. When a slot completes, return to steps 1-3 before promptly filling it with newly dispatchable work; do not wait for unrelated workers to finish.
-
-8. POST-WAVE RECONCILIATION
-Integrate/terminalize verified results, release resources, reconcile newly obsolete/duplicate work, and capture incidental material bugs/bottlenecks to C2 Inbox without triaging them inline.
-
-9. LOOP TO STEP 1
-After every completion or material control-plane change: return to Inbox, then ALL WAITING, then ALL BLOCKED, then form a new wave. Never reuse a stale dispatch plan.
-
-GLOBAL STOP CONDITION — ALL must be true simultaneously:
-- Inbox count = 0.
-- Every current WAITING item was freshly reevaluated in the current cycle.
-- Every current BLOCKED item was freshly reevaluated in the current cycle.
-- No active/claimed/running/recovering C2 run remains.
-- No runnable/dispatchable survivor remains after fresh wave reconciliation.
-- No pending writer/integration/recovery action remains.
-- No dispatchable task remains from the current global snapshot.
-- Every remaining nonterminal item is an evidence-backed genuine external/conditional/manual gate.
-
-If only genuine external gates remain, remain alive in condition-watch mode and wake automatically on canonical gate change without burning model tokens polling unchanged gates. Only a globally terminal roadmap or explicit user cancellation may stop the Master Goal permanently.
-
-USER OVERRIDES:
+USER OVERRIDES
 - Keep Grindr-Web-dependent implementation parked until explicit user gate change.
 - Never reopen the user-cancelled T7 restic/corruption item.
 - Fedora/Telegram interactive before/after notifications remain suspended.
 - Prefer GPT-6 Luna Low/Medium for simple work and GPT-6 Sol Medium for complex work.
-- Capture incidental material bugs, bottlenecks, fragilities and avoidable cost/risk to C2 Inbox without inline triage.

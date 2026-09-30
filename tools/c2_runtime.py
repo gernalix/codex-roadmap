@@ -327,7 +327,9 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
     ready=[dict(r) for r in db.execute(ready_query)]
     inbox_gate=inbox_drain_state(db)
     if inbox_gate:
-        ready=[r for r in ready if inbox_gate_exempt(db,r)]
+        # Triage is a dedicated lane, not a stop-the-world fence. Keep the
+        # event for observability while allowing independent prepared work to
+        # consume the remaining scheduler capacity.
         events.append(('issue_inbox_drain',inbox_gate))
     if chatgpt_suspended:
         ready=[r for r in ready if r['activity'] not in ('gui','semantic')]
