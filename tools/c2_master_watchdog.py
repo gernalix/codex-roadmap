@@ -294,12 +294,14 @@ def work_remains(db: dict[str, Any]) -> bool:
     return bool(int(db.get("inbox_pending") or 0) or live or db.get("runnable_ids") or db.get("active_runs"))
 
 
-def _triage_can_overlap_goal(db: dict[str, Any], delegated: dict[str, Any]) -> bool:
-    triage_run_id = str((db.get("triage_run") or {}).get("run_id") or "")
-    return bool(
-        triage_run_id and int(db.get("planning_backlog") or 0) > 0
-        and delegated.get("alive") and str(delegated.get("run_id") or "") == triage_run_id
-    )
+def _planning_can_overlap_workers(db: dict[str, Any]) -> bool:
+    """The Master Goal is a planner/coordinator, not an executor slot.
+
+    When unprepared actionable work exists, live executors must not suppress the
+    planner. Repository/resource conflicts and capacity remain enforced by the
+    scheduler when prepared work is dispatched.
+    """
+    return int(db.get("planning_backlog") or 0) > 0
 
 
 def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = None) -> dict[str, Any]:
@@ -318,11 +320,9 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
         }
     delegated = snapshot.get("delegated_worker") or {}
     workers = snapshot.get("run_workers") or []
-    triage_run_id = str((db.get("triage_run") or {}).get("run_id") or "")
     planning_backlog = int(db.get("planning_backlog") or 0)
-    triage_planning_overlap = _triage_can_overlap_goal(db, delegated)
-    nontriage_workers = [w for w in workers if str(w.get("run_id") or "") != triage_run_id]
-    goal_blocking_workers = nontriage_workers if triage_planning_overlap else workers
+    planning_overlap = _planning_can_overlap_workers(db)
+    goal_blocking_workers = [] if planning_overlap else workers
     fp = state_fingerprint(db, delegated)
     recovery_key = hashlib.sha256(json.dumps(sorted(
         (w.get("run_id"), w.get("active"), w.get("lease_expired")) for w in workers
@@ -367,7 +367,7 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "why": ["Un run ha worker inattivo e lease scaduta."], "state_key": fp,
         }
     if (any(worker.get("active") == "active" for worker in goal_blocking_workers)
-            or (delegated.get("alive") and not triage_planning_overlap)):
+            or (delegated.get("alive") and not planning_overlap)):
         progress = delegated.get("progress_age_s")
         progress_text = (
             " avanzamento Inbox recente" if progress is not None and progress <= 3600
@@ -456,7 +456,7 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             }
         actionable = bool(
             db.get("runnable_ids") or planning_backlog
-            or (db.get("inbox_pending") and not triage_planning_overlap)
+            or (db.get("inbox_pending") and not planning_overlap)
         )
         if not actionable:
             return {
@@ -588,11 +588,8 @@ def snapshot(now: float | None = None) -> dict[str, Any]:
     alive = master_worker_alive()
     workers = run_worker_states(db) if db.get("available") else []
     delegated = delegated_worker_state(db, now)
-    triage_run_id = str((db.get("triage_run") or {}).get("run_id") or "")
-    overlap = _triage_can_overlap_goal(db, delegated)
-    goal_blocking_workers = [
-        w for w in workers if not (overlap and str(w.get("run_id") or "") == triage_run_id)
-    ]
+    overlap = _planning_can_overlap_workers(db)
+    goal_blocking_workers = [] if overlap else workers
     return {
         "observed_at": now,
         "db": db,

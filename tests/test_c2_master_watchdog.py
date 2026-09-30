@@ -83,7 +83,7 @@ class MasterWatchdogDecisionTests(unittest.TestCase):
         self.assertEqual(result["status"], "recovering")
         self.assertTrue(result["should_start_goal"])
 
-    def test_nontriage_live_worker_still_blocks_goal_with_planning_backlog(self):
+    def test_nontriage_live_worker_allows_goal_for_planning_backlog(self):
         triage = {
             "run_id": "triage-1", "state": "running",
             "worker_ref": "c2-run:triage-1", "lease_expired": True,
@@ -97,8 +97,8 @@ class MasterWatchdogDecisionTests(unittest.TestCase):
             "run_id": "triage-1", "alive": True,
             "progressing": True, "progress_age_s": 30,
         }), {}, now=1000)
-        self.assertEqual(result["status"], "working")
-        self.assertFalse(result["should_start_goal"])
+        self.assertEqual(result["status"], "recovering")
+        self.assertTrue(result["should_start_goal"])
 
     def test_delegated_worker_health_changes_fingerprint(self):
         triage = {
