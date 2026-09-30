@@ -6,7 +6,7 @@ PROMPT_ID=731707
 
 - Source repository: `gernalix/codex-roadmap` only.
 - Supported tracker: GitHub Issues in disposable `gernalix/symphony-canary` only.
-- Eligible input: canonical read-only `v_work_item_runnable` row with `executor_policy=codex`, `activity=coding`, exact source repo, and explicit model/reasoning execution spec.
+- Eligible input: canonical read-only `v_work_item_runnable` row with `executor_policy=auto` or `codex`, `activity=coding`, exact source repo, and explicit model/reasoning execution spec. Human-readable model labels are resolved to CLI model IDs.
 - `tools/c3_symphony_bridge.py` publishes one issue with a stable `wi:` identity and the `c3-symphony-ready` dispatch label. A local publisher lock plus complete tracker readback make replays idempotent on the single pilot host. More than one issue with the same identity fails closed.
 - The bridge never writes roadmap SQLite. Symphony's issue, process, workspace, retry, and turn state remain in GitHub/Symphony.
 
@@ -21,9 +21,9 @@ python3 tools/c3_symphony_bridge.py workflow --db /path/to/roadmap.sqlite \
   --output "$HOME/.local/share/c3-symphony/WORKFLOW.md"
 ```
 
-The generated workflow pins the derived model and reasoning using `codex -c model=... -c model_reasoning_effort=... app-server`, clones the source repo into an isolated workspace, and references only `$GITHUB_TOKEN`. It contains no credential value.
+The generated workflow pins the derived model and reasoning using `codex -c model=... -c model_reasoning_effort=... app-server`, clones the source repo into an isolated workspace's `source/` subdirectory, and references only `$GITHUB_TOKEN`. The Symphony child starts in the workspace root so the repository's legacy C2 launch instructions are not automatically applied to the disposable pilot; the workflow explicitly forbids duplicate C2 start/finish calls. It contains no credential value.
 
-Install `operations/c3-symphony.service` as the user unit. Its `LoadCredential` source is the host-only `~/.config/c3-symphony/github-token` file, outside the repository and Codex workspace. `tools/c3_symphony_backend.py run` reads the systemd credential and executes the existing upstream Symphony binary. The unit owns the entire process group, including Codex app-server children. Never commit or print the token.
+Install `operations/c3-symphony.service` as the user unit. Its `LoadCredentialEncrypted` source is the user-scoped systemd-creds file at `~/.config/c3-symphony/credentials/github-token.cred`, outside the repository and Codex workspace. `tools/c3_symphony_backend.py run` reads the decrypted credential from `$CREDENTIALS_DIRECTORY/GITHUB_TOKEN` inside the service and executes the existing upstream Symphony binary. The unit owns the entire process group, including Codex app-server children. Never commit or print the token.
 
 ```sh
 python3 tools/c3_symphony_backend.py status
@@ -61,3 +61,5 @@ Keep MegaVault identity, roadmap policy/dependencies, Inbox, Workflowy, reposito
 5. A compatible mitigation or upstream fix for deployment-relevant dependency advisories recorded in the prior Symphony evaluation.
 
 Rollback condition: any duplicate dispatch, orphan app-server, repository-state corruption, lost stop authority, credential exposure, or tracker reconciliation failure. On trigger, stop `c3-symphony.service`, remove the ready label from outstanding pilot issues, preserve workspaces/logs for diagnosis, and keep coding traffic on the existing C2 path. No canonical roadmap or MegaVault state is rewritten by this rollback.
+
+The first disposable live batch (#7/#8) was invalidated and closed because a child in the cloned repository followed legacy C2 launch instructions. That batch is evidence for the workflow isolation requirement, not acceptance evidence. A new batch must complete with the corrected `source/` layout.

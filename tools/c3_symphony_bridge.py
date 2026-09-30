@@ -16,6 +16,7 @@ import re
 import shlex
 import sqlite3
 import subprocess
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -23,7 +24,8 @@ from pathlib import Path
 LABEL = "c3-symphony-ready"
 SOURCE_REPO = "gernalix/codex-roadmap"
 TRACKER_REPO = "gernalix/symphony-canary"
-SAFE_VALUE = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\Z")
+MODEL_ID = re.compile(r"gpt-[0-9][0-9a-z.]*-[a-z0-9-]+\Z")
+REASONING_EFFORTS = {"low", "medium", "high", "xhigh", "max", "ultra"}
 SAFE_ITEM = re.compile(r"wi:[a-f0-9]{32}\Z")
 
 
@@ -40,6 +42,20 @@ class CodingItem:
     repo: str
     model: str
     reasoning: str
+
+
+def resolve_model(value: str | None) -> str:
+    label = re.sub(r"\s+", "-", (value or "").strip().lower())
+    if not MODEL_ID.fullmatch(label):
+        raise BridgeError("missing_or_invalid_model")
+    return label
+
+
+def resolve_reasoning(value: str | None) -> str:
+    effort = (value or "").strip().lower()
+    if effort not in REASONING_EFFORTS:
+        raise BridgeError("missing_or_invalid_reasoning")
+    return effort
 
 
 def load_item(db: Path, work_item_id: str) -> CodingItem:
@@ -62,13 +78,11 @@ def load_item(db: Path, work_item_id: str) -> CodingItem:
         ).fetchone()
     if row is None or runnable is None or row["status"] != "pending" or not row["actionable"]:
         raise BridgeError("item_not_runnable")
-    if row["executor_policy"] != "codex" or row["activity"] != "coding":
+    if row["executor_policy"] not in {"auto", "codex"} or row["activity"] != "coding":
         raise BridgeError("item_not_autonomous_coding")
     if row["repo"] != SOURCE_REPO:
         raise BridgeError("source_repo_not_in_pilot")
-    model, reasoning = row["model"], row["reasoning"]
-    if not model or not reasoning or not SAFE_VALUE.fullmatch(model) or not SAFE_VALUE.fullmatch(reasoning):
-        raise BridgeError("missing_or_invalid_model_reasoning")
+    model, reasoning = resolve_model(row["model"]), resolve_reasoning(row["reasoning"])
     return CodingItem(work_item_id, row["title"], row["objective"] or "",
                       row["acceptance_json"] or "[]", row["repo"], model, reasoning)
 
@@ -137,19 +151,30 @@ def publish(item: CodingItem, github: GitHubIssues, lock_path: Path) -> dict:
             issue = matches[0]
             if issue.get("body") != body:
                 raise BridgeError("tracker_identity_conflict")
+            if issue.get("state") == "closed":
+                return {"issue_number": issue["number"], "created": False}
             if issue.get("state") != "open":
-                raise BridgeError("tracker_issue_already_terminal")
+                raise BridgeError("tracker_issue_invalid_state")
             if LABEL not in {str(x.get("name", "")).lower() for x in issue.get("labels", [])}:
                 raise BridgeError("tracker_issue_missing_ready_label")
             return {"issue_number": issue["number"], "created": False}
         issue = github.create(title, body)
         # The response is not dispatch proof; read back the unique identity.
-        matches = github.matching(title)
-        if (len(matches) != 1 or matches[0].get("number") != issue["number"]
-                or matches[0].get("body") != body
-                or matches[0].get("state") != "open"
-                or LABEL not in {str(x.get("name", "")).lower()
-                                 for x in matches[0].get("labels", [])}):
+        for attempt in range(5):
+            matches = github.matching(title)
+            if len(matches) > 1:
+                raise BridgeError("duplicate_tracker_identity")
+            if matches:
+                if (matches[0].get("number") != issue["number"]
+                        or matches[0].get("body") != body
+                        or matches[0].get("state") != "open"
+                        or LABEL not in {str(x.get("name", "")).lower()
+                                         for x in matches[0].get("labels", [])}):
+                    raise BridgeError("tracker_create_readback_failed")
+                break
+            if attempt < 4:
+                time.sleep(0.5)
+        else:
             raise BridgeError("tracker_create_readback_failed")
         return {"issue_number": issue["number"], "created": True}
 
@@ -165,12 +190,16 @@ def workflow_text(item: CodingItem, workspace_root: Path, tracker_repo: str = TR
         "tracker": {"kind": "github", "provider": {"repo": tracker_repo, "token": "$GITHUB_TOKEN"},
                     "required_labels": [LABEL], "active_states": ["open"], "terminal_states": ["closed"]},
         "workspace": {"root": str(workspace_root)},
-        "hooks": {"after_create": f"git clone https://github.com/{item.repo}.git ."},
+        "hooks": {"after_create": f"gh repo clone {item.repo} source -- --depth 1"},
         "agent": {"max_concurrent_agents": 1, "max_turns": 3},
         "codex": {"command": command, "approval_policy": "never", "thread_sandbox": "workspace-write"},
     }
     prompt = ("You are working on the GitHub pilot issue {{ issue.identifier }}.\n"
-              "Work only in this isolated repository copy. Do not push or merge.\n"
+              "This is a disposable Symphony pilot issue, not a canonical C2 work item. "
+              "Symphony has already dispatched it. Do not call roadmap_start.py, "
+              "c2_executor_start.py, c2_executor_result.py, or roadmap_finish.py.\n"
+              "The isolated repository copy is in source/. Work only there. "
+              "Run git commands with `git -C source`. Do not push or merge.\n"
               "The issue description defines the task and acceptance checks.\n"
               "After verifying the change, use github_api to comment with concise evidence and close the issue.\n"
               "If blocked, comment with the blocker and leave the issue open.\n\n"
