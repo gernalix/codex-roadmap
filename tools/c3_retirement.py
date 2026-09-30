@@ -78,11 +78,43 @@ def _property(unit: str, name: str) -> str:
     return _run("show", unit, "--property=" + name, "--value").stdout.strip()
 
 
-def _active_runs(snapshot: Path) -> int:
+def _active_runs(snapshot: Path, allow_run_id: str | None = None) -> int:
+    """Count blocking runs, optionally permitting exactly the live C3 cutover run.
+
+    The exception is deliberately narrow: one Symphony run, owning a running
+    work item tagged c3:cutover, with a production ownership record matching
+    both canonical identities. Any additional or mismatched run still blocks.
+    """
     if not snapshot.is_file():
         raise RetirementError("roadmap_snapshot_missing")
     with sqlite3.connect(f"{snapshot.resolve().as_uri()}?mode=ro", uri=True) as db:
-        return int(db.execute("SELECT COUNT(*) FROM work_item_runs WHERE state IN ('claimed','running','recovering')").fetchone()[0])
+        db.row_factory = sqlite3.Row
+        rows = db.execute("""SELECT r.run_id,r.work_item_id,r.executor,r.state,
+                   w.status AS item_status,
+                   EXISTS(SELECT 1 FROM work_item_tags t
+                          WHERE t.work_item_id=r.work_item_id
+                            AND t.tag='c3:cutover') AS is_cutover
+            FROM work_item_runs r JOIN work_items w USING(work_item_id)
+            WHERE r.state IN ('claimed','running','recovering')
+            ORDER BY r.run_id""").fetchall()
+    if not rows or allow_run_id is None:
+        return len(rows)
+    if len(rows) != 1:
+        return len(rows)
+    row = rows[0]
+    if (row["run_id"] != allow_run_id or row["executor"] != "symphony"
+            or row["item_status"] != "running" or not row["is_cutover"]):
+        return len(rows)
+    from c3_symphony_route import ownership_path
+    try:
+        ownership = json.loads(ownership_path(row["work_item_id"]).read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        raise RetirementError("allowed_cutover_ownership_missing_or_invalid") from exc
+    expected = {"run_id": row["run_id"], "work_item_id": row["work_item_id"],
+                "mode": "production"}
+    if any(ownership.get(key) != value for key, value in expected.items()):
+        raise RetirementError("allowed_cutover_ownership_mismatch")
+    return 0
 
 
 def _stale_triage(snapshot: Path) -> bool:
@@ -95,7 +127,7 @@ def _stale_triage(snapshot: Path) -> bool:
                     AND r.state IN ('claimed','running','recovering')) LIMIT 1""").fetchone())
 
 
-def _preflight(snapshot: Path) -> dict:
+def _preflight(snapshot: Path, allow_run_id: str | None = None) -> dict:
     from c2_snapshot_sync import sync
     from c3_symphony_backend import status, verify_artifact, PRODUCTION_BINARY
     from c3_symphony_bridge import DEFAULT_CONFIG, load_config
@@ -121,7 +153,7 @@ def _preflight(snapshot: Path) -> dict:
         if _property(unit, "LoadState") != "loaded":
             raise RetirementError("c3_unit_not_installed:" + unit)
     sync(output=snapshot)
-    if _active_runs(snapshot):
+    if _active_runs(snapshot, allow_run_id):
         raise RetirementError("active_roadmap_runs_must_finish_before_retirement")
     if _stale_triage(snapshot):
         raise RetirementError("stale_inbox_triage_requires_reconciliation")
@@ -129,11 +161,12 @@ def _preflight(snapshot: Path) -> dict:
         raise RetirementError("browser_lane_service_missing")
     return {"artifact_sha256": hashlib.sha256(PRODUCTION_BINARY.read_bytes()).hexdigest(),
             "tracker_repo": config.tracker_repo, "source_repos": sorted(config.source_repos),
-            "workflow": str(WORKFLOW), "backend": backend}
+            "workflow": str(WORKFLOW), "backend": backend,
+            "allowed_cutover_run_id": allow_run_id}
 
 
 def retire(*, marker: Path = MARKER, audit: Path = AUDIT,
-           snapshot: Path = SNAPSHOT) -> dict:
+           snapshot: Path = SNAPSHOT, allow_run_id: str | None = None) -> dict:
     if marker.exists():
         if not audit.is_file():
             raise RetirementError("retirement_audit_missing")
@@ -148,7 +181,7 @@ def retire(*, marker: Path = MARKER, audit: Path = AUDIT,
         _run("start", "c3-roadmap-snapshot.service", "c3-runtime.service",
              "c3-inbox-maintenance.service")
         return {"status": "already_retired", "marker": str(marker)}
-    evidence = _preflight(snapshot)
+    evidence = _preflight(snapshot, allow_run_id)
     _run("stop", "c3-symphony.service")
     before = {unit: {"active": _property(unit, "ActiveState"),
                      "unit_file": _property(unit, "UnitFileState")}
@@ -168,7 +201,7 @@ def retire(*, marker: Path = MARKER, audit: Path = AUDIT,
         _run("disable", *enabled)
     from c2_snapshot_sync import sync
     sync(output=snapshot)
-    if _active_runs(snapshot):
+    if _active_runs(snapshot, allow_run_id):
         raise RetirementError("roadmap_run_started_during_retirement")
     archived: dict[str, str] = {}
     archive_dir = marker.parent / "retired-unit-files"
@@ -212,11 +245,12 @@ def retire(*, marker: Path = MARKER, audit: Path = AUDIT,
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--allow-run-id", help="permit only this verified live C3 cutover run")
     args = parser.parse_args()
     if not args.execute:
         parser.error("retirement requires --execute")
     try:
-        print(json.dumps(retire(), sort_keys=True))
+        print(json.dumps(retire(allow_run_id=args.allow_run_id), sort_keys=True))
     except (OSError, ValueError, sqlite3.Error, RetirementError) as exc:
         print(json.dumps({"status": "blocked", "reason": str(exc)}, sort_keys=True))
         return 2
