@@ -1,5 +1,6 @@
 from pathlib import Path
 from types import SimpleNamespace
+import os
 import sys
 import tempfile
 import unittest
@@ -16,7 +17,11 @@ def fake_supervisor_types():
     return FakeBrowser,lambda url:url.startswith('https://chatgpt.com/c/'),FakeTaskConfig,FakeStore
 
 class FakeBrowser:
-    def __init__(self):self.calls=[]
+    last_endpoint=None
+    def __init__(self,endpoint=None):
+        self.calls=[];self.endpoint=endpoint;FakeBrowser.last_endpoint=endpoint
+    def connect(self):pass
+    def close(self):pass
     def new_chat(self,task,message):
         self.calls.append((task,message))
         return None,'https://chatgpt.com/c/fixture',None
@@ -46,6 +51,20 @@ class BrowserExecutorTests(unittest.TestCase):
             self.assertEqual(90,store.tasks[0].thresholds.generation_verify_s)
             self.assertEqual(180,store.tasks[0].thresholds.generation_stall_s)
             self.assertEqual(3,store.tasks[0].thresholds.max_recovery_attempts)
+
+    def test_owned_browser_defaults_to_channel_bridge(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            receipt=Path(tmp)/'receipt.json'
+            data={'executor':'chatgpt','activity':'semantic',
+                  'project_url':'https://chatgpt.com/g/g-p-project'}
+            with patch.dict(os.environ,{},clear=True), \
+                    patch('c2_chatgpt_executor.lane_degraded',return_value=False):
+                result=dispatch(run_id='bridge',work_item_id='wi:bridge',metadata=data,
+                    prompt='Decide',db_path=Path(tmp)/'db',receipt=receipt,
+                    store=FakeStore())
+            self.assertEqual('started',result['phase'])
+            self.assertEqual('channel-bridge',FakeBrowser.last_endpoint)
+
     def test_ambiguous_start_does_not_send_again(self):
         with tempfile.TemporaryDirectory() as tmp:
             class Broken(FakeBrowser):
