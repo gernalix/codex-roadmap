@@ -1,6 +1,6 @@
 ---
 prompt_id: 633902
-status: pending
+status: running
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - priority:p0
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 633902 · C3: production canary e retirement definitivo C2
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/c3-production-canary-e-retirement-definitivo-c2-633902|Apri prompt]]
 - **Primo lancio:** —
