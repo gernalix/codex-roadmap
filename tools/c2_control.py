@@ -11,7 +11,7 @@ import time
 OPERATIONS = (
     'claim_supervisor','renew_supervisor','retire_supervisor',
     'intake','prepare_codex','configure','auto_configure','schedule','acknowledge',
-    'checkpoint','record_checkpoint','recover','quarantine_browser','finish_work_item',
+    'checkpoint','record_checkpoint','recover','release_unstarted_symphony_run','quarantine_browser','finish_work_item',
     'verify_work_item','complete','reconcile_run','milestone','claim_milestone',
     'mark_milestone','reimport_terminal_state','repair_prompt_materialization',
     'reconcile_item','reparent_item','reconcile_blocked','reconcile_blocked_safety_net',
