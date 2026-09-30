@@ -22,8 +22,8 @@ tags:
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../completed/symphony-dependency-security-and-compatible-hard-998028|Apri prompt]]
 - **Primo lancio:** 2026-09-30T11:53:12Z
-- **Ultimo lancio:** 2026-09-30T11:54:32Z
-- **Ultimo esito:** PASS
+- **Ultimo lancio:** 2026-09-30T12:44:26Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -43,6 +43,7 @@ tags:
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
 | 2026-09-30T11:53:12Z | 2026-09-30T12:31:48Z | PASS | 2315.188 | gpt-6-sol | medium | 100 | 146462 |
 | 2026-09-30T11:54:32Z | 2026-09-30T11:54:36Z | UNKNOWN | 4.361 | codex-auto-review | low | 0 | 16556 |
+| 2026-09-30T12:44:26Z | 2026-09-30T12:44:30Z | UNKNOWN | 3.586 | codex-auto-review | low | 0 | 116190 |
 
 ## Analisi ChatGPT
 
