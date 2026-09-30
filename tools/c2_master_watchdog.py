@@ -391,16 +391,9 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "intervention": "", "attention_key": "", "should_start_goal": False,
             "why": ["Il servizio Master Goal o il suo worker risultano attivi."], "state_key": fp,
         }
-    if snapshot.get("goal_status") == "active":
-        return {
-            "status": "working", "phase": "executing",
-            "headline": "Il Master Goal è attivo",
-            "current": "Il daemon Codex possiede il thread e continua il Goal nativo quando il thread è idle.",
-            "next": "Attendere il prossimo cambiamento reale del control plane.",
-            "intervention": "", "attention_key": "", "should_start_goal": False,
-            "why": ["Un Goal nativo active non richiede thread/resume da un secondo app-server."],
-            "state_key": fp,
-        }
+    # A persisted Goal flag is not liveness.  The app-server stdio process is
+    # the single owner; if it is absent an "active" Goal is orphaned and must be
+    # rehydrated by c2-master-goal.service on the same thread.
     if service.get("active") not in ("inactive", "failed") or any(
         worker.get("active") not in ("inactive", "failed") or not worker.get("lease_expired")
         for worker in goal_blocking_workers
@@ -440,6 +433,19 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
     failed_service = service.get("result") not in ("success", "", "unknown")
     changed = fp != last_fp
     retry_due = failed_service and failures < MAX_START_FAILURES and now - last_wake >= RETRY_DELAY_S
+    if goal_status == "active":
+        last_owner_recovery = float(meta.get("last_owner_recovery_at") or 0)
+        if last_owner_recovery and now - last_owner_recovery < RETRY_DELAY_S:
+            return {
+                "status": "waiting_external", "phase": "owner_recovery",
+                "headline": "Master Goal active ma owner in recovery",
+                "current": "Il Goal persistito è active ma il suo app-server owner non è vivo; un recovery è già stato tentato di recente.",
+                "next": "Attendere il retry bounded o il ritorno del servizio owner.",
+                "intervention": "", "attention_key": "", "should_start_goal": False,
+                "why": ["Il flag active senza servizio/PID owner non è prova di progresso."],
+                "state_key": fp,
+            }
+        changed = True
     if goal_status == "blocked":
         observation = snapshot.get("goal_observation") or {}
         if (observation.get("thread_status") not in ("idle", "notLoaded") or
@@ -650,6 +656,8 @@ def run_once(now: float | None = None) -> int:
         meta["last_wake_at"] = now
         if snap.get("goal_status") == "blocked":
             meta["last_blocked_recovery_fingerprint"] = fp
+        if snap.get("goal_status") == "active":
+            meta["last_owner_recovery_at"] = now
         if ok:
             meta["start_failures"] = 0
         else:

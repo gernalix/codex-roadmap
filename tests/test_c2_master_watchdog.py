@@ -175,13 +175,21 @@ class MasterWatchdogDecisionTests(unittest.TestCase):
         self.assertEqual(result["status"], "needs_user")
         self.assertFalse(result["should_start_goal"])
 
-    def test_active_native_goal_does_not_start_second_app_server(self):
+    def test_active_goal_without_owner_rehydrates_same_thread(self):
         db = db_state()
         fp = watchdog.state_fingerprint(db)
         result = watchdog.decide(snap(db, goal_status="active"), {
-            "last_wake_fingerprint": fp, "last_wake_at": 999,
+            "last_wake_fingerprint": fp, "last_wake_at": 900,
         }, now=1000)
-        self.assertEqual(result["status"], "working")
+        self.assertEqual(result["status"], "recovering")
+        self.assertTrue(result["should_start_goal"])
+
+    def test_recent_owner_recovery_is_not_restarted_in_a_tight_loop(self):
+        db = db_state()
+        result = watchdog.decide(snap(db, goal_status="active"), {
+            "last_owner_recovery_at": 995,
+        }, now=1000)
+        self.assertEqual(result["status"], "waiting_external")
         self.assertFalse(result["should_start_goal"])
 
     def test_blocked_goal_reactivates_after_state_change(self):
