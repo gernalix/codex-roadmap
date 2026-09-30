@@ -1,6 +1,6 @@
 ---
 prompt_id: 103001
-status: pending
+status: running
 project_id: —
 model: GPT-6 Luna
 reasoning: medium
@@ -8,13 +8,13 @@ tags:
   - priority:p1
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 103001 · Resolve PersonalHub HubContextLinks unresolved dialog references
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/resolve-personalhub-hubcontextlinks-unresolved-d-103001|Apri prompt]]
 - **Primo lancio:** —
