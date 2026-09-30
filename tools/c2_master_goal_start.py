@@ -74,6 +74,8 @@ def own_active_goal(rpc: AppServerRPC, *, poll_seconds: float = 10.0) -> str:
 
 
 def main() -> int:
+    from c3_retirement import require_not_retired
+    require_not_retired()
     PID.parent.mkdir(parents=True, exist_ok=True)
     PID.write_text(str(os.getpid()) + "\n", encoding="utf-8")
     try:

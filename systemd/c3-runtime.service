@@ -1,0 +1,12 @@
+[Unit]
+Description=C3 fenced roadmap scheduler and publication
+After=network-online.target c3-roadmap-snapshot.service
+Wants=network-online.target
+Requires=c3-roadmap-snapshot.service
+ConditionPathExists=%h/.local/state/c3-control/c2-retired.json
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/.local/share/c2-supervisor/worktree/tools/c3_runtime.py --db %h/.local/state/c2-supervisor/roadmap.sqlite3
+TimeoutStartSec=120
+Nice=5

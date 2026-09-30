@@ -167,7 +167,9 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             now: float | None=None, max_parallel: int=DEFAULT_PARALLEL_CAP,
             supervisor_expiry: float | None=None,
             supervisor_authority: dict | None=None,
-            triage_project_url: str | None=None) -> dict:
+            triage_project_url: str | None=None,
+            worker_prefix: str='c2-run:', coding_route_override: dict | None=None,
+            control_only: bool=False) -> dict:
     now=time.time() if now is None else now
     if not 1 <= max_parallel <= HARD_PARALLEL_CAP:
         raise RuntimeErrorC2('parallel_cap_out_of_range')
@@ -224,6 +226,8 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
                 events.append(('renew_supervisor',str(authority['fencing_token'])))
                 if canonical_expiry <= now:
                     return {'events':events,'ready':0,'active':0}
+    if control_only:
+        return {'events':events,'ready':0,'active':0}
     # The periodic runtime tick is a safety net for structured canonical facts.
     # Free-text and external blockers require an explicit evidence-gated decision.
     blocked_candidates = automatic_candidates(db)[:100]
@@ -285,10 +289,10 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         if run['state'] in ('claimed','recovering'):
             key=_key('c2-ack',{'run_id':run['run_id'],'metadata':metadata,
                                'state':run['state'],'lease_until':run['lease_until']})
-            submit('acknowledge',{'run_id':run['run_id'],'worker_ref':'c2-run:'+run['run_id'],
+            submit('acknowledge',{'run_id':run['run_id'],'worker_ref':worker_prefix+run['run_id'],
                 'metadata':metadata},key)
             events.append(('acknowledge',run['run_id']))
-        elif run['worker_ref']=='c2-run:'+run['run_id']:
+        elif run['worker_ref']==worker_prefix+run['run_id']:
             started=db.execute('''SELECT 1 FROM work_item_executor_starts
               WHERE run_id=? LIMIT 1''',(run['run_id'],)).fetchone()
             if not started:
@@ -333,7 +337,7 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         events.append(('issue_inbox_drain',inbox_gate))
     if chatgpt_suspended:
         ready=[r for r in ready if r['activity'] not in ('gui','semantic')]
-    coding_route=_coding_route()
+    coding_route=coding_route_override if coding_route_override is not None else _coding_route()
     override=read_override(db)
     scoped_ready=[r for r in ready if override and override_matches(db,r,override)
                   and dispatchable(db,r,coding_route)]
@@ -376,6 +380,8 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
 
 
 def main():
+    from c3_retirement import require_not_retired
+    require_not_retired()
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db',type=Path,default=Path.home()/'projects/codex-roadmap/roadmap.sqlite')
     parser.add_argument('--max-parallel',type=int,

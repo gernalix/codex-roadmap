@@ -6,6 +6,7 @@ import json
 import shutil
 import subprocess
 from pathlib import Path
+from c3_retirement import require_not_retired
 
 UNIT_NAMES = (
     "codex-roadmap-live-status.service",
@@ -26,6 +27,7 @@ def _run(*args: str) -> None:
 
 
 def install(repo: Path, user_unit_dir: Path) -> dict[str, object]:
+    require_not_retired()
     repo = repo.expanduser().resolve()
     source_dir = repo / "systemd"
     user_unit_dir = user_unit_dir.expanduser()

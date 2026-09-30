@@ -4,11 +4,13 @@ from pathlib import Path
 import os
 import shutil
 import subprocess
+from c3_retirement import require_not_retired
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = Path.home() / ".config/systemd/user"
 
 def main() -> int:
+    require_not_retired()
     TARGET.mkdir(parents=True, exist_ok=True)
     for name in ("c2-inbox-maintenance.service", "c2-inbox-maintenance.timer"):
         shutil.copyfile(ROOT / "systemd" / name, TARGET / name)
