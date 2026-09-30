@@ -6,7 +6,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 import c2_master_watchdog as watchdog
 
 
-def db_state(*, inbox=1, pending=1, waiting=0, blocked=0, runnable=None, runs=None, triage_run=None):
+def db_state(*, inbox=1, pending=1, waiting=0, blocked=0, runnable=None, runs=None,
+             triage_run=None, planning_backlog=0):
     return {
         "available": True,
         "counts": {
@@ -17,6 +18,7 @@ def db_state(*, inbox=1, pending=1, waiting=0, blocked=0, runnable=None, runs=No
         "inbox_pending": inbox,
         "runnable_ids": list(runnable or []),
         "active_runs": list(runs or []),
+        "planning_backlog": planning_backlog,
         "authority": {"supervisor_id": "sup-a", "lease_valid": True, "lease_stale": False},
         "triage_run": triage_run,
         "last_triaged_at_ms": 123,
@@ -64,6 +66,38 @@ class MasterWatchdogDecisionTests(unittest.TestCase):
         }), {}, now=1000)
         self.assertEqual(result["status"], "working")
         self.assertEqual(result["phase"], "delegated")
+        self.assertFalse(result["should_start_goal"])
+
+    def test_live_triage_worker_allows_goal_for_planning_backlog(self):
+        triage = {
+            "run_id": "triage-1", "state": "running",
+            "worker_ref": "c2-run:triage-1", "lease_expired": True,
+        }
+        db = db_state(inbox=25, triage_run=triage, runs=[triage], planning_backlog=6)
+        result = watchdog.decide(snap(db, run_workers=[{
+            "run_id": "triage-1", "active": "active", "lease_expired": True,
+        }], delegated={
+            "run_id": "triage-1", "alive": True,
+            "progressing": True, "progress_age_s": 30,
+        }), {}, now=1000)
+        self.assertEqual(result["status"], "recovering")
+        self.assertTrue(result["should_start_goal"])
+
+    def test_nontriage_live_worker_still_blocks_goal_with_planning_backlog(self):
+        triage = {
+            "run_id": "triage-1", "state": "running",
+            "worker_ref": "c2-run:triage-1", "lease_expired": True,
+        }
+        other = {"run_id": "run-2", "state": "running", "lease_expired": True}
+        db = db_state(inbox=25, triage_run=triage, runs=[triage, other], planning_backlog=6)
+        result = watchdog.decide(snap(db, run_workers=[
+            {"run_id": "triage-1", "active": "active", "lease_expired": True},
+            {"run_id": "run-2", "active": "active", "lease_expired": True},
+        ], delegated={
+            "run_id": "triage-1", "alive": True,
+            "progressing": True, "progress_age_s": 30,
+        }), {}, now=1000)
+        self.assertEqual(result["status"], "working")
         self.assertFalse(result["should_start_goal"])
 
     def test_delegated_worker_health_changes_fingerprint(self):
@@ -223,6 +257,9 @@ class MasterWatchdogDecisionTests(unittest.TestCase):
         first = db_state(inbox=264, pending=80, waiting=10, blocked=5, triage_run=triage)
         second = db_state(inbox=284, pending=120, waiting=18, blocked=9, triage_run=triage)
         self.assertEqual(watchdog.state_fingerprint(first), watchdog.state_fingerprint(second))
+        second["planning_backlog"] = 6
+        self.assertNotEqual(watchdog.state_fingerprint(first), watchdog.state_fingerprint(second))
+        second["planning_backlog"] = 0
         second["authority"]["lease_stale"] = True
         self.assertNotEqual(watchdog.state_fingerprint(first), watchdog.state_fingerprint(second))
 

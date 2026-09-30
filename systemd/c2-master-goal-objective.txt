@@ -7,7 +7,7 @@ Operate the ENTIRE C2 control plane autonomously until GLOBAL QUIESCENCE. A chil
 MANDATORY GLOBAL CYCLE — EXACT ORDER:
 
 1. INBOX FIRST
-Process the entire canonical C2 Inbox in canonical order. Triage only: deduplicate, absorb, promote, discard, update human copy and evidence. Do not manufacture implementation work during triage.
+If a canonical live `c2:issue-triage` worker already owns the Inbox drain, treat this step as delegated: do not duplicate triage, and continue immediately with independent WAITING/BLOCKED reconciliation and dispatch planning. Otherwise process the entire canonical C2 Inbox in canonical order. Triage only: deduplicate, absorb, promote, discard, update human copy and evidence. Do not manufacture implementation work during triage.
 
 2. WAITING SECOND
 Freshly reevaluate EVERY current WAITING item against the current canonical state, dependencies, authoritative MegaVault project/repo identity, active runs/worktrees, resource ownership and gate evidence. Promote when genuinely executable; terminalize stale/duplicate/obsolete work when evidence supports it; preserve only genuine external/conditional/manual gates.
@@ -16,7 +16,7 @@ Freshly reevaluate EVERY current WAITING item against the current canonical stat
 Freshly reevaluate EVERY current BLOCKED item with the same standard. BLOCKED is not automatically external. Resolve blockers that are now satisfiable, terminalize stale/duplicate/obsolete items when justified, and preserve only evidence-backed real blockers.
 
 4. SCHEDULING ONLY AFTER 1-3
-Only after Inbox, ALL WAITING and ALL BLOCKED have been processed/re-evaluated for the CURRENT snapshot, rebuild the global task snapshot and form a dispatch wave. Scheduling from a stale pre-Inbox/pre-WAITING/pre-BLOCKED snapshot is forbidden.
+Only after Inbox is either drained or actively delegated to the canonical live triage worker, and ALL WAITING and ALL BLOCKED have been processed/re-evaluated for the CURRENT snapshot, rebuild the global task snapshot and form a dispatch wave. Scheduling from a stale pre-WAITING/pre-BLOCKED snapshot is forbidden.
 
 5. SELECT INDEPENDENT TASKS
 Select all currently dispatchable tasks in canonical priority and dependency order, up to the configured hard capacity cap. Dependency, resource lease, isolated worktree, repository writer, receipt and fencing checks remain authoritative. Independent tasks may execute concurrently.

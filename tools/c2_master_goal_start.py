@@ -11,7 +11,8 @@ from c2_appserver_rpc import AppServerRPC
 THREAD = "01a0e719-60ff-7b91-82db-1d7c55787c67"
 OBJECTIVE = (
     "C2 MASTER GOAL: operate the entire C2 autonomously. Before EVERY dispatch wave: "
-    "drain Inbox, then reevaluate ALL WAITING, then reevaluate ALL BLOCKED. Only then "
+    "drain Inbox unless a live canonical c2:issue-triage worker already owns that drain; "
+    "never duplicate delegated triage. Reevaluate ALL WAITING, then ALL BLOCKED, then "
     "form semantic waves; reconcile each selected task before dispatch; launch independent "
     "survivors concurrently under C2 leases and fencing; backfill completed slots after "
     "Inbox, WAITING and BLOCKED reconciliation. Stop only at global quiescence. Full "
