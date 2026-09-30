@@ -1,6 +1,7 @@
 from contextlib import closing
 import importlib
 import json
+import sqlite3
 from pathlib import Path
 import tempfile
 import unittest
@@ -69,6 +70,42 @@ class C3RetirementTests(unittest.TestCase):
             self.assertEqual(sum(c[0] == "mask" for c in calls), 1)
             with self.assertRaises(retirement.RetirementError):
                 retirement.require_not_retired(marker)
+
+    def test_active_run_exception_is_exact_c3_cutover_ownership(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            snapshot = root / "snapshot.sqlite"
+            with sqlite3.connect(snapshot) as db:
+                db.executescript("""
+                    CREATE TABLE work_items(work_item_id TEXT PRIMARY KEY,status TEXT);
+                    CREATE TABLE work_item_runs(run_id TEXT PRIMARY KEY,work_item_id TEXT,
+                        executor TEXT,state TEXT);
+                    CREATE TABLE work_item_tags(work_item_id TEXT,tag TEXT);
+                """)
+                db.execute("INSERT INTO work_items VALUES('wi:cutover','running')")
+                db.execute("INSERT INTO work_item_runs VALUES('run-cutover','wi:cutover','symphony','running')")
+                db.execute("INSERT INTO work_item_tags VALUES('wi:cutover','c3:cutover')")
+            ownership = root / "owner.json"
+            ownership.write_text(json.dumps({"work_item_id":"wi:cutover",
+                "run_id":"run-cutover","mode":"production",
+                "tracker_repo":"gernalix/c3-symphony"}))
+            route_module = importlib.import_module("c3_symphony_route")
+            with patch.object(route_module, "ownership_path", return_value=ownership):
+                self.assertEqual(retirement._active_runs(snapshot), 1)
+                self.assertEqual(retirement._active_runs(snapshot, "run-cutover"), 0)
+                with sqlite3.connect(snapshot) as db:
+                    db.execute("INSERT INTO work_items VALUES('wi:other','running')")
+                    db.execute("INSERT INTO work_item_runs VALUES('run-other','wi:other','rdc','running')")
+                self.assertEqual(retirement._active_runs(snapshot, "run-cutover"), 2)
+                with sqlite3.connect(snapshot) as db:
+                    db.execute("DELETE FROM work_item_runs WHERE run_id='run-other'")
+                    db.execute("DELETE FROM work_items WHERE work_item_id='wi:other'")
+            ownership.write_text(json.dumps({"work_item_id":"wi:cutover",
+                "run_id":"wrong","mode":"production"}))
+            with patch.object(route_module, "ownership_path", return_value=ownership):
+                with self.assertRaisesRegex(retirement.RetirementError,
+                                            "allowed_cutover_ownership_mismatch"):
+                    retirement._active_runs(snapshot, "run-cutover")
 
     def test_preflight_refuses_active_runs_and_requires_replacement_units(self):
         with tempfile.TemporaryDirectory() as tmp:
