@@ -1,12 +1,12 @@
 [Unit]
-Description=C3 Symphony coding backend (pilot)
+Description=C3 Symphony coding backend
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
 LoadCredentialEncrypted=GITHUB_TOKEN:%h/.config/c3-symphony/credentials/github-token.cred
-ExecStart=/usr/bin/python3 %h/projects/codex-roadmap/tools/c3_symphony_backend.py run --binary %h/.local/share/symphony-eval/bin/symphony-v0.0.3-linux_x86_64 --workflow %h/.local/share/c3-symphony/WORKFLOW.md
+ExecStart=/usr/bin/python3 %h/projects/codex-roadmap/tools/c3_symphony_backend.py run --binary %h/.local/share/c3-symphony/bin/symphony --workflow %h/.local/share/c3-symphony/WORKFLOW.md
 KillMode=control-group
 TimeoutStopSec=30
 Restart=on-failure
