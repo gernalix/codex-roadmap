@@ -465,6 +465,47 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual('symphony',runs[0]['executor'])
         self.assertEqual('gernalix/c3-symphony',runs[0]['metadata']['symphony_route']['tracker_repo'])
 
+    def test_release_unstarted_symphony_claim_returns_item_to_pending(self):
+        writer=self.conn.execute(
+            "SELECT work_item_id FROM work_items WHERE prompt_id='123456'").fetchone()[0]
+        self.conn.execute("UPDATE prompt_metadata SET model='gpt-6-sol',reasoning='high' WHERE prompt_id='123456'")
+        self.conn.execute("UPDATE work_items SET repo='gernalix/codex-roadmap' WHERE work_item_id=?",(writer,))
+        scheduler.configure(self.conn,writer,activity='coding',model='gpt-6-sol',reasoning='high',
+            worktree='/tmp/c3-task-123456')
+        route={'mode':'production','tracker_repo':'gernalix/c3-symphony',
+               'source_repos':['gernalix/codex-roadmap'],'healthy':True}
+        run=scheduler.schedule(self.conn,event_key='release-c3',now=1,coding_route=route)[0]
+        scheduler.acknowledge(self.conn,run['run_id'],worker_ref='c2-run:'+run['run_id'],
+                              metadata=run['metadata'],now=2)
+        scheduler.executor_started(self.conn,run_id=run['run_id'],now=3)
+        result=scheduler.release_unstarted_symphony_run(
+            self.conn,run_id=run['run_id'],reason='scope reconciled before tracker publish')
+        self.assertEqual('released',result['state'])
+        self.assertEqual('failed',self.conn.execute(
+            'SELECT state FROM work_item_runs WHERE run_id=?',(run['run_id'],)).fetchone()[0])
+        self.assertEqual('pending',self.conn.execute(
+            'SELECT status FROM work_items WHERE work_item_id=?',(writer,)).fetchone()[0])
+        self.assertEqual(0,self.conn.execute(
+            'SELECT count(*) FROM work_item_resource_leases WHERE run_id=?',(run['run_id'],)).fetchone()[0])
+
+    def test_release_unstarted_symphony_rejects_external_identity(self):
+        writer=self.conn.execute(
+            "SELECT work_item_id FROM work_items WHERE prompt_id='123456'").fetchone()[0]
+        self.conn.execute("UPDATE prompt_metadata SET model='gpt-6-sol',reasoning='high' WHERE prompt_id='123456'")
+        self.conn.execute("UPDATE work_items SET repo='gernalix/codex-roadmap' WHERE work_item_id=?",(writer,))
+        scheduler.configure(self.conn,writer,activity='coding',model='gpt-6-sol',reasoning='high',
+            worktree='/tmp/c3-task-123456')
+        route={'mode':'production','tracker_repo':'gernalix/c3-symphony',
+               'source_repos':['gernalix/codex-roadmap'],'healthy':True}
+        run=scheduler.schedule(self.conn,event_key='release-c3-bound',now=1,coding_route=route)[0]
+        scheduler.acknowledge(self.conn,run['run_id'],worker_ref='c2-run:'+run['run_id'],
+                              metadata=run['metadata'],now=2)
+        scheduler.executor_started(self.conn,run_id=run['run_id'],
+                                   executor_ref='tracker:7',chat_url='https://example.invalid/7',now=3)
+        with self.assertRaisesRegex(scheduler.SchedulingError,'symphony_run_already_dispatched'):
+            scheduler.release_unstarted_symphony_run(
+                self.conn,run_id=run['run_id'],reason='too late')
+
     def test_degraded_lane_suspends_chatgpt_but_keeps_native_dispatchable(self):
         chat=intake.add_work_item(self.conn,title='Chat',repo='chat-repo',executor_policy='auto')['work_item_id']
         scheduler.configure(self.conn,chat,activity='semantic',

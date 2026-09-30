@@ -877,6 +877,34 @@ def executor_result(conn, *, outcome, work_item_id=None, prompt_id=None, run_id=
             'idempotent':False}
 
 
+def release_unstarted_symphony_run(conn, *, run_id, reason):
+    """Release a Symphony claim only before any external executor identity exists."""
+    _transaction(conn)
+    reason=str(reason or '').strip()
+    if not reason:
+        raise SchedulingError('release_reason_required')
+    row=conn.execute("""SELECT r.*,w.status AS item_status FROM work_item_runs r
+        JOIN work_items w USING(work_item_id) WHERE r.run_id=?""",(run_id,)).fetchone()
+    if not row or row['executor']!='symphony':
+        raise SchedulingError('unstarted_symphony_run_required')
+    if row['state'] not in ('claimed','running','recovering') or row['item_status']!='running':
+        raise SchedulingError('unstarted_symphony_run_not_active')
+    binding=conn.execute("SELECT 1 FROM work_item_executor_bindings WHERE run_id=? LIMIT 1",
+                         (run_id,)).fetchone()
+    start=conn.execute("""SELECT executor_ref,chat_url FROM work_item_executor_starts
+        WHERE run_id=? ORDER BY started_at DESC LIMIT 1""",(run_id,)).fetchone()
+    result=conn.execute("SELECT 1 FROM work_item_result_receipts WHERE run_id=? LIMIT 1",
+                        (run_id,)).fetchone()
+    if binding or result or (start and (start['executor_ref'] or start['chat_url'])):
+        raise SchedulingError('symphony_run_already_dispatched')
+    conn.execute("UPDATE work_item_runs SET state='failed' WHERE run_id=?",(run_id,))
+    conn.execute("DELETE FROM work_item_resource_leases WHERE run_id=?",(run_id,))
+    conn.execute("""UPDATE work_items SET status='pending',blocker=NULL,
+        current_action=?,next_action=NULL WHERE work_item_id=?""",
+        ('Pre-dispatch Symphony claim released: '+reason[:220],row['work_item_id']))
+    return {'run_id':run_id,'work_item_id':row['work_item_id'],'state':'released'}
+
+
 def recover(conn, *, now=None):
     _transaction(conn)
     now=time.time() if now is None else now

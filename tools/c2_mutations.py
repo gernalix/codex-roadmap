@@ -16,7 +16,7 @@ import roadmap_db
 
 SUPERVISOR_OPERATIONS = frozenset({
     'intake', 'prepare_codex', 'configure', 'auto_configure', 'schedule', 'acknowledge',
-    'recover', 'reconcile_run', 'milestone', 'claim_milestone',
+    'recover', 'release_unstarted_symphony_run', 'reconcile_run', 'milestone', 'claim_milestone',
     'mark_milestone', 'verify_work_item',
     'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item',
     'reconcile_descendant',
@@ -75,6 +75,7 @@ def apply(conn, mutation):
         'checkpoint': c2_scheduler.checkpoint,
         'record_checkpoint': c2_scheduler.record_checkpoint,
         'recover': c2_scheduler.recover,
+        'release_unstarted_symphony_run': c2_scheduler.release_unstarted_symphony_run,
         'quarantine_browser': c2_scheduler.quarantine_browser_run,
         'finish_work_item': c2_scheduler.finish_browser_work_item,
         'complete_verified': c2_scheduler.complete_verified,
