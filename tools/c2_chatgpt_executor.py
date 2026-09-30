@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -76,7 +77,7 @@ def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
         if state['phase']=='starting':
             ChatGPTBrowser, is_persisted_chat_url, TaskConfig, Store=_supervisor_types()
             owned=browser is None
-            browser=browser or ChatGPTBrowser()
+            browser=browser or ChatGPTBrowser(endpoint=os.environ.get('C2_CHATGPT_BROWSER_ENDPOINT','channel-bridge'))
             store=store or Store()
             try:
                 if owned:
@@ -121,7 +122,7 @@ def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
     task=_task_config(TaskConfig,work_item_id=work_item_id,db_path=db_path,
         chat_url='',project_url=project_url)
     owned=browser is None
-    browser=browser or ChatGPTBrowser()
+    browser=browser or ChatGPTBrowser(endpoint=os.environ.get('C2_CHATGPT_BROWSER_ENDPOINT','channel-bridge'))
     try:
         if owned:
             browser.connect()
