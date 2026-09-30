@@ -107,6 +107,30 @@ class RuntimeTests(unittest.TestCase):
                 [doc['operations'][0]['arguments']['event_key'] for doc,_ in captured],
             )
 
+    def test_issue_triage_request_identity_changes_with_renewed_authority(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            lease_path=Path(tmp)/'lease.sqlite3'
+            with c2_supervisor_lease.connect(lease_path) as lease:
+                c2_supervisor_lease.acquire(lease,owner='runtime',pointer='/tmp/pointer',
+                                            supervisor_id='runtime',now=100,ttl=1000)
+            captured=[]
+            with patch.object(c2_runtime,'SUPERVISOR_DB',lease_path), \
+                    patch.object(c2_runtime,'submit_document',side_effect=lambda document,request_key:
+                                 (captured.append((document,request_key)) or {'issue_number':'1'})), \
+                    patch.object(c2_runtime.time,'time',return_value=150):
+                args={'project_url':'https://chatgpt.com/project','batch_limit':25}
+                c2_runtime._writer_submit('ensure_issue_triage',args,'c3-inbox-ensure-stable')
+                c2_runtime._writer_submit('ensure_issue_triage',args,'c3-inbox-ensure-stable')
+                with c2_supervisor_lease.connect(lease_path) as lease:
+                    lease.execute('UPDATE supervisor SET lease_expires_at=2000 WHERE singleton=1')
+                c2_runtime._writer_submit('ensure_issue_triage',args,'c3-inbox-ensure-stable')
+            self.assertEqual(captured[0][1],captured[1][1])
+            self.assertNotEqual(captured[0][1],captured[2][1])
+            self.assertEqual(
+                [25]*3,
+                [doc['operations'][0]['arguments']['batch_limit'] for doc,_ in captured],
+            )
+
     def test_bind_request_identity_changes_with_renewed_authority(self):
         with tempfile.TemporaryDirectory() as tmp:
             lease_path=Path(tmp)/'lease.sqlite3'
