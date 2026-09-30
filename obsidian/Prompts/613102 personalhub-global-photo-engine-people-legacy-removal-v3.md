@@ -15,7 +15,7 @@ tags:
 - **Stato:** completed
 - **Progetto:** [[../Projects/personal-hub|Personal Hub]]
 - **Prompt:** [[../../completed/personalhub-global-photo-engine-people-legacy-removal-v3|Apri prompt]]
-- **Primo lancio:** 2026-09-27T10:55:57Z
+- **Primo lancio:** 2026-09-22T17:41:20Z
 - **Ultimo lancio:** 2026-09-27T11:20:31Z
 - **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
@@ -35,6 +35,7 @@ Corregge il FAIL 624831 completando la capability foto condivisa e la verifica U
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
+| 2026-09-22T17:41:20Z | 2026-09-22T18:00:23Z | UNKNOWN | 1142.893 | gpt-5.6-sol | medium | 96 | 35273 |
 | 2026-09-27T10:55:57Z | 2026-09-27T10:56:01Z | UNKNOWN | 4.174 | codex-auto-review | low | 0 | 11562 |
 | 2026-09-27T11:20:31Z | 2026-09-27T11:20:35Z | UNKNOWN | 3.902 | codex-auto-review | low | 0 | 10555 |
 
