@@ -446,6 +446,25 @@ class SchedulerTests(unittest.TestCase):
         for activity,executor in expected.items():
             self.assertEqual(executor,scheduler.choose_executor('auto',activity))
 
+    def test_symphony_claim_is_explicit_and_unhealthy_lane_preserves_native(self):
+        writer=self.conn.execute(
+            "SELECT work_item_id FROM work_items WHERE prompt_id='123456'").fetchone()[0]
+        self.conn.execute("UPDATE prompt_metadata SET model='gpt-6-sol',reasoning='high' WHERE prompt_id='123456'")
+        self.conn.execute("UPDATE work_items SET repo='gernalix/codex-roadmap' WHERE work_item_id=?",(writer,))
+        scheduler.configure(self.conn,writer,activity='coding',model='gpt-6-sol',reasoning='high',
+            worktree='/tmp/c3-task-123456')
+        native=self.add('native-repo')
+        route={'mode':'production','tracker_repo':'gernalix/c3-symphony',
+               'source_repos':['gernalix/codex-roadmap'],'healthy':False}
+        runs=scheduler.schedule(self.conn,event_key='unhealthy-c3',now=1,coding_route=route)
+        self.assertEqual([native],[run['work_item_id'] for run in runs])
+        self.assertEqual('pending',self.conn.execute(
+            'SELECT status FROM work_items WHERE work_item_id=?',(writer,)).fetchone()[0])
+        route['healthy']=True
+        runs=scheduler.schedule(self.conn,event_key='healthy-c3',now=2,coding_route=route)
+        self.assertEqual('symphony',runs[0]['executor'])
+        self.assertEqual('gernalix/c3-symphony',runs[0]['metadata']['symphony_route']['tracker_repo'])
+
     def test_degraded_lane_suspends_chatgpt_but_keeps_native_dispatchable(self):
         chat=intake.add_work_item(self.conn,title='Chat',repo='chat-repo',executor_policy='auto')['work_item_id']
         scheduler.configure(self.conn,chat,activity='semantic',

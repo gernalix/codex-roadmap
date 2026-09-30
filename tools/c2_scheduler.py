@@ -356,6 +356,13 @@ def execution_metadata(conn, item, spec, executor):
                 raise SchedulingError('codex_metadata_mismatch:'+key)
         if bool(spec['goal_mode']) != (prompt['prompt_type'] == 'Goal'):
             raise SchedulingError('codex_metadata_mismatch:goal_mode')
+        if executor=='symphony':
+            from c3_symphony_bridge import BridgeError, resolve_model, resolve_reasoning
+            try:
+                result['model_id']=resolve_model(spec['model'])
+                result['reasoning_effort']=resolve_reasoning(spec['reasoning'])
+            except BridgeError as exc:
+                raise SchedulingError('symphony_exact_metadata_invalid') from exc
     if executor in ('chatgpt','rdc') and spec['activity'] in ('gui','semantic'):
         if not spec['project_url'] or not str(spec['project_url']).startswith('https://chatgpt.com/'):
             raise SchedulingError('chatgpt_project_url_required')
