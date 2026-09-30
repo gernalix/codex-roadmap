@@ -303,7 +303,7 @@
 | [[obsidian/Prompts/731845 prompt-731845\|731845 · Historical prompt 731845]] | completed | 2026-09-16T08:02:39Z | 2026-09-16T08:02:39Z | PASS | sì | no | — | — | — | — |
 | [[obsidian/Prompts/731846 prompt-731846\|731846 · Historical prompt 731846]] | cancelled | 2026-08-30T16:27:53Z | 2026-09-19T06:53:19Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/731904 prompt-731904\|731904 · Historical prompt 731904]] | cancelled | 2026-09-12T05:45:51Z | 2026-09-12T05:45:51Z | CANCELLED | sì | no | — | — | — | — |
-| [[obsidian/Prompts/734581 prompt-734581\|734581 · Historical prompt 734581]] | completed | 2026-09-16T00:16:27Z | 2026-09-16T00:16:27Z | PASS | no | no | — | — | — | — |
+| [[obsidian/Prompts/734581 prompt-734581\|734581 · Historical prompt 734581]] | completed | 2026-09-15T21:33:24Z | 2026-09-16T00:16:27Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/736205 prompt-736205\|736205 · Historical prompt 736205]] | cancelled | 2026-09-03T18:40:14Z | 2026-09-03T18:40:14Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/738415 prompt-738415\|738415 · Historical prompt 738415]] | cancelled | 2026-08-05T00:00:29Z | 2026-08-05T00:00:29Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/739214 prompt-739214\|739214 · Historical prompt 739214]] | cancelled | 2026-09-11T21:40:58Z | 2026-09-11T21:40:58Z | CANCELLED | no | no | — | — | — | — |
