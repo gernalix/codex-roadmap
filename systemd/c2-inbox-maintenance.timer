@@ -1,0 +1,12 @@
+[Unit]
+Description=Run bounded C2 Inbox semantic maintenance
+
+[Timer]
+OnBootSec=4min
+OnUnitInactiveSec=5min
+AccuracySec=15s
+Persistent=true
+Unit=c2-inbox-maintenance.service
+
+[Install]
+WantedBy=timers.target
