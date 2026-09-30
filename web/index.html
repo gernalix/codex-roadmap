@@ -1,0 +1,7 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C3 Control</title><link rel="stylesheet" href="/style.css"></head>
+<body><header><div><h1>C3 Control</h1><p>Canonical batches · operational control</p></div><button id="refresh">Refresh</button></header>
+<main><div class="toolbar"><label><input type="checkbox" id="done"> Include finished batches and tasks</label><span id="updated" role="status">Loading canonical state…</span></div>
+<div id="notice" role="status" hidden></div><div id="error" role="alert" hidden></div><section id="batches" aria-label="Batches"><p>Loading batches…</p></section></main>
+<dialog id="confirm"><form method="dialog"><h2>Confirm dependency impact</h2><p id="confirm-text"></p><p>This action interrupts active executors and affects every item below. Delete hides items while preserving canonical history.</p><ul id="affected"></ul><div class="actions"><button value="no">Keep items</button><button value="yes" class="danger">Confirm action</button></div></form></dialog>
+<script type="module" src="/app.mjs"></script></body></html>
