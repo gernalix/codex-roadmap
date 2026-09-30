@@ -5,7 +5,7 @@ tags:
 
 # Unknown
 
-- [[obsidian/Prompts/731707 c3-implement-thin-symphony-bridge-and-authentica-731707|731707 · C3: implement thin Symphony bridge and authenticated pilot]] · `pending`
+- [[obsidian/Prompts/731707 c3-implement-thin-symphony-bridge-and-authentica-731707|731707 · C3: implement thin Symphony bridge and authenticated pilot]] · `running`
 - [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479|853479 · Phase A — MegaVault one source of truth definitiva]] · `completed`
 - [[obsidian/Prompts/856999 aggiungere-gate-c2-per-acceptance-post-merge-856999|856999 · Aggiungere gate C2 per acceptance post-merge]] · `completed`
 - [[obsidian/Prompts/742579 rendere-il-db-grindr-favorites-frictionless-da-e-742579|742579 · Rendere il DB Grindr Favorites frictionless da esplorare]] · `completed`

@@ -1,6 +1,6 @@
 ---
 prompt_id: 731707
-status: pending
+status: running
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -10,13 +10,13 @@ tags:
   - priority:p0
   - symphony
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 731707 · C3: implement thin Symphony bridge and authenticated pilot
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/c3-implement-thin-symphony-bridge-and-authentica-731707|Apri prompt]]
 - **Primo lancio:** —
