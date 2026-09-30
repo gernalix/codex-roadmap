@@ -2,10 +2,16 @@
 Description=C2 Master Goal coordinator
 After=network-online.target c2-runtime.service
 Wants=network-online.target
+StartLimitIntervalSec=120
+StartLimitBurst=5
 
 [Service]
 Type=simple
+ExecStartPre=/usr/bin/python3 /home/daniele/.local/share/c2-supervisor/worktree/tools/c2_worktree_guard.py --sync
 ExecStart=/home/daniele/.local/bin/c2-master-goal-start
-Restart=no
+Restart=on-failure
+RestartSec=5
+KillMode=control-group
+TimeoutStopSec=15
 Environment=HOME=/home/daniele
-WorkingDirectory=/home/daniele/projects/codex-roadmap
+WorkingDirectory=/home/daniele/.local/share/c2-supervisor/worktree
