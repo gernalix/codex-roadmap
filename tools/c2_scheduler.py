@@ -403,7 +403,7 @@ def dispatchable(conn, item):
 
 
 def inbox_drain_state(conn):
-    """Hold new roadmap dispatch until the current Inbox batch is reconciled."""
+    """Report whether Inbox triage is pending/reconciling for observability."""
     if not conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='issue_inbox'").fetchone():
         return None
     if conn.execute("SELECT 1 FROM issue_inbox WHERE state='pending' LIMIT 1").fetchone():
@@ -450,9 +450,8 @@ def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120,
         WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
         ELSE 3 END,
         COALESCE(w.sort_order,2147483647),w.created_at,w.work_item_id''').fetchall()
-    inbox_gate = inbox_drain_state(conn)
-    if inbox_gate:
-        candidates = [item for item in candidates if inbox_gate_exempt(conn, item)]
+    # Inbox triage has its own P0 ordering and exclusive resource lease. Do not
+    # globally filter unrelated candidates while a long drain is in progress.
     override = read_override(conn)
     scoped = []
     if override:

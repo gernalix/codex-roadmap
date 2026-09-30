@@ -20,7 +20,7 @@ import time
 from submit_mutation import submit_document
 from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot, record_activity
 from c2_mutations import SUPERVISOR_OPERATIONS
-from c2_scheduler import read_override, override_matches, dispatchable, inbox_drain_state, inbox_gate_exempt
+from c2_scheduler import read_override, override_matches, dispatchable, inbox_drain_state
 from c2_blocked_reconcile import automatic_candidates
 from c2_chatgpt_executor import lane_degraded
 from c2_repository_integration import integration_status, prompt_repository
@@ -327,7 +327,8 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
     ready=[dict(r) for r in db.execute(ready_query)]
     inbox_gate=inbox_drain_state(db)
     if inbox_gate:
-        ready=[r for r in ready if inbox_gate_exempt(db,r)]
+        # Keep the drain state observable, but let the scheduler use independent
+        # slots while triage owns only its dedicated resource.
         events.append(('issue_inbox_drain',inbox_gate))
     if chatgpt_suspended:
         ready=[r for r in ready if r['activity'] not in ('gui','semantic')]
