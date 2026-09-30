@@ -17,9 +17,9 @@ tags:
 - **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/resolve-personalhub-hubcontextlinks-unresolved-d-103001|Apri prompt]]
-- **Primo lancio:** —
-- **Ultimo lancio:** —
-- **Ultimo esito:** —
+- **Primo lancio:** 2026-09-30T11:55:47Z
+- **Ultimo lancio:** 2026-09-30T11:55:47Z
+- **Ultimo esito:** UNKNOWN
 - **Analizzato da ChatGPT:** no
 - **Codice modificato da ChatGPT:** no (0 interventi)
 - **Fix:** —
@@ -37,7 +37,7 @@ tags:
 
 | Inizio | Fine | Esito | Durata s | Modello | Reasoning | Tool-call | Token totali |
 | --- | --- | --- | ---: | --- | --- | ---: | ---: |
-| — | — | — | — | — | — | — | — |
+| 2026-09-30T11:55:47Z | 2026-09-30T11:55:51Z | UNKNOWN | 4.317 | codex-auto-review | low | 0 | 14301 |
 
 ## Analisi ChatGPT
 
