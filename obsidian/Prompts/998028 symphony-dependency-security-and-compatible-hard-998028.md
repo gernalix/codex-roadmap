@@ -1,6 +1,6 @@
 ---
 prompt_id: 998028
-status: running
+status: completed
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -12,15 +12,15 @@ tags:
   - source:issue-inbox
   - symphony
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/unknown
 ---
 
 # 998028 · Symphony dependency security and compatible hardening gate
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/symphony-dependency-security-and-compatible-hard-998028|Apri prompt]]
+- **Prompt:** [[../../completed/symphony-dependency-security-and-compatible-hard-998028|Apri prompt]]
 - **Primo lancio:** 2026-09-30T11:53:12Z
 - **Ultimo lancio:** 2026-09-30T11:54:32Z
 - **Ultimo esito:** PASS

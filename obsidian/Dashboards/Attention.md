@@ -1,7 +1,6 @@
 # Da controllare
 
 - [[obsidian/Prompts/103001 resolve-personalhub-hubcontextlinks-unresolved-d-103001|103001 · Resolve PersonalHub HubContextLinks unresolved dialog references]] · `running` · analizzato=no · fix=—
-- [[obsidian/Prompts/998028 symphony-dependency-security-and-compatible-hard-998028|998028 · Symphony dependency security and compatible hardening gate]] · `running` · analizzato=no · fix=—
 - [[obsidian/Prompts/731707 c3-implement-thin-symphony-bridge-and-authentica-731707|731707 · C3: implement thin Symphony bridge and authenticated pilot]] · `failed` · analizzato=no · fix=—
 - [[obsidian/Prompts/181259 grindr-web-exporter-post-login-resume-v1|181259 · Riprendi Grindr dopo il login senza model waiting]] · `blocked` · analizzato=no · fix=—
 - [[obsidian/Prompts/714263 sqlite-to-obsidian-kuma-connection-recovery-v1|714263 · Chiudere il residuo Kuma di sqlite-to-obsidian]] · `blocked` · analizzato=sì · fix=—
