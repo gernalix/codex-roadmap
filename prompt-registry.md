@@ -4,11 +4,11 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [[obsidian/Prompts/425315 c3-implementare-override-utente-sincroni-per-il--425315\|425315 · C3: implementare override utente sincroni per il control plane]] | running | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/588376 logseq-updates-pat-safety-closure-v3\|588376 · Bonificare history Logseq e attivare updater]] | pending | — | — | — | no | no | — | Fedora / logseq_updates | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/425315 c3-implementare-override-utente-sincroni-per-il--425315\|425315 · C3: implementare override utente sincroni per il control plane]] | pending | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/941059 handle-pixel-and-tcl-account-routing-in-grindr-f-941059\|941059 · Handle Pixel and TCL account routing in Grindr Favorites monitor]] | pending | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479\|853479 · Phase A — MegaVault one source of truth definitiva]] | completed | 2026-09-27T10:23:54Z | 2026-09-27T10:46:42Z | PASS | no | no | — | — | GPT-5.6 Sol | medium |
 | [[obsidian/Prompts/715479 regression-datasette5-import-test-blocked-by-pyd-715479\|715479 · Regression: Datasette5 import test blocked by pydantic-core mismatch]] | completed | — | — | PASS | no | no | — | datasette5 | GPT-5.6 Sol | medium |

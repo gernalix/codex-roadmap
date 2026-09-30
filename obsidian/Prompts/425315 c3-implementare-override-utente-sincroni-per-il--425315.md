@@ -1,6 +1,6 @@
 ---
 prompt_id: 425315
-status: pending
+status: running
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -9,13 +9,13 @@ tags:
   - priority:p0
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/pending
+  - roadmap/status/running
   - roadmap/project/unknown
 ---
 
 # 425315 · C3: implementare override utente sincroni per il control plane
 
-- **Stato:** pending
+- **Stato:** running
 - **Progetto:** [[../Projects/unknown|—]]
 - **Prompt:** [[../../prompts/c3-implementare-override-utente-sincroni-per-il--425315|Apri prompt]]
 - **Primo lancio:** —
