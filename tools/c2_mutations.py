@@ -88,6 +88,7 @@ def apply(conn, mutation):
         'repair_prompt_materialization': c2_intake.repair_prompt_materialization,
         'reconcile_item': c2_work_item_admin.reconcile,
         'reconcile_descendant': c2_work_item_admin.reconcile_descendant,
+        'reparent_item': c2_work_item_admin.reparent,
         'reconcile_blocked': c2_blocked_reconcile.reconcile,
         'reconcile_blocked_safety_net': c2_blocked_reconcile.safety_net,
         'capture_issue': c2_issue_inbox.capture,

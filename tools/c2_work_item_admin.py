@@ -21,6 +21,75 @@ EDITABLE_FIELDS = {
     "title", "objective", "current_action", "next_action", "blocker",
     "sort_order", "executor_policy", "repo", "actionable", "acceptance_json",
 }
+
+
+def reparent(
+    conn: sqlite3.Connection,
+    work_item_id: str,
+    *,
+    parent_id: str | None,
+    expected_parent_id: str | None,
+    evidence: list[str],
+    actor: str = "c2-reparent-item",
+) -> dict:
+    """Move one non-prompt work item in the hierarchy with race and cycle guards."""
+    if not conn.in_transaction:
+        raise ValueError("canonical_writer_transaction_required")
+    if not isinstance(evidence, list) or not evidence or any(
+        not isinstance(fact, str) or not fact.strip() for fact in evidence
+    ):
+        raise ValueError("repository_evidence_required")
+    row = conn.execute(
+        "SELECT work_item_id,parent_id,prompt_id FROM work_items WHERE work_item_id=?",
+        (work_item_id,),
+    ).fetchone()
+    if not row:
+        raise ValueError("work_item_not_found")
+    if row["prompt_id"]:
+        raise ValueError("prompt_work_item_reparent_forbidden")
+    current_parent = row["parent_id"]
+    if current_parent != expected_parent_id:
+        raise ValueError("parent_precondition_changed")
+    if parent_id == work_item_id:
+        raise ValueError("hierarchy_cycle")
+    if conn.execute("""SELECT 1 FROM work_item_runs WHERE work_item_id=?
+        AND state IN ('claimed','running','recovering') LIMIT 1""",
+        (work_item_id,)).fetchone():
+        raise ValueError("active_run_requires_normal_lifecycle")
+    if parent_id is not None:
+        parent = conn.execute(
+            "SELECT work_item_id FROM work_items WHERE work_item_id=?", (parent_id,)
+        ).fetchone()
+        if not parent:
+            raise ValueError("parent_not_found")
+        if conn.execute("""WITH RECURSIVE descendants(id) AS (
+            SELECT work_item_id FROM work_items WHERE parent_id=?
+            UNION ALL SELECT w.work_item_id FROM work_items w
+            JOIN descendants d ON w.parent_id=d.id
+        ) SELECT 1 FROM descendants WHERE id=? LIMIT 1""",
+            (work_item_id, parent_id)).fetchone():
+            raise ValueError("hierarchy_cycle")
+    now = c2_identity.utc_now()
+    conn.execute(
+        "UPDATE work_items SET parent_id=?,updated_at=? WHERE work_item_id=?",
+        (parent_id, now, work_item_id),
+    )
+    label = f"{current_parent or '<root>'}->{parent_id or '<root>'}"
+    for fact in evidence:
+        conn.execute("""INSERT OR IGNORE INTO work_item_evidence
+            (work_item_id,evidence_kind,label,uri,value_json,created_at)
+            VALUES(?,'reparent',?,NULL,?,?)""",
+            (work_item_id, label, json.dumps({
+                "actor": actor,
+                "from_parent_id": current_parent,
+                "to_parent_id": parent_id,
+                "evidence": fact,
+            }, ensure_ascii=False, sort_keys=True), now))
+    return {
+        "work_item_id": work_item_id,
+        "from_parent_id": current_parent,
+        "parent_id": parent_id,
+    }
 TERMINAL = {"completed", "cancelled", "superseded"}
 DESCENDANT_TERMINAL = {
     "ALREADY_IMPLEMENTED": "completed",
