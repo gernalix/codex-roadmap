@@ -1,6 +1,6 @@
 ---
 prompt_id: 731707
-status: running
+status: failed
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -10,15 +10,15 @@ tags:
   - priority:p0
   - symphony
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/failed
   - roadmap/project/unknown
 ---
 
 # 731707 · C3: implement thin Symphony bridge and authenticated pilot
 
-- **Stato:** running
+- **Stato:** failed
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/c3-implement-thin-symphony-bridge-and-authentica-731707|Apri prompt]]
+- **Prompt:** [[../../falliti/c3-implement-thin-symphony-bridge-and-authentica-731707|Apri prompt]]
 - **Primo lancio:** 2026-09-30T10:11:09Z
 - **Ultimo lancio:** 2026-09-30T10:40:13Z
 - **Ultimo esito:** UNKNOWN

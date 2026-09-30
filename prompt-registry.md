@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/731707 c3-implement-thin-symphony-bridge-and-authentica-731707\|731707 · C3: implement thin Symphony bridge and authenticated pilot]] | running | 2026-09-30T10:11:09Z | 2026-09-30T10:40:13Z | UNKNOWN | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
@@ -447,3 +446,4 @@
 | [[obsidian/Prompts/205775 phase-c-source-codex-usage-monitor-datasette-fri-205775\|205775 · Phase C source — codex-usage-monitor Datasette friendliness]] | completed | — | — | PASS | no | no | — | codex-usage-monitor | GPT-6 Luna | medium |
 | [[obsidian/Prompts/592759 phase-c-source-megavault-datasette-friendliness-592759\|592759 · Phase C source — megavault Datasette friendliness]] | completed | 2026-09-27T19:11:47Z | 2026-09-27T19:11:47Z | PASS | no | no | — | MegaVault | GPT-6 Sol | medium |
 | [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338\|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] | completed | 2026-09-28T06:56:00Z | 2026-09-29T09:00:37Z | PASS | no | no | — | — | GPT-5.6 Sol | medium |
+| [[obsidian/Prompts/731707 c3-implement-thin-symphony-bridge-and-authentica-731707\|731707 · C3: implement thin Symphony bridge and authenticated pilot]] | failed | 2026-09-30T10:11:09Z | 2026-09-30T10:40:13Z | FAIL | no | no | — | — | GPT-6 Sol | medium |
