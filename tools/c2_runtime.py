@@ -299,7 +299,8 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
                 launch(run['run_id'])
                 events.append(('launch',run['run_id']))
     expired=[r for r in active
-             if r['state'] in ('claimed','running') and r['lease_until']<=now
+             if r['executor'] != 'symphony'
+             and r['state'] in ('claimed','running') and r['lease_until']<=now
              and not worker_active(str(r['run_id']))]
     if expired:
         key=_key('c2-recover',sorted((r['run_id'],r['lease_until']) for r in expired))

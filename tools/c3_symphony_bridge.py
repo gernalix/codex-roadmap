@@ -130,12 +130,15 @@ def load_item(db: Path, work_item_id: str, config: HostConfig,
                       row["worktree"], row["prompt_id"])
 
 
-def issue_title(item: CodingItem) -> str:
-    return f"[C3 {item.work_item_id}] {item.title}"[:250]
+def issue_title(item: CodingItem, run_id: str | None = None) -> str:
+    identity = f"{item.work_item_id} run:{run_id}" if run_id else item.work_item_id
+    return f"[C3 {identity}] {item.title}"[:250]
 
 
-def issue_body(item: CodingItem) -> str:
+def issue_body(item: CodingItem, run_id: str | None = None) -> str:
+    run_line = f"C3 run: {run_id}\n" if run_id else ""
     return (f"C3 source: {item.work_item_id}\n"
+            f"{run_line}"
             f"Source repository: {item.repo}\n\n"
             f"Objective:\n{item.objective}\n\n"
             f"Acceptance (canonical JSON):\n{item.acceptance}\n")
@@ -181,12 +184,13 @@ class GitHubIssues:
         return result
 
 
-def publish(item: CodingItem, github: GitHubIssues, lock_path: Path) -> dict:
+def publish(item: CodingItem, github: GitHubIssues, lock_path: Path,
+            run_id: str | None = None) -> dict:
     """Local-host serialization plus readback makes replay after a crash safe."""
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     with lock_path.open("a+") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
-        title, body = issue_title(item), issue_body(item)
+        title, body = issue_title(item, run_id), issue_body(item, run_id)
         matches = github.matching(title)
         if len(matches) > 1:
             raise BridgeError("duplicate_tracker_identity")
@@ -222,9 +226,10 @@ def publish(item: CodingItem, github: GitHubIssues, lock_path: Path) -> dict:
         return {"issue_number": issue["number"], "created": True}
 
 
-def inspect(item: CodingItem, github: GitHubIssues) -> dict:
-    matches = github.matching(issue_title(item))
-    if len(matches) != 1 or matches[0].get("body") != issue_body(item):
+def inspect(item: CodingItem, github: GitHubIssues,
+            run_id: str | None = None) -> dict:
+    matches = github.matching(issue_title(item, run_id))
+    if len(matches) != 1 or matches[0].get("body") != issue_body(item, run_id):
         raise BridgeError("tracker_identity_missing_or_conflicted")
     issue = matches[0]
     if issue.get("state") not in {"open", "closed"} or not isinstance(issue.get("number"), int):
@@ -354,9 +359,11 @@ def main() -> int:
                             "tracker_repo": config.tracker_repo, "mode": config.mode}:
                 raise BridgeError("production_ownership_mismatch")
         if args.action == "publish":
-            result = publish(item, GitHubIssues(config.tracker_repo), args.lock)
+            result = publish(item, GitHubIssues(config.tracker_repo), args.lock,
+                             args.run_id if config.mode == "production" else None)
         elif args.action == "inspect":
-            result = inspect(item, GitHubIssues(config.tracker_repo))
+            result = inspect(item, GitHubIssues(config.tracker_repo),
+                             args.run_id if config.mode == "production" else None)
         else:
             if args.workspace_root is None or args.output is None:
                 raise BridgeError("workflow_paths_required")

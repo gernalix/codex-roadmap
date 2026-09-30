@@ -374,6 +374,38 @@ class RuntimeTests(unittest.TestCase):
                     )
                 self.assertEqual(should_recover, 'recover' in submitted)
 
+    def test_expired_symphony_run_is_never_recovered_by_legacy_runtime(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                item=writer.execute(
+                    "SELECT work_item_id FROM work_items WHERE prompt_id='123456'").fetchone()[0]
+                writer.execute(
+                    "UPDATE prompt_metadata SET model='gpt-6-sol',reasoning='high' WHERE prompt_id='123456'")
+                writer.execute(
+                    "UPDATE work_items SET repo='gernalix/codex-roadmap' WHERE work_item_id=?",
+                    (item,))
+                c2_scheduler.configure(writer,item,activity='coding',
+                    model='gpt-6-sol',reasoning='high',worktree='/tmp/c3-task-123456')
+                route={'mode':'production','tracker_repo':'gernalix/c3-symphony',
+                       'source_repos':['gernalix/codex-roadmap'],'healthy':True}
+                run=c2_scheduler.schedule(writer,event_key='c3-external',now=1,
+                                          coding_route=route)[0]
+                c2_scheduler.acknowledge(writer,run['run_id'],
+                    worker_ref='c2-run:'+run['run_id'],metadata=run['metadata'],now=2)
+                c2_scheduler.executor_started(writer,run_id=run['run_id'],now=2)
+                writer.execute('UPDATE work_item_runs SET lease_until=3 WHERE run_id=?',
+                               (run['run_id'],))
+                writer.commit()
+            submitted=[]
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                c2_runtime.advance(snapshot,
+                    submit=lambda op,args,key: submitted.append(op),
+                    launch=lambda _: None, launch_notify=lambda _: None,
+                    worker_active=lambda _: False, now=1000)
+            self.assertNotIn('recover',submitted)
+
     def test_existing_chatgpt_run_is_held_then_launched_after_recovery(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=C2IntakeTests().make_cutover_db(Path(tmp))
