@@ -4,6 +4,7 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [[obsidian/Prompts/633902 c3-production-canary-e-retirement-definitivo-c2-633902\|633902 · C3: production canary e retirement definitivo C2]] | pending | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
