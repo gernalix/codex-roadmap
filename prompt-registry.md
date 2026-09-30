@@ -4,7 +4,6 @@
 
 | Prompt | Stato | Primo lancio | Ultimo lancio | Ultimo esito | Analizzato | Codice ChatGPT | Fix | Progetto | Modello | Reasoning |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [[obsidian/Prompts/633902 c3-production-canary-e-retirement-definitivo-c2-633902\|633902 · C3: production canary e retirement definitivo C2]] | running | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/556372 grindr-export-chatgpt-desktop-end-to-end-v1\|556372 · Delegare export Grindr end-to-end a ChatGPT Desktop]] | pending | — | — | — | no | no | — | grindr-export | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/582946 eboks-full-export-resume-after-mitid-v1\|582946 · Riprendere export e-Boks dopo login MitID]] | pending | — | — | — | no | no | — | e-Boks exploration | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/218695 eboks-scraper-bootstrap-public-repo-live-adapter\|218695 · Creare e validare il repository pubblico e-Boks scraper]] | pending | — | — | — | no | no | — | MegaVault / e-Boks bootstrap | GPT-5.6 Terra | medium |
@@ -25,6 +24,7 @@
 | [[obsidian/Prompts/232898 completare-preparazione-e-drain-autonomo-c2-fino-232898\|232898 · Completare preparazione e drain autonomo C2 fino a quiescenza]] | superseded | — | — | — | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/384495 rimuovere-special-case-ph-e-implementare-overrid-384495\|384495 · Rimuovere special-case PH e implementare override execution canonico]] | waiting | 2026-09-26T23:27:03Z | 2026-09-26T23:27:25Z | BLOCKED | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/507648 rimuovere-special-case-ph-e-aggiungere-execution-507648\|507648 · Rimuovere special-case PH e aggiungere execution override C2]] | superseded | — | — | — | no | no | — | — | GPT-6 Sol | medium |
+| [[obsidian/Prompts/633902 c3-production-canary-e-retirement-definitivo-c2-633902\|633902 · C3: production canary e retirement definitivo C2]] | completed | — | — | PASS | no | no | — | — | GPT-6 Sol | medium |
 | [[obsidian/Prompts/813383 codex-roadmap-sqlite-runtime-backfill\|813383 · Attivare il tracciamento SQLite della roadmap]] | completed | 2026-09-18T20:17:55Z | 2026-09-18T20:17:55Z | PASS | sì | sì | — | Fedora | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/416024 roadmap-ph-single-writer-local-activation\|416024 · Attiva single-writer roadmap e integrazione PH]] | superseded | — | — | — | no | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
 | [[obsidian/Prompts/749621 roadmap-ph-single-writer-full-local-activation\|749621 · Attiva single-writer completo e integrazione PH]] | completed | 2026-09-18T21:03:24Z | 2026-09-18T21:03:24Z | PASS | sì | no | — | PersonalHub + codex-roadmap | GPT-5.6 Terra | medium |
