@@ -8,4 +8,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/425315 c3-implementare-override-utente-sincroni-per-il--425315|425315 · C3: implementare override utente sincroni per il control plane]]
+- Nessuno.

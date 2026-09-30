@@ -5,7 +5,6 @@ tags:
 
 # Unknown
 
-- [[obsidian/Prompts/425315 c3-implementare-override-utente-sincroni-per-il--425315|425315 · C3: implementare override utente sincroni per il control plane]] · `running`
 - [[obsidian/Prompts/941059 handle-pixel-and-tcl-account-routing-in-grindr-f-941059|941059 · Handle Pixel and TCL account routing in Grindr Favorites monitor]] · `pending`
 - [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479|853479 · Phase A — MegaVault one source of truth definitiva]] · `completed`
 - [[obsidian/Prompts/856999 aggiungere-gate-c2-per-acceptance-post-merge-856999|856999 · Aggiungere gate C2 per acceptance post-merge]] · `completed`
@@ -21,6 +20,7 @@ tags:
 - [[obsidian/Prompts/507648 rimuovere-special-case-ph-e-aggiungere-execution-507648|507648 · Rimuovere special-case PH e aggiungere execution override C2]] · `superseded`
 - [[obsidian/Prompts/633902 c3-production-canary-e-retirement-definitivo-c2-633902|633902 · C3: production canary e retirement definitivo C2]] · `completed`
 - [[obsidian/Prompts/592418 c2-scheduler-due-chat-rdc-possono-scrivere-conte-592418|592418 · C2 scheduler: due chat RDC possono scrivere contemporaneamente nello stesso worktree/task]] · `completed`
+- [[obsidian/Prompts/425315 c3-implementare-override-utente-sincroni-per-il--425315|425315 · C3: implementare override utente sincroni per il control plane]] · `completed`
 - [[obsidian/Prompts/705998 c2-git-guard-commit-su-branch-emette-errore-pack-705998|705998 · C2 Git guard: commit su branch emette errore pack-refs ambiguo pur riuscendo]] · `waiting`
 - [[obsidian/Prompts/891963 c2-supervisor-terminal-workers-restano-abilitati-891963|891963 · C2 supervisor: terminal workers restano abilitati e possono contendere la lane]] · `waiting`
 - [[obsidian/Prompts/614593 c2-intake-collisioni-request-key-tra-chat-parall-614593|614593 · C2 intake: collisioni request-key tra chat parallele]] · `completed`

@@ -1,6 +1,6 @@
 ---
 prompt_id: 425315
-status: running
+status: completed
 project_id: —
 model: GPT-6 Sol
 reasoning: medium
@@ -9,15 +9,15 @@ tags:
   - priority:p0
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/unknown
 ---
 
 # 425315 · C3: implementare override utente sincroni per il control plane
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/c3-implementare-override-utente-sincroni-per-il--425315|Apri prompt]]
+- **Prompt:** [[../../completed/c3-implementare-override-utente-sincroni-per-il--425315|Apri prompt]]
 - **Primo lancio:** —
 - **Ultimo lancio:** —
 - **Ultimo esito:** —
