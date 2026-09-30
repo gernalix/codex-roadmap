@@ -148,7 +148,8 @@ def _current_authority(activity: str | None=None) -> dict[str, Any]:
 def _request_key(phase: str, work_item_id: str, arguments: dict[str, Any],
                  authority: dict[str, Any]) -> str:
     stable={"phase":phase,"work_item_id":work_item_id,"arguments":arguments,
-            "fencing_token":authority["fencing_token"]}
+            "fencing_token":authority["fencing_token"],
+            "lease_expires_at":authority["lease_expires_at"]}
     digest=hashlib.sha256(json.dumps(stable,sort_keys=True,ensure_ascii=False,
         default=str,separators=(",",":")).encode()).hexdigest()[:28]
     return "c2-prepare-codex-"+phase+"-"+digest
@@ -167,7 +168,12 @@ def _submit_phase(operation: str, arguments: dict[str, Any], phase: str,
     result=submit_document({
         "schema":"codex-roadmap.mutation.v1",
         "actor":"c2-prepare-codex",
-        "operations":[{"op":"c2_"+operation,"arguments":payload}],
+        "operations":[
+            {"op":"c2_renew_supervisor","arguments":{
+                "supervisor_authority":dict(authority),
+            }},
+            {"op":"c2_"+operation,"arguments":payload},
+        ],
     },request_key=key)
     _wait_issue_applied(DEFAULT_REPOSITORY,result["issue_number"],timeout)
     return result
