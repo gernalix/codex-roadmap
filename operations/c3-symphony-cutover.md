@@ -2,6 +2,9 @@ PROMPT_ID=998028
 
 # C3 Symphony production cutover
 
+The final host install, canary readback, C2 retirement command, and post-retirement
+service checks are in [C3 control-plane retirement](c3-c2-retirement.md).
+
 ## Authority and routing
 
 The established pilot, cleanup, model/reasoning, encrypted credential, and dependency-security gates passed. Production remains an explicit host action after this branch merges. Keep `mode=legacy` until the supervising ChatGPT authorizes a canary. The host configuration is `~/.config/c3-symphony/config.json` (mode `0600`); there is no tracker or source inference from issue prose. A missing file means legacy rollback. An invalid file fails closed.

@@ -196,7 +196,10 @@ def routed_executor(policy, activity, repo, route):
         return 'symphony-unhealthy'
     if symphony_selected(policy,activity,repo,route):
         return 'symphony' if route.get('healthy') else 'symphony-unhealthy'
-    return choose_executor(policy,activity)
+    selected = choose_executor(policy,activity)
+    if route and route.get('no_legacy_codex') and selected == 'codex':
+        return 'symphony-unhealthy'
+    return selected
 
 
 def _transaction(conn):

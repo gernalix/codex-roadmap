@@ -40,6 +40,8 @@ def watch_once(db, *, now=None):
 
 
 def main():
+    from c3_retirement import require_not_retired
+    require_not_retired()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db', type=Path, default=DEFAULT_DB)
     args = parser.parse_args()

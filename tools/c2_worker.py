@@ -33,7 +33,8 @@ class WorkerError(RuntimeError):
 
 
 def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_writer_submit,
-             rpc_factory=AppServerRPC):
+             rpc_factory=AppServerRPC, worker_prefix='c2-run:',
+             legacy_codex_allowed=True):
     with closing(_open_snapshot(db_path)) as conn:
         run=conn.execute('''SELECT r.*,w.status AS item_status,w.prompt_id,w.repo,w.executor_policy,
           w.title AS item_title,w.objective,w.acceptance_json,w.next_action
@@ -41,13 +42,15 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
           WHERE r.run_id=?''',(run_id,)).fetchone()
         if not run or run['state'] not in ('running','recovering') or run['item_status']!='running':
             raise WorkerError('run_not_claimed_and_acknowledged')
-        if run['worker_ref']!='c2-run:'+run_id:
+        if run['worker_ref']!=worker_prefix+run_id:
             raise WorkerError('worker_identity_mismatch')
         if not conn.execute('''SELECT 1 FROM work_item_executor_starts
               WHERE run_id=? LIMIT 1''',(run_id,)).fetchone():
             raise WorkerError('executor_start_receipt_missing')
         metadata=json.loads(run['metadata_json'])
         executor=run['executor']
+        if not legacy_codex_allowed and executor=='codex':
+            raise WorkerError('legacy_codex_retired')
         if executor=='symphony':
             routing=routing_mode()
             expected=metadata.get('symphony_route') or {}
@@ -69,7 +72,7 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
               (run['work_item_id'],)).fetchone())
         browser_lane_unavailable = lane_degraded() or KILL_SWITCH.exists()
         if executor in ('rdc','chatgpt') and metadata.get('activity') in ('gui','semantic') and browser_lane_unavailable:
-            if is_issue_triage and metadata.get('activity')=='semantic':
+            if legacy_codex_allowed and is_issue_triage and metadata.get('activity')=='semantic':
                 result=execute_inbox_codex(run_id=run_id,
                     work_item_id=str(run['work_item_id']),db_path=db_path)
                 return {'run_id':run_id,'executor':'codex-fallback',
@@ -215,6 +218,8 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
 
 
 def main():
+    from c3_retirement import require_not_retired
+    require_not_retired()
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db',type=Path,default=DEFAULT_DB)
     parser.add_argument('--run-id',required=True)

@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh C3 canonical roadmap snapshot
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=2min
+Persistent=true
+Unit=c3-roadmap-snapshot.service
+
+[Install]
+WantedBy=timers.target

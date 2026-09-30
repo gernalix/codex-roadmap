@@ -692,6 +692,8 @@ def run_once(now: float | None = None) -> int:
 
 
 def main() -> int:
+    from c3_retirement import require_not_retired
+    require_not_retired()
     try:
         return run_once()
     except Exception as exc:

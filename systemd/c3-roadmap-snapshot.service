@@ -1,0 +1,11 @@
+[Unit]
+Description=C3 read-only canonical roadmap snapshot
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=%h/.local/state/c3-control/c2-retired.json
+
+[Service]
+Type=oneshot
+ExecStartPre=/usr/bin/python3 %h/.local/share/c2-supervisor/worktree/tools/c2_worktree_guard.py --sync
+ExecStart=/usr/bin/python3 %h/.local/share/c2-supervisor/worktree/tools/c2_snapshot_sync.py --repo %h/projects/codex-roadmap --output %h/.local/state/c2-supervisor/roadmap.sqlite3
+Nice=10

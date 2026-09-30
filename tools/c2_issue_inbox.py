@@ -679,12 +679,15 @@ def discard(
     return {"issue_id": issue_id, "state": "discarded", "matched_work_item_id": matched_work_item_id}
 
 
-def ensure_triage(conn: sqlite3.Connection, *, project_url: str) -> dict:
+def ensure_triage(conn: sqlite3.Connection, *, project_url: str,
+                  batch_limit: int | None = None) -> dict:
     """Atomically create one runnable triage item for the current pending batch."""
     _transaction(conn)
     install_schema(conn)
     if not re.fullmatch(r"https://chatgpt\.com/g/g-p-[a-z0-9]+/project/?", project_url):
         raise IssueInboxError("explicit_c2_project_url_required")
+    if batch_limit is not None and not 1 <= batch_limit <= 25:
+        raise IssueInboxError("triage_batch_limit_invalid")
     pending = conn.execute("SELECT COUNT(*) FROM issue_inbox WHERE state='pending'").fetchone()[0]
     if not pending:
         return {"state": "empty"}
@@ -696,10 +699,12 @@ def ensure_triage(conn: sqlite3.Connection, *, project_url: str) -> dict:
     if active:
         return {"state": "existing", "work_item_id": active[0]}
     item = c2_intake.add_work_item(
-        conn, title="Triage C2 issue inbox",
+        conn, title="Triage roadmap issue inbox" if batch_limit else "Triage C2 issue inbox",
         objective=(
-            "Process every row from v_issue_inbox_pending_ordered in its displayed order. "
-            "Use the canonical snapshot to identify "
+            (f"Process at most {batch_limit} rows from v_issue_inbox_pending_ordered in displayed order, then finish this batch. "
+             if batch_limit else
+             "Process every row from v_issue_inbox_pending_ordered in its displayed order. ")
+            + "Use the canonical snapshot to identify "
             "related roadmap/repository work. Submit c2_promote_issue or c2_discard_issue "
             "through tools/c2_control.py with the current supervisor ID and fencing token. "
             "For every row, create human-facing copy before disposition. human_title must be "
@@ -717,7 +722,8 @@ def ensure_triage(conn: sqlite3.Connection, *, project_url: str) -> dict:
             "reprioritizing the whole queue. Cluster duplicates and related observations within "
             "each bounded batch. "
             "For irrelevant or obsolete issues, discard with a concrete reason. "
-            "Read pending rows again before completion and finish only when none remain."
+            + ("Leave remaining pending observations for the next bounded batch."
+             if batch_limit else "Read pending rows again before completion and finish only when none remain.")
         ),
         acceptance=["Bounded Inbox decisions are recorded with canonical work-item provenance"],
         next_action=(

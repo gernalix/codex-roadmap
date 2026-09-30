@@ -1,0 +1,9 @@
+[Unit]
+Description=Wake C3 when canonical roadmap snapshot changes
+
+[Path]
+PathChanged=%h/.local/state/c2-supervisor/roadmap.sqlite3
+Unit=c3-runtime.service
+
+[Install]
+WantedBy=default.target

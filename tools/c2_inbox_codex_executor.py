@@ -160,6 +160,8 @@ def execute(*, run_id: str, work_item_id: str, db_path: Path,
 
 def maintain(*, db_path: Path, batch: int = DEFAULT_BATCH) -> dict:
     """Run one semantic pass without a roadmap execution lifecycle."""
+    from c3_retirement import require_not_retired
+    require_not_retired()
     if not 1 <= batch <= 25:
         raise ValueError("batch_out_of_range")
     LOCK.parent.mkdir(parents=True, exist_ok=True)
