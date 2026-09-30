@@ -500,9 +500,11 @@ class IssueInboxTests(unittest.TestCase):
                 second = c2_issue_inbox.ensure_triage(conn, project_url=url)
                 self.assertEqual('created', second['state'])
                 self.assertNotEqual(first['work_item_id'], second['work_item_id'])
-                self.assertEqual('semantic', conn.execute(
-                    'SELECT activity FROM work_item_execution_specs WHERE work_item_id=?',
-                    (second['work_item_id'],)).fetchone()[0])
+                spec = conn.execute(
+                    'SELECT activity,command_json FROM work_item_execution_specs WHERE work_item_id=?',
+                    (second['work_item_id'],)).fetchone()
+                self.assertEqual('native', spec[0])
+                self.assertIn('c2-inbox-drain-native', spec[1])
             finally:
                 conn.close()
 
