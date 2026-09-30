@@ -8,4 +8,4 @@
 
 ## In esecuzione
 
-- [[obsidian/Prompts/103001 resolve-personalhub-hubcontextlinks-unresolved-d-103001|103001 · Resolve PersonalHub HubContextLinks unresolved dialog references]]
+- Nessuno.

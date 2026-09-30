@@ -5,7 +5,6 @@ tags:
 
 # Unknown
 
-- [[obsidian/Prompts/103001 resolve-personalhub-hubcontextlinks-unresolved-d-103001|103001 · Resolve PersonalHub HubContextLinks unresolved dialog references]] · `running`
 - [[obsidian/Prompts/941059 handle-pixel-and-tcl-account-routing-in-grindr-f-941059|941059 · Handle Pixel and TCL account routing in Grindr Favorites monitor]] · `pending`
 - [[obsidian/Prompts/853479 phase-a-megavault-one-source-of-truth-definitiva-853479|853479 · Phase A — MegaVault one source of truth definitiva]] · `completed`
 - [[obsidian/Prompts/856999 aggiungere-gate-c2-per-acceptance-post-merge-856999|856999 · Aggiungere gate C2 per acceptance post-merge]] · `completed`
@@ -207,4 +206,5 @@ tags:
 - [[obsidian/Prompts/575295 regression-c2-issue-1310-grindr-favorites-histor-575295|575295 · Regression: C2 Issue #1310 Grindr favorites history and Telegram actions]] · `blocked`
 - [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] · `completed`
 - [[obsidian/Prompts/731707 c3-implement-thin-symphony-bridge-and-authentica-731707|731707 · C3: implement thin Symphony bridge and authenticated pilot]] · `failed`
+- [[obsidian/Prompts/103001 resolve-personalhub-hubcontextlinks-unresolved-d-103001|103001 · Resolve PersonalHub HubContextLinks unresolved dialog references]] · `completed`
 - [[obsidian/Prompts/998028 symphony-dependency-security-and-compatible-hard-998028|998028 · Symphony dependency security and compatible hardening gate]] · `completed`

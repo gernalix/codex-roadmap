@@ -1,6 +1,6 @@
 ---
 prompt_id: 103001
-status: running
+status: completed
 project_id: —
 model: GPT-6 Luna
 reasoning: medium
@@ -8,15 +8,15 @@ tags:
   - priority:p1
   - source:issue-inbox
   - roadmap/prompt
-  - roadmap/status/running
+  - roadmap/status/completed
   - roadmap/project/unknown
 ---
 
 # 103001 · Resolve PersonalHub HubContextLinks unresolved dialog references
 
-- **Stato:** running
+- **Stato:** completed
 - **Progetto:** [[../Projects/unknown|—]]
-- **Prompt:** [[../../prompts/resolve-personalhub-hubcontextlinks-unresolved-d-103001|Apri prompt]]
+- **Prompt:** [[../../completed/resolve-personalhub-hubcontextlinks-unresolved-d-103001|Apri prompt]]
 - **Primo lancio:** 2026-09-30T11:55:14Z
 - **Ultimo lancio:** 2026-09-30T11:55:47Z
 - **Ultimo esito:** BLOCKED
