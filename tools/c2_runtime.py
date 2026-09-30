@@ -24,6 +24,8 @@ from c2_scheduler import read_override, override_matches, dispatchable, inbox_dr
 from c2_blocked_reconcile import automatic_candidates
 from c2_chatgpt_executor import lane_degraded
 from c2_repository_integration import integration_status, prompt_repository
+from c3_symphony_bridge import DEFAULT_CONFIG as C3_CONFIG, load_config as load_c3_config, BridgeError
+from c3_symphony_backend import status as c3_status, BackendError
 
 C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
 SUPERVISOR_RENEW_MARGIN_S = 60
@@ -140,6 +142,25 @@ def _repo_task_status(prompt_id: str) -> dict:
         raise RuntimeErrorC2('repo_task_status_failed:'+str(exc)) from exc
 
 
+def _coding_route() -> dict:
+    if not C3_CONFIG.exists():
+        return {'mode':'legacy','source_repos':[],'tracker_repo':None,'healthy':True}
+    try:
+        config=load_c3_config(C3_CONFIG)
+    except BridgeError:
+        return {'mode':'invalid','source_repos':[],'tracker_repo':None,'healthy':False}
+    healthy=True
+    if config.mode in ('canary','production'):
+        try:
+            state=c3_status()
+            healthy=(state.get('active_state')=='active' and state.get('api_healthy') is True
+                     and state.get('mode')==config.mode)
+        except (BackendError,BridgeError,OSError):
+            healthy=False
+    return {'mode':config.mode,'source_repos':sorted(config.source_repos),
+            'tracker_repo':config.tracker_repo,'healthy':healthy}
+
+
 def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_worker,
             launch_notify=_launch_notify, worker_active=_worker_unit_active,
             repo_task_status=_repo_task_status,
@@ -251,7 +272,7 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
        AND w.status='running' ORDER BY r.created_at,r.run_id""")]
     terminal_runs=db.execute('''SELECT r.run_id FROM work_item_runs r
        JOIN work_items w USING(work_item_id)
-       WHERE r.executor='codex' AND r.state IN ('claimed','running','recovering')
+       WHERE r.executor IN ('codex','symphony') AND r.state IN ('claimed','running','recovering')
        AND w.status IN ('completed','failed','blocked','cancelled')''').fetchall()
     for row in terminal_runs:
         run_id=str(row['run_id'])
@@ -311,9 +332,10 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         events.append(('issue_inbox_drain',inbox_gate))
     if chatgpt_suspended:
         ready=[r for r in ready if r['activity'] not in ('gui','semantic')]
+    coding_route=_coding_route()
     override=read_override(db)
     scoped_ready=[r for r in ready if override and override_matches(db,r,override)
-                  and dispatchable(db,r)]
+                  and dispatchable(db,r,coding_route)]
     if scoped_ready:
         ready=scoped_ready
     if override:
@@ -336,14 +358,16 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
           ORDER BY d.work_item_id,d.depends_on_work_item_id''')]
     # Size this wave from work that passes the current dependency/resource
     # checks. The writer repeats those checks atomically when claiming runs.
-    dispatchable_count=sum(bool(dispatchable(db, item)) for item in ready)
+    dispatchable_count=sum(bool(dispatchable(db, item, coding_route)) for item in ready)
     wave_limit=min(max_parallel, len(statuses)+dispatchable_count)
     if dispatchable_count and len(statuses)<wave_limit:
         key=_key('c2-schedule',{'ready':ready,'chatgpt_lane_degraded':chatgpt_suspended,
                                   'running':statuses,'lock_context':lock_context,
-                                  'dependencies':dependencies,'override':override,'limit':wave_limit})
+                                  'dependencies':dependencies,'override':override,'limit':wave_limit,
+                                  'coding_route':coding_route})
         submit('schedule',{'event_key':key,'max_parallel':wave_limit,
-                           'chatgpt_lane_degraded':chatgpt_suspended},key)
+                           'chatgpt_lane_degraded':chatgpt_suspended,
+                           'coding_route':coding_route},key)
         events.append(('schedule',str(len(ready))))
     return {'events':events,'ready':len(ready),'active':len(active),
             'execution_override':override,'override_draining':bool(scoped_ready),

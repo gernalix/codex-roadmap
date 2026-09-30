@@ -6,6 +6,7 @@ import argparse
 from contextlib import closing
 import json
 from pathlib import Path
+import re
 import sqlite3
 import sys
 
@@ -18,6 +19,10 @@ from roadmap_result import RoadmapResultError
 from c2_native_executor import execute as execute_native
 from c2_inbox_codex_executor import execute as execute_inbox_codex
 from c2_runtime import _open_snapshot, _writer_submit
+from c3_symphony_route import (routing_mode, eligible as symphony_eligible,
+                               dispatch as dispatch_symphony, ownership_path, RouteError)
+from c3_symphony_bridge import BridgeError
+from c3_symphony_backend import BackendError
 
 STATE_ROOT=Path.home()/'.local/state/c2/runs'
 DEFAULT_DB=Path.home()/'projects/codex-roadmap/roadmap.sqlite'
@@ -30,7 +35,7 @@ class WorkerError(RuntimeError):
 def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_writer_submit,
              rpc_factory=AppServerRPC):
     with closing(_open_snapshot(db_path)) as conn:
-        run=conn.execute('''SELECT r.*,w.status AS item_status,w.prompt_id,
+        run=conn.execute('''SELECT r.*,w.status AS item_status,w.prompt_id,w.repo,w.executor_policy,
           w.title AS item_title,w.objective,w.acceptance_json,w.next_action
           FROM work_item_runs r JOIN work_items w USING(work_item_id)
           WHERE r.run_id=?''',(run_id,)).fetchone()
@@ -43,6 +48,22 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             raise WorkerError('executor_start_receipt_missing')
         metadata=json.loads(run['metadata_json'])
         executor=run['executor']
+        if executor=='symphony':
+            routing=routing_mode()
+            expected=metadata.get('symphony_route') or {}
+            if (expected.get('mode')!=routing.mode
+                    or expected.get('tracker_repo')!=routing.tracker_repo
+                    or set(expected.get('source_repos',()))!=routing.source_repos
+                    or not symphony_eligible(routing,
+                        activity=str(metadata.get('activity') or ''),
+                        policy=str(run['executor_policy']),repo=run['repo'])):
+                raise WorkerError('symphony_claim_route_changed')
+            return dispatch_symphony(db_path,run_id,str(run['work_item_id']),routing,
+                                     submit=submit)
+        if (executor=='codex' and metadata.get('activity')=='coding'
+                and re.fullmatch(r'wi:[a-f0-9]{32}',str(run['work_item_id']))
+                and ownership_path(str(run['work_item_id'])).exists()):
+            raise WorkerError('symphony_ownership_requires_reconciliation')
         is_issue_triage=bool(conn.execute('''SELECT 1 FROM work_item_tags
               WHERE work_item_id=? AND tag='c2:issue-triage' LIMIT 1''',
               (run['work_item_id'],)).fetchone())
@@ -200,7 +221,9 @@ def main():
     args=parser.parse_args()
     try:
         result=run_once(args.db,args.run_id)
-    except (OSError,sqlite3.Error,WorkerError,AppServerError,ExecutorError,ValueError,KeyError) as exc:
+    except (OSError,sqlite3.Error,WorkerError,AppServerError,ExecutorError,RouteError,
+            BridgeError,BackendError,
+            ValueError,KeyError) as exc:
         print(json.dumps({'status':'blocked','error':str(exc)},sort_keys=True))
         return 2
     print(json.dumps({'status':'ok','result':result},sort_keys=True))

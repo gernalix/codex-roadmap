@@ -1,4 +1,5 @@
 import importlib.util
+import hashlib
 import json
 import sys
 import tempfile
@@ -21,13 +22,17 @@ class BackendTests(unittest.TestCase):
             binary = root / "symphony"
             workflow = root / "WORKFLOW.md"
             binary.write_text("binary")
-            workflow.write_text("workflow")
-            with self.assertRaisesRegex(backend.BackendError, "systemd_credentials_directory_missing"):
-                backend.run(binary, workflow, environ={})
+            workflow.write_text('---\n{"tracker":{"provider":{"repo":"gernalix/symphony-canary"}},"server":{"host":"127.0.0.1"}}\n---\n')
+            with patch.object(backend, "load_config", return_value=backend.load_config.__globals__["HostConfig"](
+                    "canary", "gernalix/symphony-canary", frozenset({"gernalix/codex-roadmap"}))):
+                with self.assertRaisesRegex(backend.BackendError, "systemd_credentials_directory_missing"):
+                    backend.run(binary, workflow, environ={})
             credential = root / "credentials"
             credential.mkdir()
             (credential / "GITHUB_TOKEN").write_text("test-token\n")
-            with patch.object(backend.os, "execve") as execve:
+            with patch.object(backend, "load_config", return_value=backend.load_config.__globals__["HostConfig"](
+                    "canary", "gernalix/symphony-canary", frozenset({"gernalix/codex-roadmap"}))), \
+                 patch.object(backend.os, "execve") as execve:
                 backend.run(binary, workflow, environ={"CREDENTIALS_DIRECTORY": str(credential)})
             argv = execve.call_args.args
             self.assertEqual(argv[1], [str(binary),
@@ -39,7 +44,10 @@ class BackendTests(unittest.TestCase):
         class Result:
             returncode = 0
             stdout = "inactive\n"
-        with patch.object(backend.subprocess, "run", return_value=Result()) as command:
+        with patch.object(backend, "load_config", return_value=backend.load_config.__globals__["HostConfig"](
+                "canary", "gernalix/symphony-canary", frozenset({"gernalix/codex-roadmap"}))), \
+             patch.object(backend, "user_bus_environment", return_value={}), \
+             patch.object(backend.subprocess, "run", return_value=Result()) as command:
             self.assertEqual(backend.status()["active_state"], "inactive")
             self.assertTrue(backend.stop()["stop_requested"])
             self.assertEqual(command.call_args.args[0],
@@ -70,11 +78,37 @@ class BackendTests(unittest.TestCase):
             def read(self, *_):
                 return json.dumps({"counts": {"running": 2, "retrying": 1},
                                    "running": [{"secret": "not exposed"}]}).encode()
-        with patch.object(backend.subprocess, "run", return_value=Result()), \
+        with patch.object(backend, "load_config", return_value=backend.load_config.__globals__["HostConfig"](
+                "canary", "gernalix/symphony-canary", frozenset({"gernalix/codex-roadmap"}))), \
+             patch.object(backend, "user_bus_environment", return_value={}), \
+             patch.object(backend.subprocess, "run", return_value=Result()), \
              patch.object(backend.urllib.request, "urlopen", return_value=Response()):
             self.assertEqual(backend.status(), {"backend": "symphony",
-                             "active_state": "active", "api_healthy": True,
+                             "mode": "canary", "active_state": "active", "api_healthy": True,
                              "counts": {"running": 2, "retrying": 1}})
+
+    def test_user_bus_fallback_and_missing_bus_fail_closed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            runtime = Path(directory)
+            with patch.object(backend.os, "getuid", return_value=1000), \
+                 patch.object(backend.Path, "is_socket", return_value=True):
+                env = backend.user_bus_environment({"XDG_RUNTIME_DIR": str(runtime)})
+            self.assertEqual(env["DBUS_SESSION_BUS_ADDRESS"], f"unix:path={runtime}/bus")
+            with self.assertRaisesRegex(backend.BackendError, "user_runtime_directory_missing"):
+                backend.user_bus_environment({"XDG_RUNTIME_DIR": str(runtime/"missing")})
+
+    def test_production_artifact_path_and_hash_are_exact(self):
+        with tempfile.TemporaryDirectory() as directory:
+            binary = Path(directory)/"symphony"
+            binary.write_bytes(b"approved artifact")
+            with patch.object(backend, "PRODUCTION_BINARY", binary), \
+                 patch.object(backend, "PRODUCTION_SHA256", hashlib.sha256(binary.read_bytes()).hexdigest()):
+                backend.verify_artifact(binary)
+                with self.assertRaisesRegex(backend.BackendError, "production_artifact_path_invalid"):
+                    backend.verify_artifact(Path(directory)/"pilot")
+                binary.write_bytes(b"drift")
+                with self.assertRaisesRegex(backend.BackendError, "production_artifact_hash_mismatch"):
+                    backend.verify_artifact(binary)
 
 
 if __name__ == "__main__":

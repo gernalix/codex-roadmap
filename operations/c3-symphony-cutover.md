@@ -1,68 +1,47 @@
 PROMPT_ID=998028
 
-# C3 Symphony pilot and cutover gate
+# C3 Symphony production cutover
 
-## Pilot boundary
+## Authority and routing
 
-- Source repository: `gernalix/codex-roadmap` only.
-- Supported tracker: GitHub Issues in disposable `gernalix/symphony-canary` only.
-- Eligible input: canonical read-only `v_work_item_runnable` row with `executor_policy=auto` or `codex`, `activity=coding`, exact source repo, and explicit model/reasoning execution spec. Human-readable model labels are resolved to CLI model IDs.
-- `tools/c3_symphony_bridge.py` publishes one issue with a stable `wi:` identity and the `c3-symphony-ready` dispatch label. A local publisher lock plus complete tracker readback make replays idempotent on the single pilot host. More than one issue with the same identity fails closed.
-- The bridge never writes roadmap SQLite. Symphony's issue, process, workspace, retry, and turn state remain in GitHub/Symphony.
+The established pilot, cleanup, model/reasoning, encrypted credential, and dependency-security gates passed. Production remains an explicit host action after this branch merges. Keep `mode=legacy` until the supervising ChatGPT authorizes a canary. The host configuration is `~/.config/c3-symphony/config.json` (mode `0600`); there is no tracker or source inference from issue prose. A missing file means legacy rollback. An invalid file fails closed.
 
-## Host setup and controls
-
-Generate the workflow outside the Codex workspace for one eligible item:
-
-```sh
-python3 tools/c3_symphony_bridge.py workflow --db /path/to/roadmap.sqlite \
-  --work-item-id 'wi:...' \
-  --workspace-root "$HOME/.local/share/c3-symphony/workspaces" \
-  --output "$HOME/.local/share/c3-symphony/WORKFLOW.md"
+```json
+{
+  "mode": "production",
+  "tracker_repo": "gernalix/c3-symphony",
+  "source_repos": ["gernalix/codex-roadmap"]
+}
 ```
 
-The generated workflow pins the derived model and reasoning using `codex -c model=... -c model_reasoning_effort=... app-server`, clones the source repo into an isolated workspace's `source/` subdirectory, and references only `$GITHUB_TOKEN`. The Symphony child starts in the workspace root so the repository's legacy C2 launch instructions are not automatically applied to the disposable pilot; the workflow explicitly forbids duplicate C2 start/finish calls. It contains no credential value.
+Use `gernalix/c3-symphony` only after the operator has explicitly configured it and verified authenticated access with `gh api repos/gernalix/c3-symphony`. If unavailable, configure an exact other production tracker. `mode=production` rejects `gernalix/symphony-canary`. `mode=canary` requires that exact disposable tracker. `mode=legacy` keeps C2 Codex. Add source repositories explicitly to the allowlist only when their isolated task worktree and existing repository writer are ready.
 
-Install `operations/c3-symphony.service` as the user unit. Its `LoadCredentialEncrypted` source is the user-scoped systemd-creds file at `~/.config/c3-symphony/credentials/github-token.cred`, outside the repository and Codex workspace. `tools/c3_symphony_backend.py run` reads the decrypted credential from `$CREDENTIALS_DIRECTORY/GITHUB_TOKEN` inside the service and executes the existing upstream Symphony binary. The unit owns the entire process group, including Codex app-server children. Never commit or print the token.
+Only autonomous `coding` with `executor_policy=auto|codex`, a canonical runnable/claimed item, an allowlisted source repo, an explicit model/reasoning pair, and an existing `task/<PROMPT_ID>` worktree can route to Symphony. Diagnostic, GUI, native, semantic, external, and human work retain their current executors. The scheduler's canonical run remains the single global claim. The host reserves one durable `wi:` to run/tracker owner before tracker publication; retry with another run or tracker fails closed. Symphony children never call C2 start/finish/result helpers. The roadmap and its single writer remain authoritative.
+
+The bridge creates or reuses exactly one tracker issue by canonical `wi:` identity under a local publication lock and reads it back. The exact tracker repository comes from host config; the source repo comes from the canonical row plus allowlist. The production workflow links the already isolated task worktree into Symphony's per-issue workspace as `source/`, gives that path explicitly to Codex with `--add-dir`, and pins `model` and `model_reasoning_effort` in the app-server command. The child commits tested changes but does not push or merge. It posts exactly one `C3_RESULT=<JSON>` comment on the tracker issue, closes that exact issue, and reads back `state=closed`. The parent requires that same issue and one terminal contract, submits one idempotent result receipt, and queues the existing repository integration writer from the isolated worktree. The existing merge readback finalizes PASS; no second merger is introduced.
+
+## Reproducible artifact and host controls
+
+The only approved source is official `openai/symphony` commit `1c0fb6c8e8ef9031a2c861e62af5f9e66cee39cb`. The build helper checks the upstream lock, applies exactly the Req and Decimal manifest edits documented below, copies the exact hardened lock, runs `MIX_ENV=prod make setup`, `make build`, and `mix hex.audit`, checks the production escript hash, and atomically installs `~/.local/share/c3-symphony/bin/symphony`. It leaves the upstream checkout untouched.
 
 ```sh
+python3 tools/c3_symphony_install.py --source /home/daniele/projects/symphony
+sha256sum ~/.local/share/c3-symphony/bin/symphony
+```
+
+Expected SHA-256: `25cdc28aaa8009ab1c3ef842b0925baa70923869000a557f8edafabc822b9c2b`. The helper requires the hardened lock SHA-256 `296b13c88039f5912ef47bab3acbc1b68718aa4ee4a6eace28e36b6026f7d6b3` and audit exit 0; any source, lock, or artifact drift stops installation. Never use `~/.local/share/symphony-eval` for production.
+
+Install `operations/c3-symphony.service` as the user unit after merge. It points to the durable binary and loads `GITHUB_TOKEN` from `~/.config/c3-symphony/credentials/github-token.cred` with `LoadCredentialEncrypted`. The backend checks the production artifact hash, the workflow tracker, and loopback listener before start. `status` and `stop` derive `XDG_RUNTIME_DIR` and `DBUS_SESSION_BUS_ADDRESS` from `/run/user/<uid>` for RDC/noninteractive callers; `stop` affects only the Symphony unit.
+
+```sh
+python3 tools/c3_symphony_bridge.py workflow --db /home/daniele/projects/codex-roadmap/roadmap.sqlite --work-item-id 'wi:...' --workspace-root "$HOME/.local/share/c3-symphony/workspaces" --output "$HOME/.local/share/c3-symphony/WORKFLOW.md"
 python3 tools/c3_symphony_backend.py status
 python3 tools/c3_symphony_backend.py stop
 ```
 
-These are the cross-surface control plane's pilot backend operations. `status` reports unit state, API health, and aggregate Symphony counts only. `stop` stops one systemd unit; it does not touch ChatGPT Web/Desktop or native/Fedora lanes. The unit and adapter require actual host installation before live stop/observe acceptance.
+Generate a workflow for the exact next item before starting the service. A healthy active backend and a byte-exact workflow for that item are required at dispatch. The host supports one active workflow at a time (`max_concurrent_agents=1`); another eligible item cannot silently reuse its model, source, or tracker configuration. Production backend/config/artifact failure blocks selected Symphony coding rather than falling back to legacy. Change to `mode=legacy` only after the Symphony owner is reconciled; a durable owner record prevents a concurrent legacy worker. Stop the unit and preserve tracker/worktree evidence for rollback. Do not deploy production traffic from this branch.
 
-Publish only after the host service and workflow are ready:
-
-```sh
-python3 tools/c3_symphony_bridge.py publish --db /path/to/roadmap.sqlite --work-item-id 'wi:...'
-```
-
-## Cutover map
-
-| Legacy C2 Codex component | Cutover action |
-| --- | --- |
-| `tools/c2_appserver_rpc.py` | Bypass/remove for Symphony coding tasks; Symphony owns app-server protocol. |
-| `tools/c2_codex_executor.py` | Bypass/remove for Symphony coding tasks; Symphony owns worker and turn lifecycle. |
-| Codex branch in `tools/c2_worker.py` | Bypass after the bridge publishes an eligible issue. |
-| Codex retry, stall, concurrency and workspace logic in `tools/c2_scheduler.py` | Bypass/remove for Symphony coding tasks; Symphony owns these per-issue functions. |
-| `tools/c2_prepare_codex.py` and `tools/c2_codex_sandbox.py` | Bypass for Symphony tasks; keep only for still-active legacy/direct Codex work until drained. |
-| C2 per-Codex recovery in supervisor/watchdog | Bypass for Symphony tasks; retain global cross-surface authority and non-Codex recovery. |
-| `tools/c2_executor_start.py` / result receipts | Adapt to one backend handoff and aggregate reconciliation; do not record Symphony's internal turns in roadmap SQLite. |
-
-Keep MegaVault identity, roadmap policy/dependencies, Inbox, Workflowy, repository single-writer integration, ChatGPT Web/Desktop, and native/Fedora execution. The bridge is a pilot handoff, not authority to switch production traffic yet. Multi-repo configuration and repository-specific integration remain post-cutover work.
-
-## Evidence required before production coding traffic switches
-
-1. Authenticated upstream GitHub tracker E2E using the host-managed credential, including issue comment/close and explicit app-server model/reasoning readback.
-2. At least two low-risk coding issues through this bridge with unique identities and a replay of each: one dispatch per issue, no duplicates, bounded concurrency, deterministic terminal cleanup and restart reconciliation.
-3. No remaining pilot-owned `codex app-server` process after stop or completion; verify source and scratch repository refs/state are unchanged except intended isolated task artifacts.
-4. Live `status` API observation and systemd `stop` of the Symphony unit, with ChatGPT Web/Desktop and native/Fedora lanes unaffected.
-5. A compatible mitigation or upstream fix for deployment-relevant dependency advisories recorded in the prior Symphony evaluation.
-
-Rollback condition: any duplicate dispatch, orphan app-server, repository-state corruption, lost stop authority, credential exposure, or tracker reconciliation failure. On trigger, stop `c3-symphony.service`, remove the ready label from outstanding pilot issues, preserve workspaces/logs for diagnosis, and keep coding traffic on the existing C2 path. No canonical roadmap or MegaVault state is rewritten by this rollback.
-
-The first disposable live batch (#7/#8) was invalidated and closed because a child in the cloned repository followed legacy C2 launch instructions. That batch is evidence for the workflow isolation requirement, not acceptance evidence.
+## Prior pilot and security evidence
 
 ## Corrected live pilot evidence
 
