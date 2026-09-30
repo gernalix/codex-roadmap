@@ -14,6 +14,7 @@ import c3_symphony_backend as backend
 from c3_symphony_bridge import (DEFAULT_CONFIG, HostConfig, load_config,
                                  load_item, workflow_text, write_workflow)
 from roadmap_finish import _queue_repo_integration
+from c2_repository_integration import integration_status, RepositoryIntegrationError
 
 WORKFLOW = Path.home()/".local/share/c3-symphony/WORKFLOW.md"
 CREDENTIAL = Path.home()/".config/c3-symphony/credentials/github-token.cred"
@@ -181,6 +182,18 @@ def import_workspace_commit(item, issue_number: int, workspace_root: Path) -> st
     return source_head
 
 
+def merged_integration(item) -> dict | None:
+    if not item.prompt_id or not item.repo:
+        return None
+    try:
+        state=integration_status(item.prompt_id,item.repo)
+    except RepositoryIntegrationError:
+        return None
+    if state.get("status")=="merged" and state.get("integration_state")=="merged":
+        return state
+    return None
+
+
 def validate_terminal(value: object) -> dict:
     if not isinstance(value, dict) or value.get("outcome") != "PASS":
         raise RouteError("symphony_terminal_outcome_invalid")
@@ -253,15 +266,25 @@ def dispatch(db: Path, run_id: str, work_item_id: str, config: HostConfig,
     if observed.get("state") != "closed":
         raise RouteError("symphony_tracker_terminal_readback_failed")
     terminal = validate_terminal(observed.get("terminal"))
-    imported_head = import_workspace_commit(item, observed["issue_number"], root)
-    terminal["evidence"] = [*terminal["evidence"], "C3 imported committed head " + imported_head]
-    args = {"run_id": run_id, "prompt_id": item.prompt_id, **terminal,
-            "integration_ready": False}
-    submit("executor_result", args, "c3-symphony-result-"+run_id)
-    _, integrated = _queue_repo_integration(item.prompt_id, Path(item.worktree))
-    if integrated:
-        args={**args, "integration_ready": True}
+    integrated_state=merged_integration(item)
+    if integrated_state:
+        detail=("C3 canonical repository integration already merged"
+                + (f" PR #{integrated_state.get('pr_number')}" if integrated_state.get("pr_number") else "")
+                + (f" at {integrated_state.get('merge_sha')}" if integrated_state.get("merge_sha") else ""))
+        terminal["evidence"] = [*terminal["evidence"], detail]
+        args = {"run_id": run_id, "prompt_id": item.prompt_id, **terminal,
+                "integration_ready": True}
         submit("executor_result", args, "c3-symphony-result-final-"+run_id)
+    else:
+        imported_head = import_workspace_commit(item, observed["issue_number"], root)
+        terminal["evidence"] = [*terminal["evidence"], "C3 imported committed head " + imported_head]
+        args = {"run_id": run_id, "prompt_id": item.prompt_id, **terminal,
+                "integration_ready": False}
+        submit("executor_result", args, "c3-symphony-result-"+run_id)
+        _, integrated = _queue_repo_integration(item.prompt_id, Path(item.worktree))
+        if integrated:
+            args={**args, "integration_ready": True}
+            submit("executor_result", args, "c3-symphony-result-final-"+run_id)
     update_owner_state(work_item_id,run_id,config,'stopping',args,observed["issue_number"])
     backend.stop()
     update_owner_state(work_item_id,run_id,config,'queued')

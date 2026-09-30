@@ -146,6 +146,34 @@ class RouteTests(unittest.TestCase):
             importer.assert_called_once_with(item, 7, Path("/tmp/c3-workspaces"))
             integration.assert_called_once_with("123456", Path("/tmp/task-worktree"))
 
+    def test_closed_tracker_with_already_merged_integration_skips_cleaned_workspace(self):
+        item=CodingItem(ITEM,"Tiny","Fix","[]","gernalix/codex-roadmap",
+                        "gpt-6-sol","medium","/tmp/task-worktree","123456")
+        terminal={"outcome":"PASS","completed":["tested"],"remaining":[],
+                  "evidence":["tracker pass"],"blocker":None,"next_action":None}
+        def bridge(action,*_):
+            return ({"issue_number":7} if action=="publish" else
+                    {"issue_number":7,"state":"closed","terminal":terminal})
+        calls=[]
+        merged={"status":"merged","integration_state":"merged","pr_number":7601,
+                "merge_sha":"abc123"}
+        with patch.object(route,"load_item",return_value=item), \
+             patch.object(route,"reserve_ownership",return_value="reserved"), \
+             patch.object(route,"ensure_backend",return_value=Path("/tmp/c3-workspaces")), \
+             patch.object(route,"merged_integration",return_value=merged), \
+             patch.object(route,"import_workspace_commit") as importer, \
+             patch.object(route,"_queue_repo_integration") as integration, \
+             patch.object(route,"update_owner_state"), \
+             patch.object(route.backend,"stop"):
+            result=route.dispatch(Path("/tmp/roadmap.sqlite"),RUN,ITEM,CONFIG,
+                                  submit=lambda *args:calls.append(args),bridge=bridge)
+        self.assertEqual(result["phase"],"queued")
+        importer.assert_not_called()
+        integration.assert_not_called()
+        self.assertEqual(len(calls),1)
+        self.assertEqual(calls[0][1]["integration_ready"],True)
+        self.assertTrue(any("PR #7601" in e for e in calls[0][1]["evidence"]))
+
     def test_queued_owner_replays_receipt_without_second_integration(self):
         item=CodingItem(ITEM,"Tiny","Fix","[]","gernalix/codex-roadmap",
                         "gpt-6-sol","medium","/tmp/task-worktree","123456")
