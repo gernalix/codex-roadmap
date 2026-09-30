@@ -74,6 +74,27 @@ class OverrideTests(unittest.TestCase):
         self.assertIn(self.b, result['blocking_prerequisites'])
         self.assertGreater(result['applied_position'], 0)
 
+    def test_move_uses_the_displayed_canonical_manual_order(self):
+        self.conn.execute('DELETE FROM work_item_dependencies')
+        self.conn.execute("INSERT INTO manual_order_overrides VALUES('roadmap',?,0,'workflowy','x','x')", (self.c,))
+        self.conn.execute("INSERT INTO manual_order_overrides VALUES('roadmap',?,1,'workflowy','x','x')", (self.a,))
+        self.conn.execute("INSERT INTO manual_order_overrides VALUES('roadmap',?,2,'workflowy','x','x')", (self.b,))
+        result = self.apply(self.command(self.b, 'move', position=1))
+        self.assertEqual([self.c, self.b, self.a], result['ordered_ids'][:3])
+        key = override.order_key(self.conn)
+        items, _ = override.graph(self.conn)
+        self.assertEqual(result['ordered_ids'], sorted(result['ordered_ids'], key=lambda i: key(items[i])))
+
+    def test_move_keeps_running_prerequisite_visible_before_dependent(self):
+        self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?", (self.a,))
+        original = self.conn.execute('SELECT sort_order FROM work_items WHERE work_item_id=?', (self.a,)).fetchone()[0]
+        result = self.apply(self.command(self.c, 'move', position=0))
+        items, _ = override.graph(self.conn)
+        order = sorted(result['ordered_ids'], key=lambda i: override.order_key(self.conn)(items[i]))
+        self.assertLess(order.index(self.a), order.index(self.b))
+        self.assertLess(order.index(self.b), order.index(self.c))
+        self.assertEqual(original, items[self.a]['sort_order'])
+
     def test_graph_change_fails_closed(self):
         cmd = self.command(self.a, 'cancel', confirmed_affected=sorted([self.a, self.b, self.c]))
         self.add('new dependent', parent_id=self.a)

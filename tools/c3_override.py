@@ -54,6 +54,8 @@ def precondition(conn, ids, action, work_item_id):
             'tags': [tuple(r) for r in conn.execute('SELECT work_item_id,tag FROM work_item_tags ORDER BY work_item_id,tag') if r[0] in scope]}
     if conn.execute("SELECT 1 FROM sqlite_master WHERE name='c3_user_order'").fetchone():
         body['user_order'] = [tuple(r) for r in conn.execute('SELECT work_item_id,rank FROM c3_user_order ORDER BY work_item_id') if r[0] in scope]
+    if action == 'move' and conn.execute("SELECT 1 FROM sqlite_master WHERE name='manual_order_overrides'").fetchone():
+        body['manual_order'] = [tuple(r) for r in conn.execute("SELECT entity_id,rank FROM manual_order_overrides WHERE scope='roadmap' ORDER BY entity_id") if r[0] in scope]
     # Renewing a lease does not change control ownership.
     for run in runs:
         run.pop('lease_until', None)
@@ -82,12 +84,26 @@ def preview(conn, work_item_id, action):
             'requires_confirmation': action in DESTRUCTIVE_ACTIONS}
 
 
+def order_key(conn):
+    names = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    user = dict(conn.execute('SELECT work_item_id,rank FROM c3_user_order')) if 'c3_user_order' in names else {}
+    manual = dict(conn.execute("SELECT entity_id,rank FROM manual_order_overrides WHERE scope='roadmap'")) if 'manual_order_overrides' in names else {}
+    priorities = {}
+    for wid, tag in conn.execute("SELECT work_item_id,tag FROM work_item_tags WHERE tag IN ('priority:p0','priority:p1','priority:p2')"):
+        priorities[wid] = min(priorities.get(wid, 3), int(tag[-1]))
+    return lambda item: (user.get(item['work_item_id'], manual.get(item['work_item_id'], 2147483647)),
+                         priorities.get(item['work_item_id'], 3),
+                         item['sort_order'] if item['sort_order'] is not None else 2147483647,
+                         item['work_item_id'])
+
+
 def legal_move(conn, work_item_id, position):
     items, edges = graph(conn)
     parent = items[work_item_id]['parent_id']
-    orders = dict(conn.execute('SELECT work_item_id,rank FROM c3_user_order')) if conn.execute("SELECT 1 FROM sqlite_master WHERE name='c3_user_order'").fetchone() else {}
-    ordered = sorted([i for i, r in items.items() if r['parent_id'] == parent],
-                     key=lambda i: (orders.get(i, 2147483647), items[i]['sort_order'] if items[i]['sort_order'] is not None else 2147483647, i))
+    deleted = {r[0] for r in conn.execute('SELECT work_item_id FROM c3_user_state WHERE deleted=1')} if conn.execute("SELECT 1 FROM sqlite_master WHERE name='c3_user_state'").fetchone() else set()
+    key = order_key(conn)
+    ordered = sorted([i for i, r in items.items() if r['parent_id'] == parent and i not in deleted],
+                     key=lambda i: key(items[i]))
     # Map dependencies on descendants to the displayed sibling's ancestor.
     def sibling(i):
         seen = set()
@@ -164,8 +180,9 @@ def apply(conn, mutation, actor):
         if conn.execute('SELECT status FROM work_items WHERE work_item_id=?', (wid,)).fetchone()[0] == 'running':
             raise ValueError('running_item_order_immutable:' + wid)
         for rank, i in enumerate(result['ordered_ids']):
-            if conn.execute('SELECT status FROM work_items WHERE work_item_id=?', (i,)).fetchone()[0] != 'running':
-                conn.execute('INSERT OR REPLACE INTO c3_user_order VALUES(?,?)', (i, rank))
+            # Store one complete legal projection; do not rewrite sort_order,
+            # prompt metadata or the active run's execution spec.
+            conn.execute('INSERT OR REPLACE INTO c3_user_order VALUES(?,?)', (i, rank))
     elif action == 'force-priority':
         if conn.execute('SELECT status FROM work_items WHERE work_item_id=?', (wid,)).fetchone()[0] == 'running':
             raise ValueError('running_item_priority_immutable')

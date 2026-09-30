@@ -54,8 +54,7 @@ class Control:
                 item['deleted'] = bool(overrides.get(item['work_item_id'], {}).get('deleted'))
                 item['user_rank'] = order.get(item['work_item_id'])
                 item['display_state'] = 'paused' if item['paused'] else item['status']
-            items.sort(key=lambda i: (i['user_rank'] if i['user_rank'] is not None else i.get('manual_rank') if i.get('manual_rank') is not None else 2147483647,
-                                      i.get('ai_priority_rank', 3), i['sort_order'] if i['sort_order'] is not None else 2147483647, i['work_item_id']))
+            items.sort(key=c3_override.order_key(conn))
             events = [dict(r) for r in conn.execute('SELECT * FROM c3_user_events ORDER BY created_at DESC LIMIT 20')] if 'c3_user_events' in names else []
             return {'items': [i for i in items if not i['deleted']],
                     'dependencies': [dict(r) for r in conn.execute('SELECT * FROM work_item_dependencies')],
