@@ -202,7 +202,7 @@
 | [[obsidian/Prompts/348271 prompt-348271\|348271 · Historical prompt 348271]] | completed | 2026-09-05T12:03:07Z | 2026-09-05T12:03:07Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/348615 prompt-348615\|348615 · Historical prompt 348615]] | completed | 2026-09-05T13:06:09Z | 2026-09-05T13:06:09Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/362714 prompt-362714\|362714 · Historical prompt 362714]] | cancelled | 2026-09-16T14:34:54Z | 2026-09-16T14:34:54Z | CANCELLED | sì | no | — | — | — | — |
-| [[obsidian/Prompts/364208 prompt-364208\|364208 · Historical prompt 364208]] | completed | 2026-09-16T03:51:24Z | 2026-09-16T03:51:24Z | PASS | no | no | — | — | — | — |
+| [[obsidian/Prompts/364208 prompt-364208\|364208 · Historical prompt 364208]] | completed | 2026-09-16T03:33:12Z | 2026-09-16T03:51:24Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/374862 prompt-374862\|374862 · Historical prompt 374862]] | completed | 2026-09-16T10:19:52Z | 2026-09-16T10:19:52Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/375344 prompt-375344\|375344 · Historical prompt 375344]] | completed | 2026-09-12T01:52:28Z | 2026-09-12T01:52:28Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/381527 prompt-381527\|381527 · Historical prompt 381527]] | cancelled | 2026-09-13T14:26:55Z | 2026-09-13T14:26:55Z | CANCELLED | no | no | — | — | — | — |
@@ -238,7 +238,7 @@
 | [[obsidian/Prompts/517842 prompt-517842\|517842 · Historical prompt 517842]] | cancelled | 2026-08-02T07:25:32Z | 2026-08-02T07:25:32Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/518264 prompt-518264\|518264 · Historical prompt 518264]] | cancelled | 2026-09-16T14:32:52Z | 2026-09-16T14:32:52Z | CANCELLED | sì | no | — | — | — | — |
 | [[obsidian/Prompts/518304 prompt-518304\|518304 · Historical prompt 518304]] | cancelled | 2026-08-30T02:35:49Z | 2026-08-30T04:35:00Z | CANCELLED | no | no | — | — | — | — |
-| [[obsidian/Prompts/519684 prompt-519684\|519684 · Historical prompt 519684]] | cancelled | 2026-09-03T18:01:01Z | 2026-09-03T18:01:01Z | CANCELLED | no | no | — | — | — | — |
+| [[obsidian/Prompts/519684 prompt-519684\|519684 · Historical prompt 519684]] | cancelled | 2026-09-03T18:01:01Z | 2026-09-30T11:09:34Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/526841 prompt-526841\|526841 · Historical prompt 526841]] | completed | 2026-09-11T22:38:57Z | 2026-09-11T22:38:57Z | PASS | no | no | — | — | — | — |
 | [[obsidian/Prompts/527418 prompt-527418\|527418 · Historical prompt 527418]] | cancelled | 2026-09-11T16:46:12Z | 2026-09-11T16:46:12Z | CANCELLED | no | no | — | — | — | — |
 | [[obsidian/Prompts/527841 prompt-527841\|527841 · Historical prompt 527841]] | cancelled | 2026-09-18T18:42:23Z | 2026-09-18T18:42:23Z | CANCELLED | no | no | — | — | — | — |
@@ -446,4 +446,4 @@
 | [[obsidian/Prompts/205775 phase-c-source-codex-usage-monitor-datasette-fri-205775\|205775 · Phase C source — codex-usage-monitor Datasette friendliness]] | completed | — | — | PASS | no | no | — | codex-usage-monitor | GPT-6 Luna | medium |
 | [[obsidian/Prompts/592759 phase-c-source-megavault-datasette-friendliness-592759\|592759 · Phase C source — megavault Datasette friendliness]] | completed | 2026-09-27T19:11:47Z | 2026-09-27T19:11:47Z | PASS | no | no | — | MegaVault | GPT-6 Sol | medium |
 | [[obsidian/Prompts/484338 riconciliare-running-c2-con-esecuzioni-realmente-484338\|484338 · Riconciliare RUNNING C2 con esecuzioni realmente vive]] | completed | 2026-09-28T06:56:00Z | 2026-09-29T09:00:37Z | PASS | no | no | — | — | GPT-5.6 Sol | medium |
-| [[obsidian/Prompts/731707 c3-implement-thin-symphony-bridge-and-authentica-731707\|731707 · C3: implement thin Symphony bridge and authenticated pilot]] | failed | 2026-09-30T10:11:09Z | 2026-09-30T11:04:47Z | FAIL | no | no | — | — | GPT-6 Sol | medium |
+| [[obsidian/Prompts/731707 c3-implement-thin-symphony-bridge-and-authentica-731707\|731707 · C3: implement thin Symphony bridge and authenticated pilot]] | failed | 2026-09-30T10:11:09Z | 2026-09-30T11:10:26Z | FAIL | no | no | — | — | GPT-6 Sol | medium |
