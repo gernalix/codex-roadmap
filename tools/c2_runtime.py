@@ -82,15 +82,16 @@ def _writer_submit(operation: str, arguments: dict, key: str):
                 'fencing_token':row['fencing_token'],
                 'lease_expires_at':row['lease_expires_at'],
             }
-            if operation in ('acknowledge','schedule','bind_executor'):
-                # The same canonical event/run binding can be replayed after a
-                # lease renewal. Its fenced document changes, so the transport
-                # Issue identity must change while the operation identity stays
+            if operation in ('acknowledge','schedule','bind_executor','ensure_issue_triage'):
+                # The same canonical operation can be replayed after a lease
+                # renewal. Its fenced document changes, so the transport Issue
+                # identity must change while the operation identity stays
                 # stable inside the writer.
                 prefix = {
                     'acknowledge':'c2-ack-authorized',
                     'schedule':'c2-schedule-authorized',
                     'bind_executor':'c2-bind-authorized',
+                    'ensure_issue_triage':'c2-issue-triage-authorized',
                 }[operation]
                 key = _key(prefix, {
                     'request_key':key,
