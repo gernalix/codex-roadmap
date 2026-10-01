@@ -1,8 +1,8 @@
 [Unit]
-Description=Wake C3 when canonical roadmap snapshot changes
+Description=Wake C3 after external canonical state mutations
 
 [Path]
-PathChanged=%h/.local/state/c2-supervisor/roadmap.sqlite3
+PathChanged=%h/.local/state/c3-control/state.changed
 Unit=c3-runtime.service
 
 [Install]

@@ -1,0 +1,11 @@
+[Unit]
+Description=C3 bounded GitHub remote ingress through local writer
+After=c3-writer.service network-online.target
+Requires=c3-writer.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/projects/codex-roadmap/tools/c3_remote_ingress.py
+TimeoutStartSec=180
+UMask=0077
+NoNewPrivileges=true

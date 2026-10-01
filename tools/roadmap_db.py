@@ -33,7 +33,8 @@ def now_utc() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 def db_path(repo: Path) -> Path:
-    return Path(repo) / DB_NAME
+    from c3_storage import database
+    return database(repo)
 
 def connect(repo: Path, *, writable: bool = True) -> sqlite3.Connection:
     path = db_path(repo)

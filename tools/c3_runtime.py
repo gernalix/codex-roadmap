@@ -18,7 +18,8 @@ from c2_supervisor_lease import (DEFAULT_DB, acquire, connect, publish_runtime_i
 from c3_retirement import MARKER
 
 LOCK = Path.home() / ".local/state/c3-control/runtime.lock"
-SNAPSHOT = Path.home() / ".local/state/c2-supervisor/roadmap.sqlite3"
+from c3_storage import local_enabled, database
+SNAPSHOT = database() if local_enabled() else Path.home() / ".local/state/c2-supervisor/roadmap.sqlite3"
 
 
 class C3RuntimeError(RuntimeError):
@@ -125,6 +126,10 @@ def main() -> int:
     parser.add_argument("--inbox-only", action="store_true")
     args = parser.parse_args()
     print(json.dumps(run(args.db, inbox_only=args.inbox_only), sort_keys=True))
+    if local_enabled():
+        # Delivery is asynchronous and never a prerequisite for local work.
+        subprocess.run(['systemctl', '--user', 'start', '--no-block', 'c3-remote-ingress.service'],
+                       capture_output=True, env=core._user_systemd_environment())
     return 0
 
 

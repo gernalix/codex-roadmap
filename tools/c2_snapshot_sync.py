@@ -13,7 +13,8 @@ import tempfile
 
 
 DEFAULT_REPO = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT = Path.home() / '.local/state/c2-supervisor/roadmap.sqlite3'
+from c3_storage import local_enabled, database
+DEFAULT_OUTPUT = database(DEFAULT_REPO) if local_enabled() else Path.home() / '.local/state/c2-supervisor/roadmap.sqlite3'
 
 
 class SnapshotError(RuntimeError):
@@ -56,6 +57,10 @@ def _preserve_active(previous, incoming):
 
 
 def sync(repo=DEFAULT_REPO, output=DEFAULT_OUTPUT):
+    if local_enabled():
+        path = database(DEFAULT_REPO)
+        _validate(path)
+        return {'state': 'local', 'database': str(path)}
     repo, output = Path(repo), Path(output)
     refs = _git(repo, 'ls-remote', 'origin', 'refs/heads/main').decode().split()
     if len(refs) != 2 or refs[1] != 'refs/heads/main':

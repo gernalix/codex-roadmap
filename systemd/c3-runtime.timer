@@ -3,7 +3,7 @@ Description=Advance C3 roadmap control plane
 
 [Timer]
 OnBootSec=30s
-OnUnitInactiveSec=1min
+OnUnitInactiveSec=15min
 Persistent=true
 Unit=c3-runtime.service
 

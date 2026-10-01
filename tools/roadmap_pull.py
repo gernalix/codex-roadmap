@@ -423,6 +423,11 @@ def guarded_pull(
     bootstrap_guard: bool = False,
 ) -> dict[str, Any]:
     repo = repo.expanduser().resolve()
+    from c3_storage import local_enabled, REPO, database
+    if local_enabled() and repo == REPO.resolve():
+        # Git is an audit replica after cutover. Never replace local state with
+        # a remote blob in the synchronous lifecycle path.
+        return {'status': 'local', 'database': str(database(repo))}
     fetched_head: str | None = None
     recovered_interrupted_fast_forward: str | None = None
     try:

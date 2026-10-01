@@ -1,6 +1,7 @@
 [Unit]
 Description=C3 Control local web application
-After=network-online.target
+After=c3-writer.service
+Requires=c3-writer.service
 Wants=network-online.target
 ConditionPathExists=%h/.local/state/c3-control/c2-retired.json
 

@@ -15,7 +15,7 @@ from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 
 from apply_issue_mutation import canonical_bytes
-from roadmap_db import apply_mutation, connect, now_utc
+from roadmap_db import apply_mutation, connect, db_path, now_utc
 
 DEFAULT_SOCKET = Path.home() / '.local/state/c3-control/writer.sock'
 MAX_REQUEST = 8 * 1024 * 1024
@@ -24,6 +24,10 @@ MAX_REQUEST = 8 * 1024 * 1024
 class LocalWriter:
     def __init__(self, repo: Path):
         self.repo = Path(repo).resolve()
+        path = db_path(self.repo)
+        if path.exists():
+            from c3_storage import verified_backup
+            verified_backup(path, path.parent / 'backups')
         self.conn = connect(self.repo)
         self.conn.commit()
         self.conn.execute('PRAGMA journal_mode=WAL')
@@ -69,6 +73,10 @@ class LocalWriter:
             conn.execute('INSERT INTO mutation_receipts(request_key,issue_number,payload_sha256,actor,applied_at) VALUES(?,?,?,?,?)',
                          (request_key, issue_number, payload_hash, actor, now_utc()))
             conn.commit()
+            # Autonomous maintenance must not wake itself recursively. External
+            # intake, executor transitions and explicit UI actions wake runtime.
+            if actor != 'c2-runtime':
+                (db_path(self.repo).parent / 'state.changed').touch()
         except Exception:
             conn.rollback()
             raise
@@ -105,6 +113,18 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, *args):
         pass
 
+    def do_GET(self):
+        if self.path != '/health':
+            self.send_error(404)
+            return
+        body = json.dumps({'status': 'ok', 'authority': str(db_path(self.server.writer.repo)),
+                           'journal_mode': self.server.writer.conn.execute('PRAGMA journal_mode').fetchone()[0]}).encode()
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
     def do_POST(self):
         try:
             size = int(self.headers.get('Content-Length', '0'))
@@ -128,7 +148,7 @@ def serve(repo, socket_path):
     socket_path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     # The lock belongs to the DB, so using another socket cannot create a
     # second service for the same canonical database.
-    with (Path(repo) / '.c3-writer.lock').open('a') as lock:
+    with (db_path(Path(repo)).parent / '.c3-writer.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         socket_path.unlink(missing_ok=True)
         writer = LocalWriter(Path(repo))

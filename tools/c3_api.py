@@ -14,6 +14,7 @@ import time
 
 import c2_snapshot_sync
 import c3_override
+from c3_storage import database, local_enabled
 from c2_runtime import _user_systemd_environment
 from roadmap_start import _wait_issue_applied
 from submit_mutation import submit_document
@@ -24,14 +25,15 @@ class ControlError(RuntimeError):
 
 
 class Control:
-    def __init__(self, repo, snapshot, *, refresh=True, timeout=120):
-        self.repo, self.snapshot = Path(repo), Path(snapshot)
+    def __init__(self, repo, snapshot=None, *, refresh=True, timeout=120):
+        self.repo = Path(repo)
+        self.snapshot = database(repo) if snapshot is None or local_enabled() else Path(snapshot)
         self.refresh, self.timeout = refresh, timeout
         self.lock = threading.RLock()
         self.last_refresh = 0
 
     def connect(self, *, force=False):
-        if self.refresh and (force or time.monotonic() - self.last_refresh > 3):
+        if self.refresh and not local_enabled() and (force or time.monotonic() - self.last_refresh > 3):
             c2_snapshot_sync.sync(self.repo, self.snapshot)
             self.last_refresh = time.monotonic()
         conn = sqlite3.connect(self.snapshot.resolve().as_uri() + '?mode=ro', uri=True)
@@ -58,7 +60,7 @@ class Control:
             events = [dict(r) for r in conn.execute('SELECT * FROM c3_user_events ORDER BY created_at DESC LIMIT 20')] if 'c3_user_events' in names else []
             return {'items': [i for i in items if not i['deleted']],
                     'dependencies': [dict(r) for r in conn.execute('SELECT * FROM work_item_dependencies')],
-                    'events': events, 'authority': 'origin/main:roadmap.sqlite'}
+                    'events': events, 'authority': 'local:roadmap.sqlite' if local_enabled() else 'origin/main:roadmap.sqlite'}
 
     def preview(self, wid, action):
         with self.lock, closing(self.connect(force=True)) as conn:
@@ -234,7 +236,7 @@ def serve(control, port=8767):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo', type=Path, default=c2_snapshot_sync.DEFAULT_REPO)
-    parser.add_argument('--snapshot', type=Path, default=Path.home() / '.local/state/c3-control/web-snapshot.sqlite3')
+    parser.add_argument('--snapshot', type=Path)
     parser.add_argument('--port', type=int, default=8767)
     args = parser.parse_args()
     serve(Control(args.repo, args.snapshot), args.port).serve_forever()

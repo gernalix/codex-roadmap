@@ -100,7 +100,8 @@ def submit_document(
         raise MutationSubmitError("empty_mutation")
 
     request_key = _validate_request_key(request_key)
-    transport = os.environ.get('C3_MUTATION_TRANSPORT', 'github')
+    from c3_storage import local_enabled
+    transport = os.environ.get('C3_MUTATION_TRANSPORT', 'local' if local_enabled() else 'github')
     if transport == 'local':
         from c3_local_writer import submit_local
         try:

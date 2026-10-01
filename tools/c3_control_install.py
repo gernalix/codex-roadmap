@@ -11,9 +11,8 @@ ROOT = Path(__file__).resolve().parents[1]
 UNITS = {
     "c3-symphony.service": ROOT / "operations/c3-symphony.service",
     **{name: ROOT / "systemd" / name for name in (
-        "c3-web.service", "c3-roadmap-snapshot.service", "c3-roadmap-snapshot.timer",
-        "c3-runtime.service", "c3-runtime.timer", "c3-runtime.path",
-        "c3-inbox-maintenance.service", "c3-inbox-maintenance.timer")},
+        "c3-writer.service", "c3-web.service", "c3-remote-ingress.service",
+        "c3-runtime.service", "c3-runtime.timer", "c3-runtime.path")},
 }
 
 

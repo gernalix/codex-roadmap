@@ -23,7 +23,8 @@ class RoadmapResultError(RuntimeError):
 
 
 ROADMAP_ROOT = Path(__file__).resolve().parents[1]
-ROADMAP_DB = ROADMAP_ROOT / "roadmap.sqlite"
+from c3_storage import database
+ROADMAP_DB = database(ROADMAP_ROOT)
 
 
 def _current_running_generation(prompt_id: str) -> int:
