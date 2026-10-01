@@ -74,11 +74,11 @@ class OverrideTests(unittest.TestCase):
         self.assertIn(self.b, result['blocking_prerequisites'])
         self.assertGreater(result['applied_position'], 0)
 
-    def test_move_uses_the_displayed_canonical_manual_order(self):
+    def test_move_uses_the_displayed_canonical_user_order(self):
         self.conn.execute('DELETE FROM work_item_dependencies')
-        self.conn.execute("INSERT INTO manual_order_overrides VALUES('roadmap',?,0,'workflowy','x','x')", (self.c,))
-        self.conn.execute("INSERT INTO manual_order_overrides VALUES('roadmap',?,1,'workflowy','x','x')", (self.a,))
-        self.conn.execute("INSERT INTO manual_order_overrides VALUES('roadmap',?,2,'workflowy','x','x')", (self.b,))
+        self.conn.execute("INSERT INTO c3_user_order VALUES(?,0)", (self.c,))
+        self.conn.execute("INSERT INTO c3_user_order VALUES(?,1)", (self.a,))
+        self.conn.execute("INSERT INTO c3_user_order VALUES(?,2)", (self.b,))
         result = self.apply(self.command(self.b, 'move', position=1))
         self.assertEqual([self.c, self.b, self.a], result['ordered_ids'][:3])
         key = override.order_key(self.conn)

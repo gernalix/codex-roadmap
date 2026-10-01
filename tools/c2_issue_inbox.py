@@ -125,23 +125,10 @@ def install_schema(conn: sqlite3.Connection) -> None:
                 (issue_id,work_item_id,role,created_at)
                 SELECT issue_id,{column},?,created_at FROM issue_inbox
                 WHERE {column} IS NOT NULL""", (role,))
-    import c2_manual_order
-
-    c2_manual_order.install_schema(conn)
     conn.execute(
         """CREATE VIEW IF NOT EXISTS v_issue_inbox_pending_ordered AS
-           SELECT
-             i.*,
-             o.rank AS manual_rank,
-             o.source AS manual_order_source,
-             o.source_modified_at AS manual_order_source_modified_at,
-             o.updated_at AS manual_order_updated_at
-           FROM issue_inbox i
-           LEFT JOIN manual_order_overrides o
-             ON o.scope='inbox' AND o.entity_id=i.issue_id
-           WHERE i.state='pending'
-           ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,
-                    o.rank,i.observed_at_ms,i.issue_id"""
+           SELECT i.* FROM issue_inbox i WHERE i.state='pending'
+           ORDER BY i.observed_at_ms,i.issue_id"""
     )
 
 

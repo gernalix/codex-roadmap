@@ -179,9 +179,6 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
     has_issue_inbox = bool(db.execute(
         "SELECT 1 FROM sqlite_master WHERE type='table' AND name='issue_inbox'"
     ).fetchone())
-    has_manual_order = bool(db.execute(
-        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='manual_order_overrides'"
-    ).fetchone())
     pending_issue_inbox = (
         int(db.execute("SELECT COUNT(*) FROM issue_inbox WHERE state='pending'").fetchone()[0])
         if has_issue_inbox else 0
@@ -318,17 +315,9 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         events.append(('recover',str(len(expired))))
     ready_query='''SELECT w.*,
             s.activity,s.model,s.reasoning,s.worktree,s.project_url,s.resources_json'''
-    if has_manual_order:
-        ready_query+=''',o.rank AS manual_rank,o.source AS manual_order_source,
-            o.source_modified_at AS manual_order_source_modified_at'''
     ready_query+=''' FROM v_work_item_runnable w
           JOIN work_item_execution_specs s USING(work_item_id)'''
-    if has_manual_order:
-        ready_query+=""" LEFT JOIN manual_order_overrides o
-          ON o.scope='roadmap' AND o.entity_id=w.work_item_id"""
-        ready_query+=""" ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,o.rank,"""
-    else:
-        ready_query+=''' ORDER BY '''
+    ready_query+=''' ORDER BY '''
     ready_query+='''CASE
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p0') THEN 0
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p1') THEN 1

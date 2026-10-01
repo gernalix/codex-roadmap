@@ -71,16 +71,6 @@ CREATE TABLE IF NOT EXISTS c2_human_copy (
 CREATE INDEX IF NOT EXISTS idx_c2_human_copy_status
   ON c2_human_copy(copy_status, entity_kind, entity_id);
 
-CREATE TABLE IF NOT EXISTS manual_order_overrides (
-  scope TEXT NOT NULL CHECK(scope IN ('inbox','roadmap')),
-  entity_id TEXT NOT NULL,
-  rank INTEGER NOT NULL CHECK(rank >= 0),
-  source TEXT NOT NULL CHECK(source='workflowy'),
-  source_modified_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL,
-  PRIMARY KEY(scope, entity_id),
-  UNIQUE(scope, rank)
-);
 
 CREATE TABLE IF NOT EXISTS issue_inbox (
   issue_id TEXT PRIMARY KEY,
@@ -246,41 +236,14 @@ SELECT
 FROM work_items w
 LEFT JOIN stats s ON s.root_id=w.work_item_id;
 
-CREATE VIEW v_roadmap_manual_order AS
-SELECT
-  w.*,
-  CASE
-    WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p0') THEN 0
-    WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p1') THEN 1
-    WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
-    ELSE 3
-  END AS ai_priority_rank,
-  o.rank AS manual_rank,
-  o.source AS manual_order_source,
-  o.source_modified_at AS manual_order_source_modified_at,
-  o.updated_at AS manual_order_updated_at
-FROM work_items w
-LEFT JOIN manual_order_overrides o
-  ON o.scope='roadmap' AND o.entity_id=w.work_item_id;
-
 CREATE VIEW v_work_item_summary AS
 SELECT w.*, p.total_actionable, p.completed_actionable, p.progress_percent
-FROM v_roadmap_manual_order w
+FROM work_items w
 JOIN v_work_item_progress p ON p.work_item_id=w.work_item_id;
 
 CREATE VIEW v_issue_inbox_pending_ordered AS
-SELECT
-  i.*,
-  o.rank AS manual_rank,
-  o.source AS manual_order_source,
-  o.source_modified_at AS manual_order_source_modified_at,
-  o.updated_at AS manual_order_updated_at
-FROM issue_inbox i
-LEFT JOIN manual_order_overrides o
-  ON o.scope='inbox' AND o.entity_id=i.issue_id
-WHERE i.state='pending'
-ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,
-         o.rank,i.observed_at_ms,i.issue_id;
+SELECT i.* FROM issue_inbox i WHERE i.state='pending'
+ORDER BY i.observed_at_ms,i.issue_id;
 
 CREATE VIEW v_work_item_runnable AS
 SELECT w.*

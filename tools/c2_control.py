@@ -17,7 +17,7 @@ OPERATIONS = (
     'reconcile_item','reparent_item','reconcile_blocked','reconcile_blocked_safety_net',
     'executor_started','bind_executor','promote_issue','discard_issue','reconcile_issue_batch',
     'edit_issue','void_issue',
-    'ensure_issue_triage','set_manual_order','clear_manual_order','set_human_copy',
+    'ensure_issue_triage','set_human_copy',
 )
 
 
@@ -85,12 +85,7 @@ def submit_control(*, operation, arguments, request_key, supervisor_id,
             'supervisor_id':row['supervisor_id'],
             'fencing_token':row['fencing_token'],
         }
-        stable_authority = (
-            operation == 'clear_manual_order' and actor == 'c2-workflowy-order'
-            and not canonical_renew
-        )
-        if not stable_authority:
-            arguments['supervisor_authority']['lease_expires_at'] = row['lease_expires_at']
+        arguments['supervisor_authority']['lease_expires_at'] = row['lease_expires_at']
     operations=[]
     if canonical_renew:
         operations.append({'op':'c2_renew_supervisor','arguments':{

@@ -9,7 +9,7 @@ import re
 import uuid
 
 import c2_control
-from c2_workflowy_order import load_runtime_identity
+from c2_supervisor_lease import load_runtime_identity
 
 
 ALLOWED = {"description", "repo", "code_location", "executor_ref", "chat_url"}

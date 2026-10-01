@@ -9,7 +9,6 @@ import c2_terminal_state_reimport
 import c2_work_item_admin
 import c2_blocked_reconcile
 import c2_issue_inbox
-import c2_manual_order
 import c2_human_copy
 import roadmap_db
 
@@ -23,7 +22,7 @@ SUPERVISOR_OPERATIONS = frozenset({
     'reconcile_blocked', 'reconcile_blocked_safety_net', 'bind_executor',
     'promote_issue', 'discard_issue', 'reconcile_issue_batch', 'edit_issue', 'void_issue', 'ensure_issue_triage',
     'set_execution_override', 'clear_execution_override',
-    'set_manual_order', 'clear_manual_order', 'set_human_copy',
+    'set_human_copy',
 })
 
 
@@ -66,8 +65,6 @@ def apply(conn, mutation):
         'schedule': c2_scheduler.schedule,
         'set_execution_override': c2_scheduler.set_override,
         'clear_execution_override': c2_scheduler.clear_override,
-        'set_manual_order': c2_manual_order.set_manual_order,
-        'clear_manual_order': c2_manual_order.clear_manual_order,
         'set_human_copy': c2_human_copy.set_copy,
         'acknowledge': c2_scheduler.acknowledge,
         'executor_started': c2_scheduler.executor_started,

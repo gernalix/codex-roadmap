@@ -12,7 +12,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
 import c2_intake
 import c2_issue_inbox
-import c2_manual_order
 import c2_scheduler
 import c2_issue_capture
 import c2_issue_manage
@@ -200,7 +199,7 @@ class IssueInboxTests(unittest.TestCase):
             finally:
                 conn.close()
 
-    def test_pending_readback_uses_manual_order_then_observed_order(self):
+    def test_pending_readback_uses_observed_order(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, conn = self.make_conn(Path(tmp))
             try:
@@ -214,18 +213,8 @@ class IssueInboxTests(unittest.TestCase):
                 third = c2_issue_inbox.capture(
                     conn, description="Third", observed_at_ms=3000
                 )["issue_id"]
-                c2_manual_order.set_manual_order(
-                    conn, scope="inbox", ordered_ids=[third, first, second],
-                    source="workflowy", source_modified_at="opaque-inbox"
-                )
                 rows = c2_issue_inbox.pending_issues(conn)
-                self.assertEqual([third, first, second], [row["issue_id"] for row in rows])
-                self.assertEqual([0, 1, 2], [row["manual_rank"] for row in rows])
-                self.assertTrue(all(
-                    row["manual_order_source"] == "workflowy"
-                    and row["manual_order_source_modified_at"] == "opaque-inbox"
-                    for row in rows
-                ))
+                self.assertEqual([first, second, third], [row["issue_id"] for row in rows])
             finally:
                 conn.close()
 

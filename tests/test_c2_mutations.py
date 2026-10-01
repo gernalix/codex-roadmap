@@ -8,7 +8,6 @@ import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import apply_issue_mutation
 import c2_intake
-import c2_manual_order
 import c2_supervisor_authority
 import c2_scheduler
 import roadmap_db
@@ -16,58 +15,14 @@ import test_c2_intake
 
 
 class C2WriterTests(unittest.TestCase):
-    def test_manual_order_set_replay_clear_is_fenced_and_preserves_source(self):
+    def test_retired_workflowy_order_operations_fail_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=test_c2_intake.C2IntakeTests().make_cutover_db(Path(tmp))
             with closing(c2_intake._connect(path)) as conn:
                 conn.execute('BEGIN IMMEDIATE')
-                authority={'supervisor_id':'test-supervisor','fencing_token':1,
-                           'lease_expires_at':time.time()+120}
-                roadmap_db.apply_mutation(conn,{'op':'c2_claim_supervisor',
-                    'arguments':{'supervisor_authority':authority}})
-                ids=[str(row[0]) for row in conn.execute(
-                    'SELECT work_item_id FROM work_items ORDER BY work_item_id')]
-                operation={'op':'c2_set_manual_order','arguments':{
-                    'scope':'roadmap','ordered_ids':list(reversed(ids)),
-                    'source':'workflowy','source_modified_at':'opaque:123',
-                    'supervisor_authority':authority}}
-                roadmap_db.apply_mutation(conn,operation)
-                first=[tuple(row) for row in conn.execute(
-                    '''SELECT entity_id,rank,source,source_modified_at,updated_at
-                       FROM manual_order_overrides ORDER BY rank''')]
-                roadmap_db.apply_mutation(conn,operation)
-                self.assertEqual(first,[tuple(row) for row in conn.execute(
-                    '''SELECT entity_id,rank,source,source_modified_at,updated_at
-                       FROM manual_order_overrides ORDER BY rank''')])
-                self.assertTrue(all(row[2:4]==('workflowy','opaque:123') for row in first))
-                with self.assertRaisesRegex(c2_supervisor_authority.AuthorityError,
-                                             'supervisor_authority_required'):
-                    roadmap_db.apply_mutation(conn,{'op':'c2_clear_manual_order',
-                                                    'arguments':{'scope':'roadmap'}})
-                stable_authority={
-                    'supervisor_id':authority['supervisor_id'],
-                    'fencing_token':authority['fencing_token'],
-                }
-                roadmap_db.apply_mutation(conn,{'op':'c2_clear_manual_order','arguments':{
-                    'scope':'roadmap','supervisor_authority':stable_authority}})
-                roadmap_db.apply_mutation(conn,{'op':'c2_clear_manual_order','arguments':{
-                    'scope':'roadmap','supervisor_authority':stable_authority}})
-                self.assertEqual([],c2_manual_order.read_manual_order(conn,'roadmap')['items'])
-
-    def test_manual_order_invalid_scope_ids_and_duplicates_fail_closed(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            path=test_c2_intake.C2IntakeTests().make_cutover_db(Path(tmp))
-            with closing(c2_intake._connect(path)) as conn:
-                conn.execute('BEGIN IMMEDIATE')
-                valid=conn.execute('SELECT work_item_id FROM work_items LIMIT 1').fetchone()[0]
-                for kwargs,error in (
-                    ({'scope':'other','ordered_ids':[]},'invalid_manual_order_scope'),
-                    ({'scope':'roadmap','ordered_ids':['wi:missing']},'invalid_manual_order_ids'),
-                    ({'scope':'roadmap','ordered_ids':[valid,valid]},'duplicate_manual_order_entity_id'),
-                ):
-                    with self.assertRaisesRegex(c2_manual_order.ManualOrderError,error):
-                        c2_manual_order.set_manual_order(conn,source='workflowy',
-                            source_modified_at='opaque',**kwargs)
+                for operation in ('c2_set_manual_order', 'c2_clear_manual_order'):
+                    with self.assertRaisesRegex(ValueError, 'unknown_c2_operation'):
+                        roadmap_db.apply_mutation(conn, {'op':operation,'arguments':{}})
 
     def test_override_set_replay_clear_requires_current_fence(self):
         with tempfile.TemporaryDirectory() as tmp:

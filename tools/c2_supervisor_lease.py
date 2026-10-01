@@ -23,6 +23,33 @@ class LeaseError(RuntimeError):
     pass
 
 
+def load_runtime_identity(path: Path = RUNTIME_ENV) -> tuple[str, int]:
+    path = Path(path).expanduser()
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError as exc:
+        raise LeaseError("supervisor_runtime_env_missing") from exc
+    values: dict[str, str] = {}
+    allowed = {"C2_SUPERVISOR_ID", "C2_FENCING_TOKEN"}
+    for raw in lines:
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if "=" not in line:
+            raise LeaseError("invalid_supervisor_runtime_env")
+        key, value = line.split("=", 1)
+        if key not in allowed or key in values or not value:
+            raise LeaseError("invalid_supervisor_runtime_env")
+        values[key] = value
+    supervisor_id = values.get("C2_SUPERVISOR_ID", "")
+    token = values.get("C2_FENCING_TOKEN", "")
+    if not re.fullmatch(r"[A-Za-z0-9_.:-]+", supervisor_id):
+        raise LeaseError("invalid_supervisor_id")
+    if not re.fullmatch(r"[1-9][0-9]*", token):
+        raise LeaseError("invalid_fencing_token")
+    return supervisor_id, int(token)
+
+
 def connect(path: Path):
     path.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(path, timeout=10, isolation_level=None)
