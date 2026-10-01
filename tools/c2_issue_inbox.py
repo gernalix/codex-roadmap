@@ -694,7 +694,7 @@ def ensure_triage(conn: sqlite3.Connection, *, project_url: str,
     active = conn.execute("""SELECT w.work_item_id FROM work_items w
         JOIN work_item_tags t USING(work_item_id)
         WHERE t.tag='c2:issue-triage'
-          AND w.status NOT IN ('completed','failed','cancelled','superseded','waived')
+          AND w.status NOT IN ('completed','failed','blocked','cancelled','superseded','waived')
         ORDER BY w.created_at,w.work_item_id LIMIT 1""").fetchone()
     if active:
         return {"state": "existing", "work_item_id": active[0]}
