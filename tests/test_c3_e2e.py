@@ -79,7 +79,14 @@ class C3EndToEndTests(unittest.TestCase):
                 arguments = {'title':'Isolated native acceptance', 'repo':'fixture/native',
                              'execution':{'activity':'native', 'command':command, 'worktree':str(root),
                                           'resources':['fixture:device']}}
-                c2_runtime._writer_submit('intake', arguments, 'fixture-intake')
+                with closing(c3_runtime.connect(lease)) as coordination:
+                    owner = c3_runtime.snapshot(coordination)
+                arguments['supervisor_authority'] = {key:owner[key] for key in
+                    ('supervisor_id','fencing_token','lease_expires_at')}
+                c3_local_writer.submit_local({'schema':'codex-roadmap.mutation.v1',
+                    'actor':'fixture-external-intake',
+                    'operations':[{'op':'c2_intake','arguments':arguments}]},
+                    request_key='fixture-intake',socket_path=socket)
                 changed_file = path.parent / 'state.changed'
                 external_event = changed_file.stat().st_mtime_ns
                 cycles = [c3_runtime.run(path)]
