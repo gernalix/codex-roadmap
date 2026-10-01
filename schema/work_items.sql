@@ -279,7 +279,7 @@ WHERE w.status='pending'
 ORDER BY COALESCE(w.sort_order,2147483647), w.created_at, w.work_item_id;
 
 
--- C2-owned project/repository identity and PROMPT_ID registry imported once from MegaVault.
+-- MegaVault read-through project/inventory cache; C3 owns prompt lifecycle IDs.
 CREATE TABLE IF NOT EXISTS projects (
   project_id INTEGER PRIMARY KEY,
   slug TEXT NOT NULL UNIQUE,

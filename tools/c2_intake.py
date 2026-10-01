@@ -72,6 +72,16 @@ def _project_and_repo(
     project: str | None,
     repo: str | None,
 ) -> tuple[int | None, str | None, str | None]:
+    from c3_projects import project_catalog
+    with project_catalog(conn) as source:
+        return _project_and_repo_catalog(source, project, repo)
+
+
+def _project_and_repo_catalog(
+    conn: sqlite3.Connection,
+    project: str | None,
+    repo: str | None,
+) -> tuple[int | None, str | None, str | None]:
     if project is None:
         return None, None, repo
     project_id = c2_identity.resolve_project_id(conn, project)

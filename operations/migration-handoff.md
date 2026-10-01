@@ -2,7 +2,7 @@
 
 Status: migration in progress. This is the single canonical handoff for this migration.
 
-Architecture: MegaVault owns project identity and desired inventory/policy; C3 owns work and prompt lifecycle; github-autosync owns Git integration; Fedora System Monitor owns observed health; codex-usage-monitor owns usage telemetry. The identity/registry cutovers are still pending.
+Architecture: MegaVault owns project identity and desired inventory/policy; C3 owns work and prompt lifecycle; github-autosync owns Git integration; Fedora System Monitor owns observed health; codex-usage-monitor owns usage telemetry. PROMPT_ID registry and monitoring cutovers are still pending.
 
 Current state: C3's local writer is active over a private Unix socket, with WAL and atomic/idempotent mutation receipts. The canonical DB is `~/.local/state/c3-control/roadmap.sqlite`; the web app reads it directly. GitHub Actions no longer writes it. Remote ingress is an asynchronous bounded delivery job. Automatic scheduling remains suspended during retirement; writer and web remain available.
 
@@ -14,6 +14,8 @@ Recovery boundary: the old supervisor lease is retired with zero expiry and no r
 
 Workflowy retired: dashboard root and its 1,812 nodes backed up privately then deleted; personal capture/import remains live. Roadmap sync, daily C2 mirror, manual-order authority, launch/fix routes and unused modules are removed; five installed units masked. C3 retains its own UI order; Inbox remains chronological. Canonical DB backup verified before removing 313 legacy overrides. Kuma monitor 63 removed after offline verified backup; all 34 other monitors preserved. Fedora excludes the retired service, including historical heartbeat samples. Tests: 95 targeted C3, 38 personal Workflowy; Fedora suite includes the retirement exclusion. Web/API and personal bridge readbacks passed.
 
-Real residuals: project and PROMPT_ID authority reconciliation; no-op audit compaction; bounded technical Inbox triage; final runtime consolidation; projection retirement; automatic safe Git GC; monitoring deduplication; full scheduler/Symphony/integrator/recovery and reboot-safety gates. No final PASS is claimed.
+Project identity cutover: MegaVault is canonical; C3 caches its 106 projects, aliases and desired repository/operation inventory. Writer refreshes the cache atomically before mutations and denies local cache writes; local intake/resolution reads MegaVault directly. Historical supervisor references moved 104→105, including prompt registry and its untyped allocation receipt; 104/105/106 now match MegaVault. Both migration steps had verified backups; integrity/FK/readback and 29 targeted tests passed. MegaVault's pre-existing dirty DB was preserved, not changed.
 
-Next action: make MegaVault the sole project identity authority, reconcile historical C3 project references, then continue D–J and the final gates from current DB/runtime state.
+Real residuals: PROMPT_ID authority reconciliation; no-op audit compaction; bounded technical Inbox triage; final runtime consolidation; projection retirement; automatic safe Git GC; monitoring deduplication; full scheduler/Symphony/integrator/recovery and reboot-safety gates. No final PASS is claimed.
+
+Next action: reconcile and reserve all historical PROMPT_IDs in C3, cut over the allocator and retire MegaVault prompt-ID producers, then continue E–J and the final gates from current DB/runtime state.

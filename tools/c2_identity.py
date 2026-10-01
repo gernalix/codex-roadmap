@@ -251,6 +251,10 @@ def _occupied_prompt_ids(conn: sqlite3.Connection) -> set[int]:
 
 
 def resolve_project_id(conn: sqlite3.Connection, value: str | int) -> int:
+    from c3_projects import project_catalog
+    with project_catalog(conn) as source:
+        if source is not conn:
+            return resolve_project_id(source, value)
     try:
         project_id = int(value)
     except (TypeError, ValueError):

@@ -11,6 +11,7 @@ import os
 import re
 import socket
 import socketserver
+import sqlite3
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 
@@ -22,7 +23,7 @@ MAX_REQUEST = 8 * 1024 * 1024
 
 
 class LocalWriter:
-    def __init__(self, repo: Path):
+    def __init__(self, repo: Path, *, projects_source=None):
         self.repo = Path(repo).resolve()
         path = db_path(self.repo)
         if path.exists():
@@ -33,6 +34,17 @@ class LocalWriter:
         self.conn.execute('PRAGMA journal_mode=WAL')
         self.conn.execute('PRAGMA synchronous=FULL')
         self.conn.execute('PRAGMA busy_timeout=30000')
+        from c3_storage import REPO
+        from c3_projects import SOURCE, CACHE_TABLES
+        self.projects_source = projects_source or (SOURCE if self.repo == REPO.resolve() else None)
+        self.syncing_projects = False
+        if self.projects_source:
+            def authorize(action, table, column, database, trigger):
+                if action in (sqlite3.SQLITE_INSERT, sqlite3.SQLITE_UPDATE, sqlite3.SQLITE_DELETE) and table in CACHE_TABLES and not self.syncing_projects:
+                    return sqlite3.SQLITE_DENY
+                return sqlite3.SQLITE_OK
+            self.authorize = authorize
+            self.conn.set_authorizer(self.authorize)
 
     def close(self):
         self.conn.close()
@@ -72,8 +84,20 @@ class LocalWriter:
                 issue_number = conn.execute('SELECT MIN(COALESCE(MIN(issue_number),0),0)-1 FROM mutation_receipts').fetchone()[0]
             elif not isinstance(issue_number, int) or issue_number <= 0:
                 raise ValueError('invalid_issue_number')
+            if self.projects_source:
+                from c3_projects import synchronize
+                self.syncing_projects = True
+                conn.set_authorizer(self.authorize)
+                try:
+                    synchronize(conn, self.projects_source)
+                finally:
+                    self.syncing_projects = False
+                    conn.set_authorizer(self.authorize)
             for operation in operations:
                 apply_mutation(conn, operation, default_actor=actor)
+            if self.projects_source:
+                from c3_projects import validate_references
+                validate_references(conn)
             conn.execute('INSERT INTO mutation_receipts(request_key,issue_number,payload_sha256,actor,applied_at) VALUES(?,?,?,?,?)',
                          (request_key, issue_number, payload_hash, actor, now_utc()))
             conn.commit()
