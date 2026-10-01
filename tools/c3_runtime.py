@@ -19,7 +19,7 @@ from c3_retirement import MARKER
 
 LOCK = Path.home() / ".local/state/c3-control/runtime.lock"
 from c3_storage import local_enabled, database
-SNAPSHOT = database() if local_enabled() else Path.home() / ".local/state/c2-supervisor/roadmap.sqlite3"
+SNAPSHOT = database()
 
 
 class C3RuntimeError(RuntimeError):
@@ -110,10 +110,6 @@ def run(db_path: Path = SNAPSHOT, *, inbox_only: bool = False) -> dict:
                     return result
                 pending = [r[0] for r in db.execute(
                     "SELECT issue_id FROM issue_inbox WHERE state='pending' ORDER BY observed_at_ms,issue_id LIMIT 25")]
-                if pending and not local_enabled():
-                    key = core._key("c3-inbox-ensure", pending)
-                    submit("ensure_issue_triage", {"project_url": core.C2_TRIAGE_PROJECT_URL,
-                                                   "batch_limit": 25}, key)
                 if inbox_only:
                     return {"inbox_pending": len(pending), "triage_requested": bool(pending)}
                 result["inbox_pending"] = len(pending)

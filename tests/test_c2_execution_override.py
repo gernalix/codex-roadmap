@@ -15,16 +15,14 @@ import test_c2_intake
 
 
 class ExecutionOverrideCliTests(unittest.TestCase):
-    def test_default_read_syncs_and_reads_verified_snapshot(self):
+    def test_default_read_uses_canonical_database_without_sync(self):
         output=StringIO()
-        with patch.object(cli,'sync') as sync, \
-             patch.object(cli,'_open_snapshot') as open_snapshot, \
+        with patch.object(cli,'_open_snapshot') as open_snapshot, \
              patch.object(cli,'read_override',return_value=None), \
              redirect_stdout(output):
             open_snapshot.return_value.__enter__.return_value = object()
             self.assertEqual(0,cli.main(['read']))
-        sync.assert_called_once_with(cli.DEFAULT_REPO,cli.DEFAULT_OUTPUT)
-        open_snapshot.assert_called_once_with(cli.DEFAULT_OUTPUT)
+        open_snapshot.assert_called_once_with(cli.CANONICAL_DB)
         self.assertEqual({'execution_override':None},json.loads(output.getvalue()))
 
     def test_explicit_snapshot_read_and_fenced_set_clear(self):

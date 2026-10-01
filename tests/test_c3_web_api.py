@@ -32,7 +32,7 @@ class WebApiTests(unittest.TestCase):
             self.b = c2_intake.add_work_item(conn, title='Dependent task', parent_id=self.a)['work_item_id']
             conn.execute('INSERT INTO work_item_dependencies VALUES(?,?,1,NULL)', (self.b, self.a))
             conn.commit()
-        self.control = c3_api.Control(self.root, self.path, refresh=False)
+        self.control = c3_api.Control(self.root, self.path)
         self.server = c3_api.serve(self.control, 0)
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()

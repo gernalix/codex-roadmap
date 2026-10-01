@@ -14,7 +14,7 @@ import subprocess
 import time
 from typing import Any, Callable
 
-import c2_snapshot_sync
+from c3_storage import CANONICAL_DB
 from c2_codex_sandbox import git_metadata_writable_roots, SandboxPathError
 from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot, record_activity
 from roadmap_start import _wait_issue_applied, RoadmapStartError
@@ -22,7 +22,7 @@ from submit_mutation import submit_document, MutationSubmitError
 
 DEFAULT_REPOSITORY = "gernalix/codex-roadmap"
 DEFAULT_REPO = Path(__file__).resolve().parents[1]
-DEFAULT_SNAPSHOT = Path.home()/".local/state/c2-supervisor/roadmap.sqlite3"
+DEFAULT_SNAPSHOT = CANONICAL_DB
 REPO_SINGLE_WRITER = Path.home()/"projects/github-autosync/repo_single_writer.py"
 ROADMAP_CANONICAL = Path.home()/"projects/codex-roadmap"
 ROADMAP_WORKTREE_ROOT = Path.home()/".local/share/c2-supervisor/worktrees/codex-roadmap"
@@ -121,7 +121,6 @@ def _state(conn: sqlite3.Connection, work_item_id: str) -> dict[str, Any]:
             result["prompt_body"]=str(body[0])
     return result
 def _refresh_state(work_item_id: str) -> dict[str, Any]:
-    c2_snapshot_sync.sync(DEFAULT_REPO,DEFAULT_SNAPSHOT)
     with closing(_open_snapshot()) as conn:
         return _state(conn,work_item_id)
 

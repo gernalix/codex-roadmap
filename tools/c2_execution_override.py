@@ -10,7 +10,7 @@ import json
 from c2_prepare_codex import _current_authority
 from c2_runtime import _open_snapshot
 from c2_scheduler import read_override
-from c2_snapshot_sync import DEFAULT_OUTPUT, DEFAULT_REPO, sync
+from c3_storage import CANONICAL_DB
 from submit_mutation import submit_document
 
 
@@ -36,9 +36,7 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     if args.action == 'read':
         from pathlib import Path
-        if not args.db:
-            sync(DEFAULT_REPO, DEFAULT_OUTPUT)
-        with closing(_open_snapshot(Path(args.db) if args.db else DEFAULT_OUTPUT)) as db:
+        with closing(_open_snapshot(Path(args.db) if args.db else CANONICAL_DB)) as db:
             print(json.dumps({'execution_override': read_override(db)}, sort_keys=True))
         return 0
     authority = _current_authority('execution_override:'+args.action)

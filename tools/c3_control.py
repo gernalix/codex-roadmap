@@ -4,24 +4,26 @@ from __future__ import annotations
 
 import argparse
 import json
-from pathlib import Path
 
-import c2_snapshot_sync
+import sqlite3
+from contextlib import closing
+from c3_storage import CANONICAL_DB
 from c2_repository_integration import integration_status
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="action", required=True)
-    snapshot = sub.add_parser("snapshot")
-    snapshot.add_argument("--repo", type=Path, default=c2_snapshot_sync.DEFAULT_REPO)
-    snapshot.add_argument("--output", type=Path, default=c2_snapshot_sync.DEFAULT_OUTPUT)
+    sub.add_parser("status")
     integration = sub.add_parser("integration-status")
     integration.add_argument("prompt_id")
     integration.add_argument("repository")
     args = parser.parse_args(argv)
-    if args.action == "snapshot":
-        print(json.dumps(c2_snapshot_sync.sync(args.repo, args.output), sort_keys=True))
+    if args.action == "status":
+        with closing(sqlite3.connect(CANONICAL_DB.resolve().as_uri() + '?mode=ro', uri=True)) as db:
+            print(json.dumps({'database': str(CANONICAL_DB),
+                              'integrity': db.execute('PRAGMA quick_check').fetchone()[0],
+                              'active_runs': db.execute("SELECT COUNT(*) FROM work_item_runs WHERE state IN ('claimed','running','recovering')").fetchone()[0]}, sort_keys=True))
         return 0
     print(json.dumps(integration_status(args.prompt_id, args.repository), sort_keys=True))
     return 0
