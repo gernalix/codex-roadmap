@@ -23,7 +23,10 @@ class LocalWriterTests(unittest.TestCase):
                 notification.bind(str(notification_socket))
                 notification.settimeout(5)
                 with patch.dict('os.environ', {'NOTIFY_SOCKET':str(notification_socket)}):
-                    process = multiprocessing.Process(target=serve, args=(repo, mutation_socket))
+                    # Python 3.14's already-running forkserver retains its old
+                    # environment; spawn models a fresh systemd process here.
+                    process = multiprocessing.get_context('spawn').Process(
+                        target=serve, args=(repo, mutation_socket))
                     process.start()
                     try:
                         self.assertEqual(b'READY=1', notification.recv(128))
