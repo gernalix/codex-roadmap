@@ -141,6 +141,31 @@ class BrowserExecutorTests(unittest.TestCase):
             self.assertFalse(receipt.exists())
             self.assertEqual([],browser.calls)
 
+    def test_issue_triage_reuses_stable_chat_without_new_tab(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            alias=Path(tmp)/'triage-chat.json'
+            alias.write_text(__import__('json').dumps({
+                'work_item_id':'wi:old','project_url':'https://chatgpt.com/g/g-p-project',
+                'chat_url':'https://chatgpt.com/c/triage'}))
+            prior=SimpleNamespace(chat_url='https://chatgpt.com/c/triage',
+                project_url='https://chatgpt.com/g/g-p-project',enabled=True)
+            class TriageStore(FakeStore):
+                def load_task(self,task_id):
+                    if task_id=='wi:old': return prior
+                    raise FileNotFoundError(task_id)
+            browser=FakeBrowser();store=TriageStore();receipt=Path(tmp)/'receipt.json'
+            with patch('c2_chatgpt_executor.ISSUE_TRIAGE_CHAT_STATE',alias):
+                result=dispatch(run_id='new',work_item_id='wi:new',
+                    metadata={'executor':'chatgpt','activity':'semantic','issue_triage':True,
+                              'project_url':'https://chatgpt.com/g/g-p-project'},
+                    prompt='Process the next batch',db_path=Path(tmp)/'db',receipt=receipt,
+                    browser=browser,store=store)
+            self.assertEqual('https://chatgpt.com/c/triage',result['chat_url'])
+            self.assertEqual([],browser.calls)
+            self.assertFalse(prior.enabled)
+            self.assertEqual('wi:new',__import__('json').loads(alias.read_text())['work_item_id'])
+            self.assertEqual('https://chatgpt.com/c/triage',store.tasks[-1].chat_url)
+
     def test_new_run_reuses_persisted_work_item_chat(self):
         with tempfile.TemporaryDirectory() as tmp:
             browser=FakeBrowser();receipt=Path(tmp)/'new-run.json'
