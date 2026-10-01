@@ -90,15 +90,31 @@ def run(db_path: Path = SNAPSHOT, *, inbox_only: bool = False) -> dict:
                         or current["lease_expires_at"] <= time.time()):
                     raise C3RuntimeError("c3_authority_lost")
             def submit(operation, arguments, key):
+                nonlocal progressed
                 guard()
-                return core._writer_submit(operation, arguments, key)
-            with closing(core._open_snapshot(db_path)) as db:
-                route = core._coding_route()
-                if route["mode"] != "production":
-                    raise C3RuntimeError("production_symphony_configuration_required")
-                route["no_legacy_codex"] = True
+                applied = core._writer_submit(operation, arguments, key)
+                if operation in {'claim_supervisor','renew_supervisor','schedule','acknowledge',
+                                 'executor_started','recover'} and not applied.get('idempotent', False):
+                    progressed = True
+                return applied
+            launched = set()
+            def launch(run_id):
                 guard()
-                result = core.advance(db, submit=submit, launch=lambda run_id: _launch(run_id, db_path),
+                if run_id not in launched and not _worker_active(run_id):
+                    _launch(run_id, db_path)
+                    launched.add(run_id)
+            route = core._coding_route()
+            if route["mode"] != "production":
+                raise C3RuntimeError("production_symphony_configuration_required")
+            route["no_legacy_codex"] = True
+            events = []
+            # Drain only the finite claim→schedule→ack→start→launch chain in
+            # this wake. No sleep, autonomous event loop or no-op retry.
+            for _ in range(6):
+                progressed = False
+                with closing(core._open_snapshot(db_path)) as db:
+                    guard()
+                    result = core.advance(db, submit=submit, launch=launch,
                                     launch_notify=_notify, worker_active=_worker_active,
                                     repo_task_status=core._repo_task_status,
                                     supervisor_authority={"supervisor_id": row["supervisor_id"],
@@ -106,9 +122,14 @@ def run(db_path: Path = SNAPSHOT, *, inbox_only: bool = False) -> dict:
                                                           "lease_expires_at": row["lease_expires_at"]},
                                     worker_prefix="c3-run:", coding_route_override=route,
                                     control_only=inbox_only)
-                if any(event[0] in ("claim_supervisor", "supervisor_fenced")
-                       for event in result.get("events", [])):
+                events.extend(result.get('events', []))
+                if any(event[0] == 'supervisor_fenced' for event in result.get('events', [])):
                     return result
+                if not progressed:
+                    break
+            if events:
+                result['events'] = events
+            with closing(core._open_snapshot(db_path)) as db:
                 inbox_result = c3_inbox_maintenance.run(db, submit)
                 pending = [r[0] for r in db.execute(
                     "SELECT issue_id FROM issue_inbox WHERE state='pending' ORDER BY observed_at_ms,issue_id LIMIT 25")]

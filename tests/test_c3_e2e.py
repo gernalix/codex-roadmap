@@ -80,11 +80,10 @@ class C3EndToEndTests(unittest.TestCase):
                              'execution':{'activity':'native', 'command':command, 'worktree':str(root),
                                           'resources':['fixture:device']}}
                 c2_runtime._writer_submit('intake', arguments, 'fixture-intake')
-                cycles = []
-                for _ in range(5):
-                    cycles.append(c3_runtime.run(path))
-                    if launched:
-                        break
+                changed_file = path.parent / 'state.changed'
+                external_event = changed_file.stat().st_mtime_ns
+                cycles = [c3_runtime.run(path)]
+                self.assertEqual(external_event, changed_file.stat().st_mtime_ns)
                 with closing(sqlite3.connect(path)) as db:
                     observed = db.execute('SELECT title,status,blocker FROM work_items').fetchall()
                 self.assertEqual(1, len(launched), (cycles, observed))
@@ -109,6 +108,7 @@ class C3EndToEndTests(unittest.TestCase):
                 result = c2_worker.run_once(path, run_id, state_root=root/'runs',
                     submit=c2_runtime._writer_submit, worker_prefix='c3-run:', legacy_codex_allowed=False)
                 self.assertEqual('completed', result['state'])
+                self.assertGreater(changed_file.stat().st_mtime_ns, external_event)
                 self.assertEqual('once\n', output.read_text())
                 with closing(sqlite3.connect(path)) as db:
                     self.assertEqual('completed', db.execute('SELECT status FROM work_items WHERE work_item_id=?',

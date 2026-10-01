@@ -119,7 +119,9 @@ class LocalWriter:
             conn.commit()
             # Autonomous maintenance must not wake itself recursively. External
             # intake, executor transitions and explicit UI actions wake runtime.
-            if actor != 'c2-runtime':
+            executor_transition = any(op.get('op') in ('c2_complete','c2_executor_result',
+                                                       'c2_finish_work_item') for op in operations)
+            if actor != 'c2-runtime' or executor_transition:
                 (db_path(self.repo).parent / 'state.changed').touch()
         except Exception:
             conn.rollback()
