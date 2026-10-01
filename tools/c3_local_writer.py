@@ -22,6 +22,17 @@ DEFAULT_SOCKET = Path.home() / '.local/state/c3-control/writer.sock'
 MAX_REQUEST = 8 * 1024 * 1024
 
 
+def notify_ready():
+    """Signal systemd only after the DB lock and mutation socket are ready."""
+    address = os.environ.get('NOTIFY_SOCKET')
+    if address:
+        if address.startswith('@'):
+            address = '\0' + address[1:]
+        with socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as notification:
+            notification.connect(address)
+            notification.send(b'READY=1')
+
+
 class LocalWriter:
     def __init__(self, repo: Path, *, projects_source=None):
         self.repo = Path(repo).resolve()
@@ -204,6 +215,7 @@ def serve(repo, socket_path):
             with socketserver.UnixStreamServer(str(socket_path), Handler) as server:
                 os.chmod(socket_path, 0o600)
                 server.writer = writer
+                notify_ready()
                 server.serve_forever()
         finally:
             writer.close()

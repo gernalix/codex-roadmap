@@ -3,6 +3,7 @@ import tempfile
 import unittest
 import multiprocessing
 import time
+import socket
 from unittest.mock import patch
 from pathlib import Path
 
@@ -13,6 +14,27 @@ from submit_mutation import submit_document, MutationSubmitError
 
 
 class LocalWriterTests(unittest.TestCase):
+    def test_systemd_ready_follows_lock_and_socket_creation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo = Path(directory)
+            mutation_socket = repo / 'writer.sock'
+            notification_socket = repo / 'notify.sock'
+            with socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as notification:
+                notification.bind(str(notification_socket))
+                notification.settimeout(5)
+                with patch.dict('os.environ', {'NOTIFY_SOCKET':str(notification_socket)}):
+                    process = multiprocessing.Process(target=serve, args=(repo, mutation_socket))
+                    process.start()
+                    try:
+                        self.assertEqual(b'READY=1', notification.recv(128))
+                        self.assertTrue(mutation_socket.exists())
+                        self.assertTrue((repo/'roadmap.sqlite').exists())
+                        with self.assertRaises(BlockingIOError):
+                            serve(repo, repo/'duplicate.sock')
+                    finally:
+                        process.terminate()
+                        process.join(5)
+
     def document(self, prompt_id='123456'):
         return {'schema': 'codex-roadmap.mutation.v1', 'actor': 'test', 'operations': [
             {'op': 'register', 'prompt_id': prompt_id, 'slug': 'test-' + prompt_id,
