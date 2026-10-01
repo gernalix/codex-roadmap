@@ -18,4 +18,6 @@ Project identity cutover: MegaVault is canonical; C3 caches its 106 projects, al
 
 Real residuals: PROMPT_ID authority reconciliation; no-op audit compaction; bounded technical Inbox triage; final runtime consolidation; projection retirement; automatic safe Git GC; monitoring deduplication; full scheduler/Symphony/integrator/recovery and reboot-safety gates. No final PASS is claimed.
 
+PROMPT_ID preflight: C3 reserves 492 IDs, MegaVault 347; eight MegaVault IDs are missing from C3 and 153 are C3-only. One shared ID (966124) is only a historical reservation in C3 but has richer allocation/materialization history in MegaVault. MegaVault hashes raw files; C3 hashes normalized text, so differing fingerprints are not by themselves proof of conflicting prompt content. MegaVault's worker/timer and remote workflow are still operational and must be fenced temporarily during the import, then retired only after successor readback. No open MegaVault prompt-ID command Issue was found at preflight.
+
 Next action: reconcile and reserve all historical PROMPT_IDs in C3, cut over the allocator and retire MegaVault prompt-ID producers, then continue E–J and the final gates from current DB/runtime state.
