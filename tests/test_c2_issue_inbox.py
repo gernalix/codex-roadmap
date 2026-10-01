@@ -546,7 +546,7 @@ class IssueInboxTests(unittest.TestCase):
             finally:
                 conn.close()
 
-    def test_one_triage_and_new_batch_after_terminal(self):
+    def test_one_triage_and_new_batch_after_terminal_or_blocked(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, conn = self.make_conn(Path(tmp))
             try:
@@ -569,6 +569,11 @@ class IssueInboxTests(unittest.TestCase):
                 self.assertEqual('semantic', conn.execute(
                     'SELECT activity FROM work_item_execution_specs WHERE work_item_id=?',
                     (second['work_item_id'],)).fetchone()[0])
+                conn.execute("UPDATE work_items SET status='blocked' WHERE work_item_id=?",
+                             (second['work_item_id'],))
+                third = c2_issue_inbox.ensure_triage(conn, project_url=url)
+                self.assertEqual('created', third['state'])
+                self.assertNotEqual(second['work_item_id'], third['work_item_id'])
             finally:
                 conn.close()
 
