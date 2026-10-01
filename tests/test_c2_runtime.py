@@ -179,6 +179,28 @@ class RuntimeTests(unittest.TestCase):
                 captured[0][0]['operations'][0]['arguments']['supervisor_authority'],
                 captured[2][0]['operations'][0]['arguments']['supervisor_authority'])
 
+    def test_recover_request_identity_changes_with_renewed_authority(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            lease_path=Path(tmp)/'lease.sqlite3'
+            with c2_supervisor_lease.connect(lease_path) as lease:
+                c2_supervisor_lease.acquire(lease,owner='runtime',pointer='/tmp/pointer',
+                                            supervisor_id='runtime',now=100,ttl=1000)
+            captured=[]
+            with patch.object(c2_runtime,'SUPERVISOR_DB',lease_path), \
+                    patch.object(c2_runtime,'submit_document',side_effect=lambda document,request_key:
+                                 (captured.append((document,request_key)) or {'issue_number':'1'})), \
+                    patch.object(c2_runtime.time,'time',return_value=150):
+                c2_runtime._writer_submit('recover',{},'c2-recover-expired-run')
+                c2_runtime._writer_submit('recover',{},'c2-recover-expired-run')
+                with c2_supervisor_lease.connect(lease_path) as lease:
+                    lease.execute('UPDATE supervisor SET lease_expires_at=2000 WHERE singleton=1')
+                c2_runtime._writer_submit('recover',{},'c2-recover-expired-run')
+            self.assertEqual(captured[0][1],captured[1][1])
+            self.assertNotEqual(captured[0][1],captured[2][1])
+            self.assertNotEqual(
+                captured[0][0]['operations'][0]['arguments']['supervisor_authority'],
+                captured[2][0]['operations'][0]['arguments']['supervisor_authority'])
+
     @patch("c2_runtime.integration_status", return_value={"status":"merged","integration_state":"merged","merge_sha":"b"*40})
     @patch("c2_runtime.prompt_repository", return_value="gernalix/codex-roadmap")
     def test_runtime_routes_self_repo_status_through_shared_helper(self, repository, integration):
