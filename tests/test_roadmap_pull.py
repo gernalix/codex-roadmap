@@ -65,6 +65,10 @@ class RoadmapPullTests(unittest.TestCase):
         conn.close()
         db.render(self.seed)
 
+        # A historical projection fixture verifies safe pulls of old commits;
+        # current rendering must never recreate it.
+        (self.seed / 'spiegazioni.md').write_text('historical projection\n', encoding='utf-8')
+
         git(self.seed, "add", ".")
         git(self.seed, "commit", "-m", "initial running roadmap")
         git(self.seed, "remote", "add", "origin", str(self.remote))
@@ -129,7 +133,7 @@ class RoadmapPullTests(unittest.TestCase):
         conn = sqlite3.connect(self.local / "roadmap.sqlite")
         self.assertEqual("running", conn.execute("SELECT status FROM prompts WHERE prompt_id='123456'").fetchone()[0])
         conn.close()
-        self.assertIn("| 123456 | running |", (self.local / "spiegazioni.md").read_text(encoding="utf-8"))
+        self.assertEqual('historical projection\n', (self.local / 'spiegazioni.md').read_text(encoding='utf-8'))
 
     def test_guarded_pull_allows_waiting_prompt_claimed_running_remotely(self) -> None:
         # A reconciled BLOCKED prompt can be WAITING locally when its new

@@ -83,11 +83,8 @@ class RoadmapDBTests(unittest.TestCase):
             db.refresh_materialization_hashes(conn,repo)
             conn.commit(); conn.close()
             db.render(repo)
-            self.assertIn("prompts/two", (repo/"roadmap.md").read_text())
-            self.assertIn("123456", (repo/"prompt-registry.md").read_text())
-            self.assertTrue((repo/"obsidian/Prompts/123456 one.md").is_file())
-            spieg=(repo/"spiegazioni.md").read_text(encoding="utf-8")
-            self.assertNotIn("[[obsidian/Prompts/123456 one\\|123456]]",spieg)
+            for retired in ('roadmap.md', 'spiegazioni.md', 'prompt-registry.md', 'obsidian'):
+                self.assertFalse((repo/retired).exists())
             self.assertTrue(db.verify(repo)["ok"])
 
     def test_summary_rows_prioritizes_running_over_pending_queue(self):
@@ -144,8 +141,7 @@ class RoadmapDBTests(unittest.TestCase):
 
             db.reconcile_prompt_file_locations(repo)
             db.render(repo)
-            spieg=(repo/"spiegazioni.md").read_text(encoding="utf-8")
-            self.assertNotIn("| 123456 | running |",spieg)
+            self.assertFalse((repo/'spiegazioni.md').exists())
             self.assertTrue((repo/"completed/one.md").is_file())
 
             conn=db.connect(repo)
@@ -180,9 +176,10 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertEqual(1,row["chatgpt_code_change_count"])
             conn.close()
             db.render(repo)
-            note=(repo/"obsidian/Prompts/123456 one.md").read_text(encoding="utf-8")
-            self.assertIn("gernalix/example",note)
-            self.assertIn("abc123",note)
+            self.assertFalse((repo/'obsidian').exists())
+            with db.connect(repo, writable=False) as reader:
+                change=reader.execute('SELECT repository,commit_sha FROM analysis_code_changes WHERE prompt_id=?', ('123456',)).fetchone()
+                self.assertEqual(('gernalix/example','abc123'),tuple(change))
 
     def test_prompt_text_mutation_updates_canonical_materialization(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -376,11 +373,7 @@ class RoadmapDBTests(unittest.TestCase):
             self.assertEqual(["123456"],runnable)
             conn.close()
             db.render(repo)
-            spieg=(repo/"spiegazioni.md").read_text(encoding="utf-8")
-            self.assertIn("| Eseguibile ora? |",spieg)
-            self.assertIn("✅ Sì",spieg)
-            self.assertIn("⏳ No — prima: 123456",spieg)
-            self.assertIn("⛔ No — prima: rifai il login a Kuma",spieg)
+            self.assertFalse((repo/'spiegazioni.md').exists())
 
     def test_untag_removes_manual_prerequisite_and_makes_prompt_runnable(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -683,7 +676,7 @@ class RoadmapDBTests(unittest.TestCase):
             with self.assertRaises(db.RoadmapDBError):
                 db.reorder_prompt(conn,"123456",0)
             conn.close()
-    def test_render_escapes_wikilink_alias_pipes_in_tables(self):
+    def test_render_does_not_recreate_retired_dashboards(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
             (repo/"prompts").mkdir()
@@ -696,12 +689,9 @@ class RoadmapDBTests(unittest.TestCase):
             db.refresh_materialization_hashes(conn,repo)
             conn.commit(); conn.close()
             db.render(repo)
-            spieg=(repo/"spiegazioni.md").read_text(encoding="utf-8")
-            registry=(repo/"prompt-registry.md").read_text(encoding="utf-8")
-            self.assertIn("[[prompts/one\\|One]]",spieg)
-            self.assertIn("[[obsidian/Prompts/123456 one\\|123456]]",spieg)
-            self.assertIn("[[obsidian/Prompts/123456 one\\|123456 · One]]",registry)
-            self.assertNotIn("[[prompts/one|One]]",spieg)
+            self.assertFalse((repo/'obsidian').exists())
+            self.assertFalse((repo/'spiegazioni.md').exists())
+            self.assertFalse((repo/'prompt-registry.md').exists())
     def test_prompt_id_is_unique(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo=Path(tmp)
