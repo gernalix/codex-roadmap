@@ -722,19 +722,8 @@ def reconcile_terminal_requests(
         if current == requested:
             continue
         if current != "running":
-            conn.execute(
-                "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
-                (
-                    row["prompt_id"],
-                    "terminal_reconcile_skipped",
-                    now_utc(),
-                    actor,
-                    json.dumps(
-                        {"current_status": current, "requested_status": requested},
-                        sort_keys=True,
-                    ),
-                ),
-            )
+            # Old terminal requests remain reconstructible from their history.
+            # A non-running item is an expected no-op, not an audit event.
             continue
         latest_run = conn.execute(
             "SELECT MAX(history_id) FROM status_history "
