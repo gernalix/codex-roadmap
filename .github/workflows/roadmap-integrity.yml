@@ -31,11 +31,12 @@ jobs:
           if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
             changed="$(git show --pretty='' --name-only "$AFTER")"
           else
+            git cat-file -e "$BEFORE^{commit}" 2>/dev/null || git fetch --no-tags --depth=1 origin "$BEFORE"
             changed="$(git diff --name-only "$BEFORE" "$AFTER")"
           fi
           protected="$(printf '%s\n' "$changed" | grep -E '^(roadmap\.sqlite|roadmap\.md|spiegazioni\.md|prompt-registry\.md|obsidian/|prompts/|completed/|falliti/|mutations/(inbox|applied)/)' || true)"
           if [ -n "$protected" ]; then
-            echo "Direct canonical/generated roadmap writes are forbidden; submit a [roadmap-mutation] Issue instead:" >&2
+            echo "Roadmap Git files are audit/projections only; use the local C3 writer for lifecycle mutations:" >&2
             printf '%s\n' "$protected" >&2
             exit 1
           fi
