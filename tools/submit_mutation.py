@@ -100,6 +100,16 @@ def submit_document(
         raise MutationSubmitError("empty_mutation")
 
     request_key = _validate_request_key(request_key)
+    transport = os.environ.get('C3_MUTATION_TRANSPORT', 'github')
+    if transport == 'local':
+        from c3_local_writer import submit_local
+        try:
+            return submit_local(document, request_key=request_key)
+        except (OSError, ValueError) as exc:
+            # Never fall back to another writer after local rejection/failure.
+            raise MutationSubmitError('local_writer_failed:' + str(exc)) from exc
+    if transport != 'github':
+        raise MutationSubmitError('invalid_mutation_transport:' + transport)
     title = ISSUE_PREFIX + request_key
     body = _canonical_bytes(document).decode("utf-8")
 

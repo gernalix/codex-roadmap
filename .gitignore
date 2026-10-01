@@ -1,6 +1,7 @@
 roadmap.sqlite-wal
 roadmap.sqlite-shm
 roadmap.sqlite-journal
+.c3-writer.lock
 __pycache__/
 *.pyc
 .obsidian/workspace.json

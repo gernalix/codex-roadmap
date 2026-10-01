@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+"""Serialized local mutation authority, exposed over a private Unix socket."""
+from __future__ import annotations
+
+import argparse
+import fcntl
+import hashlib
+import http.client
+import json
+import os
+import re
+import socket
+import socketserver
+from http.server import BaseHTTPRequestHandler
+from pathlib import Path
+
+from apply_issue_mutation import canonical_bytes
+from roadmap_db import apply_mutation, connect, now_utc
+
+DEFAULT_SOCKET = Path.home() / '.local/state/c3-control/writer.sock'
+MAX_REQUEST = 8 * 1024 * 1024
+
+
+class LocalWriter:
+    def __init__(self, repo: Path):
+        self.repo = Path(repo).resolve()
+        self.conn = connect(self.repo)
+        self.conn.commit()
+        self.conn.execute('PRAGMA journal_mode=WAL')
+        self.conn.execute('PRAGMA synchronous=FULL')
+        self.conn.execute('PRAGMA busy_timeout=30000')
+
+    def close(self):
+        self.conn.close()
+
+    def apply(self, document: dict, request_key: str, *, issue_number=None):
+        if not isinstance(document, dict) or document.get('schema') != 'codex-roadmap.mutation.v1':
+            raise ValueError('invalid_mutation_schema')
+        if not isinstance(request_key, str) or not re.fullmatch(r'[A-Za-z0-9._-]+', request_key):
+            raise ValueError('invalid_request_key')
+        operations = document.get('operations')
+        if not isinstance(operations, list) or not operations or any(not isinstance(op, dict) for op in operations):
+            raise ValueError('invalid_operations')
+        overrides = [op for op in operations if op.get('op') in ('c3_user_override', 'c3_destructive_override')]
+        if overrides and (len(operations) != 1 or request_key != 'c3-user-' + str(overrides[0].get('arguments', {}).get('request_id', ''))):
+            raise ValueError('user_override_transport_identity_mismatch')
+        if any(op.get('op') == 'c2_cutover' for op in operations):
+            raise ValueError('legacy_cutover_not_supported')
+        payload_hash = hashlib.sha256(canonical_bytes(document)).hexdigest()
+        actor = str(document.get('actor') or 'unknown')
+        conn = self.conn
+        try:
+            conn.execute('BEGIN IMMEDIATE')
+            receipt = conn.execute('SELECT * FROM mutation_receipts WHERE request_key=?', (request_key,)).fetchone()
+            if receipt:
+                if receipt['payload_sha256'] != payload_hash:
+                    raise ValueError('request_key_conflict:' + request_key)
+                conn.rollback()
+                return {'status': 'ok', 'submission': 'applied', 'request_key': request_key,
+                        'issue_number': str(receipt['issue_number']), 'idempotent': True}
+            # Existing receipts use positive GitHub issue numbers. Reserve the
+            # negative namespace for local receipts without another registry.
+            if issue_number is None:
+                issue_number = conn.execute('SELECT MIN(COALESCE(MIN(issue_number),0),0)-1 FROM mutation_receipts').fetchone()[0]
+            elif not isinstance(issue_number, int) or issue_number <= 0:
+                raise ValueError('invalid_issue_number')
+            for operation in operations:
+                apply_mutation(conn, operation, default_actor=actor)
+            conn.execute('INSERT INTO mutation_receipts(request_key,issue_number,payload_sha256,actor,applied_at) VALUES(?,?,?,?,?)',
+                         (request_key, issue_number, payload_hash, actor, now_utc()))
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+        return {'status': 'ok', 'submission': 'applied', 'request_key': request_key,
+                'issue_number': str(issue_number), 'idempotent': False}
+
+
+class UnixConnection(http.client.HTTPConnection):
+    def __init__(self, path, timeout=120):
+        super().__init__('localhost', timeout=timeout)
+        self.path = str(path)
+
+    def connect(self):
+        self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        self.sock.settimeout(self.timeout)
+        self.sock.connect(self.path)
+
+
+def submit_local(document, *, request_key, socket_path=None, issue_number=None):
+    connection = UnixConnection(socket_path or os.environ.get('C3_WRITER_SOCKET', str(DEFAULT_SOCKET)))
+    try:
+        connection.request('POST', '/mutations', json.dumps({'document': document, 'request_key': request_key, 'issue_number': issue_number}),
+                           {'Content-Type': 'application/json'})
+        response = connection.getresponse()
+        result = json.loads(response.read())
+        if response.status != 200:
+            raise ValueError(result.get('error', 'local_writer_rejected'))
+        return result
+    finally:
+        connection.close()
+
+
+class Handler(BaseHTTPRequestHandler):
+    def log_message(self, *args):
+        pass
+
+    def do_POST(self):
+        try:
+            size = int(self.headers.get('Content-Length', '0'))
+            if self.path != '/mutations' or not 0 < size <= MAX_REQUEST:
+                raise ValueError('invalid_request')
+            payload = json.loads(self.rfile.read(size))
+            result = self.server.writer.apply(payload['document'], payload['request_key'], issue_number=payload.get('issue_number'))
+            status = 200
+        except Exception as exc:
+            result, status = {'status': 'blocked', 'error': str(exc)}, 409
+        body = json.dumps(result).encode()
+        self.send_response(status)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+
+def serve(repo, socket_path):
+    socket_path = Path(socket_path)
+    socket_path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    # The lock belongs to the DB, so using another socket cannot create a
+    # second service for the same canonical database.
+    with (Path(repo) / '.c3-writer.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        socket_path.unlink(missing_ok=True)
+        writer = LocalWriter(Path(repo))
+        try:
+            with socketserver.UnixStreamServer(str(socket_path), Handler) as server:
+                os.chmod(socket_path, 0o600)
+                server.writer = writer
+                server.serve_forever()
+        finally:
+            writer.close()
+            socket_path.unlink(missing_ok=True)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--repo', type=Path, required=True)
+    parser.add_argument('--socket', type=Path, default=DEFAULT_SOCKET)
+    args = parser.parse_args()
+    serve(args.repo.resolve(), args.socket)
