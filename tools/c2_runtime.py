@@ -139,7 +139,8 @@ def _launch_notify(event_key: str):
 
 def _repo_task_status(prompt_id: str) -> dict:
     try:
-        repository=prompt_repository(Path.home()/'projects/codex-roadmap/roadmap.sqlite',prompt_id)
+        from c3_storage import CANONICAL_DB
+        repository=prompt_repository(CANONICAL_DB,prompt_id)
         return integration_status(prompt_id,repository)
     except Exception as exc:
         raise RuntimeErrorC2('repo_task_status_failed:'+str(exc)) from exc

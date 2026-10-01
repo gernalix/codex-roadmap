@@ -15,6 +15,12 @@ import c2_prepare_codex as prep
 
 
 class PrepareCodexTests(unittest.TestCase):
+    def test_roadmap_allocation_uses_git_authority_without_legacy_worktree(self):
+        item={"repo":"gernalix/codex-roadmap","project_id":"1"}
+        with patch.object(prep,"_external_worktree",return_value="/managed/task") as allocate:
+            self.assertEqual("/managed/task",prep._allocate_worktree(item,"123456"))
+            allocate.assert_called_once_with(item,"123456")
+
     def _spec(self, prompt_file: Path, *, evidence=None):
         return {
             "work_item_id":"wi:test",

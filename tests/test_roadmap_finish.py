@@ -116,25 +116,23 @@ class FinishWrapperTests(unittest.TestCase):
         self.assertEqual("queued",out["status"])
 
     @patch("c2_repository_integration._external", return_value={"status":"queued"})
-    @patch("c2_repository_integration.queue")
-    def test_external_path_unchanged(self, own, external):
+    def test_external_path_unchanged(self, external):
         self.assertEqual(("queued",False),integration.queue_integration(
             "123456","owner/other",Path("/tmp/r")))
-        external.assert_called_once_with("123456","finish-any")
-        own.assert_not_called()
+        external.assert_called_once_with("123456","finish-any","owner/other")
 
     @patch("c2_repository_integration._external", return_value={"status":"merged","integration_state":"merged"})
     def test_external_status_path_unchanged(self, external):
         self.assertEqual("merged",integration.integration_status("123456","owner/other")["status"])
-        external.assert_called_once_with("123456","status-any")
+        external.assert_called_once_with("123456","status-any","owner/other")
 
-    @patch("c2_repository_integration.queue", return_value={"status":"queued","head_sha":"a"*40})
+    @patch("c2_repository_integration._external", return_value={"status":"queued","head_sha":"a"*40})
     def test_own_queued(self, own):
         self.assertEqual(("queued",False),integration.queue_integration(
             "123456",dedicated.REPOSITORY,Path("/tmp/r")))
-        own.assert_called_once()
+        own.assert_called_once_with("123456","finish-any",dedicated.REPOSITORY)
 
-    @patch("c2_repository_integration.status", return_value={"status":"merged","integration_state":"merged","merge_sha":"b"*40})
+    @patch("c2_repository_integration._external", return_value={"status":"merged","integration_state":"merged","merge_sha":"b"*40})
     def test_own_merged(self, own):
         result=integration.integration_status("123456",dedicated.REPOSITORY)
         self.assertEqual("merged",result["status"])

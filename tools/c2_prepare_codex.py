@@ -24,8 +24,6 @@ DEFAULT_REPOSITORY = "gernalix/codex-roadmap"
 DEFAULT_REPO = Path(__file__).resolve().parents[1]
 DEFAULT_SNAPSHOT = CANONICAL_DB
 REPO_SINGLE_WRITER = Path.home()/"projects/github-autosync/repo_single_writer.py"
-ROADMAP_CANONICAL = Path.home()/"projects/codex-roadmap"
-ROADMAP_WORKTREE_ROOT = Path.home()/".local/share/c2-supervisor/worktrees/codex-roadmap"
 
 
 class PrepareCodexError(RuntimeError):
@@ -229,57 +227,6 @@ def _run_checked(command: list[str], error: str) -> str:
     return proc.stdout.strip()
 
 
-def _verify_worktree(path: Path, branch: str) -> str:
-    if not path.is_dir():
-        raise PrepareCodexError("isolated_worktree_missing")
-    root=_run_checked(["git","-C",str(path),"rev-parse","--show-toplevel"],
-                      "isolated_worktree_invalid")
-    current=_run_checked(["git","-C",str(path),"branch","--show-current"],
-                         "isolated_worktree_branch_read_failed")
-    if Path(root).resolve()!=path.resolve() or current!=branch:
-        raise PrepareCodexError("isolated_worktree_identity_conflict")
-    return str(path.resolve())
-
-
-def _roadmap_worktree(prompt_id: str) -> str:
-    canonical=ROADMAP_CANONICAL.expanduser().resolve()
-    if not canonical.is_dir():
-        raise PrepareCodexError("canonical_roadmap_checkout_missing")
-    if _repo_slug(str(canonical)).lower()!=DEFAULT_REPOSITORY.lower():
-        raise PrepareCodexError("canonical_roadmap_checkout_mismatch")
-    target=(ROADMAP_WORKTREE_ROOT/prompt_id).expanduser().resolve()
-    branch="task/"+prompt_id
-    if target.exists():
-        return _verify_worktree(target,branch)
-    remote_line=_run_checked(["git","-C",str(canonical),"ls-remote","origin","refs/heads/main"],
-                             "roadmap_remote_main_unavailable")
-    remote_sha=remote_line.split()[0] if remote_line.split() else ""
-    if not re.fullmatch(r"[0-9a-f]{40}",remote_sha):
-        raise PrepareCodexError("roadmap_remote_main_invalid")
-    have=subprocess.run(["git","-C",str(canonical),"cat-file","-e",remote_sha+"^{commit}"],
-                        stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,check=False)
-    if have.returncode:
-        fetch=subprocess.run(["git","-C",str(canonical),"-c","maintenance.auto=false",
-            "-c","gc.auto=0","fetch","--no-tags","--no-write-fetch-head","origin",remote_sha],
-            text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False)
-        if fetch.returncode:
-            again=subprocess.run(["git","-C",str(canonical),"cat-file","-e",remote_sha+"^{commit}"],
-                stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,check=False)
-            if again.returncode:
-                raise PrepareCodexError("roadmap_remote_commit_fetch_failed:"+
-                    (fetch.stderr.strip() or fetch.stdout.strip()))
-    target.parent.mkdir(parents=True,exist_ok=True)
-    branch_exists=subprocess.run(["git","-C",str(canonical),"show-ref","--verify","--quiet",
-        "refs/heads/"+branch],check=False).returncode==0
-    command=["git","-C",str(canonical),"worktree","add"]
-    if branch_exists:
-        command.extend([str(target),branch])
-    else:
-        command.extend(["-b",branch,str(target),remote_sha])
-    _run_checked(command,"roadmap_worktree_create_failed")
-    return _verify_worktree(target,branch)
-
-
 def _external_worktree(item: dict[str, Any], prompt_id: str) -> str:
     if not REPO_SINGLE_WRITER.is_file():
         raise PrepareCodexError("repo_single_writer_missing")
@@ -295,9 +242,6 @@ def _external_worktree(item: dict[str, Any], prompt_id: str) -> str:
         raise PrepareCodexError("repo_single_writer_worktree_missing")
     return worktree
 def _allocate_worktree(item: dict[str, Any], prompt_id: str) -> str:
-    slug=_repo_slug(str(item.get("repo") or ""))
-    if slug.lower()==DEFAULT_REPOSITORY.lower():
-        return _roadmap_worktree(prompt_id)
     return _external_worktree(item,prompt_id)
 
 

@@ -145,7 +145,7 @@ def _require_canonical_claim(
 
 def _repo_task_worktree(record: dict[str, Any], prompt_id: str) -> str | None:
     repo_slug = str(record.get("repo") or "").strip()
-    if not repo_slug or repo_slug.lower() == DEFAULT_REMOTE_REPO.lower():
+    if not repo_slug:
         return None
     if not DEFAULT_REPO_TASK.is_file():
         raise RoadmapStartError("repo_task_helper_missing")
