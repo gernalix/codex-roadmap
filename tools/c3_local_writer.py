@@ -53,6 +53,10 @@ class LocalWriter:
         payload_hash = hashlib.sha256(canonical_bytes(document)).hexdigest()
         actor = str(document.get('actor') or 'unknown')
         conn = self.conn
+        retired = conn.execute("SELECT 1 FROM meta WHERE key='pre_migration_execution_retired'").fetchone()
+        if retired and (actor in ('c2-supervisor-resume', 'c2-workflowy-order') or
+                        any(op.get('op') in ('c2_ensure_issue_triage', 'c2_set_manual_order', 'c2_clear_manual_order') for op in operations)):
+            raise ValueError('pre_migration_component_retired')
         try:
             conn.execute('BEGIN IMMEDIATE')
             receipt = conn.execute('SELECT * FROM mutation_receipts WHERE request_key=?', (request_key,)).fetchone()

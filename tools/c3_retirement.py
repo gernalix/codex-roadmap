@@ -167,6 +167,9 @@ def _preflight(snapshot: Path, allow_run_id: str | None = None) -> dict:
 
 def retire(*, marker: Path = MARKER, audit: Path = AUDIT,
            snapshot: Path = SNAPSHOT, allow_run_id: str | None = None) -> dict:
+    from c3_storage import local_enabled
+    if local_enabled():
+        raise RetirementError('pre_migration_cutover_helper_retired')
     if marker.exists():
         if not audit.is_file():
             raise RetirementError("retirement_audit_missing")

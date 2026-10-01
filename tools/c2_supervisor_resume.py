@@ -238,6 +238,8 @@ def resume(db, canonical: dict, pointer: dict, *, owner='c2-supervisor-resume',
 
 
 def main(argv=None) -> int:
+    from c3_retirement import require_not_retired
+    require_not_retired()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db', type=Path, default=DEFAULT_DB)
     parser.add_argument('--canonical-db', type=Path, default=DEFAULT_CANONICAL_DB)
