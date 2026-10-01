@@ -35,6 +35,13 @@ class LocalWriter:
         self.conn.execute('PRAGMA journal_mode=WAL')
         self.conn.execute('PRAGMA synchronous=FULL')
         self.conn.execute('PRAGMA busy_timeout=30000')
+        # Initialize fencing before exposing a post-cutover DB to the runtime.
+        # Otherwise its first read could silently omit the canonical claim.
+        if self.conn.execute("SELECT 1 FROM sqlite_master WHERE name='work_items' AND type='table'").fetchone():
+            from c2_supervisor_authority import install_schema
+            self.conn.execute('BEGIN IMMEDIATE')
+            install_schema(self.conn)
+            self.conn.commit()
         from c3_storage import REPO
         from c3_projects import SOURCE, CACHE_TABLES
         self.projects_source = projects_source or (SOURCE if self.repo == REPO.resolve() else None)
