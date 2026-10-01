@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from c2_chatgpt_executor import dispatch
+from c2_chatgpt_executor import dispatch, ChatWorkerError
 
 class FakeTaskConfig:
     def __init__(self,**kwargs):
@@ -57,8 +57,7 @@ class BrowserExecutorTests(unittest.TestCase):
             receipt=Path(tmp)/'receipt.json'
             data={'executor':'chatgpt','activity':'semantic',
                   'project_url':'https://chatgpt.com/g/g-p-project'}
-            with patch.dict(os.environ,{},clear=True), \
-                    patch('c2_chatgpt_executor.lane_degraded',return_value=False):
+            with patch.dict(os.environ,{},clear=True):
                 result=dispatch(run_id='bridge',work_item_id='wi:bridge',metadata=data,
                     prompt='Decide',db_path=Path(tmp)/'db',receipt=receipt,
                     store=FakeStore())
@@ -114,18 +113,18 @@ class BrowserExecutorTests(unittest.TestCase):
             self.assertEqual(40,store.tasks[0].thresholds.generation_suspect_s)
             self.assertEqual(180,store.tasks[0].thresholds.generation_stall_s)
 
-    def test_global_degradation_suspends_new_chat_without_receipt(self):
+    def test_legacy_global_degradation_cannot_gate_a_c3_run(self):
         with tempfile.TemporaryDirectory() as tmp:
             browser=FakeBrowser();receipt=Path(tmp)/'r.json'
-            with patch('c2_chatgpt_executor.lane_degraded',return_value=True):
+            with patch('pathlib.Path.home',return_value=Path(tmp)):
                 result=dispatch(run_id='one',work_item_id='wi:fixture',
-                    metadata={'executor':'chatgpt','activity':'semantic',
+                    metadata={'executor':'chatgpt','activity':'semantic','global_degraded':True,
                               'project_url':'https://chatgpt.com/g/g-p-project'},
                     prompt='Decide',db_path=Path(tmp)/'db',receipt=receipt,
                     browser=browser,store=FakeStore())
-            self.assertEqual('suspended',result['phase'])
-            self.assertFalse(receipt.exists())
-            self.assertEqual([],browser.calls)
+            self.assertEqual('started',result['phase'])
+            self.assertTrue(receipt.exists())
+            self.assertEqual(1,len(browser.calls))
 
     def test_kill_switch_suspends_before_receipt_or_browser_launch(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -141,32 +140,18 @@ class BrowserExecutorTests(unittest.TestCase):
             self.assertFalse(receipt.exists())
             self.assertEqual([],browser.calls)
 
-    def test_issue_triage_reuses_stable_chat_without_new_tab(self):
+    def test_recursive_inbox_executor_rejects_without_receipt_or_browser(self):
         with tempfile.TemporaryDirectory() as tmp:
-            alias=Path(tmp)/'triage-chat.json'
-            alias.write_text(__import__('json').dumps({
-                'work_item_id':'wi:old','project_url':'https://chatgpt.com/g/g-p-project',
-                'chat_url':'https://chatgpt.com/c/triage'}))
-            prior=SimpleNamespace(chat_url='https://chatgpt.com/c/triage',
-                project_url='https://chatgpt.com/g/g-p-project',enabled=True)
-            class TriageStore(FakeStore):
-                def load_task(self,task_id):
-                    if task_id=='wi:old': return prior
-                    raise FileNotFoundError(task_id)
-            browser=FakeBrowser();store=TriageStore();receipt=Path(tmp)/'receipt.json'
-            with patch('c2_chatgpt_executor.ISSUE_TRIAGE_CHAT_STATE',alias):
-                result=dispatch(run_id='new',work_item_id='wi:new',
-                    metadata={'executor':'chatgpt','activity':'semantic','issue_triage':True,
-                              'project_url':'https://chatgpt.com/g/g-p-project'},
-                    prompt='Process the next batch',db_path=Path(tmp)/'db',receipt=receipt,
-                    browser=browser,store=store)
-            self.assertEqual('https://chatgpt.com/c/triage',result['chat_url'])
+            browser=FakeBrowser(); receipt=Path(tmp)/'receipt.json'
+            with self.assertRaisesRegex(ChatWorkerError,'retired_recursive'):
+                dispatch(run_id='old',work_item_id='wi:old',
+                    metadata={'executor':'chatgpt','activity':'semantic','issue_triage':True},
+                    prompt='Legacy triage',db_path=Path(tmp)/'db',receipt=receipt,
+                    browser=browser,store=FakeStore())
+            self.assertFalse(receipt.exists())
             self.assertEqual([],browser.calls)
-            self.assertFalse(prior.enabled)
-            self.assertEqual('wi:new',__import__('json').loads(alias.read_text())['work_item_id'])
-            self.assertEqual('https://chatgpt.com/c/triage',store.tasks[-1].chat_url)
 
-    def test_new_run_reuses_persisted_work_item_chat(self):
+    def test_new_run_uses_only_canonical_binding_not_task_cache(self):
         with tempfile.TemporaryDirectory() as tmp:
             browser=FakeBrowser();receipt=Path(tmp)/'new-run.json'
             class ExistingStore(FakeStore):
@@ -175,9 +160,10 @@ class BrowserExecutorTests(unittest.TestCase):
                                            project_url='https://chatgpt.com/g/g-p-project')
             result=dispatch(run_id='new-run',work_item_id='wi:fixture',
                 metadata={'executor':'chatgpt','activity':'semantic',
-                          'project_url':'https://chatgpt.com/g/g-p-project'},
+                          'project_url':'https://chatgpt.com/g/g-p-project',
+                          'chat_url':'https://chatgpt.com/c/canonical'},
                 prompt='Resume',db_path=Path(tmp)/'db',receipt=receipt,
                 browser=browser,store=ExistingStore())
-            self.assertEqual('https://chatgpt.com/c/existing',result['chat_url'])
+            self.assertEqual('https://chatgpt.com/c/canonical',result['chat_url'])
             self.assertEqual([],browser.calls)
             self.assertEqual('started',__import__('json').loads(receipt.read_text())['phase'])

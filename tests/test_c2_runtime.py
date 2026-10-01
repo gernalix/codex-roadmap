@@ -375,7 +375,7 @@ class RuntimeTests(unittest.TestCase):
                 c2_scheduler.executor_started(writer,run_id='codex-live',now=2)
                 writer.commit()
             submitted=[]; launched=[]
-            with patch('c2_runtime.lane_degraded',return_value=True):
+            with patch('c2_runtime.browser_launch_suspended',return_value=True):
                 with closing(c2_runtime._open_snapshot(path)) as snapshot:
                     result=c2_runtime.advance(snapshot,
                         submit=lambda op,args,key:submitted.append((op,args)),
@@ -468,7 +468,7 @@ class RuntimeTests(unittest.TestCase):
                 writer.commit()
             for degraded, expected in ((True, []), (False, [run['run_id']])):
                 launched=[]
-                with patch('c2_runtime.lane_degraded',return_value=degraded):
+                with patch('c2_runtime.browser_launch_suspended',return_value=degraded):
                     with closing(c2_runtime._open_snapshot(path)) as snapshot:
                         c2_runtime.advance(snapshot,submit=lambda *_:None,
                             launch=launched.append,launch_notify=lambda _:None,now=3)

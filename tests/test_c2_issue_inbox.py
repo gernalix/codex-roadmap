@@ -535,34 +535,18 @@ class IssueInboxTests(unittest.TestCase):
             finally:
                 conn.close()
 
-    def test_one_triage_and_new_batch_after_terminal_or_blocked(self):
+    def test_recursive_triage_cannot_create_work_items(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, conn = self.make_conn(Path(tmp))
             try:
                 conn.execute('BEGIN IMMEDIATE')
-                c2_issue_inbox.capture(conn, description='First')
-                url = c2_runtime.C2_TRIAGE_PROJECT_URL
-                first = c2_issue_inbox.ensure_triage(conn, project_url=url)
-                self.assertEqual('created', first['state'])
-                objective = conn.execute(
-                    'SELECT objective FROM work_items WHERE work_item_id=?',
-                    (first['work_item_id'],)).fetchone()[0]
-                self.assertIn('bounded batch', objective)
-                self.assertEqual(first['work_item_id'], c2_issue_inbox.ensure_triage(
-                    conn, project_url=url)['work_item_id'])
-                conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?",
-                             (first['work_item_id'],))
-                second = c2_issue_inbox.ensure_triage(conn, project_url=url)
-                self.assertEqual('created', second['state'])
-                self.assertNotEqual(first['work_item_id'], second['work_item_id'])
-                self.assertEqual('semantic', conn.execute(
-                    'SELECT activity FROM work_item_execution_specs WHERE work_item_id=?',
-                    (second['work_item_id'],)).fetchone()[0])
-                conn.execute("UPDATE work_items SET status='blocked' WHERE work_item_id=?",
-                             (second['work_item_id'],))
-                third = c2_issue_inbox.ensure_triage(conn, project_url=url)
-                self.assertEqual('created', third['state'])
-                self.assertNotEqual(second['work_item_id'], third['work_item_id'])
+                issue = c2_issue_inbox.capture(conn, description='Needs decision')
+                before = conn.total_changes
+                with self.assertRaisesRegex(c2_issue_inbox.IssueInboxError, 'retired_recursive'):
+                    c2_issue_inbox.ensure_triage(conn, project_url='anything')
+                self.assertEqual(before, conn.total_changes)
+                self.assertEqual('pending', conn.execute(
+                    'SELECT state FROM issue_inbox WHERE issue_id=?', (issue['issue_id'],)).fetchone()[0])
             finally:
                 conn.close()
 
@@ -577,7 +561,7 @@ class IssueInboxTests(unittest.TestCase):
                 c2_scheduler.configure(conn, normal['work_item_id'], activity='native', command=['true'])
                 with patch.object(c2_runtime, 'automatic_candidates', return_value=['candidate']):
                     c2_runtime.advance(conn, submit=lambda *args: calls.append(args), launch=lambda _: None,
-                        triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
+                        triage_project_url='https://chatgpt.com/g/g-p-test/project')
                 self.assertNotIn('ensure_issue_triage', [call[0] for call in calls])
                 self.assertIn('schedule', [call[0] for call in calls])
                 self.assertIn('reconcile_blocked_safety_net', [call[0] for call in calls])
@@ -585,62 +569,7 @@ class IssueInboxTests(unittest.TestCase):
             finally:
                 conn.close()
 
-    def test_inbox_drain_does_not_starve_unrelated_work(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            _, conn = self.make_conn(Path(tmp))
-            try:
-                conn.execute('BEGIN IMMEDIATE')
-                normal = c2_intake.add_work_item(conn, title='Normal', repo='normal')
-                urgent = c2_intake.add_work_item(conn, title='P0 incident', repo='urgent',
-                    tags=['priority:p0'])
-                c2_scheduler.configure(conn, normal['work_item_id'], activity='native', command=['true'])
-                c2_scheduler.configure(conn, urgent['work_item_id'], activity='native', command=['true'])
-                issue = c2_issue_inbox.capture(conn, description='Needs triage')
-                triage = c2_issue_inbox.ensure_triage(
-                    conn, project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                submitted = []
-                state = c2_runtime.advance(conn, submit=lambda op,args,key: submitted.append(op),
-                    launch=lambda _: None, launch_notify=lambda _: None,
-                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                self.assertEqual(3, state['ready'])
-                self.assertIn(('issue_inbox_drain', 'pending'), state['events'])
-                runs = c2_scheduler.schedule(conn, event_key='during-drain', now=10)
-                self.assertEqual(
-                    {triage['work_item_id'], urgent['work_item_id'], normal['work_item_id']},
-                    {run['work_item_id'] for run in runs})
-                c2_issue_inbox.discard(conn, issue_id=issue['issue_id'],
-                    reason='Handled', triaged_by='test')
-                late = c2_intake.add_work_item(conn, title='Late independent', repo='late')
-                c2_scheduler.configure(conn, late['work_item_id'], activity='native', command=['true'])
-                reconciling = c2_runtime.advance(conn,
-                    submit=lambda op,args,key: submitted.append(op),
-                    launch=lambda _: None, launch_notify=lambda _: None,
-                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                self.assertEqual(1, reconciling['ready'])
-                self.assertIn(('issue_inbox_drain', 'reconciling'), reconciling['events'])
-                late_runs = c2_scheduler.schedule(
-                    conn, event_key='before-reconciliation', now=11, max_parallel=4)
-                self.assertEqual([late['work_item_id']],
-                    [run['work_item_id'] for run in late_runs])
-            finally:
-                conn.close()
 
-    def test_triage_cannot_finish_while_pending_rows_remain(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            _, conn = self.make_conn(Path(tmp))
-            try:
-                conn.execute('BEGIN IMMEDIATE')
-                c2_issue_inbox.capture(conn, description='Unresolved')
-                item = c2_issue_inbox.ensure_triage(
-                    conn, project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                run = c2_scheduler.schedule(conn, event_key='triage-schedule', now=10)[0]
-                c2_scheduler.acknowledge(conn, run['run_id'], worker_ref='c2-run:'+run['run_id'],
-                    metadata=run['metadata'], now=11)
-                with self.assertRaisesRegex(c2_scheduler.SchedulingError, 'issue_triage_pending_rows'):
-                    c2_scheduler.finish_browser_work_item(conn, item['work_item_id'],
-                        evidence=['claimed complete'])
-            finally:
-                conn.close()
 
 
 if __name__ == "__main__":

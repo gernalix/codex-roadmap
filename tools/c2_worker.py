@@ -11,13 +11,12 @@ import sqlite3
 import sys
 
 from c2_appserver_rpc import AppServerRPC, AppServerError, resolve_model
-from c2_chatgpt_executor import dispatch as dispatch_browser, lane_degraded, KILL_SWITCH
+from c2_chatgpt_executor import dispatch as dispatch_browser, KILL_SWITCH
 from c2_codex_executor import dispatch as dispatch_codex, record_terminal, parse_terminal_result, ExecutorError
 from c2_goal_objective import compact_goal_objective
 from roadmap_finish import _queue_repo_integration
 from roadmap_result import RoadmapResultError
 from c2_native_executor import execute as execute_native
-from c2_inbox_codex_executor import execute as execute_inbox_codex
 from c2_runtime import _open_snapshot, _writer_submit
 from c3_symphony_route import (routing_mode, eligible as symphony_eligible,
                                dispatch as dispatch_symphony, ownership_path, RouteError)
@@ -49,6 +48,10 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
             raise WorkerError('executor_start_receipt_missing')
         metadata=json.loads(run['metadata_json'])
         executor=run['executor']
+        if executor in ('rdc','chatgpt'):
+            binding=conn.execute('SELECT chat_url FROM work_item_executor_bindings WHERE run_id=?',
+                                 (run_id,)).fetchone()
+            metadata={**metadata,'chat_url':binding['chat_url'] if binding else None}
         if not legacy_codex_allowed and executor=='codex':
             raise WorkerError('legacy_codex_retired')
         if executor=='symphony':
@@ -71,14 +74,9 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
               WHERE work_item_id=? AND tag='c2:issue-triage' LIMIT 1''',
               (run['work_item_id'],)).fetchone())
         if is_issue_triage:
-            metadata={**metadata,'issue_triage':True}
-        browser_lane_unavailable = lane_degraded() or KILL_SWITCH.exists()
+            raise WorkerError('retired_recursive_inbox_executor: use the bounded technical job')
+        browser_lane_unavailable = KILL_SWITCH.exists()
         if executor in ('rdc','chatgpt') and metadata.get('activity') in ('gui','semantic') and browser_lane_unavailable:
-            if legacy_codex_allowed and is_issue_triage and metadata.get('activity')=='semantic':
-                result=execute_inbox_codex(run_id=run_id,
-                    work_item_id=str(run['work_item_id']),db_path=db_path)
-                return {'run_id':run_id,'executor':'codex-fallback',
-                        'phase':result['state'],'before':result['before'],'after':result['after']}
             return {'run_id':run_id,'executor':executor,'phase':'suspended'}
         if executor=='rdc' and metadata.get('activity')=='native':
             receipt=Path(state_root)/f'{run_id}.native.json'

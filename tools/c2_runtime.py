@@ -22,12 +22,13 @@ from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_
 from c2_mutations import SUPERVISOR_OPERATIONS
 from c2_scheduler import read_override, override_matches, dispatchable, inbox_drain_state
 from c2_blocked_reconcile import automatic_candidates
-from c2_chatgpt_executor import lane_degraded
+from c2_chatgpt_executor import KILL_SWITCH
 from c2_repository_integration import integration_status, prompt_repository
 from c3_symphony_bridge import DEFAULT_CONFIG as C3_CONFIG, load_config as load_c3_config, BridgeError
 from c3_symphony_backend import status as c3_status, BackendError
 
-C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
+def browser_launch_suspended():
+    return KILL_SWITCH.exists()
 SUPERVISOR_RENEW_MARGIN_S = 60
 DEFAULT_PARALLEL_CAP = 12
 HARD_PARALLEL_CAP = 16
@@ -270,7 +271,7 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         else:
             launch_notify(key)
             events.append(('notify',key))
-    chatgpt_suspended=lane_degraded()
+    chatgpt_suspended=browser_launch_suspended()
     active=[dict(r) for r in db.execute("""SELECT r.* FROM work_item_runs r
        JOIN work_items w USING(work_item_id)
        WHERE r.state IN ('claimed','running','recovering')

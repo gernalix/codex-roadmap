@@ -39,7 +39,7 @@ class WorkerTests(unittest.TestCase):
             finally:
                 conn.close()
 
-    def test_issue_triage_uses_codex_fallback_when_chat_lane_is_disabled(self):
+    def test_recursive_triage_rejects_even_when_browser_disabled(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp); path=C2IntakeTests().make_cutover_db(root)
             conn=c2_intake._connect(path)
@@ -58,21 +58,16 @@ class WorkerTests(unittest.TestCase):
                   (item['work_item_id'],json.dumps(metadata)))
                 c2_scheduler.executor_started(conn,run_id='triage-fallback',now=2)
                 conn.commit()
-                fallback={'state':'progress','before':20,'after':10,'returncode':0}
                 kill_switch=root/'disable-chat-supervisor'; kill_switch.write_text('')
-                with patch.object(c2_worker,'lane_degraded',return_value=False), \
-                     patch.object(c2_worker,'KILL_SWITCH',kill_switch), \
-                     patch.object(c2_worker,'execute_inbox_codex',return_value=fallback) as execute:
-                    result=c2_worker.run_once(path,'triage-fallback',state_root=root/'receipts',
-                        submit=lambda *_:self.fail('fallback should own its fenced writes'))
-                self.assertEqual('codex-fallback',result['executor'])
-                self.assertEqual('progress',result['phase'])
-                self.assertEqual(10,result['after'])
-                execute.assert_called_once()
+                with patch.object(c2_worker,'KILL_SWITCH',kill_switch), \
+                     self.assertRaisesRegex(c2_worker.WorkerError,'retired_recursive'):
+                    c2_worker.run_once(path,'triage-fallback',state_root=root/'receipts',
+                        submit=lambda *_:self.fail('retired worker must not write'))
+                self.assertFalse((root/'receipts').exists())
             finally:
                 conn.close()
 
-    def test_issue_triage_marks_browser_dispatch_for_stable_chat_reuse(self):
+    def test_recursive_triage_rejects_before_browser_dispatch(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp); path=C2IntakeTests().make_cutover_db(root)
             conn=c2_intake._connect(path)
@@ -95,13 +90,12 @@ class WorkerTests(unittest.TestCase):
                 def dispatch(**kwargs):
                     captured.update(kwargs['metadata'])
                     return {'phase':'started','chat_url':'https://chatgpt.com/c/triage'}
-                with patch.object(c2_worker,'lane_degraded',return_value=False), \
-                     patch.object(c2_worker,'KILL_SWITCH',root/'absent'), \
-                     patch.object(c2_worker,'dispatch_browser',side_effect=dispatch):
-                    result=c2_worker.run_once(path,'triage-stable',state_root=root/'receipts',
+                with patch.object(c2_worker,'KILL_SWITCH',root/'absent'), \
+                     patch.object(c2_worker,'dispatch_browser',side_effect=dispatch), \
+                     self.assertRaisesRegex(c2_worker.WorkerError,'retired_recursive'):
+                    c2_worker.run_once(path,'triage-stable',state_root=root/'receipts',
                         submit=lambda *_:None,worker_prefix='c3-run:',legacy_codex_allowed=False)
-                self.assertEqual('started',result['phase'])
-                self.assertTrue(captured['issue_triage'])
+                self.assertEqual({},captured)
             finally:
                 conn.close()
 

@@ -158,11 +158,10 @@ class C3RetirementTests(unittest.TestCase):
             with closing(c2_intake._connect(path)) as db:
                 db.execute("BEGIN IMMEDIATE")
                 issue = c2_issue_inbox.capture(db, description="Need a decision")
-                result = c2_issue_inbox.ensure_triage(
-                    db, project_url=c2_runtime.C2_TRIAGE_PROJECT_URL, batch_limit=25)
-                objective = db.execute("SELECT objective FROM work_items WHERE work_item_id=?",
-                                       (result["work_item_id"],)).fetchone()[0]
-                self.assertIn("at most 25 rows", objective)
+                changes = db.total_changes
+                with self.assertRaisesRegex(c2_issue_inbox.IssueInboxError, "retired_recursive"):
+                    c2_issue_inbox.ensure_triage(db, project_url="anything", batch_limit=25)
+                self.assertEqual(changes, db.total_changes)
                 self.assertEqual("pending", db.execute(
                     "SELECT state FROM issue_inbox WHERE issue_id=?",
                     (issue["issue_id"],)).fetchone()[0])
@@ -184,7 +183,7 @@ class C3RetirementTests(unittest.TestCase):
                            (triage["work_item_id"],))
                 db.execute("INSERT INTO work_item_tags VALUES(?,'c2:issue-triage')",
                            (triage["work_item_id"],))
-                metadata = {"activity": "semantic", "project_url": c2_runtime.C2_TRIAGE_PROJECT_URL}
+                metadata = {"activity": "semantic", "project_url": "https://chatgpt.com/g/g-p-test/project"}
                 db.execute("""INSERT INTO work_item_runs VALUES(
                     'triage',?,'event',1,'chatgpt','running',100,
                     'c3-run:triage',NULL,?,1)""",
@@ -197,12 +196,9 @@ class C3RetirementTests(unittest.TestCase):
             kill_switch = root / "disable-browser"
             kill_switch.write_text("")
             with patch.object(c2_worker, "KILL_SWITCH", kill_switch), \
-                 patch.object(c2_worker, "lane_degraded", return_value=False), \
-                 patch.object(c2_worker, "execute_inbox_codex") as fallback:
-                result = c2_worker.run_once(path, "triage", worker_prefix="c3-run:",
+                 self.assertRaisesRegex(c2_worker.WorkerError, "retired_recursive"):
+                c2_worker.run_once(path, "triage", worker_prefix="c3-run:",
                                             legacy_codex_allowed=False)
-            self.assertEqual(result["phase"], "suspended")
-            fallback.assert_not_called()
 
 
 if __name__ == "__main__":
