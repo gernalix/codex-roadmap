@@ -72,6 +72,39 @@ class WorkerTests(unittest.TestCase):
             finally:
                 conn.close()
 
+    def test_issue_triage_marks_browser_dispatch_for_stable_chat_reuse(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); path=C2IntakeTests().make_cutover_db(root)
+            conn=c2_intake._connect(path)
+            try:
+                c2_scheduler.install_schema(conn)
+                conn.execute('BEGIN IMMEDIATE')
+                item=c2_intake.add_work_item(conn,title='Triage C2 issue inbox')
+                conn.execute("INSERT INTO work_item_tags(work_item_id,tag) VALUES(?, 'c2:issue-triage')",
+                    (item['work_item_id'],))
+                conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",
+                    (item['work_item_id'],))
+                metadata={'activity':'semantic','project_url':'https://chatgpt.com/g/g-p-test/project'}
+                conn.execute("""INSERT INTO work_item_runs VALUES(
+                  'triage-stable',?,'event',1,'chatgpt','running',100,
+                  'c3-run:triage-stable',NULL,?,1)""",
+                  (item['work_item_id'],json.dumps(metadata)))
+                c2_scheduler.executor_started(conn,run_id='triage-stable',now=2)
+                conn.commit()
+                captured={}
+                def dispatch(**kwargs):
+                    captured.update(kwargs['metadata'])
+                    return {'phase':'started','chat_url':'https://chatgpt.com/c/triage'}
+                with patch.object(c2_worker,'lane_degraded',return_value=False), \
+                     patch.object(c2_worker,'KILL_SWITCH',root/'absent'), \
+                     patch.object(c2_worker,'dispatch_browser',side_effect=dispatch):
+                    result=c2_worker.run_once(path,'triage-stable',state_root=root/'receipts',
+                        submit=lambda *_:None,worker_prefix='c3-run:',legacy_codex_allowed=False)
+                self.assertEqual('started',result['phase'])
+                self.assertTrue(captured['issue_triage'])
+            finally:
+                conn.close()
+
     def test_terminal_codex_output_auto_submits_receipt_and_safe_pass_reconciliation(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp); path=C2IntakeTests().make_cutover_db(root)

@@ -70,6 +70,8 @@ def run_once(db_path: Path, run_id: str, *, state_root=STATE_ROOT, submit=_write
         is_issue_triage=bool(conn.execute('''SELECT 1 FROM work_item_tags
               WHERE work_item_id=? AND tag='c2:issue-triage' LIMIT 1''',
               (run['work_item_id'],)).fetchone())
+        if is_issue_triage:
+            metadata={**metadata,'issue_triage':True}
         browser_lane_unavailable = lane_degraded() or KILL_SWITCH.exists()
         if executor in ('rdc','chatgpt') and metadata.get('activity') in ('gui','semantic') and browser_lane_unavailable:
             if legacy_codex_allowed and is_issue_triage and metadata.get('activity')=='semantic':

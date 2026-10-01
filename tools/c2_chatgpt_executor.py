@@ -13,6 +13,7 @@ C2_GENERATION_SUSPECT_S=40
 C2_MAX_RECOVERY_ATTEMPTS=3
 LANE_STATE=Path.home()/'.local/state/chatgpt-rdc-supervisor/global.json'
 KILL_SWITCH=Path.home()/'.config/c2/disable-chat-supervisor'
+ISSUE_TRIAGE_CHAT_STATE=Path.home()/'.local/state/chatgpt-rdc-supervisor/c3-inbox-triage-chat.json'
 
 
 class ChatWorkerError(RuntimeError):
@@ -96,6 +97,10 @@ def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
                     store.save_task(task)
                     state.update(phase='started',chat_url=matches[0])
                     persist(receipt,state)
+                    if metadata.get('issue_triage'):
+                        persist(ISSUE_TRIAGE_CHAT_STATE,{
+                            'work_item_id':work_item_id,'project_url':project_url,
+                            'chat_url':matches[0]})
             finally:
                 if owned:
                     browser.close()
@@ -104,6 +109,37 @@ def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
         return {'phase':state['phase'],'chat_url':state.get('chat_url'),'resubmitted':False}
     ChatGPTBrowser, is_persisted_chat_url, TaskConfig, Store=_supervisor_types()
     store=store or Store()
+    if metadata.get('issue_triage'):
+        try:
+            alias=json.loads(ISSUE_TRIAGE_CHAT_STATE.read_text())
+        except (OSError,ValueError,TypeError):
+            alias=None
+        if alias:
+            alias_url=str(alias.get('chat_url') or '')
+            alias_project=str(alias.get('project_url') or '')
+            if alias_project and alias_project != project_url:
+                raise ChatWorkerError('triage_chat_project_conflict')
+            if not is_persisted_chat_url(alias_url):
+                raise ChatWorkerError('triage_chat_url_invalid')
+            prior_task_id=str(alias.get('work_item_id') or '')
+            load_task=getattr(store,'load_task',None)
+            if load_task is not None and prior_task_id and prior_task_id != work_item_id:
+                try:
+                    prior=load_task(prior_task_id)
+                except FileNotFoundError:
+                    prior=None
+                if prior is not None:
+                    prior.enabled=False
+                    store.save_task(prior)
+            task=_task_config(TaskConfig,work_item_id=work_item_id,
+                db_path=db_path,chat_url=alias_url,project_url=project_url)
+            store.save_task(task)
+            state={'run_id':run_id,'work_item_id':work_item_id,'project_url':project_url,
+                   'phase':'started','chat_url':alias_url}
+            persist(receipt,state)
+            persist(ISSUE_TRIAGE_CHAT_STATE,{
+                'work_item_id':work_item_id,'project_url':project_url,'chat_url':alias_url})
+            return {'phase':'started','chat_url':alias_url,'resubmitted':False}
     load_task=getattr(store,'load_task',None)
     if load_task is not None:
         try:
@@ -133,6 +169,9 @@ def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
         store.save_task(task)
         state.update(phase='started',chat_url=url)
         persist(receipt,state)
+        if metadata.get('issue_triage'):
+            persist(ISSUE_TRIAGE_CHAT_STATE,{
+                'work_item_id':work_item_id,'project_url':project_url,'chat_url':url})
         return {'phase':'started','chat_url':url,'resubmitted':False}
     finally:
         if owned:
