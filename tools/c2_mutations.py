@@ -11,6 +11,7 @@ import c2_blocked_reconcile
 import c2_issue_inbox
 import c2_human_copy
 import roadmap_db
+import c3_inbox_maintenance
 
 
 SUPERVISOR_OPERATIONS = frozenset({
@@ -22,7 +23,7 @@ SUPERVISOR_OPERATIONS = frozenset({
     'reconcile_blocked', 'reconcile_blocked_safety_net', 'bind_executor',
     'promote_issue', 'discard_issue', 'reconcile_issue_batch', 'edit_issue', 'void_issue', 'ensure_issue_triage',
     'set_execution_override', 'clear_execution_override',
-    'set_human_copy',
+    'set_human_copy', 'maintain_issue_inbox',
 })
 
 
@@ -57,6 +58,7 @@ def apply(conn, mutation):
                 c2_scheduler.reconcile_terminal_run(conn, result['run_id'])
         return result
     operations = {
+        'maintain_issue_inbox': c3_inbox_maintenance.apply,
         'cutover': c2_cutover_writer.confirm,
         'intake': c2_intake.add_work_item,
         'prepare_codex': c2_intake.prepare_codex,

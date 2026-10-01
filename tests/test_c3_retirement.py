@@ -147,7 +147,7 @@ class C3RetirementTests(unittest.TestCase):
                               side_effect=lambda op, args, key: submitted.append((op, args, key))), \
                  patch.object(c3_runtime.core, "advance", return_value={"ready": 0}) as advance:
                 result = c3_runtime.run(snapshot_path)
-            self.assertEqual(result, {"ready": 0, "inbox_pending": 1})
+            self.assertEqual(result, {"ready": 0, "inbox_pending": 1, "inbox_reconciled": 0})
             self.assertEqual(submitted, [])
             self.assertEqual(advance.call_args.kwargs["worker_prefix"], "c3-run:")
             self.assertTrue(advance.call_args.kwargs["coding_route_override"]["no_legacy_codex"])

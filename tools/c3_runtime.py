@@ -13,6 +13,7 @@ import sys
 import time
 
 import c2_runtime as core
+import c3_inbox_maintenance
 from c2_supervisor_lease import (DEFAULT_DB, acquire, connect, publish_runtime_identity,
                                  snapshot, update)
 from c3_retirement import MARKER
@@ -108,11 +109,13 @@ def run(db_path: Path = SNAPSHOT, *, inbox_only: bool = False) -> dict:
                 if any(event[0] in ("claim_supervisor", "supervisor_fenced")
                        for event in result.get("events", [])):
                     return result
+                inbox_result = c3_inbox_maintenance.run(db, submit)
                 pending = [r[0] for r in db.execute(
                     "SELECT issue_id FROM issue_inbox WHERE state='pending' ORDER BY observed_at_ms,issue_id LIMIT 25")]
                 if inbox_only:
                     return {"inbox_pending": len(pending), "triage_requested": bool(pending)}
                 result["inbox_pending"] = len(pending)
+                result["inbox_reconciled"] = inbox_result['changed']
                 return result
 
 
