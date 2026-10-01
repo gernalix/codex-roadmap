@@ -30,6 +30,7 @@ class LocalWriter:
             from c3_storage import verified_backup
             verified_backup(path, path.parent / 'backups')
         self.conn = connect(self.repo)
+        self.conn.c3_writer_owned = True
         self.conn.commit()
         self.conn.execute('PRAGMA journal_mode=WAL')
         self.conn.execute('PRAGMA synchronous=FULL')
@@ -76,8 +77,10 @@ class LocalWriter:
                 if receipt['payload_sha256'] != payload_hash:
                     raise ValueError('request_key_conflict:' + request_key)
                 conn.rollback()
+                from c3_prompt_ids import allocation_result
                 return {'status': 'ok', 'submission': 'applied', 'request_key': request_key,
-                        'issue_number': str(receipt['issue_number']), 'idempotent': True}
+                        'issue_number': str(receipt['issue_number']), 'idempotent': True,
+                        **allocation_result(conn, operations)}
             # Existing receipts use positive GitHub issue numbers. Reserve the
             # negative namespace for local receipts without another registry.
             if issue_number is None:
@@ -94,7 +97,13 @@ class LocalWriter:
                     self.syncing_projects = False
                     conn.set_authorizer(self.authorize)
             for operation in operations:
+                if conn.execute("SELECT 1 FROM meta WHERE key='prompt_id_authority' AND value='C3'").fetchone() and operation.get('op') == 'register':
+                    from c3_prompt_ids import register
+                    register(conn, operation)
                 apply_mutation(conn, operation, default_actor=actor)
+            if conn.execute("SELECT 1 FROM meta WHERE key='prompt_id_authority' AND value='C3'").fetchone():
+                from c3_prompt_ids import reconcile_used
+                reconcile_used(conn)
             if self.projects_source:
                 from c3_projects import validate_references
                 validate_references(conn)
@@ -108,8 +117,10 @@ class LocalWriter:
         except Exception:
             conn.rollback()
             raise
+        from c3_prompt_ids import allocation_result
         return {'status': 'ok', 'submission': 'applied', 'request_key': request_key,
-                'issue_number': str(issue_number), 'idempotent': False}
+                'issue_number': str(issue_number), 'idempotent': False,
+                **allocation_result(conn, operations)}
 
 
 class UnixConnection(http.client.HTTPConnection):

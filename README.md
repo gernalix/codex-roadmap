@@ -195,41 +195,23 @@ issue:<32 hex>` stabile rende idempotente un retry dello stesso payload; senza
 ID ogni invocazione crea una nuova osservazione append-only.
 
 
-### Checklist obbligatoria quando ChatGPT deve “mettere un prompt nella roadmap”
+### Prompt identity and local registration
 
-Per un **nuovo prompt** il percorso completo è:
+C3 is the only PROMPT_ID authority. The persistent local writer owns allocation,
+permanent historical reservations and request-key idempotency. MegaVault owns
+project identity only; its prompt registry is frozen historical evidence.
 
-```text
-richiesta utente
-  → MegaVault remote allocator: allocate
-  → risposta con PROMPT_ID canonico
-  → Issue [roadmap-mutation] con op=register
-  → GitHub Actions single writer
-  → roadmap.sqlite + prompt materializzato + viste
-  → MegaVault remote allocator: materialize sul file canonico
-  → verifica di entrambe le conferme
-  → solo allora risposta “aggiunto alla roadmap”
-```
+Allocate with `python3 tools/c2_identity.py allocate --request-id <REQUEST_ID>
+--source <SOURCE> [--project-id <PROJECT_ID>] [--parent-prompt-id <ID>]`.
+Submit `register` through `tools/submit_mutation.py`: the local transaction
+stores the canonical body and materializes the reserved ID atomically. There is
+no MegaVault materialize step and no lifecycle-critical GitHub dependency.
+Normal C3 intake can prepare/allocate/materialize in one writer transaction.
 
-Regole fail-closed:
-
-- una normale Issue o una Issue `[plan]` **non aggiorna la roadmap**;
-- ChatGPT non deve mai usare una `[plan]` come handoff sostitutivo quando l'utente ha chiesto una mutazione reale;
-- un Issue number non è un PROMPT_ID;
-- non dichiarare “aggiunto alla roadmap” finché la mutation Issue non è stata applicata dal writer;
-- per un nuovo prompt, non dichiarare completato il workflow finché MegaVault non conferma anche `status=materialized` per lo stesso PROMPT_ID;
-- se il bridge remoto MegaVault non risponde e il checkout canonico locale è disponibile, usare il medesimo allocator tramite `python3 /home/daniele/MegaVault/megavault.py prompt-id allocate --request-id <REQUEST_ID> ...`; se anche il checkout/allocator canonico non è disponibile, lo stato corretto è “allocazione pendente/bloccata”, mai un ID manuale o una Issue informativa;
-- per aggiornare un prompt esistente si usa direttamente una mutation Issue e **non** si alloca un nuovo ID, salvo una vera revisione del prompt che richieda una nuova materializzazione.
-
-Bridge remoto PROMPT_ID di MegaVault:
-
-- il trasporto canonico è una GitHub Issue immutabile `[prompt-id-command] <request_id>` nel repository `gernalix/MegaVault`, con il JSON del comando nel body;
-- `request_id` è la chiave idempotente del registry SQLite stesso: `megavault.sqlite:prompt_id_allocation_requests` viene scritto atomicamente insieme alla reservation del PROMPT_ID. Retry con gli stessi parametri restituiscono lo stesso ID; parametri diversi con la stessa chiave falliscono chiuso;
-- Le receipt JSON restano solo audit/proiezioni di compatibilità. L'autorità per l'idempotenza è `megavault.sqlite`; `.github/prompt-id-response.json` non è una mailbox né una fonte canonica;
-- il percorso è sempre `allocate → register → materialize`. Se un tentativo si interrompe, si riprende dal primo stato non confermato senza riallocare o riscrivere gli stati già confermati;
-- il vecchio `.github/prompt-id-request.json` non è più un entry point operativo e non va aggiornato per inviare comandi;
-- se il runner GitHub Actions privato di MegaVault non parte, usare lo stesso allocator canonico locale con `megavault.py prompt-id allocate ...` / `materialize ...`; non creare un secondo writer e non inventare ID;
-- se il bridge è indisponibile dopo `register`, la materializzazione può essere completata localmente sul file canonico ottenuto dopo un `roadmap_pull.py` protetto.
+Never choose an ID manually or reuse any historical, superseded or cancelled
+ID. A request retry returns the same allocation; changed parameters or genuine
+collisions fail closed. Verify canonical DB/socket readback, not Issue creation.
+Existing metadata changes use the same local writer without another allocation.
 
 ## Pull locale obbligatoriamente protetto
 
@@ -334,7 +316,7 @@ Regola assoluta: **1 prompt materializzato = 1 PROMPT_ID unico e immutabile di 6
 
 Una revisione/retry materializzata riceve un nuovo ID. La genealogia usa `PARENT_PROMPT_ID`; gli ID conclusi non vengono riciclati.
 
-L'allocatore canonico MegaVault è l'autorità; non inventare ID manualmente.
+Il writer locale C3 è l'autorità PROMPT_ID; MegaVault risolve i project ID. Non inventare ID manualmente.
 
 ## Modello/reasoning
 

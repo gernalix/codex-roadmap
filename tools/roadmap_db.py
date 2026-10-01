@@ -36,13 +36,17 @@ def db_path(repo: Path) -> Path:
     from c3_storage import database
     return database(repo)
 
+class RoadmapConnection(sqlite3.Connection):
+    c3_writer_owned = False
+
+
 def connect(repo: Path, *, writable: bool = True) -> sqlite3.Connection:
     path = db_path(repo)
     if not path.exists() and not writable:
         raise RoadmapDBError(f"database_missing:{path}")
     conn = (
-        sqlite3.connect(path)
-        if writable else sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
+        sqlite3.connect(path, factory=RoadmapConnection)
+        if writable else sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True, factory=RoadmapConnection)
     )
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys=ON")
@@ -1734,7 +1738,10 @@ def verify(repo: Path) -> dict[str, Any]:
 def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, default_actor: str = "chatgpt") -> None:
     op=mutation.get("op")
     actor=mutation.get("actor") or default_actor
-    if op in {"c3_user_override", "c3_destructive_override"}:
+    if op == 'prompt_id_allocate':
+        from c3_prompt_ids import allocate
+        allocate(conn, mutation)
+    elif op in {"c3_user_override", "c3_destructive_override"}:
         import c3_override
         if not conn.in_transaction:
             conn.execute("BEGIN IMMEDIATE")

@@ -28,7 +28,7 @@ Never directly edit or commit canonical/generated roadmap state to perform a roa
 - `falliti/`
 - `mutations/inbox/` or `mutations/applied/`
 
-Instead, submit one immutable `codex-roadmap.mutation.v1` request as a GitHub Issue named `[roadmap-mutation] <request_key>`, normally through `tools/submit_mutation.py`. Let `.github/workflows/apply-roadmap-mutations.yml` serialize, apply, render, commit and push it.
+Instead, submit one immutable `codex-roadmap.mutation.v1` request through `tools/submit_mutation.py` to the persistent local C3 writer. Its private socket owns `~/.local/state/c3-control/roadmap.sqlite` with WAL, atomic transactions and request-key receipts. GitHub is asynchronous ingress/audit only, never a local lifecycle prerequisite. There is no GitHub mutation-writer workflow.
 
 Prompt-backed Codex results use `tools/roadmap_finish.py --result PASS|BLOCKED|FAIL|CANCELLED`. Non-prompt work-item results use `tools/c2_executor_result.py`; `roadmap_result.py` is an internal compatibility helper.
 
@@ -67,40 +67,20 @@ A Codex/model session must not be kept alive merely to wait for an external or m
 - Prefer one bounded native check over a model round-trip. Prefer Luna over Sol for frequent/repetitive checks, but the default for pure waiting is no model call at all.
 
 
-## Hard workflow for human requests to add/update the roadmap
+## Adding/updating prompts
 
-When the user says **“metti/aggiungi/aggiorna questo prompt nella roadmap”**, the request is not satisfied by creating a normal GitHub Issue, a `[plan]` Issue, a prose handoff, or a prompt file. Those are explicitly non-canonical.
-
-Use this exact workflow:
-
-1. **Decide whether this is a new materialized prompt or a mutation of an existing PROMPT_ID.**
-   - Existing prompt: do not allocate another ID unless the prompt text/meaning itself changes and therefore requires a revision.
-   - New/revised prompt: allocation is mandatory before the roadmap mutation.
-2. **For a new/revised prompt, allocate PROMPT_ID through the canonical MegaVault allocator.**
-   - When operating remotely from ChatGPT, create one immutable GitHub Issue `[prompt-id-command] <request_id>` in `gernalix/MegaVault` with `command=allocate` in the JSON body.
-   - Wait until that Issue is processed successfully by the canonical allocator. Receipt files are audit/projection only, not the command transport.
-   - Never guess a six-digit ID, reuse an old one, derive one from an Issue number, or proceed while the allocation response is stale/missing.
-   - If the remote bridge is unavailable but the user has the canonical local MegaVault checkout, use the same canonical CLI allocator locally (`megavault.py prompt-id allocate`) and continue only with its returned ID. This is a supported fallback, not a bypass. The matching final `materialize` must likewise use the canonical CLI if the remote bridge remains unavailable.
-3. **Submit the canonical roadmap mutation.**
-   - Create exactly one `codex-roadmap.mutation.v1` Issue named `[roadmap-mutation] <request_key>` using `tools/submit_mutation.py` or an equivalent GitHub API call.
-   - For `register`, include the allocated `prompt_id`, final `prompt_text`, `current_path`, model/reasoning/project metadata and any dependencies/relations in the mutation.
-   - A title beginning with `[plan]` is never a substitute for this step and must not be presented to the user as “added to the roadmap”.
-4. **Wait for the roadmap single writer to apply the mutation.**
-   - Do not claim success merely because the Issue was created.
-   - Verify that the mutation Issue was applied/closed successfully and that the new PROMPT_ID is present in canonical roadmap state/materialization.
-5. **Materialize the allocated PROMPT_ID in MegaVault.**
-   - Create one immutable `[prompt-id-command] <request_id>` Issue with `command=materialize`, pointing `content_url` at the exact writer-materialized canonical prompt file.
-   - Wait for the allocator Issue to complete successfully with the same PROMPT_ID.
-6. **Only after steps 1–5 succeed may ChatGPT tell the user that the prompt is in the roadmap.**
-   - If any stage fails or is pending, say exactly which stage is incomplete.
-   - Do not create a parallel `[plan]` Issue as a fallback.
-7. **Clean up process mistakes.** If a non-canonical `[plan]`/handoff Issue was created by mistake for a roadmap request, close it as superseded after the real mutation is queued/applied; do not leave two competing task representations.
-
-For ordinary metadata/state changes to an existing prompt, skip PROMPT_ID allocation/materialization and use only the appropriate `codex-roadmap.mutation.v1` operation through the single writer. Running prompts remain subject to the immutable-field rules below.
+C3 owns PROMPT_ID allocation and lifecycle. MegaVault is project identity only.
+For a new/revised prompt, use `tools/c2_identity.py allocate --request-id ...
+--source ...` through the local writer; never choose a number or reuse history.
+Submit one idempotent local `register` mutation with the allocated ID and body.
+Registration atomically materializes the body/ID: no MegaVault command or
+second materialize step. Normal C3 intake can allocate/materialize together.
+Verify applied writer receipt and canonical DB readback before claiming success.
+Existing metadata/state updates do not allocate another ID.
 
 ## Operational cockpit
 
-Workflowy is the only human-facing operational cockpit. `roadmap.sqlite` remains canonical. Markdown/Obsidian projections are compatibility/audit output and MUST NOT be used to infer whether a prompt is ready, running, integrating, blocked or done.
+C3's web app is the primary operational cockpit. The local runtime `roadmap.sqlite` is canonical. Workflowy control-plane producers/routes/units are retired; personal Workflowy is independent. Markdown/Obsidian/Git replicas are rebuildable projections and MUST NOT be used to infer lifecycle state.
 
 Prompt bodies are canonical SQLite materializations keyed by PROMPT_ID. Legacy `prompts/*.md` files may remain as writer-owned compatibility materializations, but state protection and copy/launch actions must prefer the SQLite body.
 
