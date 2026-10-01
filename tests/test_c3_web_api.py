@@ -3,6 +3,8 @@ from pathlib import Path
 import json
 import sys
 import tempfile
+import multiprocessing
+import time
 import threading
 import unittest
 from unittest import mock
@@ -14,7 +16,7 @@ import c2_intake
 import c2_scheduler
 import c3_api
 import c3_override
-import apply_issue_mutation
+import c3_local_writer
 import test_c2_intake
 
 
@@ -33,16 +35,25 @@ class WebApiTests(unittest.TestCase):
             conn.execute('INSERT INTO work_item_dependencies VALUES(?,?,1,NULL)', (self.b, self.a))
             conn.commit()
         self.control = c3_api.Control(self.root, self.path)
+        self.socket = self.root / 'writer.sock'
+        self.writer_process = multiprocessing.Process(target=c3_local_writer.serve,
+            args=(self.path.parent, self.socket))
+        self.writer_process.start()
+        deadline = time.monotonic() + 5
+        while not self.socket.exists() and time.monotonic() < deadline:
+            time.sleep(.01)
+        self.assertTrue(self.socket.exists())
         self.server = c3_api.serve(self.control, 0)
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
         self.base = 'http://127.0.0.1:' + str(self.server.server_port)
-        self.issue = 0
 
     def tearDown(self):
         self.server.shutdown()
         self.server.server_close()
         self.thread.join()
+        self.writer_process.terminate()
+        self.writer_process.join(5)
         self.tmp.cleanup()
 
     def request(self, path, body=None, *, intent=True):
@@ -54,11 +65,16 @@ class WebApiTests(unittest.TestCase):
             return response.status, json.load(response)
 
     def writer(self, document, *, request_key):
-        self.issue += 1
-        event = self.root / 'event.json'
-        event.write_text(json.dumps({'issue': {'number': self.issue, 'title': '[roadmap-mutation] ' + request_key, 'body': json.dumps(document)}}))
-        apply_issue_mutation.apply_issue(self.path.parent, event, render_views=False)
-        return {'issue_number': str(self.issue), 'request_key': request_key}
+        return c3_local_writer.submit_local(document, request_key=request_key,
+                                            socket_path=self.socket)
+
+    def test_canonical_repo_ignores_stale_snapshot_but_fixture_is_isolated(self):
+        with mock.patch.object(c3_api, 'local_enabled', return_value=True), \
+             mock.patch.object(c3_api, 'database', return_value=Path('/canonical/roadmap.sqlite')):
+            canonical = c3_api.Control(c3_api.REPO, self.path)
+            self.assertEqual(Path('/canonical/roadmap.sqlite'), canonical.snapshot)
+            isolated = c3_api.Control(self.root, self.path)
+            self.assertEqual(self.path, isolated.snapshot)
 
     def action(self, wid, action, **extra):
         _, preview = self.request('/api/preview', {'work_item_id': wid, 'action': action})

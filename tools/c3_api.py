@@ -24,8 +24,9 @@ class ControlError(RuntimeError):
 
 class Control:
     def __init__(self, repo, snapshot=None, *, timeout=120):
-        self.repo = Path(repo)
-        self.snapshot = database(repo) if snapshot is None or local_enabled() else Path(snapshot)
+        self.repo = Path(repo).resolve()
+        canonical_local = self.repo == REPO.resolve() and local_enabled()
+        self.snapshot = database(self.repo) if snapshot is None or canonical_local else Path(snapshot)
         self.timeout = timeout
         self.lock = threading.RLock()
 
