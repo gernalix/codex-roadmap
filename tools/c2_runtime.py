@@ -68,6 +68,8 @@ def _key(prefix: str, data) -> str:
 
 
 def _writer_submit(operation: str, arguments: dict, key: str):
+    if operation == 'ensure_issue_triage':
+        raise RuntimeErrorC2('retired_recursive_inbox_executor')
     arguments=dict(arguments)
     if operation in SUPERVISOR_OPERATIONS or operation in ('claim_supervisor','renew_supervisor','retire_supervisor'):
         with closing(connect_supervisor(SUPERVISOR_DB)) as lease:
@@ -83,7 +85,7 @@ def _writer_submit(operation: str, arguments: dict, key: str):
                 'fencing_token':row['fencing_token'],
                 'lease_expires_at':row['lease_expires_at'],
             }
-            if operation in ('acknowledge','schedule','recover','bind_executor','ensure_issue_triage','maintain_issue_inbox'):
+            if operation in ('acknowledge','schedule','recover','bind_executor','maintain_issue_inbox'):
                 # The same canonical operation can be replayed after a lease
                 # renewal. Its fenced document changes, so the transport Issue
                 # identity must change while the operation identity stays
@@ -93,7 +95,6 @@ def _writer_submit(operation: str, arguments: dict, key: str):
                     'schedule':'c2-schedule-authorized',
                     'recover':'c2-recover-authorized',
                     'bind_executor':'c2-bind-authorized',
-                    'ensure_issue_triage':'c2-issue-triage-authorized',
                     'maintain_issue_inbox':'c3-inbox-maintenance-authorized',
                 }[operation]
                 key = _key(prefix, {

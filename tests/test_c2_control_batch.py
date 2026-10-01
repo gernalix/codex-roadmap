@@ -8,6 +8,16 @@ import c2_control
 
 
 class C2ControlBatchTests(unittest.TestCase):
+    def test_retired_triage_rejects_before_lease_or_submission(self):
+        with mock.patch.object(c2_control, 'connect', side_effect=AssertionError('no lease writes')), \
+             mock.patch.object(c2_control, 'submit_document', side_effect=AssertionError('no mutation')):
+            with self.assertRaisesRegex(ValueError, 'invalid_c2_control_operation'):
+                c2_control.submit_control(operation='ensure_issue_triage', arguments={},
+                    request_key='old', supervisor_id='old', fencing_token=1)
+            with self.assertRaisesRegex(ValueError, 'invalid_c2_control_operation'):
+                c2_control.submit_controls(operations=[{'operation':'ensure_issue_triage','arguments':{}}],
+                    request_key='old-batch', supervisor_id='old', fencing_token=1)
+
     def test_submit_controls_uses_one_transactional_document(self):
         authority = {
             "supervisor_id": "sup-a",

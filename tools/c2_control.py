@@ -17,7 +17,7 @@ OPERATIONS = (
     'reconcile_item','reparent_item','reconcile_blocked','reconcile_blocked_safety_net',
     'executor_started','bind_executor','promote_issue','discard_issue','reconcile_issue_batch',
     'edit_issue','void_issue',
-    'ensure_issue_triage','set_human_copy',
+    'set_human_copy',
 )
 
 
@@ -63,8 +63,8 @@ def submit_control(*, operation, arguments, request_key, supervisor_id,
     """Submit one command after validating and renewing the current local fence.
 
     ``canonical_renew`` atomically prepends a writer-side lease renewal. It is
-    intended for asynchronously applied Workflowy control mutations, where the
-    canonical lease can otherwise expire between enqueue and writer apply.
+    intended for bounded runtime/control batches whose canonical lease must
+    remain valid for their atomic application.
     """
     if operation not in OPERATIONS:
         raise ValueError('invalid_c2_control_operation')
