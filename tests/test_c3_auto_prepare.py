@@ -47,6 +47,18 @@ class AutoPreparationTests(unittest.TestCase):
         self.assertEqual({'activity':'coding','model':'gpt-5.6-sol','reasoning':'medium'}, candidate['profile'])
         self.assertEqual('canonical_repository_identity_missing', plan['waiting'][0]['reason'])
 
+    def test_canonical_repository_casing_is_preserved_while_matching_case_insensitively(self):
+        self.db.execute("INSERT INTO projects VALUES('49','personalhub','PersonalHub','active',0,'test','')")
+        self.db.execute("INSERT INTO repositories VALUES('R0049','49','','','','','',1,'','','','https://github.com/gernalix/PersonalHub.git','')")
+        self.db.execute("INSERT INTO work_items VALUES('oldph','oldph','oldph','[]',NULL,NULL,'gernalix/PersonalHub','49','PersonalHub','oldph','codex',0,'1','completed')")
+        self.db.execute("INSERT INTO work_item_execution_specs VALUES('oldph','coding')")
+        self.db.execute("INSERT INTO executions VALUES('oldph','PASS','gpt-5.6-sol','medium')")
+        self.add('ph-ready', repo='gernalix/personalhub')
+        plan = c3_auto_prepare.plan(self.db)
+        candidate = next(x for x in plan['prepared_candidates'] if x['item']['work_item_id'] == 'ph-ready')
+        self.assertEqual('gernalix/PersonalHub', candidate['identity']['repo'])
+        self.assertEqual('49', candidate['identity']['project_id'])
+
     def test_prompt_preserves_canonical_text_without_invented_acceptance(self):
         self.add('ready', objective='Keep this exact objective.')
         candidate = c3_auto_prepare.plan(self.db)['prepared_candidates'][0]
