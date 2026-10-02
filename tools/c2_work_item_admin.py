@@ -23,6 +23,22 @@ EDITABLE_FIELDS = {
     "actionable", "acceptance_json",
 }
 
+def reconcile_execution_identity(conn, work_item_id: str, *, project_id: str,
+                                 project_name: str, repo: str, evidence: list[str]):
+    if not isinstance(evidence, list) or not evidence:
+        raise ValueError("repository_evidence_required")
+    row = conn.execute("SELECT status FROM work_items WHERE work_item_id=?", (work_item_id,)).fetchone()
+    if not row or row["status"] != "pending":
+        raise ValueError("pending_work_item_required")
+    if conn.execute("SELECT 1 FROM work_item_runs WHERE work_item_id=? AND state IN ('claimed','running','recovering')", (work_item_id,)).fetchone():
+        raise ValueError("active_run_requires_normal_lifecycle")
+    project = conn.execute("SELECT project_id,name FROM projects WHERE project_id=?", (project_id,)).fetchone()
+    if not project or project["name"] != project_name:
+        raise ValueError("noncanonical_project_reference")
+    conn.execute("UPDATE work_items SET project_id=?,project_name=?,repo=?,updated_at=? WHERE work_item_id=?",
+                 (str(project["project_id"]), project_name, repo, c2_identity.utc_now(), work_item_id))
+    return {"work_item_id": work_item_id, "project_id": str(project["project_id"]), "repo": repo}
+
 
 def reparent(
     conn: sqlite3.Connection,
