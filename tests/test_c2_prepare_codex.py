@@ -5,7 +5,9 @@ import json
 from pathlib import Path
 import sys
 import tempfile
+import threading
 import unittest
+from concurrent.futures import ThreadPoolExecutor
 from unittest.mock import patch
 
 TOOLS=Path(__file__).resolve().parents[1]/"tools"
@@ -130,6 +132,46 @@ class PrepareCodexTests(unittest.TestCase):
                     sandbox_roots=lambda _worktree:[],
                 )
             self.assertEqual(original,state)
+
+    def test_two_serialized_preparations_share_one_prompt_worktree_and_spec(self):
+        """The writer serializes phases; replay-safe operations cannot duplicate artifacts."""
+        with tempfile.TemporaryDirectory() as tmp:
+            prompt_file=Path(tmp)/"prompt.md"
+            prompt_text="# Goal\nImplement once.\n"
+            prompt_file.write_text(prompt_text,encoding="utf-8")
+            spec=self._spec(prompt_file,evidence=["canonical evidence"])
+            state=self._state(status="pending",actionable=1)
+            lock=threading.Lock(); prompts=[]; specs=[]; worktrees=[]
+
+            def refresh(_):
+                with lock:
+                    return copy.deepcopy(state)
+            def submit(operation,arguments,phase):
+                with lock:
+                    if operation=="prepare_codex" and not state["item"]["prompt_id"]:
+                        state["item"].update(prompt_id="123456",executor_policy="codex")
+                        state["prompt"]={"prompt_id":"123456","model":spec["model"],"reasoning":spec["reasoning"],"prompt_type":"Prompt","current_path":"prompts/123456.md"}
+                        state["prompt_body"]=prep._expected_prompt_body("123456",prompt_text)
+                        prompts.append("123456")
+                    elif operation=="auto_configure" and not state["execution_spec"]:
+                        execution=arguments["execution"]
+                        state["execution_spec"]={"work_item_id":"wi:test","activity":execution["activity"],"model":execution["model"],"reasoning":execution["reasoning"],"worktree":execution["worktree"],"project_url":None,"goal_mode":0,"command_json":None,"resources_json":json.dumps(sorted(execution["resources"])),"max_attempts":execution["max_attempts"]}
+                        specs.append(execution["worktree"])
+                    elif operation not in {"prepare_codex","auto_configure","confirm_auto_preparation"}:
+                        self.fail(operation)
+            def allocate(_item,_prompt_id):
+                with lock:
+                    worktrees.append("/tmp/c2-test-worktree")
+                return "/tmp/c2-test-worktree"
+            def run():
+                return prep.prepare(spec,authority={"fencing_token":1},refresh=refresh,
+                    submit_phase=submit,allocate_worktree=allocate,sandbox_roots=lambda _:[])
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                results=list(pool.map(lambda _:run(), range(2)))
+            self.assertEqual(["123456"],prompts)
+            self.assertEqual(["/tmp/c2-test-worktree"],specs)
+            self.assertEqual({"/tmp/c2-test-worktree"},set(worktrees))
+            self.assertEqual(["prepared","prepared"],[r["status"] for r in results])
 
     def test_existing_execution_spec_conflict_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
