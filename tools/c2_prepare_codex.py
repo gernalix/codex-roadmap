@@ -357,6 +357,7 @@ def prepare(spec: dict[str, Any], *, timeout: float=120.0,
         "activity":spec["activity"],"worktree":worktree,
         "model":spec["model"],"reasoning":spec["reasoning"],
         "resources":list(spec["resources"]),"max_attempts":spec["max_attempts"],
+        "preparation_barrier": True,
     }
     if state.get("execution_spec"):
         _validate_execution_state(state,spec,worktree)
@@ -364,6 +365,7 @@ def prepare(spec: dict[str, Any], *, timeout: float=120.0,
         submit_phase("auto_configure",{"work_item_id":wid,"execution":execution},"execution")
         state=refresh(wid)
         _validate_execution_state(state,spec,worktree)
+        submit_phase("confirm_auto_preparation",{"work_item_id":wid},"readback")
     return {
         "status":"prepared","work_item_id":wid,"prompt_id":prompt_id,
         "worktree":worktree,"activity":spec["activity"],

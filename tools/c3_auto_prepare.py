@@ -91,6 +91,8 @@ def plan(conn: sqlite3.Connection, limit: int = BATCH_LIMIT) -> dict[str, Any]:
         distinct = {(x["project_id"], x["project_name"], x["repo"]) for x in identities}
         if not str(item["objective"] or "").strip():
             waiting.append({"work_item_id": item["work_item_id"], "reason": "objective_missing"})
+        elif not json.loads(item["acceptance_json"] or "[]"):
+            waiting.append({"work_item_id": item["work_item_id"], "reason": "acceptance_missing"})
         elif len(distinct) != 1:
             waiting.append({"work_item_id": item["work_item_id"], "reason": "canonical_repository_identity_missing"})
         else:

@@ -28,8 +28,8 @@ class AutoPreparationTests(unittest.TestCase):
     def tearDown(self):
         self.db.close()
 
-    def add(self, wid, repo='gernalix/codex-roadmap', objective='Do the scoped change.'):
-        self.db.execute("INSERT INTO work_items VALUES(?,?,?, '[]',NULL,NULL,?,NULL,NULL,NULL,'auto',1,'2','pending')", (wid,wid,objective,repo))
+    def add(self, wid, repo='gernalix/codex-roadmap', objective='Do the scoped change.', acceptance='["Verify the scoped result."]'):
+        self.db.execute("INSERT INTO work_items VALUES(?,?,?, ?,NULL,NULL,?,NULL,NULL,NULL,'auto',1,'2','pending')", (wid,wid,objective,acceptance,repo))
 
     def test_prepares_only_uniquely_proven_canonical_candidate(self):
         self.add('ready')
@@ -46,7 +46,13 @@ class AutoPreparationTests(unittest.TestCase):
         candidate = c3_auto_prepare.plan(self.db)['prepared_candidates'][0]
         body = c3_auto_prepare.prompt_body(candidate['item'])
         self.assertIn('Keep this exact objective.', body)
-        self.assertNotIn('Acceptance criteria', body)
+        self.assertIn('Acceptance criteria', body)
+
+    def test_missing_acceptance_fails_closed_before_identity_or_profile(self):
+        self.add('incomplete', acceptance='[]')
+        plan = c3_auto_prepare.plan(self.db)
+        self.assertEqual([], plan['prepared_candidates'])
+        self.assertEqual('acceptance_missing', plan['waiting'][0]['reason'])
 
     def test_existing_spec_is_not_candidate(self):
         self.add('ready')
