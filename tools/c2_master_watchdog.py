@@ -272,15 +272,17 @@ def goal_observation() -> dict[str, Any]:
                                           "includeTurns": True}).get("thread") or {})
             turns = thread.get("turns") or []
             latest = turns[-1] if turns else {}
+            items = latest.get("items") or []
             return {
                 "status": status,
                 "thread_status": (thread.get("status") or {}).get("type"),
                 "turn_status": latest.get("status"),
                 "turn_error": bool(latest.get("error")),
                 "approval_pending": any(
+                    bool(item.get("questions")) or
                     any(word in str(item.get("type") or "").lower()
                         for word in ("approval", "requestuserinput", "elicitation"))
-                    for item in latest.get("items") or []),
+                    for item in items),
             }
     except Exception:
         return {"status": "unknown"}
