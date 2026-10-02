@@ -45,7 +45,7 @@ def load_spec(path: Path) -> dict[str, Any]:
         raise PrepareCodexError("spec_must_be_object")
     allowed={"work_item_id","prompt_file","source","model","reasoning","activity",
              "megavault_mode","parent_prompt_id","resources","max_attempts",
-             "readiness_evidence"}
+             "readiness_evidence","project_id","project_name","repo"}
     unknown=set(raw)-allowed
     if unknown:
         raise PrepareCodexError("unknown_spec_fields:"+",".join(sorted(unknown)))
@@ -78,6 +78,12 @@ def load_spec(path: Path) -> dict[str, Any]:
     if not isinstance(evidence,list) or any(not isinstance(v,str) or not v.strip() for v in evidence):
         raise PrepareCodexError("readiness_evidence_must_be_strings")
     spec["readiness_evidence"]=[v.strip() for v in evidence]
+    identity={key: spec.get(key) for key in ("project_id","project_name","repo")
+              if spec.get(key) is not None}
+    if identity and set(identity)!={"project_id","project_name","repo"}:
+        raise PrepareCodexError("complete_project_identity_required")
+    if identity and any(not str(value).strip() for value in identity.values()):
+        raise PrepareCodexError("complete_project_identity_required")
     return spec
 
 
@@ -312,6 +318,23 @@ def prepare(spec: dict[str, Any], *, timeout: float=120.0,
         status=str(state["item"].get("status") or "")
     if status!="pending" or not int(state["item"].get("actionable") or 0):
         raise PrepareCodexError("work_item_not_ready_for_preparation:"+status)
+    identity={key: spec[key] for key in ("project_id","project_name","repo")
+              if key in spec}
+    if identity:
+        current={key: state["item"].get(key) for key in identity}
+        if any(str(current[key] or "") != str(value) for key,value in identity.items()):
+            evidence=spec.get("readiness_evidence") or []
+            if not evidence:
+                raise PrepareCodexError("identity_evidence_required")
+            submit_phase("reconcile_item",{
+                "work_item_id":wid,"classification":"CURRENT_READY","status":"pending",
+                "evidence":list(evidence),"fields":identity,
+                "include_descendants":False,
+            },"identity")
+            state=refresh(wid)
+            current={key: state["item"].get(key) for key in identity}
+            if any(str(current[key] or "") != str(value) for key,value in identity.items()):
+                raise PrepareCodexError("project_identity_reconciliation_failed")
     prompt_text=Path(spec["prompt_file"]).read_text(encoding="utf-8")
     if not state["item"].get("prompt_id"):
         arguments={
