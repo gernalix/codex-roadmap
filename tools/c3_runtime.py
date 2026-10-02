@@ -27,6 +27,34 @@ class C3RuntimeError(RuntimeError):
     pass
 
 
+def inbox_status(conn, *, batch_changed: int, batch_limit: int = 25) -> dict:
+    """Expose the global Inbox total separately from one bounded scan."""
+    pending_before = int(conn.execute(
+        "SELECT COUNT(*) FROM issue_inbox WHERE state='pending'").fetchone()[0])
+    batch_scanned = int(conn.execute(
+        "SELECT COUNT(*) FROM (SELECT 1 FROM issue_inbox "
+        "WHERE state='pending' ORDER BY observed_at_ms,issue_id LIMIT ?)",
+        (batch_limit,)).fetchone()[0])
+    pending_after = max(0, pending_before - int(batch_changed))
+    return {"inbox_pending": pending_after, "batch_scanned": batch_scanned,
+            "batch_changed": int(batch_changed),
+            "batch_remaining": max(0, pending_after - batch_scanned),
+            "triage_requested": bool(pending_after)}
+
+
+def execution_readiness_status(conn) -> dict:
+    """Keep dependency readiness separate from actual scheduler dispatchability."""
+    ready_no_spec = int(conn.execute("""SELECT COUNT(*) FROM v_work_item_runnable w
+        WHERE NOT EXISTS(SELECT 1 FROM work_item_execution_specs s
+                         WHERE s.work_item_id=w.work_item_id)""").fetchone()[0])
+    dispatchable = sum(1 for row in conn.execute("SELECT * FROM v_work_item_runnable")
+                       if core.dispatchable(conn, row, core._coding_route()))
+    return {"dependency_ready": int(conn.execute("SELECT COUNT(*) FROM v_work_item_runnable").fetchone()[0]),
+            "ready_without_execution_spec": ready_no_spec,
+            "dispatchable": dispatchable,
+            "preparation_required": bool(ready_no_spec)}
+
+
 def authority(db):
     """Transfer the sole local fence after retirement, retaining its token."""
     if not MARKER.is_file():
@@ -130,13 +158,22 @@ def run(db_path: Path = SNAPSHOT, *, inbox_only: bool = False) -> dict:
             if events:
                 result['events'] = events
             with closing(core._open_snapshot(db_path)) as db:
+                result["execution_readiness"] = execution_readiness_status(db)
                 inbox_result = c3_inbox_maintenance.run(db, submit)
-                pending = [r[0] for r in db.execute(
-                    "SELECT issue_id FROM issue_inbox WHERE state='pending' ORDER BY observed_at_ms,issue_id LIMIT 25")]
+                # The bounded maintenance planner intentionally scans at most
+                # 25 rows.  Its scan size is not the Inbox size: callers use
+                # inbox_pending to decide whether another bounded cycle is
+                # needed, so report both facts explicitly.
+                # Reconciliation is submitted through the writer and is
+                # asynchronous from this read-only snapshot.  A later wake
+                # observes the post-apply total; changed remains the bounded
+                # plan result for this cycle.
+                batch_changed = int(inbox_result['changed'])
+                inbox_result_status = inbox_status(db, batch_changed=batch_changed)
                 if inbox_only:
-                    return {"inbox_pending": len(pending), "triage_requested": bool(pending)}
-                result["inbox_pending"] = len(pending)
-                result["inbox_reconciled"] = inbox_result['changed']
+                    return inbox_result_status
+                result.update(inbox_result_status)
+                result["inbox_reconciled"] = batch_changed
                 return result
 
 
