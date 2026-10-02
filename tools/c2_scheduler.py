@@ -11,6 +11,8 @@ import sqlite3
 import time
 import uuid
 
+DEFAULT_PARALLEL_CAP = 12
+HARD_PARALLEL_CAP = 16
 
 
 class SchedulingError(RuntimeError):
@@ -449,12 +451,14 @@ def inbox_gate_exempt(conn, item):
         (item['work_item_id'],)).fetchone())
 
 
-def schedule(conn, *, event_key, now=None, max_parallel=3, lease_seconds=120,
+def schedule(conn, *, event_key, now=None, max_parallel=DEFAULT_PARALLEL_CAP, lease_seconds=120,
              chatgpt_lane_degraded=False, coding_route=None):
     _transaction(conn)
     now=time.time() if now is None else now
-    if not event_key or max_parallel < 1 or lease_seconds <= 0:
+    if not event_key or lease_seconds <= 0:
         raise SchedulingError('invalid_scheduler_event')
+    if not 1 <= max_parallel <= HARD_PARALLEL_CAP:
+        raise SchedulingError('parallel_cap_out_of_range')
     if coding_route is not None:
         if (not isinstance(coding_route,dict)
                 or coding_route.get('mode') not in ('legacy','canary','production','invalid')

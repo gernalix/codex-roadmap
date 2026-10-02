@@ -1,6 +1,7 @@
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 import c2_master_watchdog as watchdog
@@ -42,6 +43,36 @@ def snap(db, *, active="inactive", result="success", worker=False, delegated=Non
 
 
 class MasterWatchdogDecisionTests(unittest.TestCase):
+    def test_goal_observation_detects_agent_message_questions(self):
+        class FakeRPC:
+            def __init__(self, timeout):
+                self.timeout = timeout
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_):
+                return False
+
+            def __call__(self, method, _params):
+                if method == "thread/goal/get":
+                    return {"goal": {"status": "blocked"}}
+                return {"thread": {
+                    "status": {"type": "notLoaded"},
+                    "turns": [{
+                        "status": "completed", "error": None,
+                        "items": [{
+                            "type": "agentMessage",
+                            "questions": [{"id": "choice", "question": "Proceed?"}],
+                        }],
+                    }],
+                }}
+
+        with patch.object(watchdog, "AppServerRPC", FakeRPC):
+            observation = watchdog.goal_observation()
+
+        self.assertTrue(observation["approval_pending"])
+
     def test_quiescent_when_no_work_remains(self):
         db = db_state(inbox=0, pending=0)
         result = watchdog.decide(snap(db), {}, now=1000)

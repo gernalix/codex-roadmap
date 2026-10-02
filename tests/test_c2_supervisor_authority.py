@@ -12,13 +12,13 @@ import c2_supervisor_authority as authority
 
 
 class CanonicalFencingTests(unittest.TestCase):
-    def test_manual_order_install_tolerates_minimal_authority_schema(self):
+    def test_scheduler_install_tolerates_minimal_authority_schema(self):
         db = sqlite3.connect(':memory:')
         db.row_factory = sqlite3.Row
         db.execute('CREATE VIEW prompts AS SELECT 1 AS prompt_id')
         db.execute('CREATE TABLE work_items(work_item_id TEXT PRIMARY KEY,status TEXT)')
         c2_scheduler.install_schema(db)
-        self.assertIsNotNone(db.execute(
+        self.assertIsNone(db.execute(
             "SELECT 1 FROM sqlite_master WHERE type='table' "
             "AND name='manual_order_overrides'"
         ).fetchone())

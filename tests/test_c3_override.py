@@ -127,7 +127,7 @@ class OverrideTests(unittest.TestCase):
 
     def test_api_reads_canonical_projection_and_refuses_unknown_executor(self):
         self.conn.commit()
-        control = c3_api.Control('.', self.path, refresh=False)
+        control = c3_api.Control('.', self.path)
         state = control.state()
         self.assertIn(self.a, [i['work_item_id'] for i in state['items']])
         with self.assertRaisesRegex(c3_api.ControlError, 'unsupported_executor'):
@@ -137,7 +137,7 @@ class OverrideTests(unittest.TestCase):
         self.conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?", (self.a,))
         self.conn.execute("INSERT INTO work_item_runs VALUES('r',?,'e',1,'native','running',100,'c3-run:r',NULL,'{}',1)", (self.a,))
         self.conn.commit()
-        control = c3_api.Control('.', self.path, refresh=False)
+        control = c3_api.Control('.', self.path)
         plan = control.preview(self.a, 'resume')
         with mock.patch.object(control, 'executor_control', return_value=[]) as effects, mock.patch.object(c3_api, 'submit_document', side_effect=RuntimeError('offline')):
             with self.assertRaisesRegex(RuntimeError, 'offline'):

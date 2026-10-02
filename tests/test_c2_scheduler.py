@@ -408,6 +408,18 @@ class SchedulerTests(unittest.TestCase):
         runs=scheduler.schedule(self.conn,event_key='capacity',now=1,max_parallel=2)
         self.assertEqual([candidate],[run['work_item_id'] for run in runs])
 
+    def test_writer_enforces_shared_parallel_cap_and_default(self):
+        candidates=[self.add('repo-'+str(index))
+                    for index in range(scheduler.HARD_PARALLEL_CAP+2)]
+        with self.assertRaisesRegex(scheduler.SchedulingError,
+                                    'parallel_cap_out_of_range'):
+            scheduler.schedule(self.conn,event_key='over-cap',now=1,
+                               max_parallel=scheduler.HARD_PARALLEL_CAP+1)
+        runs=scheduler.schedule(self.conn,event_key='shared-default',now=1)
+        self.assertEqual(scheduler.DEFAULT_PARALLEL_CAP,len(runs))
+        self.assertEqual(candidates[:scheduler.DEFAULT_PARALLEL_CAP],
+                         [run['work_item_id'] for run in runs])
+
     def test_dependencies_and_required_gate(self):
         parent=self.add('parent')
         child=self.add('child',parent_id=parent)
