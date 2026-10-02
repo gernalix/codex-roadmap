@@ -111,7 +111,7 @@ def load_item(db: Path, work_item_id: str, config: HostConfig,
             runnable = conn.execute("""SELECT 1 FROM work_item_runs
                 WHERE run_id=? AND work_item_id=? AND executor='symphony'
                   AND state IN ('running','recovering') AND worker_ref=?""",
-                (run_id, work_item_id, "c2-run:"+run_id)).fetchone()
+                (run_id, work_item_id, "c3-run:"+run_id)).fetchone()
         else:
             runnable = conn.execute(
                 "SELECT 1 FROM v_work_item_runnable WHERE work_item_id=?",
