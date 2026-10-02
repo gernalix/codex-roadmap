@@ -82,6 +82,8 @@ class PrepareCodexTests(unittest.TestCase):
                         "resources_json":json.dumps(sorted(execution["resources"])),
                         "max_attempts":execution["max_attempts"],
                     }
+                elif operation=="confirm_auto_preparation":
+                    pass
                 else:
                     self.fail("unexpected operation "+operation)
 
@@ -98,7 +100,7 @@ class PrepareCodexTests(unittest.TestCase):
             self.assertEqual(["/tmp/repo/.git"],result["sandbox_writable_roots"])
             self.assertEqual(
                 [("reconcile_item","ready"),("prepare_codex","prompt"),
-                 ("auto_configure","execution")],calls)
+                 ("auto_configure","execution"),("confirm_auto_preparation","readback")],calls)
             self.assertEqual("pending",state["item"]["status"])
             self.assertEqual(0,state["active_runs"])
 

@@ -288,7 +288,7 @@ def configure_auto(conn, work_item_id, *, execution=None):
     if not isinstance(execution, dict):
         raise SchedulingError('execution_context_must_be_object')
     permitted = {'activity','command','worktree','project_url','model','reasoning',
-                 'resources','max_attempts'}
+                 'resources','max_attempts','preparation_barrier'}
     unknown = set(execution) - permitted
     if unknown:
         raise SchedulingError('unknown_execution_context_fields:'+','.join(sorted(unknown)))
@@ -342,7 +342,25 @@ def configure_auto(conn, work_item_id, *, execution=None):
               goal_mode=bool(prompt['prompt_type']=='Goal') if activity in ('coding','diagnostic') else False,
               command=execution.get('command'),resources=execution.get('resources') or (),
               max_attempts=execution.get('max_attempts',3))
+    if execution.get('preparation_barrier') is True:
+        conn.execute("INSERT OR IGNORE INTO work_item_tags(work_item_id,tag) VALUES(?,?)",
+                     (work_item_id, 'manual-prerequisite:c3-preparation-readback'))
     return {'state':'ready'}
+
+
+def confirm_auto_preparation(conn, work_item_id):
+    """Release an auto-preparation only after its writer readback is complete."""
+    _transaction(conn)
+    item = conn.execute("SELECT status,actionable FROM work_items WHERE work_item_id=?",
+                        (work_item_id,)).fetchone()
+    if not item or item['status'] != 'pending' or not item['actionable']:
+        raise SchedulingError('preparation_confirmation_requires_pending_item')
+    if not conn.execute("SELECT 1 FROM work_item_execution_specs WHERE work_item_id=?",
+                        (work_item_id,)).fetchone():
+        raise SchedulingError('preparation_confirmation_requires_execution_spec')
+    conn.execute("DELETE FROM work_item_tags WHERE work_item_id=? AND tag=?",
+                 (work_item_id, 'manual-prerequisite:c3-preparation-readback'))
+    return {'state': 'ready'}
 
 
 def execution_metadata(conn, item, spec, executor):

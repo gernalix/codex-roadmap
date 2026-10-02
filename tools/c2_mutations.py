@@ -15,7 +15,7 @@ import c3_inbox_maintenance
 
 
 SUPERVISOR_OPERATIONS = frozenset({
-    'intake', 'prepare_codex', 'configure', 'auto_configure', 'schedule', 'acknowledge',
+    'intake', 'prepare_codex', 'configure', 'auto_configure', 'confirm_auto_preparation', 'schedule', 'acknowledge',
     'recover', 'release_unstarted_symphony_run', 'reconcile_run', 'milestone', 'claim_milestone',
     'mark_milestone', 'verify_work_item',
     'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item',
@@ -64,6 +64,7 @@ def apply(conn, mutation):
         'prepare_codex': c2_intake.prepare_codex,
         'configure': c2_scheduler.configure,
         'auto_configure': c2_scheduler.configure_auto,
+        'confirm_auto_preparation': c2_scheduler.confirm_auto_preparation,
         'schedule': c2_scheduler.schedule,
         'set_execution_override': c2_scheduler.set_override,
         'clear_execution_override': c2_scheduler.clear_override,
