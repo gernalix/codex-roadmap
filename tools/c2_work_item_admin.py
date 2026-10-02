@@ -19,7 +19,8 @@ CLASS_STATUSES = {
 }
 EDITABLE_FIELDS = {
     "title", "objective", "current_action", "next_action", "blocker",
-    "sort_order", "executor_policy", "repo", "actionable", "acceptance_json",
+    "sort_order", "executor_policy", "repo", "project_id", "project_name",
+    "actionable", "acceptance_json",
 }
 
 
@@ -197,6 +198,19 @@ def reconcile(
         ):
             raise ValueError("invalid_acceptance")
         fields["acceptance_json"] = json.dumps(acceptance, ensure_ascii=False)
+    if "project_id" in fields:
+        project = conn.execute(
+            "SELECT project_id,name FROM projects WHERE project_id=?",
+            (str(fields["project_id"]),),
+        ).fetchone()
+        if not project:
+            raise ValueError("noncanonical_project_reference")
+        fields["project_id"] = str(project["project_id"])
+        if "project_name" in fields and fields["project_name"] != project["name"]:
+            raise ValueError("noncanonical_project_name")
+        fields.setdefault("project_name", project["name"])
+    elif "project_name" in fields:
+        raise ValueError("project_id_required_for_project_name")
     if replace_dependencies is not None and add_dependencies:
         raise ValueError("dependency_add_replace_conflict")
     if replace_tags is not None and add_tags:
