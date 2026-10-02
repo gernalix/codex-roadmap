@@ -54,6 +54,13 @@ class AutoPreparationTests(unittest.TestCase):
         self.assertEqual([], plan['prepared_candidates'])
         self.assertEqual('acceptance_missing', plan['waiting'][0]['reason'])
 
+    def test_missing_title_fails_closed(self):
+        self.add('incomplete')
+        self.db.execute("UPDATE work_items SET title='' WHERE work_item_id='incomplete'")
+        plan = c3_auto_prepare.plan(self.db)
+        self.assertEqual([], plan['prepared_candidates'])
+        self.assertEqual('title_missing', plan['waiting'][0]['reason'])
+
     def test_existing_spec_is_not_candidate(self):
         self.add('ready')
         self.db.execute("INSERT INTO work_item_execution_specs VALUES('ready','coding')")
