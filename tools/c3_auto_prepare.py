@@ -25,7 +25,12 @@ def repo_slug(value: object) -> str | None:
     elif "github.com/" in text:
         text = text.split("github.com/", 1)[1]
     text = text.removesuffix(".git").strip("/")
-    return text.lower() if re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", text) else None
+    return text if re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", text) else None
+
+
+def repo_key(value: object) -> str | None:
+    slug = repo_slug(value)
+    return slug.lower() if slug else None
 
 
 def _catalog_repositories(conn: sqlite3.Connection) -> dict[str, list[dict[str, str]]]:
@@ -36,12 +41,18 @@ def _catalog_repositories(conn: sqlite3.Connection) -> dict[str, list[dict[str, 
               FROM repositories r JOIN projects p USING(project_id)
               WHERE r.canonical=1""").fetchall()
     for row in rows:
+        canonical_repo = repo_slug(row[3])
+        if not canonical_repo:
+            canonical_repo = next((slug for value in row[3:]
+                                   if (slug := repo_slug(value))), None)
+        if not canonical_repo:
+            continue
         for value in row[3:]:
-            slug = repo_slug(value)
-            if slug:
-                result.setdefault(slug, []).append({
+            key = repo_key(value)
+            if key:
+                result.setdefault(key, []).append({
                     "project_id": str(row[0]), "project_name": str(row[1]),
-                    "repository_id": str(row[2]), "repo": slug,
+                    "repository_id": str(row[2]), "repo": canonical_repo,
                 })
     return result
 
@@ -67,7 +78,7 @@ def _profile(conn: sqlite3.Connection, project_id: str, repo: str) -> dict[str, 
              ON s.work_item_id=w.work_item_id WHERE w.project_id=? AND s.activity=?
              AND e.model=? AND e.reasoning=? AND e.outcome='PASS'""",
              (project_id, activity, model, reasoning)).fetchall()
-        if any(repo_slug(item[0]) == repo for item in source):
+        if any(repo_key(item[0]) == repo_key(repo) for item in source):
             qualified.append((activity, model, reasoning))
     qualified = sorted(set(qualified))
     if len(qualified) != 1:
@@ -86,7 +97,7 @@ def plan(conn: sqlite3.Connection, limit: int = BATCH_LIMIT) -> dict[str, Any]:
         ORDER BY w.sort_order,w.created_at,w.work_item_id""").fetchall()
     candidates, waiting = [], []
     for item in rows:
-        repo = repo_slug(item["repo"])
+        repo = repo_key(item["repo"])
         identities = catalog.get(repo or "", [])
         distinct = {(x["project_id"], x["project_name"], x["repo"]) for x in identities}
         if not str(item["title"] or "").strip():
