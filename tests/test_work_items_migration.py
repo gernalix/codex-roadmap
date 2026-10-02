@@ -15,7 +15,7 @@ import work_items_migration as migration
 
 
 class WorkItemsMigrationTests(unittest.TestCase):
-    def test_base_schema_exposes_stable_ordering_readback_views(self) -> None:
+    def test_base_schema_exposes_c3_readback_views(self) -> None:
         conn = sqlite3.connect(":memory:")
         try:
             migration.install_schema(conn)
@@ -23,20 +23,18 @@ class WorkItemsMigrationTests(unittest.TestCase):
                 row[1] for row in conn.execute("PRAGMA table_info(v_work_item_summary)")
             }
             self.assertTrue({
-                "ai_priority_rank", "manual_rank", "manual_order_source",
-                "manual_order_source_modified_at", "manual_order_updated_at",
+                "work_item_id", "status", "actionable", "executor_policy",
+                "total_actionable", "completed_actionable", "progress_percent",
             }.issubset(summary))
             inbox = {
                 row[1]
                 for row in conn.execute("PRAGMA table_info(v_issue_inbox_pending_ordered)")
             }
             self.assertTrue({
-                "issue_id", "description", "manual_rank", "manual_order_source",
-                "manual_order_source_modified_at", "manual_order_updated_at",
+                "issue_id", "description", "state", "observed_at_ms",
             }.issubset(inbox))
             self.assertEqual([], conn.execute(
-                "SELECT issue_id,description,manual_rank,manual_order_source,"
-                "manual_order_source_modified_at,manual_order_updated_at "
+                "SELECT issue_id,description,state,observed_at_ms "
                 "FROM v_issue_inbox_pending_ordered"
             ).fetchall())
         finally:

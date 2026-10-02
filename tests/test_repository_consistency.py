@@ -11,6 +11,7 @@ PROMPT_ID_RE = re.compile(r"\bPROMPT_ID=(\d{6})\b")
 REASONING_RE = re.compile(r"\breasoning=([a-z_]+)\b", re.IGNORECASE)
 
 
+@unittest.skipUnless((ROOT / "roadmap.md").exists(), "legacy Markdown projection retired")
 class RepositoryConsistencyTests(unittest.TestCase):
     def _db_pending(self):
         conn = sqlite3.connect(ROOT / "roadmap.sqlite")
