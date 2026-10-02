@@ -183,7 +183,7 @@ class BridgeTests(unittest.TestCase):
                 conn.execute("UPDATE work_item_execution_specs SET activity='coding'")
                 conn.execute("UPDATE work_items SET status='running'")
                 conn.execute("INSERT INTO work_item_runs VALUES(?,?,?,?,?)",
-                             ("run-1", ITEM_ID, "symphony", "running", "c2-run:run-1"))
+                             ("run-1", ITEM_ID, "symphony", "running", "c3-run:run-1"))
                 conn.commit()
             self.assertEqual(bridge.load_item(db, ITEM_ID, CONFIG, "run-1").model,
                              "gpt-6-sol")
