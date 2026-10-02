@@ -25,6 +25,29 @@ from test_c2_intake import C2IntakeTests
 
 
 class C3RetirementTests(unittest.TestCase):
+    def test_inbox_status_distinguishes_global_total_from_bounded_scan(self):
+        conn=sqlite3.connect(":memory:")
+        conn.execute("CREATE TABLE issue_inbox(issue_id TEXT,state TEXT,observed_at_ms INTEGER)")
+        def status(count, changed=0):
+            conn.execute("DELETE FROM issue_inbox")
+            conn.executemany("INSERT INTO issue_inbox VALUES(?,?,?)", [(str(i),'pending',i) for i in range(count)])
+            return c3_runtime.inbox_status(conn,batch_changed=changed)
+        self.assertEqual({"inbox_pending":0,"batch_scanned":0,"batch_changed":0,"batch_remaining":0,"triage_requested":False},status(0))
+        self.assertEqual((7,7,True),(status(7)["inbox_pending"],status(7)["batch_scanned"],status(7)["triage_requested"]))
+        self.assertEqual((25,25,0),tuple(status(25)[key] for key in ("inbox_pending","batch_scanned","batch_remaining")))
+        self.assertEqual((72,25,47,True),(status(72)["inbox_pending"],status(72)["batch_scanned"],status(72)["batch_remaining"],status(72)["triage_requested"]))
+        self.assertEqual((69,3,44,True),(status(72,3)["inbox_pending"],status(72,3)["batch_changed"],status(72,3)["batch_remaining"],status(72,3)["triage_requested"]))
+
+    def test_execution_readiness_marks_missing_specs_as_not_quiescent(self):
+        path=C2IntakeTests().make_cutover_db(Path(tempfile.mkdtemp()))
+        with closing(c2_intake._connect(path)) as conn:
+            conn.execute('BEGIN IMMEDIATE')
+            c2_intake.add_work_item(conn,title='Needs structured execution',repo='fixture')
+            conn.commit()
+            state=c3_runtime.execution_readiness_status(conn)
+        self.assertGreaterEqual(state['dependency_ready'],1)
+        self.assertGreaterEqual(state['ready_without_execution_spec'],1)
+        self.assertTrue(state['preparation_required'])
     def test_retired_cutover_and_snapshot_fail_without_evidence_or_side_effects(self):
         with tempfile.TemporaryDirectory() as tmp:
             marker = Path(tmp) / "absent.json"
@@ -147,7 +170,12 @@ class C3RetirementTests(unittest.TestCase):
                               side_effect=lambda op, args, key: submitted.append((op, args, key))), \
                  patch.object(c3_runtime.core, "advance", return_value={"ready": 0}) as advance:
                 result = c3_runtime.run(snapshot_path)
-            self.assertEqual(result, {"ready": 0, "inbox_pending": 1, "inbox_reconciled": 0})
+            self.assertEqual({"ready": 0, "inbox_pending": 1,
+                              "batch_scanned": 1, "batch_changed": 0,
+                              "batch_remaining": 0, "triage_requested": True,
+                              "inbox_reconciled": 0},
+                             {key:value for key,value in result.items() if key!='execution_readiness'})
+            self.assertTrue(result['execution_readiness']['preparation_required'])
             self.assertEqual(submitted, [])
             self.assertEqual(advance.call_args.kwargs["worker_prefix"], "c3-run:")
             self.assertTrue(advance.call_args.kwargs["coding_route_override"]["no_legacy_codex"])
