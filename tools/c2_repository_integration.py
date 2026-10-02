@@ -6,8 +6,6 @@ from pathlib import Path
 import sqlite3
 import subprocess
 
-from roadmap_repo_integration import REPOSITORY, queue, status
-
 REPO_SINGLE_WRITER = Path.home() / "projects/github-autosync/repo_single_writer.py"
 
 
@@ -26,11 +24,11 @@ def prompt_repository(db_path: Path, prompt_id: str) -> str:
     return str(row[0])
 
 
-def _external(prompt_id: str, command: str) -> dict:
+def _external(prompt_id: str, command: str, repository: str) -> dict:
     if not REPO_SINGLE_WRITER.is_file():
         raise RepositoryIntegrationError("repo_task_helper_missing")
     proc = subprocess.run(["python3", str(REPO_SINGLE_WRITER), command,
-        "--task-id", prompt_id], text=True, capture_output=True, check=False)
+        "--task-id", prompt_id, "--repo", repository], text=True, capture_output=True, check=False)
     if proc.returncode:
         detail = proc.stderr.strip() or proc.stdout.strip() or f"exit={proc.returncode}"
         raise RepositoryIntegrationError(f"repo_integration_{command}_failed:{detail}")
@@ -41,13 +39,7 @@ def _external(prompt_id: str, command: str) -> dict:
 
 
 def queue_integration(prompt_id: str, repository: str, worktree: Path) -> tuple[str, bool]:
-    if repository.lower() == REPOSITORY.lower():
-        try:
-            payload = queue(worktree, prompt_id)
-        except Exception as exc:
-            raise RepositoryIntegrationError(str(exc)) from exc
-    else:
-        payload = _external(prompt_id, "finish-any")
+    payload = _external(prompt_id, "finish-any", repository)
     state = str(payload.get("status") or "")
     if state == "merged":
         return state, True
@@ -59,9 +51,4 @@ def queue_integration(prompt_id: str, repository: str, worktree: Path) -> tuple[
 
 
 def integration_status(prompt_id: str, repository: str) -> dict:
-    if repository.lower() == REPOSITORY.lower():
-        try:
-            return status(prompt_id)
-        except Exception as exc:
-            raise RepositoryIntegrationError(str(exc)) from exc
-    return _external(prompt_id, "status-any")
+    return _external(prompt_id, "status-any", repository)

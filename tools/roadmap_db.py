@@ -33,15 +33,20 @@ def now_utc() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 def db_path(repo: Path) -> Path:
-    return Path(repo) / DB_NAME
+    from c3_storage import database
+    return database(repo)
+
+class RoadmapConnection(sqlite3.Connection):
+    c3_writer_owned = False
+
 
 def connect(repo: Path, *, writable: bool = True) -> sqlite3.Connection:
     path = db_path(repo)
     if not path.exists() and not writable:
         raise RoadmapDBError(f"database_missing:{path}")
     conn = (
-        sqlite3.connect(path)
-        if writable else sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
+        sqlite3.connect(path, factory=RoadmapConnection)
+        if writable else sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True, factory=RoadmapConnection)
     )
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys=ON")
@@ -717,19 +722,8 @@ def reconcile_terminal_requests(
         if current == requested:
             continue
         if current != "running":
-            conn.execute(
-                "INSERT INTO audit_events(prompt_id,event_type,event_at,actor,payload_json) VALUES(?,?,?,?,?)",
-                (
-                    row["prompt_id"],
-                    "terminal_reconcile_skipped",
-                    now_utc(),
-                    actor,
-                    json.dumps(
-                        {"current_status": current, "requested_status": requested},
-                        sort_keys=True,
-                    ),
-                ),
-            )
+            # Old terminal requests remain reconstructible from their history.
+            # A non-running item is an expected no-op, not an audit event.
             continue
         latest_run = conn.execute(
             "SELECT MAX(history_id) FROM status_history "
@@ -1733,7 +1727,15 @@ def verify(repo: Path) -> dict[str, Any]:
 def apply_mutation(conn: sqlite3.Connection, mutation: dict[str, Any], *, default_actor: str = "chatgpt") -> None:
     op=mutation.get("op")
     actor=mutation.get("actor") or default_actor
-    if isinstance(op, str) and op.startswith("c2_"):
+    if op == 'prompt_id_allocate':
+        from c3_prompt_ids import allocate
+        allocate(conn, mutation)
+    elif op in {"c3_user_override", "c3_destructive_override"}:
+        import c3_override
+        if not conn.in_transaction:
+            conn.execute("BEGIN IMMEDIATE")
+        c3_override.apply(conn, mutation, actor)
+    elif isinstance(op, str) and op.startswith("c2_"):
         import c2_mutations
         c2_mutations.apply(conn, mutation)
     elif op=="reconcile_terminals":

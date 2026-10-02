@@ -13,12 +13,41 @@ import time
 import uuid
 
 
-DEFAULT_DB = Path.home() / '.local/state/c2-supervisor/lease.sqlite3'
+from c3_storage import local_enabled
+DEFAULT_DB = Path.home() / ('.local/state/c3-control/runtime-lease.sqlite3' if local_enabled()
+                          else '.local/state/c2-supervisor/lease.sqlite3')
 RUNTIME_ENV = Path.home() / '.config/c2-supervisor/runtime.env'
 
 
 class LeaseError(RuntimeError):
     pass
+
+
+def load_runtime_identity(path: Path = RUNTIME_ENV) -> tuple[str, int]:
+    path = Path(path).expanduser()
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError as exc:
+        raise LeaseError("supervisor_runtime_env_missing") from exc
+    values: dict[str, str] = {}
+    allowed = {"C2_SUPERVISOR_ID", "C2_FENCING_TOKEN"}
+    for raw in lines:
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if "=" not in line:
+            raise LeaseError("invalid_supervisor_runtime_env")
+        key, value = line.split("=", 1)
+        if key not in allowed or key in values or not value:
+            raise LeaseError("invalid_supervisor_runtime_env")
+        values[key] = value
+    supervisor_id = values.get("C2_SUPERVISOR_ID", "")
+    token = values.get("C2_FENCING_TOKEN", "")
+    if not re.fullmatch(r"[A-Za-z0-9_.:-]+", supervisor_id):
+        raise LeaseError("invalid_supervisor_id")
+    if not re.fullmatch(r"[1-9][0-9]*", token):
+        raise LeaseError("invalid_fencing_token")
+    return supervisor_id, int(token)
 
 
 def connect(path: Path):
@@ -200,6 +229,8 @@ def publish_runtime_identity(row, path=RUNTIME_ENV):
 
 
 def main():
+    from c3_retirement import require_not_retired
+    require_not_retired()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db', type=Path, default=DEFAULT_DB)
     sub = parser.add_subparsers(dest='command', required=True)

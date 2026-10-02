@@ -1,4 +1,5 @@
 [Unit]
+ConditionPathExists=!%h/.local/state/c3-control/c2-retired.json
 Description=Check the C2 supervisor lease without model polling
 
 [Timer]

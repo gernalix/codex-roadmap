@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 TOOLS=Path(__file__).resolve().parents[1]/"tools"
 sys.path.insert(0,str(TOOLS))
@@ -14,6 +15,12 @@ import c2_prepare_codex as prep
 
 
 class PrepareCodexTests(unittest.TestCase):
+    def test_roadmap_allocation_uses_git_authority_without_legacy_worktree(self):
+        item={"repo":"gernalix/codex-roadmap","project_id":"1"}
+        with patch.object(prep,"_external_worktree",return_value="/managed/task") as allocate:
+            self.assertEqual("/managed/task",prep._allocate_worktree(item,"123456"))
+            allocate.assert_called_once_with(item,"123456")
+
     def _spec(self, prompt_file: Path, *, evidence=None):
         return {
             "work_item_id":"wi:test",
@@ -150,6 +157,43 @@ class PrepareCodexTests(unittest.TestCase):
                     allocate_worktree=lambda *_args:"/tmp/c2-test-worktree",
                     sandbox_roots=lambda _worktree:[],
                 )
+
+    def test_submit_phase_atomically_renews_and_scopes_transport_identity(self):
+        authority_a={"supervisor_id":"sup-a","fencing_token":7,"lease_expires_at":1100.0}
+        authority_b={"supervisor_id":"sup-a","fencing_token":7,"lease_expires_at":1200.0}
+        captured=[]
+
+        def submit(document,request_key):
+            captured.append((copy.deepcopy(document),request_key))
+            return {"issue_number":str(len(captured))}
+
+        arguments={"work_item_id":"wi:test","execution":{"activity":"coding"}}
+        with patch.object(prep,"_current_authority",side_effect=[authority_a,authority_a,authority_b]), \
+                patch.object(prep,"submit_document",side_effect=submit), \
+                patch.object(prep,"_wait_issue_applied"):
+            for _ in range(3):
+                prep._submit_phase(
+                    "auto_configure",arguments,"execution","wi:test",
+                    {"supervisor_id":"sup-a","fencing_token":7,"lease_expires_at":1000.0},
+                    1,
+                )
+
+        self.assertEqual(captured[0][1],captured[1][1])
+        self.assertNotEqual(captured[0][1],captured[2][1])
+        for index,(document,_key) in enumerate(captured):
+            self.assertEqual(
+                ["c2_renew_supervisor","c2_auto_configure"],
+                [op["op"] for op in document["operations"]],
+            )
+            expected=authority_a if index < 2 else authority_b
+            self.assertEqual(
+                expected,
+                document["operations"][0]["arguments"]["supervisor_authority"],
+            )
+            self.assertEqual(
+                expected,
+                document["operations"][1]["arguments"]["supervisor_authority"],
+            )
 
     def test_spec_requires_explicit_model_reasoning_and_activity(self):
         with tempfile.TemporaryDirectory() as tmp:

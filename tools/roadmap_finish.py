@@ -9,7 +9,9 @@ from roadmap_result import RoadmapResultError, finish_result
 from c2_repository_integration import (RepositoryIntegrationError, prompt_repository,
                                        queue_integration)
 
-ROADMAP_DB = Path(__file__).resolve().parents[1] / "roadmap.sqlite"
+from c3_storage import CANONICAL_DB
+
+ROADMAP_DB = CANONICAL_DB
 
 
 def _queue_repo_integration(prompt_id: str, repo: Path | None = None) -> tuple[str, bool]:

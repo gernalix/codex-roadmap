@@ -20,21 +20,18 @@ import time
 from submit_mutation import submit_document
 from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot, record_activity
 from c2_mutations import SUPERVISOR_OPERATIONS
-from c2_scheduler import (
-    DEFAULT_PARALLEL_CAP,
-    HARD_PARALLEL_CAP,
-    dispatchable,
-    inbox_drain_state,
-    inbox_gate_exempt,
-    override_matches,
-    read_override,
-)
+from c2_scheduler import read_override, override_matches, dispatchable, inbox_drain_state
 from c2_blocked_reconcile import automatic_candidates
-from c2_chatgpt_executor import lane_degraded
+from c2_chatgpt_executor import KILL_SWITCH
 from c2_repository_integration import integration_status, prompt_repository
+from c3_symphony_bridge import DEFAULT_CONFIG as C3_CONFIG, load_config as load_c3_config, BridgeError
+from c3_symphony_backend import status as c3_status, BackendError
 
-C2_TRIAGE_PROJECT_URL = 'https://chatgpt.com/g/g-p-6ab69fbdbaf88191a39a75ff5c9e3d70/project'
+def browser_launch_suspended():
+    return KILL_SWITCH.exists()
 SUPERVISOR_RENEW_MARGIN_S = 60
+DEFAULT_PARALLEL_CAP = 12
+HARD_PARALLEL_CAP = 16
 class RuntimeErrorC2(RuntimeError):
     pass
 
@@ -71,6 +68,8 @@ def _key(prefix: str, data) -> str:
 
 
 def _writer_submit(operation: str, arguments: dict, key: str):
+    if operation == 'ensure_issue_triage':
+        raise RuntimeErrorC2('retired_recursive_inbox_executor')
     arguments=dict(arguments)
     if operation in SUPERVISOR_OPERATIONS or operation in ('claim_supervisor','renew_supervisor','retire_supervisor'):
         with closing(connect_supervisor(SUPERVISOR_DB)) as lease:
@@ -86,10 +85,19 @@ def _writer_submit(operation: str, arguments: dict, key: str):
                 'fencing_token':row['fencing_token'],
                 'lease_expires_at':row['lease_expires_at'],
             }
-            if operation == 'acknowledge':
-                # The same snapshot can be replayed after a lease renewal.
-                # Its fenced document changes, so its Issue identity must too.
-                key = _key('c2-ack-authorized', {
+            if operation in ('acknowledge','schedule','recover','bind_executor','maintain_issue_inbox'):
+                # The same canonical operation can be replayed after a lease
+                # renewal. Its fenced document changes, so the transport Issue
+                # identity must change while the operation identity stays
+                # stable inside the writer.
+                prefix = {
+                    'acknowledge':'c2-ack-authorized',
+                    'schedule':'c2-schedule-authorized',
+                    'recover':'c2-recover-authorized',
+                    'bind_executor':'c2-bind-authorized',
+                    'maintain_issue_inbox':'c3-inbox-maintenance-authorized',
+                }[operation]
+                key = _key(prefix, {
                     'request_key':key,
                     'authority':arguments['supervisor_authority'],
                 })
@@ -133,10 +141,30 @@ def _launch_notify(event_key: str):
 
 def _repo_task_status(prompt_id: str) -> dict:
     try:
-        repository=prompt_repository(Path.home()/'projects/codex-roadmap/roadmap.sqlite',prompt_id)
+        from c3_storage import CANONICAL_DB
+        repository=prompt_repository(CANONICAL_DB,prompt_id)
         return integration_status(prompt_id,repository)
     except Exception as exc:
         raise RuntimeErrorC2('repo_task_status_failed:'+str(exc)) from exc
+
+
+def _coding_route() -> dict:
+    if not C3_CONFIG.exists():
+        return {'mode':'legacy','source_repos':[],'tracker_repo':None,'healthy':True}
+    try:
+        config=load_c3_config(C3_CONFIG)
+    except BridgeError:
+        return {'mode':'invalid','source_repos':[],'tracker_repo':None,'healthy':False}
+    healthy=True
+    if config.mode in ('canary','production'):
+        try:
+            state=c3_status()
+            healthy=(state.get('active_state')=='active' and state.get('api_healthy') is True
+                     and state.get('mode')==config.mode)
+        except (BackendError,BridgeError,OSError):
+            healthy=False
+    return {'mode':config.mode,'source_repos':sorted(config.source_repos),
+            'tracker_repo':config.tracker_repo,'healthy':healthy}
 
 
 def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_worker,
@@ -145,16 +173,15 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
             now: float | None=None, max_parallel: int=DEFAULT_PARALLEL_CAP,
             supervisor_expiry: float | None=None,
             supervisor_authority: dict | None=None,
-            triage_project_url: str | None=None) -> dict:
+            triage_project_url: str | None=None,
+            worker_prefix: str='c2-run:', coding_route_override: dict | None=None,
+            control_only: bool=False) -> dict:
     now=time.time() if now is None else now
     if not 1 <= max_parallel <= HARD_PARALLEL_CAP:
         raise RuntimeErrorC2('parallel_cap_out_of_range')
     events=[]
     has_issue_inbox = bool(db.execute(
         "SELECT 1 FROM sqlite_master WHERE type='table' AND name='issue_inbox'"
-    ).fetchone())
-    has_manual_order = bool(db.execute(
-        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='manual_order_overrides'"
     ).fetchone())
     pending_issue_inbox = (
         int(db.execute("SELECT COUNT(*) FROM issue_inbox WHERE state='pending'").fetchone()[0])
@@ -202,41 +229,15 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
                 events.append(('renew_supervisor',str(authority['fencing_token'])))
                 if canonical_expiry <= now:
                     return {'events':events,'ready':0,'active':0}
-    if pending_issue_inbox and triage_project_url:
-        triage = db.execute("""SELECT w.work_item_id,w.status FROM work_items w
-            JOIN work_item_tags t USING(work_item_id) WHERE t.tag='c2:issue-triage'
-            ORDER BY w.created_at DESC,w.work_item_id DESC LIMIT 1""").fetchone()
-        if triage is None or triage['status'] in ('completed','failed','cancelled','superseded','waived'):
-            pending_ids = [
-                str(row[0]) for row in db.execute(
-                    """SELECT i.issue_id FROM issue_inbox i
-                       LEFT JOIN manual_order_overrides o
-                         ON o.scope='inbox' AND o.entity_id=i.issue_id
-                       WHERE i.state='pending'
-                       ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,
-                                o.rank,i.observed_at_ms,i.issue_id"""
-                    if has_manual_order else
-                    "SELECT issue_id FROM issue_inbox WHERE state='pending' ORDER BY observed_at_ms,issue_id"
-                )
-            ]
-            key=_key('c2-issue-triage-intake',{'pending':pending_ids,
-                'previous':str(triage['work_item_id']) if triage else None})
-            submit('ensure_issue_triage',{'project_url':triage_project_url},key)
-            events.append(('issue_triage_intake',str(pending_issue_inbox)))
-            return {'events':events,'ready':0,'active':0,
-                    'issue_inbox_pending':pending_issue_inbox}
-        events.append(('issue_triage_active',str(triage['work_item_id'])))
-    elif pending_issue_inbox:
-        events.append(('issue_triage_unconfigured',str(pending_issue_inbox)))
-
+    if control_only:
+        return {'events':events,'ready':0,'active':0}
     # The periodic runtime tick is a safety net for structured canonical facts.
     # Free-text and external blockers require an explicit evidence-gated decision.
-    if not pending_issue_inbox:
-        blocked_candidates = automatic_candidates(db)[:100]
-        if blocked_candidates:
-            key = _key('c2-blocked-safety-net', blocked_candidates)
-            submit('reconcile_blocked_safety_net', {'expected': blocked_candidates}, key)
-            events.append(('blocked_safety_net', str(len(blocked_candidates))))
+    blocked_candidates = automatic_candidates(db)[:100]
+    if blocked_candidates:
+        key = _key('c2-blocked-safety-net', blocked_candidates)
+        submit('reconcile_blocked_safety_net', {'expected': blocked_candidates}, key)
+        events.append(('blocked_safety_net', str(len(blocked_candidates))))
 
     # Recover missed terminal delivery natively; a PASS receipt and canonical
     # repository merge are both required before the writer replays finalization.
@@ -271,30 +272,33 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         else:
             launch_notify(key)
             events.append(('notify',key))
-    chatgpt_suspended=lane_degraded()
+    chatgpt_suspended=browser_launch_suspended()
     active=[dict(r) for r in db.execute("""SELECT r.* FROM work_item_runs r
        JOIN work_items w USING(work_item_id)
        WHERE r.state IN ('claimed','running','recovering')
        AND w.status='running' ORDER BY r.created_at,r.run_id""")]
     terminal_runs=db.execute('''SELECT r.run_id FROM work_item_runs r
        JOIN work_items w USING(work_item_id)
-       WHERE r.executor='codex' AND r.state IN ('claimed','running','recovering')
+       WHERE r.executor IN ('codex','symphony') AND r.state IN ('claimed','running','recovering')
        AND w.status IN ('completed','failed','blocked','cancelled')''').fetchall()
     for row in terminal_runs:
         run_id=str(row['run_id'])
         submit('reconcile_run',{'run_id':run_id},'c2-reconcile-'+run_id)
         events.append(('reconcile_run',run_id))
+    paused_items = {r[0] for r in db.execute("SELECT work_item_id FROM work_item_tags WHERE tag='manual-prerequisite:c3-paused'")}
     for run in active:
+        if run['work_item_id'] in paused_items:
+            continue
         metadata=json.loads(run['metadata_json'])
         if chatgpt_suspended and metadata.get('activity') in ('gui','semantic'):
             continue
         if run['state'] in ('claimed','recovering'):
             key=_key('c2-ack',{'run_id':run['run_id'],'metadata':metadata,
                                'state':run['state'],'lease_until':run['lease_until']})
-            submit('acknowledge',{'run_id':run['run_id'],'worker_ref':'c2-run:'+run['run_id'],
+            submit('acknowledge',{'run_id':run['run_id'],'worker_ref':worker_prefix+run['run_id'],
                 'metadata':metadata},key)
             events.append(('acknowledge',run['run_id']))
-        elif run['worker_ref']=='c2-run:'+run['run_id']:
+        elif run['worker_ref']==worker_prefix+run['run_id']:
             started=db.execute('''SELECT 1 FROM work_item_executor_starts
               WHERE run_id=? LIMIT 1''',(run['run_id'],)).fetchone()
             if not started:
@@ -305,7 +309,9 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
                 launch(run['run_id'])
                 events.append(('launch',run['run_id']))
     expired=[r for r in active
-             if r['state'] in ('claimed','running') and r['lease_until']<=now
+             if r['work_item_id'] not in paused_items
+             and r['executor'] != 'symphony'
+             and r['state'] in ('claimed','running') and r['lease_until']<=now
              and not worker_active(str(r['run_id']))]
     if expired:
         key=_key('c2-recover',sorted((r['run_id'],r['lease_until']) for r in expired))
@@ -313,17 +319,9 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
         events.append(('recover',str(len(expired))))
     ready_query='''SELECT w.*,
             s.activity,s.model,s.reasoning,s.worktree,s.project_url,s.resources_json'''
-    if has_manual_order:
-        ready_query+=''',o.rank AS manual_rank,o.source AS manual_order_source,
-            o.source_modified_at AS manual_order_source_modified_at'''
     ready_query+=''' FROM v_work_item_runnable w
           JOIN work_item_execution_specs s USING(work_item_id)'''
-    if has_manual_order:
-        ready_query+=""" LEFT JOIN manual_order_overrides o
-          ON o.scope='roadmap' AND o.entity_id=w.work_item_id"""
-        ready_query+=""" ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,o.rank,"""
-    else:
-        ready_query+=''' ORDER BY '''
+    ready_query+=''' ORDER BY '''
     ready_query+='''CASE
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p0') THEN 0
             WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p1') THEN 1
@@ -333,13 +331,15 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
     ready=[dict(r) for r in db.execute(ready_query)]
     inbox_gate=inbox_drain_state(db)
     if inbox_gate:
-        ready=[r for r in ready if inbox_gate_exempt(db,r)]
+        # Keep the drain state observable, but let the scheduler use independent
+        # slots while triage owns only its dedicated resource.
         events.append(('issue_inbox_drain',inbox_gate))
     if chatgpt_suspended:
         ready=[r for r in ready if r['activity'] not in ('gui','semantic')]
+    coding_route=coding_route_override if coding_route_override is not None else _coding_route()
     override=read_override(db)
     scoped_ready=[r for r in ready if override and override_matches(db,r,override)
-                  and dispatchable(db,r)]
+                  and dispatchable(db,r,coding_route)]
     if scoped_ready:
         ready=scoped_ready
     if override:
@@ -362,14 +362,16 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
           ORDER BY d.work_item_id,d.depends_on_work_item_id''')]
     # Size this wave from work that passes the current dependency/resource
     # checks. The writer repeats those checks atomically when claiming runs.
-    dispatchable_count=sum(bool(dispatchable(db, item)) for item in ready)
+    dispatchable_count=sum(bool(dispatchable(db, item, coding_route)) for item in ready)
     wave_limit=min(max_parallel, len(statuses)+dispatchable_count)
     if dispatchable_count and len(statuses)<wave_limit:
         key=_key('c2-schedule',{'ready':ready,'chatgpt_lane_degraded':chatgpt_suspended,
                                   'running':statuses,'lock_context':lock_context,
-                                  'dependencies':dependencies,'override':override,'limit':wave_limit})
+                                  'dependencies':dependencies,'override':override,'limit':wave_limit,
+                                  'coding_route':coding_route})
         submit('schedule',{'event_key':key,'max_parallel':wave_limit,
-                           'chatgpt_lane_degraded':chatgpt_suspended},key)
+                           'chatgpt_lane_degraded':chatgpt_suspended,
+                           'coding_route':coding_route},key)
         events.append(('schedule',str(len(ready))))
     return {'events':events,'ready':len(ready),'active':len(active),
             'execution_override':override,'override_draining':bool(scoped_ready),
@@ -377,6 +379,8 @@ def advance(db: sqlite3.Connection, *, submit=_writer_submit, launch=_launch_wor
 
 
 def main():
+    from c3_retirement import require_not_retired
+    require_not_retired()
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db',type=Path,default=Path.home()/'projects/codex-roadmap/roadmap.sqlite')
     parser.add_argument('--max-parallel',type=int,

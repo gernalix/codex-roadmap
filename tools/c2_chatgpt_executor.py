@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -10,19 +11,11 @@ from c2_supervisor_source import require_supervisor_source
 
 C2_GENERATION_SUSPECT_S=40
 C2_MAX_RECOVERY_ATTEMPTS=3
-LANE_STATE=Path.home()/'.local/state/chatgpt-rdc-supervisor/global.json'
 KILL_SWITCH=Path.home()/'.config/c2/disable-chat-supervisor'
 
 
 class ChatWorkerError(RuntimeError):
     pass
-
-
-def lane_degraded(path: Path = LANE_STATE) -> bool:
-    try:
-        return json.loads(path.read_text()).get('chatgpt_lane',{}).get('state') in ('suspected','global_degraded')
-    except (OSError,ValueError,TypeError):
-        return False
 
 
 def _supervisor_types():
@@ -56,9 +49,9 @@ def _task_config(TaskConfig, *, work_item_id: str, db_path: Path,
 
 def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
              db_path: Path, receipt: Path, browser=None, store=None):
+    if metadata.get('issue_triage'):
+        raise ChatWorkerError('retired_recursive_inbox_executor: use the bounded technical job')
     if KILL_SWITCH.exists():
-        return {'phase':'suspended','chat_url':None,'resubmitted':False}
-    if lane_degraded():
         return {'phase':'suspended','chat_url':None,'resubmitted':False}
     if metadata.get('executor') not in ('chatgpt','rdc') or metadata.get('activity') not in ('gui','semantic'):
         raise ChatWorkerError('browser_executor_not_configured')
@@ -76,7 +69,7 @@ def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
         if state['phase']=='starting':
             ChatGPTBrowser, is_persisted_chat_url, TaskConfig, Store=_supervisor_types()
             owned=browser is None
-            browser=browser or ChatGPTBrowser()
+            browser=browser or ChatGPTBrowser(endpoint=os.environ.get('C2_CHATGPT_BROWSER_ENDPOINT','channel-bridge'))
             store=store or Store()
             try:
                 if owned:
@@ -103,25 +96,21 @@ def dispatch(*, run_id: str, work_item_id: str, metadata: dict, prompt: str,
         return {'phase':state['phase'],'chat_url':state.get('chat_url'),'resubmitted':False}
     ChatGPTBrowser, is_persisted_chat_url, TaskConfig, Store=_supervisor_types()
     store=store or Store()
-    load_task=getattr(store,'load_task',None)
-    if load_task is not None:
-        try:
-            previous=load_task(work_item_id)
-        except FileNotFoundError:
-            previous=None
-        if previous is not None and is_persisted_chat_url(previous.chat_url):
-            if previous.project_url != project_url:
-                raise ChatWorkerError('browser_work_item_project_conflict')
-            state={'run_id':run_id,'work_item_id':work_item_id,'project_url':project_url,
-                   'phase':'started','chat_url':previous.chat_url}
-            persist(receipt,state)
-            return {'phase':'started','chat_url':previous.chat_url,'resubmitted':False}
+    # Binding belongs to this canonical run, never to a supervisor task cache.
+    bound_url=metadata.get('chat_url')
+    if bound_url:
+        if not is_persisted_chat_url(bound_url):
+            raise ChatWorkerError('canonical_browser_binding_invalid')
+        state={'run_id':run_id,'work_item_id':work_item_id,'project_url':project_url,
+               'phase':'started','chat_url':bound_url}
+        persist(receipt,state)
+        return {'phase':'started','chat_url':bound_url,'resubmitted':False}
     state={'run_id':run_id,'work_item_id':work_item_id,'project_url':project_url,'phase':'starting'}
     persist(receipt,state)
     task=_task_config(TaskConfig,work_item_id=work_item_id,db_path=db_path,
         chat_url='',project_url=project_url)
     owned=browser is None
-    browser=browser or ChatGPTBrowser()
+    browser=browser or ChatGPTBrowser(endpoint=os.environ.get('C2_CHATGPT_BROWSER_ENDPOINT','channel-bridge'))
     try:
         if owned:
             browser.connect()

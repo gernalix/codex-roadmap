@@ -101,6 +101,17 @@ def db_snapshot(now: float | None = None) -> dict[str, Any]:
         runnable = [r[0] for r in conn.execute(
             "SELECT work_item_id FROM v_work_item_runnable ORDER BY work_item_id LIMIT 200"
         )]
+        planning_backlog = conn.execute("""
+            SELECT COUNT(*) FROM work_items w
+            LEFT JOIN work_item_execution_specs s USING(work_item_id)
+            WHERE w.status='pending' AND w.actionable=1
+              AND w.executor_policy<>'human' AND s.work_item_id IS NULL
+              AND NOT EXISTS (
+                SELECT 1 FROM work_item_tags t
+                WHERE t.work_item_id=w.work_item_id
+                  AND (t.tag='c2:issue-triage' OR t.tag LIKE 'manual-prerequisite:%')
+              )
+        """).fetchone()[0]
         runs = []
         for row in conn.execute("""
             SELECT run_id,work_item_id,executor,state,worker_ref,lease_until
@@ -149,6 +160,7 @@ def db_snapshot(now: float | None = None) -> dict[str, Any]:
         return {
             "available": True, "counts": counts, "inbox_pending": int(inbox),
             "runnable_ids": runnable, "active_runs": runs,
+            "planning_backlog": int(planning_backlog),
             "authority": authority, "triage_run": triage_run,
             "last_triaged_at_ms": triaged,
         }
@@ -182,6 +194,7 @@ def state_fingerprint(db: dict[str, Any], delegated: dict[str, Any] | None = Non
             "delegated_worker": (
                 bool(delegated.get("alive")), bool(delegated.get("progressing")),
             ),
+            "planning_backlog_bucket": _bucket(int(db.get("planning_backlog") or 0), 5),
         }
     else:
         core = {
@@ -283,6 +296,16 @@ def work_remains(db: dict[str, Any]) -> bool:
     return bool(int(db.get("inbox_pending") or 0) or live or db.get("runnable_ids") or db.get("active_runs"))
 
 
+def _planning_can_overlap_workers(db: dict[str, Any]) -> bool:
+    """The Master Goal is a planner/coordinator, not an executor slot.
+
+    When unprepared actionable work exists, live executors must not suppress the
+    planner. Repository/resource conflicts and capacity remain enforced by the
+    scheduler when prepared work is dispatched.
+    """
+    return int(db.get("planning_backlog") or 0) > 0
+
+
 def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = None) -> dict[str, Any]:
     now = time.time() if now is None else now
     db = snapshot.get("db") or {}
@@ -299,6 +322,9 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
         }
     delegated = snapshot.get("delegated_worker") or {}
     workers = snapshot.get("run_workers") or []
+    planning_backlog = int(db.get("planning_backlog") or 0)
+    planning_overlap = _planning_can_overlap_workers(db)
+    goal_blocking_workers = [] if planning_overlap else workers
     fp = state_fingerprint(db, delegated)
     recovery_key = hashlib.sha256(json.dumps(sorted(
         (w.get("run_id"), w.get("active"), w.get("lease_expired")) for w in workers
@@ -342,7 +368,8 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "should_recover_runs": True, "recovery_key": recovery_key,
             "why": ["Un run ha worker inattivo e lease scaduta."], "state_key": fp,
         }
-    if any(worker.get("active") == "active" for worker in workers) or delegated.get("alive"):
+    if (any(worker.get("active") == "active" for worker in goal_blocking_workers)
+            or (delegated.get("alive") and not planning_overlap)):
         progress = delegated.get("progress_age_s")
         progress_text = (
             " avanzamento Inbox recente" if progress is not None and progress <= 3600
@@ -366,19 +393,12 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "intervention": "", "attention_key": "", "should_start_goal": False,
             "why": ["Il servizio Master Goal o il suo worker risultano attivi."], "state_key": fp,
         }
-    if snapshot.get("goal_status") == "active":
-        return {
-            "status": "working", "phase": "executing",
-            "headline": "Il Master Goal è attivo",
-            "current": "Il daemon Codex possiede il thread e continua il Goal nativo quando il thread è idle.",
-            "next": "Attendere il prossimo cambiamento reale del control plane.",
-            "intervention": "", "attention_key": "", "should_start_goal": False,
-            "why": ["Un Goal nativo active non richiede thread/resume da un secondo app-server."],
-            "state_key": fp,
-        }
+    # A persisted Goal flag is not liveness.  The app-server stdio process is
+    # the single owner; if it is absent an "active" Goal is orphaned and must be
+    # rehydrated by c2-master-goal.service on the same thread.
     if service.get("active") not in ("inactive", "failed") or any(
         worker.get("active") not in ("inactive", "failed") or not worker.get("lease_expired")
-        for worker in workers
+        for worker in goal_blocking_workers
     ):
         return {
             "status": "needs_user", "phase": "unknown",
@@ -389,7 +409,7 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
             "attention_key": "c2_liveness_ambiguous", "should_start_goal": False,
             "why": ["Nessun restart su stato ambiguo."], "state_key": fp,
         }
-    if workers:
+    if goal_blocking_workers:
         return {
             "status": "waiting_external", "phase": "external_wait",
             "headline": "Run C2 in attesa del writer",
@@ -415,6 +435,19 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
     failed_service = service.get("result") not in ("success", "", "unknown")
     changed = fp != last_fp
     retry_due = failed_service and failures < MAX_START_FAILURES and now - last_wake >= RETRY_DELAY_S
+    if goal_status == "active":
+        last_owner_recovery = float(meta.get("last_owner_recovery_at") or 0)
+        if last_owner_recovery and now - last_owner_recovery < RETRY_DELAY_S:
+            return {
+                "status": "waiting_external", "phase": "owner_recovery",
+                "headline": "Master Goal active ma owner in recovery",
+                "current": "Il Goal persistito è active ma il suo app-server owner non è vivo; un recovery è già stato tentato di recente.",
+                "next": "Attendere il retry bounded o il ritorno del servizio owner.",
+                "intervention": "", "attention_key": "", "should_start_goal": False,
+                "why": ["Il flag active senza servizio/PID owner non è prova di progresso."],
+                "state_key": fp,
+            }
+        changed = True
     if goal_status == "blocked":
         observation = snapshot.get("goal_observation") or {}
         if (observation.get("thread_status") not in ("idle", "notLoaded") or
@@ -429,7 +462,10 @@ def decide(snapshot: dict[str, Any], meta: dict[str, Any], now: float | None = N
                 "attention_key": "c2_goal_block_ambiguous", "should_start_goal": False,
                 "why": ["Nessun restart su un blocco o turno ambiguo."], "state_key": fp,
             }
-        actionable = bool(db.get("inbox_pending") or db.get("runnable_ids"))
+        actionable = bool(
+            db.get("runnable_ids") or planning_backlog
+            or (db.get("inbox_pending") and not planning_overlap)
+        )
         if not actionable:
             return {
                 "status": "waiting_external", "phase": "external_wait",
@@ -559,6 +595,9 @@ def snapshot(now: float | None = None) -> dict[str, Any]:
     service = systemd_state(MASTER_SERVICE)
     alive = master_worker_alive()
     workers = run_worker_states(db) if db.get("available") else []
+    delegated = delegated_worker_state(db, now)
+    overlap = _planning_can_overlap_workers(db)
+    goal_blocking_workers = [] if overlap else workers
     return {
         "observed_at": now,
         "db": db,
@@ -567,9 +606,9 @@ def snapshot(now: float | None = None) -> dict[str, Any]:
         "run_workers": workers,
         "goal_observation": (goal_observation() if db.get("available") and work_remains(db)
                              and service.get("active") not in ("active",) and not alive
-                             and not any(w["active"] == "active" for w in workers)
+                             and not any(w["active"] == "active" for w in goal_blocking_workers)
                              else {"status": "not_checked"}),
-        "delegated_worker": delegated_worker_state(db, now),
+        "delegated_worker": delegated,
     }
 
 
@@ -619,6 +658,8 @@ def run_once(now: float | None = None) -> int:
         meta["last_wake_at"] = now
         if snap.get("goal_status") == "blocked":
             meta["last_blocked_recovery_fingerprint"] = fp
+        if snap.get("goal_status") == "active":
+            meta["last_owner_recovery_at"] = now
         if ok:
             meta["start_failures"] = 0
         else:
@@ -653,6 +694,8 @@ def run_once(now: float | None = None) -> int:
 
 
 def main() -> int:
+    from c3_retirement import require_not_retired
+    require_not_retired()
     try:
         return run_once()
     except Exception as exc:

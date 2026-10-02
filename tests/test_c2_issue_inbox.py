@@ -12,7 +12,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
 import c2_intake
 import c2_issue_inbox
-import c2_manual_order
 import c2_scheduler
 import c2_issue_capture
 import c2_issue_manage
@@ -28,6 +27,73 @@ class IssueInboxTests(unittest.TestCase):
         conn = c2_intake._connect(path)
         c2_scheduler.install_schema(conn)
         return path, conn
+
+    def test_batch_many_to_one_split_discard_and_replay(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute('BEGIN IMMEDIATE')
+                issues = [c2_issue_inbox.capture(conn, description=f'Observation {n}')['issue_id']
+                          for n in range(4)]
+                existing = c2_intake.add_work_item(conn, title='Existing')['work_item_id']
+                before_items = conn.execute('SELECT COUNT(*) FROM work_items').fetchone()[0]
+                args = dict(batch_id='semantic-1', triaged_by='test',
+                    new_items=[{'alias':'second', 'title':'Second decision'}],
+                    decisions=[
+                        {'issue_id':issues[0], 'reason':'same work', 'work_item_ids':[existing]},
+                        {'issue_id':issues[1], 'reason':'same work', 'work_item_ids':[existing]},
+                        {'issue_id':issues[2], 'reason':'two scopes', 'work_item_ids':[existing,'@second']},
+                        {'issue_id':issues[3], 'reason':'no work', 'work_item_ids':[]}])
+                result = c2_issue_inbox.reconcile_batch(conn, **args)
+                self.assertEqual(result, c2_issue_inbox.reconcile_batch(conn, **args))
+                self.assertEqual(before_items + 1, conn.execute('SELECT COUNT(*) FROM work_items').fetchone()[0])
+                self.assertEqual(4, conn.execute('SELECT COUNT(*) FROM issue_work_item_links WHERE role="decision"').fetchone()[0])
+                self.assertEqual(['promoted'] * 3 + ['discarded'],
+                    [conn.execute('SELECT state FROM issue_inbox WHERE issue_id=?',(i,)).fetchone()[0] for i in issues])
+                with self.assertRaisesRegex(c2_issue_inbox.IssueInboxError, 'batch_id_conflict'):
+                    c2_issue_inbox.reconcile_batch(conn, **{**args, 'triaged_by':'other'})
+            finally:
+                conn.close()
+
+    def test_legacy_scalar_links_are_migrated_once(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute('BEGIN IMMEDIATE')
+                item = c2_intake.add_work_item(conn, title='Old decision')['work_item_id']
+                issue = c2_issue_inbox.capture(conn, description='Old observation')['issue_id']
+                conn.execute('UPDATE issue_inbox SET state="promoted",promoted_work_item_id=? WHERE issue_id=?',(item,issue))
+                conn.execute('DROP TABLE issue_work_item_links')
+                c2_issue_inbox.install_schema(conn)
+                c2_issue_inbox.install_schema(conn)
+                self.assertEqual([(issue,item,'decision')], [tuple(row) for row in conn.execute(
+                    'SELECT issue_id,work_item_id,role FROM issue_work_item_links')])
+                self.assertEqual([], conn.execute('PRAGMA foreign_key_check').fetchall())
+            finally:
+                conn.close()
+
+    def test_batch_requires_fenced_writer_operation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, conn = self.make_conn(Path(tmp))
+            try:
+                conn.execute('BEGIN IMMEDIATE')
+                issue = c2_issue_inbox.capture(conn, description='Writer batch')['issue_id']
+                arguments = {'batch_id':'writer-batch', 'triaged_by':'test',
+                    'decisions':[{'issue_id':issue, 'reason':'no work', 'work_item_ids':[]}]}
+                with self.assertRaisesRegex(Exception, 'supervisor_authority_required'):
+                    roadmap_db.apply_mutation(conn, {'op':'c2_reconcile_issue_batch',
+                                                      'arguments':arguments})
+                authority = {'supervisor_id':'test-supervisor', 'fencing_token':1,
+                             'lease_expires_at':time.time()+120}
+                roadmap_db.apply_mutation(conn, {'op':'c2_claim_supervisor',
+                    'arguments':{'supervisor_authority':authority}})
+                roadmap_db.apply_mutation(conn, {'op':'c2_reconcile_issue_batch',
+                    'arguments':{**arguments, 'supervisor_authority':authority}})
+                self.assertEqual(1, conn.execute('SELECT COUNT(*) FROM issue_reconciliation_batches').fetchone()[0])
+                self.assertEqual('discarded', conn.execute(
+                    'SELECT state FROM issue_inbox WHERE issue_id=?',(issue,)).fetchone()[0])
+            finally:
+                conn.close()
 
     def test_pending_edit_and_void_are_audited_and_idempotent(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -133,7 +199,7 @@ class IssueInboxTests(unittest.TestCase):
             finally:
                 conn.close()
 
-    def test_pending_readback_uses_manual_order_then_observed_order(self):
+    def test_pending_readback_uses_observed_order(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, conn = self.make_conn(Path(tmp))
             try:
@@ -147,18 +213,8 @@ class IssueInboxTests(unittest.TestCase):
                 third = c2_issue_inbox.capture(
                     conn, description="Third", observed_at_ms=3000
                 )["issue_id"]
-                c2_manual_order.set_manual_order(
-                    conn, scope="inbox", ordered_ids=[third, first, second],
-                    source="workflowy", source_modified_at="opaque-inbox"
-                )
                 rows = c2_issue_inbox.pending_issues(conn)
-                self.assertEqual([third, first, second], [row["issue_id"] for row in rows])
-                self.assertEqual([0, 1, 2], [row["manual_rank"] for row in rows])
-                self.assertTrue(all(
-                    row["manual_order_source"] == "workflowy"
-                    and row["manual_order_source_modified_at"] == "opaque-inbox"
-                    for row in rows
-                ))
+                self.assertEqual([first, second, third], [row["issue_id"] for row in rows])
             finally:
                 conn.close()
 
@@ -479,121 +535,41 @@ class IssueInboxTests(unittest.TestCase):
             finally:
                 conn.close()
 
-    def test_one_triage_and_new_batch_after_terminal(self):
+    def test_recursive_triage_cannot_create_work_items(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, conn = self.make_conn(Path(tmp))
             try:
                 conn.execute('BEGIN IMMEDIATE')
-                c2_issue_inbox.capture(conn, description='First')
-                url = c2_runtime.C2_TRIAGE_PROJECT_URL
-                first = c2_issue_inbox.ensure_triage(conn, project_url=url)
-                self.assertEqual('created', first['state'])
-                objective = conn.execute(
-                    'SELECT objective FROM work_items WHERE work_item_id=?',
-                    (first['work_item_id'],)).fetchone()[0]
-                self.assertIn('relative priority', objective)
-                self.assertIn('dependencies in both directions', objective)
-                self.assertEqual(first['work_item_id'], c2_issue_inbox.ensure_triage(
-                    conn, project_url=url)['work_item_id'])
-                conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?",
-                             (first['work_item_id'],))
-                second = c2_issue_inbox.ensure_triage(conn, project_url=url)
-                self.assertEqual('created', second['state'])
-                self.assertNotEqual(first['work_item_id'], second['work_item_id'])
-                self.assertEqual('semantic', conn.execute(
-                    'SELECT activity FROM work_item_execution_specs WHERE work_item_id=?',
-                    (second['work_item_id'],)).fetchone()[0])
+                issue = c2_issue_inbox.capture(conn, description='Needs decision')
+                before = conn.total_changes
+                with self.assertRaisesRegex(c2_issue_inbox.IssueInboxError, 'retired_recursive'):
+                    c2_issue_inbox.ensure_triage(conn, project_url='anything')
+                self.assertEqual(before, conn.total_changes)
+                self.assertEqual('pending', conn.execute(
+                    'SELECT state FROM issue_inbox WHERE issue_id=?', (issue['issue_id'],)).fetchone()[0])
             finally:
                 conn.close()
 
-    def test_runtime_requests_atomic_triage_once_per_nonterminal_item(self):
+    def test_runtime_does_not_create_triage_item_or_gate_scheduling(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, conn = self.make_conn(Path(tmp))
             try:
                 conn.execute('BEGIN IMMEDIATE')
                 c2_issue_inbox.capture(conn, description='Needs triage')
                 calls = []
-                def submit(op, arguments, key):
-                    calls.append((op, arguments, key))
-                    if op == 'ensure_issue_triage':
-                        c2_issue_inbox.ensure_triage(conn, **arguments)
-                c2_runtime.advance(conn, submit=submit, launch=lambda _: None,
-                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                self.assertEqual('ensure_issue_triage', calls[0][0])
-                c2_runtime.advance(conn, submit=submit, launch=lambda _: None,
-                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                self.assertEqual(1, sum(op == 'ensure_issue_triage' for op, _, _ in calls))
-                first_key = calls[0][2]
-                triage_id = conn.execute("""SELECT w.work_item_id FROM work_items w
-                    JOIN work_item_tags t USING(work_item_id)
-                    WHERE t.tag='c2:issue-triage'""").fetchone()[0]
-                conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?", (triage_id,))
-                c2_runtime.advance(conn, submit=submit, launch=lambda _: None,
-                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                triage_calls = [entry for entry in calls if entry[0] == 'ensure_issue_triage']
-                self.assertEqual(2, len(triage_calls))
-                self.assertNotEqual(first_key, triage_calls[1][2])
-            finally:
-                conn.close()
-
-    def test_inbox_drain_blocks_new_work_until_triage_reconciliation(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            _, conn = self.make_conn(Path(tmp))
-            try:
-                conn.execute('BEGIN IMMEDIATE')
-                normal = c2_intake.add_work_item(conn, title='Normal', repo='normal')
-                urgent = c2_intake.add_work_item(conn, title='P0 incident', repo='urgent',
-                    tags=['priority:p0'])
+                normal = c2_intake.add_work_item(conn, title='Independent', repo='independent')
                 c2_scheduler.configure(conn, normal['work_item_id'], activity='native', command=['true'])
-                c2_scheduler.configure(conn, urgent['work_item_id'], activity='native', command=['true'])
-                issue = c2_issue_inbox.capture(conn, description='Needs triage')
-                triage = c2_issue_inbox.ensure_triage(
-                    conn, project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                objective = conn.execute('SELECT objective FROM work_items WHERE work_item_id=?',
-                    (triage['work_item_id'],)).fetchone()[0]
-                self.assertIn('After the full Inbox drain', objective)
-                submitted = []
-                state = c2_runtime.advance(conn, submit=lambda op,args,key: submitted.append(op),
-                    launch=lambda _: None, launch_notify=lambda _: None,
-                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                self.assertEqual(2, state['ready'])
-                self.assertIn(('issue_inbox_drain', 'pending'), state['events'])
-                runs = c2_scheduler.schedule(conn, event_key='during-drain', now=10)
-                self.assertEqual({triage['work_item_id'], urgent['work_item_id']},
-                    {run['work_item_id'] for run in runs})
-                c2_issue_inbox.discard(conn, issue_id=issue['issue_id'],
-                    reason='Handled', triaged_by='test')
-                reconciling = c2_runtime.advance(conn,
-                    submit=lambda op,args,key: submitted.append(op),
-                    launch=lambda _: None, launch_notify=lambda _: None,
-                    triage_project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                self.assertEqual(0, reconciling['ready'])
-                self.assertIn(('issue_inbox_drain', 'reconciling'), reconciling['events'])
-                self.assertEqual([], c2_scheduler.schedule(conn,
-                    event_key='before-reconciliation', now=11))
-                conn.execute("UPDATE work_items SET status='completed' WHERE work_item_id=?",
-                    (triage['work_item_id'],))
-                self.assertEqual(normal['work_item_id'], c2_scheduler.schedule(conn,
-                    event_key='after-reconciliation', now=12)[0]['work_item_id'])
+                with patch.object(c2_runtime, 'automatic_candidates', return_value=['candidate']):
+                    c2_runtime.advance(conn, submit=lambda *args: calls.append(args), launch=lambda _: None,
+                        triage_project_url='https://chatgpt.com/g/g-p-test/project')
+                self.assertNotIn('ensure_issue_triage', [call[0] for call in calls])
+                self.assertIn('schedule', [call[0] for call in calls])
+                self.assertIn('reconcile_blocked_safety_net', [call[0] for call in calls])
+                self.assertEqual(0, conn.execute("SELECT COUNT(*) FROM work_item_tags WHERE tag='c2:issue-triage'").fetchone()[0])
             finally:
                 conn.close()
 
-    def test_triage_cannot_finish_while_pending_rows_remain(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            _, conn = self.make_conn(Path(tmp))
-            try:
-                conn.execute('BEGIN IMMEDIATE')
-                c2_issue_inbox.capture(conn, description='Unresolved')
-                item = c2_issue_inbox.ensure_triage(
-                    conn, project_url=c2_runtime.C2_TRIAGE_PROJECT_URL)
-                run = c2_scheduler.schedule(conn, event_key='triage-schedule', now=10)[0]
-                c2_scheduler.acknowledge(conn, run['run_id'], worker_ref='c2-run:'+run['run_id'],
-                    metadata=run['metadata'], now=11)
-                with self.assertRaisesRegex(c2_scheduler.SchedulingError, 'issue_triage_pending_rows'):
-                    c2_scheduler.finish_browser_work_item(conn, item['work_item_id'],
-                        evidence=['claimed complete'])
-            finally:
-                conn.close()
+
 
 
 if __name__ == "__main__":

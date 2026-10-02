@@ -14,7 +14,7 @@ import subprocess
 import time
 from typing import Any, Callable
 
-import c2_snapshot_sync
+from c3_storage import CANONICAL_DB
 from c2_codex_sandbox import git_metadata_writable_roots, SandboxPathError
 from c2_supervisor_lease import DEFAULT_DB as SUPERVISOR_DB, connect as connect_supervisor, _require as require_supervisor, snapshot as supervisor_snapshot, record_activity
 from roadmap_start import _wait_issue_applied, RoadmapStartError
@@ -22,10 +22,8 @@ from submit_mutation import submit_document, MutationSubmitError
 
 DEFAULT_REPOSITORY = "gernalix/codex-roadmap"
 DEFAULT_REPO = Path(__file__).resolve().parents[1]
-DEFAULT_SNAPSHOT = Path.home()/".local/state/c2-supervisor/roadmap.sqlite3"
+DEFAULT_SNAPSHOT = CANONICAL_DB
 REPO_SINGLE_WRITER = Path.home()/"projects/github-autosync/repo_single_writer.py"
-ROADMAP_CANONICAL = Path.home()/"projects/codex-roadmap"
-ROADMAP_WORKTREE_ROOT = Path.home()/".local/share/c2-supervisor/worktrees/codex-roadmap"
 
 
 class PrepareCodexError(RuntimeError):
@@ -121,7 +119,6 @@ def _state(conn: sqlite3.Connection, work_item_id: str) -> dict[str, Any]:
             result["prompt_body"]=str(body[0])
     return result
 def _refresh_state(work_item_id: str) -> dict[str, Any]:
-    c2_snapshot_sync.sync(DEFAULT_REPO,DEFAULT_SNAPSHOT)
     with closing(_open_snapshot()) as conn:
         return _state(conn,work_item_id)
 
@@ -148,7 +145,8 @@ def _current_authority(activity: str | None=None) -> dict[str, Any]:
 def _request_key(phase: str, work_item_id: str, arguments: dict[str, Any],
                  authority: dict[str, Any]) -> str:
     stable={"phase":phase,"work_item_id":work_item_id,"arguments":arguments,
-            "fencing_token":authority["fencing_token"]}
+            "fencing_token":authority["fencing_token"],
+            "lease_expires_at":authority["lease_expires_at"]}
     digest=hashlib.sha256(json.dumps(stable,sort_keys=True,ensure_ascii=False,
         default=str,separators=(",",":")).encode()).hexdigest()[:28]
     return "c2-prepare-codex-"+phase+"-"+digest
@@ -167,7 +165,12 @@ def _submit_phase(operation: str, arguments: dict[str, Any], phase: str,
     result=submit_document({
         "schema":"codex-roadmap.mutation.v1",
         "actor":"c2-prepare-codex",
-        "operations":[{"op":"c2_"+operation,"arguments":payload}],
+        "operations":[
+            {"op":"c2_renew_supervisor","arguments":{
+                "supervisor_authority":dict(authority),
+            }},
+            {"op":"c2_"+operation,"arguments":payload},
+        ],
     },request_key=key)
     _wait_issue_applied(DEFAULT_REPOSITORY,result["issue_number"],timeout)
     return result
@@ -224,57 +227,6 @@ def _run_checked(command: list[str], error: str) -> str:
     return proc.stdout.strip()
 
 
-def _verify_worktree(path: Path, branch: str) -> str:
-    if not path.is_dir():
-        raise PrepareCodexError("isolated_worktree_missing")
-    root=_run_checked(["git","-C",str(path),"rev-parse","--show-toplevel"],
-                      "isolated_worktree_invalid")
-    current=_run_checked(["git","-C",str(path),"branch","--show-current"],
-                         "isolated_worktree_branch_read_failed")
-    if Path(root).resolve()!=path.resolve() or current!=branch:
-        raise PrepareCodexError("isolated_worktree_identity_conflict")
-    return str(path.resolve())
-
-
-def _roadmap_worktree(prompt_id: str) -> str:
-    canonical=ROADMAP_CANONICAL.expanduser().resolve()
-    if not canonical.is_dir():
-        raise PrepareCodexError("canonical_roadmap_checkout_missing")
-    if _repo_slug(str(canonical)).lower()!=DEFAULT_REPOSITORY.lower():
-        raise PrepareCodexError("canonical_roadmap_checkout_mismatch")
-    target=(ROADMAP_WORKTREE_ROOT/prompt_id).expanduser().resolve()
-    branch="task/"+prompt_id
-    if target.exists():
-        return _verify_worktree(target,branch)
-    remote_line=_run_checked(["git","-C",str(canonical),"ls-remote","origin","refs/heads/main"],
-                             "roadmap_remote_main_unavailable")
-    remote_sha=remote_line.split()[0] if remote_line.split() else ""
-    if not re.fullmatch(r"[0-9a-f]{40}",remote_sha):
-        raise PrepareCodexError("roadmap_remote_main_invalid")
-    have=subprocess.run(["git","-C",str(canonical),"cat-file","-e",remote_sha+"^{commit}"],
-                        stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,check=False)
-    if have.returncode:
-        fetch=subprocess.run(["git","-C",str(canonical),"-c","maintenance.auto=false",
-            "-c","gc.auto=0","fetch","--no-tags","--no-write-fetch-head","origin",remote_sha],
-            text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False)
-        if fetch.returncode:
-            again=subprocess.run(["git","-C",str(canonical),"cat-file","-e",remote_sha+"^{commit}"],
-                stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,check=False)
-            if again.returncode:
-                raise PrepareCodexError("roadmap_remote_commit_fetch_failed:"+
-                    (fetch.stderr.strip() or fetch.stdout.strip()))
-    target.parent.mkdir(parents=True,exist_ok=True)
-    branch_exists=subprocess.run(["git","-C",str(canonical),"show-ref","--verify","--quiet",
-        "refs/heads/"+branch],check=False).returncode==0
-    command=["git","-C",str(canonical),"worktree","add"]
-    if branch_exists:
-        command.extend([str(target),branch])
-    else:
-        command.extend(["-b",branch,str(target),remote_sha])
-    _run_checked(command,"roadmap_worktree_create_failed")
-    return _verify_worktree(target,branch)
-
-
 def _external_worktree(item: dict[str, Any], prompt_id: str) -> str:
     if not REPO_SINGLE_WRITER.is_file():
         raise PrepareCodexError("repo_single_writer_missing")
@@ -290,9 +242,6 @@ def _external_worktree(item: dict[str, Any], prompt_id: str) -> str:
         raise PrepareCodexError("repo_single_writer_worktree_missing")
     return worktree
 def _allocate_worktree(item: dict[str, Any], prompt_id: str) -> str:
-    slug=_repo_slug(str(item.get("repo") or ""))
-    if slug.lower()==DEFAULT_REPOSITORY.lower():
-        return _roadmap_worktree(prompt_id)
     return _external_worktree(item,prompt_id)
 
 

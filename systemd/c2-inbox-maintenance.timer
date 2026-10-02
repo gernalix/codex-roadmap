@@ -1,0 +1,13 @@
+[Unit]
+ConditionPathExists=!%h/.local/state/c3-control/c2-retired.json
+Description=Run bounded C2 Inbox semantic maintenance
+
+[Timer]
+OnBootSec=4min
+OnUnitInactiveSec=5min
+AccuracySec=15s
+Persistent=true
+Unit=c2-inbox-maintenance.service
+
+[Install]
+WantedBy=timers.target

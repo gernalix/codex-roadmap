@@ -5,7 +5,6 @@ import tempfile
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import c2_intake as intake
-import c2_manual_order
 import c2_scheduler as scheduler
 import roadmap_db
 import test_c2_intake
@@ -237,37 +236,31 @@ class SchedulerTests(unittest.TestCase):
         self.conn.execute("INSERT INTO work_item_tags(work_item_id,tag) VALUES(?,'priority:p0')",(urgent,))
         self.assertEqual(urgent,scheduler.schedule(self.conn,event_key='priority',now=1,max_parallel=1)[0]['work_item_id'])
 
-    def test_manual_rank_obeys_dependency_and_blocker_eligibility(self):
+    def test_user_rank_obeys_dependency_and_blocker_eligibility(self):
         dependency=self.add('dependency')
         dependent=self.add('dependent',depends_on=[dependency])
         blocked=self.add('blocked')
         self.conn.execute("UPDATE work_items SET status='blocked',blocker='external' WHERE work_item_id=?",(blocked,))
-        c2_manual_order.set_manual_order(self.conn,scope='roadmap',
-            ordered_ids=[dependent,blocked,dependency],source='workflowy',
-            source_modified_at='wf-1')
+        self.conn.executemany('INSERT INTO c3_user_order VALUES(?,?)', [(wid, rank) for rank, wid in enumerate([dependent,blocked,dependency])])
         run=scheduler.schedule(self.conn,event_key='manual-hard-gates',now=1,max_parallel=1)[0]
         self.assertEqual(dependency,run['work_item_id'])
         self.assertEqual('blocked',self.conn.execute(
             'SELECT status FROM work_items WHERE work_item_id=?',(blocked,)).fetchone()[0])
 
-    def test_manual_rank_precedes_ai_priority_and_reset_restores_ai_order(self):
+    def test_user_rank_precedes_ai_priority_and_reset_restores_ai_order(self):
         p0=self.add('p0')
         p1=self.add('p1')
         self.conn.execute("INSERT INTO work_item_tags VALUES(?,'priority:p0')",(p0,))
         self.conn.execute("INSERT INTO work_item_tags VALUES(?,'priority:p1')",(p1,))
-        c2_manual_order.set_manual_order(self.conn,scope='roadmap',ordered_ids=[p1,p0],
-            source='workflowy',source_modified_at='wf-2')
-        readback=self.conn.execute(
-            'SELECT manual_rank,manual_order_source,ai_priority_rank,sort_order,status '
-            'FROM v_work_item_summary WHERE work_item_id=?',(p1,)).fetchone()
-        self.assertEqual((0,'workflowy',1,2,'pending'),tuple(readback))
+        self.conn.executemany('INSERT INTO c3_user_order VALUES(?,?)', [(p1,0),(p0,1)])
+        self.assertEqual(0,self.conn.execute('SELECT rank FROM c3_user_order WHERE work_item_id=?',(p1,)).fetchone()[0])
         self.assertEqual(p1,scheduler.schedule(
             self.conn,event_key='manual-priority',now=1,max_parallel=1)[0]['work_item_id'])
 
         self.conn.execute("UPDATE work_items SET status='pending' WHERE work_item_id=?",(p1,))
         self.conn.execute('DELETE FROM work_item_resource_leases')
         self.conn.execute('DELETE FROM work_item_runs')
-        c2_manual_order.clear_manual_order(self.conn,scope='roadmap')
+        self.conn.execute('DELETE FROM c3_user_order')
         self.assertEqual(p0,scheduler.schedule(
             self.conn,event_key='ai-priority-restored',now=2,max_parallel=1)[0]['work_item_id'])
 
@@ -276,13 +269,11 @@ class SchedulerTests(unittest.TestCase):
         ready=self.add('ready-second')
         fallback=self.add('fallback-third')
         self.conn.execute("UPDATE work_items SET status='blocked',blocker='wait' WHERE work_item_id=?",(blocked,))
-        c2_manual_order.set_manual_order(self.conn,scope='roadmap',
-            ordered_ids=[blocked,ready,fallback],source='workflowy',
-            source_modified_at='wf-3')
+        self.conn.executemany('INSERT INTO c3_user_order VALUES(?,?)', [(wid, rank) for rank, wid in enumerate([blocked,ready,fallback])])
         self.assertEqual(ready,scheduler.schedule(
             self.conn,event_key='while-blocked',now=1,max_parallel=1)[0]['work_item_id'])
         self.assertEqual(0,self.conn.execute(
-            "SELECT rank FROM manual_order_overrides WHERE scope='roadmap' AND entity_id=?",
+            "SELECT rank FROM c3_user_order WHERE work_item_id=?",
             (blocked,)).fetchone()[0])
 
         self.conn.execute("UPDATE work_items SET status='pending',blocker=NULL WHERE work_item_id=?",(blocked,))
@@ -457,6 +448,68 @@ class SchedulerTests(unittest.TestCase):
                   'semantic':'chatgpt','external':None,'human':'human'}
         for activity,executor in expected.items():
             self.assertEqual(executor,scheduler.choose_executor('auto',activity))
+
+    def test_symphony_claim_is_explicit_and_unhealthy_lane_preserves_native(self):
+        writer=self.conn.execute(
+            "SELECT work_item_id FROM work_items WHERE prompt_id='123456'").fetchone()[0]
+        self.conn.execute("UPDATE prompt_metadata SET model='gpt-6-sol',reasoning='high' WHERE prompt_id='123456'")
+        self.conn.execute("UPDATE work_items SET repo='gernalix/codex-roadmap' WHERE work_item_id=?",(writer,))
+        scheduler.configure(self.conn,writer,activity='coding',model='gpt-6-sol',reasoning='high',
+            worktree='/tmp/c3-task-123456')
+        native=self.add('native-repo')
+        route={'mode':'production','tracker_repo':'gernalix/c3-symphony',
+               'source_repos':['gernalix/codex-roadmap'],'healthy':False}
+        runs=scheduler.schedule(self.conn,event_key='unhealthy-c3',now=1,coding_route=route)
+        self.assertEqual([native],[run['work_item_id'] for run in runs])
+        self.assertEqual('pending',self.conn.execute(
+            'SELECT status FROM work_items WHERE work_item_id=?',(writer,)).fetchone()[0])
+        route['healthy']=True
+        runs=scheduler.schedule(self.conn,event_key='healthy-c3',now=2,coding_route=route)
+        self.assertEqual('symphony',runs[0]['executor'])
+        self.assertEqual('gernalix/c3-symphony',runs[0]['metadata']['symphony_route']['tracker_repo'])
+        self.assertEqual(runs[0]['run_id'],self.conn.execute(
+            "SELECT run_id FROM work_item_resource_leases WHERE resource='symphony:backend'").fetchone()[0])
+
+    def test_release_unstarted_symphony_claim_returns_item_to_pending(self):
+        writer=self.conn.execute(
+            "SELECT work_item_id FROM work_items WHERE prompt_id='123456'").fetchone()[0]
+        self.conn.execute("UPDATE prompt_metadata SET model='gpt-6-sol',reasoning='high' WHERE prompt_id='123456'")
+        self.conn.execute("UPDATE work_items SET repo='gernalix/codex-roadmap' WHERE work_item_id=?",(writer,))
+        scheduler.configure(self.conn,writer,activity='coding',model='gpt-6-sol',reasoning='high',
+            worktree='/tmp/c3-task-123456')
+        route={'mode':'production','tracker_repo':'gernalix/c3-symphony',
+               'source_repos':['gernalix/codex-roadmap'],'healthy':True}
+        run=scheduler.schedule(self.conn,event_key='release-c3',now=1,coding_route=route)[0]
+        scheduler.acknowledge(self.conn,run['run_id'],worker_ref='c2-run:'+run['run_id'],
+                              metadata=run['metadata'],now=2)
+        scheduler.executor_started(self.conn,run_id=run['run_id'],now=3)
+        result=scheduler.release_unstarted_symphony_run(
+            self.conn,run_id=run['run_id'],reason='scope reconciled before tracker publish')
+        self.assertEqual('released',result['state'])
+        self.assertEqual('failed',self.conn.execute(
+            'SELECT state FROM work_item_runs WHERE run_id=?',(run['run_id'],)).fetchone()[0])
+        self.assertEqual('pending',self.conn.execute(
+            'SELECT status FROM work_items WHERE work_item_id=?',(writer,)).fetchone()[0])
+        self.assertEqual(0,self.conn.execute(
+            'SELECT count(*) FROM work_item_resource_leases WHERE run_id=?',(run['run_id'],)).fetchone()[0])
+
+    def test_release_unstarted_symphony_rejects_external_identity(self):
+        writer=self.conn.execute(
+            "SELECT work_item_id FROM work_items WHERE prompt_id='123456'").fetchone()[0]
+        self.conn.execute("UPDATE prompt_metadata SET model='gpt-6-sol',reasoning='high' WHERE prompt_id='123456'")
+        self.conn.execute("UPDATE work_items SET repo='gernalix/codex-roadmap' WHERE work_item_id=?",(writer,))
+        scheduler.configure(self.conn,writer,activity='coding',model='gpt-6-sol',reasoning='high',
+            worktree='/tmp/c3-task-123456')
+        route={'mode':'production','tracker_repo':'gernalix/c3-symphony',
+               'source_repos':['gernalix/codex-roadmap'],'healthy':True}
+        run=scheduler.schedule(self.conn,event_key='release-c3-bound',now=1,coding_route=route)[0]
+        scheduler.acknowledge(self.conn,run['run_id'],worker_ref='c2-run:'+run['run_id'],
+                              metadata=run['metadata'],now=2)
+        scheduler.executor_started(self.conn,run_id=run['run_id'],
+                                   executor_ref='tracker:7',chat_url='https://example.invalid/7',now=3)
+        with self.assertRaisesRegex(scheduler.SchedulingError,'symphony_run_already_dispatched'):
+            scheduler.release_unstarted_symphony_run(
+                self.conn,run_id=run['run_id'],reason='too late')
 
     def test_degraded_lane_suspends_chatgpt_but_keeps_native_dispatchable(self):
         chat=intake.add_work_item(self.conn,title='Chat',repo='chat-repo',executor_policy='auto')['work_item_id']

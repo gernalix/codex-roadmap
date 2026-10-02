@@ -1,31 +1,17 @@
-from pathlib import Path
-import sys
-import tempfile
+from contextlib import redirect_stdout
+from io import StringIO
 import unittest
-from unittest import mock
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
+from unittest.mock import patch
 import c2_roadmap_status as status
 
 
-class Result:
-    def __init__(self, stdout=""):
-        self.stdout = stdout
-        self.stderr = ""
-        self.returncode = 0
-
-
-class GoalRuntimeTests(unittest.TestCase):
-    def test_master_goal_start_process_counts_as_live_worker(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            with mock.patch.object(status, "RPC_PIDFILE", Path(tmp) / "missing.pid"), \
-                 mock.patch.object(status, "SESSION_ROOT", Path(tmp) / "sessions"), \
-                 mock.patch.object(status, "sh", return_value=Result(
-                     "123 python3 /home/daniele/.local/bin/c2-master-goal-start\n"
-                 )):
-                runtime = status.goal_runtime(1000)
-        self.assertTrue(runtime["worker_alive"])
-        self.assertTrue(runtime["helper_alive"])
+class DashboardRetirementTests(unittest.TestCase):
+    def test_retired_dashboard_never_fetches_or_opens_a_snapshot(self):
+        with patch("subprocess.run") as run, patch("sqlite3.connect") as connect, redirect_stdout(StringIO()) as output:
+            self.assertEqual(status.main(), 2)
+        run.assert_not_called()
+        connect.assert_not_called()
+        self.assertIn("retired_permanently", output.getvalue())
 
 
 if __name__ == "__main__":

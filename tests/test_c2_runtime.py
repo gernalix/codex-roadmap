@@ -88,6 +88,80 @@ class RuntimeTests(unittest.TestCase):
             authority=captured[0][0]['operations'][0]['arguments']['supervisor_authority']
             self.assertEqual(row['lease_expires_at'],authority['lease_expires_at'])
 
+    def test_schedule_request_identity_changes_with_renewed_authority(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            lease_path=Path(tmp)/'lease.sqlite3'
+            with c2_supervisor_lease.connect(lease_path) as lease:
+                c2_supervisor_lease.acquire(lease,owner='runtime',pointer='/tmp/pointer',
+                                            supervisor_id='runtime',now=100,ttl=1000)
+            captured=[]
+            with patch.object(c2_runtime,'SUPERVISOR_DB',lease_path), \
+                    patch.object(c2_runtime,'submit_document',side_effect=lambda document,request_key:
+                                 (captured.append((document,request_key)) or {'issue_number':'1'})), \
+                    patch.object(c2_runtime.time,'time',return_value=150):
+                args={'event_key':'stable-schedule-event','max_parallel':3,
+                      'chatgpt_lane_degraded':False}
+                c2_runtime._writer_submit('schedule',args,'c2-schedule-original')
+                c2_runtime._writer_submit('schedule',args,'c2-schedule-original')
+                with c2_supervisor_lease.connect(lease_path) as lease:
+                    lease.execute('UPDATE supervisor SET lease_expires_at=2000 WHERE singleton=1')
+                c2_runtime._writer_submit('schedule',args,'c2-schedule-original')
+            self.assertEqual(captured[0][1],captured[1][1])
+            self.assertNotEqual(captured[0][1],captured[2][1])
+            self.assertEqual(
+                ['stable-schedule-event']*3,
+                [doc['operations'][0]['arguments']['event_key'] for doc,_ in captured],
+            )
+
+    def test_technical_inbox_request_identity_changes_with_renewed_authority(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            lease_path=Path(tmp)/'lease.sqlite3'
+            with c2_supervisor_lease.connect(lease_path) as lease:
+                c2_supervisor_lease.acquire(lease,owner='runtime',pointer='/tmp/pointer',
+                                            supervisor_id='runtime',now=100,ttl=1000)
+            captured=[]
+            with patch.object(c2_runtime,'SUPERVISOR_DB',lease_path), \
+                    patch.object(c2_runtime,'submit_document',side_effect=lambda document,request_key:
+                                 (captured.append((document,request_key)) or {'issue_number':'1'})), \
+                    patch.object(c2_runtime.time,'time',return_value=150):
+                args={'expected_digest':'known-decisions','batch_limit':25}
+                c2_runtime._writer_submit('maintain_issue_inbox',args,'c3-inbox-maintenance-stable')
+                c2_runtime._writer_submit('maintain_issue_inbox',args,'c3-inbox-maintenance-stable')
+                with c2_supervisor_lease.connect(lease_path) as lease:
+                    lease.execute('UPDATE supervisor SET lease_expires_at=2000 WHERE singleton=1')
+                c2_runtime._writer_submit('maintain_issue_inbox',args,'c3-inbox-maintenance-stable')
+            self.assertEqual(captured[0][1],captured[1][1])
+            self.assertNotEqual(captured[0][1],captured[2][1])
+            self.assertEqual(
+                [25]*3,
+                [doc['operations'][0]['arguments']['batch_limit'] for doc,_ in captured],
+            )
+
+    def test_bind_request_identity_changes_with_renewed_authority(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            lease_path=Path(tmp)/'lease.sqlite3'
+            with c2_supervisor_lease.connect(lease_path) as lease:
+                c2_supervisor_lease.acquire(lease,owner='runtime',pointer='/tmp/pointer',
+                                            supervisor_id='runtime',now=100,ttl=1000)
+            captured=[]
+            with patch.object(c2_runtime,'SUPERVISOR_DB',lease_path), \
+                    patch.object(c2_runtime,'submit_document',side_effect=lambda document,request_key:
+                                 (captured.append((document,request_key)) or {'issue_number':'1'})), \
+                    patch.object(c2_runtime.time,'time',return_value=150):
+                args={'run_id':'run-1','executor_ref':'thread-1',
+                      'chat_url':'codex://threads/thread-1'}
+                c2_runtime._writer_submit('bind_executor',args,'c2-bind-run-1')
+                c2_runtime._writer_submit('bind_executor',args,'c2-bind-run-1')
+                with c2_supervisor_lease.connect(lease_path) as lease:
+                    lease.execute('UPDATE supervisor SET lease_expires_at=2000 WHERE singleton=1')
+                c2_runtime._writer_submit('bind_executor',args,'c2-bind-run-1')
+            self.assertEqual(captured[0][1],captured[1][1])
+            self.assertNotEqual(captured[0][1],captured[2][1])
+            self.assertEqual(
+                ['thread-1']*3,
+                [doc['operations'][0]['arguments']['executor_ref'] for doc,_ in captured],
+            )
+
     def test_ack_request_identity_changes_with_renewed_authority(self):
         with tempfile.TemporaryDirectory() as tmp:
             lease_path=Path(tmp)/'lease.sqlite3'
@@ -105,6 +179,28 @@ class RuntimeTests(unittest.TestCase):
                 with c2_supervisor_lease.connect(lease_path) as lease:
                     lease.execute('UPDATE supervisor SET lease_expires_at=2000 WHERE singleton=1')
                 c2_runtime._writer_submit('acknowledge',args,'c2-ack-original')
+            self.assertEqual(captured[0][1],captured[1][1])
+            self.assertNotEqual(captured[0][1],captured[2][1])
+            self.assertNotEqual(
+                captured[0][0]['operations'][0]['arguments']['supervisor_authority'],
+                captured[2][0]['operations'][0]['arguments']['supervisor_authority'])
+
+    def test_recover_request_identity_changes_with_renewed_authority(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            lease_path=Path(tmp)/'lease.sqlite3'
+            with c2_supervisor_lease.connect(lease_path) as lease:
+                c2_supervisor_lease.acquire(lease,owner='runtime',pointer='/tmp/pointer',
+                                            supervisor_id='runtime',now=100,ttl=1000)
+            captured=[]
+            with patch.object(c2_runtime,'SUPERVISOR_DB',lease_path), \
+                    patch.object(c2_runtime,'submit_document',side_effect=lambda document,request_key:
+                                 (captured.append((document,request_key)) or {'issue_number':'1'})), \
+                    patch.object(c2_runtime.time,'time',return_value=150):
+                c2_runtime._writer_submit('recover',{},'c2-recover-expired-run')
+                c2_runtime._writer_submit('recover',{},'c2-recover-expired-run')
+                with c2_supervisor_lease.connect(lease_path) as lease:
+                    lease.execute('UPDATE supervisor SET lease_expires_at=2000 WHERE singleton=1')
+                c2_runtime._writer_submit('recover',{},'c2-recover-expired-run')
             self.assertEqual(captured[0][1],captured[1][1])
             self.assertNotEqual(captured[0][1],captured[2][1])
             self.assertNotEqual(
@@ -285,7 +381,7 @@ class RuntimeTests(unittest.TestCase):
                 c2_scheduler.executor_started(writer,run_id='codex-live',now=2)
                 writer.commit()
             submitted=[]; launched=[]
-            with patch('c2_runtime.lane_degraded',return_value=True):
+            with patch('c2_runtime.browser_launch_suspended',return_value=True):
                 with closing(c2_runtime._open_snapshot(path)) as snapshot:
                     result=c2_runtime.advance(snapshot,
                         submit=lambda op,args,key:submitted.append((op,args)),
@@ -330,6 +426,38 @@ class RuntimeTests(unittest.TestCase):
                     )
                 self.assertEqual(should_recover, 'recover' in submitted)
 
+    def test_expired_symphony_run_is_never_recovered_by_legacy_runtime(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=C2IntakeTests().make_cutover_db(Path(tmp))
+            with closing(c2_intake._connect(path)) as writer:
+                writer.execute('BEGIN IMMEDIATE')
+                item=writer.execute(
+                    "SELECT work_item_id FROM work_items WHERE prompt_id='123456'").fetchone()[0]
+                writer.execute(
+                    "UPDATE prompt_metadata SET model='gpt-6-sol',reasoning='high' WHERE prompt_id='123456'")
+                writer.execute(
+                    "UPDATE work_items SET repo='gernalix/codex-roadmap' WHERE work_item_id=?",
+                    (item,))
+                c2_scheduler.configure(writer,item,activity='coding',
+                    model='gpt-6-sol',reasoning='high',worktree='/tmp/c3-task-123456')
+                route={'mode':'production','tracker_repo':'gernalix/c3-symphony',
+                       'source_repos':['gernalix/codex-roadmap'],'healthy':True}
+                run=c2_scheduler.schedule(writer,event_key='c3-external',now=1,
+                                          coding_route=route)[0]
+                c2_scheduler.acknowledge(writer,run['run_id'],
+                    worker_ref='c2-run:'+run['run_id'],metadata=run['metadata'],now=2)
+                c2_scheduler.executor_started(writer,run_id=run['run_id'],now=2)
+                writer.execute('UPDATE work_item_runs SET lease_until=3 WHERE run_id=?',
+                               (run['run_id'],))
+                writer.commit()
+            submitted=[]
+            with closing(c2_runtime._open_snapshot(path)) as snapshot:
+                c2_runtime.advance(snapshot,
+                    submit=lambda op,args,key: submitted.append(op),
+                    launch=lambda _: None, launch_notify=lambda _: None,
+                    worker_active=lambda _: False, now=1000)
+            self.assertNotIn('recover',submitted)
+
     def test_existing_chatgpt_run_is_held_then_launched_after_recovery(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=C2IntakeTests().make_cutover_db(Path(tmp))
@@ -346,7 +474,7 @@ class RuntimeTests(unittest.TestCase):
                 writer.commit()
             for degraded, expected in ((True, []), (False, [run['run_id']])):
                 launched=[]
-                with patch('c2_runtime.lane_degraded',return_value=degraded):
+                with patch('c2_runtime.browser_launch_suspended',return_value=degraded):
                     with closing(c2_runtime._open_snapshot(path)) as snapshot:
                         c2_runtime.advance(snapshot,submit=lambda *_:None,
                             launch=launched.append,launch_notify=lambda _:None,now=3)

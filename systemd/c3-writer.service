@@ -1,0 +1,16 @@
+[Unit]
+Description=C3 canonical local SQLite mutation writer
+Before=c3-runtime.service c3-web.service
+
+[Service]
+Type=notify
+NotifyAccess=main
+WorkingDirectory=%h/projects/codex-roadmap
+ExecStart=/usr/bin/python3 %h/projects/codex-roadmap/tools/c3_local_writer.py --repo %h/projects/codex-roadmap
+Restart=on-failure
+RestartSec=3
+UMask=0077
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

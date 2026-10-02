@@ -1,0 +1,19 @@
+[Unit]
+Description=C3 Control local web application
+After=c3-writer.service
+Requires=c3-writer.service
+Wants=network-online.target
+ConditionPathExists=%h/.local/state/c3-control/c2-retired.json
+
+[Service]
+Type=simple
+WorkingDirectory=%h/projects/codex-roadmap
+ExecStartPre=/usr/bin/node %h/projects/codex-roadmap/web/build.mjs
+ExecStart=/usr/bin/python3 %h/projects/codex-roadmap/tools/c3_api.py --repo %h/projects/codex-roadmap --port 8767
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+UMask=0077
+
+[Install]
+WantedBy=default.target

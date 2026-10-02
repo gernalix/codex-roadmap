@@ -5,6 +5,7 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
+from c3_retirement import require_not_retired
 
 ROOT = Path(__file__).resolve().parents[1]
 HOME = Path.home()
@@ -14,6 +15,7 @@ USER_SYSTEMD = HOME / ".config/systemd/user"
 OBJECTIVE = HOME / ".local/share/c2-master-goal/objective.txt"
 
 FILES = {
+    ROOT / "tools/c3_retirement.py": LIB / "c3_retirement.py",
     ROOT / "tools/c2_master_watchdog.py": LIB / "c2_master_watchdog.py",
     ROOT / "tools/c2_appserver_rpc.py": LIB / "c2_appserver_rpc.py",
     ROOT / "tools/c2_master_goal_start.py": BIN / "c2-master-goal-start",
@@ -32,6 +34,7 @@ def run(*args: str) -> None:
 
 
 def main() -> int:
+    require_not_retired()
     LIB.mkdir(parents=True, exist_ok=True)
     BIN.mkdir(parents=True, exist_ok=True)
     USER_SYSTEMD.mkdir(parents=True, exist_ok=True)

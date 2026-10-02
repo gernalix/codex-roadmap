@@ -1,0 +1,12 @@
+[Unit]
+Description=C3 fenced roadmap scheduler and publication
+After=c3-writer.service
+Wants=network-online.target
+Requires=c3-writer.service
+ConditionPathExists=%h/.local/state/c3-control/c2-retired.json
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/projects/codex-roadmap/tools/c3_runtime.py --db %h/.local/state/c3-control/roadmap.sqlite
+TimeoutStartSec=120
+Nice=5

@@ -127,6 +127,9 @@ def import_megavault_subset(
     target_db: Path,
     megavault_db: Path,
 ) -> dict[str, Any]:
+    from c3_storage import CANONICAL_DB, REPO
+    if CANONICAL_DB.exists() and Path(target_db).resolve() in (CANONICAL_DB.resolve(), (REPO / 'roadmap.sqlite').resolve()):
+        raise C2IdentityError('legacy_identity_import_retired')
     source_path = Path(megavault_db).expanduser().resolve()
     with closing(connect_db(source_path, read_only=True)) as source, closing(
         connect_db(target_db)
@@ -251,6 +254,10 @@ def _occupied_prompt_ids(conn: sqlite3.Connection) -> set[int]:
 
 
 def resolve_project_id(conn: sqlite3.Connection, value: str | int) -> int:
+    from c3_projects import project_catalog
+    with project_catalog(conn) as source:
+        if source is not conn:
+            return resolve_project_id(source, value)
     try:
         project_id = int(value)
     except (TypeError, ValueError):
@@ -277,6 +284,13 @@ def resolve_project_id(conn: sqlite3.Connection, value: str | int) -> int:
         raise C2IdentityError(f"project_not_found:{project_id}")
     return project_id
 
+def _require_prompt_writer(conn):
+    from c3_storage import CANONICAL_DB, REPO
+    filename = conn.execute('PRAGMA database_list').fetchone()[2]
+    if filename and Path(filename).resolve() in (CANONICAL_DB.resolve(), (REPO / 'roadmap.sqlite').resolve()) and not getattr(conn, 'c3_writer_owned', False):
+        raise C2IdentityError('prompt_id_local_writer_required')
+
+
 def allocate_prompt_id(
     conn: sqlite3.Connection,
     *,
@@ -285,6 +299,7 @@ def allocate_prompt_id(
     project_id: int | None = None,
     parent_prompt_id: int | None = None,
 ) -> int:
+    _require_prompt_writer(conn)
     source = str(source).strip()
     if not source or source.startswith("historical-"):
         raise C2IdentityError("invalid_prompt_id_source")
@@ -364,6 +379,7 @@ def materialize_prompt_id(
     *,
     content_sha256: str,
 ) -> None:
+    _require_prompt_writer(conn)
     digest = str(content_sha256).strip().lower()
     if len(digest) != 64 or any(ch not in "0123456789abcdef" for ch in digest):
         raise C2IdentityError("invalid_content_sha256")
@@ -393,6 +409,7 @@ def materialize_prompt_id(
 
 
 def mark_prompt_id_used(conn: sqlite3.Connection, prompt_id: int) -> None:
+    _require_prompt_writer(conn)
     row = _registry_row(conn, prompt_id)
     if str(row["source"]).startswith("historical-"):
         raise C2IdentityError(f"historical_prompt_id_terminal:{prompt_id}")
@@ -415,6 +432,7 @@ def mark_prompt_id_used(conn: sqlite3.Connection, prompt_id: int) -> None:
 
 
 def cancel_prompt_id(conn: sqlite3.Connection, prompt_id: int) -> None:
+    _require_prompt_writer(conn)
     row = _registry_row(conn, prompt_id)
     if str(row["source"]).startswith("historical-"):
         raise C2IdentityError(f"historical_prompt_id_terminal:{prompt_id}")
@@ -436,8 +454,9 @@ def cancel_prompt_id(conn: sqlite3.Connection, prompt_id: int) -> None:
     )
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="C2 project/repository identity and PROMPT_ID registry")
-    parser.add_argument("--db", type=Path, required=True)
+    from c3_storage import CANONICAL_DB
+    parser = argparse.ArgumentParser(description="C3 PROMPT_ID authority; MegaVault project identity")
+    parser.add_argument("--db", type=Path, default=CANONICAL_DB)
     sub = parser.add_subparsers(dest="command", required=True)
 
     imp = sub.add_parser("import-megavault")
@@ -469,11 +488,29 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
+        from c3_storage import CANONICAL_DB, REPO
+        canonical = args.db.resolve() in (CANONICAL_DB.resolve(), (REPO / 'roadmap.sqlite').resolve())
+        if canonical:
+            args.db = CANONICAL_DB
+            if args.command == 'allocate':
+                from c3_local_writer import submit_local
+                project_id = None
+                if args.project_id is not None:
+                    with closing(connect_db(args.db, read_only=True)) as conn:
+                        project_id = resolve_project_id(conn, args.project_id)
+                result = submit_local({'schema': 'codex-roadmap.mutation.v1', 'actor': 'c3-prompt-id',
+                    'operations': [{'op': 'prompt_id_allocate', 'arguments': {
+                        'source': args.source, 'request_id': args.request_id, 'project_id': project_id,
+                        'parent_prompt_id': args.parent_prompt_id}}]}, request_key='prompt-id-' + args.request_id)
+                print(json.dumps({'status': 'allocated', **result['allocations'][0]}, sort_keys=True))
+                return 0
+            if args.command not in ('project-resolve', 'show'):
+                raise C2IdentityError('use_local_writer_prompt_lifecycle')
         if args.command == "import-megavault":
             payload = import_megavault_subset(args.db, args.megavault_db)
         else:
-            with closing(connect_db(args.db)) as conn:
-                conn.execute("BEGIN IMMEDIATE")
+            with closing(connect_db(args.db, read_only=args.command in ('project-resolve', 'show'))) as conn:
+                conn.execute("BEGIN" if args.command in ('project-resolve', 'show') else "BEGIN IMMEDIATE")
                 try:
                     if args.command == "project-resolve":
                         payload = {"project_id": resolve_project_id(conn, args.value)}
@@ -510,7 +547,7 @@ def main(argv: list[str] | None = None) -> int:
                 except Exception:
                     conn.rollback()
                     raise
-    except (OSError, sqlite3.Error, C2IdentityError) as exc:
+    except (OSError, sqlite3.Error, C2IdentityError, ValueError) as exc:
         print(json.dumps({"status": "blocked", "error": str(exc)}, sort_keys=True))
         return 2
     print(json.dumps({"status": "ok", **payload}, ensure_ascii=False, sort_keys=True))

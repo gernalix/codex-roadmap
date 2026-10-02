@@ -1,11 +1,12 @@
 from pathlib import Path
 from types import SimpleNamespace
+import os
 import sys
 import tempfile
 import unittest
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from c2_chatgpt_executor import dispatch
+from c2_chatgpt_executor import dispatch, ChatWorkerError
 
 class FakeTaskConfig:
     def __init__(self,**kwargs):
@@ -16,7 +17,11 @@ def fake_supervisor_types():
     return FakeBrowser,lambda url:url.startswith('https://chatgpt.com/c/'),FakeTaskConfig,FakeStore
 
 class FakeBrowser:
-    def __init__(self):self.calls=[]
+    last_endpoint=None
+    def __init__(self,endpoint=None):
+        self.calls=[];self.endpoint=endpoint;FakeBrowser.last_endpoint=endpoint
+    def connect(self):pass
+    def close(self):pass
     def new_chat(self,task,message):
         self.calls.append((task,message))
         return None,'https://chatgpt.com/c/fixture',None
@@ -46,6 +51,19 @@ class BrowserExecutorTests(unittest.TestCase):
             self.assertEqual(90,store.tasks[0].thresholds.generation_verify_s)
             self.assertEqual(180,store.tasks[0].thresholds.generation_stall_s)
             self.assertEqual(3,store.tasks[0].thresholds.max_recovery_attempts)
+
+    def test_owned_browser_defaults_to_channel_bridge(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            receipt=Path(tmp)/'receipt.json'
+            data={'executor':'chatgpt','activity':'semantic',
+                  'project_url':'https://chatgpt.com/g/g-p-project'}
+            with patch.dict(os.environ,{},clear=True):
+                result=dispatch(run_id='bridge',work_item_id='wi:bridge',metadata=data,
+                    prompt='Decide',db_path=Path(tmp)/'db',receipt=receipt,
+                    store=FakeStore())
+            self.assertEqual('started',result['phase'])
+            self.assertEqual('channel-bridge',FakeBrowser.last_endpoint)
+
     def test_ambiguous_start_does_not_send_again(self):
         with tempfile.TemporaryDirectory() as tmp:
             class Broken(FakeBrowser):
@@ -95,18 +113,18 @@ class BrowserExecutorTests(unittest.TestCase):
             self.assertEqual(40,store.tasks[0].thresholds.generation_suspect_s)
             self.assertEqual(180,store.tasks[0].thresholds.generation_stall_s)
 
-    def test_global_degradation_suspends_new_chat_without_receipt(self):
+    def test_legacy_global_degradation_cannot_gate_a_c3_run(self):
         with tempfile.TemporaryDirectory() as tmp:
             browser=FakeBrowser();receipt=Path(tmp)/'r.json'
-            with patch('c2_chatgpt_executor.lane_degraded',return_value=True):
+            with patch('pathlib.Path.home',return_value=Path(tmp)):
                 result=dispatch(run_id='one',work_item_id='wi:fixture',
-                    metadata={'executor':'chatgpt','activity':'semantic',
+                    metadata={'executor':'chatgpt','activity':'semantic','global_degraded':True,
                               'project_url':'https://chatgpt.com/g/g-p-project'},
                     prompt='Decide',db_path=Path(tmp)/'db',receipt=receipt,
                     browser=browser,store=FakeStore())
-            self.assertEqual('suspended',result['phase'])
-            self.assertFalse(receipt.exists())
-            self.assertEqual([],browser.calls)
+            self.assertEqual('started',result['phase'])
+            self.assertTrue(receipt.exists())
+            self.assertEqual(1,len(browser.calls))
 
     def test_kill_switch_suspends_before_receipt_or_browser_launch(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -122,7 +140,18 @@ class BrowserExecutorTests(unittest.TestCase):
             self.assertFalse(receipt.exists())
             self.assertEqual([],browser.calls)
 
-    def test_new_run_reuses_persisted_work_item_chat(self):
+    def test_recursive_inbox_executor_rejects_without_receipt_or_browser(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            browser=FakeBrowser(); receipt=Path(tmp)/'receipt.json'
+            with self.assertRaisesRegex(ChatWorkerError,'retired_recursive'):
+                dispatch(run_id='old',work_item_id='wi:old',
+                    metadata={'executor':'chatgpt','activity':'semantic','issue_triage':True},
+                    prompt='Legacy triage',db_path=Path(tmp)/'db',receipt=receipt,
+                    browser=browser,store=FakeStore())
+            self.assertFalse(receipt.exists())
+            self.assertEqual([],browser.calls)
+
+    def test_new_run_uses_only_canonical_binding_not_task_cache(self):
         with tempfile.TemporaryDirectory() as tmp:
             browser=FakeBrowser();receipt=Path(tmp)/'new-run.json'
             class ExistingStore(FakeStore):
@@ -131,9 +160,10 @@ class BrowserExecutorTests(unittest.TestCase):
                                            project_url='https://chatgpt.com/g/g-p-project')
             result=dispatch(run_id='new-run',work_item_id='wi:fixture',
                 metadata={'executor':'chatgpt','activity':'semantic',
-                          'project_url':'https://chatgpt.com/g/g-p-project'},
+                          'project_url':'https://chatgpt.com/g/g-p-project',
+                          'chat_url':'https://chatgpt.com/c/canonical'},
                 prompt='Resume',db_path=Path(tmp)/'db',receipt=receipt,
                 browser=browser,store=ExistingStore())
-            self.assertEqual('https://chatgpt.com/c/existing',result['chat_url'])
+            self.assertEqual('https://chatgpt.com/c/canonical',result['chat_url'])
             self.assertEqual([],browser.calls)
             self.assertEqual('started',__import__('json').loads(receipt.read_text())['phase'])

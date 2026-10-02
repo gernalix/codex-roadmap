@@ -12,15 +12,11 @@ import c2_roadmap_status as dashboard
 
 
 class TerminalViewTests(unittest.TestCase):
-    def test_dashboard_live_mode_uses_alternate_screen(self):
+    def test_retired_dashboard_has_no_live_mode(self):
         out = StringIO()
-        with patch.object(dashboard.sys, "stdout", out):
-            dashboard._live_screen_enter()
-            dashboard._live_screen_exit()
-        value = out.getvalue()
-        self.assertIn("\033[?1049h", value)
-        self.assertIn("\033[3J", value)
-        self.assertIn("\033[?1049l", value)
+        with redirect_stdout(out):
+            self.assertEqual(dashboard.main(), 2)
+        self.assertIn("retired_permanently", out.getvalue())
 
     def test_executor_shows_only_current_raw_codex_batch(self):
         stream = StringIO(

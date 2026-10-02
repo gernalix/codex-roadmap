@@ -9,21 +9,21 @@ import c2_terminal_state_reimport
 import c2_work_item_admin
 import c2_blocked_reconcile
 import c2_issue_inbox
-import c2_manual_order
 import c2_human_copy
 import roadmap_db
+import c3_inbox_maintenance
 
 
 SUPERVISOR_OPERATIONS = frozenset({
     'intake', 'prepare_codex', 'configure', 'auto_configure', 'schedule', 'acknowledge',
-    'recover', 'reconcile_run', 'milestone', 'claim_milestone',
+    'recover', 'release_unstarted_symphony_run', 'reconcile_run', 'milestone', 'claim_milestone',
     'mark_milestone', 'verify_work_item',
     'reimport_terminal_state', 'repair_prompt_materialization', 'reconcile_item',
     'reconcile_descendant',
     'reconcile_blocked', 'reconcile_blocked_safety_net', 'bind_executor',
-    'promote_issue', 'discard_issue', 'edit_issue', 'void_issue', 'ensure_issue_triage',
+    'promote_issue', 'discard_issue', 'reconcile_issue_batch', 'edit_issue', 'void_issue', 'ensure_issue_triage',
     'set_execution_override', 'clear_execution_override',
-    'set_manual_order', 'clear_manual_order', 'set_human_copy',
+    'set_human_copy', 'maintain_issue_inbox',
 })
 
 
@@ -58,6 +58,7 @@ def apply(conn, mutation):
                 c2_scheduler.reconcile_terminal_run(conn, result['run_id'])
         return result
     operations = {
+        'maintain_issue_inbox': c3_inbox_maintenance.apply,
         'cutover': c2_cutover_writer.confirm,
         'intake': c2_intake.add_work_item,
         'prepare_codex': c2_intake.prepare_codex,
@@ -66,8 +67,6 @@ def apply(conn, mutation):
         'schedule': c2_scheduler.schedule,
         'set_execution_override': c2_scheduler.set_override,
         'clear_execution_override': c2_scheduler.clear_override,
-        'set_manual_order': c2_manual_order.set_manual_order,
-        'clear_manual_order': c2_manual_order.clear_manual_order,
         'set_human_copy': c2_human_copy.set_copy,
         'acknowledge': c2_scheduler.acknowledge,
         'executor_started': c2_scheduler.executor_started,
@@ -75,6 +74,7 @@ def apply(conn, mutation):
         'checkpoint': c2_scheduler.checkpoint,
         'record_checkpoint': c2_scheduler.record_checkpoint,
         'recover': c2_scheduler.recover,
+        'release_unstarted_symphony_run': c2_scheduler.release_unstarted_symphony_run,
         'quarantine_browser': c2_scheduler.quarantine_browser_run,
         'finish_work_item': c2_scheduler.finish_browser_work_item,
         'complete_verified': c2_scheduler.complete_verified,
@@ -88,11 +88,13 @@ def apply(conn, mutation):
         'repair_prompt_materialization': c2_intake.repair_prompt_materialization,
         'reconcile_item': c2_work_item_admin.reconcile,
         'reconcile_descendant': c2_work_item_admin.reconcile_descendant,
+        'reparent_item': c2_work_item_admin.reparent,
         'reconcile_blocked': c2_blocked_reconcile.reconcile,
         'reconcile_blocked_safety_net': c2_blocked_reconcile.safety_net,
         'capture_issue': c2_issue_inbox.capture,
         'promote_issue': c2_issue_inbox.promote,
         'discard_issue': c2_issue_inbox.discard,
+        'reconcile_issue_batch': c2_issue_inbox.reconcile_batch,
         'edit_issue': c2_issue_inbox.edit,
         'void_issue': c2_issue_inbox.void,
         'ensure_issue_triage': c2_issue_inbox.ensure_triage,

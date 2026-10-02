@@ -1,4 +1,5 @@
 [Unit]
+ConditionPathExists=!%h/.local/state/c3-control/c2-retired.json
 Description=Detect and fence an expired C2 supervisor
 ConditionPathExists=%h/.local/state/c2-supervisor/lease.sqlite3
 ConditionPathExists=!%h/.config/c2/disable-chat-supervisor

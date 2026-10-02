@@ -68,6 +68,12 @@ def _gh_json(*args: str) -> dict[str, Any]:
 
 
 def _wait_issue_applied(repository: str, issue_number: str, timeout: float) -> None:
+    from c3_storage import local_enabled, database
+    if local_enabled():
+        with sqlite3.connect(database().resolve().as_uri() + '?mode=ro', uri=True) as conn:
+            if not conn.execute('SELECT 1 FROM mutation_receipts WHERE issue_number=?', (int(issue_number),)).fetchone():
+                raise RoadmapStartError('local_receipt_missing:' + str(issue_number))
+        return
     deadline = time.monotonic() + timeout
     while True:
         issue = _gh_json("api", f"repos/{repository}/issues/{issue_number}")
@@ -83,7 +89,8 @@ def _wait_issue_applied(repository: str, issue_number: str, timeout: float) -> N
 
 
 def _local_prompt_record(repo: Path, prompt_id: str) -> dict[str, Any]:
-    path = repo.expanduser().resolve() / "roadmap.sqlite"
+    from c3_storage import database
+    path = database(repo.expanduser().resolve())
     if not path.is_file():
         raise RoadmapStartError("local_roadmap_db_missing")
     try:
@@ -120,7 +127,8 @@ def _require_canonical_claim(
     repo: Path, prompt_id: str, request_key: str, issue_number: str
 ) -> None:
     """A closed Issue alone may be a no-op replay of an older claim."""
-    path = repo.expanduser().resolve() / "roadmap.sqlite"
+    from c3_storage import database
+    path = database(repo.expanduser().resolve())
     with closing(sqlite3.connect(f"file:{path}?mode=ro", uri=True)) as conn:
         status = conn.execute(
             "SELECT status FROM prompts WHERE prompt_id=?", (prompt_id,)
@@ -137,7 +145,7 @@ def _require_canonical_claim(
 
 def _repo_task_worktree(record: dict[str, Any], prompt_id: str) -> str | None:
     repo_slug = str(record.get("repo") or "").strip()
-    if not repo_slug or repo_slug.lower() == DEFAULT_REMOTE_REPO.lower():
+    if not repo_slug:
         return None
     if not DEFAULT_REPO_TASK.is_file():
         raise RoadmapStartError("repo_task_helper_missing")

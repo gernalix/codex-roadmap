@@ -6,12 +6,40 @@ from unittest.mock import patch
 import json
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import c2_intake,c2_scheduler,c2_worker
+from c3_symphony_bridge import HostConfig
 from test_c2_intake import C2IntakeTests
 
 
 class WorkerTests(unittest.TestCase):
 
-    def test_issue_triage_uses_codex_fallback_when_chat_lane_is_disabled(self):
+    def test_symphony_claim_uses_only_symphony_adapter(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); path=C2IntakeTests().make_cutover_db(root)
+            conn=c2_intake._connect(path)
+            try:
+                c2_scheduler.install_schema(conn)
+                conn.execute('BEGIN IMMEDIATE')
+                conn.execute("UPDATE work_items SET status='running',repo='gernalix/codex-roadmap' WHERE prompt_id='123456'")
+                config=HostConfig('production','gernalix/c3-symphony',frozenset({'gernalix/codex-roadmap'}))
+                metadata={'activity':'coding','symphony_route':{'mode':'production',
+                    'tracker_repo':'gernalix/c3-symphony','source_repos':['gernalix/codex-roadmap']}}
+                conn.execute("""INSERT INTO work_item_runs VALUES(
+                  'symphony-run','prompt:123456','event',1,'symphony','running',100,
+                  'c2-run:symphony-run',NULL,?,1)""",(json.dumps(metadata),))
+                c2_scheduler.executor_started(conn,run_id='symphony-run',now=2)
+                conn.commit()
+                with patch.object(c2_worker,'routing_mode',return_value=config), \
+                     patch.object(c2_worker,'dispatch_symphony',return_value={'executor':'symphony','phase':'running'}) as dispatch, \
+                     patch.object(c2_worker,'dispatch_codex') as legacy:
+                    result=c2_worker.run_once(path,'symphony-run',state_root=root/'receipts',
+                        submit=lambda *_:None)
+                self.assertEqual('symphony',result['executor'])
+                dispatch.assert_called_once()
+                legacy.assert_not_called()
+            finally:
+                conn.close()
+
+    def test_recursive_triage_rejects_even_when_browser_disabled(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp); path=C2IntakeTests().make_cutover_db(root)
             conn=c2_intake._connect(path)
@@ -30,17 +58,44 @@ class WorkerTests(unittest.TestCase):
                   (item['work_item_id'],json.dumps(metadata)))
                 c2_scheduler.executor_started(conn,run_id='triage-fallback',now=2)
                 conn.commit()
-                fallback={'state':'progress','before':20,'after':10,'returncode':0}
                 kill_switch=root/'disable-chat-supervisor'; kill_switch.write_text('')
-                with patch.object(c2_worker,'lane_degraded',return_value=False), \
-                     patch.object(c2_worker,'KILL_SWITCH',kill_switch), \
-                     patch.object(c2_worker,'execute_inbox_codex',return_value=fallback) as execute:
-                    result=c2_worker.run_once(path,'triage-fallback',state_root=root/'receipts',
-                        submit=lambda *_:self.fail('fallback should own its fenced writes'))
-                self.assertEqual('codex-fallback',result['executor'])
-                self.assertEqual('progress',result['phase'])
-                self.assertEqual(10,result['after'])
-                execute.assert_called_once()
+                with patch.object(c2_worker,'KILL_SWITCH',kill_switch), \
+                     self.assertRaisesRegex(c2_worker.WorkerError,'retired_recursive'):
+                    c2_worker.run_once(path,'triage-fallback',state_root=root/'receipts',
+                        submit=lambda *_:self.fail('retired worker must not write'))
+                self.assertFalse((root/'receipts').exists())
+            finally:
+                conn.close()
+
+    def test_recursive_triage_rejects_before_browser_dispatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); path=C2IntakeTests().make_cutover_db(root)
+            conn=c2_intake._connect(path)
+            try:
+                c2_scheduler.install_schema(conn)
+                conn.execute('BEGIN IMMEDIATE')
+                item=c2_intake.add_work_item(conn,title='Triage C2 issue inbox')
+                conn.execute("INSERT INTO work_item_tags(work_item_id,tag) VALUES(?, 'c2:issue-triage')",
+                    (item['work_item_id'],))
+                conn.execute("UPDATE work_items SET status='running' WHERE work_item_id=?",
+                    (item['work_item_id'],))
+                metadata={'activity':'semantic','project_url':'https://chatgpt.com/g/g-p-test/project'}
+                conn.execute("""INSERT INTO work_item_runs VALUES(
+                  'triage-stable',?,'event',1,'chatgpt','running',100,
+                  'c3-run:triage-stable',NULL,?,1)""",
+                  (item['work_item_id'],json.dumps(metadata)))
+                c2_scheduler.executor_started(conn,run_id='triage-stable',now=2)
+                conn.commit()
+                captured={}
+                def dispatch(**kwargs):
+                    captured.update(kwargs['metadata'])
+                    return {'phase':'started','chat_url':'https://chatgpt.com/c/triage'}
+                with patch.object(c2_worker,'KILL_SWITCH',root/'absent'), \
+                     patch.object(c2_worker,'dispatch_browser',side_effect=dispatch), \
+                     self.assertRaisesRegex(c2_worker.WorkerError,'retired_recursive'):
+                    c2_worker.run_once(path,'triage-stable',state_root=root/'receipts',
+                        submit=lambda *_:None,worker_prefix='c3-run:',legacy_codex_allowed=False)
+                self.assertEqual({},captured)
             finally:
                 conn.close()
 

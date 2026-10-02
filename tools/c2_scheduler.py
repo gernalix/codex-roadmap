@@ -11,9 +11,6 @@ import sqlite3
 import time
 import uuid
 
-import c2_manual_order
-
-
 DEFAULT_PARALLEL_CAP = 12
 HARD_PARALLEL_CAP = 16
 
@@ -175,7 +172,8 @@ def install_schema(conn):
         if sqlite3.complete_statement(statement):
             conn.execute(statement)
             statement = ''
-    c2_manual_order.install_schema(conn)
+    import c3_override
+    c3_override.install_schema(conn)
 
 
 def choose_executor(policy: str, activity: str) -> str | None:
@@ -187,6 +185,23 @@ def choose_executor(policy: str, activity: str) -> str | None:
         return policy
     return {'coding':'codex','diagnostic':'codex','gui':'rdc',
             'native':'rdc','semantic':'chatgpt'}[activity]
+
+
+def symphony_selected(policy, activity, repo, route):
+    return bool(route and route.get('mode') in ('canary','production')
+                and activity=='coding' and policy in ('auto','codex')
+                and repo in route.get('source_repos',()))
+
+
+def routed_executor(policy, activity, repo, route):
+    if route and route.get('mode')=='invalid' and activity=='coding' and policy in ('auto','codex'):
+        return 'symphony-unhealthy'
+    if symphony_selected(policy,activity,repo,route):
+        return 'symphony' if route.get('healthy') else 'symphony-unhealthy'
+    selected = choose_executor(policy,activity)
+    if route and route.get('no_legacy_codex') and selected == 'codex':
+        return 'symphony-unhealthy'
+    return selected
 
 
 def _transaction(conn):
@@ -335,7 +350,7 @@ def execution_metadata(conn, item, spec, executor):
     result['executor'] = executor
     result['repo'] = item['repo']
     result['prompt_id'] = item['prompt_id']
-    if executor == 'codex':
+    if executor in ('codex','symphony'):
         if not item['prompt_id']:
             raise SchedulingError('codex_prompt_materialization_required')
         prompt = conn.execute('SELECT * FROM prompts WHERE prompt_id=?', (item['prompt_id'],)).fetchone()
@@ -346,6 +361,13 @@ def execution_metadata(conn, item, spec, executor):
                 raise SchedulingError('codex_metadata_mismatch:'+key)
         if bool(spec['goal_mode']) != (prompt['prompt_type'] == 'Goal'):
             raise SchedulingError('codex_metadata_mismatch:goal_mode')
+        if executor=='symphony':
+            from c3_symphony_bridge import BridgeError, resolve_model, resolve_reasoning
+            try:
+                result['model_id']=resolve_model(spec['model'])
+                result['reasoning_effort']=resolve_reasoning(spec['reasoning'])
+            except BridgeError as exc:
+                raise SchedulingError('symphony_exact_metadata_invalid') from exc
     if executor in ('chatgpt','rdc') and spec['activity'] in ('gui','semantic'):
         if not spec['project_url'] or not str(spec['project_url']).startswith('https://chatgpt.com/'):
             raise SchedulingError('chatgpt_project_url_required')
@@ -367,7 +389,7 @@ def _repo_writer_conflict(conn, item, spec):
                or spec['worktree']==peer['worktree'] for peer in peers)
 
 
-def dispatchable(conn, item):
+def dispatchable(conn, item, coding_route=None):
     """Whether an item could acquire a new C2 run with current shared locks."""
     ancestor = item['parent_id']
     seen = set()
@@ -385,10 +407,12 @@ def dispatchable(conn, item):
                         (item['work_item_id'],)).fetchone()
     if not spec:
         return False
-    executor = choose_executor(item['executor_policy'], spec['activity'])
-    if executor in (None, 'human'):
+    executor = routed_executor(item['executor_policy'],spec['activity'],item['repo'],coding_route)
+    if executor in (None, 'human', 'symphony-unhealthy'):
         return False
     resources = set(json.loads(spec['resources_json']))
+    if executor=='symphony':
+        resources.add('symphony:backend')
     if item['repo']:
         resources.add('worktree:'+spec['worktree'] if spec['worktree'] else 'repo:'+item['repo'])
         if _repo_writer_conflict(conn,item,spec):
@@ -407,7 +431,7 @@ def dispatchable(conn, item):
 
 
 def inbox_drain_state(conn):
-    """Hold new roadmap dispatch until the current Inbox batch is reconciled."""
+    """Report whether Inbox triage is pending/reconciling for observability."""
     if not conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='issue_inbox'").fetchone():
         return None
     if conn.execute("SELECT 1 FROM issue_inbox WHERE state='pending' LIMIT 1").fetchone():
@@ -428,44 +452,52 @@ def inbox_gate_exempt(conn, item):
 
 
 def schedule(conn, *, event_key, now=None, max_parallel=DEFAULT_PARALLEL_CAP, lease_seconds=120,
-             chatgpt_lane_degraded=False):
+             chatgpt_lane_degraded=False, coding_route=None):
     _transaction(conn)
     now=time.time() if now is None else now
     if not event_key or lease_seconds <= 0:
         raise SchedulingError('invalid_scheduler_event')
     if not 1 <= max_parallel <= HARD_PARALLEL_CAP:
         raise SchedulingError('parallel_cap_out_of_range')
+    if coding_route is not None:
+        if (not isinstance(coding_route,dict)
+                or coding_route.get('mode') not in ('legacy','canary','production','invalid')
+                or not isinstance(coding_route.get('healthy'),bool)
+                or not isinstance(coding_route.get('source_repos'),list)):
+            raise SchedulingError('invalid_coding_route')
+        if coding_route['mode']=='production' and coding_route.get('tracker_repo')=='gernalix/symphony-canary':
+            raise SchedulingError('production_tracker_is_canary')
+        if coding_route['mode'] in ('canary','production') and (
+                not coding_route.get('tracker_repo') or not coding_route['source_repos']):
+            raise SchedulingError('tracker_or_source_allowlist_required')
     prior = conn.execute('SELECT result_json FROM work_item_scheduler_events WHERE event_key=?', (event_key,)).fetchone()
     if prior:
         return json.loads(prior[0])
     active = conn.execute('''SELECT COUNT(*) FROM v_work_item_execution_liveness
       WHERE has_live_executor=1''').fetchone()[0]
     results = []
-    candidates = conn.execute('''SELECT w.*,
-        o.rank AS manual_rank,
-        o.source AS manual_order_source,
-        o.source_modified_at AS manual_order_source_modified_at
+    import c3_override
+    c3_override.install_schema(conn)
+    candidates = conn.execute('''SELECT w.*
       FROM v_work_item_runnable w
-      LEFT JOIN manual_order_overrides o
-        ON o.scope='roadmap' AND o.entity_id=w.work_item_id
-      ORDER BY CASE WHEN o.rank IS NULL THEN 1 ELSE 0 END,
-        o.rank,
+      LEFT JOIN c3_user_order u ON u.work_item_id=w.work_item_id
+      ORDER BY CASE WHEN u.rank IS NULL THEN 1 ELSE 0 END,
+        u.rank,
         CASE
         WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p0') THEN 0
         WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p1') THEN 1
         WHEN EXISTS(SELECT 1 FROM work_item_tags t WHERE t.work_item_id=w.work_item_id AND t.tag='priority:p2') THEN 2
         ELSE 3 END,
         COALESCE(w.sort_order,2147483647),w.created_at,w.work_item_id''').fetchall()
-    inbox_gate = inbox_drain_state(conn)
-    if inbox_gate:
-        candidates = [item for item in candidates if inbox_gate_exempt(conn, item)]
+    # Inbox triage has its own P0 ordering and exclusive resource lease. Do not
+    # globally filter unrelated candidates while a long drain is in progress.
     override = read_override(conn)
     scoped = []
     if override:
         for item in candidates:
             if not override_matches(conn,item,override):
                 continue
-            if dispatchable(conn,item):
+            if dispatchable(conn,item,coding_route):
                 scoped.append(item)
     if scoped:
         candidates = scoped
@@ -493,12 +525,14 @@ def schedule(conn, *, event_key, now=None, max_parallel=DEFAULT_PARALLEL_CAP, le
         spec = conn.execute('SELECT * FROM work_item_execution_specs WHERE work_item_id=?', (item['work_item_id'],)).fetchone()
         if not spec:
             continue  # No guessed semantic classification or implicit launch.
-        executor = choose_executor(item['executor_policy'], spec['activity'])
-        if executor in (None, 'human'):
+        executor = routed_executor(item['executor_policy'],spec['activity'],item['repo'],coding_route)
+        if executor in (None, 'human', 'symphony-unhealthy'):
             continue
         if chatgpt_lane_degraded and spec['activity'] in ('gui','semantic'):
             continue
         resources = set(json.loads(spec['resources_json']))
+        if executor=='symphony':
+            resources.add('symphony:backend')
         if item['repo']:
             # Default exclusive repo writer. Explicit isolated worktree resource
             # is permitted only when the spec supplies the actual worktree.
@@ -512,6 +546,12 @@ def schedule(conn, *, event_key, now=None, max_parallel=DEFAULT_PARALLEL_CAP, le
             continue
         try:
             metadata = execution_metadata(conn, item, spec, executor)
+            if executor=='symphony':
+                metadata['symphony_route']={
+                    'mode':coding_route['mode'],
+                    'tracker_repo':coding_route['tracker_repo'],
+                    'source_repos':coding_route['source_repos'],
+                }
         except SchedulingError as exc:
             results.append({'work_item_id':item['work_item_id'], 'blocked':str(exc)})
             continue
@@ -846,6 +886,34 @@ def executor_result(conn, *, outcome, work_item_id=None, prompt_id=None, run_id=
             'idempotent':False}
 
 
+def release_unstarted_symphony_run(conn, *, run_id, reason):
+    """Release a Symphony claim only before any external executor identity exists."""
+    _transaction(conn)
+    reason=str(reason or '').strip()
+    if not reason:
+        raise SchedulingError('release_reason_required')
+    row=conn.execute("""SELECT r.*,w.status AS item_status FROM work_item_runs r
+        JOIN work_items w USING(work_item_id) WHERE r.run_id=?""",(run_id,)).fetchone()
+    if not row or row['executor']!='symphony':
+        raise SchedulingError('unstarted_symphony_run_required')
+    if row['state'] not in ('claimed','running','recovering') or row['item_status']!='running':
+        raise SchedulingError('unstarted_symphony_run_not_active')
+    binding=conn.execute("SELECT 1 FROM work_item_executor_bindings WHERE run_id=? LIMIT 1",
+                         (run_id,)).fetchone()
+    start=conn.execute("""SELECT executor_ref,chat_url FROM work_item_executor_starts
+        WHERE run_id=? ORDER BY started_at DESC LIMIT 1""",(run_id,)).fetchone()
+    result=conn.execute("SELECT 1 FROM work_item_result_receipts WHERE run_id=? LIMIT 1",
+                        (run_id,)).fetchone()
+    if binding or result or (start and (start['executor_ref'] or start['chat_url'])):
+        raise SchedulingError('symphony_run_already_dispatched')
+    conn.execute("UPDATE work_item_runs SET state='failed' WHERE run_id=?",(run_id,))
+    conn.execute("DELETE FROM work_item_resource_leases WHERE run_id=?",(run_id,))
+    conn.execute("""UPDATE work_items SET status='pending',blocker=NULL,
+        current_action=?,next_action=NULL WHERE work_item_id=?""",
+        ('Pre-dispatch Symphony claim released: '+reason[:220],row['work_item_id']))
+    return {'run_id':run_id,'work_item_id':row['work_item_id'],'state':'released'}
+
+
 def recover(conn, *, now=None):
     _transaction(conn)
     now=time.time() if now is None else now
@@ -1020,13 +1088,13 @@ def complete(conn, run_id, *, succeeded, worker_ref):
 
 
 def reconcile_terminal_run(conn, run_id):
-    """Release a Codex run only after the canonical terminal writer has acted."""
+    """Release a coding run only after the canonical terminal writer has acted."""
     _transaction(conn)
     row=conn.execute('''SELECT r.state,r.executor,w.status AS item_status
       FROM work_item_runs r JOIN work_items w USING(work_item_id)
       WHERE r.run_id=?''',(run_id,)).fetchone()
-    if not row or row['executor']!='codex':
-        raise SchedulingError('codex_run_required')
+    if not row or row['executor'] not in ('codex','symphony'):
+        raise SchedulingError('coding_run_required')
     if row['item_status'] not in ('completed','failed','blocked','cancelled'):
         raise SchedulingError('canonical_terminal_state_required')
     target='completed' if row['item_status']=='completed' else 'failed'

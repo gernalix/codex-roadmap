@@ -58,7 +58,7 @@ def main(argv: list[str] | None=None) -> int:
     print(json.dumps({
         "status":"blocked",
         "error":"legacy_direct_inbox_writer_disabled",
-        "use":"tools/submit_mutation.py -> [roadmap-mutation] Issue -> GitHub Actions single writer",
+        "use":"tools/submit_mutation.py -> local C3 writer",
     },sort_keys=True))
     return 2
 

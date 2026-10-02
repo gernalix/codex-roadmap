@@ -104,6 +104,14 @@ def apply_issue(
     issue_number, request_key, actor, document = parse_event(event_path)
     payload_sha256 = hashlib.sha256(canonical_bytes(document)).hexdigest()
 
+    user_operations = [op for op in document['operations'] if isinstance(op, dict)
+                       and op.get('op') in ('c3_user_override', 'c3_destructive_override')]
+    if user_operations:
+        if len(user_operations) != 1 or len(document['operations']) != 1:
+            raise IssueMutationError('user_override_must_be_exclusive')
+        if request_key != 'c3-user-' + str(user_operations[0].get('arguments', {}).get('request_id', '')):
+            raise IssueMutationError('user_override_transport_identity_mismatch')
+
     cutover_operations = [op for op in document['operations']
                           if isinstance(op,dict) and op.get('op')=='c2_cutover']
     if cutover_operations:
