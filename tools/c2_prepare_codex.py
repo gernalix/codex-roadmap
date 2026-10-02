@@ -326,10 +326,8 @@ def prepare(spec: dict[str, Any], *, timeout: float=120.0,
             evidence=spec.get("readiness_evidence") or []
             if not evidence:
                 raise PrepareCodexError("identity_evidence_required")
-            submit_phase("reconcile_item",{
-                "work_item_id":wid,"classification":"CURRENT_READY","status":"pending",
-                "evidence":list(evidence),"fields":identity,
-                "include_descendants":False,
+            submit_phase("reconcile_execution_identity",{
+                "work_item_id":wid,"evidence":list(evidence),**identity,
             },"identity")
             state=refresh(wid)
             current={key: state["item"].get(key) for key in identity}
