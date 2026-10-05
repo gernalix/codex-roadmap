@@ -1,3 +1,5 @@
+> FROZEN C3 ARCHIVE (2026-10-05). Historical reference only. Do not execute these operating instructions. Current task flow: /home/daniele/MegaVault/ai/META_INFRASTRUCTURE.md.
+
 # C3 control-plane retirement
 
 This is a host action after the reviewed branch is merged. Do not run it in a

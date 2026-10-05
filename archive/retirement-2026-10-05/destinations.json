@@ -1,0 +1,2263 @@
+{
+  "migration-ae9b388ca6ab35d8": {
+    "destination": "https://github.com/gernalix/activity-watch-uploader/issues/6",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "activity-watch-uploader",
+    "sources": [
+      "wi:fdeba379da7e47639eeeb5fccb468e32"
+    ]
+  },
+  "migration-715311327b313006": {
+    "destination": "https://github.com/gernalix/activity-watch-uploader/issues/7",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "activity-watch-uploader",
+    "sources": [
+      "wi:02ed2370898f4b8591612f91336c8409",
+      "issue:670b63c20f87227e0d1a72bb8d5cac4c"
+    ]
+  },
+  "migration-ed3d511d7397e6bf": {
+    "destination": "https://github.com/gernalix/adb-device-keeper/issues/3",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "adb-device-keeper",
+    "sources": [
+      "wi:cfd77b91d63f40ae9370747a7311060b"
+    ]
+  },
+  "migration-091582ab850df133": {
+    "destination": "https://github.com/gernalix/adb-device-keeper/issues/4",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "adb-device-keeper",
+    "sources": [
+      "wi:75b9dbade6c74a869c0a6278492833ee"
+    ]
+  },
+  "migration-b52c597d82a82231": {
+    "destination": "https://github.com/gernalix/adb-device-keeper/issues/5",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "adb-device-keeper",
+    "sources": [
+      "task:CHATGPT-20260925-ADB-KEEPER-LATENCY",
+      "state:gate:9ad7b5812f954676d1c8"
+    ]
+  },
+  "migration-74427c732bfce881": {
+    "destination": "https://github.com/gernalix/amici_fb/issues/3",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "amici-fb",
+    "sources": [
+      "wi:621af0a298134a7f8819f2e9341bebee"
+    ]
+  },
+  "migration-6cd31a0f12c33616": {
+    "destination": "https://github.com/gernalix/amici_fb/issues/4",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "amici-fb",
+    "sources": [
+      "wi:edc894e1d7e94037a48581ce7d310d64",
+      "issue:4ddcf0a67d1a4242a16ef7dca92ae958"
+    ]
+  },
+  "migration-c4926d6b4f415b36": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/14",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:bdfb0b1951cc4361b01690b5b18efcd7"
+    ]
+  },
+  "migration-adb19f1c359d8f7e": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/15",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:23f5aafd9abe4edba5effe14f6af0988"
+    ]
+  },
+  "migration-8c1350c089d854f2": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/16",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:c55ef1a126774d138eb9bb3b1734e37b"
+    ]
+  },
+  "migration-9ed52629a763e85f": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/17",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:c55c1af448494a38a8f1350946a45caa"
+    ]
+  },
+  "migration-64f70b270114a870": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/18",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:3c7c9af3af3141b28b44f6d0016e41a4"
+    ]
+  },
+  "migration-80b1ad554971cd56": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/19",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:4a9d8d63fcdb4f06849698e2a440dae3"
+    ]
+  },
+  "migration-22b7d0847296f383": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/20",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:836089c33c924a66831eca93b4cfa714"
+    ]
+  },
+  "migration-93a9db48e2c2a9ed": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/21",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:c1111977abd94541a6ad7f406ea21840",
+      "issue:4ba4583bccbf4a5ab8d694da5eaf6bcf"
+    ]
+  },
+  "migration-48c44005cfa7380c": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/22",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:5f77be769c0b4c209ff54d4a875c18df"
+    ]
+  },
+  "migration-808320ed1859e02a": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/23",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:7dd7e7121347484ab59f9a274598c5a1"
+    ]
+  },
+  "migration-03665ff7d1624b9f": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/24",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:db9f575d8f3a40e08fb16dec95a2ad11"
+    ]
+  },
+  "migration-b5f2db6abdb18e09": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/25",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:faf3525f8b624553bd6c9921fa8efd5f"
+    ]
+  },
+  "migration-b9fc0eb4fd6fea3c": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/26",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:c613a965f8a340f7906e512168c6626e"
+    ]
+  },
+  "migration-57d594cd8008f6f9": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/27",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:94bef287ab7a4dc7960a084a9ab6a72f"
+    ]
+  },
+  "migration-21f4729b7af2cfc9": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/28",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:6f1e3fffb4ee453fa9ecf96099da2ec9"
+    ]
+  },
+  "migration-84f7bb4e128afc71": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/29",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:2fab7a5f428546ca8965316f65797289"
+    ]
+  },
+  "migration-33ed8b82c5de6472": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/30",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:d465baccfee548dab9e25260d4a0c3db"
+    ]
+  },
+  "migration-f9d03d524e058515": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/31",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:b6eeb6db003143bd8d9031ebeba1c912"
+    ]
+  },
+  "migration-346fee477072743e": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/32",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:58349358cc5f4aa19ebcba3ff3a3152c"
+    ]
+  },
+  "migration-66eea99d7a490326": {
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/33",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chatgpt-rdc-supervisor",
+    "sources": [
+      "wi:ecf935a31a634254bcc89eae6daadccc"
+    ]
+  },
+  "migration-a00ace6deea6f799": {
+    "destination": "https://github.com/gernalix/chrome-codex-switcher/issues/25",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chrome-codex-switcher",
+    "sources": [
+      "wi:215c872683324cbd9736bb42f2d603ff"
+    ]
+  },
+  "migration-46ce29468b106f4d": {
+    "destination": "https://github.com/gernalix/chrome-codex-switcher/issues/26",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "chrome-codex-switcher",
+    "sources": [
+      "wi:880930830ac54dcdb3ccf8d062f8648b"
+    ]
+  },
+  "migration-aa3ba51fca18ed28": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10004",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:933b7758bde84f93adf665280b3a8baa"
+    ]
+  },
+  "migration-3c032b29a01731b2": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10005",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:53a52adb1bf24689a76e384a95ca9919"
+    ]
+  },
+  "migration-d6c513e16dc7b8a8": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10006",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:b4973cff2a6449bfa8e93af99d71ed7a"
+    ]
+  },
+  "migration-277dab00c93ce48a": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10007",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:5f106b5f31c6446a87499a70c6b18d40"
+    ]
+  },
+  "migration-7b8519d5da2ce46c": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10008",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:22a446534a654d8ba868fc7d04c5b175"
+    ]
+  },
+  "migration-7dd6682a391a6fdd": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10009",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:b30b76a7df1e4ffb9b9f2945fbbefe5e"
+    ]
+  },
+  "migration-430371ef37513ff7": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10010",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:53317b48f00d4b3084353e7470b8fb89"
+    ]
+  },
+  "migration-58196f9b59e7b0a6": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10011",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:5c395fad257044489865d3bf1e5fcc76"
+    ]
+  },
+  "migration-63f3f61ee5bea251": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10012",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:f053865f8d664df58bd3d14c51464b67"
+    ]
+  },
+  "migration-745bc3e85b60b932": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10013",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:531da330d6c24355ac1db4700a67989f"
+    ]
+  },
+  "migration-27013326c267c809": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10014",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:7f7fa9817c7741e59ffb9fb773026b65"
+    ]
+  },
+  "migration-35bc4797ca821400": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10015",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:338f1a75febd49aa856aef9364301517"
+    ]
+  },
+  "migration-49b47d167102e953": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10016",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:fb1b1feff32b4eec98c4cf244905f007"
+    ]
+  },
+  "migration-43cf2a7d9e2bef6c": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10017",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:bfc4aba54c4f4a78b6e5bd9362b92d3d"
+    ]
+  },
+  "migration-9fc7ce7bfd162118": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10018",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:180ee1c55f104a2a93a05c0a7654c49e"
+    ]
+  },
+  "migration-42b0a2ec1faaf20a": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10019",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:f2d5d81a952b47b1bd4fa4c07d175265"
+    ]
+  },
+  "migration-949b9829941ef13e": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10020",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:75b78aa9c8ab4877a60b3b4e1cefb8b4"
+    ]
+  },
+  "migration-59ec3a88faac0098": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10021",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:4e8aaf5df49a4d45808b52d93ccdd667"
+    ]
+  },
+  "migration-f51b601df7a1541a": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10022",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:d1e672b5b2be4467a3b5e3e805655d61"
+    ]
+  },
+  "migration-a521d995b7c12ff2": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10023",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:64ddc28d325c4e3da453bc822f27066f"
+    ]
+  },
+  "migration-199b2c7f2b65b03f": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10024",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:0fa0c1ccfc3d4d269d28225ee81161bc"
+    ]
+  },
+  "migration-2854c6a614065325": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10025",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:807810998ed34f44977c469507bc94fd"
+    ]
+  },
+  "migration-b55dc9948fb03618": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10026",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:cbaeaf6d11924d2297ea512bb626eb92"
+    ]
+  },
+  "migration-2716c9fb09ce6a0a": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10027",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:5f95f420c4fa4315a6b7104adb043096"
+    ]
+  },
+  "migration-ee3c1c0d86f2ee89": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10028",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:92343c3e9477413b86378a2cc399d05c"
+    ]
+  },
+  "migration-0573df5aa7b3b520": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10029",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:f48781c70dcf4687acb9034db8f6da41",
+      "issue:f89fa6a228eb4bba8905217fbc86d66b"
+    ]
+  },
+  "migration-d8186610d6428b77": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10030",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:c08601bd97f34cddaad27c10a4c76938"
+    ]
+  },
+  "migration-80acd3539202505f": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10031",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:65bd233b608648a78c699bc721881bc0"
+    ]
+  },
+  "migration-5a9cb22e83c44cd3": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10032",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:3d44ce0d12dc42998a8d70e0f1ab3c43"
+    ]
+  },
+  "migration-15541c7d8ffdaf55": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10033",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:11a03c388d1e429e9b26e60a2fd0cf9d"
+    ]
+  },
+  "migration-085d4fdf932afc38": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10034",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:e57a0f1bda9646cc86d5b1dd43a0269f"
+    ]
+  },
+  "migration-cff25d9511f6e7c5": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10035",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:70f12d74db7847d9b320b990ef4f1169"
+    ]
+  },
+  "migration-d6f0650b75c63a5a": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10036",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:a6ea0904c28a4eb4917f606fe09aa7ac"
+    ]
+  },
+  "migration-4b3dd697b1891c88": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10037",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:86d78fb985073fea1f1dc4dde153924c"
+    ]
+  },
+  "migration-c918f9d363b786bb": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10038",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:b22f9c7f75eb4b48906b879a2fcbb73f"
+    ]
+  },
+  "migration-9fad45d7c264aef5": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10039",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:5aa64d45f2b14a028b9df61d89ca31f6"
+    ]
+  },
+  "migration-48e827b6dee63670": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10040",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:59ad4b6948aa4184bcdb286e8ba22ac3"
+    ]
+  },
+  "migration-f5143f1201982981": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10041",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:55efbf2057fa446da332c9111eff2662",
+      "issue:f26bca0580464265a82fb589a3816400",
+      "issue:7f7ec756ca724136b8054a6875d41669"
+    ]
+  },
+  "migration-bf53fd58a32965e7": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10042",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:c8b44abd856ed5d73278261ffa2f1c73"
+    ]
+  },
+  "migration-bab3d38cb7d345fa": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10043",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:5eb06aaba99a4164a80774acfc6195ee"
+    ]
+  },
+  "migration-d9ef3ab5cb980dc8": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10044",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:9398702bbb024ab2bc63ee2b261490f5"
+    ]
+  },
+  "migration-31fa7512c14a62e0": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10045",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:c04fddf34c024cc49a9dc94974212e9e"
+    ]
+  },
+  "migration-92f3b2195003f93f": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10046",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:4c5d8a8f173042c2ba39be81cc66ccab"
+    ]
+  },
+  "migration-b12616a854d18d84": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10047",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:a299a4c1a72049b88f594587dc786768"
+    ]
+  },
+  "migration-8667cebb836681ca": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10048",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:c4623c29fc8a42009ad8a210feacf0a4"
+    ]
+  },
+  "migration-b1688d65ec764082": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10049",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:d7d08413702e40478ef902f441ff96dc"
+    ]
+  },
+  "migration-c6c57d3e540f9158": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10050",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:69dac07b112f4416be53c5400b568c73"
+    ]
+  },
+  "migration-bc37f3d11c08b5a5": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10051",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "prompt:302284",
+      "state:gate:008c5ecbb292e8c246fc"
+    ]
+  },
+  "migration-7960ffeb889e9aa9": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10052",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:b572e371b4b04fccbb805a3fac566ba1"
+    ]
+  },
+  "migration-41e9a3b502253019": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10053",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:e601303d612a414990e3831971c59dac"
+    ]
+  },
+  "migration-00cc6cc31057eced": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10054",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:786751b25b874e6e9fca02e037c5d02c"
+    ]
+  },
+  "migration-9f4d1da296c6e535": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10055",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:c876e0631b4ab7f1eb29de4faa9e5592"
+    ]
+  },
+  "migration-aa6e687dc2e69396": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10056",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:a8f30d04208f4bbeb50a8a1f5790c1af"
+    ]
+  },
+  "migration-9daa0468636033d9": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10057",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:83ba579a17e44cd7a39103f73e040a7a"
+    ]
+  },
+  "migration-6e61fc074ce36caa": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10058",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:0575e6982b1e4c32978bb76c45796f1e"
+    ]
+  },
+  "migration-11022fb068a9212d": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10059",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:2349c8af8ff34ba094ca0917deb45e35"
+    ]
+  },
+  "migration-2a15a6facfb9e585": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10060",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:a4778e5d694c491e9ff25a636080f10b"
+    ]
+  },
+  "migration-86c00edde6df0893": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10061",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:031e649cff744f1897e09702a69e3c2a",
+      "issue:127f80b17e27564b37e278ddd53fe124"
+    ]
+  },
+  "migration-c74baf4b9c8a4c2a": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10062",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:d6ef7dd6d4914705bed13f3469a79bd7"
+    ]
+  },
+  "migration-14940f36ac3e633a": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10063",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:68b1698c3cd842d68d4686277fdb34ab"
+    ]
+  },
+  "migration-48bc6bbaaf08e398": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10064",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:ab385383b9284e28937bd7067470ba51"
+    ]
+  },
+  "migration-2788fac6454d1206": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10065",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:4de25640ee774663b0c0e4e6c929d9d0"
+    ]
+  },
+  "migration-460b43eada98b44f": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10066",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:9360aebc12e842babc508c6e4adf33fd"
+    ]
+  },
+  "migration-819abba0b2942e1b": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10067",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:187a78f98f93408abcfc4b5a0121367e"
+    ]
+  },
+  "migration-005ae89f7c0a8eef": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10068",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "task:CHATGPT-20260924-NTFY-CHECKPOINTS",
+      "state:gate:d9a7f05f5f4c41fffdf5"
+    ]
+  },
+  "migration-38c9b6fc840a7929": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10069",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "task:CHATGPT-20260924-GLOBAL-RECOVERY",
+      "state:gate:418325ea7dc254618ead"
+    ]
+  },
+  "migration-4452c63c8f6cb333": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10070",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:4dcb24e3bbe4418984d8d6760033ea5b"
+    ]
+  },
+  "migration-3b12ee3ced10608c": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10071",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:99b052e168314081b6f0bff5ca1c0414"
+    ]
+  },
+  "migration-8adacbb6bd775830": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10072",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:6d603f31e51b449788e2cd3d607d56b1"
+    ]
+  },
+  "migration-6151ee7b4d1a8e8c": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10073",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:1c8ef738372aec85ae0e14f16a555e91"
+    ]
+  },
+  "migration-122d4bf6ed4b293f": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10074",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:f38f18786e174404a76123c80071226e",
+      "issue:f410c63656764c26d7166cc0359f701f"
+    ]
+  },
+  "migration-d1367f9bdb29d95e": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10075",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:9e4582576d404f3ebcd51c687f36289e"
+    ]
+  },
+  "migration-c1cef5d8aaa006d9": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10076",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:7eda9dc5a7c84a1bb18b2987eb447ce1"
+    ]
+  },
+  "migration-c7e9bb466430e5dc": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10077",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "issue:840400641f494b9286706bef4a81da55",
+      "issue:a88203fd2a2a4360b69157cf5e6fa2d4"
+    ]
+  },
+  "migration-a634780e19f50981": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10078",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:9cefb46b5ae24837863d6b7b1383ff47"
+    ]
+  },
+  "migration-1922248503b95d60": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10079",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:f805605951ed4371ace6b870810cdbd8"
+    ]
+  },
+  "migration-2e524540883176b1": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10080",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:3f259a4e8086401484db7e229149181a",
+      "issue:261a7bb002a419e668ac4963acda366f"
+    ]
+  },
+  "migration-b904f4a6182df266": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10081",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:449059bbf030499a88c5f1c3a42a3ee4"
+    ]
+  },
+  "migration-d35be66ad932656a": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10082",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:43a64f7bc5704840a0f82cd2ad9172e9"
+    ]
+  },
+  "migration-a70f18009693a7cf": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10083",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:d7e75dd104cb40b692be78ed3c39b6b0"
+    ]
+  },
+  "migration-373fea55380b5acc": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10084",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:1fa8bb3014d24dc8b4a900ec74b9f2bd"
+    ]
+  },
+  "migration-53db8eef4ee97e75": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10085",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:e30219c2d6e74fadac68920237d5c105"
+    ]
+  },
+  "migration-d2e3e31d1d9a9ff6": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10086",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:e3a021dde2134b8980cb33a4cc3243c3"
+    ]
+  },
+  "migration-c6ddb13f2439877c": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10087",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:8f572889adbc4233ae84a609a812d0bd"
+    ]
+  },
+  "migration-a2b8106db9a08caf": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10088",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:1f096c5c7ff3457495db8c6684f9df22"
+    ]
+  },
+  "migration-fa090fca05dab7fa": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10089",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:2f4b651f19734ba8af1191f1a8dfdba0",
+      "wi:a8e5ec1142594ff89c3d4ed8fc2f7870"
+    ]
+  },
+  "migration-9bb3f7e3763e3b9a": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10090",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:148f9388b72f456480cb0155a51c5665"
+    ]
+  },
+  "migration-37d7d5d9167c47b1": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10091",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:be3cd0afad414f6297bc52155eceb0b1"
+    ]
+  },
+  "migration-aca5550108dbbcbd": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10092",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:3476c751c7734c9fb11ae4d737143ee3"
+    ]
+  },
+  "migration-79033347771cd58e": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10093",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:4cbb0e01f57e43f2b1ea5e18138cb77f"
+    ]
+  },
+  "migration-65a07b0cadb854c0": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10094",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:5c52af51fc494286a05d89eda320607e"
+    ]
+  },
+  "migration-12a6b6c60c480dff": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10095",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:7bdd1d89d1cf4d77a47c82947fbf8b07"
+    ]
+  },
+  "migration-45292ce523992e3c": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10096",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:e1373812bc1444488c824c0e57812fc8",
+      "wi:6d318704d7bd441c930832c927116a97",
+      "wi:787f93c506dd4f3f8be56439372529db"
+    ]
+  },
+  "migration-e5008aa9802b4885": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10097",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:0f43364c82a14bfd9aac43c0de9221a9"
+    ]
+  },
+  "migration-be43276e244474cb": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10098",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:1c989b834905489993c3ab03f88ba06c"
+    ]
+  },
+  "migration-5fb2d76effeeac6a": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10099",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:99008c0293d643908124d64ce79d7a77"
+    ]
+  },
+  "migration-74da3b5e4a421ec5": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10100",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:11f71a566efd4e86b114f228cf3bc3ff"
+    ]
+  },
+  "migration-9baf5f361c6d21a6": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10101",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:fefff747c8eb419498222d5ea53a7340"
+    ]
+  },
+  "migration-39a68c033ec2c3a0": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10102",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:e328b70d05f042d8b7ff763d440def70",
+      "wi:c30d552797d44b7b864a782bfb84caf4",
+      "wi:8c81a0c4a2bd422995ae76252889402f",
+      "wi:6574bc4f782f4925913d64cc7c0988e4"
+    ]
+  },
+  "migration-e5781321a8a3e933": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10103",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:0392ce6c4706416eb56e3ee68e1d935a"
+    ]
+  },
+  "migration-40c06fef3f715672": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10104",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:2e8c2a75a54f4fa9a54e33c87133fbe3"
+    ]
+  },
+  "migration-93734b60de9154b9": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10105",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:6a5d66627c98493c98b8c3f2080538e7"
+    ]
+  },
+  "migration-7849bc6b18c3f136": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10106",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:afc8ff1a5230497fb5debd7808585f9b"
+    ]
+  },
+  "migration-d7b4572a025ac5ca": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10107",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:9ab6a2da5c254ecdafc30c9ed883440b"
+    ]
+  },
+  "migration-b0849e15bb461b37": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10108",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:fb9c5ee65c8d4ec4a39043028e2ff623"
+    ]
+  },
+  "migration-a4f1293a81747fcf": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10109",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:3b758b1f12c74de183199965f8689b02"
+    ]
+  },
+  "migration-e316b02eb7a2bec7": {
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10110",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-roadmap",
+    "sources": [
+      "wi:826f5d0f2c4642fbb868053069d95ccc"
+    ]
+  },
+  "migration-148dab4e29de6b0b": {
+    "destination": "https://github.com/gernalix/codex-usage/issues/2",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-usage",
+    "sources": [
+      "wi:9b616b30ceac4e2eb7061aa7b6886beb"
+    ]
+  },
+  "migration-1e30c2d0cfea44d7": {
+    "destination": "https://github.com/gernalix/codex-usage-monitor/issues/10",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-usage-monitor",
+    "sources": [
+      "wi:48e8ca6fc9104affa935ec158a82851a"
+    ]
+  },
+  "migration-180bc278c432d120": {
+    "destination": "https://github.com/gernalix/codex-usage-monitor/issues/11",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-usage-monitor",
+    "sources": [
+      "wi:450c736a819842659f8079679976dc54"
+    ]
+  },
+  "migration-a5d364a6f65ff0d9": {
+    "destination": "https://github.com/gernalix/codex-usage-monitor/issues/12",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-usage-monitor",
+    "sources": [
+      "wi:0ae5cc40737b4548bd4cff4251f8d757"
+    ]
+  },
+  "migration-af8b2bdffb189d66": {
+    "destination": "https://github.com/gernalix/codex-usage-monitor/issues/13",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-usage-monitor",
+    "sources": [
+      "issue:b9c1535b04a472b83dd97aae90f46e2e"
+    ]
+  },
+  "migration-aaeb4c0b1f7d7479": {
+    "destination": "https://github.com/gernalix/codex-usage-monitor/issues/14",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "codex-usage-monitor",
+    "sources": [
+      "wi:a588bda1aa184789a0bfa8c78e951e86",
+      "issue:7e44b55cf4a948208c2a2659e643c40d"
+    ]
+  },
+  "migration-8ee178bbeadf81bf": {
+    "destination": "https://github.com/gernalix/datasette5/issues/5",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "datasette5",
+    "sources": [
+      "wi:abf635b09b6f4defbcdd1d25392028c3"
+    ]
+  },
+  "migration-5317d9b51a52b161": {
+    "destination": "https://github.com/gernalix/datasette5/issues/6",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "datasette5",
+    "sources": [
+      "wi:7e98dee44dae4265ab7b8210cf6a2cc8"
+    ]
+  },
+  "migration-66b1d38c10bd6aef": {
+    "destination": "https://github.com/gernalix/datasette5/issues/7",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "datasette5",
+    "sources": [
+      "wi:6a187c7e94be40daba8dce5678ba64f6"
+    ]
+  },
+  "migration-676af5eef66f4bf3": {
+    "destination": "https://github.com/gernalix/datasette5/issues/8",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "datasette5",
+    "sources": [
+      "wi:9116862e72024e89b0033b4c6eeb146c"
+    ]
+  },
+  "migration-76ec3eaf4983147f": {
+    "destination": "https://github.com/gernalix/datasette5/issues/9",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "datasette5",
+    "sources": [
+      "wi:862b055b7d354891bf6a25ea47c5904a",
+      "wi:f3b17931e7ca4d01b61c5dbe66e6db0c",
+      "issue:7a6a9ce2c1a0310f43ea5298708586d9",
+      "issue:51cbbaa4108f6921f4b346228c78dad2",
+      "issue:8482c70f472b8e52bc307ad5301d688d",
+      "issue:66be22f35d0479f46241fb49e59e1ce5",
+      "issue:4f946423ab27a33a3eb53c5daa67b6ec",
+      "issue:78c0713bbb381cad04913a529e8d47b2",
+      "issue:ff0c7f95deed9dbae0874acf91cd4a9f",
+      "issue:fa03eae97151cb4e70b63502a3697832",
+      "issue:bb02e0e04a2530699a32b2e821adf75b",
+      "issue:ac5e406eecd4f75526a7c38db65e61fe",
+      "issue:7f1e42893082035764419b31142b15bb",
+      "issue:226ad7292d767e4c2694f80ef316397f",
+      "issue:2f691be6a9ca77bfa7d3b9e0586499b1"
+    ]
+  },
+  "migration-71935aa33f0921d6": {
+    "destination": "https://github.com/gernalix/duplicate-photos-detector/issues/3",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "duplicate-photos-detector",
+    "sources": [
+      "wi:c7ff920764e94e5d885c9c2c559fcab5"
+    ]
+  },
+  "migration-a969771de09e3605": {
+    "destination": "https://github.com/gernalix/duplicate-photos-detector/issues/4",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "duplicate-photos-detector",
+    "sources": [
+      "wi:5ed7c05c167844dc9336a495c2f0f28f"
+    ]
+  },
+  "migration-cd617360cdbf2bde": {
+    "destination": "https://github.com/gernalix/eboks-scraper/issues/1",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "eboks-scraper",
+    "sources": [
+      "prompt:218695"
+    ]
+  },
+  "migration-4cc8ffeb1f2fff07": {
+    "destination": "https://github.com/gernalix/eboks-scraper/issues/2",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "eboks-scraper",
+    "sources": [
+      "prompt:582946"
+    ]
+  },
+  "migration-66ad3a5e18da02be": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/24",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "prompt:714263"
+    ]
+  },
+  "migration-8b220560425f333b": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/25",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:ff254f4139444dc8909c96324bb9a588"
+    ]
+  },
+  "migration-a9123d5252038b35": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/26",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:f5cef53ce33749e8b100ad866f01278f"
+    ]
+  },
+  "migration-402424b72059a1fa": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/27",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:a392bc6406104fd98a665f42716d88ff"
+    ]
+  },
+  "migration-503ce070e9a69210": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/28",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:e9752f40936a4cfcbd5c1995de397a23"
+    ]
+  },
+  "migration-5e3a7ecc665d8d02": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/29",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:094168dcaf81433d838fc72de40d10a2"
+    ]
+  },
+  "migration-28a9ad068bb55520": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/30",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:8c9c1321a9da4e81a304e60ef207211e"
+    ]
+  },
+  "migration-15c0cf2c3246a348": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/31",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:4cc0a0ebbe23407bb26d2e28da494182",
+      "issue:934fca7ed2b0407b765c8fc8d532a932"
+    ]
+  },
+  "migration-ac4a66c70b31da72": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/32",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:029455443ece4a49934a8c768fbfa63d"
+    ]
+  },
+  "migration-0081733dc3bb2bd2": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/33",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:1e6449f8b8fb4f1080b8feebe78b2655"
+    ]
+  },
+  "migration-33b1cf7f835809ed": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/34",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:c4a6355f1fca48ec90e50b5294c6cee4",
+      "issue:475135dc25b515bf515fa8c5a1f63361"
+    ]
+  },
+  "migration-b8ea394992ee654f": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/35",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:8f96e208aa4f4d7389ab431ae66da4cf",
+      "issue:2b5c75a87efeeb5240a00b460defffb4"
+    ]
+  },
+  "migration-ec8c66c232545b4b": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/36",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:2036610c7e9b460fbf2e82e615bdf128",
+      "issue:0af3a26f7f5b4c8c80670ae4c873558e"
+    ]
+  },
+  "migration-f2049605a779f192": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/37",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:3ca01eff93a94d299cb0b9590251d80f"
+    ]
+  },
+  "migration-f8a4b978b04c51cd": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/38",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "issue:9eab116f1086884694f447bb11fb7c3e",
+      "issue:1f19ee2e73068f648f3ec63a43426056",
+      "issue:f6a1ff17654f5593a4d878ba8b9a73ef",
+      "issue:ed90315e83c70dec32464e75c94bbebd",
+      "issue:755b4973eade454e1f0841824f46b0ed",
+      "issue:700d019df70f5751c32a135b1b5dbb53",
+      "issue:7335831259a51ab50052c234c30b0d82",
+      "issue:d3e55ce45ac8bed95ccd88a9bc24c659",
+      "issue:75886edd43c91533053e0bb4ef54869c",
+      "issue:227b86d254c6f2cd1d41140e71b1e068",
+      "issue:c5a680f29c12f520d964d9261a342c1d",
+      "issue:e3e39d3ee666c314587888b5bd715716",
+      "issue:c54199adf1a0dca60f6557fb7bf88b62",
+      "issue:c80b9200a8470b61b3d25b4b46d3f2d5",
+      "issue:16f27f612cdef8943705d00a8eb16713",
+      "issue:afb219100302c5737f1532cd6d37f7e7",
+      "issue:31ea657d978f426a96a2e074af72a670",
+      "issue:0134b899b17237a087fecf4c9a00fb4b",
+      "issue:3b6858d08aeb40a89b925965900bca85"
+    ]
+  },
+  "migration-eb44bc5d72e2ec4e": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/39",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "task:CHATGPT-20260924-TELEGRAM-NOTIFICATION-HYGIENE",
+      "state:gate:55124f54849769b609e2"
+    ]
+  },
+  "migration-82daa5054c66fa2d": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/40",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "prompt:463817"
+    ]
+  },
+  "migration-8c44f98eb50f8ca6": {
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/41",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-system-monitor",
+    "sources": [
+      "wi:a372ffb8c3e245e9b9f68cb935197788"
+    ]
+  },
+  "migration-4dc881f0c3dcc1e2": {
+    "destination": "https://github.com/gernalix/github-autosync/issues/36",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "github-autosync",
+    "sources": [
+      "wi:d29b347667534ba6b5fd635f3bf59f51"
+    ]
+  },
+  "migration-f7006590638fb01e": {
+    "destination": "https://github.com/gernalix/github-autosync/issues/37",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "github-autosync",
+    "sources": [
+      "wi:27a7241e16b341278b2359267bfad4f5"
+    ]
+  },
+  "migration-b407e96e6d943ac6": {
+    "destination": "https://github.com/gernalix/github-autosync/issues/38",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "github-autosync",
+    "sources": [
+      "wi:3f3926e2ecd6463985c041a4fc5127e3",
+      "issue:4b56cd7fcd2a5d74f024e973adf6c45f",
+      "issue:a15671ec79622335bd027e2929e9eb8b"
+    ]
+  },
+  "migration-3100591af17da6af": {
+    "destination": "https://github.com/gernalix/github-autosync/issues/39",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "github-autosync",
+    "sources": [
+      "wi:b05b3f7c6275487d82211592f7d8249e",
+      "issue:92934cae3053f2de7c2946d675a6248e",
+      "issue:f8f0525b36dfb0bb0eb0955c1b27b8f0"
+    ]
+  },
+  "migration-61aa37a461a16748": {
+    "destination": "https://github.com/gernalix/github-autosync/issues/40",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "github-autosync",
+    "sources": [
+      "wi:96202bfd9bc746638e8e835dd5cc718c"
+    ]
+  },
+  "migration-3e024c20097f120d": {
+    "destination": "https://github.com/gernalix/github-autosync/issues/41",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "github-autosync",
+    "sources": [
+      "wi:9e30e4d3e93c4881831529b1ab7cf726"
+    ]
+  },
+  "migration-1387f4ccf5554d9a": {
+    "destination": "https://github.com/gernalix/github-autosync/issues/42",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "github-autosync",
+    "sources": [
+      "task:CHATGPT-20260924-INFRA-BRANCH-CLEANUP",
+      "state:gate:5c9bd667130f639a1d50",
+      "wi:dad7a0b2953041a597762b7190bd074c"
+    ]
+  },
+  "migration-c6f0d7e4b42e9381": {
+    "destination": "https://github.com/gernalix/github-autosync/issues/43",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "github-autosync",
+    "sources": [
+      "wi:a6def01900b3499aab85b99a9492a199",
+      "issue:2f47a72ce99c4acd42405ff9b0f4d875"
+    ]
+  },
+  "migration-3e4a7e9377b1e843": {
+    "destination": "https://github.com/gernalix/github-autosync/issues/44",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "github-autosync",
+    "sources": [
+      "wi:d08356a155404433bbea2f6700287927"
+    ]
+  },
+  "migration-007fd8750a3cc42c": {
+    "destination": "https://github.com/gernalix/github-autosync/issues/45",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "github-autosync",
+    "sources": [
+      "wi:4d32aecaaa1f40a2b882cd1b283098c0"
+    ]
+  },
+  "migration-fd847d09a5bc6a00": {
+    "destination": "https://github.com/gernalix/grindr-export/issues/2",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-export",
+    "sources": [
+      "prompt:556372"
+    ]
+  },
+  "migration-d50f50b1bf8b15b6": {
+    "destination": "https://github.com/gernalix/grindr-export/issues/3",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-export",
+    "sources": [
+      "wi:f18ca8f13c314a27a34ee810c14cf973"
+    ]
+  },
+  "migration-1c742bc13e1d12bc": {
+    "destination": "https://github.com/gernalix/grindr-export/issues/4",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-export",
+    "sources": [
+      "wi:2588d81073d74251acee6c0848d6ee22"
+    ]
+  },
+  "migration-b890745fc63343f2": {
+    "destination": "https://github.com/gernalix/grindr-export/issues/5",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-export",
+    "sources": [
+      "wi:ce3676f92b59422f94c4d5607daf630a"
+    ]
+  },
+  "migration-c45152eb74d509bd": {
+    "destination": "https://github.com/gernalix/grindr-export/issues/6",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-export",
+    "sources": [
+      "wi:e7df91c724b8481c81fb0098df9f8815"
+    ]
+  },
+  "migration-e6ccc246809b6040": {
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/22",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-favorites-monitor",
+    "sources": [
+      "wi:d3ea91a910f1433c9d2e2def4ce5dfea"
+    ]
+  },
+  "migration-11ea23640200d977": {
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/23",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-favorites-monitor",
+    "sources": [
+      "wi:0289531d52654709bac431ed52475894"
+    ]
+  },
+  "migration-bcc0830a155ecf73": {
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/24",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-favorites-monitor",
+    "sources": [
+      "wi:73bd99da6da94ce9857ace787929977b"
+    ]
+  },
+  "migration-5ae13da5380391e2": {
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/25",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-favorites-monitor",
+    "sources": [
+      "wi:4faad2c6bc8c4875a931355791f33963"
+    ]
+  },
+  "migration-f202a42fcaeef731": {
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/26",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-favorites-monitor",
+    "sources": [
+      "wi:ede29523c7004568b6ab8081fc92bc7b"
+    ]
+  },
+  "migration-88a3d075f5416d29": {
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/27",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-favorites-monitor",
+    "sources": [
+      "wi:37832d5a38a04e29a6c1bdccabf08f82"
+    ]
+  },
+  "migration-dd6ff422db7e7025": {
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/28",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-favorites-monitor",
+    "sources": [
+      "wi:cc78ff4dcaf942f998d821fb48826d23"
+    ]
+  },
+  "migration-54bcd4167e9990f7": {
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/29",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-favorites-monitor",
+    "sources": [
+      "wi:f0066b6c940b4d90b3981610312cb3b3"
+    ]
+  },
+  "migration-b4c83d76687015fe": {
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/30",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-favorites-monitor",
+    "sources": [
+      "wi:fdd72bab3cd44ee89decb25f910b87c6"
+    ]
+  },
+  "migration-b792b40308d97c2e": {
+    "destination": "https://github.com/gernalix/livinggaul-x-downloader/issues/2",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "livinggaul-x-downloader",
+    "sources": [
+      "wi:f4014d28c049406a8777472f0e44622f"
+    ]
+  },
+  "migration-f69c347a3af3800f": {
+    "destination": "https://github.com/gernalix/livinggaul-x-downloader/issues/3",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "livinggaul-x-downloader",
+    "sources": [
+      "wi:95a1a38cba6440c487b056069c5c1787"
+    ]
+  },
+  "migration-37d360520a30483d": {
+    "destination": "https://github.com/gernalix/logseq_updates/issues/2",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "logseq-updates",
+    "sources": [
+      "wi:d23af287f5e84d74a2ef694a1302dcda"
+    ]
+  },
+  "migration-1c7d7ee0c2eaf024": {
+    "destination": "https://github.com/gernalix/logseq_updates/issues/3",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "logseq-updates",
+    "sources": [
+      "prompt:588376"
+    ]
+  },
+  "migration-dba52f99a8587d72": {
+    "destination": "https://github.com/gernalix/MegaVault/issues/124",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "megavault",
+    "sources": [
+      "wi:132f59a76399444ca205dce3cc8cb86f"
+    ]
+  },
+  "migration-fe01f4e07402de92": {
+    "destination": "https://github.com/gernalix/MegaVault/issues/125",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "megavault",
+    "sources": [
+      "wi:d6185f8fb88d466f907814bf6125890e"
+    ]
+  },
+  "migration-539082d115cc77cf": {
+    "destination": "https://github.com/gernalix/MegaVault/issues/126",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "megavault",
+    "sources": [
+      "issue:36f8601f38c64ee2a7aaf56d8d6efe87"
+    ]
+  },
+  "migration-691ca490dd3830ff": {
+    "destination": "https://github.com/gernalix/MegaVault/issues/127",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "megavault",
+    "sources": [
+      "wi:68cd5b09eae24fe59352bd0750a559c1",
+      "wi:e20d87af9a6641c385b03b40aa72ab8a"
+    ]
+  },
+  "migration-32cddf649d3c1b41": {
+    "destination": "https://github.com/gernalix/MegaVault/issues/128",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "megavault",
+    "sources": [
+      "wi:344346f8ef8446cabac86d947fde9c64"
+    ]
+  },
+  "migration-969b6b096e17d32e": {
+    "destination": "https://github.com/gernalix/MegaVault/issues/129",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "megavault",
+    "sources": [
+      "wi:bead141503364bba82cec8d78760c81b"
+    ]
+  },
+  "migration-e530188e6f2f55fb": {
+    "destination": "https://github.com/gernalix/oracle-backup-service/issues/3",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "oracle-backup-service",
+    "sources": [
+      "wi:3e33a8af2ac348329a43e1426deabcaa"
+    ]
+  },
+  "migration-a426683c80ce47ea": {
+    "destination": "https://github.com/gernalix/oracle-backup-service/issues/4",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "oracle-backup-service",
+    "sources": [
+      "wi:700597bcdbe74531ae672b7bfa4ab2bf"
+    ]
+  },
+  "migration-1465c16ed12ca34f": {
+    "destination": "https://github.com/gernalix/PersonalHub/issues/68",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "personalhub",
+    "sources": [
+      "wi:540812eaa038465a94cfbe758120c3a9"
+    ]
+  },
+  "migration-1f4ce835bad83560": {
+    "destination": "https://github.com/gernalix/PersonalHub/issues/69",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "personalhub",
+    "sources": [
+      "issue:6ab711a9cb384219a8916b07402d8360"
+    ]
+  },
+  "migration-a421e1f9a096f797": {
+    "destination": "https://github.com/gernalix/PersonalHub/issues/70",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "personalhub",
+    "sources": [
+      "wi:6e571be01bf14bf1abd45fc3a9295006"
+    ]
+  },
+  "migration-d993d6e0bd02af15": {
+    "destination": "https://github.com/gernalix/PersonalHub/issues/71",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "personalhub",
+    "sources": [
+      "task:CHATGPT-20260924-PERSONALHUB-P0"
+    ]
+  },
+  "migration-cff0721b6c29d604": {
+    "destination": "https://github.com/gernalix/PersonalHub/issues/72",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "personalhub",
+    "sources": [
+      "wi:7023be35e1d743f7b900fa31624cd07d"
+    ]
+  },
+  "migration-a3edc42d21dff92c": {
+    "destination": "https://github.com/gernalix/PersonalHub/issues/73",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "personalhub",
+    "sources": [
+      "wi:8740f8fd8e744642b01a3abc7055172e",
+      "wi:4ff68fd6a78a4953ad997a856996884f"
+    ]
+  },
+  "migration-8c4d33cd56efdbae": {
+    "destination": "https://github.com/gernalix/prompt-history/issues/6",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "prompt-history",
+    "sources": [
+      "wi:b0ac852fc6ae47e5b6bdea474a6336f7"
+    ]
+  },
+  "migration-9f6a4cf23a2279f5": {
+    "destination": "https://github.com/gernalix/prompt-history/issues/7",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "prompt-history",
+    "sources": [
+      "wi:4dd3b3acaac84e79abacbf0df59d765e",
+      "wi:a20c079e2b2d413db8eec2aab822308d"
+    ]
+  },
+  "migration-5bb7de146dd66221": {
+    "destination": "https://github.com/gernalix/prompt-history/issues/8",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "prompt-history",
+    "sources": [
+      "wi:95fcdd3fdb384eefb877627028a248fb"
+    ]
+  },
+  "migration-0d9d0b68dce2745f": {
+    "destination": "https://github.com/gernalix/prompt-history/issues/9",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "prompt-history",
+    "sources": [
+      "prompt:812553"
+    ]
+  },
+  "migration-1d7ccab218563f69": {
+    "destination": "https://github.com/gernalix/salute/issues/3",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "salute",
+    "sources": [
+      "wi:916f47260cbd4be9aaadd2702f98364c"
+    ]
+  },
+  "migration-bb24d6411b6b54a5": {
+    "destination": "https://github.com/gernalix/telegram_insert_bot/issues/6",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "telegram_insert_bot",
+    "sources": [
+      "wi:ebc53f3d7ade4100a4716ca98250c389"
+    ]
+  },
+  "migration-84cd4570288393d6": {
+    "destination": "https://github.com/gernalix/telegram_insert_bot/issues/7",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "telegram_insert_bot",
+    "sources": [
+      "wi:ab3b68fe0a4841b2a9c4b34b894ae801"
+    ]
+  },
+  "migration-9f3d11b25eec27da": {
+    "destination": "https://github.com/gernalix/MegaVault/blob/task/c3-retirement-20261005/inbox/migration-9f3d11b25eec27da.md",
+    "kind": "passive_inbox",
+    "action": "unclassified source lacks project evidence",
+    "project": "unclassified",
+    "sources": [
+      "prompt:482731"
+    ]
+  },
+  "migration-073a107d26a6dc2b": {
+    "destination": "https://github.com/gernalix/vm_oracle/issues/2",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "vm_oracle",
+    "sources": [
+      "wi:1286360980cf462689f46cfcaf5d3e5d"
+    ]
+  },
+  "migration-b121c418c6d1bc19": {
+    "destination": "https://github.com/gernalix/workflowy-importer/issues/47",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "workflowy-importer",
+    "sources": [
+      "wi:84f5b2625bbc4efa884ab2bd96114b4f"
+    ]
+  },
+  "migration-cc75773d29182450": {
+    "destination": "https://github.com/gernalix/workflowy-importer/issues/48",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "workflowy-importer",
+    "sources": [
+      "wi:c248ba7b698a4a0788c8f9e773f68c96"
+    ]
+  },
+  "migration-b237aaab7142ab8c": {
+    "destination": "https://github.com/gernalix/workflowy-importer/issues/49",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "workflowy-importer",
+    "sources": [
+      "wi:e8b30d54c8db4af2b6b9b61b94b5845d",
+      "wi:08e57056aea44263a73e37c675c9b194",
+      "issue:e22726e3b2d09cb1f0ab09356b9a49d8",
+      "issue:5fd4c0f8e97a6a58827ecee9c9b5d3ad",
+      "issue:5ffc3e63789c0ffb6cd645beec21cc51",
+      "issue:c7b8390236186de90fbae8d76b194388",
+      "issue:c892f930a0238fe54d97385548cbfa51",
+      "issue:76a031934639e1461065bb9808f424aa",
+      "issue:40dfebb49c16b9cfafc5f1b4ec14df02",
+      "issue:6939f32b0c547d498ada61e2b7c0c822",
+      "issue:9594567d14963810f5f016112a9602e1",
+      "issue:b7f70b1c84ea922a2e6da12d0890bb1f",
+      "issue:c4ab6433504a298719fea5531eb46ebb",
+      "issue:836c1fcc2a578e570dc60d9605dfc291",
+      "issue:090548031b73a59df448f93b8ee31bea",
+      "issue:98d13c26c0cf10723692fbb9d7aca9f2"
+    ]
+  },
+  "migration-9cce0e0392006549": {
+    "destination": "https://github.com/gernalix/discord-exporter/issues/1",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "discord-exporter",
+    "sources": [
+      "wi:3c629e8792a247248005cf4c5d7467f8"
+    ]
+  },
+  "migration-aea97653f6d2b469": {
+    "destination": "https://github.com/gernalix/fedora-diagnostics/issues/1",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-diagnostics",
+    "sources": [
+      "wi:94542d6bd658426ab2f6878492830732"
+    ]
+  },
+  "migration-abdc621cbc005270": {
+    "destination": "https://github.com/gernalix/fedora-external-updater/issues/1",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-external-updater",
+    "sources": [
+      "wi:cf7961cc86724eeca469331d3d4ff934"
+    ]
+  },
+  "migration-0916e52943635ff2": {
+    "destination": "https://github.com/gernalix/fedora-external-updater/issues/2",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "fedora-external-updater",
+    "sources": [
+      "wi:dce555999f864385912180bedadb974d"
+    ]
+  },
+  "migration-c741cbecd2b0a84a": {
+    "destination": "https://github.com/gernalix/grindr-web-exporter/issues/1",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-web-exporter",
+    "sources": [
+      "wi:600e8f7b41324bd7b20ef71ef7b65b1d"
+    ]
+  },
+  "migration-5810339cef002e12": {
+    "destination": "https://github.com/gernalix/grindr-web-exporter/issues/2",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-web-exporter",
+    "sources": [
+      "prompt:181259"
+    ]
+  },
+  "migration-6ceebfb94dae29e6": {
+    "destination": "https://github.com/gernalix/oracle-uptime-kuma/issues/1",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "oracle-uptime-kuma",
+    "sources": [
+      "wi:826b96d10cd6402a99acb1aa35b57445"
+    ]
+  },
+  "migration-04e48ebde2aff11a": {
+    "destination": "https://github.com/gernalix/owntracks-watcher/issues/1",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "owntracks-watcher",
+    "sources": [
+      "wi:18c195e69e934c20ab3179434e1cb594"
+    ]
+  },
+  "migration-18772b5f4d4c49d3": {
+    "destination": "https://github.com/gernalix/symphony/issues/1",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "symphony",
+    "sources": [
+      "wi:7f6314dfb441485dbcb9ac9617f7de09"
+    ]
+  },
+  "migration-1ed623d9e4bc4a1c": {
+    "destination": "https://github.com/gernalix/symphony/issues/2",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "symphony",
+    "sources": [
+      "wi:7a0f79e5dfbe428a9b8e0d822790b4f1"
+    ]
+  },
+  "migration-c1275c3ff595b668": {
+    "destination": "https://github.com/gernalix/symphony/issues/3",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "symphony",
+    "sources": [
+      "wi:34dc01ae54474b92a4f4347fb5e23f98"
+    ]
+  },
+  "migration-ef8004badda6362a": {
+    "destination": "https://github.com/gernalix/symphony/issues/4",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "symphony",
+    "sources": [
+      "wi:6574d8f1b17641f6ba0e31ab7858ca19"
+    ]
+  },
+  "migration-35ddcd2102f28b18": {
+    "destination": "https://github.com/gernalix/symphony/issues/5",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "symphony",
+    "sources": [
+      "wi:a7b0ee2c44154950a6decefe27a35d12"
+    ]
+  },
+  "migration-aea857054e54b1a7": {
+    "destination": "https://github.com/gernalix/symphony/issues/6",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "symphony",
+    "sources": [
+      "wi:e05e4132802142c8b930da057331eb15"
+    ]
+  },
+  "migration-324954f746b28358": {
+    "destination": "https://github.com/gernalix/windows-flight-recorder/issues/1",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "windows-flight-recorder",
+    "sources": [
+      "wi:50697bb4218f44649cc98e420438b709"
+    ]
+  },
+  "migration-bb87194648e92449": {
+    "destination": "https://github.com/gernalix/windows-winget-daily-update/issues/1",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "windows-winget-daily-update",
+    "sources": [
+      "wi:13f1917d7170445b889b2bb26a6d4535"
+    ]
+  },
+  "migration-910de44ee230fa75": {
+    "destination": "https://github.com/gernalix/x-repost-downloader/issues/1",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "x-repost-downloader",
+    "sources": [
+      "wi:709800eccb74484f952b35b1b0f07fe6"
+    ]
+  },
+  "migration-d381c0b4b603d1cc": {
+    "destination": "https://github.com/gernalix/x-repost-downloader/issues/2",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "x-repost-downloader",
+    "sources": [
+      "prompt:826451"
+    ]
+  },
+  "migration-131b1dcb644c5fba": {
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/31",
+    "kind": "github_issue",
+    "action": "created project issue",
+    "project": "grindr-favorites-monitor",
+    "sources": [
+      "github:gernalix/codex-roadmap#6617"
+    ]
+  }
+}

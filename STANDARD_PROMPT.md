@@ -1,3 +1,5 @@
+> FROZEN C3 ARCHIVE (2026-10-05). Historical reference only. Do not execute these operating instructions. Current task flow: /home/daniele/MegaVault/ai/META_INFRASTRUCTURE.md.
+
 # Esecuzione Codex della roadmap
 
 > `roadmap.sqlite` è la source of truth. Le viste Markdown sono generate.

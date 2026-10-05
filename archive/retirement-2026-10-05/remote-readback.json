@@ -1,0 +1,1448 @@
+[
+  {
+    "task": "migration-ae9b388ca6ab35d8",
+    "destination": "https://github.com/gernalix/activity-watch-uploader/issues/6",
+    "body_sha256": "dcbc18c767802251f9cf037cb56068cae21ad115d66e263e0cc3ea81c7586833",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-715311327b313006",
+    "destination": "https://github.com/gernalix/activity-watch-uploader/issues/7",
+    "body_sha256": "12d2d237cdf96506bfa75b7be15359c34e0ea80298b287c62fca849b09c0f39b",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-ed3d511d7397e6bf",
+    "destination": "https://github.com/gernalix/adb-device-keeper/issues/3",
+    "body_sha256": "7b3141aa3c548a5ce322e9b7995bf1aca5dc931a1659be0110137734322ebc20",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-091582ab850df133",
+    "destination": "https://github.com/gernalix/adb-device-keeper/issues/4",
+    "body_sha256": "b5c959e3816d74ff3a3b0f688f23498ee0b4403ea826a96009632dd554a43071",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b52c597d82a82231",
+    "destination": "https://github.com/gernalix/adb-device-keeper/issues/5",
+    "body_sha256": "9388fb2578ed67c5bbc81ea7a1d46d26b5ec8add6d971894b94b55ea537144e7",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-74427c732bfce881",
+    "destination": "https://github.com/gernalix/amici_fb/issues/3",
+    "body_sha256": "e16132d41eeb09d4c0d34e5c00da409d13260515d74b8f1964b3f609c2cc8988",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-6cd31a0f12c33616",
+    "destination": "https://github.com/gernalix/amici_fb/issues/4",
+    "body_sha256": "1f3639715d8abe599a6c6fbcc690dfa3231eb27d015b9d6d0047e127d05c3183",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-c4926d6b4f415b36",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/14",
+    "body_sha256": "bb6b0bde207ce3f07361801f77d5c1d8d848382c8d2abf6dd48ca0e8dbaa1b5d",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-adb19f1c359d8f7e",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/15",
+    "body_sha256": "c85fd20868773020da96d855149ba1e9f8c68faea39ce177d2b7548fa2f82caa",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-8c1350c089d854f2",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/16",
+    "body_sha256": "fa28c2fdbab05f127a42bea06a2909b7bc1635554c2a9b46a2e8fa6690b5e944",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-9ed52629a763e85f",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/17",
+    "body_sha256": "48c47d4e34f97eb4418fa9bb8d330b7fdcb69bd2729d38d15475c4fb70ab68a6",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-64f70b270114a870",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/18",
+    "body_sha256": "d84bf7788f5ee1590347b6c224f9b468970dd874c70fe1effec2602bfee99f04",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-80b1ad554971cd56",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/19",
+    "body_sha256": "0daa8f39cbd5a677d2db560ec608712a085dba6370084e70e42edb62b59feaa7",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-22b7d0847296f383",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/20",
+    "body_sha256": "52a4c0de715078be8b9891d2064997a21b077a7f804e3b60a3db570a3578769c",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-93a9db48e2c2a9ed",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/21",
+    "body_sha256": "aa45a78c039fa2e4e4e19c6c5ae134ded14a67b9c73e9c1142768ad85af51b1f",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-48c44005cfa7380c",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/22",
+    "body_sha256": "1a1c94b5c8d9066a22e1efa187516165d221b63af01ca79db7f1112f9c872961",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-808320ed1859e02a",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/23",
+    "body_sha256": "0728db49fac7ccd0d863cea2d1007c0062c47f796b4ba7f7ecdb8ae1ef4c8cb1",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-03665ff7d1624b9f",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/24",
+    "body_sha256": "ced8b42e582fcfd5709bd0381fe283b63ed715ab9033d05b562a27963939c021",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b5f2db6abdb18e09",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/25",
+    "body_sha256": "c1ed0f28d19bd5bb103949084843e28d3d8b2981cfd9ae018a196da17d24e5f5",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b9fc0eb4fd6fea3c",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/26",
+    "body_sha256": "2b89f1798b52a1365e3a12f9f2c937e0c040cd8dd70b982c1e2d68adab1f3667",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-57d594cd8008f6f9",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/27",
+    "body_sha256": "5089fadf574fec5779053313d0c32dcc79f75fd632d555519cfbc7bdee33cb70",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-21f4729b7af2cfc9",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/28",
+    "body_sha256": "507f38f95b175be6ff57a8013bf622f5dc8ca34aa7797e854cd327b867770b96",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-84f7bb4e128afc71",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/29",
+    "body_sha256": "58c7315678d40cca09897e397031e0dc95be6b729e224be2d968fda9ca68e78a",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-33ed8b82c5de6472",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/30",
+    "body_sha256": "ae2c9ac44d2e2cc68e4ac26d2222fef2e4f64fa367c65a39f770dd04b5458a14",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-f9d03d524e058515",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/31",
+    "body_sha256": "1171f97075634197960de1b0f3e576331081906779589d37596385af039d5270",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-346fee477072743e",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/32",
+    "body_sha256": "9963fc73c3265b3b6a7558461f5efcfbccafb5eceb0255cd019314be49a763b1",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-66eea99d7a490326",
+    "destination": "https://github.com/gernalix/chatgpt-rdc-supervisor/issues/33",
+    "body_sha256": "dcf5dec46108c53e0da6f1999bec1414dec904fc6b4d211b9efcf70aae197c78",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-a00ace6deea6f799",
+    "destination": "https://github.com/gernalix/chrome-codex-switcher/issues/25",
+    "body_sha256": "b7425974dd1188586bc150e39557bc85bf313a6a4e4f110e1b071dd71a338cc1",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-46ce29468b106f4d",
+    "destination": "https://github.com/gernalix/chrome-codex-switcher/issues/26",
+    "body_sha256": "98cb95c2702ff6e8e9dbea289340d182f3468c2da58f525ea954fdbf8925ed40",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-aa3ba51fca18ed28",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10004",
+    "body_sha256": "005c85fbc6ff4bd72da4ee6c00afcb6838ff0b4eafdb145063673385bb3ac659",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-3c032b29a01731b2",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10005",
+    "body_sha256": "66001cde6ae60a70548b6da53e799757392834d4e3ee8eccb2c53074a17477dc",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-d6c513e16dc7b8a8",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10006",
+    "body_sha256": "756b2d722428a8a30ab669af7610ed0cc94de4965bf92b9387b13ddb749f19e5",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-277dab00c93ce48a",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10007",
+    "body_sha256": "99b14a9145a60f16d8dae34f6619eb45f671ab6a5ff88182eae899f253be3461",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-7b8519d5da2ce46c",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10008",
+    "body_sha256": "4977d05aeb531aef138c79755fe3b10a914febf8eed2b2d8792b5b15b8c3d4aa",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-7dd6682a391a6fdd",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10009",
+    "body_sha256": "a120d659507ca57aba21fed41ccd5b6da22aa47153db36350804f590825502b6",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-430371ef37513ff7",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10010",
+    "body_sha256": "b08aa15cffdaa7ea7d63464511c227f3931152b53d0a4d260ec022cabaa970bd",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-58196f9b59e7b0a6",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10011",
+    "body_sha256": "11505e9d9e857b88778b8ce627635064f29a1240620c9d296662eed077e0fd9c",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-63f3f61ee5bea251",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10012",
+    "body_sha256": "ab91f044c2aa3f45817c5d6bffcf01d61ee113e6b250206e72f24f484f7aa081",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-745bc3e85b60b932",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10013",
+    "body_sha256": "d2f4d3944a57b9c713e8313dbd69050bcafa0499dc2010545862c0fef0867253",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-27013326c267c809",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10014",
+    "body_sha256": "a430af481ee14e700e928a57e954434961b06dbcffaac55ffca86f5052bad95c",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-35bc4797ca821400",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10015",
+    "body_sha256": "57130b4b53d9f2d1d0a4083872a0ba9a1b00924bb8e491744bb9a8c318aca7e9",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-49b47d167102e953",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10016",
+    "body_sha256": "a620eb4f57861543056df9424cb1357babae0171feebb52188c57d665548d6ef",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-43cf2a7d9e2bef6c",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10017",
+    "body_sha256": "e0d882d93b730561de9f19c8635a1f6375b014d4880924b7cec82d44ed1291b8",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-9fc7ce7bfd162118",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10018",
+    "body_sha256": "3547870c50bf0037fbaa2337b0cc04d4de21e4c2be04f36cf5e680ce625b0173",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-42b0a2ec1faaf20a",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10019",
+    "body_sha256": "577e697a71e5dc7a933201a40bc9f775e42213b2b50cc6f2d16e79ffbd4e3430",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-949b9829941ef13e",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10020",
+    "body_sha256": "d3ec769730d804658ba37dc69467d13fff5823852a40bcf20cb03d6b76ba4c40",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-59ec3a88faac0098",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10021",
+    "body_sha256": "39933f7bf9a7c5f566a511309c31e72baca68a466caace46b1b3336dd0647729",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-f51b601df7a1541a",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10022",
+    "body_sha256": "ca2a39838e8f17d9ff30561728c75d0c79284f688c3a93c8714066330c7ec1b2",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-a521d995b7c12ff2",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10023",
+    "body_sha256": "8833504d6c304674032188ca87191ba23984a8d64e463c07158b3462d690b3e3",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-199b2c7f2b65b03f",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10024",
+    "body_sha256": "35751b976b2a07e9aec039505611df157caafba056a0d3f732e593076e636414",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-2854c6a614065325",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10025",
+    "body_sha256": "565c8075ccdf80d5157d5c62f8aeaf2190b6eaae7a3344ea588ba8bb303e18f6",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b55dc9948fb03618",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10026",
+    "body_sha256": "d5f2b8edb19cc72cde1678350d3870a76c72d399c0db09aa4af7757685299813",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-2716c9fb09ce6a0a",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10027",
+    "body_sha256": "2a16f376c7b0053c8e772a3ca4c00c8958601fb46434ff461fe0428818e1df83",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-ee3c1c0d86f2ee89",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10028",
+    "body_sha256": "977f848d35a76d9e95c1cc3c3629a699a4e4512f0c526e69b573be85122e58dd",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-0573df5aa7b3b520",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10029",
+    "body_sha256": "490ff6a8c7d3e0189e32c0c7d50506b20199e931db50775e55e4076fcb1faa34",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-d8186610d6428b77",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10030",
+    "body_sha256": "649b13cabeb1834a2f6df5dc61f86edac9f0c5fadcbade7c469f938e02febb40",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-80acd3539202505f",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10031",
+    "body_sha256": "378f0fb0e48e686259135c9184142019a539c524df010677fddc4664cc58ef16",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-5a9cb22e83c44cd3",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10032",
+    "body_sha256": "83cf61917489434212e19dbe3233f5728c9c785f46c7d6d5d85200ca760e0784",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-15541c7d8ffdaf55",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10033",
+    "body_sha256": "179904301543db07942b960a418c1479b6694e582b32bc35706a3a56311cb179",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-085d4fdf932afc38",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10034",
+    "body_sha256": "7c1aa4f231fbcbcaf9a46101e916a5e750f60f9713e034e7015727c6b5d1abff",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-cff25d9511f6e7c5",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10035",
+    "body_sha256": "0eec97a341cd79f397853f8da8287babe14ce242d5ee35886e912faf8c7a1c0f",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-d6f0650b75c63a5a",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10036",
+    "body_sha256": "45f9b1438b5e6bd974ee95299a218cf9412e295572eedf4c9f6db96986dac19f",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-4b3dd697b1891c88",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10037",
+    "body_sha256": "1f221bbd1305b45afc4f200980f3636adb4d42745538bfb72cf651648fa533a9",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-c918f9d363b786bb",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10038",
+    "body_sha256": "9fff420c08a95c181bdea4ecdf9eff72603fd3cdfa6e30689408d9f198197486",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-9fad45d7c264aef5",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10039",
+    "body_sha256": "3c414004cfb5c5956d5f6320458e1efc1249100a228b41ae1b9ac3a6d77c5597",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-48e827b6dee63670",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10040",
+    "body_sha256": "eb0897be0ca29cf23897a8bfb484cd34aca4a8048f0f1a4d06625cee87986906",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-f5143f1201982981",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10041",
+    "body_sha256": "e878bf425b749fbf9f64882f216e4a0609125bcd50c4c49ea98cd4e6daeeac4e",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-bf53fd58a32965e7",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10042",
+    "body_sha256": "f2ac4a6726c4f11347fbb49d0ba88d1d750a96d92a80015a6eb939e70ca5c893",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-bab3d38cb7d345fa",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10043",
+    "body_sha256": "a343cdbf37fb5c7e367e56a4a8da4ce629e4385ffeb6ce07a1f01d4d19c62ca3",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-d9ef3ab5cb980dc8",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10044",
+    "body_sha256": "5518832847bb4a2d0edbe453ead7cc920f3645be1f674b8aabe6a0addd27fa60",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-31fa7512c14a62e0",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10045",
+    "body_sha256": "5d0b215918cd42c309b3131aa588bed009e703b9648c38d89a9909f00a944f21",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-92f3b2195003f93f",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10046",
+    "body_sha256": "5899653e7751a0a7b9ea5d663f6482f73f6cdb88412fa4484e6fcb25854773d8",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b12616a854d18d84",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10047",
+    "body_sha256": "ee50400a37d0d763b2b2ec3a00c6b370a57e3a194388542f46e3e0707d34e698",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-8667cebb836681ca",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10048",
+    "body_sha256": "47b39694d484f5a5f87a061bd7c2f98bf84d302e582c0bfe9a0865edf0d272ee",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b1688d65ec764082",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10049",
+    "body_sha256": "2ce4a15fec114cfc318a12ca74784dedaf4408710977102d666d4c8f69f03a81",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-c6c57d3e540f9158",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10050",
+    "body_sha256": "00459166448309a123dce9e7a54ccd201eec4b69cd51bda51eaae7b8400fb302",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-bc37f3d11c08b5a5",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10051",
+    "body_sha256": "6e24b17a158339b4ed85a8cc28a14d0de20b16e64f8978b0b28fa349c8e504e0",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-7960ffeb889e9aa9",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10052",
+    "body_sha256": "6869538a2c2c5ba6aba6b913ca72616dd59d4d3918e2c6d59a27bcc0baf00588",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-41e9a3b502253019",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10053",
+    "body_sha256": "9f8b4712e7a6882caef99104f5407852d373c3692aae77c8e0d75c20ce9df8e7",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-00cc6cc31057eced",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10054",
+    "body_sha256": "999b1d2e5e9360fc338dd3af88e80b8eb280b7ed3226cdd5603ff08bd12ffb08",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-9f4d1da296c6e535",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10055",
+    "body_sha256": "eaf211c10812d537f83237a6f8013f178723f4490de6090b534eac2573ffc0fa",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-aa6e687dc2e69396",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10056",
+    "body_sha256": "e56424e031f21697723c40a26bee0718c0f298f390606589a7fb42d097181bf6",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-9daa0468636033d9",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10057",
+    "body_sha256": "8429c84bf107614ab5000cb50120d33ad5d25068be79d0af6911d4ebb30b67ab",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-6e61fc074ce36caa",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10058",
+    "body_sha256": "4224cd37afd481adb249d44bcdd05399411969b84a990f53898a646eb1ca7754",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-11022fb068a9212d",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10059",
+    "body_sha256": "7c64a0ff9aa138277333cc7f454ecc239f832c5d53b191bea9cfa1b3cbca5fa7",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-2a15a6facfb9e585",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10060",
+    "body_sha256": "0507eac921e3594969d2be9109de17248b52d176501424587c677418199e1ead",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-86c00edde6df0893",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10061",
+    "body_sha256": "b5e650022ac37a0b49b6c707afcc44347548502b0bd3783e99d0108382ac302f",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-c74baf4b9c8a4c2a",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10062",
+    "body_sha256": "56f44afc95bdafbcb93d9c751da840dacb041ca4d462a3845bad1e00e5bed309",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-14940f36ac3e633a",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10063",
+    "body_sha256": "597393b8fecb8e4281c1aef8dd48ef0ae24405754b60b41bb9b5f245e331a192",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-48bc6bbaaf08e398",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10064",
+    "body_sha256": "fa888e28420431da4cddab167451231e14cacf60481d170536af4db40b16ef7b",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-2788fac6454d1206",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10065",
+    "body_sha256": "e2a64021fb10e21cac25079522c05539292644a54f5f534f7099558d389d1f57",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-460b43eada98b44f",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10066",
+    "body_sha256": "7173d36da391d662483979d33d6f94f809b3e51564ff2d05f3cf580e419ca0ff",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-819abba0b2942e1b",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10067",
+    "body_sha256": "cdbbecd346c38066ca0fbd688371b6fd9584e8c8937e1ed5658119ee900ef345",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-005ae89f7c0a8eef",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10068",
+    "body_sha256": "70e38776ff86f6f2dd1de4c1c4519e49072a0810d72c07844a46f671fc6f41a6",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-38c9b6fc840a7929",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10069",
+    "body_sha256": "0ac89531432bd86846245bd5c1665e3ba234b9bd385baf899c14a6795f001318",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-4452c63c8f6cb333",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10070",
+    "body_sha256": "bd63968081494bc89917f3bb91bb940186c4bc0491675dbe0d8bbf04cc6dde0b",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-3b12ee3ced10608c",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10071",
+    "body_sha256": "d5603216191bae560ccbc8b38674afce334c800e5a9c8e1056d4e92b447acc90",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-8adacbb6bd775830",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10072",
+    "body_sha256": "434ce2f940ff839b89e4996e51513238a6b976d405942d4bf2de952e275db930",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-6151ee7b4d1a8e8c",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10073",
+    "body_sha256": "6f377ad787ba291ad3a8383bc5d333a05a60ce468b1b4893608fb62f37134fa7",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-122d4bf6ed4b293f",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10074",
+    "body_sha256": "518cc126995b116830866284c71b2adebff30c389659eb91d24635c6141c0ea1",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-d1367f9bdb29d95e",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10075",
+    "body_sha256": "0cb01963bc30a619fa461ceca838d78e643ec34fb69e4b6d92a67d888b77bd27",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-c1cef5d8aaa006d9",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10076",
+    "body_sha256": "6633b574b1f1965fa4582e029853011f6189c216b606249259792476d58c11e8",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-c7e9bb466430e5dc",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10077",
+    "body_sha256": "c7f3018f8b3edbc41b7a8e63d675e5a740bddb85afaf7c4a6b5d56c2ef6a687a",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-a634780e19f50981",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10078",
+    "body_sha256": "9fc37c61d9ee67ce526aeda10e5e36fcf8ff1098a050d4e664bfe5f9eed11ed3",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-1922248503b95d60",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10079",
+    "body_sha256": "cbf7828fcdfc91f544e3198832f898a386df446202589609d6256a30cdea7562",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-2e524540883176b1",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10080",
+    "body_sha256": "e7398d85881ef845fd0d8abafb270fddb91c7188fe14990bdb5780036d7de6e1",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b904f4a6182df266",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10081",
+    "body_sha256": "83cd67d652e1f2ef245f88f71971de9c1ea3e267629e2589791aadbf1f12f7d6",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-d35be66ad932656a",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10082",
+    "body_sha256": "a83ef76a52bed036e1a986c1484c67b876cad58f84745ba7eeff0b03c0c2693d",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-a70f18009693a7cf",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10083",
+    "body_sha256": "4660d36ba5b52a26a5e2b9e4526080637f0898bea36245423c73eb89e3dcadf8",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-373fea55380b5acc",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10084",
+    "body_sha256": "dc3386a2d065d257c4fc1e89adacd8a2ec3fb69096891d0814d564ace1a90303",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-53db8eef4ee97e75",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10085",
+    "body_sha256": "44f682a9b647c72fbfde0b60929cca215c4d6589ae281a6b9e52cfc6dbc002ce",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-d2e3e31d1d9a9ff6",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10086",
+    "body_sha256": "0e52bbb171fdf3dcb5c3e8808c127b0abdaeb3c0f52cd21ec9f7fe2d8065c9a4",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-c6ddb13f2439877c",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10087",
+    "body_sha256": "bd0ca8bdfb7824e3e5c0e0a28d6452a53ad9eaf2b28387b9ad6fac67c8c0fb69",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-a2b8106db9a08caf",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10088",
+    "body_sha256": "aaee609720845dc0724488a1841e0048dbec972a1c013d4a1555579e09c5acc8",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-fa090fca05dab7fa",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10089",
+    "body_sha256": "ef5c94057e8b3951e79bbd4f4098986014e3000f47b49b9ccf9f988e72c54c8c",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-9bb3f7e3763e3b9a",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10090",
+    "body_sha256": "fb085f3f0ad76305af78e666a119d9df6b3d08f24c22dc37ba5b9eca35266689",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-37d7d5d9167c47b1",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10091",
+    "body_sha256": "392bb607e26857eba411ca2885a090c6ec81915af4bae273cacf109f0ee77397",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-aca5550108dbbcbd",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10092",
+    "body_sha256": "212b61c078dc1a61f9f43f490a095ae48cad550bf1cf9e6cb18ab6510ff81b16",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-79033347771cd58e",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10093",
+    "body_sha256": "154d14f83cb5e5623d3831265b5426887973f8b6298cf3e930a7efea45c3cc0c",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-65a07b0cadb854c0",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10094",
+    "body_sha256": "40f2e58d94618f55ed1d72b49127cebb52208534a75a02dd5bcb8b72b0ba5db0",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-12a6b6c60c480dff",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10095",
+    "body_sha256": "07a7de48fca27acfa358dfa8e2823b74499b23add84f4da9dc677ee4a8fa1729",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-45292ce523992e3c",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10096",
+    "body_sha256": "df4ca29557da047010c9209a4f312b153561249d611eb2a6f494939d10545a73",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-e5008aa9802b4885",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10097",
+    "body_sha256": "717d8bef66d7f3b1ab7b02071a0df88f8f843a6a632006ba5a9c454bdcaaf936",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-be43276e244474cb",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10098",
+    "body_sha256": "aa0e75b4039081146e1ac3442cf8109a03650392f2fd703d72df4a2225d96189",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-5fb2d76effeeac6a",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10099",
+    "body_sha256": "4667ba3ef8653f2386d2a77619510b0551c9f3d34b8caacfaf61a6ce2ce2fac1",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-74da3b5e4a421ec5",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10100",
+    "body_sha256": "a033160e7b1fb6d9950b4d0c2440735aa5fb9c79f217baea0a94ac503c05d0e2",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-9baf5f361c6d21a6",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10101",
+    "body_sha256": "d4b3b75365197ef8312ebfb8d276f69bd9bff3b2dfc151bf24841a68ec3a57cb",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-39a68c033ec2c3a0",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10102",
+    "body_sha256": "26a45e3030ea050979e7b5dbd2e454785b475b0a36d536dd29ebaee867344b09",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-e5781321a8a3e933",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10103",
+    "body_sha256": "926eae745ebd1c24b76a1535122020776d80c1121211fe2912f3ee4e318a11ec",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-40c06fef3f715672",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10104",
+    "body_sha256": "ebd17cc14f53ae4b7aeeb3b8ed48d3e606dfde107137d70abe468f3e3d65d8cc",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-93734b60de9154b9",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10105",
+    "body_sha256": "acbc717c826030f064adc080195f9e54dc7bf93913edeee4addba97a7d651f4c",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-7849bc6b18c3f136",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10106",
+    "body_sha256": "d9ffc2e98a075a084915d844d5cc499768518d488e81dac0bf0d6c3f3c5ddcc9",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-d7b4572a025ac5ca",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10107",
+    "body_sha256": "cefc9a5a37599376a2b45c08aa8fd9269475fa6f7dc593936f7b0a39ec9ef341",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b0849e15bb461b37",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10108",
+    "body_sha256": "b110125da6e668a646c843893abf11374475d655590b30832854f52a525dbc0e",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-a4f1293a81747fcf",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10109",
+    "body_sha256": "e166862a01253028d7c3f1020e665279e6ad1aaacc10f0f1cbd5c278d1b50542",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-e316b02eb7a2bec7",
+    "destination": "https://github.com/gernalix/codex-roadmap/issues/10110",
+    "body_sha256": "36869598177111325de04137fdac48620a336263bbceeeee401fff890f531773",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-148dab4e29de6b0b",
+    "destination": "https://github.com/gernalix/codex-usage/issues/2",
+    "body_sha256": "c476c2d88ecab00e011deb177dddc551e11a41667417e6e4769dec80fb0a6811",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-1e30c2d0cfea44d7",
+    "destination": "https://github.com/gernalix/codex-usage-monitor/issues/10",
+    "body_sha256": "56f71e788528fd9bf1774939dcd42bb9a189169e1ce2bcbc97b314d7481ebae6",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-180bc278c432d120",
+    "destination": "https://github.com/gernalix/codex-usage-monitor/issues/11",
+    "body_sha256": "7f874b7337708b2ca73a547f08ca3fb8a71c60150fa89e71a250ad0baf5f1133",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-a5d364a6f65ff0d9",
+    "destination": "https://github.com/gernalix/codex-usage-monitor/issues/12",
+    "body_sha256": "a7573a38c6f04066d4c53d2caf1e37d63a61400f4b92af474c9ef37162ed5908",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-af8b2bdffb189d66",
+    "destination": "https://github.com/gernalix/codex-usage-monitor/issues/13",
+    "body_sha256": "81a6a6d871d3d6668c98f60abc97fde14d78dd8205c017e1c8b3e10451310957",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-aaeb4c0b1f7d7479",
+    "destination": "https://github.com/gernalix/codex-usage-monitor/issues/14",
+    "body_sha256": "4b634acc1083eca6d078f52a05ecb67dc7dbf59161b01c745f7d43deb5d3c7c9",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-8ee178bbeadf81bf",
+    "destination": "https://github.com/gernalix/datasette5/issues/5",
+    "body_sha256": "bba5e5762b35695b2eb97d524c729dbd6a609d0d09fa1e1e3bf2dd8cf953d646",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-5317d9b51a52b161",
+    "destination": "https://github.com/gernalix/datasette5/issues/6",
+    "body_sha256": "d9ba3e77eecc749691d5011d0adcdaa0013245ee7105e664fcb152bee9b72ee6",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-66b1d38c10bd6aef",
+    "destination": "https://github.com/gernalix/datasette5/issues/7",
+    "body_sha256": "6eb0dc0446bc50315929320388a71f07971ac382cc9eacdac70ed8d679eda7ab",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-676af5eef66f4bf3",
+    "destination": "https://github.com/gernalix/datasette5/issues/8",
+    "body_sha256": "58cc74a542bb7c3abdf99eabfcad6bfc9df63e1d8c1fc33b840cd5f824d07262",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-76ec3eaf4983147f",
+    "destination": "https://github.com/gernalix/datasette5/issues/9",
+    "body_sha256": "11feb7c9e13a9f69aa6f4e78384003ce41748dba3981395dc940c70b35a60fff",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-9cce0e0392006549",
+    "destination": "https://github.com/gernalix/discord-exporter/issues/1",
+    "body_sha256": "e3f64cfb49add05498993c31a006f39edb526f76249e3e0fb686a033edce7ebc",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-71935aa33f0921d6",
+    "destination": "https://github.com/gernalix/duplicate-photos-detector/issues/3",
+    "body_sha256": "909f896801419c8caa217506917e3ac6ace3a956433774d7c672761bca4f94fb",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-a969771de09e3605",
+    "destination": "https://github.com/gernalix/duplicate-photos-detector/issues/4",
+    "body_sha256": "565fc825e18216258cfe1e1ec8aeb4b50f214f6672547017276484f91ed08e51",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-cd617360cdbf2bde",
+    "destination": "https://github.com/gernalix/eboks-scraper/issues/1",
+    "body_sha256": "f8faa2c0e949163f444b571b5c724f871f951da22e9806c73d703a99f78bfe41",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-4cc8ffeb1f2fff07",
+    "destination": "https://github.com/gernalix/eboks-scraper/issues/2",
+    "body_sha256": "4680750da4940ff4b1b7871645fa97a021bf481ab54d1754a1832a11f7fc5658",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-aea97653f6d2b469",
+    "destination": "https://github.com/gernalix/fedora-diagnostics/issues/1",
+    "body_sha256": "531dc4a4aacd99f4fc92c3db6cd2114b2215b03bd21761e9d415cfb7500b36c0",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-abdc621cbc005270",
+    "destination": "https://github.com/gernalix/fedora-external-updater/issues/1",
+    "body_sha256": "5ac29cdd3b10cad1223a67d46dc2d8a14d085aca53566b336f5971c4f9d0f3d2",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-0916e52943635ff2",
+    "destination": "https://github.com/gernalix/fedora-external-updater/issues/2",
+    "body_sha256": "0acd3cc186a5912ac16243ce6c6622486308ee4a9bd2e120931b479e679a5487",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-66ad3a5e18da02be",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/24",
+    "body_sha256": "11c4caadf11ac754421c6d64b15b89a2df1486062b572157743f846eb4933f75",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-8b220560425f333b",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/25",
+    "body_sha256": "b7e8a5caf1d18d6c2018200115332452e1c0e796287c9503be9099cacc4ddc32",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-a9123d5252038b35",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/26",
+    "body_sha256": "9653c838d6203e1caa2444cd7ba96ac775d2f1da8b52a4567892f37f2b9701e2",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-402424b72059a1fa",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/27",
+    "body_sha256": "ba9b9f1bc1319b12267c9a773dd2a3f2350e62b2d24f638bb253fe4b5b163fce",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-503ce070e9a69210",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/28",
+    "body_sha256": "ab4f6d5230b4b3c2d441e20e7b5b3f2cc815702470fca7a2f42bb81dd0c4721e",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-5e3a7ecc665d8d02",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/29",
+    "body_sha256": "61d2b9e14f9eb2346bab86cdd3687dc41321d1cf0040dcc025e9f7e478ac9007",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-28a9ad068bb55520",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/30",
+    "body_sha256": "ee1fc76783f77be4620410e5007e2b826beebd8c0f6736146dd92b25e86b0502",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-15c0cf2c3246a348",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/31",
+    "body_sha256": "5fb7fcbadfd9f62a16d41fd93b4864e28664beceba4772d1d7f72e368f8a32d8",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-ac4a66c70b31da72",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/32",
+    "body_sha256": "20d9a975f89a82cac23c5e837769a0f78261e8a329387e1bc1fdc3673e0b9a13",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-0081733dc3bb2bd2",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/33",
+    "body_sha256": "3a534faa8befbc45198163610618eae8b1168bd45974caf6c91515fb3f1b69af",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-33b1cf7f835809ed",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/34",
+    "body_sha256": "f17965003e52d069d6fa6d34288d9f22cd6a2386926f5e8ec977cbcd14c61ddf",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b8ea394992ee654f",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/35",
+    "body_sha256": "16edfb55a78a3074cd226419631f7a6342737138c4b388cafb0b2f7df10702b8",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-ec8c66c232545b4b",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/36",
+    "body_sha256": "6e24e108b900ef6edd6fd84296b677455b7173d672969096dbdaddc85eee7fd6",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-f2049605a779f192",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/37",
+    "body_sha256": "7a99478e8042176d353f12f635fbcf4e457547247eb04809eb014e25be1d48fb",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-f8a4b978b04c51cd",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/38",
+    "body_sha256": "8ac77839af87ac7415663f3cfe889f858245b15f0d5834423575ec0514138e88",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-eb44bc5d72e2ec4e",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/39",
+    "body_sha256": "fa211a184c897f5a03a07ae609bda417057a6973ff8358f8007b0d72becfecac",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-82daa5054c66fa2d",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/40",
+    "body_sha256": "77cd57fd0c542c09b3df83cdd959a64a4b5f81ca35306638279f657773e66e33",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-8c44f98eb50f8ca6",
+    "destination": "https://github.com/gernalix/fedora-system-monitor/issues/41",
+    "body_sha256": "57929c2c7622327406b325af670de68b9b9b2f749a288b66ac7733003e8579b4",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-4dc881f0c3dcc1e2",
+    "destination": "https://github.com/gernalix/github-autosync/issues/36",
+    "body_sha256": "5c716419904359fd4bf5eb6ab699ac533c4f43a84991d77d59c6afc55e51f57d",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-f7006590638fb01e",
+    "destination": "https://github.com/gernalix/github-autosync/issues/37",
+    "body_sha256": "ef4ba7533895fbac2357b6f101d12c305992d553435f26808f52b2a4f4f9b027",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b407e96e6d943ac6",
+    "destination": "https://github.com/gernalix/github-autosync/issues/38",
+    "body_sha256": "d9eeb361e324a7178cbe388009f16d83101822ceed2b0d4edcb29cc6e1483f08",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-3100591af17da6af",
+    "destination": "https://github.com/gernalix/github-autosync/issues/39",
+    "body_sha256": "5c05b49cdbd458acf95574a36d20481eeed6018cd2a3aa964ffe99a1d34a5369",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-61aa37a461a16748",
+    "destination": "https://github.com/gernalix/github-autosync/issues/40",
+    "body_sha256": "c6547c8e3c06dc0e9392420ae27ae880e7a2af00973a91278ef6362c585d85cf",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-3e024c20097f120d",
+    "destination": "https://github.com/gernalix/github-autosync/issues/41",
+    "body_sha256": "52b5afaa08f06f917b4a8d92f6e454e6f9f12c6fa3eec77d0a30bac42222a963",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-1387f4ccf5554d9a",
+    "destination": "https://github.com/gernalix/github-autosync/issues/42",
+    "body_sha256": "07f6d6bef0e23d3b4f0855d85c759d388464e0a9308e8ea30ec882420b48a06f",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-c6f0d7e4b42e9381",
+    "destination": "https://github.com/gernalix/github-autosync/issues/43",
+    "body_sha256": "fb33583948ce6fe342aff8e294ac9ec20d042eddabfd75e736c3a0c8fbe139f0",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-3e4a7e9377b1e843",
+    "destination": "https://github.com/gernalix/github-autosync/issues/44",
+    "body_sha256": "cc1a498123dc557ca3654749792ac3300ae43df88850d99671e02ce198129f64",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-007fd8750a3cc42c",
+    "destination": "https://github.com/gernalix/github-autosync/issues/45",
+    "body_sha256": "eb813fcf80eaf712ffa68f5a4e871584bfe90a2f3e150145bb998aae6426e748",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-fd847d09a5bc6a00",
+    "destination": "https://github.com/gernalix/grindr-export/issues/2",
+    "body_sha256": "c7d7deb25bd0091fe143a14590146070d5d53328dce31ce28e097f60cf2d9b37",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-d50f50b1bf8b15b6",
+    "destination": "https://github.com/gernalix/grindr-export/issues/3",
+    "body_sha256": "62c9f7f8bd0d9562a6380baea19c00863a9c160f36c585df9d7a73143d52db89",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-1c742bc13e1d12bc",
+    "destination": "https://github.com/gernalix/grindr-export/issues/4",
+    "body_sha256": "607027f860211a8af7e715d9e0467c0c0474b6629c9199ea48bfaae53fe140d1",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b890745fc63343f2",
+    "destination": "https://github.com/gernalix/grindr-export/issues/5",
+    "body_sha256": "5e6f20b7a69804a4208c3b00b8900f4045df985bfa2d61e912f3324413c9eb11",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-c45152eb74d509bd",
+    "destination": "https://github.com/gernalix/grindr-export/issues/6",
+    "body_sha256": "265f5be4e00dce7924794806cd911db00b0e27d9f8f79f00e05c3572e06532aa",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-e6ccc246809b6040",
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/22",
+    "body_sha256": "52840ace4c6760bd30cfb2ade400ba1a4063065a1b25b4ca990ecf12e9de84a8",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-11ea23640200d977",
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/23",
+    "body_sha256": "604c69ceac3dac4b39e2549da927974c8bd023deaa23fc180374beed57ec44b6",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-bcc0830a155ecf73",
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/24",
+    "body_sha256": "affff0ba6f9ed2f3b956c193668e1cc577aac40dcca0669fd29ddd017a95ce23",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-5ae13da5380391e2",
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/25",
+    "body_sha256": "3408abfda29282c8f46a1e5d1bf38e5386d71691b48872703424d42b05b81298",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-f202a42fcaeef731",
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/26",
+    "body_sha256": "0be5e39693487e1a4ca036aa46a6eeef5aad30558d7e9935ad6c82a2d049421f",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-88a3d075f5416d29",
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/27",
+    "body_sha256": "733a714e4928fd02799634bbd4870af2cff3ad95a88e1b4d0766c8bc4af95f4e",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-dd6ff422db7e7025",
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/28",
+    "body_sha256": "c404e84a6bde4c2a9aa69e2b55c6e7585c673b98a9b8a3d630d59d7a5b035bfc",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-54bcd4167e9990f7",
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/29",
+    "body_sha256": "a343a3ce5ddde64366d5ccedd887538b5b02b13b88efad263863d79242772859",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b4c83d76687015fe",
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/30",
+    "body_sha256": "d5264d1c938a6dcb02c95aa2eeb5e3bf6323e472dca6529a7c7eb50cc9f3505f",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-c741cbecd2b0a84a",
+    "destination": "https://github.com/gernalix/grindr-web-exporter/issues/1",
+    "body_sha256": "d0d36078ddb25f9671fe76b5331a8904932cf708963da1651c52a15325a9997d",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-5810339cef002e12",
+    "destination": "https://github.com/gernalix/grindr-web-exporter/issues/2",
+    "body_sha256": "6347e92850047f29f18babd30b9cf2f79c759f4cf638e9888b331f7bb3e63f89",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b792b40308d97c2e",
+    "destination": "https://github.com/gernalix/livinggaul-x-downloader/issues/2",
+    "body_sha256": "e649254fb5c66044eca17b1fbca95555177d74052d01a4608219fa45bedc2221",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-f69c347a3af3800f",
+    "destination": "https://github.com/gernalix/livinggaul-x-downloader/issues/3",
+    "body_sha256": "8662b6b0989af515ab08a871cb4f8244a4428bdc8788d10f30eba36b683375df",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-37d360520a30483d",
+    "destination": "https://github.com/gernalix/logseq_updates/issues/2",
+    "body_sha256": "9168c86e470e9bbbe3939c3c64a45b316bde8cb50b3bf28361ccd79d06ee89ab",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-1c7d7ee0c2eaf024",
+    "destination": "https://github.com/gernalix/logseq_updates/issues/3",
+    "body_sha256": "525b230f39f5b6d4f54b788c4ff231f16b19f9d36b10adc17ea45e2417e60f6c",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-dba52f99a8587d72",
+    "destination": "https://github.com/gernalix/MegaVault/issues/124",
+    "body_sha256": "61f034becf8ef9e88dbd916e829aecfa436f9e65827b5342fe10f1a40d595848",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-fe01f4e07402de92",
+    "destination": "https://github.com/gernalix/MegaVault/issues/125",
+    "body_sha256": "e1bedc9f785e796301b9d7d37066bef4e28b566aead76306d6da00aa7a318070",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-539082d115cc77cf",
+    "destination": "https://github.com/gernalix/MegaVault/issues/126",
+    "body_sha256": "2ef0c40e7aca03f695ab489a69b468e4adb6d882645aa680ad7d7a3ed56dfea0",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-691ca490dd3830ff",
+    "destination": "https://github.com/gernalix/MegaVault/issues/127",
+    "body_sha256": "31db7a722a649492fbeccb3d40ec80a3d739da8d216c82f9d75cc4af9ed1f4d8",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-32cddf649d3c1b41",
+    "destination": "https://github.com/gernalix/MegaVault/issues/128",
+    "body_sha256": "4621b95fa595e9e0242d3f5c8b7e6f714b8762069fa92821ac53f382a2104675",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-969b6b096e17d32e",
+    "destination": "https://github.com/gernalix/MegaVault/issues/129",
+    "body_sha256": "8133e06720cfe5a12cb420e72e9285d62f892f81b7b4daf32bf68987ad43f6b0",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-e530188e6f2f55fb",
+    "destination": "https://github.com/gernalix/oracle-backup-service/issues/3",
+    "body_sha256": "9b70829e2144cab5f22978ac6798c9c0b3c01700be5e3739a25232b26d6eb058",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-a426683c80ce47ea",
+    "destination": "https://github.com/gernalix/oracle-backup-service/issues/4",
+    "body_sha256": "f0a42fb984cfdfb380d6513a077c142602bd61e4972fbc43c05d00f7269762b2",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-6ceebfb94dae29e6",
+    "destination": "https://github.com/gernalix/oracle-uptime-kuma/issues/1",
+    "body_sha256": "99136529a9fb64a4a62734e3234b1462c59c2c8cebea4d35f6ba68215c0d3de7",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-04e48ebde2aff11a",
+    "destination": "https://github.com/gernalix/owntracks-watcher/issues/1",
+    "body_sha256": "3785ba15154152b9f2390044e816d57c06e61ac8018774d9d3334d8db4758281",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-1465c16ed12ca34f",
+    "destination": "https://github.com/gernalix/PersonalHub/issues/68",
+    "body_sha256": "8d9adf63f4b5fef39095262820e61f3c1f2f14a22994e5dba980c5be1affd1dd",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-1f4ce835bad83560",
+    "destination": "https://github.com/gernalix/PersonalHub/issues/69",
+    "body_sha256": "c7c498972674f452c0de78d41994b8e633a7676114ca9decdb95e84007102dc1",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-a421e1f9a096f797",
+    "destination": "https://github.com/gernalix/PersonalHub/issues/70",
+    "body_sha256": "969c0f7bc9b40e7767f1b9d1c351ec367076c0db94aac14e8a9522210513b025",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-d993d6e0bd02af15",
+    "destination": "https://github.com/gernalix/PersonalHub/issues/71",
+    "body_sha256": "fdc112fb11a73f5ba5865994cca6403a5129ecf88783f0dc9fd75c55f5b6dd87",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-cff0721b6c29d604",
+    "destination": "https://github.com/gernalix/PersonalHub/issues/72",
+    "body_sha256": "fdea14cbd6ae70a5c1475425d2f86cfe7cbf0717d9cb3fc92c450a21652d5a23",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-a3edc42d21dff92c",
+    "destination": "https://github.com/gernalix/PersonalHub/issues/73",
+    "body_sha256": "7e14106d1cab9c2f9e35470af1c28c6b82225a94039a377ec1154c0fabd52b54",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-8c4d33cd56efdbae",
+    "destination": "https://github.com/gernalix/prompt-history/issues/6",
+    "body_sha256": "c7d338dd02b25daf197b8439035c53b7d4469e67b102931f42df075d632d75c7",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-9f6a4cf23a2279f5",
+    "destination": "https://github.com/gernalix/prompt-history/issues/7",
+    "body_sha256": "033beae6da2847d43bf7715c860d3f4cda9386da3fbc80c5a5cba6633a3a5ad8",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-5bb7de146dd66221",
+    "destination": "https://github.com/gernalix/prompt-history/issues/8",
+    "body_sha256": "82d9e62e4bf156e152f31c2c6ce2568f8d635b66e4a70e46ac60571554159811",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-0d9d0b68dce2745f",
+    "destination": "https://github.com/gernalix/prompt-history/issues/9",
+    "body_sha256": "21035309a66613c3d1a66bbc235b9c8a51f347f4d87762a49aaff76e5167b4f1",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-1d7ccab218563f69",
+    "destination": "https://github.com/gernalix/salute/issues/3",
+    "body_sha256": "f953327b4e8f1f2b4b42a724677b513ca5e12cb9f10501d008269c3573dcda8c",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-18772b5f4d4c49d3",
+    "destination": "https://github.com/gernalix/symphony/issues/1",
+    "body_sha256": "ddf2c4e97c55f872a0540d7e91fe61268fa93b81c597ba1ab83e5c537f294473",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-1ed623d9e4bc4a1c",
+    "destination": "https://github.com/gernalix/symphony/issues/2",
+    "body_sha256": "eacc87fb3d462158c23344768b5367fd1a9a4f19cf94b685cc88b59be26a89c5",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-c1275c3ff595b668",
+    "destination": "https://github.com/gernalix/symphony/issues/3",
+    "body_sha256": "b8e3095adc4ff3184f488c24835382192b791145e76c3a41b7f68c10b6439847",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-ef8004badda6362a",
+    "destination": "https://github.com/gernalix/symphony/issues/4",
+    "body_sha256": "1b02aff3daf1af3f52189823d562171676975750a4015dfe25c82bfa40998ebe",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-35ddcd2102f28b18",
+    "destination": "https://github.com/gernalix/symphony/issues/5",
+    "body_sha256": "5c81898aaff324027798dd0de1f4197c7fe7671447b9a52bc9c88389a3fd13b0",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-aea857054e54b1a7",
+    "destination": "https://github.com/gernalix/symphony/issues/6",
+    "body_sha256": "d587ea2d281a9068757f0f18de2c8618d38241121f3530212220e266baa0a146",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-bb24d6411b6b54a5",
+    "destination": "https://github.com/gernalix/telegram_insert_bot/issues/6",
+    "body_sha256": "7977ac4e6bc75843546e758369d7ebf0a128d64a65a27245155203815f763fee",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-84cd4570288393d6",
+    "destination": "https://github.com/gernalix/telegram_insert_bot/issues/7",
+    "body_sha256": "fff00225433d18ce42d7fe3ffc68767364f1aac81ed16e0508e09494c71b81c1",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-073a107d26a6dc2b",
+    "destination": "https://github.com/gernalix/vm_oracle/issues/2",
+    "body_sha256": "36a8a8927aebed42eb257379c272aae8ccab6e003324544b17a0593849138353",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-324954f746b28358",
+    "destination": "https://github.com/gernalix/windows-flight-recorder/issues/1",
+    "body_sha256": "8dd018060d19f19c3085ba37e05de6cc59478bae05f47ff99ccafc71376bda0a",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-bb87194648e92449",
+    "destination": "https://github.com/gernalix/windows-winget-daily-update/issues/1",
+    "body_sha256": "590c8f42a479ce7d1afdc9eb433aa5abb485d0517f3bfcbd7219f3e45253f5ed",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b121c418c6d1bc19",
+    "destination": "https://github.com/gernalix/workflowy-importer/issues/47",
+    "body_sha256": "7b2665c1f0641e90c1442255eaf91a4dc6eef2f55697a9d3a82df59a17eb9111",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-cc75773d29182450",
+    "destination": "https://github.com/gernalix/workflowy-importer/issues/48",
+    "body_sha256": "706b97927903e971d2c4a0e2d84944871642b81c5d7287f9523e613f8c9b6859",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-b237aaab7142ab8c",
+    "destination": "https://github.com/gernalix/workflowy-importer/issues/49",
+    "body_sha256": "d3e9f3b43a96ffee60220e314e6f3e96a494c720f75df28c2188a104d7278b81",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-910de44ee230fa75",
+    "destination": "https://github.com/gernalix/x-repost-downloader/issues/1",
+    "body_sha256": "aea213d26c900da29de79961b69bfe2b3d6589ecc3c52a8fc1c86befe5552cd4",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-d381c0b4b603d1cc",
+    "destination": "https://github.com/gernalix/x-repost-downloader/issues/2",
+    "body_sha256": "cf2583b655de9e379696a3a85a8b5e3e90a7e311ab5d1ffbb468dc97d71134dc",
+    "all_sources_and_requirements_present": true
+  },
+  {
+    "task": "migration-131b1dcb644c5fba",
+    "destination": "https://github.com/gernalix/grindr-favorites-monitor/issues/31",
+    "body_sha256": "1095e44053d8a36fcfd854bb2b107195413a9fc553af3e36ef31d75a530d4297",
+    "all_sources_and_requirements_present": true
+  }
+]

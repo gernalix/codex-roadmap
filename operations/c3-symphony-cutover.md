@@ -1,3 +1,5 @@
+> FROZEN C3 ARCHIVE (2026-10-05). Historical reference only. Do not execute these operating instructions. Current task flow: /home/daniele/MegaVault/ai/META_INFRASTRUCTURE.md.
+
 PROMPT_ID=998028
 
 # C3 Symphony production cutover
