@@ -49,9 +49,25 @@
   },
   "sha256": {
     "canonical.sqlite": "52a8221b31bad41935c622790578f0bd76130e1677919f5b586bc9853529858a",
+    "export.json": "8ff337bc5ddd985ce56eb2721d76a9fce99ec4ebf6ec74d917f7314f7763b38b",
+    "export.md": "004446580fb1d86dcfa3c5f9e66d6186ac44c04e36ddfd33cdd42db037cdd9bb",
+    "source-documents.json": "9546bcf4c84d72365708ca682a84931c9ffe83f4ba6d03a5fa3a68c3481514b6",
+    "migration-plan.json": "f414352adfa6473d118c0467d778fc9b3a81ef8a7be3cd26ae94b1161507d40e",
+    "github-open-ingress.json": "4dbd847bf741ef4a09e2c8a2514cc10687f34accb565d9c5b7e11a34fbed754e",
+    "destinations.json": "054b51e540e2e9576ac86480c8955ecb4a378dd53e8eca6ded89fffe6686760a",
+    "pre-repository-destinations.json": "b80be1f3d0a8fa570c51422a7f8246d9b88b8ad195a29a4fe9eed42956c99d97",
+    "created-repositories.json": "29896c4648db4ae404d78b6188dea51d1eb98899070748224bd80fe2d4968318",
     "canonical.sqlite-wal": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "canonical.sqlite-shm": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
-    "export.json": "8ff337bc5ddd985ce56eb2721d76a9fce99ec4ebf6ec74d917f7314f7763b38b",
-    "export.md": "004446580fb1d86dcfa3c5f9e66d6186ac44c04e36ddfd33cdd42db037cdd9bb"
+    "remote-readback.json": "298304cded831d4cd1c1582eae54472c66bffb8e69b442a95c0fc77f96626378",
+    "verify.py": "1778f8e96373f276383af8d33c20e3b5fa047ab7b5ebcaef8e1cee6c517b405d",
+    "historical-ci.yml": "d2a4fe2053de90e50452bae4d8c5919848946a02affe7a2e41508525550eb1ab",
+    "historical-roadmap-integrity.yml": "c8e15bf4b3431c4cdbe2b3d468720cb3a8782dececf79a58ebfe20815827abef",
+    "project-backlog-commit.json": "bd5e2627fccc6a8d9ddaa744429961ef54b417a45271afca39f0094e6b174962",
+    "disabled-components.json": "fb02730d185517c1157496686e6e5fef55847eb230b2cb62bfe705704a245f42",
+    "SUMMARY.md": "1c2ba7a7983b954897523dd9fef9b76f7b0414a5f154edc039eafdc7e0cd1a5f",
+    "all-source-dispositions.json": "d8f8bf631976d33b57166b43a0cfdaf6fcb545bcc4e6658fab166b17959d606d",
+    "frozen-legacy-pull-requests.json": "d123747d19961cfdbbadf3f10a3591ae8bc98cf5ae435d38b693738a81ddf913",
+    "verification.json": "28c5aa612546228e32bd546601f30df96376bf42fcf57617372bc40513530359"
   }
 }

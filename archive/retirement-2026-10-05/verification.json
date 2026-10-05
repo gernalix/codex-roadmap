@@ -1,0 +1,27 @@
+{
+  "full_export_and_source_coverage": "PASS",
+  "sources": {
+    "Inbox": 1167,
+    "Roadmap": 1522,
+    "open_inbox": 87,
+    "nonterminal_roadmap": 237,
+    "additional_github_issue": 1
+  },
+  "destinations": 242,
+  "github_issues": 241,
+  "unclassified": 1,
+  "new_repositories": 10,
+  "tests": {
+    "MegaVault": "77 PASS",
+    "Fedora System Monitor": "230 PASS",
+    "github-autosync": "110 PASS full suite plus corrected dry-run boundary test PASS; CI full suite SUCCESS"
+  },
+  "runtime": {
+    "C3_units_stopped_masked": 9,
+    "C3_active_units": 0,
+    "writer_socket_exists": false,
+    "legacy_automations": "already PAUSED/DISABLED",
+    "C3_Kuma_monitors": "no matching monitor in live authoritative Kuma DB"
+  },
+  "archival_application_source_unchanged": true
+}
