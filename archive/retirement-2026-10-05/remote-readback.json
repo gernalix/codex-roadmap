@@ -422,7 +422,7 @@
   {
     "task": "migration-31fa7512c14a62e0",
     "destination": "https://github.com/gernalix/codex-roadmap/issues/10045",
-    "body_sha256": "5d0b215918cd42c309b3131aa588bed009e703b9648c38d89a9909f00a944f21",
+    "body_sha256": "d4453a521f584e381b8c4687b9b2a595920a689b763237cbd1a7b26f199800ed",
     "all_sources_and_requirements_present": true
   },
   {
@@ -566,7 +566,7 @@
   {
     "task": "migration-38c9b6fc840a7929",
     "destination": "https://github.com/gernalix/codex-roadmap/issues/10069",
-    "body_sha256": "0ac89531432bd86846245bd5c1665e3ba234b9bd385baf899c14a6795f001318",
+    "body_sha256": "023d869a62eb0006bc520470083bd56d7606a0df1f6d21d7f1eeeb028b540ad0",
     "all_sources_and_requirements_present": true
   },
   {
@@ -878,7 +878,7 @@
   {
     "task": "migration-76ec3eaf4983147f",
     "destination": "https://github.com/gernalix/datasette5/issues/9",
-    "body_sha256": "11feb7c9e13a9f69aa6f4e78384003ce41748dba3981395dc940c70b35a60fff",
+    "body_sha256": "916fecedb58df918d2d6e034f7a883d83c338978c65d4ba9f8c79a7c5fe9f0bf",
     "all_sources_and_requirements_present": true
   },
   {
@@ -962,7 +962,7 @@
   {
     "task": "migration-5e3a7ecc665d8d02",
     "destination": "https://github.com/gernalix/fedora-system-monitor/issues/29",
-    "body_sha256": "61d2b9e14f9eb2346bab86cdd3687dc41321d1cf0040dcc025e9f7e478ac9007",
+    "body_sha256": "6376ee9a990c0e376bd7e34f7e3ccae773ea8dd3e9b8487de3cfef375676be77",
     "all_sources_and_requirements_present": true
   },
   {
@@ -1298,7 +1298,7 @@
   {
     "task": "migration-d993d6e0bd02af15",
     "destination": "https://github.com/gernalix/PersonalHub/issues/71",
-    "body_sha256": "fdc112fb11a73f5ba5865994cca6403a5129ecf88783f0dc9fd75c55f5b6dd87",
+    "body_sha256": "5c41c9190833360a1f536a54fa4fd8a8f1e017e247ef4220b9cdc3974d7a9693",
     "all_sources_and_requirements_present": true
   },
   {
@@ -1424,7 +1424,7 @@
   {
     "task": "migration-b237aaab7142ab8c",
     "destination": "https://github.com/gernalix/workflowy-importer/issues/49",
-    "body_sha256": "d3e9f3b43a96ffee60220e314e6f3e96a494c720f75df28c2188a104d7278b81",
+    "body_sha256": "1badfb7727bc6cc6e8022ac86cda0c336ddc911031d89216a38081e4a936c903",
     "all_sources_and_requirements_present": true
   },
   {

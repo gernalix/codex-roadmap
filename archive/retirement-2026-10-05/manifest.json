@@ -59,7 +59,7 @@
     "created-repositories.json": "29896c4648db4ae404d78b6188dea51d1eb98899070748224bd80fe2d4968318",
     "canonical.sqlite-wal": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "canonical.sqlite-shm": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
-    "remote-readback.json": "298304cded831d4cd1c1582eae54472c66bffb8e69b442a95c0fc77f96626378",
+    "remote-readback.json": "c4fa39fff65daa3ad8907baada0f8045d8d3d64cc5296ebb2ca112041fbb4dc8",
     "verify.py": "1778f8e96373f276383af8d33c20e3b5fa047ab7b5ebcaef8e1cee6c517b405d",
     "historical-ci.yml": "d2a4fe2053de90e50452bae4d8c5919848946a02affe7a2e41508525550eb1ab",
     "historical-roadmap-integrity.yml": "c8e15bf4b3431c4cdbe2b3d468720cb3a8782dececf79a58ebfe20815827abef",
@@ -68,6 +68,7 @@
     "SUMMARY.md": "1c2ba7a7983b954897523dd9fef9b76f7b0414a5f154edc039eafdc7e0cd1a5f",
     "all-source-dispositions.json": "d8f8bf631976d33b57166b43a0cfdaf6fcb545bcc4e6658fab166b17959d606d",
     "frozen-legacy-pull-requests.json": "d123747d19961cfdbbadf3f10a3591ae8bc98cf5ae435d38b693738a81ddf913",
-    "verification.json": "28c5aa612546228e32bd546601f30df96376bf42fcf57617372bc40513530359"
+    "verification.json": "28c5aa612546228e32bd546601f30df96376bf42fcf57617372bc40513530359",
+    "eboks-local-repository.json": "0dd7834b94376579bbd0eab257e4cc1e83fca3aaa58bb117a79fe7d2b8a88259"
   }
 }
