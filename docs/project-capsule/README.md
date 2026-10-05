@@ -1,3 +1,5 @@
+> FROZEN C3 ARCHIVE (2026-10-05). Historical reference only. Do not execute these operating instructions. Current task flow: /home/daniele/MegaVault/ai/META_INFRASTRUCTURE.md.
+
 # Project Capsule v1
 
 A capsule is the local entry point for a new executor. Put `project-capsule.yaml` at the repository root, with concise `AGENTS.md` and linked local architecture, operations and data model documents where relevant. The [JSON Schema](schema-v1.json) defines the machine readable contract; [template.yaml](template.yaml) is the starting point. The manifest records project facts and executable commands, while source paths and the freshness review commit make those facts checkable.

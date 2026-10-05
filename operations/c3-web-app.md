@@ -1,3 +1,5 @@
+> FROZEN C3 ARCHIVE (2026-10-05). Historical reference only. Do not execute these operating instructions. Current task flow: /home/daniele/MegaVault/ai/META_INFRASTRUCTURE.md.
+
 # C3 Control Web App
 
 Open http://127.0.0.1:8767/ in the existing browser. The enabled user unit

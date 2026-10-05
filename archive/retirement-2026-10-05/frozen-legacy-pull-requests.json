@@ -1,0 +1,26 @@
+[
+  {
+    "body": "Follow-up to #5478 and Inbox #5486. The native Goal itself remained active after a bounded service turn and generated automatic continuations even when the deterministic watchdog did not wake it. This change makes each watchdog wake produce at most one Master Goal turn and pauses a still-active Goal in finally. Installer now deploys the bounded controller and its user service. Focused suite: 8/8 PASS.",
+    "headRefName": "chatgpt/c2-bounded-master-goal-20260929",
+    "headRefOid": "619cc0a77277af5f3e0f6705e55ebddc1d2422ad",
+    "number": 5496,
+    "title": "Bound C2 Master Goal to deterministic wakes",
+    "url": "https://github.com/gernalix/codex-roadmap/pull/5496"
+  },
+  {
+    "body": "Switch ensure_issue_triage from ChatGPT semantic/browser execution to the non-GUI native Inbox drain helper. This preserves fencing/single-writer semantics while avoiding the intentionally disabled ChatGPT supervisor lane. Focused IssueInbox tests pass.",
+    "headRefName": "chatgpt/triage-native-default-20260929",
+    "headRefOid": "0290b80368ff7b7e0024bab067d6f048055411c7",
+    "number": 4801,
+    "title": "Route C2 Inbox triage through native executor",
+    "url": "https://github.com/gernalix/codex-roadmap/pull/4801"
+  },
+  {
+    "body": "Adds the canonical per-run executor/conversation ledger, lifecycle/backfill views, focused tests, and C2 protocol documentation. Workflowy projection is tracked separately in gernalix/workflowy-importer#26.\\n\\nVerification: 104 focused C2 tests PASS; py_compile PASS; roadmap verify PASS.",
+    "headRefName": "task/992303",
+    "headRefOid": "a57dc95a92f91b6a2552d46fd6065fb70bdbd3a9",
+    "number": 1479,
+    "title": "Track C2 executor conversation history",
+    "url": "https://github.com/gernalix/codex-roadmap/pull/1479"
+  }
+]

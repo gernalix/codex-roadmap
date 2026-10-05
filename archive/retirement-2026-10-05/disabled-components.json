@@ -1,0 +1,15 @@
+{
+  "units": [
+    "c3-writer.service",
+    "c3-web.service",
+    "c3-runtime.service",
+    "c3-runtime.timer",
+    "c3-runtime.path",
+    "c3-remote-ingress.service",
+    "c3-symphony.service",
+    "fedora-system-monitor-kuma-c2-bridge.service",
+    "fedora-system-monitor-kuma-c2-bridge.timer"
+  ],
+  "readback": "Id=c3-writer.service\nActiveState=inactive\nUnitFileState=masked\n\nId=c3-web.service\nActiveState=inactive\nUnitFileState=masked\n\nId=c3-runtime.service\nActiveState=inactive\nUnitFileState=masked\n\nId=c3-runtime.timer\nActiveState=inactive\nUnitFileState=masked\n\nId=c3-runtime.path\nActiveState=inactive\nUnitFileState=masked\n\nId=c3-remote-ingress.service\nActiveState=inactive\nUnitFileState=masked\n\nId=c3-symphony.service\nActiveState=inactive\nUnitFileState=masked\n\nId=fedora-system-monitor-kuma-c2-bridge.service\nActiveState=inactive\nUnitFileState=masked\n\nId=fedora-system-monitor-kuma-c2-bridge.timer\nActiveState=inactive\nUnitFileState=masked\n",
+  "preserved_definitions": "/home/daniele/.local/state/c3-control/retired-units-20261005"
+}

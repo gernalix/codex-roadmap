@@ -1,3 +1,5 @@
+> FROZEN C3 ARCHIVE (2026-10-05). Historical reference only. Do not execute these operating instructions. Current task flow: /home/daniele/MegaVault/ai/META_INFRASTRUCTURE.md.
+
 # Roadmap SQLite
 
 `roadmap.sqlite` è la **source of truth** dei metadati della roadmap.

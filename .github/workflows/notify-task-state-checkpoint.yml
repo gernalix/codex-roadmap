@@ -1,10 +1,7 @@
 name: Notify task-state checkpoint
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "operations/task-state/**"
+  workflow_dispatch: # Historical publisher; automatic C3 checkpoints retired.
 
 permissions:
   contents: read

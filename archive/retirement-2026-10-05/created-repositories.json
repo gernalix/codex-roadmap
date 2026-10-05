@@ -1,0 +1,92 @@
+{
+  "fedora-diagnostics": {
+    "project_id": 14,
+    "path": "/home/daniele/projects/fedora-diagnostics",
+    "repo": "gernalix/fedora-diagnostics",
+    "remote": "origin",
+    "created_remote": true,
+    "initialized_local": true,
+    "commit": "da222ee3cb16974f2200d23b93fdc3a77b5ad88e"
+  },
+  "fedora-external-updater": {
+    "project_id": 100,
+    "path": "/home/daniele/projects/fedora-external-updater",
+    "repo": "gernalix/fedora-external-updater",
+    "remote": "origin",
+    "created_remote": true,
+    "initialized_local": false,
+    "commit": "3f9086864c5f107c5a3afd0e0ffdfa164182986e"
+  },
+  "grindr-web-exporter": {
+    "project_id": 18,
+    "path": "/home/daniele/projects/grindr-web-exporter",
+    "repo": "gernalix/grindr-web-exporter",
+    "remote": "origin",
+    "created_remote": true,
+    "initialized_local": false,
+    "commit": "1bafbb99444841a49e4de939aab44e455b6c633f"
+  },
+  "oracle-uptime-kuma": {
+    "project_id": 31,
+    "path": "/home/daniele/projects/oracle-uptime-kuma",
+    "repo": "gernalix/oracle-uptime-kuma",
+    "remote": "origin",
+    "created_remote": true,
+    "initialized_local": true,
+    "commit": "b26ec2b629ce838e493312ef1599e256e56fcef8"
+  },
+  "owntracks-watcher": {
+    "project_id": 33,
+    "path": "/home/daniele/projects/owntracks-watcher",
+    "repo": "gernalix/owntracks-watcher",
+    "remote": "origin",
+    "created_remote": true,
+    "initialized_local": true,
+    "commit": "2b20da70a6432b4518b55d1631fbf51bc7b04804"
+  },
+  "windows-flight-recorder": {
+    "project_id": 44,
+    "path": "/home/daniele/projects/windows-flight-recorder",
+    "repo": "gernalix/windows-flight-recorder",
+    "remote": "origin",
+    "created_remote": true,
+    "initialized_local": true,
+    "commit": "96cf78330f8f30be2500dbddc17f320b31ddcada"
+  },
+  "windows-winget-daily-update": {
+    "project_id": 45,
+    "path": "/home/daniele/projects/windows-winget-daily-update",
+    "repo": "gernalix/windows-winget-daily-update",
+    "remote": "origin",
+    "created_remote": true,
+    "initialized_local": true,
+    "commit": "ff9bc22d17e5b1892a07e32a18dde1fb534c4c3b"
+  },
+  "x-repost-downloader": {
+    "project_id": 50,
+    "path": "/home/daniele/projects/x-repost-downloader",
+    "repo": "gernalix/x-repost-downloader",
+    "remote": "origin",
+    "created_remote": true,
+    "initialized_local": false,
+    "commit": "e7291e9d1959484514a19a5079fc094d005457e9"
+  },
+  "discord-exporter": {
+    "project_id": 65,
+    "path": "/home/daniele/projects/discord-exporter",
+    "repo": "gernalix/discord-exporter",
+    "remote": "origin",
+    "created_remote": true,
+    "initialized_local": false,
+    "commit": "18f8c62af7647b1c2b9999d0bb74ed01e19deced"
+  },
+  "symphony": {
+    "project_id": null,
+    "path": "/home/daniele/projects/symphony",
+    "repo": "gernalix/symphony",
+    "remote": "backlog",
+    "created_remote": true,
+    "initialized_local": false,
+    "commit": "be10a1b79df723d6d7612b5651c8522704dafb2e"
+  }
+}
